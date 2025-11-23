@@ -1,0 +1,20 @@
+{
+  "index": "prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design",
+  "paper_title": "Prodigy: Improving the Memory Latency of Data-Indirect Irregular Workloads Using Hardware-Software Co-Design",
+  "metadata": {
+    "authors": [
+      "Nishil Talati",
+      "Kyle May",
+      "Armand Behroozi",
+      "et al."
+    ],
+    "affiliations": [
+      "University of Michigan",
+      "University of Wisconsin, Madison",
+      "University of Edinburgh"
+    ],
+    "venue": "MICRO",
+    "year": 2021
+  },
+  "description": "提出Prodigy，一种软硬件协同设计的低开销预取方案，用于加速具有数据间接访问模式（单值和范围间接）的不规则工作负载。其核心是数据间接图（DIG）表示，由编译器自动生成并指导硬件预取器。在仅0.8KB存储开销下，相比无预取基线平均提速2.6倍、节能1.6倍，并显著优于现有先进预取器。"
+}

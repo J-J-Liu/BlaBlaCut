@@ -1,0 +1,1066 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>RPG2: Robust Profile-Guided Runtime Prefetch Generation 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rpg2-robust-profile-guided-runtime-prefetch-generation" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RPG2: Robust Profile-Guided Runtime Prefetch Generation 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-bolt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 基于BOLT的二进制代码分析与生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-osr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 运行时代码注入与在线栈替换（OSR）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 基于性能反馈的动态预取距离调优
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 安全回滚机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rpg2-robust-profile-guided-runtime-prefetch-generation">RPG2: Robust Profile-Guided Runtime Prefetch Generation 论文解析<a class="headerlink" href="#rpg2-robust-profile-guided-runtime-prefetch-generation" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>
+- Yuxuan Zhang
+- Nathan Sobotka
+- Soyoon Park
+- Saba Jamilan
+- Tanvir Ahmed Khan
+- Baris Kasikci
+- Gilles A Pokam
+- Heiner Litz
+- Joseph Devietti</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>
+- <strong>29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 1 (ASPLOS ’24)</strong></p>
+<p><strong>发表年份 (Publication Year)</strong>
+- <strong>2024</strong></p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong>
+- 解决传统软件数据预取（prefetching）技术在面对不同<strong>程序输入</strong>和<strong>处理器微架构</strong>时表现不稳定的问题。静态编译器插入的预取指令无法适应运行时变化，可能导致性能提升，也可能因缓存污染或带宽竞争而造成显著<strong>性能下降</strong>。
+- 设计一个<strong>纯软件</strong>、<strong>在线</strong>的系统，能够在程序运行时动态地注入、调优甚至回滚预取指令，以实现<strong>鲁棒的</strong>（Robust）性能收益，即在能提升性能时最大化收益，在有害时能安全回退到原始性能。</p>
+<p><strong>方法</strong>
+- 提出 <strong>RPG2</strong> (Robust Profile-Guided Runtime Prefetch Generation) 系统，其工作流程分为四个阶段：
+  - <strong>Phase 1: Profiling</strong>：利用 Linux <code>perf</code> 工具和 Intel <strong>PEBS</strong> (Precise Event-Based Sampling) 硬件特性，对运行中的进程进行采样，识别导致<strong>LLC</strong> (Last-Level Cache) 的热点指令。
+  - <strong>Phase 2: Code Analysis &amp; Generation</strong>：基于 <strong>BOLT</strong> (Binary Optimization and Layout Tool) 框架，对二进制文件进行分析。通过<strong>后向切片</strong>（Backwards Slicing）技术，识别并支持三类内存访问模式（特别是间接内存访问 <code>a[b[i]]</code>），并生成一个逻辑上为 <strong>NOP</strong> 的<strong>预取内核</strong>（prefetch kernel）。
+  - <strong>Phase 3: Runtime Code Insertion</strong>：将包含预取内核的新函数版本注入到目标进程的地址空间中。为解决正在执行的函数调用问题，RPG2 实现了针对 C/C++ 等非托管语言的<strong>栈上替换</strong>（On-Stack Replacement, OSR），利用 BOLT 生成的 <strong>BATT</strong> (BOLT Address Translation Table) 来安全地重定向程序计数器（PC）。
+  - <strong>Phase 4: Monitoring And Tuning</strong>：通过测量 <strong>IPC</strong> (Instructions Per Cycle) 作为性能指标，对预取距离（prefetch distance）进行<strong>有界搜索</strong>（先确定方向，再粗粒度跳跃，最后二分查找）。如果所有距离都无法带来性能提升，则<strong>回滚</strong>（Rolling Back）到原始代码。</p>
+<p><img alt="" src="../images/8806a8fc532258cfa443880bb5424d8f57d264409c9b84d884d8ec41f3ee51c2.jpg" /></p>
+<p><em>Figure 4. RPG2 proceeds through four phases when optimizing a target process.</em></p>
+<p><strong>结果</strong>
+- RPG2 在多种基准测试（如 CRONO 套件中的 <code>sssp</code>, <code>bfs</code>, <code>pr</code>）和不同输入集（SNAP 数据集）上进行了评估，展示了其有效性与鲁棒性。
+- <strong>性能提升</strong>：在预取有益的场景下，RPG2 能够获得最高 <strong>2.15×</strong> 的加速比，性能与最先进的静态预取编译器（如 APT-GET）相当。
+- <strong>避免性能下降</strong>：在预取有害的场景下（如 <code>bfs</code> 基准测试中的许多输入），RPG2 能成功检测并回滚，从而<strong>避免了高达 50-70% 的性能损失</strong>，显著优于静态方案。
+- <strong>操作开销低</strong>：关键的停顿世界（stop-the-world）操作（如代码注入、距离调整）平均仅需 <strong>1-4 毫秒</strong>，对整体性能影响很小。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Benchmark/Input</th>
+<th style="text-align: center;">RPG2 (All)</th>
+<th style="text-align: center;">RPG2 (Speedup)</th>
+<th style="text-align: center;">RPG2 (Slowdown)</th>
+<th style="text-align: center;">APT-GET / Offline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>pr </strong>(Cascade Lake)</td>
+<td style="text-align: center;">~1.1x</td>
+<td style="text-align: center;">~1.3x</td>
+<td style="text-align: center;">~1.0x</td>
+<td style="text-align: center;">~1.3x / ~0.9x</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>bfs </strong>(Cascade Lake)</td>
+<td style="text-align: center;">~0.9x</td>
+<td style="text-align: center;">~1.1x</td>
+<td style="text-align: center;">~0.8x</td>
+<td style="text-align: center;">N/A / ~0.5x</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/24962dbf6f2b2945464bbffad43379d1f1359a9ada18905c0a736aeb5ef9b7f3.jpg" /></p>
+<p><em>Figure 7. RPG2 and baseline performance on Cascade Lake (top) and Haswell (bottom).</em></p>
+<ul>
+<li><strong>预取距离调优准确性</strong>：对于具有单一最优距离的输入，RPG2 的搜索结果在 <strong>10 以内</strong>的比例超过一半。</li>
+<li><strong>输入与架构敏感性</strong>：实验验证了预取效果对输入和微架构的高度敏感性，例如 <code>sssp</code> 在不同输入下的最优距离差异巨大，<code>pr</code> 在 Cascade Lake 和 Haswell 上的表现甚至可能完全相反。</li>
+</ul>
+<p><img alt="" src="../images/3a1ec04fb133efa439de9006c2e67e74495c23f7af7fed9cced3c6c8e6873d31.jpg" /></p>
+<p><em>Figure 1. The sssp benchmark from CRONO [2] has very different optimal prefetch distances (shaded regions) with different inputs.</em></p>
+<p><img alt="" src="../images/03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg" /></p>
+<p><em>Figure 2. The pr benchmark from CRONO [2] sees a speedup or a slowdown with prefetching, depending on the microarchitecture.</em></p>
+<p><strong>结论</strong>
+- 静态软件预取是一种“双刃剑”，其效果极易受到<strong>程序输入</strong>和<strong>处理器微架构</strong>的影响，难以在通用场景下保证鲁棒性。
+- RPG2 通过<strong>在线、动态</strong>的方式解决了这一核心挑战。它不仅能像静态编译器一样在有利场景下提供显著的性能加速，更重要的是，它具备<strong>自我保护机制</strong>，能在预取有害时自动回滚，从而<strong>保留了原始性能</strong>。
+- RPG2 证明了在运行时进行动态二进制优化和调优是应对复杂、多变硬件环境的有效途径，为构建更智能、更安全的性能优化框架提供了新的思路。</p>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景与动机</strong></p>
+<ul>
+<li><strong>数据缓存预取 (Data cache prefetching)</strong> 是一种关键的性能优化技术，旨在通过提前将数据加载到缓存中来掩盖内存访问延迟。</li>
+<li>然而，有效的预取面临巨大挑战：预取过早会<strong>污染缓存 (pollute the cache)</strong>，预取过晚会<strong>无法避免缓存缺失 (fail to avoid cache misses)</strong>，并且会与程序的正常“需求”访问<strong>竞争有限的片外内存带宽</strong>。</li>
+<li>现有的<strong>静态编译器方法</strong>（如 APT-GET）虽然可以插入预取指令，但它们生成的二进制文件包含<strong>固定的预取距离</strong>，无法适应运行时变化。</li>
+<li>该论文通过大规模实验揭示，预取的有效性高度依赖于<strong>程序输入 (program input)</strong> 和 <strong>处理器微架构 (processor microarchitecture)</strong>。例如：<ul>
+<li>在 <code>sssp</code> 基准测试中，不同输入（如 <code>ROedges</code> 和 <code>gowalla</code>）的<strong>最佳预取距离</strong>差异巨大。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/3a1ec04fb133efa439de9006c2e67e74495c23f7af7fed9cced3c6c8e6873d31.jpg" /></p>
+<p><em>Figure 1. The sssp benchmark from CRONO [2] has very different optimal prefetch distances (shaded regions) with different inputs.</em></p>
+<div class="highlight"><pre><span></span><code>- 在 `pr` 基准测试中，同一个输入在 **Intel Cascade Lake** 和 **Intel Haswell** 上的表现可能完全相反（一个加速，一个减速）。
+</code></pre></div>
+<p><img alt="" src="../images/03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg" /></p>
+<p><em>Figure 2. The pr benchmark from CRONO [2] sees a speedup or a slowdown with prefetching, depending on the microarchitecture.</em></p>
+<div class="highlight"><pre><span></span><code>- 在 `bfs` 基准测试中，预取甚至会导致高达 **50-70%** 的严重性能下降。
+</code></pre></div>
+<p><img alt="" src="../images/e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg" /></p>
+<p><em>Figure 3. The bfs benchmark from CRONO [2] often (but not always) suffers significant performance slowdown with prefetching.</em></p>
+<ul>
+<li>这些发现表明，预取是一把“<strong>双刃剑 (double-edged sword)</strong>”，其脆弱性使得开发者对其望而却步。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了 <strong>RPG2 (Robust Profile-Guided Runtime Prefetch Generation)</strong>，这是一个<strong>纯软件、在线 (online)</strong> 的系统，能够在程序运行时动态地注入、调优甚至回滚预取指令，以最大化性能并保证鲁棒性。</li>
+<li>RPG2 的核心工作流程分为四个阶段：<ul>
+<li><strong>Phase 1: Profiling</strong>：使用硬件性能计数器（如 Intel PEBS）对运行中的进程进行剖析，识别出导致<strong>末级缓存 (LLC) 缺失</strong>的热点指令，并建立基线 IPC。</li>
+<li><strong>Phase 2: Code Analysis &amp; Generation</strong>：基于 <strong>BOLT (Binary Optimization and Layout Tool)</strong> 框架，在二进制层面分析代码模式（特别是<strong>间接内存访问 (indirect memory accesses)</strong>），并生成一个逻辑上为 <strong>NOP</strong> 的<strong>预取内核 (prefetch kernel)</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/8806a8fc532258cfa443880bb5424d8f57d264409c9b84d884d8ec41f3ee51c2.jpg" /></p>
+<p><em>Figure 4. RPG2 proceeds through four phases when optimizing a target process.</em></p>
+<div class="highlight"><pre><span></span><code>- **Phase 3: Runtime Code Insertion**：利用 **ptrace** 和自定义库 **libpg2**，将包含预取内核的新函数版本注入到目标进程的地址空间中，并通过创新的 **On-Stack Replacement (OSR)** 技术，将正在执行的旧函数调用无缝切换到新版本，这是首个支持 C/C++ 等非托管语言的 OSR 实现。
+- **Phase 4: Monitoring And Tuning**：通过一个**有界搜索算法**在线调整预取距离，并持续监控 **IPC (Instructions Per Cycle)** 性能指标。如果任何预取距离都无法带来性能提升，RPG2 会**自动回滚 (roll back)** 到原始代码，从而避免性能损失。
+</code></pre></div>
+<ul>
+<li>RPG2 的关键优势在于其<strong>鲁棒性 (robustness)</strong>：它不仅能提供高达 <strong>2.15×</strong> 的加速比（与最佳静态编译器相当），还能在预取有害时安全地恢复原始性能，这是静态方法无法做到的。</li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>RPG2 是一个纯软件的、在线（online）运行时系统，用于为正在执行的 C/C++ 程序动态地生成、注入和调优数据预取（prefetch）指令。其核心目标是克服静态预取方案对<strong>程序输入</strong>和<strong>处理器微架构</strong>的敏感性，通过实时性能反馈来确保预取的<strong>鲁棒性</strong>（Robustness），即在提升性能的同时，能自动回滚以避免因预取不当导致的性能下降。</p>
+<p>RPG2 的工作流程分为四个紧密衔接的阶段，如图 </p>
+<p><img alt="" src="../images/8806a8fc532258cfa443880bb5424d8f57d264409c9b84d884d8ec41f3ee51c2.jpg" /></p>
+<p><em>Figure 4. RPG2 proceeds through four phases when optimizing a target process.</em></p>
+<p>所示：</p>
+<ul>
+<li><strong>第一阶段：Profiling (性能剖析)</strong></li>
+<li>利用 Linux 的 <code>perf</code> 工具和 Intel 的 <strong>Precise Event-Based Sampling </strong>(PEBS) 硬件特性，对目标进程进行采样。</li>
+<li>监控 <strong>MEM_LOAD_RETIRED.L3_MISS</strong> 事件，以识别导致<strong>最后一级缓存</strong>（LLC）的指令地址（PC）。</li>
+<li>
+<p>默认采样 2 秒，并筛选出在其所属函数中贡献至少 10% LLC miss 的指令作为预取候选者。</p>
+</li>
+<li>
+<p><strong>第二阶段：Code Analysis &amp; Generation (代码分析与生成)</strong></p>
+</li>
+<li>基于 <strong>Meta 的 BOLT </strong>(Binary Optimization and Layout Tool) 框架，在二进制层面进行代码分析和转换，无需源代码。</li>
+<li>通过新增的 <strong>InjectPrefetchPass</strong> 分析循环结构和内存访问模式，主要支持三类访问模式（见下表）：</li>
+</ul>
+<p><img alt="" src="../images/fe03b6d54b53d4bb1aba9836ed24b04e899a30c45027742e128f78d3060ab49c.jpg" /></p>
+<p><em>Table 1. Memory access categories that RPG2 supports</em></p>
+<ul>
+<li>使用<strong>后向切片</strong>（Backwards Slicing）技术，从候选 load 指令回溯，构建计算未来预取地址所需的指令序列（称为 <strong>prefetch kernel</strong>）。</li>
+<li>
+<p>生成的 prefetch kernel 被设计为逻辑上的 <strong>NOP</strong>，确保不改变原程序语义，并包含必要的<strong>边界检查</strong>（bounds check）以防止越界访问。</p>
+</li>
+<li>
+<p><strong>第三阶段：Runtime Code Insertion (运行时代码插入)</strong></p>
+</li>
+<li>通过 <strong>ptrace API</strong> 和一个预加载的共享库 <strong>libpg2</strong>，将包含 prefetch kernel 的新函数版本（??1）注入到目标进程的地址空间。</li>
+<li>采用 <strong>On-Stack Replacement </strong>(OSR) 技术，将正在执行旧函数（??0）的线程 PC 动态重定向到新函数（??1）的对应位置。</li>
+<li>
+<p>利用 BOLT 生成的 <strong>BOLT Address Translation Table </strong>(BATT) 来精确映射新旧函数间的指令地址，这是实现 C/C++ 等非托管语言 OSR 的关键。</p>
+</li>
+<li>
+<p><strong>第四阶段：Monitoring And Tuning (监控与调优)</strong></p>
+</li>
+<li>通过测量 <strong>IPC </strong>(Instructions Per Cycle) 作为性能指标，对预取距离（prefetch distance）进行在线调优。</li>
+<li>采用一种三阶段搜索算法（梯度探测、粗粒度跳跃、细粒度二分搜索）在 [1, 200] 范围内寻找最优距离。</li>
+<li>如果搜索发现任何预取距离都无法超越原始性能基线，RPG2 会触发<strong>回滚机制</strong>（Rolling Back），利用 BATT 将所有执行流切换回原始的、无预取的代码版本，从而保证性能安全。</li>
+</ul>
+<h3 id="1-bolt">1. 基于BOLT的二进制代码分析与生成<a class="headerlink" href="#1-bolt" title="Permanent link">&para;</a></h3>
+<p><strong>核心原理与流程</strong></p>
+<p>RPG2的代码分析与生成阶段是其动态预取能力的核心，它通过扩展Meta的<strong>BOLT (Binary Optimization and Layout Tool)</strong> 框架来实现。该阶段不依赖源代码，直接对已编译的二进制文件进行操作，识别热点循环中的可预取内存访问，并注入一个逻辑上为<strong>NOP (No Operation)</strong> 的预取内核（prefetch kernel）。</p>
+<ul>
+<li><strong>输入</strong>: 由第一阶段（Profiling）识别出的、导致大量<strong>LLC (Last-Level Cache) misses</strong>的指令地址（PC）。</li>
+<li><strong>处理</strong>: RPG2向BOLT添加了一个名为 <strong><code>InjectPrefetchPass</code></strong> 的新优化Pass。该Pass负责分析二进制代码，识别模式，并生成新的机器码。</li>
+<li><strong>输出</strong>: 一个包含原始函数和已注入预取内核的新函数的<strong>新BOLTed二进制文件</strong>。这个新函数将在第三阶段被动态加载到运行进程中。</li>
+</ul>
+<p><strong>可预取的内存访问模式分类</strong></p>
+<p>RPG2将可预取的内存访问归纳为三大类，这些模式覆盖了从密集数组到稀疏图结构的常见场景。</p>
+<p><img alt="" src="../images/fe03b6d54b53d4bb1aba9836ed24b04e899a30c45027742e128f78d3060ab49c.jpg" /></p>
+<p><em>Table 1. Memory access categories that RPG2 supports</em></p>
+<ul>
+<li><strong>Category 1: <code>a[i]</code> 或 <code>a[j]</code></strong></li>
+<li>这是最简单的<strong>直接内存访问</strong>（direct memory access），通常具有良好的空间局部性。</li>
+<li>RPG2认为硬件预取器通常能很好地处理此类模式，但如果分析发现存在显著的LLC miss，则会介入以提供更精确的控制。</li>
+<li><strong>Category 2: <code>a[b[i]]</code></strong></li>
+<li>这是典型的<strong>间接内存访问</strong>（indirect memory access），也是硬件预取器难以有效处理的主要痛点。</li>
+<li>RPG2的主要优化目标就是此类模式，因为它在图计算等应用中极为普遍。</li>
+<li><strong>Category 3: <code>a[??(b[i])+j]</code></strong></li>
+<li>这是一种更复杂的间接访问，结合了外层循环的间接索引和内层循环的偏移。</li>
+<li>对于此模式，RPG2的策略是优先在外层循环中为未来的<code>b[i+d]</code>预取数据，而不是在内层循环中为<code>j+d</code>预取，因为前者能更有效地解决根本的间接访问延迟问题。</li>
+</ul>
+<p><strong>代码分析：后向切片 (Backwards Slicing)</strong></p>
+<p>为了精确地为间接访问生成预取地址，RPG2采用<strong>后向切片 (Backwards Slicing)</strong> 技术。</p>
+<ul>
+<li>从由Profiling阶段标记的、导致最多LLC miss的<strong>demand load</strong>指令开始。</li>
+<li>向后追溯该load指令的地址计算所依赖的所有指令，直到遇到<strong>循环不变量 (loop invariant)</strong> 或<strong>循环归纳变量 (loop induction variable)</strong>。</li>
+<li>这个切片过程构建了计算未来预取地址所需的最小指令集。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/c0fcf70d8c6a8270d3d6404732e5a3b4b481a21341d1e8fa08a86695d77bc9e9.jpg" /></p>
+<p><em>Figure 5. Annotated example of RPG2 code transformations.</em></p>
+<p>展示了这一过程：从<code>ld [r3+r2]→r4</code>回溯到<code>ld [r0+r1]→r2</code>，其中<code>r0</code>和<code>r3</code>是循环不变量，<code>r1</code>是归纳变量。
+- 切片结果用于判断该load属于上述三个类别中的哪一个，并决定预取内核应插入到内层还是外层循环头中。</p>
+<p><strong>代码生成：预取内核 (Prefetch Kernel)</strong></p>
+<p>生成的预取内核必须满足<strong>语义不变性</strong>，即其执行不能改变原程序的行为。</p>
+<ul>
+<li><strong>寄存器分配</strong>: 内核需要临时寄存器来计算地址。RPG2通过将一个现有寄存器（如<code>r5</code>）<strong>spill</strong>到栈上来获取一个<strong>scratch register</strong>，并在内核结束时将其恢复。</li>
+<li><strong>边界检查 (Bounds Check)</strong>: 由于预取是针对未来迭代（<code>i + d</code>）的数据，必须确保该地址是有效的，以避免程序崩溃。RPG2会复制原始循环的边界检查条件，并对其进行调整（例如，将<code>bnz</code>改为<code>bgte</code>）来保护预取操作。</li>
+<li><strong>指令转换</strong>: 将原始用于计算未来数据地址的<strong>demand load</strong>指令转换为<strong>prefetch instruction</strong>（如x86的<code>prefetcht0</code>）。</li>
+<li><strong>逻辑结构</strong>: 整个内核被设计为一个受保护的代码块：先进行边界检查，若通过则执行地址计算和预取，最后清理临时状态并继续执行原始循环体。这保证了其<strong>NOP</strong>特性。</li>
+</ul>
+<p><strong>在RPG2整体架构中的作用</strong></p>
+<p>此阶段是连接离线分析与在线优化的桥梁。</p>
+<ul>
+<li>它将Profiling阶段获得的<strong>性能洞察</strong>（哪些PC导致miss）转化为具体的<strong>代码修改方案</strong>。</li>
+<li>通过利用BOLT，RPG2获得了强大的二进制提升（lifting）和重写能力，无需源代码即可进行复杂的代码变换。</li>
+<li>生成的新二进制文件为第三阶段的<strong>Runtime Code Insertion</strong>提供了原材料，使得后续的<strong>On-Stack Replacement (OSR)</strong> 成为可能。</li>
+<li>其生成的预取内核是第四阶段<strong>Monitoring And Tuning</strong>的操作对象，通过动态修改内核中的立即数（prefetch distance）来实现在线调优。</li>
+</ul>
+<h3 id="2-osr">2. 运行时代码注入与在线栈替换（OSR）<a class="headerlink" href="#2-osr" title="Permanent link">&para;</a></h3>
+<p><strong>运行时代码注入与在线栈替换（OSR）的实现原理</strong></p>
+<p>RPG2 的核心创新之一在于其能够在程序运行时动态地将包含预取指令的优化代码注入到目标进程中，并安全地将正在执行的线程从原始代码切换到新代码，这一过程被称为 <strong>On-Stack Replacement (OSR)</strong>。其实现依赖于多个关键技术组件的协同工作。</p>
+<ul>
+<li>RPG2 采用了一种“<strong>pay-as-you-go</strong>”的策略，即只有在决定进行优化时才注入代码，避免了像 XRay 那样在热点循环中预埋 NOP 指令所带来的高达 <strong>5%</strong> 的持续性运行时开销。</li>
+<li>为了将新函数 <code>f1</code> 注入到正在运行的目标进程地址空间中，RPG2 并非直接覆盖原有的函数 <code>f0</code>，而是将其放置在一个<strong>全新的内存位置</strong>。这种设计巧妙地规避了因代码长度变化导致的分支目标偏移问题，并完整保留了所有指向 <code>f0</code> 的指针（包括函数指针、setjmp 缓冲区等），为后续可能的回滚提供了便利。</li>
+<li>代码注入的具体执行由一个名为 <strong>libpg2</strong> 的动态库完成。该库通过 Linux 的 <strong>LD_PRELOAD</strong> 机制在目标进程启动时被加载到其地址空间内。由于 libpg2 运行在目标进程内部，它可以直接、高效地修改进程内存，避免了频繁使用 <strong>ptrace</strong> 系统调用带来的高延迟。</li>
+<li><strong>ptrace</strong> API 在此过程中扮演协调者的角色，主要用于<strong>暂停/恢复</strong>目标进程、触发 libpg2 的执行以及在必要时进行单步调试（single-stepping）。</li>
+</ul>
+<p><img alt="" src="../images/d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" /></p>
+<p><em>Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.</em></p>
+<p><strong>在线栈替换（OSR）的算法流程与关键挑战</strong></p>
+<p>OSR 的主要挑战在于，如何将那些<strong>已经处于 <code>f0</code> 函数执行中途</strong>的线程（即其程序计数器 PC 指向 <code>f0</code> 内部）安全地重定向到 <code>f1</code> 中的对应位置，而不能简单地等待当前函数调用结束。</p>
+<ul>
+<li>RPG2 能够成功实现 OSR 依赖于两个关键原因：</li>
+<li><strong>零数据布局变更</strong>：RPG2 的预取内核（prefetch kernel）被设计成逻辑上的 <strong>NOP</strong>。其代码转换（如寄存器溢出/恢复）确保了 <code>f0</code> 和 <code>f1</code> 之间的<strong>数据布局（变量到寄存器/栈的映射）完全一致</strong>。这解决了传统编译器级优化（如 APT-GET）因 IR 层面的微小改动导致数据布局剧变，从而使 OSR 变得极其复杂的问题。</li>
+<li>
+<p><strong>BOLT 地址翻译表（BATT）</strong>：BOLT 在对二进制文件进行优化时，会自动生成一个 <strong>BOLT Address Translation Table (BATT)</strong>，并将其嵌入到输出的 ELF 文件中。这个表精确地记录了原始函数 <code>f0</code> 中每条指令与其在优化后函数 <code>f1</code> 中对应指令之间的 <strong>PC 映射关系</strong>。</p>
+</li>
+<li>
+<p>OSR 的具体执行流程如下：</p>
+</li>
+<li>RPG2 通过 ptrace <strong>暂停</strong>目标进程。</li>
+<li>利用 libpg2 在目标进程地址空间内分配新内存，并将 <code>f1</code> 的代码复制进去。</li>
+<li><strong>修补所有直接调用 <code>f0</code> 的调用点</strong>，使其跳转到 <code>f1</code>。</li>
+<li>对于每个线程，检查其 PC 是否指向 <code>f0</code>。<ul>
+<li>如果是，则利用 <strong>BATT</strong> 将该 PC <strong>翻译</strong>为 <code>f1</code> 中的对应地址，并更新线程的 PC。</li>
+<li>如果线程的 PC 指向的是新插入的预取内核（这部分在 <code>f0</code> 中没有对应物，故 BATT 中无条目），则 RPG2 会通过 ptrace 对该线程进行 <strong>single-stepping</strong>，直到其 PC 移动到 BATT 中有记录的位置，再进行翻译和更新。</li>
+</ul>
+</li>
+<li>最后，RPG2 <strong>恢复</strong>目标进程的执行，此时所有线程都已在 <code>f1</code> 上运行。</li>
+</ul>
+<p><strong>参数设置、输入输出及在整体中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：经过 BOLT 优化后生成的新二进制文件（包含 <code>f1</code> 和 BATT）、正在运行的目标进程 PID。</li>
+<li><strong>输出</strong>：一个地址空间已被修改的目标进程，其执行流已无缝切换至包含预取指令的 <code>f1</code> 函数。</li>
+<li><strong>关键参数/配置</strong>：</li>
+<li><strong>LD_PRELOAD</strong>：用于注入 libpg2 库。</li>
+<li><strong>ptrace 权限</strong>：需要足够的系统权限来附加到目标进程。</li>
+<li><strong>BATT</strong>：作为 OSR 的核心数据结构，其准确性直接决定了替换的安全性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">作用</th>
+<th style="text-align: left;">关键特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>libpg2</strong></td>
+<td style="text-align: left;">在目标进程内部执行代码注入</td>
+<td style="text-align: left;">低开销内存写入，通过 LD_PRELOAD 加载</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ptrace</strong></td>
+<td style="text-align: left;">控制目标进程生命周期和状态</td>
+<td style="text-align: left;">用于暂停/恢复进程，处理边界情况（如 single-stepping）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BATT</strong></td>
+<td style="text-align: left;">提供新旧函数间的指令地址映射</td>
+<td style="text-align: left;">由 BOLT 生成，是实现安全 OSR 的基石</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>新函数 f1</strong></td>
+<td style="text-align: left;">包含预取内核的优化版本</td>
+<td style="text-align: left;">与 f0 保持数据布局一致，逻辑上为 NOP</td>
+</tr>
+</tbody>
+</table>
+<p><strong>在 RPG2 整体架构中的作用</strong></p>
+<p>运行时代码注入与 OSR 是连接离线代码生成（Phase 2）和在线性能调优（Phase 4）的<strong>关键桥梁</strong>。它使得 RPG2 能够突破静态编译的限制，真正实现 <strong>动态、自适应</strong>的预取优化。没有这一机制，RPG2 就无法在程序运行过程中安全地部署和回滚优化，也就无法应对预取效果对<strong>程序输入</strong>和<strong>微架构</strong>的高度敏感性，从而失去其“<strong>Robust</strong>”的核心价值。</p>
+<h3 id="3_1">3. 基于性能反馈的动态预取距离调优<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<p><strong>RPG2动态预取距离调优机制详解</strong></p>
+<p>RPG2的核心创新之一在于其能够在线、动态地为注入的预取指令找到最优的<strong>prefetch distance</strong>（预取距离），从而最大化性能收益并规避因配置不当导致的性能损失。该机制完全基于运行时反馈，以<strong>IPC </strong>(Instructions Per Cycle) 作为核心性能指标。</p>
+<ul>
+<li><strong>整体目标</strong>：在程序运行过程中，自动搜索并锁定一个能带来最高IPC的预取距离值。</li>
+<li><strong>关键约束</strong>：</li>
+<li>搜索过程本身必须轻量，不能对目标程序造成过大的性能干扰。</li>
+<li>必须具备“安全网”机制，当所有尝试的距离都无法超越基线性能时，能够回滚到原始无预取代码。</li>
+<li><strong>作用</strong>：此调优阶段是RPG2实现“<strong>Robust</strong>”（鲁棒性）的关键。它解决了静态编译器无法应对的<strong>input-dependent</strong>（输入依赖）和<strong>microarchitecture-dependent</strong>（微架构依赖）问题，确保预取优化只在有益时生效。</li>
+</ul>
+<p><strong>三阶段搜索算法流程</strong></p>
+<p>RPG2的搜索算法被精心设计为三个连续阶段，旨在高效地在广阔的搜索空间（默认[1, 200]）中定位局部最优解。</p>
+<ul>
+<li><strong>第一阶段：梯度探测 </strong>(Gradient Detection)</li>
+<li><strong>目的</strong>：确定搜索方向（增大或减小预取距离）。</li>
+<li><strong>流程</strong>：<ul>
+<li>从区间[1, 100]中随机选择一个初始距离 <code>d</code>。</li>
+<li>分别测量 <code>d-5</code>、<code>d</code> 和 <code>d+5</code> 三个点的IPC。</li>
+<li>通过比较这三个点的IPC值，计算出一个简单的性能梯度，从而决定向哪个方向（正或负）进行后续搜索。</li>
+</ul>
+</li>
+<li>
+<p><strong>原理</strong>：避免了从固定点（如1）开始的盲目搜索，利用随机起点增加了找到全局最优解的可能性。</p>
+</li>
+<li>
+<p><strong>第二阶段：粗粒度跳跃 </strong>(Coarse-grained Jumping)</p>
+</li>
+<li><strong>目的</strong>：快速跨越性能平缓区，逼近性能峰值区域。</li>
+<li><strong>流程</strong>：<ul>
+<li>从第一阶段确定的方向开始，以指数方式（步长不断翻倍）跳跃式地测试新的预取距离。</li>
+<li>只要IPC持续提升，就继续沿该方向跳跃。</li>
+<li>一旦发现IPC下降，或者达到预设边界（1或200），则停止跳跃。</li>
+<li>将最后一次IPC提升的点和第一次IPC下降的点，分别记为搜索区间的下界和上界。</li>
+</ul>
+</li>
+<li>
+<p><strong>原理</strong>：此阶段牺牲了精度以换取速度，能迅速将搜索范围从数百个可能值缩小到一个较窄的窗口。</p>
+</li>
+<li>
+<p><strong>第三阶段：二分查找 </strong>(Binary Search)</p>
+</li>
+<li><strong>目的</strong>：在第二阶段确定的狭窄窗口内，精确定位局部最优的预取距离。</li>
+<li><strong>流程</strong>：<ul>
+<li>在已确定的上下界之间执行标准的二分查找。</li>
+<li>每次迭代都测试中点距离的IPC，并根据结果缩小区间，直到找到窗口内的最佳值。</li>
+</ul>
+</li>
+<li><strong>原理</strong>：在小范围内进行精细搜索，确保找到该区域内的最优解。</li>
+</ul>
+<p><strong>性能监控与决策机制</strong></p>
+<p>整个调优过程紧密围绕<strong>IPC</strong>这一指标展开，并辅以安全回滚策略。</p>
+<ul>
+<li><strong>性能指标选择</strong>：</li>
+<li>选用<strong>IPC</strong>而非<strong>LLC MPKI</strong>（Last-Level Cache Misses Per Kilo-Instruction）作为主要指标。</li>
+<li>原因在于，实验发现LLC MPKI的降低与最终性能提升的相关性不强（见图11），而IPC能更直接地反映端到端的性能变化。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/f4effe82e50ea717508d8c2571fd16df588b36a87bf7836ebb3d96773985a05f.jpg" /></p>
+<p><em>Figure 11. The relationship between speedup and LLC MPKI for pr on Cascade Lake.</em></p>
+<ul>
+<li><strong>测量与执行</strong>：</li>
+<li>每次调整预取距离后，RPG2会暂停目标进程，通过修改机器码中的立即数来更新距离。</li>
+<li>随后恢复进程执行，并使用<code>perf stat</code>监控约<strong>0.3秒</strong>的IPC作为该距离的性能评估。</li>
+<li>这些操作通过<code>libpg2</code>库在目标进程地址空间内高效完成，单次距离调整的停顿时间仅为<strong>1.1-1.4ms</strong>（见表2）。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4.jpg" /></p>
+<ul>
+<li><strong>回滚机制 </strong>(Rolling Back)</li>
+<li>如果在整个搜索结束后，未能找到任何一个预取距离能使IPC超越原始基线，则触发回滚。</li>
+<li>RPG2会利用<strong>BOLT Address Translation Table </strong>(BATT) 将所有线程的程序计数器（PC）从优化后的函数（<code>f1</code>）映射回原始函数（<code>f0</code>）。</li>
+<li>对于恰好执行在预取内核中的线程，由于BATT中无对应条目，RPG2会使用<code>ptrace</code>进行单步执行，直到PC回到有映射关系的代码位置。</li>
+<li>此机制确保了即使预取有害，系统也能在几秒内恢复到原始性能水平，体现了其鲁棒性（见图10右）。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/bf9367c258960cd85482ea244dcca3e62c08a2ec04410b21469f291c936d59e6.jpg" /></p>
+<p><em>Figure 10. RPG2’s impact on IPC over time.</em></p>
+<p><strong>当前限制与未来方向</strong></p>
+<p>尽管该调优机制高效且有效，但仍存在一些限制。</p>
+<ul>
+<li><strong>单一距离假设</strong>：为了控制搜索复杂度，RPG2目前强制所有预取点使用<strong>相同的预取距离</strong>。然而，对于像<code>sssp</code>这样包含多个独立预取点的程序，非对称的距离配置可能更优（见图13）。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/e36d1471d7bce3f47c2dc2f42c31b2ccd9f803995217272909a6278fd696006e.jpg" /></p>
+<p><em>Figure 13. The relationship between multiple loads’ prefetch distances and performance for sssp running the p2pGnutella05 input on Cascade Lake.</em></p>
+<ul>
+<li><strong>搜索空间平滑性假设</strong>：算法假设IPC随预取距离的变化是相对平滑的。但在某些特殊场景下（如<code>randacc</code>基准测试），性能曲线可能存在尖锐的峰值（仅在特定距离如8的倍数时性能激增），这可能导致搜索算法错过最优解。</li>
+</ul>
+<h3 id="4">4. 安全回滚机制<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p><strong>安全回滚机制的实现原理</strong></p>
+<ul>
+<li>RPG2 的安全回滚机制是其 <strong>鲁棒性 (robustness)</strong> 的核心保障，旨在当动态插入的预取代码对性能产生负面影响时，能够无缝地将程序执行恢复到原始、未优化的状态。</li>
+<li>该机制依赖于两个关键技术：<strong>代码版本共存</strong>和 <strong>BOLT Address Translation Table (BATT)</strong>。</li>
+<li>在 <strong>Phase 3: Runtime Code Insertion</strong> 阶段，RPG2 并非直接覆盖原始函数 <code>f0</code>，而是在进程地址空间中分配新内存，将包含预取内核的优化函数 <code>f1</code> 放置于此。原始函数 <code>f0</code> 被完整保留。</li>
+<li>这种设计使得回滚操作在概念上变得简单：只需将所有指向 <code>f1</code> 的执行流重新导向回 <code>f1</code> 即可。</li>
+</ul>
+<p><strong>回滚触发条件与算法流程</strong></p>
+<ul>
+<li>回滚的决策发生在 <strong>Phase 4: Monitoring And Tuning</strong> 阶段。</li>
+<li>RPG2 通过一个三阶段的搜索算法（确定方向、粗粒度采样、二分查找）在 <code>[1, 200]</code> 的范围内探索最优的 <strong>prefetch distance</strong>。</li>
+<li>在整个搜索过程中，RPG2 持续监控程序的 <strong>IPC (Instructions Per Cycle)</strong> 作为性能指标。</li>
+<li><strong>回滚触发条件</strong>：当搜索算法完成，并且发现<strong>所有被测试过的预取距离配置所产生的 IPC 均未超过原始基线 IPC</strong> 时，RPG2 判定预取有害，并启动回滚流程。</li>
+<li>回滚的具体步骤如下：<ul>
+<li>RPG2 通过 <code>ptrace</code> 暂停目标进程。</li>
+<li>利用 <strong>BATT</strong> 将所有已修改的<strong>直接调用点</strong>从 <code>f1</code> 的入口地址恢复为 <code>f0</code> 的入口地址。</li>
+<li>对于当前正在 <code>f1</code> 中执行的线程，需要将其 <strong>Program Counter (PC)</strong> 从 <code>f1</code> 中的位置映射回 <code>f0</code> 中的等效位置。这正是 BATT 的核心作用。</li>
+</ul>
+</li>
+</ul>
+<p><strong>BATT 的关键作用与特殊处理</strong></p>
+<ul>
+<li><strong>BATT (BOLT Address Translation Table)</strong> 是由 BOLT 工具在生成优化二进制文件时嵌入的一个映射表，它记录了原始函数 <code>f0</code> 中每条指令的地址与其在优化后函数 <code>f1</code> 中对应指令地址之间的关系。</li>
+<li>对于常规的代码路径，BATT 提供了从 <code>f1</code> 到 <code>f0</code> 的反向映射能力，使得 PC 的重定向成为可能。</li>
+<li><strong>特殊 Corner Case 处理</strong>：如果一个线程的 PC 正好位于 <strong>prefetch kernel</strong> 内部，由于这段代码在 <code>f0</code> 中不存在，BATT 中自然没有对应的映射条目。</li>
+<li>为解决此问题，RPG2 采用了一种巧妙的策略：它不尝试直接映射，而是利用 <code>ptrace</code> 的 <strong>single-step</strong> 功能，让目标进程单步执行，直到 PC 离开 prefetch kernel 并到达 <code>f1</code> 中一段在 <code>f0</code> 里也存在的代码区域。此时，BATT 中便存在有效的映射条目，可以安全地完成 PC 的转换。</li>
+</ul>
+<p><img alt="" src="../images/d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" /></p>
+<p><em>Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.</em></p>
+<p><strong>在整体系统中的作用与价值</strong></p>
+<ul>
+<li>安全回滚机制将预取这一“双刃剑”式的优化转变为一种 <strong>零风险或负风险</strong> 的操作。开发者或系统无需担心因错误的预取配置而导致严重的性能下降。</li>
+<li>它使得 RPG2 能够大胆地进行在线探索和优化，即使在面对 <strong>输入敏感 (input-sensitive)</strong> 或 <strong>微架构敏感 (microarchitecture-sensitive)</strong> 的工作负载时（如 Figure 2 和 Figure 3 所示），也能保证最坏情况下性能不会低于原始基线。</li>
+<li>这一机制是 RPG2 区别于传统 <strong>静态编译器</strong>（如 APT-GET）的关键优势。静态方法一旦生成了有害的预取代码，便无法在运行时纠正，而 RPG2 则具备了 <strong>自适应</strong> 和 <strong>自我修复</strong> 的能力。</li>
+<li>最终，该机制确保了 RPG2 的核心承诺：<strong>Preserving its performance benefits, while avoiding slowdowns</strong>（保留性能收益，同时避免减速）。</li>
+</ul>
+<hr />
+<h2 id="4_1">4. 实验方法与实验结果<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>硬件平台</strong>：实验在两台服务器上进行。</li>
+<li><strong>Intel Cascade Lake</strong>: 双路 Xeon Gold 6230R，每路26核52线程，2.1GHz；L3缓存36MiB；384GiB RAM。</li>
+<li><strong>Intel Haswell</strong>: 双路 Xeon E5-2618L v3，每路8核16线程，2.3GHz；L3缓存20MiB；128GiB RAM。</li>
+<li>两台机器均启用所有可用的 <strong>hardware prefetchers</strong>。</li>
+<li><strong>软件环境</strong>：Linux 5.40，使用 Clang 10.0 编译所有工作负载，并链接 <code>-Wl,--emit-relocs</code> 以支持 BOLT。</li>
+<li><strong>基准测试套件</strong>：</li>
+<li><strong>CRONO</strong> 套件：包含 BFS、PR、BC、SSSP 四个图算法基准，使用来自 <strong>SNAP</strong> 的71个真实世界图数据集和部分合成数据。</li>
+<li><strong>AJ benchmarks</strong>：包含 IS、CG、randAccess，使用 Ainsworth and Jones 论文中的输入。</li>
+<li><strong>工作负载配置</strong>：所有基准均使用 <code>-O3</code> 优化，并延长运行时间至至少1分钟。通过修改代码手动标记初始化阶段结束，以确保 <strong>RPG2</strong> 在主计算阶段进行分析。</li>
+<li><strong>RPG2 配置</strong>：</li>
+<li><strong>Profiling</strong>：通过 <strong>PEBS</strong> 采样 LLC misses，持续2秒。</li>
+<li><strong>Tuning</strong>：每次 IPC 测量持续0.3秒。</li>
+<li><strong>对比基线 (Baselines)</strong>：</li>
+<li><strong>APT-GET</strong>：最新的 profile-guided 静态编译器，为一个随机输入生成二进制文件并在其他输入上运行。</li>
+<li><strong>manual prefetching</strong>：仅在 AJ benchmarks 中可用。</li>
+<li><strong>RPG2 active-only</strong>：仅包含成功激活优化的运行结果。</li>
+<li><strong>offline RPG2</strong>：为每个输入手动生成最优预取距离的二进制文件，作为性能上限。</li>
+</ul>
+<hr />
+<p><strong>结果数据分析</strong></p>
+<ul>
+<li><strong>整体性能表现</strong>：</li>
+</ul>
+<p><img alt="" src="../images/24962dbf6f2b2945464bbffad43379d1f1359a9ada18905c0a736aeb5ef9b7f3.jpg" /></p>
+<p><em>Figure 7. RPG2 and baseline performance on Cascade Lake (top) and Haswell (bottom).</em></p>
+<ul>
+<li>在 <strong>speedup group</strong>（RPG2 能提升性能的输入）中，<strong>RPG2</strong> 的性能增益与 <strong>APT-GET</strong> 和 <strong>offline</strong> 方案相当，证明其在线调优的有效性。</li>
+<li>在 <strong>slowdown group</strong>（预取会损害性能的输入）中，<strong>RPG2</strong> 的优势显著。它能检测到性能下降并 <strong>roll back</strong> 到原始代码，从而几乎完全避免了性能损失，而 <strong>APT-GET</strong> 和 <strong>offline</strong> 则遭受严重减速。</li>
+<li><strong>RPG2 (all)</strong> 与 <strong>RPG2 active-only</strong> 之间的差距源于在线分析的噪声，有时无法收集到足够的 LLC miss 样本以激活优化。</li>
+<li><strong>预取距离搜索精度</strong>：</li>
+</ul>
+<p><img alt="" src="../images/9712ff6ecfc19e411194cd0ef766960c420eca387fc8429f55dacc62484e84fc.jpg" /></p>
+<p><em>Figure 8. How close RPG2 gets to the optimal prefetch distance, for inputs with a single optimal distance.</em></p>
+<ul>
+<li>在120个具有单一最优预取距离的输入中，<strong>RPG2</strong> 的搜索结果有超过一半落在最优值±10的范围内，表明其搜索算法在大多数情况下是有效的。</li>
+<li>主要误差来源是 <strong>noisy IPC measurements</strong>，这可能导致搜索过早终止。</li>
+<li><strong>微架构层面验证</strong>：</li>
+<li><strong>LLC MPKI</strong>：</li>
+</ul>
+<p><img alt="" src="../images/f4effe82e50ea717508d8c2571fd16df588b36a87bf7836ebb3d96773985a05f.jpg" /></p>
+<p><em>Figure 11. The relationship between speedup and LLC MPKI for pr on Cascade Lake.</em></p>
+<p>RPG2 成功降低了 LLC MPKI，但 MPKI 的降低幅度与最终 <strong>speedup</strong> 之间没有强相关性，暗示性能提升还涉及 DRAM 带宽等其他因素。
+  - <strong>动态指令数开销</strong>：</p>
+<p><img alt="" src="../images/02aec35471a586e12689f07e9e30e761e421ae129fb6ede1ed34e783b1743be8.jpg" /></p>
+<p><em>Figure 12. RPG2’s impact on dynamic instruction count for pr on Cascade Lake.</em></p>
+<p>由于插入了预取内核（prefetch kernel），动态指令数平均增加不到15%，最坏情况为37%。RPG2 的性能增益已克服了这部分开销。
+- <strong>运行时行为</strong>：</p>
+<p><img alt="" src="../images/bf9367c258960cd85482ea244dcca3e62c08a2ec04410b21469f291c936d59e6.jpg" /></p>
+<p><em>Figure 10. RPG2’s impact on IPC over time.</em></p>
+<ul>
+<li>RPG2 能在几秒内完成分析、注入和调优。在有益场景下，IPC 显著提升；在有害场景下，经过短暂探索后能成功回滚，恢复原始性能。</li>
+<li><strong>操作延迟</strong>：</li>
+</ul>
+<p><img alt="" src="../images/730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4.jpg" /></p>
+<ul>
+<li><strong>BOLT 代码生成</strong>：约30毫秒，在后台完成。</li>
+<li><strong>Stop-the-world 操作</strong>：<ul>
+<li>初始代码插入：3-4毫秒。</li>
+<li>单次预取距离调整：1.1-1.4毫秒。</li>
+<li>平均探索11-12个距离点。</li>
+</ul>
+</li>
+<li>这些低延迟保证了 RPG2 在线操作对程序整体性能的干扰极小。</li>
+</ul>
+<hr />
+<p><strong>消融实验与敏感性分析</strong></p>
+<ul>
+<li><strong>Profiling 时长的影响</strong>：</li>
+</ul>
+<p><img alt="" src="../images/7a810de94e65f385b9d67285044beecb074c78c1bd1d9ddb87feb40aac55a1b5.jpg" /></p>
+<p><em>Figure 9. The impact of profiling phase duration on RPG2’s optimization activation.</em></p>
+<ul>
+<li>默认 <strong>profiling</strong> 时长为2秒。实验表明，更长的 profiling 时间能略微提高优化激活的成功率（“always”比例上升），但根据 <strong>Amdahl’s Law</strong>，过长的分析时间会减少可用于加速的执行时间。2秒被证明是一个合理的折衷。</li>
+<li><strong>预取距离的敏感性</strong>：</li>
+</ul>
+<p><img alt="" src="../images/30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34.jpg" /></p>
+<ul>
+<li>对所有输入在 [1,100] 范围内穷举预取距离，发现仅有少数输入呈现易于优化的 <strong>asymptotic</strong> 行为。</li>
+<li>大量输入属于 <strong>single optimal</strong> 或 <strong>range optimal</strong>，需要精确搜索。</li>
+<li>输入的行为在不同微架构（Haswell vs. Cascade Lake）上不稳定，凸显了动态适应的必要性。</li>
+<li><strong>多负载预取距离</strong>：</li>
+</ul>
+<p><img alt="" src="../images/e36d1471d7bce3f47c2dc2f42c31b2ccd9f803995217272909a6278fd696006e.jpg" /></p>
+<p><em>Figure 13. The relationship between multiple loads’ prefetch distances and performance for sssp running the p2pGnutella05 input on Cascade Lake.</em></p>
+<ul>
+<li>对于 SSSP（包含两个可预取负载）的分析表明，<strong>asymmetric</strong> 预取距离（即为两个负载设置不同距离）有时能带来比 <strong>symmetric</strong>（RPG2 当前策略）更好的性能。</li>
+<li>这揭示了 RPG2 当前将所有预取点设为相同距离的策略存在优化空间，但高效的多维搜索是一个挑战。</li>
+<li><strong>失败案例分析</strong>：</li>
+<li><strong>Phase transition 误判</strong>：在某些输入（如 sssp/as20000102）中，程序本身存在从低 IPC 到高 IPC 的阶段转换。RPG2 错误地将此 IPC 提升归因于预取，从而未能及时回滚，导致性能受损。这表明单纯依赖 <strong>IPC</strong> 作为性能指标在某些场景下是不充分的。</li>
+<li><strong>非平滑搜索空间</strong>：在 randacc 基准中，仅当预取距离为8的倍数时性能才显著提升，搜索空间高度不连续。RPG2 假设搜索空间相对平滑的策略在此失效，错过了最优解。</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

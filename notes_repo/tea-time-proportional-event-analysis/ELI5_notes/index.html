@@ -1,0 +1,680 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/tea-time-proportional-event-analysis/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>TEA: Time-Proportional Event Analysis 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tea-time-proportional-event-analysis" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TEA: Time-Proportional Event Analysis 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-time-proportional-per-instruction-cycle-stacks-pics-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Time-Proportional Per-Instruction Cycle Stacks (PICS) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-performance-signature-vector-psv-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Performance Signature Vector (PSV) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-commit-state-based-event-hierarchy-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Commit-State-Based Event Hierarchy (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-time-proportional-sampling-logic-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Time-Proportional Sampling Logic (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tea-time-proportional-event-analysis">TEA: Time-Proportional Event Analysis 通俗讲解<a class="headerlink" href="#tea-time-proportional-event-analysis" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前的性能分析工具，无论是 <strong>instruction-driven</strong>（如 AMD IBS, Arm SPE）还是 <strong>event-driven</strong>（如 PMC 计数），都有一个致命盲区：它们无法回答“<strong>为什么执行这些关键指令花了这么多时间？</strong>”</li>
+<li><strong>Instruction-driven</strong> 的方法（在 fetch/dispatch 阶段打标签）会严重偏向那些卡在流水线前端的指令，而不是真正卡住整个程序进度的指令。想象一下，你的快递车（ROB）因为前面一辆车抛锚（stalled at head）而动弹不得，但分析员却只记录后面不断涌来的、根本上不了路的新快递单（dispatched instructions），这显然抓错了重点。</li>
+<li><strong>Event-driven</strong> 的方法（单纯计数 cache miss, branch mispredict）则完全忽略了现代处理器的 <strong>latency hiding</strong> 能力。一个 cache miss 发生了，但如果处理器能同时干别的活，这个 miss 对总时间的影响可能微乎其微。反之，一个没被计数的事件如果恰好发生在关键路径上，就能让整个程序停摆。所以，<strong>事件计数和它对性能的真实影响之间，常常没有强相关性</strong>（见图7）。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>这篇论文提出的 <strong>TEA (Time-Proportional Event Analysis)</strong>，就像是给 CPU 的 <strong>commit stage</strong>（退休办公室）装了一个带“病因诊断”的打卡机。</li>
+<li>传统的 profiler（比如 TIP）只是记录“谁在退休办公室门口排队”，告诉你哪些指令是瓶颈（Q1）。但它不知道这些人为什么排队。</li>
+<li>TEA 则更进一步：当某条指令在退休办公室门口排队时（即暴露了延迟），这个打卡机会立刻翻出这条指令从出生（fetch）到现在的完整“病历”（<strong>Performance Signature Vector, PSV</strong>），看看它一路上经历了哪些“病症”（performance events），比如是不是得了“L1 cache miss”或者“branch mispredict”。</li>
+<li>最终，TEA 给每个静态指令生成一份 <strong>PICS (Per-Instruction Cycle Stacks)</strong>，这份报告不仅告诉你这个指令总共耽误了多少时间（高度），还把这段时间精确地分解成各种“病症”所贡献的部分（各层高度）。这就完美地同时回答了 Q1（谁是病人）和 Q2（得了什么病）。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者的核心洞察是：<strong>要建立时间与事件之间的因果关系，采样点必须在 commit stage，并且要追踪所有 in-flight 指令的事件</strong>。</li>
+<li>为了解决 overhead 问题，他们没有盲目追踪所有几百个 PMU 事件，而是回归第一性原理，只关注那些能直接导致 <strong>commit stall</strong> 的关键事件，并利用 <strong>performance event hierarchies</strong> 精心挑选了 <strong>9 个</strong>最具解释力的事件（见表1）。</li>
+<li>具体实现上，他们在处理器的各个关键模块（Fetch, Dispatch, LSU, ROB）中嵌入逻辑，为每条动态指令（µop）维护一个 <strong>9-bit 的 PSV</strong>。这个向量会随着指令在流水线中前进而不断更新，记录下它遭遇的所有关键事件。</li>
+<li>当基于 <strong>TIP</strong> 的时间比例采样器决定在某个周期进行采样时，它会根据当前的 <strong>commit state</strong>（Compute, Drained, Stalled, Flushed）精准定位到应该为此刻延迟负责的那条（或几条）指令，然后连同它的 <strong>PSV</strong> 一起打包上报。</li>
+<li>通过这种设计，TEA 巧妙地将 <strong>时间归属</strong>（由 TIP 解决）和 <strong>事件归因</strong>（由 PSV 解决）无缝结合，最终以极低的开销（<strong>~0.1% 功耗，1.1% 性能</strong>）实现了前所未有的分析精度（<strong>平均误差仅 2.1%</strong>，远优于 IBS/SPE/RIS 的 ~55%）。</li>
+</ul>
+<p><img alt="" src="../images/eb6db800b0743fd8564fb4a8f11a2c335ff65e65a3eaf511e8e7806f0bc37165.jpg" /></p>
+<p><em>Table 1: The performance events of TEA, IBS, SPE, and RIS.</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">平均误差</th>
+<th style="text-align: left;">存储开销</th>
+<th style="text-align: left;">关键缺陷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>TEA</strong></td>
+<td style="text-align: left;"><strong>2.1%</strong></td>
+<td style="text-align: left;"><strong>249 B</strong></td>
+<td style="text-align: left;">需要硬件支持</td>
+</tr>
+<tr>
+<td style="text-align: left;">NCI-TEA</td>
+<td style="text-align: left;">11.3%</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Flush 场景下归因错误</td>
+</tr>
+<tr>
+<td style="text-align: left;">AMD IBS</td>
+<td style="text-align: left;">55.6%</td>
+<td style="text-align: left;">~1 B</td>
+<td style="text-align: left;">非时间比例，前端采样偏差</td>
+</tr>
+<tr>
+<td style="text-align: left;">Arm SPE</td>
+<td style="text-align: left;">55.5%</td>
+<td style="text-align: left;">~1 B</td>
+<td style="text-align: left;">非时间比例，前端采样偏差</td>
+</tr>
+<tr>
+<td style="text-align: left;">IBM RIS</td>
+<td style="text-align: left;">56.0%</td>
+<td style="text-align: left;">~1 B</td>
+<td style="text-align: left;">非时间比例，前端采样偏差</td>
+</tr>
+</tbody>
+</table>
+<p>正是这种高精度，让 TEA 能在 <strong>lbm</strong> 和 <strong>nab</strong> 这样的真实 benchmark 中发现传统工具无法定位的深层次性能问题，并指导开发者做出有效的优化，分别获得了 <strong>1.28x</strong> 和 <strong>2.45x</strong> 的显著加速。</p>
+<h3 id="1-time-proportional-per-instruction-cycle-stacks-pics-eli5">1. Time-Proportional Per-Instruction Cycle Stacks (PICS) (ELI5)<a class="headerlink" href="#1-time-proportional-per-instruction-cycle-stacks-pics-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前的性能分析工具，无论是 <strong>instruction-driven</strong>（如 AMD IBS, Arm SPE）还是 <strong>event-driven</strong>（如 PMC 计数），都有一个根本性的“错位”问题。</li>
+<li><strong>Instruction-driven 的难受之处</strong>：它们在指令刚进入流水线（fetch/dispatch 阶段）就给它“贴标签”，然后记录它一生中遇到的所有事件。但问题是，一条指令可能在前端卡了很久，但真正拖慢整个程序的却是另一条在 <strong>commit 阶段</strong>卡住的指令。这种做法会严重高估那些“生不逢时”（在错误时间被取指/分发）的指令的重要性，导致你优化了错误的目标。</li>
+<li><strong>Event-driven 的难受之处</strong>：它只告诉你“发生了多少次缓存未命中、分支预测失败”，但这些事件的<strong>计数</strong>和它们对<strong>整体执行时间的真实影响</strong>之间没有直接关系。因为现代处理器有强大的 <strong>latency hiding</strong>（延迟隐藏）能力，很多事件的影响被掩盖了。你看到一个很高的 L1 miss 计数，但它可能对性能毫无影响，而一个低频但致命的 pipeline flush 却被淹没在数据海洋里。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你在管理一个繁忙的餐厅（CPU）。你想找出是什么让顾客（程序）等待时间变长。</li>
+<li><strong>旧方法（IBS/SPE）</strong> 就像在顾客一进门（fetch）就给他手腕上戴个计时器，记录他从进门到坐下点餐期间遇到的所有麻烦（比如等位、找不到服务员）。但这完全忽略了后厨（execution/commit）才是真正的瓶颈。可能后厨的一个主厨（关键指令）手受伤了（stall），导致所有菜都出不来，但你的计时器却在记录那些早就坐好、只是在闲聊的顾客。</li>
+<li><strong>旧方法（PMC计数）</strong> 就像你只统计“今天摔碎了多少个盘子”、“服务员跑了多少趟”。这些数据本身没错，但无法告诉你哪个事件是导致翻台率（性能）下降的元凶。也许摔盘子发生在客流低谷，影响不大；而一次关键的食材短缺（pipeline flush）虽然只发生一次，却让整个餐厅停摆半小时。</li>
+<li><strong>TEA 的 PICS</strong> 则像一个聪明的经理，他只在<strong>上菜窗口</strong>（commit stage）观察。每当上菜窗口空闲（stalled/drained/flushed），他就立刻记下：“此刻，是因为后厨的哪道菜（指令）没准备好？具体是因为缺了哪种食材（cache miss）还是厨师切错了（branch mispredict）？” 这样，他记录的每一分钟等待，都<strong>精确地、按时间比例地</strong>对应到真正造成瓶颈的那个环节。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有抛弃现有的采样框架，而是巧妙地在 <strong>TIP (Time-Proportional Instruction Profiling)</strong> 这个已经能准确定位“谁在 commit 阶段卡住”的基础上，增加了一个 <strong>Performance Signature Vector (PSV)</strong>。</li>
+<li><strong>核心逻辑转换</strong>：传统的采样只关心“<strong>哪个</strong>指令地址在卡”，而 TEA 的采样关心的是“<strong>哪个</strong>指令地址在卡，以及它身上带着哪些‘事件徽章’（PSV）”。</li>
+<li>具体来说，TEA 在硬件层面为每个 in-flight 指令（ROB entry）维护一个 <strong>9-bit 的 PSV</strong>，这个向量会随着指令在流水线中流动，实时记录它是否遭遇了预定义的关键事件（如 ST-L1, FL-MB 等）。</li>
+<li>当 TIP 的采样逻辑在 commit 阶段触发时，它不仅抓取指令地址，还会一并抓取该指令当前的 <strong>PSV</strong>。通过大量这样的采样，就可以为每个静态指令构建一个 <strong>Cycle Stack</strong>：栈的总高度代表它对总执行时间的贡献（回答 Q1），而栈内不同颜色的区块大小则代表不同事件（或事件组合）所贡献的时间比例（回答 Q2）。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/6ab3d4d6d062d567eaece089793fa0b9b45668c215a54846790eeae0de6930ad.jpg" /></p>
+<p><em>Figure 1: Example explaining how TEA creates PICS. TEA explains how performance events cause performance loss.</em></p>
+<ul>
+<li>这个设计的精妙之处在于，它将“<strong>时间归属</strong>”和“<strong>事件归因</strong>”这两个问题，在 <strong>commit 这个唯一能暴露真实延迟的时刻</strong>，通过 <strong>PSV</strong> 这个载体<strong>一次性、原子性地</strong>解决了。这从根本上保证了分析结果的 <strong>time-proportionality</strong>。</li>
+</ul>
+<h3 id="2-performance-signature-vector-psv-eli5">2. Performance Signature Vector (PSV) (ELI5)<a class="headerlink" href="#2-performance-signature-vector-psv-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong>
+- 传统的性能分析工具，比如 <strong>AMD IBS</strong>、<strong>Arm SPE</strong>，它们的问题在于“抓错了人”。它们在指令刚进入流水线（fetch/dispatch阶段）就给它贴上一个标签，然后记录这个指令后续遇到了什么事件（比如 cache miss）。但问题是，一个指令可能在前端等了很久，但它真正卡住整个程序的地方是在后端（commit阶段）。这种“前端采样”的方式，会把大量时间花在那些其实对整体性能影响不大的指令上，导致分析结果严重失真。论文里提到，这些方法的平均误差高达 <strong>55%+</strong>，几乎没法用。
+- 另一种方法是只统计事件发生的总次数（event-driven），比如总共发生了多少次 L1 cache miss。但这更糟糕，因为它完全忽略了 <strong>latency hiding</strong>（延迟隐藏）效应。一个 cache miss 如果被其他指令的执行掩盖了，那它对性能就没啥影响；反之，一个没被掩盖的 miss 才是真凶。光看总数，根本分不清谁是“真凶”，谁是“背锅侠”。</p>
+<p><strong>通俗比方</strong>
+- 想象你在调查一条高速公路为什么堵车。老办法（IBS/SPE）就像是在入口收费站（fetch）给每辆车发一个记录仪，让它自己记下路上遇到的所有事故。但问题在于，很多车在入口排队时就被记录了，而真正的堵点可能在几十公里外的一个隧道里（commit）。你拿到的数据里，全是入口排队的车，却漏掉了隧道里动弹不得的车。
+- <strong>Performance Signature Vector (PSV)</strong> 的做法则完全不同。它相当于在整条高速公路上部署了无数个微型传感器，每辆车（动态指令）一上路，就自动激活一个专属的“状态手环”（PSV）。这个手环只有几个简单的指示灯（bit），分别对应“是否遇到隧道事故”、“是否遇到桥梁维修”等关键事件。最关键的是，交通指挥中心（TEA sampler）只在<strong>道路最拥堵的瓶颈点</strong>（commit stage）拍照取证。照片里不仅有堵在那里的车牌号（instruction pointer），还有它手上手环亮着的灯（PSV）。这样，你就精准地知道，到底是哪个事件组合导致了这个具体的堵点。</p>
+<p><img alt="" src="../images/74ab2ef30a3ba5d969cd61f92fd8e514ab517907f123077b196ef3f913d14afe.jpg" /></p>
+<p><em>Figure 2: Example comparing TEA to dispatch-tagging. TEA is time-proportional whereas dispatch-tagging is not.</em></p>
+<p><strong>关键一招</strong>
+- 作者没有改变采样的核心逻辑（依然在 commit 阶段进行 <strong>time-proportional</strong> 采样），而是巧妙地在原有的指令数据包（instruction packet）中，为每个动态指令都附加了一个轻量级的 <strong>PSV</strong>。
+- 这个 PSV 是一个 <strong>bit-vector</strong>，它的每一位都对应一个精心挑选的、能解释 commit stall 的关键性能事件（如 ST-L1, FL-MB 等，见下表）。当指令在流水线中执行时，硬件会自动将它经历的事件“点亮”对应的 bit。
+- 在采样时刻，硬件不仅捕获当前造成 stall 的指令地址，还一并捕获它完整的 PSV。通过聚合大量这样的（指令地址, PSV）样本，就能为每个静态指令构建出 <strong>Per-Instruction Cycle Stacks (PICS)</strong>，清晰地展示其执行时间是如何被不同的事件组合所消耗的。
+- 这一招的精妙之处在于，它用极低的开销（仅 <strong>9 bits</strong> per instruction, 功耗增加 <strong>~0.1%</strong>）实现了对性能瓶颈的精准归因，将平均误差从 <strong>55%+</strong> 降到了 <strong>2.1%</strong>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Commit State</th>
+<th style="text-align: left;">Performance Event (in PSV)</th>
+<th style="text-align: left;">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Stalled (ST)</strong></td>
+<td style="text-align: left;">ST-L1, ST-TLB, ST-LLC</td>
+<td style="text-align: left;">Load 指令在 ROB 头部等待数据</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Drained (DR)</strong></td>
+<td style="text-align: left;">DR-L1, DR-TLB, DR-SQ</td>
+<td style="text-align: left;">ROB 为空，因前端取指或 Store Queue 满</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Flushed (FL)</strong></td>
+<td style="text-align: left;">FL-MB, FL-EX, FL-MO</td>
+<td style="text-align: left;">因分支误预测、异常或内存排序冲突导致 flush</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-commit-state-based-event-hierarchy-eli5">3. Commit-State-Based Event Hierarchy (ELI5)<a class="headerlink" href="#3-commit-state-based-event-hierarchy-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong>
+- 传统的性能分析工具，比如 AMD IBS、Arm SPE，它们的问题在于“抓错了人”。它们在指令刚进入流水线（fetch/dispatch阶段）就给指令打上标签，然后记录它后面遇到的所有事件。
+- 这导致一个致命问题：一个指令可能在前端被卡住很久（比如等缓存），但它本身并不是程序慢的“罪魁祸首”。真正让程序变慢的，是那些已经执行完、却卡在 <strong>Re-Order Buffer (ROB)</strong> 头部无法退休（commit）的指令，因为它们堵住了整个流水线。旧方法会过度关注那些“无辜的等待者”，而忽略了真正的“瓶颈制造者”。
+- 另一方面，单纯的事件计数器（Event Counting）只告诉你“发生了多少次缓存未命中”，但完全不关心这些未命中是否真的拖慢了程序。现代处理器有强大的乱序执行和延迟隐藏能力，很多未命中都被掩盖了，对性能毫无影响。这种“只看数量，不看影响”的方式，让开发者很难判断优化方向。</p>
+<p><strong>通俗比方</strong>
+- 想象你在管理一条高速公路的收费站（Commit Stage）。你的目标是找出造成交通大拥堵的根本原因。
+- 旧方法（如IBS）就像是在车辆刚进入高速入口匝道（Fetch/Dispatch）时，就给每辆车发一个记录仪。结果你发现入口处排了很长的队，就以为问题是入口太窄。但实际上，队伍之所以长，是因为前方主路的收费站（Commit）被一辆抛锚的大卡车（Stalled Instruction）堵死了。你记录了一堆在入口排队的私家车的数据，却完全没搞清楚真正的问题所在。
+- TEA的做法则聪明得多。它直接在<strong>收费站现场</strong>观察。它看到收费站当前处于什么状态：
+    - <strong>Stalled</strong>: 收费站开着，但第一辆车（ROB Head）坏了动不了。
+    - <strong>Drained</strong>: 收费站空着，因为后面没车来了（前端停顿）。
+    - <strong>Flushed</strong>: 刚才有一辆车逆行（分支预测错误），导致后面所有车都被清空了。
+- 然后，TEA不是漫无目的地记录所有信息，而是根据这三种“拥堵状态”，去追溯最可能导致该状态的<strong>关键原因</strong>。比如，如果是“Stalled”状态，它就重点检查这辆坏掉的车是不是因为“没油了”（L1 Cache Miss）或者“驾照有问题”（TLB Miss）。这就像是建立了一个“故障树”，从现象（拥堵状态）精准定位到少数几个核心病因。</p>
+<p><strong>关键一招</strong>
+- 作者的核心洞察是：<strong>所有的性能损失，最终都会在 Commit 阶段以三种非计算状态（Stalled, Drained, Flushed）暴露出来</strong>。因此，不需要追踪成百上千个性能事件，只需要围绕这三种状态，构建一个精简的“事件因果树”即可。
+- 具体来说，他们做了两件事：
+    - <strong>状态驱动采样</strong>：硬件采样器不再随机或在前端采样，而是紧密耦合到 Commit 逻辑。只有当处理器处于 Stalled/Drained/Flushed 状态时，才去采样那个“责任指令”（即导致该状态的指令）。
+    - <strong>层次化事件选择</strong>：针对每种状态，只选择最顶层、最具解释力的几个事件。例如，对于 <strong>Stalled</strong> 状态，他们没有去追踪所有可能的缓存层级未命中，而是选择了 <strong>ST-L1</strong> (L1 Data Cache Miss), <strong>ST-TLB</strong> (L1 Data TLB Miss), 和 <strong>ST-LLC</strong> (Last-Level Cache Miss) 这三个关键节点。因为 L1 未命中是 LLC 未命中的前提，抓住这几个根因，就能解释绝大多数情况，同时将需要追踪的事件数量从几百个锐减到 <strong>九个</strong>。
+- 这个设计巧妙地平衡了<strong>洞察力</strong>（Insight）和<strong>开销</strong>（Overhead）。通过聚焦于 Commit 状态这个“性能损失的唯一出口”，并利用事件间的依赖关系进行剪枝，TEA 用极小的硬件代价（仅增加 <strong>249 bytes</strong> 存储和 <strong>~0.1%</strong> 功耗）就获得了远超现有工具的准确性。</p>
+<p><img alt="" src="../images/a4284d00fc9253f43ab27e72c7760d5e67d36ff852e7b04dbc1205345da8368e.jpg" /></p>
+<p><em>Figure 3: Performance event hierarchy for the Stalled (ST) commit state.</em></p>
+<p><img alt="" src="../images/eb6db800b0743fd8564fb4a8f11a2c335ff65e65a3eaf511e8e7806f0bc37165.jpg" /></p>
+<p><em>Table 1: The performance events of TEA, IBS, SPE, and RIS.</em></p>
+<h3 id="4-time-proportional-sampling-logic-eli5">4. Time-Proportional Sampling Logic (ELI5)<a class="headerlink" href="#4-time-proportional-sampling-logic-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong>
+- 传统的性能分析工具，比如 <strong>AMD IBS</strong>、<strong>Arm SPE</strong>，它们的采样逻辑是“<strong>在哪里打标签，就在哪里采样</strong>”，通常在 <strong>fetch</strong> 或 <strong>dispatch</strong> 阶段给指令打上标记。
+- 这个做法在现代乱序执行（<strong>out-of-order</strong>）处理器上会出大问题。想象一下，一个指令因为 <strong>cache miss</strong> 卡在了 <strong>Re-Order Buffer (ROB)</strong> 的头部，导致整个流水线都停摆了。此时，前端（fetch/dispatch）可能还在不断地把新指令塞进来，但这些新指令根本没机会执行，它们只是“无辜的旁观者”。
+- 传统工具会错误地采样到这些“旁观者”指令，并把当前巨大的性能开销（stall cycles）归咎于它们。这就像是工厂停工了，你不去找那个卡住机器的坏零件，反而去记录那些堆在仓库里还没用上的新零件，完全<strong>本末倒置</strong>。
+- 结果就是，开发者看到的性能报告严重失真，无法定位真正的性能瓶颈（<strong>performance-critical instructions</strong>），优化工作变成了“盲人摸象”。</p>
+<p><strong>通俗比方 (The Analogy)</strong>
+- 这就像调查一场交通大拥堵的原因。传统方法（fetch/dispatch tagging）相当于在<strong>高速入口收费站</strong>随机拍下车牌号，然后说：“看，这些车造成了堵车！”
+- 但实际上，造成堵车的很可能是在<strong>几公里外事故现场</strong>那辆抛锚的大卡车。收费站拍到的车，只是被堵在路上的受害者。
+- <strong>Time-Proportional Sampling Logic</strong> 的做法则聪明得多：它直接飞到<strong>拥堵最严重的路段</strong>（即处理器的 <strong>commit stage</strong>），找到那辆<strong>真正挡在路上的车</strong>（即 <strong>head of ROB</strong> 的指令），然后问：“嘿，兄弟，你为啥停在这儿？是因为没油了（<strong>cache miss</strong>）？还是爆胎了（<strong>branch mispredict</strong>）？”
+- 它只关心那个<strong>正在暴露延迟（exposing latency）</strong> 的指令，因为它才是真正消耗系统时间的“罪魁祸首”。</p>
+<p><strong>关键一招 (The "How")</strong>
+- 作者没有改变采样的基本形式（依然是<strong>statistical sampling</strong>），而是彻底<strong>扭转了采样的目标选择逻辑</strong>。
+- 核心在于，TEA 的硬件采样器会<strong>实时监控 commit stage 的状态</strong>，并根据四种不同状态精准定位“元凶”：
+  - <strong>Compute</strong>: 多条指令同时提交，时间均匀分摊给它们。
+  - <strong>Stalled</strong>: ROB 头部的指令还没执行完。采样目标就是这个<strong>next-committing instruction</strong>。
+  - <strong>Drained</strong>: ROB 空了，因为前端取指慢（如 <strong>I-cache miss</strong>）。采样目标是下一个将要提交的指令。
+  - <strong>Flushed</strong>: 因为分支预测错误等原因，ROB 被清空了。此时，真正该负责的是那个<strong>已经提交但导致 flush 的指令</strong>（<strong>last-committed instruction</strong>），而不是下一个要提交的。
+- 为了实现这一点，TEA 在硬件上做了一个精巧的设计：它为每个动态指令维护一个 <strong>Performance Signature Vector (PSV)</strong>，并在 commit stage 的采样时刻，将<strong>正确的指令地址</strong>与其<strong>完整的 PSV</strong>（记录了它经历的所有性能事件）一起打包上报。
+- 这个逻辑转换确保了最终生成的 <strong>Per-Instruction Cycle Stacks (PICS)</strong> 是 <strong>time-proportional</strong> 的——每条指令在报告中所占的“高度”，严格正比于它对总执行时间的真实贡献。</p>
+<p><img alt="" src="../images/6ab3d4d6d062d567eaece089793fa0b9b45668c215a54846790eeae0de6930ad.jpg" /></p>
+<p><em>Figure 1: Example explaining how TEA creates PICS. TEA explains how performance events cause performance loss.</em></p>
+<p><img alt="" src="../images/74ab2ef30a3ba5d969cd61f92fd8e514ab517907f123077b196ef3f913d14afe.jpg" /></p>
+<p><em>Figure 2: Example comparing TEA to dispatch-tagging. TEA is time-proportional whereas dispatch-tagging is not.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

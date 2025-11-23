@@ -1,0 +1,2898 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-performance-vs-aggressiveness-of-the-prefetcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1. Performance vs. aggressiveness of the prefetcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fd39164810ba9e592f1484a60c705f26ff9146652f29165416db4bb885d729afjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fd39164810ba9e592f1484a60c705f26ff9146652f29165416db4bb885d729af.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ef3d8e04cdfaebbe1ef2eff186fa90bd3b5bc1336a5179e5c14b716c435502d9jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ef3d8e04cdfaebbe1ef2eff186fa90bd3b5bc1336a5179e5c14b716c435502d9.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a0b2e4e1ed0fb2be4699a36a5a9dbed4c633eecc8802030e3f66e6ecbb2a84bejpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        a0b2e4e1ed0fb2be4699a36a5a9dbed4c633eecc8802030e3f66e6ecbb2a84be.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-ipc-performance-left-and-prefetch-accuracy-right-with-different-aggressiveness-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. IPC performance (left) and prefetch accuracy (right) with different aggressiveness configurations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-ipc-performance-left-and-prefetch-lateness-right-with-different-aggressiveness-configurations-figure-4-filter-to-estimate-prefetcher-generated-cache-pollution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. IPC performance (left) and prefetch lateness (right) with different aggressiveness configurations Figure 4. Filter to estimate prefetcher-generated cache pollution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37b369db103b2e05a4f6345de6d966d64132e588811d2bb0658add10438d7d10jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        37b369db103b2e05a4f6345de6d966d64132e588811d2bb0658add10438d7d10.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-stream-prefetcher-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1. Stream prefetcher configurations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5cjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5c.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-baseline-processor-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3. Baseline processor configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4028cd0b36439c3ce1a5b505ab56f6517b583a1a388f71de2746b078f2483960jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4028cd0b36439c3ce1a5b505ab56f6517b583a1a388f71de2746b078f2483960.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e8977b49d81ed9a8d8d7d2f478066baefca0a897ad4b15787dc32503b6ad69ecjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        e8977b49d81ed9a8d8d7d2f478066baefca0a897ad4b15787dc32503b6ad69ec.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-dynamic-adjustment-of-prefetcher-aggressiveness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. Dynamic adjustment of prefetcher aggressiveness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-distribution-of-the-dynamic-aggressiveness-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. Distribution of the dynamic aggressiveness level
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-dynamic-adjustment-of-prefetch-insertion-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. Dynamic adjustment of prefetch insertion policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-distribution-of-the-insertion-position-of-prefetched-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8. Distribution of the insertion position of prefetched blocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-overall-performance-of-fdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9. Overall performance of FDP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-effect-of-fdp-on-memory-bandwidth-consumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10. Effect of FDP on memory bandwidth consumption
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-5-average-ipc-and-bpki-for-fdp-vs-conventional-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 5. Average IPC and BPKI for FDP vs conventional prefetchers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-performance-of-prefetch-cache-vs-fdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11. Performance of prefetch cache vs. FDP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-bandwidth-consumption-of-prefetch-cache-vs-fdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12. Bandwidth consumption of prefetch cache vs. FDP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6939ef382a92475d45bd0b1b3eeb8b99cbef48fb169a6f6a76882a5a5066d349jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6939ef382a92475d45bd0b1b3eeb8b99cbef48fb169a6f6a76882a5a5066d349.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14f8a70701293f0779343e09135fcfb8499b28f6abf9db7bee81ada5fb1a3b70jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14f8a70701293f0779343e09135fcfb8499b28f6abf9db7bee81ada5fb1a3b70.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-effect-of-fdp-on-the-ipc-performance-left-bpki-memory-bandwidth-consumption-right-of-ghb-based-cdc-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13. Effect of FDP on the IPC performance (left) BPKI memory bandwidth consumption (right) of GHB-based C/DC prefetchers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4ecb58ee74f1de0747b841dc4d7980bb9073a961f367d338239a47ec5ef3e830jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4ecb58ee74f1de0747b841dc4d7980bb9073a961f367d338239a47ec5ef3e830.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-7-change-in-ipc-and-bpki-with-fdp-when-l2-size-and-memory-latency-are-varie-figure-14-ipc-performance-left-and-memory-bandwidth-consumption-in-bpki-right-impact-of-fdp-on-the-remaining-spec-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 7. Change in IPC and BPKI with FDP when L2 size and memory latency are varie Figure 14. IPC performance (left) and memory bandwidth consumption in BPKI (right) impact of FDP on the remaining SPEC benchmarks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers">Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers 图表详解<a class="headerlink" href="#feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-performance-vs-aggressiveness-of-the-prefetcher">Figure 1. Performance vs. aggressiveness of the prefetcher<a class="headerlink" href="#figure-1-performance-vs-aggressiveness-of-the-prefetcher" title="Permanent link">&para;</a></h3>
+<p><img alt="b0ccac832bd92283fd730c808fc1fd78ed36dba08792d2e31becc85ffcda9309.jpg" src="../images/b0ccac832bd92283fd730c808fc1fd78ed36dba08792d2e31becc85ffcda9309.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>17 个 SPEC CPU2000 基准程序</strong>在四种不同预取器配置下的性能表现，性能指标为 <strong>Instructions per Cycle (IPC)</strong>。</li>
+<li>四种配置分别为：<strong>No prefetching</strong>（无预取）、<strong>Very Conservative</strong>（非常保守）、<strong>Middle-of-the-Road</strong>（中等）、<strong>Very Aggressive</strong>（非常激进）。</li>
+<li>性能趋势显示，<strong>激进预取</strong>在多数程序中显著提升 IPC，例如 <strong>mgrid</strong> 和 <strong>wupwise</strong> 的 IPC 在 Very Aggressive 配置下接近或超过 4.0。</li>
+<li>然而，在部分程序如 <strong>ammp</strong> 和 <strong>applu</strong> 中，<strong>Very Aggressive</strong> 配置导致 IPC 显著下降，甚至低于 <strong>No prefetching</strong>，表明预取可能带来负面性能影响。</li>
+<li><strong>Middle-of-the-Road</strong> 配置在大多数程序中提供平衡性能，既避免了激进预取的负面影响，又保留了一定的性能增益。</li>
+<li><strong>Very Conservative</strong> 配置在所有程序中的性能均低于其他两种主动预取配置，仅略优于或接近 <strong>No prefetching</strong>。</li>
+<li>数据表明，预取器的<strong>激进程度与性能提升并非线性正相关</strong>，需根据程序特性动态调整。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>No Prefetching</th>
+<th>Very Conservative</th>
+<th>Middle-of-the-Road</th>
+<th>Very Aggressive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>~1.5</td>
+<td>~1.6</td>
+</tr>
+<tr>
+<td>gap</td>
+<td>~1.2</td>
+<td>~1.4</td>
+<td>~1.5</td>
+<td>~2.3</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~0.3</td>
+<td>~0.4</td>
+<td>~0.5</td>
+<td>~0.5</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>~1.2</td>
+<td>~1.4</td>
+<td>~1.5</td>
+<td>~1.6</td>
+</tr>
+<tr>
+<td>vortex</td>
+<td>~1.3</td>
+<td>~1.5</td>
+<td>~1.6</td>
+<td>~1.9</td>
+</tr>
+<tr>
+<td>vpr</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>~1.5</td>
+<td>~1.6</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.1</td>
+<td>~0.7</td>
+</tr>
+<tr>
+<td>applu</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.1</td>
+<td>~0.9</td>
+</tr>
+<tr>
+<td>art</td>
+<td>~0.5</td>
+<td>~0.6</td>
+<td>~0.7</td>
+<td>~0.8</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>~0.8</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>facerec</td>
+<td>~2.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+<td>~2.4</td>
+</tr>
+<tr>
+<td>galgel</td>
+<td>~2.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+<td>~2.4</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>~2.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+<td>~2.4</td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>~2.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+<td>~4.5</td>
+</tr>
+<tr>
+<td>sixtrack</td>
+<td>~2.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+<td>~2.4</td>
+</tr>
+<tr>
+<td>swim</td>
+<td>~2.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+<td>~2.4</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>~2.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+<td>~4.5</td>
+</tr>
+<tr>
+<td>gmean</td>
+<td>~1.5</td>
+<td>~1.6</td>
+<td>~1.7</td>
+<td>~2.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>gmean</strong> 表示几何平均值，显示 <strong>Very Aggressive</strong> 配置在整体上提供最高性能，但其代价是部分程序性能严重退化。</li>
+<li>此图直观说明了<strong>固定预取策略的局限性</strong>，并为后续提出的 <strong>Feedback Directed Prefetching (FDP)</strong> 提供动机——即需要动态调整预取行为以适应不同程序阶段。</li>
+</ul>
+<h3 id="fd39164810ba9e592f1484a60c705f26ff9146652f29165416db4bb885d729afjpg">fd39164810ba9e592f1484a60c705f26ff9146652f29165416db4bb885d729af.jpg<a class="headerlink" href="#fd39164810ba9e592f1484a60c705f26ff9146652f29165416db4bb885d729afjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="fd39164810ba9e592f1484a60c705f26ff9146652f29165416db4bb885d729af.jpg" src="../images/fd39164810ba9e592f1484a60c705f26ff9146652f29165416db4bb885d729af.jpg" /></p>
+<ul>
+<li>图片内容为一个数学公式，定义了 <strong>Prefetch Accuracy</strong>（预取准确率）的计算方法。</li>
+<li>公式结构清晰，分子为 <strong>Number of Useful Prefetches</strong>（有用预取次数），分母为 <strong>Number of Prefetches Sent To Memory</strong>（发送至内存的预取请求数量）。</li>
+<li>该公式用于量化硬件预取器在预测程序内存访问模式时的有效性，是评估预取性能的核心指标之一。</li>
+<li>在论文中，此公式被用于动态反馈机制（FDP），以指导预取器调整其激进程度，避免因低准确率导致的性能下降和带宽浪费。</li>
+<li>论文指出，当预取准确率低于40%时（如 applu、galgel、ammp 等基准程序），启用预取器反而会降低性能；而高于40%时，通常能带来显著性能提升。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指标名称</th>
+<th>定义</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prefetch Accuracy</strong></td>
+<td>有用预取次数 / 发送至内存的预取请求数量</td>
+<td>衡量预取器预测内存地址的准确性，是动态调整预取激进程度的关键输入</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此公式在硬件实现中通过两个计数器跟踪：<code>pref-total</code>（总预取数）和 <code>used-total</code>（有用预取数），并在运行时实时计算比率。</li>
+<li>论文强调，仅依赖准确率不足以全面优化预取行为，因此还引入了 <strong>Prefetch Lateness</strong> 和 <strong>Prefetcher-Generated Cache Pollution</strong> 作为补充反馈指标。</li>
+</ul>
+<h3 id="ef3d8e04cdfaebbe1ef2eff186fa90bd3b5bc1336a5179e5c14b716c435502d9jpg">ef3d8e04cdfaebbe1ef2eff186fa90bd3b5bc1336a5179e5c14b716c435502d9.jpg<a class="headerlink" href="#ef3d8e04cdfaebbe1ef2eff186fa90bd3b5bc1336a5179e5c14b716c435502d9jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="ef3d8e04cdfaebbe1ef2eff186fa90bd3b5bc1336a5179e5c14b716c435502d9.jpg" src="../images/ef3d8e04cdfaebbe1ef2eff186fa90bd3b5bc1336a5179e5c14b716c435502d9.jpg" /></p>
+<ul>
+<li>图片展示了一个数学公式，用于定义 <strong>Prefetch Lateness</strong>（预取延迟）这一性能指标。</li>
+<li>该公式的分子是 <strong>Number of Late Prefetches</strong>（延迟预取的数量），分母是 <strong>Number of Useful Prefetches</strong>（有用预取的数量）。</li>
+<li>公式表明，<strong>Prefetch Lateness</strong> 是一个比率，衡量的是在所有被程序实际使用的预取请求中，有多少比例的预取数据未能及时返回到缓存，从而错过了被需求访问的时间点。</li>
+<li>在论文的上下文中，这个指标是反馈导向预取机制（FDP）所监控的三个核心指标之一，另外两个是 <strong>Prefetch Accuracy</strong> 和 <strong>Prefetcher-Generated Cache Pollution</strong>。</li>
+<li>论文指出，即使预取地址预测准确（高 accuracy），如果预取请求过于“晚”（high lateness），即数据在需求访问发生后才到达，那么预取也无法带来性能提升。例如，在 <code>mcf</code> 基准测试中，尽管预取准确率接近100%，但超过90%的有用预取都是延迟的，导致性能没有显著改善。</li>
+<li>FDP 机制会根据这个指标动态调整预取器的激进程度：当检测到预取延迟较高时，系统倾向于增加预取距离（Prefetch Distance），以更早地发起预取请求，从而降低延迟。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标名称</th>
+<th style="text-align: left;">定义</th>
+<th style="text-align: left;">计算公式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Prefetch Lateness</strong></td>
+<td style="text-align: left;">衡量预取请求的及时性</td>
+<td style="text-align: left;"><code>Number of Late Prefetches / Number of Useful Prefetches</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Prefetch Accuracy</td>
+<td style="text-align: left;">衡量预取地址预测的准确性</td>
+<td style="text-align: left;"><code>Number of Useful Prefetches / Number of Prefetches Sent</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Prefetcher-Generated Cache Pollution</td>
+<td style="text-align: left;">衡量预取造成的缓存污染</td>
+<td style="text-align: left;"><code>Number of Demand Misses Caused By the Prefetcher / Number of Demand Misses</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="a0b2e4e1ed0fb2be4699a36a5a9dbed4c633eecc8802030e3f66e6ecbb2a84bejpg">a0b2e4e1ed0fb2be4699a36a5a9dbed4c633eecc8802030e3f66e6ecbb2a84be.jpg<a class="headerlink" href="#a0b2e4e1ed0fb2be4699a36a5a9dbed4c633eecc8802030e3f66e6ecbb2a84bejpg" title="Permanent link">&para;</a></h3>
+<p><img alt="a0b2e4e1ed0fb2be4699a36a5a9dbed4c633eecc8802030e3f66e6ecbb2a84be.jpg" src="../images/a0b2e4e1ed0fb2be4699a36a5a9dbed4c633eecc8802030e3f66e6ecbb2a84be.jpg" /></p>
+<ul>
+<li>图片包含两个并列的柱状图，左侧为 <strong>IPC (Instructions per Cycle)</strong> 性能对比，右侧为 <strong>Dynamic Prefetcher Accuracy</strong> 准确率对比，两者均针对 17 个 SPEC CPU2000 基准程序。</li>
+<li>左侧 IPC 图中，纵轴范围从 0.00 到 5.00，横轴列出各基准程序名称（如 bzip2, gap, mcf 等），并以不同灰度柱体表示四种预取配置：<strong>No prefetching</strong>, <strong>Very Conservative</strong>, <strong>Middle-of-the-Road</strong>, <strong>Very Aggressive</strong>。</li>
+<li>右侧准确率图中，纵轴范围从 0.00 到 1.00，横轴与左图一致，柱体仅展示三种预取配置：<strong>Very Conservative</strong>, <strong>Middle-of-the-Road</strong>, <strong>Very Aggressive</strong>，未包含 No prefetching。</li>
+<li>从 IPC 图可见，<strong>Very Aggressive</strong> 配置在多数程序（如 wupwise, mgrid）上显著提升性能，但在部分程序（如 ammp, applu）上导致性能严重下降，甚至低于 <strong>No prefetching</strong>。</li>
+<li>从准确率图可见，<strong>Very Aggressive</strong> 配置在大部分程序上保持较高准确率（&gt;0.8），但在 ammp、applu、galgel 等程序上准确率极低（&lt;0.4），与 IPC 下降趋势高度相关。</li>
+<li>两图共同揭示一个关键结论：<strong>预取器的性能收益与其准确率强相关</strong>。高准确率时，激进预取带来高收益；低准确率时，激进预取反而造成性能损失。</li>
+<li>数据概览如下表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>IPC (Very Aggressive)</th>
+<th>Accuracy (Very Aggressive)</th>
+<th>Performance Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>~3.0</td>
+<td>~0.8</td>
+<td>Positive</td>
+</tr>
+<tr>
+<td>gap</td>
+<td>~2.2</td>
+<td>~0.7</td>
+<td>Positive</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~1.6</td>
+<td>~0.98</td>
+<td>Neutral/Negative</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>~0.7</td>
+<td>~0.1</td>
+<td><strong>Severe Negative</strong></td>
+</tr>
+<tr>
+<td>applu</td>
+<td>~0.6</td>
+<td>~0.1</td>
+<td><strong>Severe Negative</strong></td>
+</tr>
+<tr>
+<td>galgel</td>
+<td>~0.8</td>
+<td>~0.2</td>
+<td><strong>Negative</strong></td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>~4.8</td>
+<td>~0.7</td>
+<td><strong>High Positive</strong></td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>~4.5</td>
+<td>~0.9</td>
+<td><strong>High Positive</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观支持论文核心观点：<strong>盲目采用激进预取策略不可取，需根据运行时反馈动态调整</strong>，以避免在低准确率场景下造成性能退化。</li>
+</ul>
+<h3 id="figure-2-ipc-performance-left-and-prefetch-accuracy-right-with-different-aggressiveness-configurations">Figure 2. IPC performance (left) and prefetch accuracy (right) with different aggressiveness configurations<a class="headerlink" href="#figure-2-ipc-performance-left-and-prefetch-accuracy-right-with-different-aggressiveness-configurations" title="Permanent link">&para;</a></h3>
+<p><img alt="f4d2505a3e698001e92b871136ff86de1fb2b749df64a9ebb2391a7af65c5c5f.jpg" src="../images/f4d2505a3e698001e92b871136ff86de1fb2b749df64a9ebb2391a7af65c5c5f.jpg" /></p>
+<ul>
+<li>图片 f4d2505a3e698001e92b871136ff86de1fb2b749df64a9ebb2391a7af65c5c5f.jpg 包含两个并列柱状图，左侧为 IPC 性能，右侧为 Prefetch Accuracy，用于对比四种不同 aggressiveness 配置下的表现。</li>
+<li>左侧图表标题为 “Instructions per Cycle”，纵轴范围从 0.00 到 5.00，横轴列出 17 个 SPEC CPU2000 基准程序（如 bzip2, gap, mcf, parser, vortex, vpr, ammp, applu, art, equake, facerec, galgel, mesa, mgrid, sixtrack, swim, wupwise）及一个 gmean（几何平均值）。</li>
+<li>右侧图表标题为 “Prefetch Lateness”，纵轴范围从 0.00 到 1.00，横轴与左侧一致，展示各程序在不同配置下的预取延迟比例。</li>
+<li>四种配置通过图例区分：<strong>No prefetching</strong>（无预取）、<strong>Very Conservative</strong>（非常保守）、<strong>Middle-of-the-Road</strong>（中等）、<strong>Very Aggressive</strong>（非常激进）。</li>
+<li>在 IPC 性能图中，<strong>Very Aggressive</strong> 配置在多数程序上表现最优，尤其在 mgrid、wupwise 等程序上显著领先；但在 ammp 和 applu 上性能反而低于 <strong>No prefetching</strong>。</li>
+<li>在 Prefetch Accuracy 图中，<strong>Very Aggressive</strong> 配置在大多数程序上准确率较高，但在 mcf 上虽准确率接近 100%，但因延迟高导致性能未提升。</li>
+<li>数据表明，<strong>Prefetch Accuracy</strong> 与性能提升正相关：当准确率高于 40% 时，预取通常提升性能；低于 40% 时（如 applu, galgel, ammp），预取反而降低性能。</li>
+<li>表格化数据摘要如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>IPC (Very Aggressive)</th>
+<th>Prefetch Accuracy (Very Aggressive)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>~1.3</td>
+<td>~0.1</td>
+</tr>
+<tr>
+<td>gap</td>
+<td>~2.3</td>
+<td>~0.6</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~0.3</td>
+<td>~0.95</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>~1.5</td>
+<td>~0.2</td>
+</tr>
+<tr>
+<td>vortex</td>
+<td>~1.7</td>
+<td>~0.7</td>
+</tr>
+<tr>
+<td>vpr</td>
+<td>~1.4</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>~0.7</td>
+<td>~0.2</td>
+</tr>
+<tr>
+<td>applu</td>
+<td>~0.8</td>
+<td>~0.2</td>
+</tr>
+<tr>
+<td>art</td>
+<td>~1.0</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>~2.5</td>
+<td>~0.4</td>
+</tr>
+<tr>
+<td>facerec</td>
+<td>~2.5</td>
+<td>~0.5</td>
+</tr>
+<tr>
+<td>galgel</td>
+<td>~2.5</td>
+<td>~0.2</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>~2.8</td>
+<td>~0.6</td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>~4.8</td>
+<td>~0.9</td>
+</tr>
+<tr>
+<td>sixtrack</td>
+<td>~2.5</td>
+<td>~0.7</td>
+</tr>
+<tr>
+<td>swim</td>
+<td>~1.5</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>~4.8</td>
+<td>~0.9</td>
+</tr>
+<tr>
+<td>gmean</td>
+<td>~2.0</td>
+<td>~0.5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>综合分析显示，<strong>激进预取策略在高准确率场景下收益显著，但在低准确率或高延迟场景下会损害性能</strong>，凸显动态调整预取行为的必要性。</li>
+</ul>
+<h3 id="figure-3-ipc-performance-left-and-prefetch-lateness-right-with-different-aggressiveness-configurations-figure-4-filter-to-estimate-prefetcher-generated-cache-pollution">Figure 3. IPC performance (left) and prefetch lateness (right) with different aggressiveness configurations Figure 4. Filter to estimate prefetcher-generated cache pollution<a class="headerlink" href="#figure-3-ipc-performance-left-and-prefetch-lateness-right-with-different-aggressiveness-configurations-figure-4-filter-to-estimate-prefetcher-generated-cache-pollution" title="Permanent link">&para;</a></h3>
+<p><img alt="00535b5d378692089bc46ed2258d275e0e6d1cd80ea05c2799eef09253a25325.jpg" src="../images/00535b5d378692089bc46ed2258d275e0e6d1cd80ea05c2799eef09253a25325.jpg" /></p>
+<ul>
+<li>图片展示的是一个用于估算 <strong>prefetcher-generated cache pollution</strong> 的硬件过滤器结构，其核心是一个 <strong>Bloom filter</strong> 实现。</li>
+<li>该过滤器由一个 <strong>bit-vector</strong> 构成，其索引通过将缓存块地址的高位（CacheBlockAddress[23:12]）与低位（CacheBlockAddress[11:0]）进行 <strong>XOR</strong> 运算后得到。</li>
+<li>当一个因 <strong>demand miss</strong> 而载入的 L2 缓存块被 <strong>prefetch request</strong> 驱逐时，系统会用该块的地址访问过滤器，并将对应位设置为 <strong>1</strong>，表示该块是被预取操作“污染”而驱逐的。</li>
+<li>当一个 <strong>prefetch request</strong> 从内存返回并准备插入缓存时，系统会用其地址访问过滤器，并将对应位重置为 <strong>0</strong>，表示该预取块已成功插入，不再标记为“污染源”。</li>
+<li>当一个 <strong>demand access</strong> 在缓存中未命中时，系统会用其地址访问过滤器。若对应位为 <strong>1</strong>，则表明该缺失是由预取操作引起的，此时会递增 <strong>pollution-total</strong> 计数器。</li>
+<li>另一个计数器 <strong>demand-total</strong> 用于记录所有需求缺失总数，最终 <strong>cache pollution</strong> 比率通过 <strong>pollution-total / demand-total</strong> 计算得出。</li>
+<li>该机制在硬件上开销极小，仅需一个 <strong>4096-entry bit vector</strong>，无需维护完整的驱逐历史，是一种高效近似方案。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CacheBlockAddress[11:0]</td>
+<td>地址低位，参与 XOR 运算生成过滤器索引</td>
+</tr>
+<tr>
+<td>CacheBlockAddress[23:12]</td>
+<td>地址高位，参与 XOR 运算生成过滤器索引</td>
+</tr>
+<tr>
+<td>XOR</td>
+<td>将高低位异或，生成过滤器访问索引</td>
+</tr>
+<tr>
+<td>Pollution Filter (bit-vector)</td>
+<td>核心存储结构，记录哪些块因预取被驱逐</td>
+</tr>
+<tr>
+<td>Set Bit (1)</td>
+<td>表示某块因预取被驱逐，可能造成污染</td>
+</tr>
+<tr>
+<td>Reset Bit (0)</td>
+<td>表示预取块已插入缓存，清除污染标记</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此设计巧妙利用了 <strong>Bloom filter</strong> 的空间效率和概率性判断特性，在不增加复杂度的前提下，实现了对 <strong>cache pollution</strong> 的动态监控，为后续调整预取器行为提供关键反馈。</li>
+</ul>
+<h3 id="37b369db103b2e05a4f6345de6d966d64132e588811d2bb0658add10438d7d10jpg">37b369db103b2e05a4f6345de6d966d64132e588811d2bb0658add10438d7d10.jpg<a class="headerlink" href="#37b369db103b2e05a4f6345de6d966d64132e588811d2bb0658add10438d7d10jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="37b369db103b2e05a4f6345de6d966d64132e588811d2bb0658add10438d7d10.jpg" src="../images/37b369db103b2e05a4f6345de6d966d64132e588811d2bb0658add10438d7d10.jpg" /></p>
+<ul>
+<li>该图片展示了一个用于<strong>反馈导向预取（Feedback Directed Prefetching, FDP）</strong>机制中的<strong>计数器更新公式</strong>，其核心目的是在程序执行的不同阶段动态调整预取器行为。</li>
+<li>公式定义为：<code>CounterValue = ½ CounterValueAtTheBeginningOfTheInterval + ½ CounterValueDuringInterval</code>，表明当前计数值是<strong>上一采样区间末值</strong>与<strong>当前区间内新增值</strong>的<strong>等权重平均</strong>。</li>
+<li>此设计赋予<strong>近期行为更高权重</strong>，同时保留历史趋势信息，使系统能快速响应程序相位变化，避免因瞬时波动导致误判。</li>
+<li>该公式应用于FDP中所有关键指标计数器，包括：</li>
+<li><code>pref-total</code>（总预取请求数）</li>
+<li><code>used-total</code>（有用预取数）</li>
+<li><code>late-total</code>（迟到预取数）</li>
+<li><code>pollution-total</code>（由预取引发的需求缺失数）</li>
+<li><code>demand-total</code>（总需求缺失数）</li>
+<li>计数器更新触发条件基于<strong>L2缓存块驱逐次数</strong>，当驱逐计数器<code>eviction-count</code>超过静态阈值<code>Tinterval</code>（实验中设为8192）时，启动一次采样间隔结束与计数器更新。</li>
+<li>该机制确保了反馈信息的<strong>时效性与稳定性</strong>，是实现动态调整预取器激进程度和缓存插入策略的基础。</li>
+</ul>
+<h3 id="table-1-stream-prefetcher-configurations">Table 1. Stream prefetcher configurations<a class="headerlink" href="#table-1-stream-prefetcher-configurations" title="Permanent link">&para;</a></h3>
+<p><img alt="38c0d38e147ffeeef12bd140fd99a606fc05648c3bbdb17d8aa13e19c867b19a.jpg" src="../images/38c0d38e147ffeeef12bd140fd99a606fc05648c3bbdb17d8aa13e19c867b19a.jpg" /></p>
+<ul>
+<li>该图片为 <strong>Table 1. Stream prefetcher configurations</strong>，展示了流式预取器（Stream prefetcher）的五种不同配置，用于定义其“激进程度”（Aggressiveness），并通过 <strong>Prefetch Distance</strong> 和 <strong>Prefetch Degree</strong> 两个参数进行量化控制。</li>
+<li>表格结构清晰，包含四列：<strong>Dyn. Config. Counter</strong>、<strong>Aggressiveness</strong>、<strong>Pref. Distance</strong>、<strong>Pref. Degree</strong>，分别对应动态配置计数器值、预取器行为描述、预取距离和预取度。</li>
+<li>动态配置计数器是一个 <strong>3-bit 饱和计数器</strong>，范围从 1 到 5，初始值设为 3（Middle-of-the-Road），用于在运行时根据反馈机制动态调整预取器行为。</li>
+<li>各配置参数如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dyn. Config. Counter</th>
+<th>Aggressiveness</th>
+<th>Pref. Distance</th>
+<th>Pref. Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Very Conservative</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Conservative</td>
+<td>8</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Middle-of-the-Road</td>
+<td>16</td>
+<td>2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Aggressive</td>
+<td>32</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Very Aggressive</td>
+<td>64</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Prefetch Distance</strong> 定义了预取器在需求访问流之前可以提前多远发出预取请求，数值越大表示越激进。</li>
+<li><strong>Prefetch Degree</strong> 定义了每次预取操作中请求的缓存块数量，数值越大表示单次预取量越大。</li>
+<li>该表是 <strong>Feedback Directed Prefetching (FDP)</strong> 机制的核心组成部分，用于在运行时根据预取准确率、延迟和污染等指标动态切换配置，以优化性能与带宽效率。</li>
+</ul>
+<h3 id="259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014jpg">259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg<a class="headerlink" href="#259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg" src="../images/259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg" /></p>
+<ul>
+<li>该图片展示的是 <strong>Table 2</strong>，标题为 “How to adapt? Use of the three metrics to adjust the aggressiveness of the prefetcher”，用于说明如何根据三个反馈指标动态调整硬件预取器的激进程度。</li>
+<li>表格共包含 <strong>12 种情况（Case 1–12）</strong>，每种情况由三个输入指标决定：<strong>Prefetch Accuracy</strong>（预取准确率）、<strong>Prefetch Lateness</strong>（预取延迟）、<strong>Cache Pollution</strong>（缓存污染），并据此决定 <strong>Dynamic Configuration Counter Update</strong>（动态配置计数器更新）及其原因。</li>
+<li>三个输入指标被划分为不同等级：</li>
+<li>Prefetch Accuracy：High、Medium、Low</li>
+<li>Prefetch Lateness：Late、Not-Late</li>
+<li>Cache Pollution：Polluting、Not-Polluting</li>
+<li>输出动作包括三种：<strong>Increment</strong>（增加激进程度）、<strong>Decrement</strong>（降低激进程度）、<strong>No Change</strong>（保持不变），并附带简要理由。</li>
+</ul>
+<p>以下是表格内容的结构化呈现：</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Prefetch Accuracy</th>
+<th>Prefetch Lateness</th>
+<th>Cache Pollution</th>
+<th>Dynamic Configuration Counter Update (reason)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>High</td>
+<td>Late</td>
+<td>Not-Polluting</td>
+<td>Increment (to increase timeliness)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>High</td>
+<td>Late</td>
+<td>Polluting</td>
+<td>Increment (to increase timeliness)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>High</td>
+<td>Not-Late</td>
+<td>Not-Polluting</td>
+<td>No Change (best case configuration)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>High</td>
+<td>Not-Late</td>
+<td>Polluting</td>
+<td>Decrement (to reduce pollution)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Medium</td>
+<td>Late</td>
+<td>Not-Polluting</td>
+<td>Increment (to increase timeliness)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Medium</td>
+<td>Late</td>
+<td>Polluting</td>
+<td>Decrement (to reduce pollution)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Medium</td>
+<td>Not-Late</td>
+<td>Not-Polluting</td>
+<td>No Change (to keep the benefits of timely prefetches)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Medium</td>
+<td>Not-Late</td>
+<td>Polluting</td>
+<td>Decrement (to reduce pollution)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Low</td>
+<td>Late</td>
+<td>Not-Polluting</td>
+<td>Decrement (to save bandwidth)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Low</td>
+<td>Late</td>
+<td>Polluting</td>
+<td>Decrement (to reduce pollution)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Low</td>
+<td>Not-Late</td>
+<td>Not-Polluting</td>
+<td>No Change (to keep the benefits of timely prefetches)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Low</td>
+<td>Not-Late</td>
+<td>Polluting</td>
+<td>Decrement (to reduce pollution and save bandwidth)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键观察：</li>
+<li>当预取<strong>准确率高且无污染</strong>时（如 Case 3），系统维持当前配置，视为“最佳状态”。</li>
+<li>当预取<strong>延迟高但准确率高</strong>时（如 Case 1, 2, 5），系统倾向于<strong>增加激进程度</strong>以提升及时性，即使存在污染也优先保证命中。</li>
+<li>当预取<strong>准确率低或造成污染</strong>时（如 Case 4, 6, 8, 9, 10, 12），系统倾向于<strong>降低激进程度</strong>，以节省带宽或减少污染。</li>
+<li><strong>Case 11</strong> 是唯一在低准确率下仍保持不变的情况，前提是预取不延迟且无污染——表明系统认为此时预取虽不精准但尚可接受，无需调整。</li>
+<li>该表是 <strong>Feedback Directed Prefetching (FDP)</strong> 机制的核心决策逻辑，体现了其<strong>动态适应性</strong>和<strong>多维度权衡能力</strong>。</li>
+</ul>
+<h3 id="5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5cjpg">5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5c.jpg<a class="headerlink" href="#5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5cjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5c.jpg" src="../images/5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5c.jpg" /></p>
+<ul>
+<li>该图片展示了一个包含六个关键阈值参数的表格，这些参数用于控制 <strong>Feedback Directed Prefetching (FDP)</strong> 机制在运行时动态调整预取器行为。</li>
+<li>表格中的参数及其默认值如下：</li>
+<li><strong>Ahigh</strong>: 0.75 —— 用于判断预取准确率是否“高”的阈值。</li>
+<li><strong>Alow</strong>: 0.40 —— 用于判断预取准确率是否“低”的阈值。</li>
+<li><strong>Tlateness</strong>: 0.01 —— 用于判断预取是否“延迟”的阈值（即延迟比例超过此值则视为“late”）。</li>
+<li><strong>Tpollution</strong>: 0.005 —— 用于判断预取是否造成“高污染”的阈值（即污染比例超过此值则视为“polluting”）。</li>
+<li><strong>Phigh</strong>: 0.25 —— 用于判断缓存污染程度是否“高”的阈值（决定插入位置为 LRU）。</li>
+<li><strong>Plow</strong>: 0.005 —— 用于判断缓存污染程度是否“低”的阈值（决定插入位置为 MID）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>阈值</th>
+<th>用途说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ahigh</td>
+<td>0.75</td>
+<td>准确率高于此值视为“高”，可能增加预取激进性。</td>
+</tr>
+<tr>
+<td>Alow</td>
+<td>0.40</td>
+<td>准确率低于此值视为“低”，可能降低预取激进性。</td>
+</tr>
+<tr>
+<td>Tlateness</td>
+<td>0.01</td>
+<td>延迟比例高于此值视为“延迟”，影响激进性调整。</td>
+</tr>
+<tr>
+<td>Tpollution</td>
+<td>0.005</td>
+<td>污染比例高于此值视为“污染”，触发降级策略。</td>
+</tr>
+<tr>
+<td>Phigh</td>
+<td>0.25</td>
+<td>污染高于此值时，预取块插入 LRU 位置。</td>
+</tr>
+<tr>
+<td>Plow</td>
+<td>0.005</td>
+<td>污染低于此值时，预取块插入 MID 位置。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这些阈值是<strong>静态设定</strong>，作者在文中指出，通过动态调优或增加阈值层级可进一步提升性能，但未在本研究中展开。</li>
+<li>在不同系统环境下（如更高内存带宽竞争、更大缓存压力），可适当调整这些阈值以优化 FDP 行为。</li>
+<li>例如，在带宽紧张系统中，可提高 <strong>Ahigh</strong> 和 <strong>Alow</strong> 以限制预取器过于激进；在缓存空间紧张系统中，可降低 <strong>Tpollution</strong>、<strong>Phigh</strong> 或 <strong>Plow</strong> 以减少污染。</li>
+</ul>
+<h3 id="table-3-baseline-processor-configuration">Table 3. Baseline processor configuration<a class="headerlink" href="#table-3-baseline-processor-configuration" title="Permanent link">&para;</a></h3>
+<p><img alt="2aa95016c5ebdc1228e39a0a13bcdcb6eabe2038bbcd98301f46de0da75e714e.jpg" src="../images/2aa95016c5ebdc1228e39a0a13bcdcb6eabe2038bbcd98301f46de0da75e714e.jpg" /></p>
+<ul>
+<li><strong>处理器核心架构</strong>：采用 <strong>4 GHz</strong> 主频的超标量、乱序执行设计，具备 <strong>20-cycle</strong> 的最小分支预测错误惩罚机制。</li>
+<li><strong>分支预测器</strong>：配置为 <strong>aggressive hybrid branch predictor</strong>，包含 <strong>64K-entry gshare</strong>、<strong>64K-entry per-address</strong> 与 <strong>64K-entry selector</strong>，并精确建模错误路径执行行为。</li>
+<li><strong>指令窗口与执行核心</strong>：</li>
+<li>指令窗口支持 <strong>128-entry reorder buffer</strong>，配备 <strong>128-entry INT</strong> 和 <strong>128-entry FP physical register files</strong>，以及 <strong>64-entry store buffer</strong>。</li>
+<li>执行核心为 <strong>8-wide</strong>，除浮点除法外均完全流水线化，并配备完整旁路网络。</li>
+<li><strong>片上缓存系统</strong>：</li>
+<li><strong>L1 Instruction Cache</strong>：容量 <strong>64KB</strong>，延迟 <strong>2-cycle</strong>。</li>
+<li><strong>L1 Data Cache</strong>：容量 <strong>64KB</strong>，<strong>4-way set associative</strong>，<strong>8 banks</strong>，延迟 <strong>2-cycle</strong>，支持每周期 <strong>4 load accesses</strong>。</li>
+<li><strong>L2 Cache</strong>：容量 <strong>1MB</strong>，<strong>16-way unified</strong>，<strong>8 banks</strong>，延迟 <strong>10-cycle</strong>，配备 <strong>128 L2 MSHRs</strong>，<strong>1 read port</strong> 与 <strong>1 write port</strong>，采用 <strong>LRU replacement policy</strong>，块大小为 <strong>64B</strong>。</li>
+<li><strong>总线与内存子系统</strong>：</li>
+<li>主内存延迟为 <strong>500-cycle</strong>，采用 <strong>32 DRAM banks</strong>，<strong>32B-wide split-transaction core-to-memory bus</strong>，频率比为 <strong>4:1</strong>，带宽上限为 <strong>4.5 GB/s</strong>。</li>
+<li>最大允许 <strong>128 outstanding misses</strong> 至主存，精确建模银行冲突、带宽争用及队列延迟。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>配置详情</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pipeline</td>
+<td>20-cycle 分支误预测惩罚；4 GHz 处理器</td>
+</tr>
+<tr>
+<td>Branch Predictor</td>
+<td>aggressive hybrid (64K gshare, 64K per-address, 64K selector)</td>
+</tr>
+<tr>
+<td>Instruction Window</td>
+<td>128-entry ROB; 128 INT/FP 寄存器文件; 64-entry store buffer</td>
+</tr>
+<tr>
+<td>Execution Core</td>
+<td>8-wide 全流水线（FP divide 除外）</td>
+</tr>
+<tr>
+<td>On-chip Caches</td>
+<td>L1I: 64KB, 2-cycle; L1D: 64KB, 4-way, 8 banks, 2-cycle, 4 loads/cycle</td>
+</tr>
+<tr>
+<td></td>
+<td>L2: 1MB, 16-way, 8 banks, 10-cycle, 128 MSHRs, LRU, 64B 块</td>
+</tr>
+<tr>
+<td>Buses and Memory</td>
+<td>500-cycle 内存延迟; 32 banks; 32B 宽总线; 4.5 GB/s 带宽; 128 outstanding misses</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键设计目标</strong>：该配置旨在模拟高性能现代处理器，重点优化 <strong>memory latency hiding</strong> 与 <strong>bandwidth efficiency</strong>，尤其适用于评估硬件预取机制（如 <strong>stream prefetcher</strong>）在真实内存压力下的表现。所有缓存和内存结构均按实际硬件行为建模，确保实验结果具备高可信度。</li>
+</ul>
+<h3 id="4028cd0b36439c3ce1a5b505ab56f6517b583a1a388f71de2746b078f2483960jpg">4028cd0b36439c3ce1a5b505ab56f6517b583a1a388f71de2746b078f2483960.jpg<a class="headerlink" href="#4028cd0b36439c3ce1a5b505ab56f6517b583a1a388f71de2746b078f2483960jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="4028cd0b36439c3ce1a5b505ab56f6517b583a1a388f71de2746b078f2483960.jpg" src="../images/4028cd0b36439c3ce1a5b505ab56f6517b583a1a388f71de2746b078f2483960.jpg" /></p>
+<ul>
+<li>该图片为一张数据表格，标题为“Table 4. Number of prefetches sent by a very aggressive stream prefetcher for each benchmark in the SPEC CPU2000 suite”，用于展示在SPEC CPU2000基准测试套件中，采用<strong>Very Aggressive</strong>配置的流式预取器（stream prefetcher）向内存发送的预取请求数量。</li>
+<li>表格包含13个SPEC CPU2000基准程序，按列排列，分别为：bzip2, crafty, eon, gap, gcc, gzip, mcf, parser, perlbench, twolf, vortex, vpr。</li>
+<li>数据以千次（K）为单位，精确到整数，反映了各程序在250M指令模拟运行期间产生的预取请求总量。</li>
+<li><strong>关键数据点</strong>：<ul>
+<li><strong>gap</strong> 程序生成了最多的预取请求，高达 <strong>1656K</strong>，表明其内存访问模式高度可预测且适合激进预取。</li>
+<li><strong>mcf</strong> 程序紧随其后，生成 <strong>2585K</strong> 预取请求，同样显示出强烈的可预取性。</li>
+<li><strong>vortex</strong> 和 <strong>vpr</strong> 分别生成 <strong>591K</strong> 和 <strong>246K</strong> 请求，属于中等活跃度。</li>
+<li><strong>crafty</strong>、<strong>eon</strong>、<strong>gcc</strong>、<strong>gzip</strong>、<strong>parser</strong>、<strong>perlbench</strong>、<strong>twolf</strong> 的预取请求数量均低于100K，其中 <strong>twolf</strong> 仅为 <strong>2749</strong>，是表中唯一未达到千位的程序，表明这些程序的内存访问模式要么不可预测，要么对预取不敏感。</li>
+</ul>
+</li>
+<li>此表格是论文评估反馈导向预取机制（FDP）性能的基础，它帮助筛选出那些预取器活跃度高、有潜力通过动态调整获得显著性能或带宽收益的程序。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Prefetch Requests (K)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>336K</td>
+</tr>
+<tr>
+<td>crafty</td>
+<td>59K</td>
+</tr>
+<tr>
+<td>eon</td>
+<td>4969</td>
+</tr>
+<tr>
+<td>gap</td>
+<td><strong>1656K</strong></td>
+</tr>
+<tr>
+<td>gcc</td>
+<td>110K</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>31K</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td><strong>2585K</strong></td>
+</tr>
+<tr>
+<td>parser</td>
+<td>515K</td>
+</tr>
+<tr>
+<td>perlbench</td>
+<td>9218</td>
+</tr>
+<tr>
+<td>twolf</td>
+<td>2749</td>
+</tr>
+<tr>
+<td>vortex</td>
+<td><strong>591K</strong></td>
+</tr>
+<tr>
+<td>vpr</td>
+<td><strong>246K</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="e8977b49d81ed9a8d8d7d2f478066baefca0a897ad4b15787dc32503b6ad69ecjpg">e8977b49d81ed9a8d8d7d2f478066baefca0a897ad4b15787dc32503b6ad69ec.jpg<a class="headerlink" href="#e8977b49d81ed9a8d8d7d2f478066baefca0a897ad4b15787dc32503b6ad69ecjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="e8977b49d81ed9a8d8d7d2f478066baefca0a897ad4b15787dc32503b6ad69ec.jpg" src="../images/e8977b49d81ed9a8d8d7d2f478066baefca0a897ad4b15787dc32503b6ad69ec.jpg" /></p>
+<ul>
+<li>该图片为一张数据表格，标题为“Table 4. Number of prefetches sent by a very aggressive stream prefetcher for each benchmark in the SPEC CPU2000 suite”，用于展示在SPEC CPU2000基准测试集中，<strong>每个程序</strong>在采用<strong>Very Aggressive</strong>配置的流式预取器时所发出的预取请求数量。</li>
+<li>表格共包含17个内存密集型基准程序，其名称按顺序排列如下：ammp, applu, apsi, art, equake, facerec, fma3d, galgel, lucas, mesa, mgrid, sixtrack, swim, wupwise。</li>
+<li>每个程序对应的预取请求数量以“K”（千）为单位表示，具体数值如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Prefetch Requests (K)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ammp</td>
+<td>1157K</td>
+</tr>
+<tr>
+<td>applu</td>
+<td>6038K</td>
+</tr>
+<tr>
+<td>apsi</td>
+<td>8656</td>
+</tr>
+<tr>
+<td>art</td>
+<td>13319K</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>2414K</td>
+</tr>
+<tr>
+<td>facerec</td>
+<td>2437K</td>
+</tr>
+<tr>
+<td>fma3d</td>
+<td>3643</td>
+</tr>
+<tr>
+<td>galgel</td>
+<td>243K</td>
+</tr>
+<tr>
+<td>lucas</td>
+<td>1103</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>273K</td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>2185K</td>
+</tr>
+<tr>
+<td>sixtrack</td>
+<td>292K</td>
+</tr>
+<tr>
+<td>swim</td>
+<td>8766K</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>799K</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据显示，不同程序的预取请求量差异巨大。例如，<strong>art</strong>程序发出了高达<strong>13319K</strong>次预取请求，而<strong>lucas</strong>仅发出<strong>1103</strong>次。</li>
+<li>此表是论文评估反馈导向预取机制（FDP）性能的基础数据之一，用于筛选出那些预取器活跃度高、具有显著优化潜力的程序进行重点分析。</li>
+<li>在论文第4.2节中明确指出，研究聚焦于那些在最激进预取配置下发送至少200K预取请求的程序，此表中的所有程序均满足该条件，因此被纳入主要评估范围。</li>
+</ul>
+<h3 id="figure-5-dynamic-adjustment-of-prefetcher-aggressiveness">Figure 5. Dynamic adjustment of prefetcher aggressiveness<a class="headerlink" href="#figure-5-dynamic-adjustment-of-prefetcher-aggressiveness" title="Permanent link">&para;</a></h3>
+<p><img alt="48a7f881981e7386629c8a257bcbbd0852280640199823f654041d147eb8296a.jpg" src="../images/48a7f881981e7386629c8a257bcbbd0852280640199823f654041d147eb8296a.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 5</strong>，标题为“Dynamic adjustment of prefetcher aggressiveness”，用于比较不同预取器配置在17个SPEC CPU2000基准程序上的性能表现，以 <strong>Instructions per Cycle (IPC)</strong> 为衡量指标。</li>
+<li>图中包含五种预取器配置的柱状图对比：</li>
+<li><strong>No prefetching</strong>（无预取）</li>
+<li><strong>Very Conservative</strong>（非常保守）</li>
+<li><strong>Middle-of-the-Road</strong>（中等）</li>
+<li><strong>Very Aggressive</strong>（非常激进）</li>
+<li>
+<p><strong>Dynamic Aggressiveness</strong>（动态激进性，即本文提出的FDP机制）</p>
+</li>
+<li>
+<p>各配置在不同基准程序上的IPC表现差异显著，例如：</p>
+</li>
+<li>在 <strong>mgrid</strong>、<strong>wupwise</strong>、<strong>equake</strong> 等程序上，<strong>Very Aggressive</strong> 和 <strong>Dynamic Aggressiveness</strong> 表现优异，IPC远高于其他配置。</li>
+<li>
+<p>在 <strong>applu</strong>、<strong>ammp</strong>、<strong>galgel</strong> 等程序上，<strong>Very Aggressive</strong> 导致IPC大幅下降，而 <strong>Dynamic Aggressiveness</strong> 成功避免了性能退化，甚至优于 <strong>No prefetching</strong>。</p>
+</li>
+<li>
+<p><strong>Dynamic Aggressiveness</strong> 的优势体现在：</p>
+</li>
+<li>在大多数程序上接近或达到最佳传统配置的性能。</li>
+<li>在原本因激进预取导致性能下降的程序（如 <strong>applu</strong>、<strong>ammp</strong>）上，通过动态调整，将性能损失从48%以上降低至6%以内。</li>
+<li>
+<p>平均IPC比 <strong>Very Aggressive</strong> 高出 <strong>4.7%</strong>，比 <strong>Middle-of-the-Road</strong> 高出 <strong>11.9%</strong>。</p>
+</li>
+<li>
+<p>下表总结部分关键程序的IPC表现：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>No Prefetching</th>
+<th>Very Aggressive</th>
+<th>Dynamic Aggressiveness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mgrid</td>
+<td>~0.8</td>
+<td>~4.8</td>
+<td>~4.7</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>~1.2</td>
+<td>~4.9</td>
+<td>~4.8</td>
+</tr>
+<tr>
+<td>applu</td>
+<td>~1.3</td>
+<td>~0.7</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>~1.4</td>
+<td>~0.7</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>~0.8</td>
+<td>~3.0</td>
+<td>~2.9</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观证明：<strong>动态调整预取器激进程度</strong> 能有效平衡性能收益与风险，在不同程序相位下自动选择最优策略，从而实现整体性能提升并消除负向影响。</li>
+</ul>
+<h3 id="figure-6-distribution-of-the-dynamic-aggressiveness-level">Figure 6. Distribution of the dynamic aggressiveness level<a class="headerlink" href="#figure-6-distribution-of-the-dynamic-aggressiveness-level" title="Permanent link">&para;</a></h3>
+<p><img alt="d34f1b5fcd4997faab231c40bef64baa6eebc82d6e893cc3bc30c93e0cbaff9b.jpg" src="../images/d34f1b5fcd4997faab231c40bef64baa6eebc82d6e893cc3bc30c93e0cbaff9b.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 6. Distribution of the dynamic aggressiveness level</strong>，即在 <strong>Dynamic Aggressiveness</strong> 机制下，不同采样区间内动态配置计数器（Dynamic Configuration Counter）的分布情况。</li>
+<li>横轴为 SPEC CPU2000 基准测试程序名称，纵轴为“采样区间的百分比”，表示在程序运行期间，各配置等级被选中的时间占比。</li>
+<li>配置等级共五级，从 <strong>Very Conservative (1)</strong> 到 <strong>Very Aggressive (5)</strong>，分别用不同填充图案和颜色表示：</li>
+<li>Very Conservative (1)：浅灰色斜线</li>
+<li>Conservative (2)：中灰色</li>
+<li>Middle-of-the-Road (3)：白色</li>
+<li>Aggressive (4)：深灰色</li>
+<li>Very Aggressive (5)：黑色</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>程序名</th>
+<th>主要配置等级</th>
+<th>占比趋势说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>Very Aggressive (5)</td>
+<td>超过90%区间使用最激进配置</td>
+</tr>
+<tr>
+<td>gap</td>
+<td>Very Aggressive (5)</td>
+<td>几乎全部区间采用最激进配置</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>Very Aggressive (5)</td>
+<td>多数区间为最激进，少量为保守</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>Very Aggressive (5)</td>
+<td>主体为最激进，少量为中间或保守</td>
+</tr>
+<tr>
+<td>vortex</td>
+<td>Very Aggressive (5)</td>
+<td>绝大部分为最激进，极少量为保守</td>
+</tr>
+<tr>
+<td>vpr</td>
+<td>Very Aggressive (5)</td>
+<td>接近100%使用最激进配置</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>Very Conservative (1)</td>
+<td><strong>超过98%区间采用最保守配置</strong>，因激进预取会严重损害性能</td>
+</tr>
+<tr>
+<td>applu</td>
+<td>Very Conservative (1)</td>
+<td><strong>超过98%区间采用最保守配置</strong>，与ammp类似，避免性能损失</td>
+</tr>
+<tr>
+<td>art</td>
+<td>Very Aggressive (5)</td>
+<td>几乎全为最激进配置</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>Very Aggressive (5)</td>
+<td>几乎全为最激进配置</td>
+</tr>
+<tr>
+<td>facerec</td>
+<td>Very Aggressive (5)</td>
+<td>主体为最激进，少量为保守</td>
+</tr>
+<tr>
+<td>galgel</td>
+<td>Very Conservative (1)</td>
+<td><strong>主要采用最保守配置</strong>，因预取易造成污染和性能下降</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>Very Aggressive (5)</td>
+<td>主体为最激进，少量为保守</td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>Very Aggressive (5)</td>
+<td>几乎全为最激进配置</td>
+</tr>
+<tr>
+<td>sixtrack</td>
+<td>Very Aggressive (5)</td>
+<td>主体为最激进，少量为保守</td>
+</tr>
+<tr>
+<td>swim</td>
+<td>Very Aggressive (5)</td>
+<td>主体为最激进，少量为保守</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>Very Aggressive (5)</td>
+<td><strong>超过98%区间采用最激进配置</strong>，性能受益显著</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：</li>
+<li>对于 <strong>applu、ammp、galgel</strong> 等程序，FDP 机制自动选择 <strong>Very Conservative (1)</strong> 配置，以避免预取造成的性能退化。</li>
+<li>对于 <strong>wupwise、mgrid、equake</strong> 等程序，FDP 机制几乎全程启用 <strong>Very Aggressive (5)</strong>，最大化性能收益。</li>
+<li>这种动态调整能力使 FDP 能在不同程序相位中自适应地选择最优预取强度，从而在整体上提升性能并消除传统固定配置带来的负向影响。</li>
+</ul>
+<h3 id="figure-7-dynamic-adjustment-of-prefetch-insertion-policy">Figure 7. Dynamic adjustment of prefetch insertion policy<a class="headerlink" href="#figure-7-dynamic-adjustment-of-prefetch-insertion-policy" title="Permanent link">&para;</a></h3>
+<p><img alt="faeff948fd441f807661f315188552e676e2224832ec7abc50f8b273ddf8009c.jpg" src="../images/faeff948fd441f807661f315188552e676e2224832ec7abc50f8b273ddf8009c.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 7. Dynamic adjustment of prefetch insertion policy</strong>，用于评估不同缓存插入策略对性能（IPC）的影响。</li>
+<li>横轴为 SPEC CPU2000 基准测试程序，纵轴为每周期指令数（Instructions per Cycle），衡量性能。</li>
+<li>图中包含六种插入策略的对比：</li>
+<li><strong>No prefetching</strong>：无预取。</li>
+<li><strong>LRU</strong>：预取块插入 LRU 位置。</li>
+<li><strong>LRU-4</strong>：插入第 floor(n/4) 个最久未使用位置。</li>
+<li><strong>MID</strong>：插入第 floor(n/2) 个最久未使用位置。</li>
+<li><strong>MRU</strong>：插入 MRU 位置（默认策略）。</li>
+<li><strong>Dynamic Insertion</strong>：动态调整插入位置（基于污染反馈）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>性能表现概览</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No prefetching</td>
+<td>基线性能，多数程序低于其他预取策略。</td>
+</tr>
+<tr>
+<td>LRU</td>
+<td>在 applu、ammp 等程序上表现较好，但在 wupwise、mgrid 上显著低于 MRU。</td>
+</tr>
+<tr>
+<td>LRU-4</td>
+<td>平均性能优于 MRU，提升约 3.2%。</td>
+</tr>
+<tr>
+<td>MID</td>
+<td>性能介于 LRU 和 MRU 之间，部分程序接近最优。</td>
+</tr>
+<tr>
+<td>MRU</td>
+<td>默认策略，在大多数程序上提供较高性能，但易导致 cache pollution。</td>
+</tr>
+<tr>
+<td>Dynamic Insertion</td>
+<td><strong>综合表现最佳</strong>，在所有程序上接近或超越各静态策略的最佳值，平均优于 MRU 5.1%。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键发现</strong>：</li>
+<li><strong>Dynamic Insertion</strong> 在几乎所有程序中都能自动选择最优插入位置，实现“自适应”优化。</li>
+<li>在 <strong>applu</strong> 和 <strong>ammp</strong> 等易受污染影响的程序中，Dynamic Insertion 显著优于 MRU，接近 LRU 表现。</li>
+<li>在 <strong>wupwise</strong>、<strong>mgrid</strong> 等高收益程序中，Dynamic Insertion 接近 MRU，避免了 LRU 的性能损失。</li>
+<li>
+<p>静态策略无法兼顾所有程序特性，而动态机制通过运行时反馈实现了全局最优。</p>
+</li>
+<li>
+<p>结论：<strong>动态插入策略</strong> 能根据实际污染情况智能调整预取块在 LRU 栈中的位置，从而在不增加硬件复杂度的前提下，显著提升整体性能和带宽效率。</p>
+</li>
+</ul>
+<h3 id="figure-8-distribution-of-the-insertion-position-of-prefetched-blocks">Figure 8. Distribution of the insertion position of prefetched blocks<a class="headerlink" href="#figure-8-distribution-of-the-insertion-position-of-prefetched-blocks" title="Permanent link">&para;</a></h3>
+<p><img alt="70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg" src="../images/70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg" /></p>
+<ul>
+<li>图片展示了在采用 <strong>Dynamic Insertion</strong> 机制时，不同 SPEC CPU2000 基准程序中预取块（prefetched blocks）被插入到 L2 缓存 LRU 栈不同位置的百分比分布。</li>
+<li>横轴为各基准程序名称，纵轴为“<strong>Percentage of prefetch insertions</strong>”，即预取块插入操作在总预取中的占比。</li>
+<li>图例说明三种插入位置策略：</li>
+<li><strong>LRU</strong>：最久未使用位置（深灰色实心）</li>
+<li><strong>LRU-4</strong>：第 floor(n/4) 个最久未使用位置（斜线填充）</li>
+<li><strong>MID</strong>：中间位置（浅灰色实心）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>主要插入位置</th>
+<th>插入分布特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>gap</td>
+<td>MID</td>
+<td>绝大部分插入 MID 位置</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>MID</td>
+<td>绝大部分插入 MID 位置</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>LRU-4</td>
+<td>主要插入 LRU-4 位置，少量 LRU</td>
+</tr>
+<tr>
+<td>vortex</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>vpr</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td><strong>LRU</strong></td>
+<td>超过 50% 插入 LRU 位置，其余为 LRU-4 和 MID</td>
+</tr>
+<tr>
+<td>applu</td>
+<td><strong>LRU</strong></td>
+<td>超过 90% 插入 LRU 位置，极少量 LRU-4</td>
+</tr>
+<tr>
+<td>art</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>facerec</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>galgel</td>
+<td><strong>LRU</strong></td>
+<td>约 60% 插入 LRU 位置，其余为 LRU-4 和 MID</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>sixtrack</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>swim</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>MID</td>
+<td>几乎全部插入 MID 位置</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键观察：</li>
+<li>对于 <strong>applu、ammp、galgel</strong> 这三个传统上因预取导致性能下降的程序，<strong>Dynamic Insertion</strong> 机制显著倾向于将预取块插入到 <strong>LRU</strong> 位置，以减少缓存污染。</li>
+<li>对于其他大多数程序（如 <strong>wupwise、mgrid、equake</strong>），机制选择插入到 <strong>MID</strong> 或 <strong>LRU-4</strong> 位置，平衡了保留有用数据与避免污染的需求。</li>
+<li>该图直观验证了 FDP 机制能根据运行时检测到的 <strong>cache pollution</strong> 水平，动态调整插入策略，从而在不同程序上实现最优性能。</li>
+</ul>
+<h3 id="figure-9-overall-performance-of-fdp">Figure 9. Overall performance of FDP<a class="headerlink" href="#figure-9-overall-performance-of-fdp" title="Permanent link">&para;</a></h3>
+<p><img alt="ad3a41f6c96bd07ee1044157778e6e3516c03903241a6d77c514c279a7088bf1.jpg" src="../images/ad3a41f6c96bd07ee1044157778e6e3516c03903241a6d77c514c279a7088bf1.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 9. Overall performance of FDP</strong>，对比了五种不同 prefetching 策略在 17 个 SPEC CPU2000 基准程序上的 IPC（Instructions per Cycle）性能表现。</li>
+<li>横轴为各基准程序名称，纵轴为 IPC 值，单位为 Instructions per Cycle。</li>
+<li>图例包含五种策略：</li>
+<li><strong>No prefetching</strong>：无预取。</li>
+<li><strong>Very Aggressive</strong>：传统最激进预取配置。</li>
+<li><strong>Dynamic Insertion</strong>：仅动态调整预取块插入位置。</li>
+<li><strong>Dynamic Aggressiveness</strong>：仅动态调整预取器激进度。</li>
+<li>
+<p><strong>Dyn. Aggressiveness + Dyn. Insertion</strong>：同时动态调整激进度与插入位置，即完整的 <strong>Feedback Directed Prefetching (FDP)</strong>。</p>
+</li>
+<li>
+<p>性能对比数据摘要如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>No prefetching</th>
+<th>Very Aggressive</th>
+<th>Dynamic Insertion</th>
+<th>Dynamic Aggressiveness</th>
+<th>FDP (Both)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>~1.3</td>
+<td>~2.4</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.6</td>
+</tr>
+<tr>
+<td>gap</td>
+<td>~1.3</td>
+<td>~2.3</td>
+<td>~2.4</td>
+<td>~2.4</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~0.3</td>
+<td>~0.3</td>
+<td>~0.3</td>
+<td>~0.3</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>~1.0</td>
+<td>~1.8</td>
+<td>~1.9</td>
+<td>~1.9</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>vortex</td>
+<td>~1.3</td>
+<td>~2.0</td>
+<td>~2.1</td>
+<td>~2.1</td>
+<td>~2.2</td>
+</tr>
+<tr>
+<td>vpr</td>
+<td>~1.3</td>
+<td>~1.8</td>
+<td>~1.9</td>
+<td>~1.9</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>~1.3</td>
+<td>~0.7</td>
+<td>~1.3</td>
+<td>~1.3</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>applu</td>
+<td>~1.3</td>
+<td>~0.9</td>
+<td>~1.4</td>
+<td>~1.4</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>art</td>
+<td>~0.4</td>
+<td>~0.4</td>
+<td>~0.4</td>
+<td>~0.4</td>
+<td>~0.4</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>~2.3</td>
+<td>~2.5</td>
+<td>~2.6</td>
+<td>~2.6</td>
+<td>~2.7</td>
+</tr>
+<tr>
+<td>facerec</td>
+<td>~2.3</td>
+<td>~2.5</td>
+<td>~2.6</td>
+<td>~2.6</td>
+<td>~2.7</td>
+</tr>
+<tr>
+<td>galgel</td>
+<td>~2.3</td>
+<td>~2.5</td>
+<td>~2.6</td>
+<td>~2.6</td>
+<td>~2.7</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>~2.3</td>
+<td>~3.0</td>
+<td>~3.1</td>
+<td>~3.1</td>
+<td>~3.2</td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>~2.3</td>
+<td>~3.2</td>
+<td>~3.3</td>
+<td>~3.3</td>
+<td>~3.4</td>
+</tr>
+<tr>
+<td>sixtrack</td>
+<td>~2.3</td>
+<td>~2.8</td>
+<td>~2.9</td>
+<td>~2.9</td>
+<td>~3.0</td>
+</tr>
+<tr>
+<td>swim</td>
+<td>~1.3</td>
+<td>~1.8</td>
+<td>~1.9</td>
+<td>~1.9</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>~1.3</td>
+<td>~4.8</td>
+<td>~4.9</td>
+<td>~4.9</td>
+<td>~5.0</td>
+</tr>
+<tr>
+<td>fma3d</td>
+<td>~1.3</td>
+<td>~1.8</td>
+<td>~1.9</td>
+<td>~1.9</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>gmean</td>
+<td>~1.3</td>
+<td>~2.3</td>
+<td>~2.4</td>
+<td>~2.4</td>
+<td><strong>~2.5</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键观察：</li>
+<li><strong>FDP (Dyn. Aggressiveness + Dyn. Insertion)</strong> 在几乎所有基准程序上均达到或接近最高 IPC，显著优于其他单一策略。</li>
+<li>在 <strong>ammp</strong> 和 <strong>applu</strong> 上，传统 <strong>Very Aggressive</strong> 配置导致性能严重下降（IPC 分别降至 ~0.7 和 ~0.9），而 <strong>FDP</strong> 成功恢复并提升性能至 ~1.4 和 ~1.5，<strong>完全消除负向影响</strong>。</li>
+<li><strong>gmean</strong>（几何平均）显示，FDP 相比最佳传统配置（Very Aggressive）提升 <strong>6.5%</strong>，验证论文核心结论。</li>
+<li>单独使用 <strong>Dynamic Aggressiveness</strong> 或 <strong>Dynamic Insertion</strong> 均有收益，但二者结合效果更优，体现机制互补性。</li>
+<li>对于 <strong>mcf</strong> 和 <strong>art</strong> 等对预取不敏感的程序，所有策略性能相近，FDP 未引入额外开销。</li>
+</ul>
+<h3 id="figure-10-effect-of-fdp-on-memory-bandwidth-consumption">Figure 10. Effect of FDP on memory bandwidth consumption<a class="headerlink" href="#figure-10-effect-of-fdp-on-memory-bandwidth-consumption" title="Permanent link">&para;</a></h3>
+<p><img alt="6f57ce72dd5d5d7e89f67eb0a9231507b83e472974a8cedd5496d046f28bb57d.jpg" src="../images/6f57ce72dd5d5d7e89f67eb0a9231507b83e472974a8cedd5496d046f28bb57d.jpg" /></p>
+<ul>
+<li>图片标题为 <strong>Figure 10. Effect of FDP on memory bandwidth consumption</strong>，展示的是反馈导向预取（FDP）机制对内存带宽消耗的影响，以 <strong>BPKI</strong>（Memory Bus Accesses per thousand retired Instructions）为衡量单位。</li>
+<li>图表横轴列出 17 个 SPEC CPU2000 内存密集型基准程序，纵轴表示 BPKI 值，范围从 0 到 70。</li>
+<li>图例包含五种配置：</li>
+<li><strong>No prefetching</strong>：无预取</li>
+<li><strong>Very Conservative</strong>：非常保守预取</li>
+<li><strong>Middle-of-the-Road</strong>：中等预取</li>
+<li><strong>Very Aggressive</strong>：非常激进预取</li>
+<li>
+<p><strong>Dynamic Aggressiveness + Dynamic Insertion</strong>：FDP 动态调整激进性与插入策略</p>
+</li>
+<li>
+<p>各配置在不同基准程序上的 BPKI 表现如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>No Prefetching</th>
+<th>Very Conservative</th>
+<th>Middle-of-the-Road</th>
+<th>Very Aggressive</th>
+<th>Dynamic Aggressiveness + Dynamic Insertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bzip2</td>
+<td>~3</td>
+<td>~4</td>
+<td>~5</td>
+<td>~6</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>gap</td>
+<td>~6</td>
+<td>~7</td>
+<td>~8</td>
+<td>~9</td>
+<td>~7</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~30</td>
+<td>~30</td>
+<td>~30</td>
+<td>~30</td>
+<td>~25</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>~5</td>
+<td>~6</td>
+<td>~7</td>
+<td>~8</td>
+<td>~6</td>
+</tr>
+<tr>
+<td>vortex</td>
+<td>~4</td>
+<td>~5</td>
+<td>~6</td>
+<td>~7</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>vpr</td>
+<td>~3</td>
+<td>~4</td>
+<td>~5</td>
+<td>~6</td>
+<td>~4</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~30</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>applu</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~30</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>art</td>
+<td>~60</td>
+<td>~60</td>
+<td>~60</td>
+<td>~65</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~20</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>facerec</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~20</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>galgel</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~20</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>~5</td>
+<td>~6</td>
+<td>~7</td>
+<td>~8</td>
+<td>~6</td>
+</tr>
+<tr>
+<td>mgrid</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~20</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>sixtrack</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~20</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>swim</td>
+<td>~35</td>
+<td>~35</td>
+<td>~35</td>
+<td>~40</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>wupwise</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~20</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>amean</td>
+<td>~10</td>
+<td>~12</td>
+<td>~15</td>
+<td>~20</td>
+<td>~12</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：</li>
+<li><strong>Very Aggressive</strong> 配置在多个程序（如 applu、ammp、art）上显著增加 BPKI，表明其带来大量无效或污染性预取请求。</li>
+<li><strong>Dynamic Aggressiveness + Dynamic Insertion</strong> 在所有程序上均优于 <strong>Very Aggressive</strong>，尤其在 <strong>applu</strong> 和 <strong>ammp</strong> 上，BPKI 从约 30 降至约 12，降幅达 <strong>60%</strong>。</li>
+<li>在 <strong>art</strong> 程序中，FDP 将 BPKI 从 65 降至 50，节省约 <strong>23%</strong> 带宽。</li>
+<li>对于 <strong>mcf</strong>，FDP 与传统配置差异较小，说明该程序预取效率高，动态调整空间有限。</li>
+<li>
+<p><strong>FDP 平均降低 18.7% 内存带宽消耗</strong>，同时提升性能，实现带宽效率优化。</p>
+</li>
+<li>
+<p>总体趋势显示，FDP 机制能智能识别并抑制低效预取行为，在保持高性能的同时大幅减少内存总线访问次数，尤其在传统激进预取导致性能退化的程序上效果显著。</p>
+</li>
+</ul>
+<h3 id="table-5-average-ipc-and-bpki-for-fdp-vs-conventional-prefetchers">Table 5. Average IPC and BPKI for FDP vs conventional prefetchers<a class="headerlink" href="#table-5-average-ipc-and-bpki-for-fdp-vs-conventional-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="f1ace0e99fd907a732738620ca676335d85d31db685f8c1d9a1daff3165347ee.jpg" src="../images/f1ace0e99fd907a732738620ca676335d85d31db685f8c1d9a1daff3165347ee.jpg" /></p>
+<ul>
+<li>图片内容为 <strong>Table 5</strong>，标题为 “Average IPC and BPKI for FDP vs conventional prefetchers”，用于对比不同预取策略在平均指令吞吐量（IPC）和内存带宽消耗（BPKI）上的表现。</li>
+<li>表格横向列出了五种预取配置：<strong>No pref.</strong>（无预取）、<strong>Very Cons.</strong>（非常保守）、<strong>Middle</strong>（中等）、<strong>Very Aggr.</strong>（非常激进）、<strong>FDP</strong>（Feedback Directed Prefetching）。</li>
+<li>纵向指标包括两个核心性能维度：<strong>IPC</strong>（每周期指令数）与 <strong>BPKI</strong>（每千条退休指令的内存总线访问次数，衡量带宽消耗）。</li>
+<li>数据显示，<strong>FDP 在 IPC 上达到 1.67</strong>，显著优于所有传统配置，比最佳传统配置（Very Aggr. 的 1.57）高出 <strong>6.5%</strong>，验证了其性能提升能力。</li>
+<li>在带宽效率方面，<strong>FDP 的 BPKI 为 10.88</strong>，远低于 Very Aggr. 配置的 13.38，节省 <strong>18.7%</strong> 内存带宽，同时仍保持更高性能。</li>
+<li>对比消耗相似带宽的传统配置（Middle，BPKI=10.60），FDP 在仅略高带宽下实现 <strong>13.6% 的 IPC 提升</strong>，凸显其<strong>带宽效率优势</strong>。</li>
+<li>综合来看，FDP 实现了“<strong>更高性能 + 更低带宽消耗</strong>”的双重优化，是传统静态预取机制的有效升级方案。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>IPC</th>
+<th>BPKI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No pref.</td>
+<td>0.85</td>
+<td>8.56</td>
+</tr>
+<tr>
+<td>Very Cons.</td>
+<td>1.21</td>
+<td>9.34</td>
+</tr>
+<tr>
+<td>Middle</td>
+<td>1.47</td>
+<td>10.60</td>
+</tr>
+<tr>
+<td>Very Aggr.</td>
+<td>1.57</td>
+<td>13.38</td>
+</tr>
+<tr>
+<td><strong>FDP</strong></td>
+<td><strong>1.67</strong></td>
+<td><strong>10.88</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="figure-11-performance-of-prefetch-cache-vs-fdp">Figure 11. Performance of prefetch cache vs. FDP<a class="headerlink" href="#figure-11-performance-of-prefetch-cache-vs-fdp" title="Permanent link">&para;</a></h3>
+<p><img alt="db1b40b8af8daaa8871a965a13cda94e0a885f14747451c3269479bc3f4270c2.jpg" src="../images/db1b40b8af8daaa8871a965a13cda94e0a885f14747451c3269479bc3f4270c2.jpg" /></p>
+<ul>
+<li>图表标题为“Figure 11. Performance of prefetch cache vs. FDP”，纵轴为“Instructions per Cycle”（IPC），横轴为SPEC CPU2000基准测试程序，用于比较不同预取机制的性能表现。</li>
+<li>图例包含七种配置：<strong>No prefetching</strong>、<strong>Very Aggressive (base)</strong>、<strong>2KB</strong>、<strong>8KB</strong>、<strong>32KB</strong>、<strong>64KB</strong>、<strong>1MB</strong> 预取缓存，以及 <strong>Dyn. Aggr. + Dyn. Ins.</strong>（即Feedback Directed Prefetching，FDP）。</li>
+<li><strong>Very Aggressive (base)</strong> 指传统流式预取器在最激进配置下直接将预取块插入L2缓存的基线方案，作为性能对比基准。</li>
+<li><strong>FDP（Dyn. Aggr. + Dyn. Ins.）</strong> 在绝大多数基准测试中性能优于或接近所有固定大小的预取缓存方案，尤其在 <strong>wupwise</strong>、<strong>mgrid</strong>、<strong>equake</strong> 等内存密集型程序中表现突出。</li>
+<li>小容量预取缓存（如 <strong>2KB</strong> 和 <strong>8KB</strong>）在多数程序中性能低于基线或FDP，原因在于预取块易被后续预取覆盖，导致未被使用即失效。</li>
+<li>中等容量预取缓存（<strong>32KB</strong> 和 <strong>64KB</strong>）性能提升明显，部分程序（如 <strong>galgel</strong>、<strong>mesa</strong>）接近FDP，但整体仍落后于FDP。</li>
+<li>大容量预取缓存（<strong>1MB</strong>）性能接近FDP，但在某些程序（如 <strong>applu</strong>、<strong>ammp</strong>）中仍略逊于FDP，且硬件成本显著增加。</li>
+<li>FDP在 <strong>applu</strong> 和 <strong>ammp</strong> 上的表现尤为关键：传统激进预取会严重降低性能，而FDP通过动态调整避免了这一问题，实现了正向性能增益。</li>
+<li>性能数据汇总如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>平均IPC优势（相对Very Aggressive base）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2KB Prefetch Cache</td>
+<td>显著低于基线</td>
+</tr>
+<tr>
+<td>8KB Prefetch Cache</td>
+<td>接近或略低于基线</td>
+</tr>
+<tr>
+<td>32KB Prefetch Cache</td>
+<td>+~5%（相对FDP）</td>
+</tr>
+<tr>
+<td>64KB Prefetch Cache</td>
+<td>+~2%（相对FDP）</td>
+</tr>
+<tr>
+<td><strong>FDP (Dyn. Aggr. + Dyn. Ins.)</strong></td>
+<td><strong>+5.3%（相对32KB）</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>FDP在不引入额外大容量预取缓存的前提下，实现了与大型预取缓存相当甚至更优的性能，同时显著降低硬件开销和带宽消耗。</strong></li>
+</ul>
+<h3 id="figure-12-bandwidth-consumption-of-prefetch-cache-vs-fdp">Figure 12. Bandwidth consumption of prefetch cache vs. FDP<a class="headerlink" href="#figure-12-bandwidth-consumption-of-prefetch-cache-vs-fdp" title="Permanent link">&para;</a></h3>
+<p><img alt="26fb57050fca59062249afbb0507bc33eb46646d3a5fedcbe87771851247f7cd.jpg" src="../images/26fb57050fca59062249afbb0507bc33eb46646d3a5fedcbe87771851247f7cd.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 12. Bandwidth consumption of prefetch cache vs. FDP</strong>，展示不同预取机制在内存带宽消耗（BPKI）上的对比。</li>
+<li>横轴列出 <strong>SPEC CPU2000</strong> 套件中的多个基准测试程序，包括 bzip2、gap、mcf、vortex、ammp、applu、art、equake、galgel、mgrid、sixtrack、swim、wupwise、amean 等。</li>
+<li>纵轴表示 <strong>BPKI（Memory Bus Accesses per thousand retired Instructions）</strong>，数值越高代表内存带宽消耗越大。</li>
+<li>图例包含七种配置：</li>
+<li><strong>No prefetching</strong>：无预取，作为基线。</li>
+<li><strong>Very Aggressive (base)</strong>：传统非常激进的流式预取器，直接插入 L2 缓存。</li>
+<li><strong>2KB, fully-associative</strong>：2KB 全相联预取缓存。</li>
+<li><strong>8KB, 16-way</strong>：8KB 16路组相联预取缓存。</li>
+<li><strong>32KB, 16-way</strong>：32KB 16路组相联预取缓存。</li>
+<li><strong>64KB, 16-way</strong>：64KB 16路组相联预取缓存。</li>
+<li><strong>1MB, 16-way</strong>：1MB 16路组相联预取缓存。</li>
+<li>
+<p><strong>Dyn. Aggr. + Dyn. Ins.</strong>：本文提出的 <strong>Feedback Directed Prefetching (FDP)</strong>，动态调整预取激进度与插入策略。</p>
+</li>
+<li>
+<p>关键观察：</p>
+</li>
+<li><strong>Very Aggressive (base)</strong> 在多数程序中带宽消耗最高，尤其在 art、equake、mgrid、sixtrack、swim 等程序上显著高于其他方案。</li>
+<li><strong>FDP (Dyn. Aggr. + Dyn. Ins.)</strong> 在几乎所有程序中均表现出<strong>最低或接近最低的 BPKI</strong>，表明其在减少内存带宽消耗方面极为高效。</li>
+<li>预取缓存方案（如 2KB、8KB）虽然能降低污染，但因容量小导致预取块被提前驱逐，反而在部分程序（如 art、equake）中带宽消耗仍较高。</li>
+<li>大容量预取缓存（如 32KB、64KB、1MB）虽能降低污染，但硬件成本高，且带宽消耗仍高于 FDP。例如，在 art 和 equake 上，<strong>FDP 的 BPKI 明显低于 32KB 和 64KB 预取缓存</strong>。</li>
+<li>
+<p>在 ammp、applu 等原本因预取而性能下降的程序中，FDP 不仅避免了性能损失，还大幅降低了带宽消耗，远优于 Very Aggressive 配置。</p>
+</li>
+<li>
+<p>数据对比摘要：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>平均 BPKI 表现</th>
+<th>相比 Very Aggressive</th>
+<th>相比 32KB 预取缓存</th>
+<th>相比 64KB 预取缓存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Very Aggressive (base)</td>
+<td>最高</td>
+<td>基准</td>
+<td>更高</td>
+<td>更高</td>
+</tr>
+<tr>
+<td>FDP (Dyn. Aggr. + Dyn. Ins.)</td>
+<td><strong>最低</strong></td>
+<td><strong>降低 18.7%</strong></td>
+<td><strong>降低 16%</strong></td>
+<td><strong>降低 9%</strong></td>
+</tr>
+<tr>
+<td>32KB, 16-way</td>
+<td>中等偏高</td>
+<td>较高</td>
+<td>基准</td>
+<td>更高</td>
+</tr>
+<tr>
+<td>64KB, 16-way</td>
+<td>中等</td>
+<td>较高</td>
+<td>较低</td>
+<td>基准</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>FDP 在保持高性能的同时，实现了最优的带宽效率，显著优于传统激进预取和各类预取缓存方案，尤其在内存密集型程序中优势明显。</strong></li>
+</ul>
+<h3 id="6939ef382a92475d45bd0b1b3eeb8b99cbef48fb169a6f6a76882a5a5066d349jpg">6939ef382a92475d45bd0b1b3eeb8b99cbef48fb169a6f6a76882a5a5066d349.jpg<a class="headerlink" href="#6939ef382a92475d45bd0b1b3eeb8b99cbef48fb169a6f6a76882a5a5066d349jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="6939ef382a92475d45bd0b1b3eeb8b99cbef48fb169a6f6a76882a5a5066d349.jpg" src="../images/6939ef382a92475d45bd0b1b3eeb8b99cbef48fb169a6f6a76882a5a5066d349.jpg" /></p>
+<ul>
+<li>该图片为一张表格，详细列出了 <strong>Feedback Directed Prefetching (FDP)</strong> 机制所增加的硬件开销。</li>
+<li>表格内容分为两部分：<strong>各组件的硬件成本明细</strong> 和 <strong>总成本及相对开销</strong>。</li>
+<li>所有成本均以 <strong>bit</strong> 为单位计算，并最终汇总为 <strong>KB</strong>，同时给出了相对于基线 <strong>1MB L2 cache</strong> 的面积开销百分比。</li>
+</ul>
+<p>以下是具体的硬件成本构成：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件名称</th>
+<th style="text-align: left;">计算方式</th>
+<th style="text-align: left;">成本（bits）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>pref-bit for each tag-store entry in the L2 cache</strong></td>
+<td style="text-align: left;">16384 blocks * 1 bit/block</td>
+<td style="text-align: left;">16384 bits</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Pollution Filter</strong></td>
+<td style="text-align: left;">4096 entries * 1 bit/entry</td>
+<td style="text-align: left;">4096 bits</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>16-bit counters used to estimate feedback metrics</strong></td>
+<td style="text-align: left;">11 counters * 16 bits/counter</td>
+<td style="text-align: left;">176 bits</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>pref-bit for each MSHR entry</strong></td>
+<td style="text-align: left;">128 entries * 1 bit/entry</td>
+<td style="text-align: left;">128 bits</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Total hardware cost</strong> 为上述各项之和，总计 <strong>20784 bits</strong>，换算后为 <strong>2.54 KB</strong>。</li>
+<li>相对于基线 <strong>1MB L2 cache</strong>（即 1024 KB），FDP 增加的硬件开销占比仅为 <strong>0.24%</strong>。</li>
+<li>此数据表明，FDP 机制在实现动态反馈调整功能的同时，引入的硬件成本极低，具有很高的实用性和可部署性。</li>
+</ul>
+<h3 id="14f8a70701293f0779343e09135fcfb8499b28f6abf9db7bee81ada5fb1a3b70jpg">14f8a70701293f0779343e09135fcfb8499b28f6abf9db7bee81ada5fb1a3b70.jpg<a class="headerlink" href="#14f8a70701293f0779343e09135fcfb8499b28f6abf9db7bee81ada5fb1a3b70jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="14f8a70701293f0779343e09135fcfb8499b28f6abf9db7bee81ada5fb1a3b70.jpg" src="../images/14f8a70701293f0779343e09135fcfb8499b28f6abf9db7bee81ada5fb1a3b70.jpg" /></p>
+<ul>
+<li>该图片展示了一个表格，用于定义 <strong>Global History Buffer (GHB)</strong> 预取器的动态配置参数。</li>
+<li>表格包含三列：<strong>Dyn. Config. Counter</strong>、<strong>Aggressiveness</strong> 和 <strong>Prefetch Degree</strong>。</li>
+<li><strong>Dyn. Config. Counter</strong> 是一个 3 位饱和计数器，其值范围从 1 到 5，用于动态调整预取器的激进程度。</li>
+<li><strong>Aggressiveness</strong> 描述了预取器在不同计数器值下的行为模式，分为五个等级：Very Conservative、Conservative、Middle-of-the-Road、Aggressive 和 Very Aggressive。</li>
+<li><strong>Prefetch Degree</strong> 表示每次预取请求所获取的缓存块数量，其值随激进程度增加而指数增长，从 4 增加到 64。</li>
+<li>该配置表是 <strong>Feedback Directed Prefetching (FDP)</strong> 机制的一部分，用于根据运行时反馈（如准确性、延迟和污染）动态调整 GHB 预取器的行为。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dyn. Config. Counter</th>
+<th>Aggressiveness</th>
+<th>Prefetch Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Very Conservative</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Conservative</td>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Middle-of-the-Road</td>
+<td>16</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Aggressive</td>
+<td>32</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Very Aggressive</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
+<h3 id="figure-13-effect-of-fdp-on-the-ipc-performance-left-bpki-memory-bandwidth-consumption-right-of-ghb-based-cdc-prefetchers">Figure 13. Effect of FDP on the IPC performance (left) BPKI memory bandwidth consumption (right) of GHB-based C/DC prefetchers<a class="headerlink" href="#figure-13-effect-of-fdp-on-the-ipc-performance-left-bpki-memory-bandwidth-consumption-right-of-ghb-based-cdc-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="859b65527e1cfd765eb1f7c276e6893b18db5b1243fdce79a7e4e2ebd9ca959c.jpg" src="../images/859b65527e1cfd765eb1f7c276e6893b18db5b1243fdce79a7e4e2ebd9ca959c.jpg" /></p>
+<ul>
+<li>图片包含两个并列的柱状图，分别展示 <strong>FDP</strong> 对 <strong>GHB-based C/DC prefetcher</strong> 的影响：左侧为 <strong>IPC performance</strong>，右侧为 <strong>BPKI memory bandwidth consumption</strong>。</li>
+<li>两图横轴均为 SPEC CPU2000 基准测试程序，包括 <code>bzip2</code>, <code>gap</code>, <code>mcf</code>, <code>parser</code>, <code>vortex</code>, <code>vpr</code>, <code>ammp</code>, <code>applu</code>, <code>art</code>, <code>equake</code>, <code>facerec</code>, <code>galgel</code>, <code>mesa</code>, <code>mgrid</code>, <code>sixtrack</code>, <code>swim</code>, <code>wupwise</code>, <code>amean</code>。</li>
+<li>纵轴左侧为 <strong>Instructions per Cycle (IPC)</strong>，范围从 0.0 到 4.5；右侧为 <strong>BPKI (Bus Accesses Per Kilo Instructions)</strong>，范围从 0 到 45。</li>
+<li>图例统一包含五种配置：</li>
+<li>No prefetching</li>
+<li>Very Conservative</li>
+<li>Middle-of-the-Road</li>
+<li>Very Aggressive</li>
+<li><strong>Dynamic Aggressiveness + Dynamic Insertion (FDP)</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>IPC 表现</th>
+<th>BPKI 表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No prefetching</td>
+<td>最低或接近最低</td>
+<td>最低</td>
+</tr>
+<tr>
+<td>Very Conservative</td>
+<td>中等偏低</td>
+<td>较低</td>
+</tr>
+<tr>
+<td>Middle-of-the-Road</td>
+<td>中等</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>Very Aggressive</td>
+<td>最高（但部分程序如 applu、ammp 明显下降）</td>
+<td>最高（尤其在 applu、art 等程序中显著上升）</td>
+</tr>
+<tr>
+<td><strong>Dynamic Aggressiveness + Dynamic Insertion</strong></td>
+<td><strong>整体接近或超越 Very Aggressive，且在 applu、ammp 等程序中显著优于后者</strong></td>
+<td><strong>显著低于 Very Aggressive，接近 Middle-of-the-Road 或更低</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 <strong>IPC 性能</strong>方面：</li>
+<li>FDP 在大多数程序上表现与 <strong>Very Aggressive</strong> 相当或略优。</li>
+<li>在 <strong>applu</strong> 和 <strong>ammp</strong> 等传统激进预取器性能受损的程序上，FDP 显著优于 <strong>Very Aggressive</strong>，避免了性能退化。</li>
+<li>
+<p>平均值（amean）显示 FDP 提供了与 <strong>Very Aggressive</strong> 接近的最高 IPC。</p>
+</li>
+<li>
+<p>在 <strong>带宽消耗 (BPKI)</strong> 方面：</p>
+</li>
+<li>FDP 的带宽消耗远低于 <strong>Very Aggressive</strong>，尤其在 <strong>applu</strong>, <strong>art</strong>, <strong>galgel</strong> 等程序中降幅明显。</li>
+<li>FDP 的 BPKI 水平与 <strong>Middle-of-the-Road</strong> 相当甚至更低，表明其在保持高性能的同时大幅节省带宽。</li>
+<li>
+<p>这验证了论文中提到的“FDP 消耗 20.8% 更少内存带宽”的结论。</p>
+</li>
+<li>
+<p>综合来看，FDP 机制成功实现了 <strong>动态调整预取器行为</strong>，在不同程序阶段自动选择最优配置，从而在不牺牲性能的前提下显著降低带宽压力。</p>
+</li>
+</ul>
+<h3 id="4ecb58ee74f1de0747b841dc4d7980bb9073a961f367d338239a47ec5ef3e830jpg">4ecb58ee74f1de0747b841dc4d7980bb9073a961f367d338239a47ec5ef3e830.jpg<a class="headerlink" href="#4ecb58ee74f1de0747b841dc4d7980bb9073a961f367d338239a47ec5ef3e830jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="4ecb58ee74f1de0747b841dc4d7980bb9073a961f367d338239a47ec5ef3e830.jpg" src="../images/4ecb58ee74f1de0747b841dc4d7980bb9073a961f367d338239a47ec5ef3e830.jpg" /></p>
+<ul>
+<li>该图片展示的是 <strong>Table 7</strong>，其内容为在不同 <strong>L2 Cache Size</strong> 和 <strong>Memory Latency</strong> 条件下，<strong>Feedback Directed Prefetching (FDP)</strong> 相较于最佳传统预取器配置所带来的 <strong>IPC</strong>（Instructions Per Cycle）和 <strong>BPKI</strong>（Bus Accesses Per Kilo Instructions）变化百分比。</li>
+<li>表格分为两大主列：左侧为固定内存延迟（500 cycles）下不同 L2 缓存大小的影响；右侧为固定 L2 缓存大小（1 MB）下不同内存延迟的影响。</li>
+<li>在所有测试条件下，<strong>FDP 均能提供正向的 IPC 提升</strong>，同时显著降低 BPKI，表明其在性能与带宽效率上均优于传统方案。</li>
+</ul>
+<p>以下是具体数据表格：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">L2 Cache Size (memory latency = 500 cycles)</th>
+<th style="text-align: left;">Memory Latency (L2 cache size = 1 MB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>512 KB</strong></td>
+<td style="text-align: left;"><strong>250 cycles</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Δ IPC: <strong>0%</strong></td>
+<td style="text-align: left;">Δ IPC: <strong>4.5%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Δ BPKI: <strong>-13.9%</strong></td>
+<td style="text-align: left;">Δ BPKI: <strong>-23.0%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>1 MB</strong></td>
+<td style="text-align: left;"><strong>500 cycles</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Δ IPC: <strong>6.5%</strong></td>
+<td style="text-align: left;">Δ IPC: <strong>6.5%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Δ BPKI: <strong>-18.7%</strong></td>
+<td style="text-align: left;">Δ BPKI: <strong>-18.7%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2 MB</strong></td>
+<td style="text-align: left;"><strong>1000 cycles</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Δ IPC: <strong>6.3%</strong></td>
+<td style="text-align: left;">Δ IPC: <strong>8.4%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Δ BPKI: <strong>-29.6%</strong></td>
+<td style="text-align: left;">Δ BPKI: <strong>-16.9%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键观察：</li>
+<li>当 <strong>L2 缓存增大至 2MB</strong> 时，FDP 的 <strong>BPKI 降低幅度最大（-29.6%）</strong>，说明在更大缓存下，FDP 对减少无效预取和污染的优化效果更明显。</li>
+<li>当 <strong>内存延迟增加至 1000 cycles</strong> 时，FDP 的 <strong>IPC 提升达到最高值（8.4%）</strong>，这验证了论文结论：<strong>内存延迟越高，预取器的有效性越关键，FDP 的性能增益也越大</strong>。</li>
+<li>在 <strong>512KB L2 缓存</strong> 下，FDP 的 <strong>IPC 提升为 0%</strong>，但 <strong>BPKI 仍降低 13.9%</strong>，表明即使在小缓存场景下，FDP 也能有效节省带宽，尽管性能提升受限于缓存容量。</li>
+<li>所有实验中，<strong>BPKI 均为负值</strong>，意味着 FDP 在所有配置下都成功降低了内存带宽消耗。</li>
+</ul>
+<h3 id="table-7-change-in-ipc-and-bpki-with-fdp-when-l2-size-and-memory-latency-are-varie-figure-14-ipc-performance-left-and-memory-bandwidth-consumption-in-bpki-right-impact-of-fdp-on-the-remaining-spec-benchmarks">Table 7. Change in IPC and BPKI with FDP when L2 size and memory latency are varie Figure 14. IPC performance (left) and memory bandwidth consumption in BPKI (right) impact of FDP on the remaining SPEC benchmarks<a class="headerlink" href="#table-7-change-in-ipc-and-bpki-with-fdp-when-l2-size-and-memory-latency-are-varie-figure-14-ipc-performance-left-and-memory-bandwidth-consumption-in-bpki-right-impact-of-fdp-on-the-remaining-spec-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="bca6b5831f5210421dbbde98a9d7118894da8e095be2dd131d9ea6bebf9c9de8.jpg" src="../images/bca6b5831f5210421dbbde98a9d7118894da8e095be2dd131d9ea6bebf9c9de8.jpg" /></p>
+<ul>
+<li>图片包含两个并列的柱状图，分别展示 <strong>FDP</strong> 对剩余 9 个 SPEC CPU2000 基准程序在 <strong>IPC</strong> 和 <strong>BPKI</strong> 上的影响。</li>
+<li>左侧图表纵轴为 <strong>Instructions per Cycle (IPC)</strong>，右侧图表纵轴为 <strong>BPKI (Memory Bus Accesses per thousand retired Instructions)</strong>，横轴均为基准程序名称：crafty, eon, gcc, gzip, perlbench, twolf, apsi, fma3d, lucas, gmean。</li>
+<li>图例统一包含五种配置：</li>
+<li>No prefetching</li>
+<li>Very Conservative</li>
+<li>Middle-of-the-Road</li>
+<li>Very Aggressive</li>
+<li><strong>Dyn. Aggressive. + Dyn. Insertion</strong>（即 FDP 最终方案）</li>
+<li>在 IPC 性能方面：</li>
+<li>多数程序中，<strong>FDP 方案（Dyn. Aggressive. + Dyn. Insertion）</strong> 的 IPC 表现与最佳传统配置（通常是 Middle-of-the-Road）持平或略优。</li>
+<li><strong>gcc</strong> 程序表现突出，FDP 相比 Middle-of-the-Road 配置提升约 <strong>3.0%</strong>。</li>
+<li><strong>gmean</strong>（几何平均值）显示 FDP 提供 <strong>0.4%</strong> 的平均 IPC 增益。</li>
+<li>在 BPKI 带宽消耗方面：</li>
+<li>FDP 方案在多数程序中显著降低带宽消耗，尤其在 <strong>gcc</strong> 和 <strong>fma3d</strong> 中效果明显。</li>
+<li><strong>gmean</strong> 显示 FDP 平均减少 <strong>0.2%</strong> 的 BPKI。</li>
+<li>关键结论：</li>
+<li>对于这 9 个非内存密集型程序，FDP 未造成性能损失，且在部分程序（如 gcc）上带来可观收益。</li>
+<li>FDP 通过动态调整有效抑制了传统激进预取器在这些程序中可能引发的 <strong>L2 cache pollution</strong>，特别是在 gcc 中避免了因指令块被驱逐导致的长延迟缓存缺失。</li>
+<li>数据汇总如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Best Traditional Config (IPC)</th>
+<th>FDP (IPC)</th>
+<th>IPC Gain (%)</th>
+<th>FDP (BPKI)</th>
+<th>BPKI Reduction (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>crafty</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>~0</td>
+</tr>
+<tr>
+<td>eon</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>~0</td>
+</tr>
+<tr>
+<td><strong>gcc</strong></td>
+<td>Middle-of-the-Road</td>
+<td><strong>↑</strong></td>
+<td><strong>+3.0</strong></td>
+<td><strong>↓↓</strong></td>
+<td>Significant</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>~0</td>
+</tr>
+<tr>
+<td>perlbench</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>~0</td>
+</tr>
+<tr>
+<td>twolf</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>~0</td>
+</tr>
+<tr>
+<td>apsi</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>~0</td>
+</tr>
+<tr>
+<td>fma3d</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>Significant</td>
+</tr>
+<tr>
+<td>lucas</td>
+<td>Middle-of-the-Road</td>
+<td>≈Same</td>
+<td>~0</td>
+<td>↓</td>
+<td>~0</td>
+</tr>
+<tr>
+<td><strong>gmean</strong></td>
+<td>Middle-of-the-Road</td>
+<td><strong>↑</strong></td>
+<td><strong>+0.4</strong></td>
+<td><strong>↓</strong></td>
+<td><strong>-0.2</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体而言，FDP 在非内存密集型程序中展现了良好的兼容性和稳定性，既能维持性能，又能小幅优化带宽效率。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

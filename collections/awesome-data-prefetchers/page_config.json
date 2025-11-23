@@ -1,0 +1,13 @@
+{
+    "title": "Awesome Data Prefetchers",
+    "description": "数据预取器相关论文",
+    "papers": [
+        "feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers",
+        "limoncello-prefetchers-for-scale",
+        "prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design",
+        "profile-guided-temporal-prefetching",
+        "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
+        "rnr-a-software-assisted-record-and-replay-hardware-prefetcher",
+        "rpg2-robust-profile-guided-runtime-prefetch-generation"
+    ]
+}

@@ -1,0 +1,2106 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/rnr-a-software-assisted-record-and-replay-hardware-prefetcher/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>RnR: A Software-Assisted Record-and-Replay Hardware Prefetcher 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rnr-a-software-assisted-record-and-replay-hardware-prefetcher" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RnR: A Software-Assisted Record-and-Replay Hardware Prefetcher 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fig-1-prefetcher-coverage-and-accuracy-of-pagerank-48-on-amazon-graph-32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 1. Prefetcher coverage and accuracy of PageRank [48] on amazon graph [32].
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-2-motivation-and-key-idea-of-the-rnr-prefetcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 2. Motivation and key idea of the RnR prefetcher.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-3-state-transition-diagram-of-the-rnr-prefetch-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 3. State transition diagram of the RnR prefetch state.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-i-rnr-function-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE I RNR FUNCTION CALLS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-4-rnr-system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 4. RnR system architecture.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-5-prefetching-timing-control-example-with-window-size-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 5. Prefetching timing control example with window size = 3.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iibaseline-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE IIBASELINE CONFIGURATION.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iii-input-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE III INPUT DATASETS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-6-speedup-over-no-prefetcher-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 6. Speedup over no prefetcher baseline.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-7-l2-mpki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 7. L2 MPKI.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-8-miss-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 8. Miss coverage.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-9-prefetcher-accuracy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 9. Prefetcher accuracy.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-10-effectiveness-of-replay-timing-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 10. Effectiveness of replay timing control.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-11-prefetch-timeliness-breakdown-left-bar-no-control-middle-bar-window-control-right-bar-windowpace-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 11. Prefetch timeliness breakdown (Left bar: no control, middle bar: window control, right bar: window+pace control).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-12-additional-off-chip-traffic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 12. Additional off-chip traffic.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-13-metadata-storage-overhead-of-sequence-table-and-window-division-table-normalized-to-input-dataset-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 13. Metadata storage overhead of sequence table and window division table (normalized to input dataset sizes).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-14-average-speedup-and-storage-for-different-window-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 14. Average speedup and storage for different window sizes.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iv-comparison-to-other-irregular-hardware-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE IV COMPARISON TO OTHER IRREGULAR HARDWARE PREFETCHERS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rnr-a-software-assisted-record-and-replay-hardware-prefetcher">RnR: A Software-Assisted Record-and-Replay Hardware Prefetcher 图表详解<a class="headerlink" href="#rnr-a-software-assisted-record-and-replay-hardware-prefetcher" title="Permanent link">&para;</a></h1>
+<h3 id="fig-1-prefetcher-coverage-and-accuracy-of-pagerank-48-on-amazon-graph-32">Fig. 1. Prefetcher coverage and accuracy of PageRank [48] on amazon graph [32].<a class="headerlink" href="#fig-1-prefetcher-coverage-and-accuracy-of-pagerank-48-on-amazon-graph-32" title="Permanent link">&para;</a></h3>
+<p><img alt="dda95345bd5ebb85734f8a0981f861bf04099ed3ca4e6ec1bc36aa775d582279.jpg" src="../images/dda95345bd5ebb85734f8a0981f861bf04099ed3ca4e6ec1bc36aa775d582279.jpg" /></p>
+<ul>
+<li>图表标题为“Fig. 1. Prefetcher coverage and accuracy of PageRank [48] on amazon graph [32]”，展示的是在亚马逊图数据集上运行PageRank算法时，不同预取器的<strong>Miss Coverage</strong>（缺失覆盖率）与<strong>Prefetching Accuracy</strong>（预取准确率）的对比。</li>
+<li>横轴表示<strong>Prefetching Accuracy</strong>，范围从0%到100%；纵轴表示<strong>Miss Coverage</strong>，范围同样为0%到100%。理想点位于右上角（100%, 100%），代表完美预取器。</li>
+<li>图中包含五个预取器的数据点，分别用不同标记表示：</li>
+<li><strong>Next-line [50]</strong>：位于左下角，准确率约10%，覆盖率约5%，表现最差。</li>
+<li><strong>Bingo [9]</strong>：准确率约20%，覆盖率约15%，略优于Next-line。</li>
+<li><strong>SteMS [52]</strong>：准确率约30%，覆盖率约25%，性能中等。</li>
+<li><strong>MISB [59]</strong>：准确率约65%，覆盖率约40%，表现较好。</li>
+<li><strong>DROPLET [10]</strong>：准确率约70%，覆盖率约60%，是传统硬件预取器中的佼佼者。</li>
+<li><strong>RnR</strong>：以红色星号标注，位于右上角，<strong>准确率接近100%，覆盖率也接近100%</strong>，显著优于所有其他预取器。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器</th>
+<th>Prefetching Accuracy</th>
+<th>Miss Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Next-line [50]</td>
+<td>~10%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>Bingo [9]</td>
+<td>~20%</td>
+<td>~15%</td>
+</tr>
+<tr>
+<td>SteMS [52]</td>
+<td>~30%</td>
+<td>~25%</td>
+</tr>
+<tr>
+<td>MISB [59]</td>
+<td>~65%</td>
+<td>~40%</td>
+</tr>
+<tr>
+<td>DROPLET [10]</td>
+<td>~70%</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td><strong>RnR</strong></td>
+<td><strong>~100%</strong></td>
+<td><strong>~100%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>RnR预取器在该场景下实现了近乎完美的预取效果，表明其<strong>软件辅助记录与重放机制</strong>能有效捕捉并利用PageRank算法中重复的不规则内存访问模式，从而大幅超越传统硬件预取器。</li>
+<li>该图直观验证了论文核心主张：对于具有长周期重复访问模式的应用，RnR能通过程序员指导实现高精度、高覆盖率的预取，解决现有预取器在不规则访问场景下的失效问题。</li>
+</ul>
+<h3 id="fig-2-motivation-and-key-idea-of-the-rnr-prefetcher">Fig. 2. Motivation and key idea of the RnR prefetcher.<a class="headerlink" href="#fig-2-motivation-and-key-idea-of-the-rnr-prefetcher" title="Permanent link">&para;</a></h3>
+<p><img alt="ae6b15c225201520ccfca5b6d8aef5986a3b391ab2cd6e437854e245311d47ca.jpg" src="../images/ae6b15c225201520ccfca5b6d8aef5986a3b391ab2cd6e437854e245311d47ca.jpg" /></p>
+<ul>
+<li>
+<p>图 2 展示了 RnR prefetcher 的动机与核心设计思想，分为四个子图：(a) 重复性不规则时空模式，(b) 不同记录与重放方案对比，(c) RnR prefetcher 核心理念，(d) RnR 时序控制带来的性能收益。</p>
+</li>
+<li>
+<p>子图 (a) 描述了在 SpMV 和 PageRank 等迭代算法中，内存访问呈现<strong>重复性不规则时空模式</strong>。程序执行过程中，不同空间区域（如 Matrix/Edge 与 Vector/pr_curr）产生不同的访问序列，这些序列在每个迭代周期（Temporal Region）内重复出现。例如，Matrix 访问是流式（s1），而 Vector 访问是不规则的（s2），两者混合发生，导致传统预取器难以区分和预测。</p>
+</li>
+<li>
+<p>子图 (b) 对比了三种预取机制：</p>
+</li>
+<li><strong>GHB Based Temporal Prefetcher</strong>：基于全局历史缓冲区，仅用地址索引，无法区分相似模式（如地址9后接12或20），易误预测。</li>
+<li><strong>ISB with PC Localization</strong>：引入程序计数器（PC）辅助区分，但仍依赖共享表，对长序列和混合模式效果有限。</li>
+<li>
+<p><strong>RnR with a Light Software Interface</strong>：由软件定义时空区域，在首次迭代记录 miss 序列及时间戳，后续迭代按精确时序重放，实现高精度与及时性。</p>
+</li>
+<li>
+<p>子图 (c) 阐明 RnR 的工作流程：</p>
+</li>
+<li><strong>首次迭代（iter=1）</strong>：发生 cache miss 时，RnR 记录 miss 地址序列（如 Blk9, Blk20, Blk1）及元数据（timing info），存储于内存。</li>
+<li>
+<p><strong>后续迭代（iter&gt;1）</strong>：RnR 在相同时空区域触发重放，根据记录的 timing 控制预取节奏，将数据提前载入 private cache，避免 miss。</p>
+</li>
+<li>
+<p>子图 (d) 强调<strong>时序控制的重要性</strong>：</p>
+</li>
+<li>若无控制（Late/Eearly），预取过早或过晚会导致数据被驱逐或错过使用时机，无法提升性能。</li>
+<li>
+<p>RnR 通过 window-based timing control，确保预取块在需求前“恰到好处”到达 L2 cache，实现 Timely Prefetch，显著提升性能。</p>
+</li>
+<li>
+<p>关键术语保留：LLC、GHB、ISB、PC、Temporal Region、Spatial Region、Private Cache、Metadata、Replay、Record。</p>
+</li>
+<li>
+<p>性能对比示意：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取机制</th>
+<th>精度</th>
+<th>覆盖率</th>
+<th>时序控制</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GHB</td>
+<td>低</td>
+<td>中</td>
+<td>无</td>
+<td>常规模式</td>
+</tr>
+<tr>
+<td>ISB</td>
+<td>中</td>
+<td>中</td>
+<td>弱</td>
+<td>PC局部化</td>
+</tr>
+<tr>
+<td><strong>RnR</strong></td>
+<td><strong>高</strong></td>
+<td><strong>高</strong></td>
+<td><strong>强</strong></td>
+<td><strong>重复不规则模式</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>RnR 的核心优势在于<strong>软件引导硬件</strong>，利用程序员对应用结构和迭代行为的先验知识，实现精准记录与重放，从而解决传统预取器在不规则、长序列、混合模式下的失效问题。</li>
+</ul>
+<h3 id="fig-3-state-transition-diagram-of-the-rnr-prefetch-state">Fig. 3. State transition diagram of the RnR prefetch state.<a class="headerlink" href="#fig-3-state-transition-diagram-of-the-rnr-prefetch-state" title="Permanent link">&para;</a></h3>
+<p><img alt="a411c9bb16467f008f25fdaefd04d87326c1286fa05a084065b20d3d18802c22.jpg" src="../images/a411c9bb16467f008f25fdaefd04d87326c1286fa05a084065b20d3d18802c22.jpg" /></p>
+<ul>
+<li>图片 a411c9bb16467f008f25fdaefd04d87326c1286fa05a084065b20d3d18802c22.jpg 展示的是 <strong>RnR prefetcher</strong> 的状态转换图，即 Fig. 3。</li>
+<li>该图描绘了 RnR 预取器在四个核心状态之间的转换逻辑：<strong>Idle</strong>、<strong>Record</strong>、<strong>Replay</strong> 和 <strong>Pause</strong>。</li>
+<li>状态转换由软件调用的特定函数触发，这些函数是 RnR 编程接口的一部分，用于控制预取行为。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>转换编号</th>
+<th>触发函数</th>
+<th>源状态</th>
+<th>目标状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td><code>PrefetchState.start()</code></td>
+<td>Idle</td>
+<td>Record</td>
+<td>启动记录模式，开始捕获目标数据结构的 L2 缓存缺失序列。</td>
+</tr>
+<tr>
+<td>②</td>
+<td><code>PrefetchState.replay()</code></td>
+<td>Record</td>
+<td>Replay</td>
+<td>结束记录，开始回放已记录的缺失序列以进行预取。</td>
+</tr>
+<tr>
+<td>③</td>
+<td><code>PrefetchState.replay()</code></td>
+<td>Replay</td>
+<td>Replay</td>
+<td>在回放过程中，允许重新进入回放状态（自循环），可能用于重置或续播。</td>
+</tr>
+<tr>
+<td>④</td>
+<td><code>PrefetchState.end()</code></td>
+<td>Record</td>
+<td>Idle</td>
+<td>终止记录过程并返回空闲状态。</td>
+</tr>
+<tr>
+<td>⑤</td>
+<td><code>PrefetchState.pause()</code></td>
+<td>Replay</td>
+<td>Pause</td>
+<td>暂停当前的回放操作。</td>
+</tr>
+<tr>
+<td>⑥</td>
+<td><code>PrefetchState.resume()</code></td>
+<td>Pause</td>
+<td>Replay</td>
+<td>从暂停状态恢复回放操作。</td>
+</tr>
+<tr>
+<td>⑦</td>
+<td><code>PrefetchState.end()</code></td>
+<td>Pause</td>
+<td>Idle</td>
+<td>终止预取器，从暂停状态直接返回空闲。</td>
+</tr>
+<tr>
+<td>⑧</td>
+<td><code>PrefetchState.pause()</code></td>
+<td>Record</td>
+<td>Pause</td>
+<td>暂停当前的记录操作。</td>
+</tr>
+<tr>
+<td>⑨</td>
+<td><code>PrefetchState.resume()</code></td>
+<td>Pause</td>
+<td>Record</td>
+<td>从暂停状态恢复记录操作。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键设计点</strong>：</li>
+<li><strong>软件主导控制</strong>：所有状态转换均由软件显式调用函数触发，体现了“软件辅助”的核心思想。</li>
+<li><strong>灵活性</strong>：支持在 <strong>Record</strong> 和 <strong>Replay</strong> 状态之间暂停 (<code>pause</code>) 和恢复 (<code>resume</code>)，这对于处理上下文切换或动态调整非常关键。</li>
+<li><strong>生命周期管理</strong>：<code>start()</code> 和 <code>end()</code> 函数定义了预取器的完整生命周期，确保资源可以被正确分配和释放。</li>
+<li><strong>状态隔离</strong>：<strong>Record</strong> 和 <strong>Replay</strong> 是互斥的操作阶段，通过明确的状态转换保证了数据的一致性和操作的原子性。</li>
+</ul>
+<h3 id="table-i-rnr-function-calls">TABLE I RNR FUNCTION CALLS.<a class="headerlink" href="#table-i-rnr-function-calls" title="Permanent link">&para;</a></h3>
+<p><img alt="966dc9051b6d765a5134684518bd561d7f427a86b9824e51dcb94d7aa52c2188.jpg" src="../images/966dc9051b6d765a5134684518bd561d7f427a86b9824e51dcb94d7aa52c2188.jpg" /></p>
+<ul>
+<li>该图片为 <strong>TABLE I RNR FUNCTION CALLS</strong>，详细列出了 <strong>RnR prefetcher</strong> 提供的编程接口函数及其功能说明。</li>
+<li>表格包含两列：<strong>Function</strong> 和 <strong>Explanation</strong>，清晰定义了每个函数调用的目的和行为。</li>
+<li>所有函数均以 <strong>RnR.</strong> 为前缀，表明其属于 <strong>Record-and-Replay (RnR)</strong> 硬件预取器的软件控制接口。</li>
+<li>函数按功能可分为初始化、地址边界管理、窗口大小设置、预取状态控制和资源释放五大类。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RnR.init()</strong></td>
+<td>设置 <strong>ASID</strong> 用于权限检查，为 <strong>SequenceTable</strong> 和 <strong>DivisionTable</strong> 分配内存，并设置默认窗口大小。</td>
+</tr>
+<tr>
+<td><strong>AddrBase.set(addr, size)</strong></td>
+<td>添加一个基地址及其对应大小，用于定义目标数据结构的内存范围。</td>
+</tr>
+<tr>
+<td><strong>AddrBase.enable(addr)</strong></td>
+<td>启用对指定地址范围的边界检查，允许记录或重放该区域的访问。</td>
+</tr>
+<tr>
+<td><strong>AddrBase.disable(addr)</strong></td>
+<td>禁用对指定地址范围的边界检查，停止对该区域的记录或重放。</td>
+</tr>
+<tr>
+<td><strong>WindowSize.set(size)</strong></td>
+<td>设置不同于默认值的窗口大小，用于控制重放阶段的预取节奏。</td>
+</tr>
+<tr>
+<td><strong>PrefetchState.start()</strong></td>
+<td>启用 <strong>RnR</strong> 并开始记录首次出现的缓存缺失序列。</td>
+</tr>
+<tr>
+<td><strong>PrefetchState.replay()</strong></td>
+<td>从头开始重放已记录的序列，启动预取操作。</td>
+</tr>
+<tr>
+<td><strong>PrefetchState.end()</strong></td>
+<td>禁用 <strong>RnR</strong>，停止所有记录和重放操作。</td>
+</tr>
+<tr>
+<td><strong>PrefetchState.pause()</strong></td>
+<td>暂停当前的重放过程，常用于上下文切换或迁移场景。</td>
+</tr>
+<tr>
+<td><strong>PrefetchState.resume()</strong></td>
+<td>从暂停状态恢复重放，继续执行未完成的预取序列。</td>
+</tr>
+<tr>
+<td><strong>RnR.end()</strong></td>
+<td>释放为元数据分配的内存空间，清理资源。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>RnR.init()</strong> 是整个流程的起点，负责初始化硬件状态和内存分配，是后续所有操作的前提。</li>
+<li><strong>AddrBase.set()</strong>, <strong>enable()</strong>, <strong>disable()</strong> 允许程序员精确控制哪些数据结构参与记录与重放，实现<strong>空间区域</strong>的隔离。</li>
+<li><strong>WindowSize.set()</strong> 提供了对预取节奏的细粒度控制，是实现<strong>及时预取</strong>的关键机制。</li>
+<li><strong>PrefetchState.start()</strong>, <strong>replay()</strong>, <strong>end()</strong>, <strong>pause()</strong>, <strong>resume()</strong> 构成了完整的状态机，使程序员能灵活控制预取器在不同阶段的行为。</li>
+<li><strong>RnR.end()</strong> 负责资源回收，确保系统在预取任务结束后能释放占用的内存，避免内存泄漏。</li>
+<li>整体设计体现了“<strong>软件辅助</strong>”的核心思想：程序员通过这些轻量级接口，将应用层面的知识（如数据结构位置、迭代边界）传递给硬件预取器，从而大幅提升预取的准确性和覆盖率。</li>
+</ul>
+<h3 id="fig-4-rnr-system-architecture">Fig. 4. RnR system architecture.<a class="headerlink" href="#fig-4-rnr-system-architecture" title="Permanent link">&para;</a></h3>
+<p><img alt="85d84063190d7be3daa1437988d6b87d851994782af7b938e8ac1e622c1f8bd2.jpg" src="../images/85d84063190d7be3daa1437988d6b87d851994782af7b938e8ac1e622c1f8bd2.jpg" /></p>
+<ul>
+<li>该图展示了 RnR prefetcher 的系统架构，分为 <strong>Record</strong> 和 <strong>Replay</strong> 两个核心阶段，并通过软件接口与硬件协同工作。</li>
+<li>图中使用不同颜色箭头区分数据流：<strong>橙色</strong>代表软件控制信号，<strong>红色虚线</strong>代表 Record 阶段的数据路径，<strong>蓝色虚线</strong>代表 Replay 阶段的数据路径，<strong>黑色实线</strong>代表通用或共享路径。</li>
+<li><strong>Record 阶段</strong>（左侧）：</li>
+<li>当内存包访问命中预设地址范围时，会标记 <code>Packet Flag=1</code> 并递增 <code>Cur Struct Read</code> 计数器。</li>
+<li>若发生 L2 miss 且 <code>Packet Flag=1</code>，则将该 miss 地址写入 <strong>Seq Table Buffer</strong>，并更新长度。</li>
+<li>每当记录的 miss 数量达到 <code>Window Size</code>，将当前 <code>Cur Struct Read</code> 值写入 <strong>Div Table Buffer</strong>，用于后续节奏控制。</li>
+<li>元数据（Seq Table 和 Div Table）在缓冲区满时批量写回预留内存空间，通过 TLB 查询物理地址，每 4MB 页面仅查一次以减少开销。</li>
+<li><strong>Replay 阶段</strong>（右侧）：</li>
+<li>系统从预留内存预取 Seq Table 和 Div Table 到本地缓冲区，实现双缓冲机制。</li>
+<li>根据 <code>Cur Struct Read</code> 与 Div Table 中窗口阈值对比，动态调整 prefetch pace，确保 prefetch 与程序执行进度同步。</li>
+<li>Prefetch 请求直接发送至 L2 cache，避免污染 LLC，同时根据 <code>Prefetch Pace</code> 控制频率，减少与需求访问的竞争。</li>
+<li><strong>软件接口部分</strong>（顶部中央）：</li>
+<li>软件通过设置寄存器控制 RnR 状态，包括 <code>Prefetch State</code>、<code>Window Size</code>、<code>Base Addr</code>、<code>Struct Len</code>、<code>Enable/Disable</code> 等。</li>
+<li>ASID 寄存器用于权限检查，确保多进程环境下的安全隔离。</li>
+<li><strong>关键组件交互</strong>：</li>
+<li><strong>Cache Controller</strong> 协调 L1/L2/LLC 与 RnR prefetcher 的数据流。</li>
+<li><strong>Stream Prefetcher</strong> 在 Record 阶段被禁用，避免干扰目标结构的 miss 记录。</li>
+<li><strong>Reserved Memory Space</strong> 存储序列和划分表，由程序员分配，支持跨上下文切换保留元数据。</li>
+<li><strong>状态机与控制逻辑</strong>：</li>
+<li>RnR 内部维护多个计数器和指针，如 <code>Cur Window</code>、<code>Cur Seq Table Len</code>、<code>Prefetch Pace</code>，确保 replay 时精确匹配 record 时的访问节奏。</li>
+<li>支持暂停（Pause）与恢复（Resume），便于上下文切换或动态调整。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>主要操作</th>
+<th>关键控制信号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Record</td>
+<td>记录 L2 miss 序列，统计每窗口访问次数</td>
+<td><code>Prefetch State=Record</code>, <code>Enable</code></td>
+</tr>
+<tr>
+<td>Replay</td>
+<td>根据记录序列和节奏信息发起 prefetch，写入 L2 cache</td>
+<td><code>Prefetch State=Replay</code>, <code>Prefetch Pace</code></td>
+</tr>
+<tr>
+<td>Software</td>
+<td>设置地址范围、窗口大小、启用/禁用、启动/停止</td>
+<td><code>ASID</code>, <code>Base Addr</code>, <code>Window Size</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体设计强调 <strong>软件指导硬件</strong>，利用程序员对应用模式的认知，实现高精度、高覆盖率、及时性的 prefetch，尤其适用于具有重复不规则访问模式的应用。</li>
+</ul>
+<h3 id="fig-5-prefetching-timing-control-example-with-window-size-3">Fig. 5. Prefetching timing control example with window size = 3.<a class="headerlink" href="#fig-5-prefetching-timing-control-example-with-window-size-3" title="Permanent link">&para;</a></h3>
+<p><img alt="adf6c61c9778d9af2e7829910a06e58617e2c0ebfd2b755fe5cbd4e29d1444ca.jpg" src="../images/adf6c61c9778d9af2e7829910a06e58617e2c0ebfd2b755fe5cbd4e29d1444ca.jpg" /></p>
+<ul>
+<li>图片展示了 RnR prefetcher 的 <strong>replay timing control</strong> 机制，以窗口大小为 3 的示例说明如何通过记录和回放控制预取时机，避免过早或过晚预取。</li>
+<li>图中分为四个子图：(a) Record、(b) Replay without timing controls、(c) Replay with window controls、(d) Replay with window and pace controls，分别代表不同控制策略下的预取行为。</li>
+<li>在 (a) Record 阶段，系统将内存访问序列按窗口划分（Window 1~4），每个窗口包含 3 次结构访问（如 1,2,3 属于 Window 1），并记录每个窗口内的 miss 比率（例如 Window 1 有 2 次 miss，miss ratio = 50%）。</li>
+<li>(b) Replay without timing controls 表示无控制的回放：预取器在每次需求访问后立即发出预取请求，导致大量数据在未被使用前就被驱逐（early prefetch），造成缓存污染。</li>
+<li>(c) Replay with window controls 引入了基于窗口的控制：预取器在完成当前窗口内所有需求访问后才开始预取下一窗口的数据（如 Window 1 完成后才预取 Window 2 的 4,5,6），从而确保预取数据在需要时仍在缓存中。</li>
+<li>(d) Replay with window and pace controls 进一步优化，在窗口内均匀分布预取请求（如 Window 1 中每 1.5 次访问发一次预取），减少与需求访问的冲突，提升系统吞吐。</li>
+<li>关键术语保留英文：<strong>Record</strong>, <strong>Replay</strong>, <strong>window size</strong>, <strong>prefetch</strong>, <strong>hit</strong>, <strong>miss</strong>, <strong>pace control</strong>。</li>
+<li>下表总结各阶段预取行为对比：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>控制方式</th>
+<th>预取时机</th>
+<th>缓存效率</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a) Record</td>
+<td>无</td>
+<td>记录 miss 序列及窗口内访问次数</td>
+<td>无</td>
+<td>用于后续 replay 的元数据采集</td>
+</tr>
+<tr>
+<td>(b) Replay without timing controls</td>
+<td>无</td>
+<td>每次访问后立即预取</td>
+<td>低</td>
+<td>数据易被提前驱逐，造成浪费</td>
+</tr>
+<tr>
+<td>(c) Replay with window controls</td>
+<td>窗口级控制</td>
+<td>当前窗口完成后预取下一窗口</td>
+<td>高</td>
+<td>匹配程序执行节奏，避免过早预取</td>
+</tr>
+<tr>
+<td>(d) Replay with window and pace controls</td>
+<td>窗口+步调控制</td>
+<td>窗口内均匀分布预取</td>
+<td>最高</td>
+<td>减少争用，提升并发效率</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>核心优势</strong>：通过记录窗口内 miss ratio 和访问频率，RnR 能动态调整预取节奏，实现“<strong>timely prefetching</strong>”，显著提升预取命中率和系统性能。</li>
+</ul>
+<h3 id="table-iibaseline-configuration">TABLE IIBASELINE CONFIGURATION.<a class="headerlink" href="#table-iibaseline-configuration" title="Permanent link">&para;</a></h3>
+<p><img alt="98a1b6e2316183b2f13bc16d876d32c98edbc9af254d7377c89e2c4fa0a4cb6c.jpg" src="../images/98a1b6e2316183b2f13bc16d876d32c98edbc9af254d7377c89e2c4fa0a4cb6c.jpg" /></p>
+<ul>
+<li>该表格详细列出了论文中用于评估 RnR 预取器的<strong>基线系统配置</strong>，涵盖了处理器、缓存、内存控制器和主存等关键组件。</li>
+<li><strong>处理器</strong>部分指明了系统采用 <strong>4 核心</strong>架构，运行频率为 <strong>4 GHz</strong>，具备 <strong>4-wide Out-of-Order (OoO)</strong> 执行能力，并配备了 <strong>256-entry Reorder Buffer (ROB)</strong> 和 <strong>64-entry Load/Store Queue (LSQ)</strong>。分支预测器采用了 <strong>16-entry perceptron 分支预测器</strong>，指令发射队列为 <strong>16-entry</strong>。</li>
+<li><strong>L1 数据/指令缓存 (L1-Ds/Is)</strong> 为每个核心私有，容量为 <strong>64KB</strong>，采用 <strong>8-way 组相联</strong>，拥有 <strong>8-entry Miss Status Holding Register (MSHR)</strong>，访问延迟为 <strong>4 个周期</strong>。</li>
+<li><strong>L2 缓存 (L2s)</strong> 同样为每个核心私有，容量扩大至 <strong>256KB</strong>，仍为 <strong>8-way 组相联</strong>，配备 <strong>16-entry MSHR</strong>，访问延迟增加到 <strong>12 个周期</strong>。</li>
+<li><strong>最后一级缓存 (LLC)</strong> 为所有核心共享，容量高达 <strong>8MB</strong>，采用 <strong>16-way 组相联</strong>，拥有 <strong>128-entry MSHR</strong>，访问延迟为 <strong>42 个周期</strong>。</li>
+<li><strong>内存控制器</strong>采用 <strong>FCFS (First-Come, First-Served)</strong> 调度策略，读队列大小为 <strong>64</strong>，写队列大小为 <strong>32</strong>。写队列排水策略设定为：当队列占用率达到 <strong>75%</strong> 时启动高优先级排水，达到 <strong>25%</strong> 时启动低优先级排水。</li>
+<li><strong>主存</strong>配置为 <strong>4GB</strong> 容量，运行在 <strong>2400 MHz</strong> 频率下，采用 <strong>单通道、单 Rank、16 个 Bank</strong> 的结构。关键时序参数 <strong>tCL (CAS Latency)</strong>、<strong>tRCD (RAS to CAS Delay)</strong> 和 <strong>tRP (Row Precharge Time)</strong> 均设定为 <strong>17 个周期</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">配置详情</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Processors</strong></td>
+<td style="text-align: left;">4 cores, 4 GHz, 4-wide OoO, 256-entry ROB, 64-entry LSQ, 16-entry perceptron branch predictor [27], 16-entry issue queue</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L1-Ds/Is</strong></td>
+<td style="text-align: left;">private, 64KB, 8-way, 8-entry MSHR, delay = 4 cycles</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L2s</strong></td>
+<td style="text-align: left;">private, 256KB, 8-way, 16-entry MSHR, delay = 12 cycles</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LLC</strong></td>
+<td style="text-align: left;">shared, 8 MB, 16-way, 128-entry MSHR, delay = 42 cycles</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Memory Controller</strong></td>
+<td style="text-align: left;">FCFS, read queue size = 64, write queue size = 32, write queue draining: high/low threshold = 75%/25%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Main Memory</strong></td>
+<td style="text-align: left;">4GB, 2400 MHz, 1 channel, 1 rank, 16 banks, tCL = tRCD = tRP = 17 cycles</td>
+</tr>
+</tbody>
+</table>
+<h3 id="table-iii-input-datasets">TABLE III INPUT DATASETS.<a class="headerlink" href="#table-iii-input-datasets" title="Permanent link">&para;</a></h3>
+<p><img alt="d9690dc7c44c9e8fbe47f6a7a55fd941417be717b1399cd2fece2a49a44493d2.jpg" src="../images/d9690dc7c44c9e8fbe47f6a7a55fd941417be717b1399cd2fece2a49a44493d2.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table III</strong>，标题为 <strong>INPUT DATASETS</strong>，用于列出实验所使用的输入数据集。</li>
+<li>数据集分为两大类：<strong>Graph Input</strong> 和 <strong>Sparse Matrix</strong>，分别对应图算法和稀疏矩阵计算的基准测试。</li>
+<li><strong>Graph Input</strong> 部分包含四个数据集，其详细信息如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Names</th>
+<th>Edges</th>
+<th>Nodes</th>
+<th>Size</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>amazon [32]</td>
+<td>3.3M</td>
+<td>0.4M</td>
+<td>47.9MB</td>
+<td>purchase network</td>
+</tr>
+<tr>
+<td>com-orkut [32]</td>
+<td>117M</td>
+<td>3.1M</td>
+<td>1.7GB</td>
+<td>social network</td>
+</tr>
+<tr>
+<td>urand [11]</td>
+<td>260M</td>
+<td>16.8M</td>
+<td>2.1GB</td>
+<td>synthetic</td>
+</tr>
+<tr>
+<td>roadUSA [11]</td>
+<td>57.7M</td>
+<td>23.9M</td>
+<td>1.3GB</td>
+<td>road network</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Sparse Matrix</strong> 部分包含四个稀疏矩阵数据集，其详细信息如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Names</th>
+<th>Rows</th>
+<th>Nonzeros</th>
+<th>Size</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>atmosmodj [19]</td>
+<td>1.2M</td>
+<td>8.8M</td>
+<td>214MB</td>
+<td>fluid dynamics</td>
+</tr>
+<tr>
+<td>bbmat [19]</td>
+<td>38.7K</td>
+<td>1.7M</td>
+<td>42.4MB</td>
+<td>fluid dynamics</td>
+</tr>
+<tr>
+<td>nlpkkt80 [19]</td>
+<td>1.1M</td>
+<td>28.1M</td>
+<td>350MB</td>
+<td>PDE optimization</td>
+</tr>
+<tr>
+<td>pdb1HYS [19]</td>
+<td>36.4K</td>
+<td>4.3M</td>
+<td>86.0MB</td>
+<td>protein data bank</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有数据集均标注了引用来源（如 [32]、[11]、[19]），表明其来自公开或已发表的研究数据集。</li>
+<li>数据集类型覆盖广泛，包括社交网络、合成图、道路网络、流体动力学、偏微分方程优化和蛋白质数据库，体现了实验的多样性与代表性。</li>
+<li>数据规模从几十 MB 到几 GB 不等，节点数和边数跨度大，适合评估不同内存访问模式下的预取器性能。</li>
+<li><strong>urand</strong> 为合成图，具有随机连接特性，常用于测试预取器在无规律访问模式下的表现。</li>
+<li><strong>roadUSA</strong> 为道路网络，结构相对规则，可作为对比基线，验证预取器在局部性较好的场景下的有效性。</li>
+<li>稀疏矩阵数据集如 <strong>atmosmodj</strong> 和 <strong>nlpkkt80</strong> 具有高非零元素密度，适用于评估 SpMV（Sparse Matrix-Vector multiplication）内核的预取效率。</li>
+</ul>
+<h3 id="fig-6-speedup-over-no-prefetcher-baseline">Fig. 6. Speedup over no prefetcher baseline.<a class="headerlink" href="#fig-6-speedup-over-no-prefetcher-baseline" title="Permanent link">&para;</a></h3>
+<p><img alt="306e0cce2fbf83e249036af0d08066d768556de8201dfe528d2f51eba9b85833.jpg" src="../images/306e0cce2fbf83e249036af0d08066d768556de8201dfe528d2f51eba9b85833.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Fig. 6. Speedup over no prefetcher baseline</strong>，展示的是不同预取器在三种应用（PageRank、Hyper-Anf、spCG）上相对于无预取基线的性能加速比。</li>
+<li>横轴按应用分组：<strong>PageRank</strong>、<strong>Hyper-Anf</strong>、<strong>spCG</strong>，每组内包含多个输入数据集（如 urand、amazon、com-orkut、roadUSA 等），并以 <strong>GEOMEAN</strong> 表示几何平均值。</li>
+<li>纵轴为 <strong>Speedup</strong>，范围从 0.0 到 5.0，表示性能提升倍数。</li>
+<li>图例中包含八种预取器：</li>
+<li>next-line</li>
+<li>bingo</li>
+<li>SteMS</li>
+<li>MISB</li>
+<li>droplet</li>
+<li>RnR</li>
+<li>RnR-Combined</li>
+<li>
+<p>Ideal</p>
+</li>
+<li>
+<p>各预取器表现总结如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器</th>
+<th>PageRank (GEOMEAN)</th>
+<th>Hyper-Anf (GEOMEAN)</th>
+<th>spCG (GEOMEAN)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>next-line</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>bingo</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>SteMS</td>
+<td>~1.4</td>
+<td>~1.5</td>
+<td>~1.6</td>
+</tr>
+<tr>
+<td>MISB</td>
+<td>~1.5</td>
+<td>~1.6</td>
+<td>~1.7</td>
+</tr>
+<tr>
+<td>droplet</td>
+<td>~1.6</td>
+<td>~1.8</td>
+<td>—</td>
+</tr>
+<tr>
+<td>RnR</td>
+<td><strong>~2.1</strong></td>
+<td><strong>~2.2</strong></td>
+<td><strong>~2.9</strong></td>
+</tr>
+<tr>
+<td>RnR-Combined</td>
+<td><strong>~2.3</strong></td>
+<td><strong>~2.4</strong></td>
+<td><strong>~3.0</strong></td>
+</tr>
+<tr>
+<td>Ideal</td>
+<td>~4.5</td>
+<td>~4.7</td>
+<td>~5.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>RnR</strong> 和 <strong>RnR-Combined</strong> 在所有应用和输入数据集上均显著优于其他通用预取器（next-line、bingo、SteMS、MISB），尤其在 <strong>spCG</strong> 上达到 <strong>2.9×</strong> 和 <strong>3.0×</strong> 加速。</li>
+<li><strong>droplet</strong> 在 PageRank 和 Hyper-Anf 上表现较好，但在 spCG 上未评估（因设计针对图算法）。</li>
+<li><strong>Ideal</strong> 代表理论最优情况（无限大 LLC），其加速比远高于所有实际预取器，说明当前硬件仍存在优化空间。</li>
+<li>在 <strong>urand</strong> 输入（高随机性、低局部性）下，传统预取器效果差，而 <strong>RnR</strong> 仍保持高加速比，体现其对不规则访问模式的有效性。</li>
+<li><strong>RnR-Combined</strong> 在所有应用中均略优于 <strong>RnR</strong>，表明结合流式预取（next-line）可进一步提升整体性能。</li>
+<li>所有预取器在 <strong>roadUSA</strong>（结构较规则）上表现相对更好，说明规则访问模式更易被传统预取器捕捉。</li>
+</ul>
+<h3 id="fig-7-l2-mpki">Fig. 7. L2 MPKI.<a class="headerlink" href="#fig-7-l2-mpki" title="Permanent link">&para;</a></h3>
+<p><img alt="72cd74b9fec8e7dcbf8e0ded18a4a0e9c5362b626311e750d16d3e2b2cf62eb0.jpg" src="../images/72cd74b9fec8e7dcbf8e0ded18a4a0e9c5362b626311e750d16d3e2b2cf62eb0.jpg" /></p>
+<ul>
+<li>图片展示了在不同工作负载（PageRank、Hyper-Anf、spCG）和不同输入数据集上，各种预取器对 <strong>L2 MPKI</strong>（每千条指令的 L2 缓存未命中次数）的影响。</li>
+<li><strong>RnR</strong> 和 <strong>RnR-Combined</strong> 在绝大多数测试场景下实现了最低的 L2 MPKI，表明其在减少缓存未命中方面效果显著。</li>
+<li>对于 <strong>PageRank</strong> 工作负载：</li>
+<li>在 <strong>urand</strong> 输入上，RnR-Combined 将 MPKI 从约 80 降至接近 0，降幅超过 97%。</li>
+<li>在 <strong>amazon</strong> 和 <strong>com-orkut</strong> 上，RnR-Combined 也将 MPKI 降低至 10 以下，降幅分别约为 94.6% 和 98.9%。</li>
+<li>在 <strong>roadUSA</strong> 上，由于其较好的局部性，所有预取器表现都较好，但 RnR-Combined 仍保持最低 MPKI。</li>
+<li>对于 <strong>Hyper-Anf</strong> 工作负载：</li>
+<li>在 <strong>urand</strong> 输入上，RnR-Combined 将 MPKI 从约 60 降至接近 0。</li>
+<li>在 <strong>amazon</strong> 和 <strong>com-orkut</strong> 上，RnR-Combined 同样将 MPKI 降至 10 以下。</li>
+<li>在 <strong>roadUSA</strong> 上，RnR-Combined 的 MPKI 略高于其他一些预取器，但仍处于较低水平。</li>
+<li>对于 <strong>spCG</strong> 工作负载：</li>
+<li>在 <strong>bimat</strong>、<strong>nlpkkt80</strong> 和 <strong>pdt01MYS</strong> 输入上，RnR-Combined 均将 MPKI 降至接近 0。</li>
+<li>在 <strong>GEOMEAN</strong>（几何平均值）上，RnR-Combined 的 MPKI 也远低于其他预取器。</li>
+<li><strong>RnR-Combined</strong> 是指同时为规则和不规则访问的数据结构启用 RnR 预取器，而 <strong>RnR</strong> 仅针对不规则访问的数据结构。</li>
+<li>从图中可以看出，<strong>RnR-Combined</strong> 在大多数情况下优于 <strong>RnR</strong>，说明结合使用可以进一步提升性能。</li>
+<li>其他预取器如 <strong>nextline</strong>、<strong>bingo</strong>、<strong>SteMS</strong>、<strong>MISB</strong>、<strong>droplet</strong> 在不同输入上的表现差异较大，且普遍不如 RnR-Combined。</li>
+<li><strong>droplet</strong> 在 PageRank 上表现尚可，但在 Hyper-Anf 和 spCG 上表现不佳。</li>
+<li><strong>MISB</strong> 在某些输入上表现较好，但总体上不如 RnR-Combined。</li>
+<li><strong>nextline</strong> 作为最简单的预取器，在所有输入上表现最差。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>输入数据集</th>
+<th>RnR-Combined MPKI</th>
+<th>其他预取器最高 MPKI</th>
+<th>降幅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PageRank</td>
+<td>urand</td>
+<td>接近 0</td>
+<td>约 80</td>
+<td>&gt;97%</td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>amazon</td>
+<td>&lt;10</td>
+<td>约 50</td>
+<td>~94.6%</td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>com-orkut</td>
+<td>&lt;10</td>
+<td>约 50</td>
+<td>~98.9%</td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>roadUSA</td>
+<td>约 10</td>
+<td>约 30</td>
+<td>~66.7%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>urand</td>
+<td>接近 0</td>
+<td>约 60</td>
+<td>&gt;98%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>amazon</td>
+<td>&lt;10</td>
+<td>约 40</td>
+<td>~75%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>com-orkut</td>
+<td>&lt;10</td>
+<td>约 40</td>
+<td>~75%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>roadUSA</td>
+<td>约 15</td>
+<td>约 25</td>
+<td>~40%</td>
+</tr>
+<tr>
+<td>spCG</td>
+<td>bimat</td>
+<td>接近 0</td>
+<td>约 40</td>
+<td>&gt;97%</td>
+</tr>
+<tr>
+<td>spCG</td>
+<td>nlpkkt80</td>
+<td>接近 0</td>
+<td>约 40</td>
+<td>&gt;97%</td>
+</tr>
+<tr>
+<td>spCG</td>
+<td>pdt01MYS</td>
+<td>接近 0</td>
+<td>约 40</td>
+<td>&gt;97%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，<strong>RnR-Combined</strong> 预取器在减少 L2 缓存未命中方面表现出色，尤其是在处理具有重复不规则内存访问模式的应用程序时。</li>
+</ul>
+<h3 id="fig-8-miss-coverage">Fig. 8. Miss coverage.<a class="headerlink" href="#fig-8-miss-coverage" title="Permanent link">&para;</a></h3>
+<p><img alt="2e6d32d4f3ab6f4173f4bb93e08252eb91f8d60d261353a5fc974f184657d50b.jpg" src="../images/2e6d32d4f3ab6f4173f4bb93e08252eb91f8d60d261353a5fc974f184657d50b.jpg" /></p>
+<ul>
+<li>图片展示了不同硬件预取器在三个应用（PageRank、Hyper-Anf、spCG）及其多个输入数据集上的<strong>Miss Coverage</strong>性能对比，覆盖范围从0%到100%。</li>
+<li><strong>RnR</strong>（Record-and-Replay）预取器在所有测试场景中均表现出<strong>最高或接近最高的覆盖率</strong>，尤其在不规则访问模式（如urand、com-orkut）下优势显著。</li>
+<li>对比其他预取器：</li>
+<li><strong>nextline</strong>：作为基础流式预取器，在结构化数据（如roadUSA）上表现尚可，但在不规则图数据上覆盖率极低。</li>
+<li><strong>bingo</strong> 和 <strong>SteMS</strong>：空间/时空预取器，在局部性较好的数据（如roadUSA）上表现较好，但在随机图（urand）上覆盖率骤降。</li>
+<li><strong>MISB</strong>：基于时间相关性的预取器，受限于模式区分能力，在复杂图结构中覆盖率不稳定。</li>
+<li><strong>droplet</strong>：面向图算法的领域专用预取器，在Hyper-Anf上表现优于PageRank，但仍低于RnR。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>数据集</th>
+<th>RnR 覆盖率</th>
+<th>bingo 覆盖率</th>
+<th>SteMS 覆盖率</th>
+<th>MISB 覆盖率</th>
+<th>droplet 覆盖率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PageRank</td>
+<td>urand</td>
+<td><strong>~95%</strong></td>
+<td>~20%</td>
+<td>~30%</td>
+<td>~40%</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>amazon</td>
+<td><strong>~85%</strong></td>
+<td>~60%</td>
+<td>~70%</td>
+<td>~65%</td>
+<td>~75%</td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>com-orkut</td>
+<td><strong>~90%</strong></td>
+<td>~50%</td>
+<td>~60%</td>
+<td>~55%</td>
+<td>~70%</td>
+</tr>
+<tr>
+<td>PageRank</td>
+<td>roadUSA</td>
+<td><strong>~95%</strong></td>
+<td>~80%</td>
+<td>~85%</td>
+<td>~80%</td>
+<td>~85%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>urand</td>
+<td><strong>~90%</strong></td>
+<td>~25%</td>
+<td>~35%</td>
+<td>~45%</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>amazon</td>
+<td><strong>~88%</strong></td>
+<td>~65%</td>
+<td>~75%</td>
+<td>~70%</td>
+<td>~80%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>com-orkut</td>
+<td><strong>~92%</strong></td>
+<td>~55%</td>
+<td>~65%</td>
+<td>~60%</td>
+<td>~75%</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>roadUSA</td>
+<td><strong>~95%</strong></td>
+<td>~85%</td>
+<td>~90%</td>
+<td>~85%</td>
+<td>~90%</td>
+</tr>
+<tr>
+<td>spCG</td>
+<td>GEOMEAN</td>
+<td><strong>~95%</strong></td>
+<td>~70%</td>
+<td>~75%</td>
+<td>~70%</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在<strong>GEOMEAN</strong>（几何平均）汇总中，RnR在所有应用上均保持<strong>88%以上</strong>的覆盖率，远超其他预取器。</li>
+<li>RnR的优势源于其<strong>软件辅助记录与回放机制</strong>，能精准捕获重复的不规则访问序列，无需依赖共享模式或地址相关性，从而实现高覆盖率。</li>
+<li>特别是在<strong>urand</strong>这类高度随机图数据上，RnR的覆盖率接近<strong>95%</strong>，而其他预取器普遍低于50%，凸显其对不规则访问模式的适应能力。</li>
+</ul>
+<h3 id="fig-9-prefetcher-accuracy">Fig. 9. Prefetcher accuracy.<a class="headerlink" href="#fig-9-prefetcher-accuracy" title="Permanent link">&para;</a></h3>
+<p><img alt="ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" src="../images/ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" /></p>
+<ul>
+<li>图片展示了不同硬件预取器在三个应用（PageRank、Hyper-Anf、spCG）及其多种输入数据集上的<strong>预取准确率（Accuracy）</strong>对比，横轴为应用与数据集组合，纵轴为准确率百分比。</li>
+<li><strong>RnR</strong> 预取器在所有测试场景中均表现出<strong>最高或接近最高的准确率</strong>，平均准确率达 <strong>97.18%</strong>，显著优于其他预取器。</li>
+<li>其他预取器表现如下：</li>
+<li><strong>Next-line</strong>：在具有良好局部性的数据集（如 roadUSA）上表现尚可，但在随机图（urand）上准确率极低。</li>
+<li><strong>Bingo</strong> 和 <strong>SteMS</strong>：作为通用空间/时空预取器，在不规则访问模式下准确率普遍偏低，尤其在 urand 数据集上接近 0%。</li>
+<li><strong>MISB</strong>：作为基于时间相关性的预取器，在部分数据集上表现优于 Bingo 和 SteMS，但仍远低于 RnR。</li>
+<li><strong>DROPLET</strong>：专为图算法设计，在 Hyper-Anf 上表现较好，但在 PageRank-urand 上因间接访问延迟导致准确率下降。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用/数据集</th>
+<th>Next-line</th>
+<th>Bingo</th>
+<th>SteMS</th>
+<th>MISB</th>
+<th>DROPLET</th>
+<th>RnR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PageRank-urand</td>
+<td>~5%</td>
+<td>~0%</td>
+<td>~0%</td>
+<td>~20%</td>
+<td>~30%</td>
+<td><strong>~98%</strong></td>
+</tr>
+<tr>
+<td>PageRank-amazon</td>
+<td>~40%</td>
+<td>~60%</td>
+<td>~70%</td>
+<td>~80%</td>
+<td>~85%</td>
+<td><strong>~99%</strong></td>
+</tr>
+<tr>
+<td>PageRank-com-orkut</td>
+<td>~30%</td>
+<td>~50%</td>
+<td>~60%</td>
+<td>~75%</td>
+<td>~80%</td>
+<td><strong>~98%</strong></td>
+</tr>
+<tr>
+<td>PageRank-roadUSA</td>
+<td>~50%</td>
+<td>~70%</td>
+<td>~80%</td>
+<td>~85%</td>
+<td>~90%</td>
+<td><strong>~99%</strong></td>
+</tr>
+<tr>
+<td>Hyper-Anf-urand</td>
+<td>~5%</td>
+<td>~0%</td>
+<td>~0%</td>
+<td>~25%</td>
+<td>~40%</td>
+<td><strong>~97%</strong></td>
+</tr>
+<tr>
+<td>Hyper-Anf-amazon</td>
+<td>~45%</td>
+<td>~65%</td>
+<td>~75%</td>
+<td>~85%</td>
+<td>~90%</td>
+<td><strong>~98%</strong></td>
+</tr>
+<tr>
+<td>Hyper-Anf-com-orkut</td>
+<td>~35%</td>
+<td>~55%</td>
+<td>~65%</td>
+<td>~80%</td>
+<td>~85%</td>
+<td><strong>~97%</strong></td>
+</tr>
+<tr>
+<td>Hyper-Anf-roadUSA</td>
+<td>~55%</td>
+<td>~75%</td>
+<td>~85%</td>
+<td>~90%</td>
+<td>~95%</td>
+<td><strong>~99%</strong></td>
+</tr>
+<tr>
+<td>spCG-bbmat</td>
+<td>~50%</td>
+<td>~60%</td>
+<td>~70%</td>
+<td>~80%</td>
+<td>N/A</td>
+<td><strong>~98%</strong></td>
+</tr>
+<tr>
+<td>spCG-nlpkkt80</td>
+<td>~45%</td>
+<td>~55%</td>
+<td>~65%</td>
+<td>~75%</td>
+<td>N/A</td>
+<td><strong>~97%</strong></td>
+</tr>
+<tr>
+<td>spCG-pdb1HYS</td>
+<td>~55%</td>
+<td>~65%</td>
+<td>~75%</td>
+<td>~85%</td>
+<td>N/A</td>
+<td><strong>~98%</strong></td>
+</tr>
+<tr>
+<td>spCG-GEO-MEAN</td>
+<td>~50%</td>
+<td>~60%</td>
+<td>~70%</td>
+<td>~80%</td>
+<td>N/A</td>
+<td><strong>~98%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>RnR 准确率高的核心原因在于其<strong>记录-回放机制</strong>：首次迭代记录真实缓存缺失序列，后续迭代精确回放相同序列，避免了传统预取器因模式混淆或预测错误导致的误预取。</li>
+<li>在<strong>urand</strong>等高度随机的数据集上，RnR 的优势尤为明显，因为其他预取器无法捕捉无规律的访问模式，而 RnR 依赖程序员指定的重复区域，无需预测即可实现高精度预取。</li>
+<li>图表显示，即使在<strong>roadUSA</strong>这类具有良好局部性的数据集上，RnR 仍能保持接近 100% 的准确率，说明其设计在各种访问模式下均具备鲁棒性。</li>
+</ul>
+<h3 id="fig-10-effectiveness-of-replay-timing-control">Fig. 10. Effectiveness of replay timing control.<a class="headerlink" href="#fig-10-effectiveness-of-replay-timing-control" title="Permanent link">&para;</a></h3>
+<p><img alt="6dceb3629c0b54f1b7d5ce5b5e11a8ab3691bb715929b3e98101afd5919eed38.jpg" src="../images/6dceb3629c0b54f1b7d5ce5b5e11a8ab3691bb715929b3e98101afd5919eed38.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Fig. 10. Effectiveness of replay timing control</strong>，旨在评估 RnR prefetcher 中回放时序控制机制的有效性。</li>
+<li>横轴按应用分类：<strong>PageRank</strong>、<strong>Hyper-Anf</strong> 和 <strong>spCG</strong>，每个应用下包含不同输入数据集：<strong>urand</strong>、<strong>amazon</strong>、<strong>com-orkut</strong>、<strong>roadUSA</strong> 和 <strong>GEO-MEAN</strong>（几何平均值）。</li>
+<li>纵轴表示 <strong>Speedup</strong>（加速比），范围从 0.0 到 4.0，用于衡量不同控制策略下的性能提升。</li>
+<li>图例说明三种控制策略：</li>
+<li><strong>no control</strong>（绿色柱）：无窗口或节奏控制，仅简单回放序列。</li>
+<li><strong>window control</strong>（黄色柱）：启用基于窗口的时序控制，根据记录的访问密度调整预取节奏。</li>
+<li><strong>window and pace control</strong>（橙色柱）：在窗口控制基础上进一步引入“pace control”，更精细地匹配需求访问频率。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>输入数据集</th>
+<th>no control</th>
+<th>window control</th>
+<th>window and pace control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PageRank</td>
+<td>urand</td>
+<td>~1.0</td>
+<td>~2.3</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td></td>
+<td>amazon</td>
+<td>~1.2</td>
+<td>~2.6</td>
+<td>~2.7</td>
+</tr>
+<tr>
+<td></td>
+<td>com-orkut</td>
+<td>~1.1</td>
+<td>~2.4</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td></td>
+<td>roadUSA</td>
+<td>~1.5</td>
+<td>~2.8</td>
+<td>~2.9</td>
+</tr>
+<tr>
+<td></td>
+<td>GEO-MEAN</td>
+<td>~1.2</td>
+<td>~2.5</td>
+<td>~2.6</td>
+</tr>
+<tr>
+<td>Hyper-Anf</td>
+<td>urand</td>
+<td>~1.0</td>
+<td>~2.2</td>
+<td>~2.3</td>
+</tr>
+<tr>
+<td></td>
+<td>amazon</td>
+<td>~1.3</td>
+<td>~2.7</td>
+<td>~2.8</td>
+</tr>
+<tr>
+<td></td>
+<td>com-orkut</td>
+<td>~1.2</td>
+<td>~2.5</td>
+<td>~2.6</td>
+</tr>
+<tr>
+<td></td>
+<td>roadUSA</td>
+<td>~1.6</td>
+<td>~2.9</td>
+<td>~3.0</td>
+</tr>
+<tr>
+<td></td>
+<td>GEO-MEAN</td>
+<td>~1.3</td>
+<td>~2.6</td>
+<td>~2.7</td>
+</tr>
+<tr>
+<td>spCG</td>
+<td>urand</td>
+<td>~1.0</td>
+<td>~2.4</td>
+<td>~2.6</td>
+</tr>
+<tr>
+<td></td>
+<td>amazon</td>
+<td>~1.4</td>
+<td>~2.8</td>
+<td>~2.9</td>
+</tr>
+<tr>
+<td></td>
+<td>com-orkut</td>
+<td>~1.3</td>
+<td>~2.6</td>
+<td>~2.7</td>
+</tr>
+<tr>
+<td></td>
+<td>roadUSA</td>
+<td>~1.7</td>
+<td>~3.0</td>
+<td>~3.1</td>
+</tr>
+<tr>
+<td></td>
+<td>GEO-MEAN</td>
+<td>~1.4</td>
+<td>~2.7</td>
+<td>~2.8</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：</li>
+<li>所有应用和输入中，<strong>window control</strong> 相较于 <strong>no control</strong> 均带来显著性能提升，平均加速比提升约 <strong>2.3x–3.0x</strong>。</li>
+<li><strong>window and pace control</strong> 在多数情况下略优于 <strong>window control</strong>，但提升幅度较小（通常 &lt; 0.2x），表明窗口控制已足够有效。</li>
+<li><strong>roadUSA</strong> 输入表现最佳，因其具有较好空间局部性，预取更容易命中且不被过早驱逐。</li>
+<li><strong>urand</strong> 输入表现最差，因随机连接导致高失效率和低局部性，但仍能通过时序控制获得明显收益。</li>
+<li>
+<p><strong>GEO-MEAN</strong> 显示整体趋势：<strong>window control</strong> 平均提供约 <strong>2.6x</strong> 加速，<strong>window and pace control</strong> 提升至约 <strong>2.7x</strong>。</p>
+</li>
+<li>
+<p><strong>结论</strong>：</p>
+</li>
+<li><strong>Replay timing control</strong> 是 RnR prefetcher 高效性的核心机制，尤其 <strong>window control</strong> 能有效避免过早或过晚预取。</li>
+<li>引入 <strong>pace control</strong> 可微调预取节奏，但在大多数场景下收益有限，说明窗口粒度已足够精细。</li>
+<li>该机制对所有测试应用均有效，尤其在不规则访问模式（如 urand）中仍能维持高性能，验证了 RnR 设计的鲁棒性。</li>
+</ul>
+<h3 id="fig-11-prefetch-timeliness-breakdown-left-bar-no-control-middle-bar-window-control-right-bar-windowpace-control">Fig. 11. Prefetch timeliness breakdown (Left bar: no control, middle bar: window control, right bar: window+pace control).<a class="headerlink" href="#fig-11-prefetch-timeliness-breakdown-left-bar-no-control-middle-bar-window-control-right-bar-windowpace-control" title="Permanent link">&para;</a></h3>
+<p><img alt="e29567a1f867a3ec9446532f77e60d81817bce404c33cc4aa71c595e7447696f.jpg" src="../images/e29567a1f867a3ec9446532f77e60d81817bce404c33cc4aa71c595e7447696f.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Fig. 11</strong>，标题为“Prefetch timeliness breakdown”，用于分析 RnR prefetcher 在不同控制策略下的预取及时性表现。</li>
+<li>横轴按应用和输入数据集分类，包括 <strong>PageRank</strong>、<strong>Hyper-Anf</strong> 和 <strong>spCG</strong>，每个应用下有多个输入（如 urand, amazon, com-orkut 等）。</li>
+<li>纵轴表示预取数据的百分比分布，分为四类：<strong>On time</strong>（准时）、<strong>Early</strong>（过早）、<strong>Late</strong>（过晚）、<strong>Out of window</strong>（窗口外）。</li>
+<li>每个数据集对应三组柱状图，分别代表三种控制策略：</li>
+<li>左侧柱：<strong>no control</strong>（无控制）</li>
+<li>中间柱：<strong>window control</strong>（窗口控制）</li>
+<li>右侧柱：<strong>window+pace control</strong>（窗口+节奏控制）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用/输入</th>
+<th>控制策略</th>
+<th>On time</th>
+<th>Early</th>
+<th>Late</th>
+<th>Out of window</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PageRank-urand</td>
+<td>no control</td>
+<td>~70%</td>
+<td>~25%</td>
+<td>~5%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window control</td>
+<td>~90%</td>
+<td>~8%</td>
+<td>~2%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window+pace</td>
+<td>~92%</td>
+<td>~6%</td>
+<td>~2%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td>PageRank-amazon</td>
+<td>no control</td>
+<td>~85%</td>
+<td>~10%</td>
+<td>~5%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window control</td>
+<td>~95%</td>
+<td>~4%</td>
+<td>~1%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window+pace</td>
+<td>~96%</td>
+<td>~3%</td>
+<td>~1%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td>Hyper-Anf-urand</td>
+<td>no control</td>
+<td>~65%</td>
+<td>~30%</td>
+<td>~5%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window control</td>
+<td>~88%</td>
+<td>~10%</td>
+<td>~2%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window+pace</td>
+<td>~90%</td>
+<td>~8%</td>
+<td>~2%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td>spCG-pdbHYS</td>
+<td>no control</td>
+<td>~90%</td>
+<td>~5%</td>
+<td>~5%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window control</td>
+<td>~98%</td>
+<td>~1%</td>
+<td>~1%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td></td>
+<td>window+pace</td>
+<td>~98%</td>
+<td>~1%</td>
+<td>~1%</td>
+<td>~0%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：</li>
+<li><strong>无控制策略</strong>下，预取数据中“Early”比例较高，尤其在 <strong>urand</strong> 输入上可达 25%-30%，表明预取过早导致数据被提前驱逐。</li>
+<li>引入 <strong>window control</strong> 后，“On time”比例显著提升至 88%-98%，同时“Early”大幅下降，说明窗口机制有效匹配了程序执行节奏。</li>
+<li>进一步加入 <strong>pace control</strong> 对大多数输入提升有限，仅在 <strong>urand</strong> 类型输入上略有改善（减少 2%-4% 的“Early”），表明窗口控制已足够应对多数场景。</li>
+<li>
+<p>所有策略下“Out of window”均接近 0%，说明预取范围控制良好，未产生无效预取。</p>
+</li>
+<li>
+<p><strong>结论</strong>：</p>
+</li>
+<li><strong>window control</strong> 是提升预取及时性的核心机制，能将“On time”比例稳定在 90% 以上。</li>
+<li><strong>pace control</strong> 作为补充，在极端不规则访问模式（如 urand）中可微调预取节奏，但对整体性能影响较小。</li>
+<li>RnR prefetcher 通过记录时序信息并动态调整预取节奏，实现了高及时性，避免了传统预取器因“过早”或“过晚”导致的缓存污染或延迟掩盖失效。</li>
+</ul>
+<h3 id="fig-12-additional-off-chip-traffic">Fig. 12. Additional off-chip traffic.<a class="headerlink" href="#fig-12-additional-off-chip-traffic" title="Permanent link">&para;</a></h3>
+<p><img alt="34ddc8df05a02e0b0cace157d394113256b519d520f892e9c415ab307db106fd.jpg" src="../images/34ddc8df05a02e0b0cace157d394113256b519d520f892e9c415ab307db106fd.jpg" /></p>
+<ul>
+<li>图片展示了不同 prefetcher 在 PageRank、Hyper-Anf 和 spCG 三种工作负载下，相对于无 prefetcher 基线所增加的 <strong>off-chip traffic</strong> 百分比。</li>
+<li>横轴按工作负载分组，每组内包含多个输入数据集（如 urand, amazon, com-orkut 等），并以 <strong>GEOMEAN</strong> 表示几何平均值。</li>
+<li>纵轴为百分比，表示额外流量占基线内存访问量的比例。</li>
+<li>各 prefetcher 用不同颜色柱状图表示：nextline（绿色）、bingo（黄色）、SteMS（橙色）、MISB（紫色）、droplet（棕色）、RnR（深蓝色）、RnR-Combined（浅蓝色）。</li>
+<li><strong>RnR 和 RnR-Combined 的额外流量显著低于其他通用 prefetcher</strong>，尤其在 spCG 上表现最优。</li>
+<li>在 PageRank 和 Hyper-Anf 中，<strong>DROPLET 的额外流量与 RnR 相近</strong>，但 RnR-Combined 因同时处理规则和不规则结构，流量略高。</li>
+<li><strong>MISB 和 bingo 产生最高额外流量</strong>，因其预测精度低，导致大量无效 prefetch 请求。</li>
+<li><strong>GEOMEAN 数据显示</strong>：
+  | Prefetcher     | PageRank | Hyper-Anf | spCG   |
+  |----------------|----------|-----------|--------|
+  | nextline       | 45.2%    | 58.4%     | —      |
+  | bingo          | 67.1%    | —         | —      |
+  | SteMS          | —        | —         | —      |
+  | MISB           | 19.7%    | —         | —      |
+  | droplet        | 12.2%    | —         | —      |
+  | RnR            | 12.0%    | —         | —      |
+  | RnR-Combined   | 27.6%    | —         | —      |</li>
+<li><strong>RnR 的低额外流量主要归因于其高准确率（&gt;97%）</strong>，减少了无效 prefetch；而 DROPLET 虽流量相近，但源于其地址生成延迟导致的低效。</li>
+<li><strong>Metadata traffic 是 RnR 额外流量的主要来源</strong>，但因其具有良好空间局部性，可高效利用 DRAM row buffer，对性能影响较小。</li>
+</ul>
+<h3 id="fig-13-metadata-storage-overhead-of-sequence-table-and-window-division-table-normalized-to-input-dataset-sizes">Fig. 13. Metadata storage overhead of sequence table and window division table (normalized to input dataset sizes).<a class="headerlink" href="#fig-13-metadata-storage-overhead-of-sequence-table-and-window-division-table-normalized-to-input-dataset-sizes" title="Permanent link">&para;</a></h3>
+<p><img alt="cf9ff15bc2bdfb729a1cff3e7ae81c03bae84130ed203ad534b616154abdfd5a.jpg" src="../images/cf9ff15bc2bdfb729a1cff3e7ae81c03bae84130ed203ad534b616154abdfd5a.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Fig. 13</strong>，即 RnR prefetcher 的元数据存储开销（sequence table + window division table），并以输入数据集大小为基准进行归一化。</li>
+<li>图表横轴分为三组：<strong>PageRank</strong>、<strong>Hyper-Anf</strong> 和 <strong>spCG</strong>，每组下包含多个输入数据集，如 urand、amazon、com-orkut、roadUSA 等。</li>
+<li>纵轴为“Normalized Storage Overhead”，单位为百分比，表示元数据存储占原始输入数据集大小的比例。</li>
+<li>每个柱状图上方标注了实际存储开销（MB），下方为归一化后的百分比值。</li>
+<li><strong>PageRank</strong>：</li>
+<li>urand 输入：<strong>471MB</strong>，占比 <strong>25%</strong>（最高）。</li>
+<li>amazon 输入：<strong>190.4MB</strong>，占比约 <strong>15%</strong>。</li>
+<li>com-orkut 输入：<strong>80.4MB</strong>，占比约 <strong>10%</strong>。</li>
+<li>roadUSA 输入：<strong>5.3MB</strong>，占比约 <strong>5%</strong>（最低，因局部性好）。</li>
+<li>GEOMEAN：<strong>87.2MB</strong>，占比约 <strong>10%</strong>。</li>
+<li><strong>Hyper-Anf</strong>：</li>
+<li>urand 输入：<strong>449MB</strong>，占比约 <strong>20%</strong>。</li>
+<li>amazon 输入：<strong>6.8MB</strong>，占比约 <strong>5%</strong>。</li>
+<li>com-orkut 输入：<strong>78.4MB</strong>，占比约 <strong>10%</strong>。</li>
+<li>roadUSA 输入：<strong>173MB</strong>，占比约 <strong>15%</strong>。</li>
+<li>GEOMEAN：<strong>70.1MB</strong>，占比约 <strong>10%</strong>。</li>
+<li><strong>spCG</strong>：</li>
+<li>atmosmodj 输入：<strong>35.1MB</strong>，占比约 <strong>15%</strong>。</li>
+<li>bimat 输入：<strong>4.3MB</strong>，占比约 <strong>5%</strong>。</li>
+<li>nlpkkt80 输入：<strong>54.3MB</strong>，占比约 <strong>10%</strong>。</li>
+<li>pdi1HYS 输入：<strong>9.5MB</strong>，占比约 <strong>5%</strong>。</li>
+<li>GEOMEAN：<strong>16.7MB</strong>，占比约 <strong>5%</strong>。</li>
+<li>总体趋势显示，<strong>局部性差的数据集（如 urand）导致更高的存储开销</strong>，而局部性好的数据集（如 roadUSA、bimat）则显著降低开销。</li>
+<li>存储开销主要来自 <strong>sequence table</strong>，因其记录每个 L2 miss 地址；window division table 开销极小，仅记录每窗口的访问计数。</li>
+<li>平均而言，RnR 在 PageRank、spCG、Hyper-Anf 上分别需 <strong>12.1%、11.58%、13.0%</strong> 的输入数据集大小作为元数据存储空间。</li>
+</ul>
+<h3 id="fig-14-average-speedup-and-storage-for-different-window-sizes">Fig. 14. Average speedup and storage for different window sizes.<a class="headerlink" href="#fig-14-average-speedup-and-storage-for-different-window-sizes" title="Permanent link">&para;</a></h3>
+<p><img alt="26e3718f3bb594e6c5507fb555816d06f815433c4b3c4b3836d8d614afd22098.jpg" src="../images/26e3718f3bb594e6c5507fb555816d06f815433c4b3c4b3836d8d614afd22098.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Fig. 14. Average speedup and storage for different window sizes</strong>，展示的是 <strong>RnR prefetcher</strong> 在不同 <strong>Window Size</strong> 设置下的平均性能加速比（Speedup）与存储开销（Storage Overhead）的对比关系。</li>
+<li>横轴为 <strong>Window Size</strong>，取值从 1 到 2048，单位为 cache lines。纵轴左侧为 <strong>Speedup</strong>（绿色柱状图），右侧为 <strong>Storage Overhead</strong>（蓝色折线图，百分比）。</li>
+<li><strong>Speedup</strong> 随着 Window Size 增大而上升，在 Window Size 达到 64 后趋于稳定，维持在约 <strong>2.0x</strong> 左右。这表明 RnR 的性能增益在窗口大小达到一定阈值后不再显著提升。</li>
+<li><strong>Storage Overhead</strong> 随 Window Size 增大而下降，从 Window Size=1 时的约 <strong>25%</strong> 下降至 Window Size=2048 时的约 <strong>10%</strong>。这是因为更大的窗口意味着更少的窗口划分，从而减少 <strong>Window Division Table</strong> 的元数据存储量。</li>
+<li>关键观察：当 Window Size 小于 64 时，<strong>Speedup 显著降低</strong>，同时 <strong>Storage Overhead 急剧上升</strong>，说明过小的窗口会损害性能并增加存储负担。</li>
+<li>综合来看，<strong>Window Size 在 64 至 2048 范围内</strong> 是最优选择，既能保证高加速比，又能控制存储开销在合理水平。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Window Size</th>
+<th>Speedup (approx.)</th>
+<th>Storage Overhead (approx.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1.0x</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1.3x</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>16</td>
+<td>1.5x</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>64</td>
+<td>2.0x</td>
+<td>12%</td>
+</tr>
+<tr>
+<td>256</td>
+<td>2.0x</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>1024</td>
+<td>2.0x</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>2048</td>
+<td>2.0x</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图表验证了论文中关于 <strong>Window Size 选择策略</strong> 的结论：<strong>不应小于 64</strong>，且在 <strong>64 至 2048 之间性能与存储开销达到最佳平衡</strong>。</li>
+</ul>
+<h3 id="table-iv-comparison-to-other-irregular-hardware-prefetchers">TABLE IV COMPARISON TO OTHER IRREGULAR HARDWARE PREFETCHERS.<a class="headerlink" href="#table-iv-comparison-to-other-irregular-hardware-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="4e33dc178eaa0bc866a730009aa7d984d05404abbf75f61097269e90f5075604.jpg" src="../images/4e33dc178eaa0bc866a730009aa7d984d05404abbf75f61097269e90f5075604.jpg" /></p>
+<ul>
+<li><strong>RnR (Proposed)</strong> 针对具有重复模式的应用，如迭代求解器和图算法内核。其预取目标由软件定义，通过“记录与重放”机制生成预取地址，触发时机依赖于软件辅助的重放时序控制机制。系统开销方面，硬件部分小于1KB，软件接口轻量，存储开销约为输入数据的12%。</li>
+<li><strong>DROPLET [10]</strong> 专注于间接内存访问，如图算法。预取对象为边数据和顶点数据，地址基于依赖关系计算，触发时机为边数据访问或回填。硬件开销为12KB，软件接口轻量。</li>
+<li><strong>IMP [60]</strong> 同样针对间接内存访问，适用于包含SpMV内核或图算法的应用。预取对象为索引和间接数据，地址基于依赖关系计算，触发时机为索引数据访问。硬件开销为0.7KB。</li>
+<li><strong>Bingo [9]</strong> 用于重复空间模式，如OLTP和DSS。无特定预取结构约束，地址基于历史预测，触发时机为缓存访问。硬件开销为119KB。</li>
+<li><strong>MISB [59]</strong> 用于重复时间模式，如数据库和缓存。无特定预取结构约束，地址基于历史预测，触发时机为缓存未命中。硬件开销为49KB，存储开销为输入数据的8%。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher Design</th>
+<th>Prefetching Target Properties and Applications</th>
+<th>What Structure to Prefetch</th>
+<th>How to Generate Prefetch Addresses</th>
+<th>When to Prefetch</th>
+<th>System Overhead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RnR (Proposed)</strong></td>
+<td>Repeating patterns, e.g., iterative solver, iterative graph kernel</td>
+<td>Defined by software</td>
+<td>Record and replay</td>
+<td>Software assist, replay timing control mechanism</td>
+<td>Hardware: less than 1KB<br>Software: light interface<br>Storage: 12% input</td>
+</tr>
+<tr>
+<td>DROPLET [10]</td>
+<td>Indirect memory access, e.g., graph algorithms</td>
+<td>Edge and vertex data</td>
+<td>Compute based on dependency</td>
+<td>Edge access or refill</td>
+<td>Hardware: 12KB<br>Software: light interface</td>
+</tr>
+<tr>
+<td>IMP [60]</td>
+<td>Indirect memory access, e.g., applications with SpMV kernel, graph algorithms</td>
+<td>Index and indirect data</td>
+<td>Compute based on dependency</td>
+<td>Index data access</td>
+<td>Hardware: 0.7KB</td>
+</tr>
+<tr>
+<td>Bingo [9]</td>
+<td>Repeating spatial patterns, e.g., OLTP, DSS</td>
+<td>No constraint</td>
+<td>Predict based on history</td>
+<td>Cache access</td>
+<td>Hardware: 119KB</td>
+</tr>
+<tr>
+<td>MISB [59]</td>
+<td>Repeating temporal patterns, e.g., database, caching</td>
+<td>No constraint</td>
+<td>Predict based on history</td>
+<td>Cache miss</td>
+<td>Hardware: 49KB<br>Storage: 8% input</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键对比</strong>：RnR 的核心优势在于其<strong>软件辅助的记录与重放机制</strong>，能够精准捕捉重复的不规则访问模式，从而实现高准确率和覆盖率。相比之下，其他预取器多依赖历史预测，难以处理复杂或相似的访问序列。此外，RnR 的硬件开销极低（&lt;1KB），而 MISB 和 Bingo 分别需要 49KB 和 119KB 的硬件资源。</li>
+<li><strong>存储开销</strong>：RnR 的存储开销为输入数据的12%，高于 MISB 的8%，但显著低于 Bingo 的119KB 硬件开销。这表明 RnR 在保持高性能的同时，实现了合理的资源平衡。</li>
+<li><strong>触发机制</strong>：RnR 的触发时机由软件控制，结合重放时序控制机制，确保预取的及时性。而其他预取器多依赖缓存访问或未命中事件，可能导致预取过早或过晚。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

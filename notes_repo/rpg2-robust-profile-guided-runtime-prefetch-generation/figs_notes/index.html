@@ -1,0 +1,1692 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>RPG2: Robust Profile-Guided Runtime Prefetch Generation 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rpg2-robust-profile-guided-runtime-prefetch-generation" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RPG2: Robust Profile-Guided Runtime Prefetch Generation 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-the-sssp-benchmark-from-crono-2-has-very-different-optimal-prefetch-distances-shaded-regions-with-different-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1. The sssp benchmark from CRONO [2] has very different optimal prefetch distances (shaded regions) with different inputs.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-the-pr-benchmark-from-crono-2-sees-a-speedup-or-a-slowdown-with-prefetching-depending-on-the-microarchitecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. The pr benchmark from CRONO [2] sees a speedup or a slowdown with prefetching, depending on the microarchitecture.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-the-bfs-benchmark-from-crono-2-often-but-not-always-suffers-significant-performance-slowdown-with-prefetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. The bfs benchmark from CRONO [2] often (but not always) suffers significant performance slowdown with prefetching.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-rpg2-proceeds-through-four-phases-when-optimizing-a-target-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. RPG2 proceeds through four phases when optimizing a target process.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-memory-access-categories-that-rpg2-supports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1. Memory access categories that RPG2 supports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-annotated-example-of-rpg2-code-transformations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. Annotated example of RPG2 code transformations.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-the-pc-register-and-code-memory-of-the-target-process-before-and-after-rpg2s-code-replacement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-rpg2-and-baseline-performance-on-cascade-lake-top-and-haswell-bottom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. RPG2 and baseline performance on Cascade Lake (top) and Haswell (bottom).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-how-close-rpg2-gets-to-the-optimal-prefetch-distance-for-inputs-with-a-single-optimal-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8. How close RPG2 gets to the optimal prefetch distance, for inputs with a single optimal distance.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-the-impact-of-profiling-phase-duration-on-rpg2s-optimization-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9. The impact of profiling phase duration on RPG2’s optimization activation.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-rpg2s-impact-on-ipc-over-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10. RPG2’s impact on IPC over time.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-the-relationship-between-speedup-and-llc-mpki-for-pr-on-cascade-lake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11. The relationship between speedup and LLC MPKI for pr on Cascade Lake.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-rpg2s-impact-on-dynamic-instruction-count-for-pr-on-cascade-lake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12. RPG2’s impact on dynamic instruction count for pr on Cascade Lake.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-the-relationship-between-multiple-loads-prefetch-distances-and-performance-for-sssp-running-the-p2pgnutella05-input-on-cascade-lake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13. The relationship between multiple loads’ prefetch distances and performance for sssp running the p2pGnutella05 input on Cascade Lake.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rpg2-robust-profile-guided-runtime-prefetch-generation">RPG2: Robust Profile-Guided Runtime Prefetch Generation 图表详解<a class="headerlink" href="#rpg2-robust-profile-guided-runtime-prefetch-generation" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-the-sssp-benchmark-from-crono-2-has-very-different-optimal-prefetch-distances-shaded-regions-with-different-inputs">Figure 1. The sssp benchmark from CRONO [2] has very different optimal prefetch distances (shaded regions) with different inputs.<a class="headerlink" href="#figure-1-the-sssp-benchmark-from-crono-2-has-very-different-optimal-prefetch-distances-shaded-regions-with-different-inputs" title="Permanent link">&para;</a></h3>
+<p><img alt="3a1ec04fb133efa439de9006c2e67e74495c23f7af7fed9cced3c6c8e6873d31.jpg" src="../images/3a1ec04fb133efa439de9006c2e67e74495c23f7af7fed9cced3c6c8e6873d31.jpg" /></p>
+<ul>
+<li>图表展示了 <strong>sssp</strong> 基准测试在 <strong>Haswell</strong> 架构上的性能表现，横轴为 <strong>prefetch distance</strong>（预取距离），纵轴为 <strong>speedup</strong>（加速比），基准线为 1.0。</li>
+<li>四条曲线分别代表不同输入数据集：<strong>RO-edges</strong>（绿色）、<strong>amazon0601</strong>（蓝色）、<strong>gowalla</strong>（紫色）、<strong>NotreDame</strong>（橙色）。</li>
+<li>每条曲线的<strong>阴影区域</strong>标示了该输入下<strong>最优预取距离范围</strong>，即加速比最高的区间：</li>
+<li><strong>RO-edges</strong>：最优区间为 <strong>20–34</strong>，最高加速比接近 <strong>1.8x</strong>。</li>
+<li><strong>amazon0601</strong>：最优区间为 <strong>70–100</strong>，加速比稳定在 <strong>1.2x</strong> 左右。</li>
+<li><strong>gowalla</strong>：最优区间为 <strong>1–2</strong>，加速比约 <strong>1.2x</strong>，超过此范围性能迅速下降。</li>
+<li><strong>NotreDame</strong>：无明显最优区间，整体加速比接近或低于 1.0，部分距离甚至导致性能下降。</li>
+<li>数据表明，<strong>同一程序在不同输入下，最优预取距离差异巨大</strong>，静态编译器难以统一优化。</li>
+<li>表格总结各输入最优预取距离与性能表现：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>输入数据集</th>
+<th>最优预取距离范围</th>
+<th>最高加速比</th>
+<th>性能趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RO-edges</td>
+<td>20–34</td>
+<td>~1.8x</td>
+<td>明显峰值，范围较宽</td>
+</tr>
+<tr>
+<td>amazon0601</td>
+<td>70–100</td>
+<td>~1.2x</td>
+<td>平缓上升后趋于稳定</td>
+</tr>
+<tr>
+<td>gowalla</td>
+<td>1–2</td>
+<td>~1.2x</td>
+<td>窄峰，过早或过晚均显著降速</td>
+</tr>
+<tr>
+<td>NotreDame</td>
+<td>无明确最优</td>
+<td>≤1.0x</td>
+<td>多数距离无收益，部分有害</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图直观揭示了<strong>预取距离对性能的高度敏感性</strong>，强调动态调整的必要性，也是 RPG2 系统设计的核心动机。</li>
+</ul>
+<h3 id="figure-2-the-pr-benchmark-from-crono-2-sees-a-speedup-or-a-slowdown-with-prefetching-depending-on-the-microarchitecture">Figure 2. The pr benchmark from CRONO [2] sees a speedup or a slowdown with prefetching, depending on the microarchitecture.<a class="headerlink" href="#figure-2-the-pr-benchmark-from-crono-2-sees-a-speedup-or-a-slowdown-with-prefetching-depending-on-the-microarchitecture" title="Permanent link">&para;</a></h3>
+<p><img alt="03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg" src="../images/03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg" /></p>
+<ul>
+<li>图表展示了 <strong>CRONO</strong> 套件中的 <strong>pr</strong> 基准测试在不同微架构和输入下的性能表现，纵轴为 <strong>speedup（越高越好）</strong>，横轴为 <strong>prefetch distance</strong>。</li>
+<li>四条曲线分别代表两种输入（<strong>wiki-topcats</strong> 和 <strong>tvshow-edges</strong>）在两种微架构（<strong>Cascade Lake</strong> 和 <strong>Haswell</strong>）上的表现：</li>
+<li><strong>wiki-topcats Cascade Lake</strong>：虚线浅蓝色，整体表现优异，speedup 稳定在 1.75–2.00 区间。</li>
+<li><strong>tvshow-edges Haswell</strong>：实线深绿色，表现中等，speedup 在 1.00–1.25 之间波动。</li>
+<li><strong>wiki-topcats Haswell</strong>：实线浅蓝色，表现较差，speedup 接近 1.00，部分区域甚至低于 1.00。</li>
+<li><strong>tvshow-edges Cascade Lake</strong>：虚线深绿色，表现最差，speedup 多数时间低于 1.00，表明 prefetching 导致性能下降。</li>
+<li>数据总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>微架构</th>
+<th>性能趋势</th>
+<th>最大 speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wiki-topcats</td>
+<td>Cascade Lake</td>
+<td>显著提升</td>
+<td>~2.00</td>
+</tr>
+<tr>
+<td>tvshow-edges</td>
+<td>Haswell</td>
+<td>轻微提升</td>
+<td>~1.25</td>
+</tr>
+<tr>
+<td>wiki-topcats</td>
+<td>Haswell</td>
+<td>基本无提升或轻微下降</td>
+<td>~1.00</td>
+</tr>
+<tr>
+<td>tvshow-edges</td>
+<td>Cascade Lake</td>
+<td>明显下降</td>
+<td>&lt;1.00</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键发现：</li>
+<li><strong>prefetching 的效果高度依赖于微架构与输入的组合</strong>，同一输入在不同微架构上可能产生完全相反的效果。</li>
+<li><strong>Cascade Lake</strong> 对 <strong>wiki-topcats</strong> 输入表现出极佳的 prefetch 效果，但对 <strong>tvshow-edges</strong> 输入则适得其反。</li>
+<li><strong>Haswell</strong> 上 <strong>tvshow-edges</strong> 输入受益于 prefetching，而 <strong>wiki-topcats</strong> 则几乎无收益。</li>
+<li>这种不一致性凸显了静态编译器难以准确预测最优 prefetch 配置的问题，也说明了 <strong>RPG2</strong> 这类动态调整系统的重要性。</li>
+</ul>
+<h3 id="figure-3-the-bfs-benchmark-from-crono-2-often-but-not-always-suffers-significant-performance-slowdown-with-prefetching">Figure 3. The bfs benchmark from CRONO [2] often (but not always) suffers significant performance slowdown with prefetching.<a class="headerlink" href="#figure-3-the-bfs-benchmark-from-crono-2-often-but-not-always-suffers-significant-performance-slowdown-with-prefetching" title="Permanent link">&para;</a></h3>
+<p><img alt="e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg" src="../images/e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>bfs</strong> 基准测试在不同输入和微架构下的性能表现，横轴为 <strong>prefetch distance</strong>（预取距离），纵轴为 <strong>speedup</strong>（加速比），基准线为 1.0。</li>
+<li><strong>amazon0505</strong> 输入在 <strong>Cascade Lake</strong> 上表现良好，加速比稳定在 1.0 以上，表明预取在此配置下有效。</li>
+<li>同一输入 <strong>amazon0505</strong> 在 <strong>Haswell</strong> 上加速比略低于 1.0，说明预取在此微架构下效果不佳或略有拖累。</li>
+<li><strong>RO-edges</strong> 输入在 <strong>Haswell</strong> 上加速比约为 0.45，显著低于基准线，表明预取导致严重性能下降。</li>
+<li><strong>RO-edges</strong> 输入在 <strong>Cascade Lake</strong> 上加速比约为 0.3，性能下降更为严重，进一步凸显预取的负面影响。</li>
+<li>数据表明，预取效果高度依赖于 <strong>输入数据</strong> 和 <strong>微架构</strong>，同一输入在不同硬件上表现差异巨大。</li>
+<li>性能变化趋势显示，<strong>prefetch distance</strong> 的调整对性能影响有限，尤其在 RO-edges 输入中，无论距离如何调整，性能均未改善。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>微架构</th>
+<th>加速比范围</th>
+<th>性能趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>amazon0505</td>
+<td>Cascade Lake</td>
+<td>&gt;1.0</td>
+<td>稳定提升</td>
+</tr>
+<tr>
+<td>amazon0505</td>
+<td>Haswell</td>
+<td>~0.95</td>
+<td>轻微下降</td>
+</tr>
+<tr>
+<td>RO-edges</td>
+<td>Haswell</td>
+<td>~0.45</td>
+<td>显著下降</td>
+</tr>
+<tr>
+<td>RO-edges</td>
+<td>Cascade Lake</td>
+<td>~0.3</td>
+<td>极度下降</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图印证了论文核心观点：<strong>预取是双刃剑</strong>，不当使用会导致性能大幅下滑，需动态调整以适应运行时环境。</li>
+</ul>
+<h3 id="figure-4-rpg2-proceeds-through-four-phases-when-optimizing-a-target-process">Figure 4. RPG2 proceeds through four phases when optimizing a target process.<a class="headerlink" href="#figure-4-rpg2-proceeds-through-four-phases-when-optimizing-a-target-process" title="Permanent link">&para;</a></h3>
+<p><img alt="8806a8fc532258cfa443880bb5424d8f57d264409c9b84d884d8ec41f3ee51c2.jpg" src="../images/8806a8fc532258cfa443880bb5424d8f57d264409c9b84d884d8ec41f3ee51c2.jpg" /></p>
+<ul>
+<li>图片展示了 RPG2 系统优化目标进程的四个核心阶段，从左至右依次为：<strong>Profile</strong>、<strong>Build new binary</strong>、<strong>Insert code</strong> 和 <strong>Tune</strong>。</li>
+<li>在第一阶段 <strong>Profile</strong> 中，RPG2 通过分析运行中的目标进程，识别出频繁触发 LLC miss 的指令。图中示例代码 <code>ld [r3+r2]→r4</code> 被标记为高频 LLC miss 源，其前向依赖链（backwards slice）被提取用于后续 prefetch kernel 构建。</li>
+<li>第二阶段 <strong>Build new binary</strong> 基于 BOLT 工具生成新二进制文件。图中红色高亮部分为插入的 <strong>prefetch kernel</strong>，包含：</li>
+<li>寄存器保存（<code>push r5</code>）</li>
+<li>地址计算（<code>add r1, #20→r5</code>，其中 20 为初始 prefetch distance）</li>
+<li>边界检查（<code>cmp r5, #100; bgte cleanup</code>）</li>
+<li>预取指令（<code>pf [r3+r5]</code>）</li>
+<li>清理与恢复（<code>pop r5</code>）</li>
+<li>原始循环体继续执行</li>
+<li>第三阶段 <strong>Insert code</strong> 将新函数 <code>newtop</code> 注入目标进程地址空间。此阶段需暂停进程，通过 <code>ptrace</code> 或 <code>libpg2</code> 实现代码替换，并更新所有指向原函数 <code>top</code> 的调用点和栈返回地址，确保控制流正确跳转至 <code>newtop</code>。</li>
+<li>第四阶段 <strong>Tune</strong> 对 prefetch distance 进行动态调整。图中显示将距离从 20 修改为 32（<code>add r1, #32→r2</code>），该过程通过修改机器码中的立即数实现，每次调整仅需重写少量字节，且伴随短暂进程暂停。</li>
+<li>整个流程强调 <strong>在线优化</strong> 与 <strong>无侵入式回退</strong>：若 tuning 后性能未提升，RPG2 可快速回滚至原始代码 <code>top</code>，避免性能损失。</li>
+<li>关键术语保留英文：<strong>LLC miss</strong>、<strong>prefetch kernel</strong>、<strong>backwards slice</strong>、<strong>BOLT</strong>、<strong>ptrace</strong>、<strong>libpg2</strong>。</li>
+<li>该图直观呈现了 RPG2 如何在不中断程序语义的前提下，动态注入并优化 prefetch 指令，体现其“<strong>robust</strong>”特性——既能提升性能，也能安全回退。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>主要操作</th>
+<th>关键技术/组件</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Profile</td>
+<td>识别高频 LLC miss 指令</td>
+<td>PEBS, perf</td>
+<td>定位可优化点</td>
+</tr>
+<tr>
+<td>Build new binary</td>
+<td>插入 prefetch kernel</td>
+<td>BOLT, InjectPrefetchPass</td>
+<td>生成含预取逻辑的新函数</td>
+</tr>
+<tr>
+<td>Insert code</td>
+<td>注入新函数到运行进程</td>
+<td>ptrace, libpg2, OSR</td>
+<td>实现运行时代码替换</td>
+</tr>
+<tr>
+<td>Tune</td>
+<td>动态调整 prefetch distance</td>
+<td>IPC 监控, 二分搜索</td>
+<td>找到最优预取距离或回退</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图中箭头与虚线框清晰划分各阶段边界，强调“<strong>paused</strong>”状态仅在关键操作时发生，其余时间目标进程正常运行，最小化性能干扰。</li>
+</ul>
+<h3 id="table-1-memory-access-categories-that-rpg2-supports">Table 1. Memory access categories that RPG2 supports<a class="headerlink" href="#table-1-memory-access-categories-that-rpg2-supports" title="Permanent link">&para;</a></h3>
+<p><img alt="fe03b6d54b53d4bb1aba9836ed24b04e899a30c45027742e128f78d3060ab49c.jpg" src="../images/fe03b6d54b53d4bb1aba9836ed24b04e899a30c45027742e128f78d3060ab49c.jpg" /></p>
+<ul>
+<li>图片内容为 <strong>Table 1</strong>，标题为 “Memory access categories that RPG2 supports”，用于说明 RPG2 系统支持的三种内存访问模式及其对应的预取策略。</li>
+<li>表格包含三列：<strong>demand access</strong>（需求访问）、<strong>prefetch</strong>（预取表达式）、<strong>description</strong>（描述）。</li>
+<li>三种访问模式均基于数组和循环变量构建，适用于常见数据结构如密集数组、稀疏数组和 stencil 模式。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>demand access</th>
+<th>prefetch</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a[j]</td>
+<td>a[j+d]</td>
+<td><strong>direct access using inner loop induction var</strong></td>
+</tr>
+<tr>
+<td>a[f(b[j])]</td>
+<td>a[f(b[j+d])]</td>
+<td><strong>indirect access using inner loop induction var</strong></td>
+</tr>
+<tr>
+<td>a[f(b[i])+j]</td>
+<td>a[f(b[i+d])+j]</td>
+<td><strong>indirect access using inner and outer loop induction vars</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>第一行对应直接访问模式，RPG2 在内层循环中对索引 <code>j</code> 偏移 <code>d</code> 进行预取，适用于具有空间局部性的数组访问。</li>
+<li>第二行对应间接访问模式，通过函数 <code>f</code> 对 <code>b[j]</code> 的结果进行寻址，预取时将 <code>j</code> 替换为 <code>j+d</code>，以覆盖更复杂的指针链式访问。</li>
+<li>第三行对应嵌套循环中的混合访问模式，使用外层循环变量 <code>i</code> 和内层变量 <code>j</code>，预取时仅偏移外层变量 <code>i</code> 至 <code>i+d</code>，该策略在实验中表现优于同时偏移内外层变量。</li>
+<li>RPG2 当前仅支持这三类模式，但作者指出其已覆盖多数实际代码场景，如稠密/稀疏数组与 stencil 计算。</li>
+<li>未支持的模式包括纯指针结构（无数组参与），留待未来扩展。</li>
+</ul>
+<h3 id="figure-5-annotated-example-of-rpg2-code-transformations">Figure 5. Annotated example of RPG2 code transformations.<a class="headerlink" href="#figure-5-annotated-example-of-rpg2-code-transformations" title="Permanent link">&para;</a></h3>
+<p><img alt="c0fcf70d8c6a8270d3d6404732e5a3b4b481a21341d1e8fa08a86695d77bc9e9.jpg" src="../images/c0fcf70d8c6a8270d3d6404732e5a3b4b481a21341d1e8fa08a86695d77bc9e9.jpg" /></p>
+<ul>
+<li>图片展示了 RPG2 系统对一段原始汇编代码进行优化的完整流程，核心目标是为<strong>间接内存访问</strong>（如 <code>ld [r3+r2]→r4</code>）插入<strong>prefetch kernel</strong>，同时保证语义不变。</li>
+<li>原始代码是一个循环体，包含两个关键加载指令：<code>ld [r0+r1]→r2</code> 和 <code>ld [r3+r2]→r4</code>。其中，后者是导致 LLC miss 的热点负载，被选为 prefetch 目标。</li>
+<li>RPG2 通过<strong>backwards slicing</strong>分析数据依赖链，从 <code>ld [r3+r2]→r4</code> 回溯至 <code>ld [r0+r1]→r2</code>，确认其属于 <code>a[??(b[j])]</code> 类型的间接访问模式，从而决定在<strong>外层循环头</strong>插入 prefetch kernel。</li>
+<li>优化后的代码结构清晰分为三部分：</li>
+<li><strong>Prefetch Kernel</strong>：位于 <code>newtop</code> 标签下，负责计算并执行 prefetch 指令。</li>
+<li><strong>Cleanup</strong>：恢复被借用寄存器的状态。</li>
+<li><strong>Original Loop Body</strong>：保持原有逻辑不变。</li>
+<li>具体优化步骤如下：</li>
+<li><strong>保存寄存器</strong>：<code>push r5</code> 将寄存器 <code>r5</code> 压栈，作为临时工作寄存器。</li>
+<li><strong>计算 prefetch 地址</strong>：<code>add r1, #20→r5</code> 计算 20 个迭代后的地址偏移量。</li>
+<li><strong>边界检查</strong>：<code>cmp r5, #100</code> 和 <code>bgte cleanup_</code> 确保不会访问非法内存。</li>
+<li><strong>执行 prefetch</strong>：<code>ld [r0+r5]→r5</code> 和 <code>pf [r3+r5]</code> 分别加载索引和发出 prefetch 指令。</li>
+<li><strong>恢复状态</strong>：<code>pop r5</code> 恢复原寄存器值。</li>
+<li><strong>执行原循环体</strong>：后续指令与原始代码完全一致。</li>
+<li>整个过程体现了 RPG2 的设计哲学：<strong>NOP-like semantics</strong>，即 prefetch kernel 在功能上等价于空操作，仅增加预取行为，不改变程序逻辑。</li>
+<li>该图还用箭头标注了控制流路径，清晰展示了 prefetch kernel 如何无缝嵌入到原有循环中，确保程序正确性和性能提升。</li>
+</ul>
+<h3 id="figure-6-the-pc-register-and-code-memory-of-the-target-process-before-and-after-rpg2s-code-replacement">Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.<a class="headerlink" href="#figure-6-the-pc-register-and-code-memory-of-the-target-process-before-and-after-rpg2s-code-replacement" title="Permanent link">&para;</a></h3>
+<p><img alt="d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" src="../images/d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" /></p>
+<ul>
+<li>图片展示了 RPG2 系统在运行时进行 <strong>代码替换</strong> 的前后对比，核心目标是将原始函数 <code>f0</code> 替换为优化后的函数 <code>f1</code>，同时保持程序语义不变。</li>
+<li><strong>“before” 部分</strong>：</li>
+<li>程序计数器（PC）指向函数 <code>f0</code> 的某条指令，表示当前正在执行 <code>f0</code>。</li>
+<li>函数 <code>g0</code> 和 <code>h0</code> 内部均包含对 <code>f0</code> 的调用指令（<code>call f0</code>），即它们的执行流会跳转到 <code>f0</code>。</li>
+<li>所有调用和执行都围绕 <code>f0</code> 进行，此时系统尚未应用任何优化。</li>
+<li><strong>“after” 部分</strong>：</li>
+<li>RPG2 将优化后的函数 <code>f1</code> 放置在内存中的新位置（红色区域），而原始函数 <code>f0</code> 仍保留在原处。</li>
+<li>所有原本调用 <code>f0</code> 的指令（如 <code>g0</code> 和 <code>h0</code> 中的 <code>call f0</code>）被修改为调用 <code>f1</code>（即 <code>call f1</code>）。</li>
+<li>PC 指针已更新，指向 <code>f1</code> 中对应的指令位置，确保线程从 <code>f0</code> 的执行点无缝切换到 <code>f1</code> 的对应位置。</li>
+<li>此设计允许 RPG2 在性能退化时快速回滚至 <code>f0</code>，无需重新编译或重启进程。</li>
+<li>关键机制：RPG2 利用 <strong>BOLT Address Translation Table (BATT)</strong> 实现 <strong>On-Stack Replacement (OSR)</strong>，将 <code>f0</code> 的 PC 映射到 <code>f1</code> 的等效位置，从而支持在函数执行中途切换版本。</li>
+<li>优势总结：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>零数据布局变更</strong></td>
+<td>Prefetch kernel 设计为逻辑 NOP，不改变寄存器或栈变量分配。</td>
+</tr>
+<tr>
+<td><strong>安全回滚</strong></td>
+<td>若 <code>f1</code> 导致性能下降，可恢复至 <code>f0</code>，保留原始性能。</td>
+</tr>
+<tr>
+<td><strong>低开销注入</strong></td>
+<td>使用 <code>libpg2</code> 直接操作目标进程内存，避免频繁系统调用。</td>
+</tr>
+<tr>
+<td><strong>兼容性</strong></td>
+<td>无需源码，仅依赖二进制文件，适用于 C/C++ 等非托管语言。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观体现了 RPG2 如何在运行时动态插入并激活优化代码，同时保障程序稳定性和性能可逆性。</li>
+</ul>
+<h3 id="figure-7-rpg2-and-baseline-performance-on-cascade-lake-top-and-haswell-bottom">Figure 7. RPG2 and baseline performance on Cascade Lake (top) and Haswell (bottom).<a class="headerlink" href="#figure-7-rpg2-and-baseline-performance-on-cascade-lake-top-and-haswell-bottom" title="Permanent link">&para;</a></h3>
+<p><img alt="24962dbf6f2b2945464bbffad43379d1f1359a9ada18905c0a736aeb5ef9b7f3.jpg" src="../images/24962dbf6f2b2945464bbffad43379d1f1359a9ada18905c0a736aeb5ef9b7f3.jpg" /></p>
+<ul>
+<li>图片展示了 RPG2 系统在 Cascade Lake 和 Haswell 两种微架构上的性能表现，对比了多个基线方案，包括 <strong>APT-GET</strong>、<strong>offline</strong>、<strong>active-only</strong> 和 <strong>manual</strong>。</li>
+<li>数据按基准测试（CRONO 和 AJ）和机器类型分组，每个柱状图代表不同输入集合的平均加速比（speedup over original），误差条表示标准差。</li>
+<li>CRONO 基准测试包含 pr、sssp、bfs 和 bc，AJ 基准测试包含 cg、is 和 randacc。每个基准测试进一步细分为“all”、“speedup”和“slowdown”三组，分别对应所有输入、仅加速输入和仅减速输入。</li>
+<li>在 Cascade Lake 上，RPG2 在 pr 和 sssp 的“speedup”组中表现优异，接近或超过 offline 和 APT-GET；但在 bfs 的“slowdown”组中，RPG2 显著优于其他方案，因其能自动回滚至原始代码。</li>
+<li>在 Haswell 上，RPG2 在 pr 和 sssp 的“speedup”组中仍保持竞争力，但在 bfs 的“slowdown”组中优势更加明显，因为其能有效避免 prefetching 带来的性能下降。</li>
+<li>对于 AJ 基准测试，RPG2 在 is 和 randacc 上表现良好，尤其在 Haswell 上接近 manual 优化水平；但在 cg 上表现较弱，可能因输入特性或 prefetching 策略不匹配。</li>
+<li><strong>active-only</strong> 模式仅在收集到足够 profiling 数据时激活优化，因此其性能通常低于 full RPG2，但高于 offline，表明 online profiling 存在一定噪声和延迟。</li>
+<li><strong>offline</strong> 模式始终启用 prefetching，虽在部分输入上表现最佳，但在 prefetching 有害的输入上会导致显著 slowdown，而 RPG2 能动态规避此类情况。</li>
+<li>总体而言，RPG2 在保证性能提升的同时，通过动态调整和回滚机制，显著提升了 prefetching 的鲁棒性，尤其在面对输入和微架构变化时表现稳定。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Machine</th>
+<th>Group</th>
+<th>RPG2 Speedup</th>
+<th>APT-GET Speedup</th>
+<th>Offline Speedup</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pr</td>
+<td>Cascade Lake</td>
+<td>all (71)</td>
+<td>~1.2</td>
+<td>~1.1</td>
+<td>~1.2</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>pr</td>
+<td>Cascade Lake</td>
+<td>speedup (54)</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>pr</td>
+<td>Cascade Lake</td>
+<td>slowdown (11)</td>
+<td>~0.9</td>
+<td>~0.8</td>
+<td>~0.7</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>sssp</td>
+<td>Cascade Lake</td>
+<td>all (71)</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>sssp</td>
+<td>Cascade Lake</td>
+<td>speedup (54)</td>
+<td>~1.4</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>sssp</td>
+<td>Cascade Lake</td>
+<td>slowdown (11)</td>
+<td>~0.8</td>
+<td>~0.7</td>
+<td>~0.6</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>bfs</td>
+<td>Cascade Lake</td>
+<td>all (71)</td>
+<td>~1.0</td>
+<td>~0.9</td>
+<td>~1.0</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>bfs</td>
+<td>Cascade Lake</td>
+<td>speedup (2)</td>
+<td>~1.1</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>bfs</td>
+<td>Cascade Lake</td>
+<td>slowdown (42)</td>
+<td>~0.7</td>
+<td>~0.6</td>
+<td>~0.5</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>Cascade Lake</td>
+<td>all (7)</td>
+<td>~1.1</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>Cascade Lake</td>
+<td>speedup (4)</td>
+<td>~1.2</td>
+<td>~1.1</td>
+<td>~1.2</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>Cascade Lake</td>
+<td>slowdown (3)</td>
+<td>~0.9</td>
+<td>~0.8</td>
+<td>~0.7</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>pr</td>
+<td>Haswell</td>
+<td>all (67)</td>
+<td>~1.2</td>
+<td>~1.1</td>
+<td>~1.2</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>pr</td>
+<td>Haswell</td>
+<td>speedup (51)</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>pr</td>
+<td>Haswell</td>
+<td>slowdown (16)</td>
+<td>~0.8</td>
+<td>~0.7</td>
+<td>~0.6</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>sssp</td>
+<td>Haswell</td>
+<td>all (67)</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>sssp</td>
+<td>Haswell</td>
+<td>speedup (46)</td>
+<td>~1.4</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>sssp</td>
+<td>Haswell</td>
+<td>slowdown (21)</td>
+<td>~0.7</td>
+<td>~0.6</td>
+<td>~0.5</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>bfs</td>
+<td>Haswell</td>
+<td>all (67)</td>
+<td>~1.0</td>
+<td>~0.9</td>
+<td>~1.0</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>bfs</td>
+<td>Haswell</td>
+<td>speedup (8)</td>
+<td>~1.1</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>bfs</td>
+<td>Haswell</td>
+<td>slowdown (31)</td>
+<td>~0.6</td>
+<td>~0.5</td>
+<td>~0.4</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>Haswell</td>
+<td>all (7)</td>
+<td>~1.1</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>Haswell</td>
+<td>speedup (6)</td>
+<td>~1.2</td>
+<td>~1.1</td>
+<td>~1.2</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>bc</td>
+<td>Haswell</td>
+<td>slowdown (1)</td>
+<td>~0.9</td>
+<td>~0.8</td>
+<td>~0.7</td>
+<td>RPG2 明显优于其他</td>
+</tr>
+<tr>
+<td>cg</td>
+<td>Cascade Lake</td>
+<td>-</td>
+<td>~0.8</td>
+<td>~0.7</td>
+<td>~0.9</td>
+<td>RPG2 表现一般</td>
+</tr>
+<tr>
+<td>is</td>
+<td>Cascade Lake</td>
+<td>-</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>randacc</td>
+<td>Cascade Lake</td>
+<td>-</td>
+<td>~1.4</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>RPG2 略优</td>
+</tr>
+<tr>
+<td>cg</td>
+<td>Haswell</td>
+<td>-</td>
+<td>~1.0</td>
+<td>~0.9</td>
+<td>~1.1</td>
+<td>RPG2 表现一般</td>
+</tr>
+<tr>
+<td>is</td>
+<td>Haswell</td>
+<td>-</td>
+<td>~1.2</td>
+<td>~1.1</td>
+<td>~1.2</td>
+<td>RPG2 与 offline 相当</td>
+</tr>
+<tr>
+<td>randacc</td>
+<td>Haswell</td>
+<td>-</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>RPG2 略优</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>RPG2 的核心优势在于其动态适应能力</strong>，不仅能捕捉输入和微架构变化带来的性能差异，还能在 prefetching 有害时自动回滚，从而在整体上提供更稳定和可靠的性能提升。</li>
+</ul>
+<h3 id="figure-8-how-close-rpg2-gets-to-the-optimal-prefetch-distance-for-inputs-with-a-single-optimal-distance">Figure 8. How close RPG2 gets to the optimal prefetch distance, for inputs with a single optimal distance.<a class="headerlink" href="#figure-8-how-close-rpg2-gets-to-the-optimal-prefetch-distance-for-inputs-with-a-single-optimal-distance" title="Permanent link">&para;</a></h3>
+<p><img alt="9712ff6ecfc19e411194cd0ef766960c420eca387fc8429f55dacc62484e84fc.jpg" src="../images/9712ff6ecfc19e411194cd0ef766960c420eca387fc8429f55dacc62484e84fc.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 8</strong>，主题是评估 RPG2 在具有单一最优预取距离的输入上，其搜索结果与真实最优值之间的偏差。</li>
+<li>横轴表示 <strong>absolute distance from optimal prefetch distance</strong>，即 RPG2 找到的距离与真实最优距离之间的绝对差值，单位为迭代次数。</li>
+<li>纵轴表示 <strong>frequency</strong>，即在 120 个测试输入中，对应偏差值出现的频次。</li>
+<li>数据分布呈现明显的右偏态：<strong>大部分输入（约 50%）的偏差在 10 以内</strong>，其中偏差为 0–3 的输入有 22 个，偏差为 4–10 的输入合计约 36 个。</li>
+<li>偏差超过 20 的输入数量显著减少，但仍有部分输入存在较大误差，如偏差在 50–60 区间内仍存在多个案例。</li>
+<li>最大偏差接近 65，表明在少数极端情况下，RPG2 的搜索未能收敛至最优解。</li>
+<li>作者指出，<strong>性能增益并不总是随距离逼近最优值而线性提升</strong>，因此即使存在一定偏差，实际性能影响可能有限。</li>
+<li>主要误差来源是 <strong>IPC 测量噪声</strong>，导致搜索空间被误判，从而提前终止或偏离最优路径。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>偏差区间</th>
+<th>频次（输入数）</th>
+<th>占比（近似）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–3</td>
+<td>22</td>
+<td>18.3%</td>
+</tr>
+<tr>
+<td>4–10</td>
+<td>~36</td>
+<td>~30%</td>
+</tr>
+<tr>
+<td>11–20</td>
+<td>~15</td>
+<td>~12.5%</td>
+</tr>
+<tr>
+<td>21–30</td>
+<td>~10</td>
+<td>~8.3%</td>
+</tr>
+<tr>
+<td>31–40</td>
+<td>~5</td>
+<td>~4.2%</td>
+</tr>
+<tr>
+<td>41–50</td>
+<td>~3</td>
+<td>~2.5%</td>
+</tr>
+<tr>
+<td>51–60</td>
+<td>~8</td>
+<td>~6.7%</td>
+</tr>
+<tr>
+<td>&gt;60</td>
+<td>~2</td>
+<td>~1.7%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，RPG2 的预取距离搜索算法在大多数情况下表现良好，但在高噪声环境下仍有改进空间。</li>
+</ul>
+<h3 id="figure-9-the-impact-of-profiling-phase-duration-on-rpg2s-optimization-activation">Figure 9. The impact of profiling phase duration on RPG2’s optimization activation.<a class="headerlink" href="#figure-9-the-impact-of-profiling-phase-duration-on-rpg2s-optimization-activation" title="Permanent link">&para;</a></h3>
+<p><img alt="7a810de94e65f385b9d67285044beecb074c78c1bd1d9ddb87feb40aac55a1b5.jpg" src="../images/7a810de94e65f385b9d67285044beecb074c78c1bd1d9ddb87feb40aac55a1b5.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 9</strong>，主题是 <strong>profiling phase duration</strong> 对 <strong>RPG2’s optimization activation</strong> 的影响。</li>
+<li>横轴表示 <strong>profiling phase duration</strong>，取值为 <strong>0.5s, 1s, 2s, 4s</strong>；纵轴为百分比，范围从 <strong>0% 到 100%</strong>。</li>
+<li>纵向堆叠柱状图分为三段：</li>
+<li><strong>蓝色底部区域（always）</strong>：表示在所有运行中，RPG2 的优化阶段（代码生成、注入和调优）<strong>始终被激活</strong>。</li>
+<li><strong>浅蓝色中间区域（mixed）</strong>：表示优化阶段<strong>有时被激活，有时未被激活</strong>。</li>
+<li><strong>红色顶部区域（never）</strong>：表示优化阶段<strong>从未被激活</strong>。</li>
+<li>数据趋势显示：</li>
+<li>随着 <strong>profiling duration 增加</strong>，<strong>always 区域扩大</strong>，说明更长的采样时间提高了 RPG2 成功触发优化的概率。</li>
+<li><strong>never 区域缩小</strong>，表明较长的 profiling 减少了因数据不足导致优化失败的情况。</li>
+<li><strong>mixed 区域变化较小</strong>，说明部分输入对 profiling 时间不敏感。</li>
+<li>具体数值估算（基于视觉比例）：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Profiling Duration</th>
+<th>Always (%)</th>
+<th>Mixed (%)</th>
+<th>Never (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5s</td>
+<td>~38%</td>
+<td>~47%</td>
+<td>~15%</td>
+</tr>
+<tr>
+<td>1s</td>
+<td>~40%</td>
+<td>~45%</td>
+<td>~15%</td>
+</tr>
+<tr>
+<td>2s</td>
+<td>~39%</td>
+<td>~48%</td>
+<td>~13%</td>
+</tr>
+<tr>
+<td>4s</td>
+<td>~48%</td>
+<td>~40%</td>
+<td>~12%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>延长 profiling phase 可提升 RPG2 优化激活率</strong>，但边际收益递减。默认设置 <strong>2s</strong> 是兼顾效率与效果的合理折衷。</li>
+</ul>
+<h3 id="figure-10-rpg2s-impact-on-ipc-over-time">Figure 10. RPG2’s impact on IPC over time.<a class="headerlink" href="#figure-10-rpg2s-impact-on-ipc-over-time" title="Permanent link">&para;</a></h3>
+<p><img alt="bf9367c258960cd85482ea244dcca3e62c08a2ec04410b21469f291c936d59e6.jpg" src="../images/bf9367c258960cd85482ea244dcca3e62c08a2ec04410b21469f291c936d59e6.jpg" /></p>
+<ul>
+<li>图片展示了 RPG2 系统在两个不同输入（higgs-retweet_network 和 soc-sign-bitcoinalpha-edit）下对 IPC（Instructions Per Cycle）随时间变化的影响，用于评估其在线优化行为。</li>
+<li>左图对应 higgs-retweet_network 输入，在 Haswell 机器上运行。初始 IPC 约为 <strong>0.44</strong>，在约 <strong>6 秒</strong>处因 RPG2 进入代码注入与调优阶段而短暂下降，随后稳定在 <strong>0.55</strong> 以上，最终选定 prefetch distance 为 <strong>62</strong>，实现 <strong>超过 25% 的 IPC 提升</strong>。</li>
+<li>右图对应 soc-sign-bitcoinalpha-edit 输入，在 Cascade Lake 机器上运行。初始 IPC 约为 <strong>2.0</strong>，在约 <strong>3 秒</strong>后进入 prefetch active 阶段（阴影区域），但 IPC 不升反降，表明 prefetching 有害性能；RPG2 在约 <strong>8 秒</strong>时检测到此情况并执行 rollback，恢复至原始代码，IPC 回升至 <strong>2.0</strong> 附近。</li>
+<li>两张图共同说明 RPG2 能动态响应程序行为：在有益时提升性能，在有害时快速回退，避免持续性能损失。</li>
+<li>关键操作时间点：</li>
+<li><strong>代码注入与调优暂停</strong>：发生在第 6 秒（左图）和第 3–8 秒（右图），期间 IPC 波动。</li>
+<li><strong>Rollback 触发</strong>：右图中于第 8 秒完成，恢复原始性能。</li>
+<li>RPG2 的核心能力体现在：</li>
+<li><strong>实时监测 IPC 变化</strong>作为性能指标。</li>
+<li><strong>自动决策是否启用或禁用 prefetch</strong>，无需人工干预。</li>
+<li><strong>支持 On-Stack Replacement (OSR)</strong>，确保在函数执行中途也能安全切换代码版本。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>时间点 (秒)</th>
+<th>事件描述</th>
+<th>IPC 变化趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–6</td>
+<td>初始执行 + profiling</td>
+<td>稳定或轻微波动</td>
+</tr>
+<tr>
+<td>6</td>
+<td>代码注入与调优开始</td>
+<td>短暂下降</td>
+</tr>
+<tr>
+<td>6–9</td>
+<td>调优完成，启用最优 prefetch distance</td>
+<td>显著上升（左图）</td>
+</tr>
+<tr>
+<td>3–8</td>
+<td>prefetch active（有害案例）</td>
+<td>下降 → 持续低谷</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Rollback 至原始代码</td>
+<td>恢复至初始水平</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图验证了 RPG2 的“鲁棒性”设计目标：不仅追求性能提升，更关键的是能识别并规避性能陷阱，确保系统整体稳定性。</li>
+</ul>
+<h3 id="figure-11-the-relationship-between-speedup-and-llc-mpki-for-pr-on-cascade-lake">Figure 11. The relationship between speedup and LLC MPKI for pr on Cascade Lake.<a class="headerlink" href="#figure-11-the-relationship-between-speedup-and-llc-mpki-for-pr-on-cascade-lake" title="Permanent link">&para;</a></h3>
+<p><img alt="f4effe82e50ea717508d8c2571fd16df588b36a87bf7836ebb3d96773985a05f.jpg" src="../images/f4effe82e50ea717508d8c2571fd16df588b36a87bf7836ebb3d96773985a05f.jpg" /></p>
+<ul>
+<li>图表展示了在 Cascade Lake 平台上运行 pr 基准测试时，<strong>speedup</strong> 与 <strong>LLC MPKI（Last-Level Cache Misses Per Kilo-Instruction）变化量</strong>之间的关系。</li>
+<li>横轴为“change in LLC MPKI”，表示相对于无 prefetch 基线的 LLC 缺失率变化，负值代表减少，正值代表增加；纵轴为 speedup，即性能加速比。</li>
+<li>数据点分布显示：<strong>大部分数据点集中在横轴负半轴</strong>，表明 RPG2 的 prefetch 机制普遍降低了 LLC MPKI，即减少了缓存缺失。</li>
+<li>尽管 LLC MPKI 降低，但 speedup 并未呈现强正相关性。例如：</li>
+<li>当 LLC MPKI 减少约 -15 时，speedup 可达 1.3–1.4；</li>
+<li>但当 LLC MPKI 减少至 -5 左右时，speedup 仍可高达 1.3；</li>
+<li>同时，部分数据点即使 LLC MPKI 几乎无变化（接近 0），speedup 仍维持在 1.1–1.2 区间。</li>
+<li>存在少量数据点位于横轴右侧（LLC MPKI 增加），其 speedup 多数低于 1.0，说明 prefetch 在这些情况下反而导致性能下降。</li>
+<li>图中密集簇状分布于横轴接近 0、纵轴 1.0–1.2 区域，暗示部分输入下 prefetch 对 LLC MPKI 影响微弱，但仍有小幅性能提升，可能源于其他层级缓存或 DRAM 带宽优化。</li>
+<li>该图验证了论文第 4.4 节结论：<strong>LLC MPKI 不是衡量 prefetch 效果的可靠指标</strong>，因为性能提升不仅依赖于 LLC 缺失减少，还受其他内存层级行为和带宽竞争影响。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>横轴区间 (change in LLC MPKI)</th>
+<th>纵轴表现 (speedup)</th>
+<th>性能趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-20 至 -15</td>
+<td>1.3 – 1.4</td>
+<td>显著加速</td>
+</tr>
+<tr>
+<td>-15 至 -5</td>
+<td>1.1 – 1.3</td>
+<td>中等加速</td>
+</tr>
+<tr>
+<td>接近 0</td>
+<td>1.0 – 1.2</td>
+<td>微幅加速或持平</td>
+</tr>
+<tr>
+<td>&gt; 0</td>
+<td>&lt; 1.0</td>
+<td>性能退化</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>综上，该图揭示了 prefetch 优化效果的复杂性：<strong>仅靠降低 LLC MPKI 无法准确预测性能收益</strong>，RPG2 的在线调优机制正是为了应对这种非线性、多因素耦合的性能响应。</li>
+</ul>
+<h3 id="730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4jpg">730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4.jpg<a class="headerlink" href="#730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4.jpg" src="../images/730aba1441c65a0b28581ce05a8fe5cdd1337d9e8945548c95855ca07331eae4.jpg" /></p>
+<ul>
+<li>该图片为 <strong>Table 2</strong>，标题为“Average latency of RPG2 operations”，展示了 RPG2 系统在不同基准测试（benchmark）中关键操作的平均延迟数据。</li>
+<li>表格包含六行和八列，其中第一列为操作类型，其余七列为不同基准测试：pr、sssp、bfs、bc、is、randacc、cg。</li>
+<li>所有数据单位均为毫秒（ms），除第一行“RPG² exec (s)”单位为秒（s），表示 RPG2 整体执行时间。</li>
+<li>数据显示，<strong>BOLT 生成二进制文件耗时最长</strong>，平均在 26.4ms 至 32.0ms 之间，其中 randacc 最高（32.0ms），cg 最低（26.4ms）。</li>
+<li><strong>代码插入（code insert）</strong> 耗时稳定，各基准测试均在 2.9ms 至 3.9ms 之间，cg 最快（2.9ms），pr 最慢（3.9ms）。</li>
+<li><strong>单次 prefetch distance 编辑（1x pd edit）</strong> 耗时极短，所有基准测试均在 1.1ms 至 1.4ms 之间，randacc 和 is 最快（1.1ms），bfs 最慢（1.4ms）。</li>
+<li><strong>prefetch distance 编辑次数（# pd edits）</strong> 平均在 8.8 至 12.7 次之间，bc 最高（12.7），randacc 最低（8.8）。</li>
+<li>RPG2 整体执行时间（RPG² exec）从 7.6 秒（pr）到 8.8 秒（cg）不等，表明系统在后台运行时对主程序影响较小。</li>
+<li>数据表明，RPG2 的<strong>停机操作（stop-the-world）延迟极低</strong>，如代码插入和单次编辑均在毫秒级，确保了在线优化的实时性。</li>
+<li>表格数据支持论文第 4.3.1 节结论：RPG2 的关键操作延迟低，对性能干扰小，符合其“轻量级在线优化”设计目标。</li>
+</ul>
+<h3 id="figure-12-rpg2s-impact-on-dynamic-instruction-count-for-pr-on-cascade-lake">Figure 12. RPG2’s impact on dynamic instruction count for pr on Cascade Lake.<a class="headerlink" href="#figure-12-rpg2s-impact-on-dynamic-instruction-count-for-pr-on-cascade-lake" title="Permanent link">&para;</a></h3>
+<p><img alt="02aec35471a586e12689f07e9e30e761e421ae129fb6ede1ed34e783b1743be8.jpg" src="../images/02aec35471a586e12689f07e9e30e761e421ae129fb6ede1ed34e783b1743be8.jpg" /></p>
+<ul>
+<li>图片展示了 RPG2 系统在 Cascade Lake 平台上对 pr 基准测试的 <strong>动态指令计数</strong>（dynamic instruction count）影响，数据已归一化至原始无预取版本。</li>
+<li>横轴表示归一化后的指令计数比例，从 1.00（无额外开销）到 1.35（增加 35%），纵轴为对应比例出现的频率。</li>
+<li>数据分布显示：<strong>约一半输入</strong>的指令计数增幅低于 15%，集中在 1.00–1.15 区间；最差情况增幅达 <strong>37%</strong>，出现在 1.35 区间。</li>
+<li>高频峰值位于 1.15 和 1.20，表明多数输入因 prefetch kernel 的插入导致指令数适度增长，但整体仍被性能增益所抵消。</li>
+<li>该图验证了 RPG2 的开销可控性：尽管引入了额外计算逻辑（如地址计算、边界检查），其带来的指令膨胀并未显著拖累整体性能。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>归一化指令计数</th>
+<th>频率（近似）</th>
+<th>性能影响说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.00</td>
+<td>12</td>
+<td>无额外开销，极少数情况</td>
+</tr>
+<tr>
+<td>1.05</td>
+<td>1</td>
+<td>几乎无影响</td>
+</tr>
+<tr>
+<td>1.10–1.15</td>
+<td>6–12</td>
+<td>中等开销，常见范围</td>
+</tr>
+<tr>
+<td>1.20</td>
+<td>5</td>
+<td>较高开销，但仍可接受</td>
+</tr>
+<tr>
+<td>1.25–1.35</td>
+<td>1–2</td>
+<td>最高开销，仅少数输入</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：RPG2 的 prefetch kernel 引入的指令开销是<strong>输入依赖型</strong>的，取决于数据结构大小与预取距离，但系统设计确保了即使在最坏情况下，性能收益仍能覆盖此开销。</li>
+</ul>
+<h3 id="30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34jpg">30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34.jpg<a class="headerlink" href="#30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34.jpg" src="../images/30d16b2b71fbc63c4f826cad21b9ce416d506db55f96a7c7a9e9ac5e0706ce34.jpg" /></p>
+<ul>
+<li>该图片展示的是 <strong>Table 3</strong>，标题为“<strong>The influence of prefetch distance on performance</strong>”，用于量化不同程序输入和微架构下，预取距离对性能的影响模式。</li>
+<li>表格按 <strong>benchmark</strong>（pr, sssp, bfs, bc）和 <strong>microarchitecture</strong>（Cascade Lake, Haswell）分类，统计了每种组合下不同性能行为类型的输入数量。</li>
+<li>性能行为类型共八类，包括：</li>
+<li><strong>single optimal</strong>：存在唯一最优预取距离。</li>
+<li><strong>range optimal</strong>：存在一个连续的最优距离区间。</li>
+<li><strong>asymptotic</strong>：性能随距离增加趋于饱和。</li>
+<li><strong>both bad</strong>：在两种微架构上预取均导致性能下降。</li>
+<li><strong>Haswell bad</strong>：仅在 Haswell 上有害。</li>
+<li><strong>Cascade bad</strong>：仅在 Cascade Lake 上有害。</li>
+<li><strong>noisy</strong>：行为过于随机，无法清晰归类。</li>
+<li><strong>other</strong>：其余未归入上述类别的行为。</li>
+</ul>
+<p>以下是表格数据整理：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>Cascade Lake (pr)</th>
+<th>Cascade Lake (sssp)</th>
+<th>Cascade Lake (bfs)</th>
+<th>Cascade Lake (bc)</th>
+<th>Haswell (pr)</th>
+<th>Haswell (sssp)</th>
+<th>Haswell (bfs)</th>
+<th>Haswell (bc)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>single optimal</td>
+<td>26</td>
+<td>25</td>
+<td>1</td>
+<td>2</td>
+<td>18</td>
+<td>23</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>range optimal</td>
+<td>2</td>
+<td>7</td>
+<td>1</td>
+<td>3</td>
+<td>7</td>
+<td>9</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>asymptotic</td>
+<td>15</td>
+<td>13</td>
+<td>2</td>
+<td>2</td>
+<td>18</td>
+<td>14</td>
+<td>1</td>
+<td>6</td>
+</tr>
+<tr>
+<td>both bad</td>
+<td>11</td>
+<td>10</td>
+<td>52</td>
+<td>0</td>
+<td>11</td>
+<td>10</td>
+<td>52</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Haswell bad</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+<td>5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Cascade bad</td>
+<td>2</td>
+<td>2</td>
+<td>5</td>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>noisy</td>
+<td>4</td>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+<td>7</td>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>other</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据表明，<strong>bfs</strong> 在两种微架构上绝大多数输入都属于 <strong>both bad</strong> 类型，说明其预取极易导致性能退化。</li>
+<li><strong>pr</strong> 和 <strong>sssp</strong> 的输入中，<strong>single optimal</strong> 和 <strong>asymptotic</strong> 占比较高，意味着在这两个基准测试中，通过搜索或固定距离仍可能获得较好收益。</li>
+<li><strong>bc</strong> 基准测试样本较少，但显示在 Haswell 上更倾向于 <strong>asymptotic</strong> 行为。</li>
+<li><strong>Haswell bad</strong> 和 <strong>Cascade bad</strong> 类型的存在，凸显了预取效果对 <strong>微架构高度敏感</strong>，同一输入在不同机器上表现可能截然相反。</li>
+<li><strong>noisy</strong> 类型在 Haswell 上出现频率更高，暗示其性能响应更不稳定，增加了自动调优难度。</li>
+<li>该表支持论文核心论点：预取优化不能依赖静态编译，必须具备 <strong>动态适应能力</strong>，如 RPG2 所提供的运行时调整与回滚机制。</li>
+</ul>
+<h3 id="figure-13-the-relationship-between-multiple-loads-prefetch-distances-and-performance-for-sssp-running-the-p2pgnutella05-input-on-cascade-lake">Figure 13. The relationship between multiple loads’ prefetch distances and performance for sssp running the p2pGnutella05 input on Cascade Lake.<a class="headerlink" href="#figure-13-the-relationship-between-multiple-loads-prefetch-distances-and-performance-for-sssp-running-the-p2pgnutella05-input-on-cascade-lake" title="Permanent link">&para;</a></h3>
+<p><img alt="e36d1471d7bce3f47c2dc2f42c31b2ccd9f803995217272909a6278fd696006e.jpg" src="../images/e36d1471d7bce3f47c2dc2f42c31b2ccd9f803995217272909a6278fd696006e.jpg" /></p>
+<ul>
+<li>该图展示了在 <strong>Cascade Lake</strong> 微架构上运行 <strong>sssp</strong> 基准测试（输入为 <strong>p2pGnutella05</strong>）时，两个独立负载（<strong>load0</strong> 和 <strong>load1</strong>）的 <strong>prefetch distance</strong> 对性能（以 <strong>speedup</strong> 衡量）的影响。</li>
+<li>图中三维曲面表示不同 <strong>load0 prefetch distance</strong>（x轴）与 <strong>load1 prefetch distance</strong>（y轴）组合下所获得的 <strong>speedup</strong>（z轴），颜色从蓝到黄绿渐变代表性能由低到高。</li>
+<li><strong>load0 prefetch distance</strong> 的影响更为显著：当其值较小时（如20-40），无论 <strong>load1 prefetch distance</strong> 如何变化，整体 <strong>speedup</strong> 都较高；随着 <strong>load0 prefetch distance</strong> 增大，<strong>speedup</strong> 明显下降，表明 <strong>load0</strong> 是性能瓶颈的关键点。</li>
+<li><strong>load1 prefetch distance</strong> 的影响相对次要：在 <strong>load0 prefetch distance</strong> 固定的情况下，调整 <strong>load1 prefetch distance</strong> 只能带来小幅性能波动（约 ±2%），说明其优化空间有限。</li>
+<li>存在多个局部最优解：曲面并非平滑单调，而是呈现多个峰谷，意味着某些特定距离组合（如 load0=30, load1=60）可能比“对称”配置（两者距离相等）更优。</li>
+<li>RPG2 当前采用“对称”策略（即所有 prefetch location 使用相同距离），在此场景下可能无法达到理论最优性能，凸显了未来支持 <strong>asymmetric prefetch distances</strong> 的必要性。</li>
+<li>性能敏感度高：即使微小的距离调整也可能导致 <strong>speedup</strong> 从 1.24 降至 1.12，说明 <strong>prefetch distance tuning</strong> 必须精确，且需动态适应运行时环境。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>范围</th>
+<th>性能趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>load0 prefetch distance</strong></td>
+<td>20–100</td>
+<td><strong>显著负相关</strong>：距离越小，speedup越高；距离增大，性能急剧下降</td>
+</tr>
+<tr>
+<td><strong>load1 prefetch distance</strong></td>
+<td>20–100</td>
+<td><strong>弱相关</strong>：在固定 load0 距离下，仅引起小幅波动（±2%）</td>
+</tr>
+<tr>
+<td><strong>speedup</strong></td>
+<td>1.12–1.24</td>
+<td>最高可达 <strong>1.24×</strong>，最低跌至 <strong>1.12×</strong>，差距达 <strong>10.7%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图验证了论文第 4.5 节观点：多负载场景下，<strong>prefetch distance search space</strong> 呈现非线性、非对称特性，静态或统一距离策略难以逼近最优解。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>
