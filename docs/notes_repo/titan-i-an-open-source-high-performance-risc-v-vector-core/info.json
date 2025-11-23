@@ -1,0 +1,21 @@
+{
+  "index": "titan-i-an-open-source-high-performance-risc-v-vector-core",
+  "paper_title": "Titan-I: An Open-Source, High Performance RISC-V Vector Core",
+  "metadata": {
+    "authors": [
+      "Jiuyang Liu",
+      "Qinjun Li",
+      "Yunqian Luo",
+      "et al."
+    ],
+    "affiliations": [
+      "Huazhong University of Science and Technology",
+      "Institute of Software, Chinese Academy of Sciences",
+      "Tsinghua University",
+      "Xinpian Technology Co., Ltd."
+    ],
+    "venue": "MICRO",
+    "year": 2025
+  },
+  "description": "提出Titan-I (T1)，一个开源、高性能的乱序RISC-V向量核，通过粗粒度布局规划器、数据通路级置换单元和掩码寄存器缓存解决VLEN/DLEN扩展难题，并采用细粒度链接、提交即发射等技术提升ILP。在密码学 workload 上，T1以40%面积实现对Nvidia 3090/5090最高2.41倍/1.85倍加速；在HPC上，以19%面积达到HiSilicon TaiShan V120性能，并在4倍数据通路扩展下获得4.59倍加速。"
+}

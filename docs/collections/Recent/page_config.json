@@ -1,0 +1,18 @@
+{
+    "title": "Recent Papers",
+    "description": "最近收录的论文笔记，欢迎阅读~",
+    "papers": [
+        "bolt-a-practical-binary-optimizer-for-data-centers-and-beyond",    
+        "feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers",
+        "limoncello-prefetchers-for-scale",
+        "ocolos-online-code-layout-optimizations",
+        "prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design",
+        "profile-guided-temporal-prefetching",
+        "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
+        "rnr-a-software-assisted-record-and-replay-hardware-prefetcher",
+        "rpg2-robust-profile-guided-runtime-prefetch-generation",
+        "tea-time-proportional-event-analysis",
+        "tip-time-proportional-instruction-profiling",
+        "titan-i-an-open-source-high-performance-risc-v-vector-core"
+    ]
+}

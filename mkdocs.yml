@@ -1,0 +1,56 @@
+site_name: BlaBlaCut
+site_url: https://example.com/  # 部署时填入你的实际网址
+
+# 1. 启用 Material 主题
+theme:
+  name: material
+  language: zh  # 设置为中文
+  features:
+    - navigation.sections    # 侧边栏分组
+    - navigation.top         # 返回顶部按钮
+    - navigation.indexes     # 面包屑导航
+    - search.suggest         # 搜索建议
+    - search.highlight       # 搜索高亮
+    - content.code.copy      # 代码块复制按钮
+  palette: 
+    # 切换到深色模式的按钮配置
+    - scheme: default
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+    - scheme: slate
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: 切换到浅色模式
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  
+# 2. 常用 Markdown 扩展 (让文档更好看)
+markdown_extensions:
+  - admonition               # 提示块 (例如 !!! note)
+  - pymdownx.details         # 折叠块
+  - pymdownx.superfences     # 高级代码块
+  - pymdownx.highlight:      # 代码高亮
+      anchor_linenums: true
+  - pymdownx.tabbed:         # 选项卡
+      alternate_style: true 
+  - toc:
+      permalink: true        # 标题旁显示锚点链接
+
+# 3. 注册自定义 CSS 和 JavaScript
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/switcher.js
+
+# 4. 导航菜单结构 (可选，不写则自动根据文件夹生成)
+nav:
+  - Home: index.md
+  - Recent: collections/Recent/index.md
+  - Awesome Data Prefetchers: collections/awesome-data-prefetchers/index.md
+  - MICRO 2025: collections/micro-2025/index.md

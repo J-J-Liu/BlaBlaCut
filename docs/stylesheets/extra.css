@@ -1,0 +1,101 @@
+
+
+/* --- 放大 Logo --- */
+/* 注意：MkDocs 顶栏默认高度较小，Logo 太大会撑破布局，40px-42px 是极限完美尺寸 */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+    height: 30px; /* 默认约 24px，这里几乎放大了一倍 */
+    width: auto;  /* 保持比例 */
+    
+    /* 添加一点悬停时的动态效果 */
+    transition: transform 0.3s ease;
+}
+
+/* 鼠标摸到 Logo 时稍微转动一下，增加趣味性 */
+.md-header__button.md-logo:hover img {
+    transform: rotate(10deg) scale(1.8);
+}
+
+/* 悬浮按钮容器 */
+.paper-switch-btn-container {
+  position: fixed;
+  bottom: 30px;        /* 距离底部距离 */
+  right: 30px;         /* 距离右侧距离 */
+  z-index: 100;        /* 保证浮在最上层 */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;           /* 按钮之间的间距 */
+}
+
+/* 悬浮按钮样式 */
+.paper-switch-btn {
+  position: relative;  /* 相对于容器定位 */
+  background-color: var(--md-primary-fg-color); /* 使用主题主色 */
+  color: white !important;
+  padding: 10px 20px;
+  border-radius: 30px; /* 圆角胶囊形状 */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.5em;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  /* 包含图标和文字的布局 */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 鼠标悬停效果 */
+.paper-switch-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  background-color: var(--md-primary-fg-color--light);
+}
+
+/* 极简阅读模式：仅在桌面宽屏（>1220px）时生效，手机端保持默认 */
+@media screen and (min-width: 76.25em) {
+    
+    /* 1. 对于 notes_repo 下的页面：隐藏原本的左侧文件导航栏，显示页面内目录 */
+    body.is-notes-repo-page .md-sidebar--primary {
+        display: none !important;
+    }
+
+    /* 2. 对于其他页面（非 notes_repo）：显示原本的左侧文件导航栏 */
+    body:not(.is-notes-repo-page) .md-sidebar--primary {
+        display: block !important;
+    }
+    
+    /* 主页也显示左侧导航栏（保持原有行为） */
+    body.is-home-page .md-sidebar--primary {
+        display: block !important;
+    }
+
+    /* 3. 使用 Flex 布局反转顺序（仅对 notes_repo 下的页面生效） */
+    body.is-notes-repo-page .md-main__inner {
+        /* 默认是 [正文] [右侧栏]，反转变成 [右侧栏] [正文] */
+        flex-direction: row-reverse;
+        /* 让内容整体居中，如果喜欢靠左可以去掉这行 */
+        justify-content: center; 
+    }
+    
+    /* 其他页面保持正常的布局顺序 */
+    body:not(.is-notes-repo-page) .md-main__inner {
+        flex-direction: row;
+    }
+
+    /* 主页保持正常的布局顺序 */
+    body.is-home-page .md-main__inner {
+        flex-direction: row;
+    }
+
+    /* 4. 调整 notes_repo 页面搬过来的目录栏样式 */
+    body.is-notes-repo-page .md-sidebar--secondary {
+        /* 它是从右边搬过来的，要重置一下间距 */
+        margin-left: 0 !important;
+        margin-right: 1rem; /* 给正文留点呼吸感 */
+        
+        /* 保持固定定位的效果 */
+        height: auto;
+    }
+}
