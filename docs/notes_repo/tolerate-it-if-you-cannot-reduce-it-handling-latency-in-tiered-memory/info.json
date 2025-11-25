@@ -1,0 +1,19 @@
+{
+  "index": "tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory",
+  "paper_title": "Tolerate It if You Cannot Reduce It: Handling Latency in Tiered Memory",
+  "metadata": {
+    "authors": [
+      "Musa Unal",
+      "Vishal Gupta",
+      "Yueyang Pan",
+      "et al."
+    ],
+    "affiliations": [
+      "EPFL"
+    ],
+    "venue": "HOTOS",
+    "year": 2025,
+    "doi": "10.1145/3713082.3730376"
+  },
+  "description": "论文提出Linden系统，结合延迟减少（页迁移）与延迟容忍（预取）策略优化分层内存性能。指出传统硬件预取在CXL内存上因带宽竞争可导致19%性能下降，而软件预取需采用层级感知的预取距离（如CXL需距离7而非DRAM的4）。实验显示对热点且可预取区域迁移到慢速层可提升7%性能。"
+}

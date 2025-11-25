@@ -1,0 +1,20 @@
+{
+  "index": "integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency",
+  "paper_title": "Integrating Prefetcher Selection with Dynamic Request Allocation Improves Prefetching Efficiency",
+  "metadata": {
+    "authors": [
+      "Mengming Li",
+      "Qijun Zhang",
+      "Yongqing Ren",
+      "et al."
+    ],
+    "affiliations": [
+      "Hong Kong University of Science and Technology",
+      "Intel"
+    ],
+    "venue": "HPCA",
+    "year": 2025,
+    "doi": null
+  },
+  "description": "论文提出Alecto，一种结合动态请求分配（DDRA）与细粒度预取器选择的框架，解决了现有方案中需求请求分配不准确和选择标准粗糙的问题。Alecto通过为每个内存访问指令动态分配合适的预取器，显著提升了预取效率。实验表明，Alecto在单核和八核上分别比SOTA的Bandit算法提升2.76%和7.56%，并减少48%的预取器表访问能耗，存储开销小于1KB。"
+}

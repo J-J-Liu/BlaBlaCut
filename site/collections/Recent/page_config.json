@@ -1,0 +1,23 @@
+{
+    "title": "Recent Papers",
+    "description": "最近收录的论文笔记，欢迎阅读~",
+    "papers": [
+        "atr-out-of-order-register-release-exploiting-atomic-regions",
+        "bolt-a-practical-binary-optimizer-for-data-centers-and-beyond",
+        "drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems",
+        "feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers",
+        "integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency",
+        "learning-to-walk-architecting-learned-virtual-memory-translation",
+        "limoncello-prefetchers-for-scale",
+        "ocolos-online-code-layout-optimizations",
+        "prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design",
+        "profile-guided-temporal-prefetching",
+        "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
+        "rnr-a-software-assisted-record-and-replay-hardware-prefetcher",
+        "rpg2-robust-profile-guided-runtime-prefetch-generation",
+        "shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads",
+        "tea-time-proportional-event-analysis",
+        "tip-time-proportional-instruction-profiling",
+        "titan-i-an-open-source-high-performance-risc-v-vector-core"
+    ]
+}

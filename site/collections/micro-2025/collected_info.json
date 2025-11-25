@@ -1,0 +1,48 @@
+{
+    "title": "MICRO 2025",
+    "description": "MICRO 2025 论文",
+    "papers": [
+        {
+            "index": "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
+            "paper_title": "RICH Prefetcher: Storing Rich Information in Memory to Trade Capacity and Bandwidth for Latency Hiding",
+            "metadata": {
+                "authors": [
+                    "Ningzhi Ai",
+                    "Wenjian He",
+                    "Hu He",
+                    "et al."
+                ],
+                "affiliations": [
+                    "Huawei Technologies Co., Ltd",
+                    "Tsinghua University"
+                ],
+                "venue": "MICRO",
+                "year": 2025
+            },
+            "description": "针对高带宽/大容量但高延迟的未来内存系统，提出RICH预取器。其核心创新是利用丰富的元数据，通过多尺度区域（2KB/4KB/16KB）和多偏移触发机制协同工作，在保持高精度的同时提升覆盖率和及时性。为控制开销，采用片上/片下分层存储元数据。实验表明，在传统系统中性能优于Bingo 3.4%，在增加120ns延迟的高延迟系统中优势扩大至8.3%。",
+            "_source_folder": "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding"
+        },
+        {
+            "index": "titan-i-an-open-source-high-performance-risc-v-vector-core",
+            "paper_title": "Titan-I: An Open-Source, High Performance RISC-V Vector Core",
+            "metadata": {
+                "authors": [
+                    "Jiuyang Liu",
+                    "Qinjun Li",
+                    "Yunqian Luo",
+                    "et al."
+                ],
+                "affiliations": [
+                    "Huazhong University of Science and Technology",
+                    "Institute of Software, Chinese Academy of Sciences",
+                    "Tsinghua University",
+                    "Xinpian Technology Co., Ltd."
+                ],
+                "venue": "MICRO",
+                "year": 2025
+            },
+            "description": "提出Titan-I (T1)，一个开源、高性能的乱序RISC-V向量核，通过粗粒度布局规划器、数据通路级置换单元和掩码寄存器缓存解决VLEN/DLEN扩展难题，并采用细粒度链接、提交即发射等技术提升ILP。在密码学 workload 上，T1以40%面积实现对Nvidia 3090/5090最高2.41倍/1.85倍加速；在HPC上，以19%面积达到HiSilicon TaiShan V120性能，并在4倍数据通路扩展下获得4.59倍加速。",
+            "_source_folder": "titan-i-an-open-source-high-performance-risc-v-vector-core"
+        }
+    ]
+}

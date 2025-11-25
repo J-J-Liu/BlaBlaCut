@@ -1,0 +1,19 @@
+{
+  "index": "profile-guided-temporal-prefetching",
+  "paper_title": "Profile-Guided Temporal Prefetching",
+  "metadata": {
+    "authors": [
+      "Mengming Li",
+      "Qijun Zhang",
+      "Yichuan Gao",
+      "et al."
+    ],
+    "affiliations": [
+      "Hong Kong University of Science and Technology (HKUST)",
+      "Intel"
+    ],
+    "venue": "ISCA",
+    "year": 2025
+  },
+  "description": "提出Prophet，一个软硬协同的Profile-Guided时序预取框架，通过轻量级计数器分析和动态提示注入，优化片上元数据表管理。相比SOTA硬件预取器Triangel，性能提升14.23%，显著优于软件方案RPG2（仅0.1%增益），且能自适应不同输入，开销可忽略。"
+}

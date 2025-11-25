@@ -1,0 +1,20 @@
+{
+  "index": "feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers",
+  "paper_title": "Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers",
+  "metadata": {
+    "authors": [
+      "Santhosh Srinath",
+      "Onur Mutlu",
+      "Hyesoon Kim",
+      "et al."
+    ],
+    "affiliations": [
+      "Microsoft",
+      "Microsoft Research",
+      "The University of Texas at Austin"
+    ],
+    "venue": "MICRO",
+    "year": 2007
+  },
+  "description": "提出反馈导向预取（FDP）机制，通过动态监控预取准确率、及时性和缓存污染来调整硬件预取器的激进程度和预取块在缓存LRU栈中的插入位置。在SPEC CPU2000上，相比最佳传统流式预取器，平均性能提升6.5%，内存带宽消耗降低18.7%。"
+}

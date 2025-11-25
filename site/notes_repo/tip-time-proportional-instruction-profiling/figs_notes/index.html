@@ -1,0 +1,1767 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/tip-time-proportional-instruction-profiling/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>TIP: Time-Proportional Instruction Profiling 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tip-time-proportional-instruction-profiling" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TIP: Time-Proportional Instruction Profiling 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-instruction-level-profle-error-of-state-of-the-art-profilers-compared-to-our-time-proportional-instruction-profilertipexisting-profilers-are-inaccurate-due-to-lack-of-ilp-support-and-systematic-latency-misattribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Instruction-level profle error of state-of-the-art profilers compared to our Time-Proportional Instruction Profiler(TIP).Existing profilers are inaccurate due to lack of ILP support and systematic latency misattribution.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-lci-nci-and-tip-sample-instructions-at-commit-whereas-dispatchsoftware-samples-at-dispatchfetchdispatch-and-software-are-biased-because-i-different-instructions-spend-more-time-in-some-pipeline-stages-than-othersand-i-the-time-an-instruction-spends-at-the-head-ofthe-rob-directly-impacts-execution-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: LCI, NCI and TIP sample instructions at commit whereas Dispatch(Software) samples at dispatch(fetch).Dispatch and Software are biased because (i) different instructions spend more time in some pipeline stages than others,and (i) the time an instruction spends at the head ofthe ROB directly impacts execution time.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-oracle-profiler-clock-cycle-attribution-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Oracle profiler clock cycle attribution overview.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure4exampleillustrating-theoraclenc1andlciprofilersona2-wideout-of-orderprocessornciandlcifallhortbeuse-they-do-not-account-for-ilpat-the-commit-stage-and-misattribute-pipeline-stallflush-andordrain-latencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-structural-overview-of-our-time-proportional-instruction-profiler-tip-tip-is-triggered-by-the-pmucollects-a-sampleand-finally-exposes-the-sample-to-software" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Structural overview of our Time-Proportional Instruction Profiler (TIP). TIP is triggered by the PMU,collects a sample,and finally exposes the sample to software.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-tip-sample-selection-logictip-classifies-samples-based-on-the-the-core-state-rob-flagsand-oir-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-simulated-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: Simulated Configuration.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-normalized-cycle-stacks-collected-at-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Normalized cycle stacks collected at commit.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure8functio-elerorsfortederentprofs-ncindecuateatthefuctioleliftar-and-dispatch-are-largely-inaccurate-figure-9-basic-block-levelerrorsforthe-diferent-profilerssoftwareand-dispatcharenotshownbecauseoftheirhigherror-tiptip-ilpand-nciare-accurateat-the-basic-block-level-whereas-lciand-softwareand-dispatch-arenot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure8:Functio-elerorsfortederentprofs.-,NCI,ndecuateatthefuctioleliftar and Dispatch are largely inaccurate. Figure 9: Basic-block-levelerrorsforthe diferent profilers.(Softwareand Dispatcharenotshownbecauseoftheirhigherror TIP,TIP-ILP,and NCIare accurateat the basic block level, whereas LCI(and Softwareand Dispatch) arenot.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-0instruction-levelerrorsforthe-different-profilerssoftwaredispatchandlciareomitted-becauseoftheirlarge-errors-tip-is-the-only-accurate-profiler-at-the-instruction-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 0:Instruction-levelerrorsforthe different profilers.(Software,Dispatch,andLCIareomitted becauseoftheirlarge errors.) TIP is the only accurate profiler at the instruction level.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figuresensitivityanalysesatsacuracycontinuestomeasurablyimprovebeyond4khzunliketheotherproflersbperdic-samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardwarecmakingncicommitparallelism-aware-increases-profile-errorin-contrast-to-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure:Sensitivityanalyses.(a)T'sacuracycontinuestomeasurablyimprovebeyond4KHzunliketheotherproflers.(b)Perdic samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardware.(c)MakingNCIcommitparallelism-aware increases profile error,in contrast to TIP.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12function-and-instruction-level-profiles-for-lmagick-for-tip-and-nci-compared-to-oracle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12:Function and instruction-level profiles for lmagick for TIP and NCI compared to Oracle.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-time-breakdown-for-the-four-most-runtimeintensive-functions-in-lmagick-comparing-the-original-to-our-optimized-versionthe-193x-speed-up-is-primarily-due-improved-processor-utilization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13: Time breakdown for the four most runtimeintensive functions in lmagick comparing the original to our optimized version.The 1.93x speed-up is primarily due improved processor utilization.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tip-time-proportional-instruction-profiling">TIP: Time-Proportional Instruction Profiling 图表详解<a class="headerlink" href="#tip-time-proportional-instruction-profiling" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-instruction-level-profle-error-of-state-of-the-art-profilers-compared-to-our-time-proportional-instruction-profilertipexisting-profilers-are-inaccurate-due-to-lack-of-ilp-support-and-systematic-latency-misattribution">Figure 1: Instruction-level profle error of state-of-the-art profilers compared to our Time-Proportional Instruction Profiler(TIP).Existing profilers are inaccurate due to lack of ILP support and systematic latency misattribution.<a class="headerlink" href="#figure-1-instruction-level-profle-error-of-state-of-the-art-profilers-compared-to-our-time-proportional-instruction-profilertipexisting-profilers-are-inaccurate-due-to-lack-of-ilp-support-and-systematic-latency-misattribution" title="Permanent link">&para;</a></h3>
+<p><img alt="501ae01efccae38527f4120367e437c0b10d9dacd28beb8f2b04c02048c0f44a.jpg" src="../images/501ae01efccae38527f4120367e437c0b10d9dacd28beb8f2b04c02048c0f44a.jpg" /></p>
+<ul>
+<li>图片包含两个并列的柱状图，分别标记为 (a) Average error 和 (b) Imagick，用于对比不同性能分析器在指令级别上的错误率。</li>
+<li>两个图表均以“Error”为纵轴，单位为百分比（%），范围从0%到60%；横轴列出五种分析器：Software、Dispatch、LCI、NCI 和 TIP。</li>
+<li><strong>图 (a) Average error</strong> 展示了所有基准测试的平均错误率：</li>
+<li>Software 分析器错误率最高，约为 <strong>61.8%</strong>。</li>
+<li>Dispatch 分析器错误率为 <strong>53.1%</strong>。</li>
+<li>LCI 分析器错误率为 <strong>55.4%</strong>。</li>
+<li>NCI 分析器错误率为 <strong>9.3%</strong>。</li>
+<li>TIP 分析器错误率最低，仅为 <strong>1.6%</strong>。</li>
+<li><strong>图 (b) Imagick</strong> 展示了 SPEC CPU2017 基准测试 Imagick 的特定错误率：</li>
+<li>Software 错误率仍最高，接近 <strong>60%</strong>。</li>
+<li>Dispatch 错误率约为 <strong>40%</strong>。</li>
+<li>LCI 错误率约为 <strong>35%</strong>。</li>
+<li>NCI 错误率约为 <strong>20%</strong>。</li>
+<li>TIP 错误率极低，几乎不可见，约为 <strong>1.6%</strong>。</li>
+<li>从数据可见，TIP 在平均和特定场景下均显著优于现有分析器，其错误率仅为 NCI 的约六分之一。</li>
+<li>所有现有分析器（Software、Dispatch、LCI、NCI）错误率较高，主要归因于 <strong>缺乏 ILP 支持</strong> 和 <strong>系统性延迟归因错误</strong>。</li>
+<li>TIP 的设计结合了 Oracle 分析器的时间归因策略与统计采样，从而在保持高精度的同时实现实际部署可行性。</li>
+</ul>
+<h3 id="figure-2-lci-nci-and-tip-sample-instructions-at-commit-whereas-dispatchsoftware-samples-at-dispatchfetchdispatch-and-software-are-biased-because-i-different-instructions-spend-more-time-in-some-pipeline-stages-than-othersand-i-the-time-an-instruction-spends-at-the-head-ofthe-rob-directly-impacts-execution-time">Figure 2: LCI, NCI and TIP sample instructions at commit whereas Dispatch(Software) samples at dispatch(fetch).Dispatch and Software are biased because (i) different instructions spend more time in some pipeline stages than others,and (i) the time an instruction spends at the head ofthe ROB directly impacts execution time.<a class="headerlink" href="#figure-2-lci-nci-and-tip-sample-instructions-at-commit-whereas-dispatchsoftware-samples-at-dispatchfetchdispatch-and-software-are-biased-because-i-different-instructions-spend-more-time-in-some-pipeline-stages-than-othersand-i-the-time-an-instruction-spends-at-the-head-ofthe-rob-directly-impacts-execution-time" title="Permanent link">&para;</a></h3>
+<p><img alt="ea5846c5aaf5c2db6a01093c4820281a6e03ed957d30331fe7995c26f6a867e6.jpg" src="../images/ea5846c5aaf5c2db6a01093c4820281a6e03ed957d30331fe7995c26f6a867e6.jpg" /></p>
+<ul>
+<li>图片标题为 Figure 2，旨在对比不同性能分析采样策略在处理器流水线中的采样位置及其带来的偏差。</li>
+<li><strong>核心结论</strong>：LCI、NCI 和 TIP 在 <strong>Commit 阶段</strong>采样，而 Dispatch（及 Software）在 <strong>Dispatch 或 Fetch 阶段</strong>采样。后者因忽略指令在 ROB 中的阻塞时间，导致采样偏差。</li>
+<li>图 (a) 展示了典型的 <strong>Out-of-order 架构</strong>流程：</li>
+<li>指令从 Inst. Cache/TLB 获取，经 Decode、Register Rename 后进入 Dispatch。</li>
+<li>Dispatch 将指令分发至 Issue Buffer，再由 Execution Units 执行。</li>
+<li>最终指令按序提交至 Commit 阶段，同时更新 ROB。</li>
+<li>PMU 可从 LCI、NCI、TIP 三种策略中选择采样点。</li>
+<li>图 (b) 举例说明 <strong>Dispatch 采样机制</strong>：</li>
+<li>Load 指令（I10）因数据未就绪，在 ROB 头部阻塞（Stalled），导致后续指令（如 I18, I19）无法被调度。</li>
+<li>此时 Dispatch 阶段因背压停滞，I10 被持续采样——尽管它并未真正“执行”，而是因等待资源被“卡住”。</li>
+<li>这种采样方式错误地将延迟归因于 I10，而非其根本原因（Load 依赖）。</li>
+<li>图 (c) 展示 <strong>Commit 时间线</strong>：</li>
+<li>横轴为周期（Cycles），纵轴为指令编号。</li>
+<li>Load 指令（I10）在第 3 周期才完成执行并提交，此前周期均处于阻塞状态。</li>
+<li>若在 Commit 阶段采样，则 Load 指令将在多个周期内被采样，真实反映其对执行时间的影响。</li>
+<li>若在 Dispatch 阶段采样，则可能在早期周期采样到 I10，造成误导性归因。</li>
+<li>下表总结不同采样策略的特性：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>采样策略</th>
+<th>采样阶段</th>
+<th>是否时间比例</th>
+<th>主要偏差来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Software</td>
+<td>Fetch</td>
+<td>❌</td>
+<td>中断延迟 + Skid，采样远离实际阻塞点</td>
+</tr>
+<tr>
+<td>Dispatch</td>
+<td>Dispatch</td>
+<td>❌</td>
+<td>指令在 Dispatch 阶段停留时间长 ≠ 实际执行耗时</td>
+</tr>
+<tr>
+<td>LCI</td>
+<td>Commit</td>
+<td>❌</td>
+<td>仅采样最后提交指令，忽略并行提交与阻塞指令</td>
+</tr>
+<tr>
+<td>NCI</td>
+<td>Commit</td>
+<td>❌</td>
+<td>采样下一提交指令，误将阻塞归因于后续指令</td>
+</tr>
+<tr>
+<td>TIP</td>
+<td>Commit</td>
+<td>✅</td>
+<td>精确归因每个周期给阻塞或并行提交的指令</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键术语保留英文：ROB（Re-Order Buffer）、LCI（Last Committed Instruction）、NCI（Next Committing Instruction）、PMU（Performance Monitoring Unit）、Dispatch、Commit。</li>
+<li><strong>视觉强调</strong>：图中用数字标记关键事件（如① Load 提交、② I10 阻塞、③ Load 开始执行、④ Load 完成提交），强化因果关系。</li>
+<li>该图直观揭示：<strong>只有在 Commit 阶段采样，并正确处理 ILP 与阻塞归因，才能实现时间比例（time-proportional）的性能分析</strong>。TIP 正是基于此原则设计。</li>
+</ul>
+<h3 id="figure-3-oracle-profiler-clock-cycle-attribution-overview">Figure 3: Oracle profiler clock cycle attribution overview.<a class="headerlink" href="#figure-3-oracle-profiler-clock-cycle-attribution-overview" title="Permanent link">&para;</a></h3>
+<p><img alt="6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" src="../images/6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" /></p>
+<ul>
+<li>图片展示了 Oracle Profiler 在每个时钟周期内如何对处理器状态进行分类并分配时间的逻辑流程图，其核心是基于 <strong>ROB (Reorder Buffer)</strong> 的状态判断。</li>
+<li>流程始于“<strong>Every clock cycle</strong>”，首先判断“<strong>One or more instructions in the ROB?</strong>”：</li>
+<li>若为“<strong>Yes</strong>”，则进入下一判断：“<strong>Committing one or more instructions?</strong>”。<ul>
+<li>若为“<strong>Yes</strong>”，则进入 <strong>State 1: Computing</strong>。在此状态下，该时钟周期的时间被<strong>平均分配</strong>给所有正在提交的指令（即 <code>1/n</code> 周期，其中 <code>n</code> 为提交的指令数）。</li>
+<li>若为“<strong>No</strong>”，则进入 <strong>State 2: Stalled</strong>。在此状态下，该时钟周期的时间被归因于<strong>阻塞提交的指令</strong>，即位于 ROB 头部的指令。</li>
+</ul>
+</li>
+<li>若为“<strong>No</strong>”，则进入下一判断：“<strong>Is the ROB empty due to a flush?</strong>”。<ul>
+<li>若为“<strong>Yes</strong>”，则进入 <strong>State 3: Flushed</strong>。在此状态下，该时钟周期的时间被归因于<strong>导致流水线冲刷的指令</strong>（例如，错误预测的分支指令）。</li>
+<li>若为“<strong>No</strong>”，则进入 <strong>State 4: Drained</strong>。在此状态下，该时钟周期的时间被归因于<strong>清空 ROB 后第一个进入 ROB 的指令</strong>，通常是由于前端停顿（如指令缓存未命中）造成的。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">状态</th>
+<th style="text-align: left;">条件</th>
+<th style="text-align: left;">时间归因对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>State 1: Computing</strong></td>
+<td style="text-align: left;">ROB 非空且正在提交指令</td>
+<td style="text-align: left;"><strong>平均分配</strong>给所有正在提交的指令 (<code>1/n</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>State 2: Stalled</strong></td>
+<td style="text-align: left;">ROB 非空但未提交指令</td>
+<td style="text-align: left;"><strong>阻塞提交的指令</strong>（ROB 头部指令）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>State 3: Flushed</strong></td>
+<td style="text-align: left;">ROB 为空且由冲刷导致</td>
+<td style="text-align: left;"><strong>导致冲刷的指令</strong>（如错误预测的分支）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>State 4: Drained</strong></td>
+<td style="text-align: left;">ROB 为空且非冲刷导致</td>
+<td style="text-align: left;"><strong>清空后第一个进入 ROB 的指令</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图清晰地定义了 Oracle Profiler 的四个基本状态及其对应的时间归因策略，确保了其<strong>时间比例性 (time-proportional)</strong>，即每个时钟周期都精确地归因于当前处理器实际暴露延迟的指令或事件。</li>
+<li>此设计是 Oracle Profiler 能够作为“黄金标准”的基础，因为它系统性地解决了现有分析器在处理 ILP、流水线停顿、冲刷和前端耗尽等问题上的归因错误。</li>
+</ul>
+<h3 id="figure4exampleillustrating-theoraclenc1andlciprofilersona2-wideout-of-orderprocessornciandlcifallhortbeuse-they-do-not-account-for-ilpat-the-commit-stage-and-misattribute-pipeline-stallflush-andordrain-latencies">Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.<a class="headerlink" href="#figure4exampleillustrating-theoraclenc1andlciprofilersona2-wideout-of-orderprocessornciandlcifallhortbeuse-they-do-not-account-for-ilpat-the-commit-stage-and-misattribute-pipeline-stallflush-andordrain-latencies" title="Permanent link">&para;</a></h3>
+<p><img alt="fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" src="../images/fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>2-wide out-of-order processor</strong> 上，<strong>Oracle</strong>、<strong>NCI</strong> 和 <strong>LCI</strong> 三种性能分析器在四种核心状态下的采样行为对比：<strong>(a) Computing</strong>、<strong>(b) Stalled</strong>、<strong>(c) Flushed</strong>、<strong>(d) Drained</strong>。</li>
+<li>每个子图包含三部分：<strong>ROB state</strong>（重排序缓冲区状态随周期变化）、<strong>Profile</strong>（各分析器对指令的周期归因数值）、以及红色标注的错误说明。
+(a) Computing 状态</li>
+<li>处理器在每个周期提交两个指令（如 I1/I2, I3/I4...），处于正常计算状态。</li>
+<li><strong>Oracle</strong> 正确将每个周期的 1 个时钟周期平均分配给两个提交指令（即每个指令 0.5 周期）。</li>
+<li><strong>NCI</strong> 仅记录下一个提交指令（如周期1记录 I2），忽略另一个（I1），导致 <strong>ILP 未被计入</strong>。</li>
+<li><strong>LCI</strong> 仅记录最后一个提交指令（如周期1记录 I1），同样忽略另一个（I2），也导致 <strong>ILP 未被计入</strong>。</li>
+<li>表格总结：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Cycle</th>
+<th>Instruction</th>
+<th>Oracle</th>
+<th>NCI</th>
+<th>LCI</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>I1</td>
+<td>0.5</td>
+<td>0</td>
+<td>1</td>
+<td>NCI 忽略 I1；LCI 忽略 I2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>I2</td>
+<td>0.5</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>I3</td>
+<td>0.5</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>I4</td>
+<td>0.5</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>(b) Stalled 状态</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- 周期2至41，处理器因 Load 指令未完成而停滞，仅在周期42恢复提交。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>Oracle</strong> 将40个停滞周期全部归因于阻塞提交的 Load 指令，并在周期42将0.5周期归因于 Load 和 I3。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>NCI</strong> 在周期42正确归因于 I3，但完全忽略 Load 的停滞贡献（归因0），<strong>未能处理 ILP</strong>。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>LCI</strong> 错误地将41个周期归因于 I1（最后提交指令），仅在周期42归因1周期给 Load，造成严重 <strong>Stall misattribution</strong>。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- 表格总结：</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Cycle Range</th>
+<th>Instruction</th>
+<th>Oracle</th>
+<th>NCI</th>
+<th>LCI</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-41</td>
+<td>Load</td>
+<td>40.5</td>
+<td>0</td>
+<td>1</td>
+<td>LCI 严重错误归因</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Load</td>
+<td>0.5</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>42</td>
+<td>I3</td>
+<td>0.5</td>
+<td>1</td>
+<td>0</td>
+<td>NCI 未处理 ILP</td>
+</tr>
+<tr>
+<td>(c) Flushed 状态</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- 分支指令在周期1提交后被发现预测错误，导致后续指令（I3/I4）被清除（squashed），处理器空转至周期6才重新调度新指令。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>Oracle</strong> 将分支指令归因4.5周期（含其自身0.5 + 清除期间4周期），并归因1周期给 I5（首次调度指令）。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>NCI</strong> 完全忽略分支指令（归因0），并将清除期间的4周期归因于 I5（下一个提交指令），造成 <strong>Flush misattribution</strong>。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>LCI</strong> 正确归因分支指令4.5周期，但在周期6归因5周期给 I5，存在轻微偏差。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- 表格总结：</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Cycle</th>
+<th>Instruction</th>
+<th>Oracle</th>
+<th>NCI</th>
+<th>LCI</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Branch</td>
+<td>4.5</td>
+<td>0</td>
+<td>4.5</td>
+<td>NCI 完全忽略分支</td>
+</tr>
+<tr>
+<td>6</td>
+<td>I5</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>NCI/LCI 过度归因</td>
+</tr>
+<tr>
+<td>(d) Drained 状态</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- 周期1提交 I1/I2 后，因指令缓存缺失导致 ROB 排空，直至周期42才重新调度 I3。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>Oracle</strong> 归因0.5周期给 I1/I2，41周期给 I3（含排空40周期 + 阻塞1周期）。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>NCI</strong> 正确归因 I3 41周期（下一个提交指令），表现良好。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>LCI</strong> 错误归因 I2 41周期（最后提交指令），完全忽略 I3，造成 <strong>Drain misattribution</strong>。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- 表格总结：</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Cycle</th>
+<th>Instruction</th>
+<th>Oracle</th>
+<th>NCI</th>
+<th>LCI</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>I1</td>
+<td>0.5</td>
+<td>0</td>
+<td>1</td>
+<td>LCI 错误归因给 I2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>I2</td>
+<td>0.5</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>42</td>
+<td>I3</td>
+<td>41</td>
+<td>41</td>
+<td>0</td>
+<td>LCI 完全忽略 I3</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体结论：<strong>Oracle</strong> 是唯一能准确归因所有周期的分析器，因为它考虑了 <strong>ILP</strong> 并正确处理 <strong>Stall</strong>、<strong>Flush</strong> 和 <strong>Drain</strong> 状态。<strong>NCI</strong> 和 <strong>LCI</strong> 因缺乏 ILP 支持和系统性归因错误，导致显著误差。</li>
+</ul>
+<h3 id="figure-5-structural-overview-of-our-time-proportional-instruction-profiler-tip-tip-is-triggered-by-the-pmucollects-a-sampleand-finally-exposes-the-sample-to-software">Figure 5: Structural overview of our Time-Proportional Instruction Profiler (TIP). TIP is triggered by the PMU,collects a sample,and finally exposes the sample to software.<a class="headerlink" href="#figure-5-structural-overview-of-our-time-proportional-instruction-profiler-tip-tip-is-triggered-by-the-pmucollects-a-sampleand-finally-exposes-the-sample-to-software" title="Permanent link">&para;</a></h3>
+<p><img alt="8bd1fee5cbdd6469c8627ea6a85340837aac4a580dea7fe52e3616e5a256dc55.jpg" src="../images/8bd1fee5cbdd6469c8627ea6a85340837aac4a580dea7fe52e3616e5a256dc55.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Time-Proportional Instruction Profiler (TIP)</strong> 的结构概览，其核心功能是响应 <strong>PMU</strong> 事件、采集样本并最终将样本暴露给软件层。</li>
+<li>TIP 位于 <strong>PMU</strong> 与 <strong>CPU</strong> 的 <strong>ROB (Reorder Buffer)</strong> 之间，通过紧密耦合 ROB 实现精确的指令级时间归因。</li>
+<li><strong>PMU</strong> 模块包含两个关键寄存器：<strong>Event</strong> 和 <strong>Cycle</strong>。当满足采样条件时，<strong>Event</strong> 触发 TIP 开始工作，<strong>Cycle</strong> 记录当前周期数。</li>
+<li><strong>TIP</strong> 模块由三个主要部分组成：</li>
+<li><strong>OIR Update</strong>：负责更新 <strong>Offending Instruction Register (OIR)</strong>，记录可能引发流水线刷新或异常的指令地址及标志。</li>
+<li><strong>OIR</strong>：存储最近提交或触发异常的指令信息，用于处理 ROB 为空（Flushed 或 Drained 状态）时的归因。</li>
+<li><strong>Sample Selection</strong>：根据当前处理器状态和 ROB 内容，选择正确的指令地址和状态标志进行采样。</li>
+<li><strong>CPU</strong> 部分展示了 <strong>ROB</strong> 的结构，它由多个 <strong>Bank</strong> 组成，每个 Bank 可以存储一条指令。图中示例为 3 个 Bank，分别存储了 Inst.0 到 Inst.7。</li>
+<li><strong>ROB</strong> 的状态由 <strong>Bank Pointer</strong> 和 <strong>Column Pointer</strong> 共同管理，用于定位 ROB 中最老的有效指令（即 Head of ROB）。</li>
+<li><strong>Sample Selection</strong> 单元输出的样本数据存储在一组 <strong>CSRs (Control Status Registers)</strong> 中，包括：</li>
+<li><strong>Cycle</strong>：记录采样发生时的周期数。</li>
+<li><strong>Flags</strong>：记录采样时的状态标志，如 Stalled, Frontend, Exception, Flush, Mispredicted 等。</li>
+<li><strong>Addr. 0, Addr. 1, ..., Addr. i</strong>：存储被选中的指令地址，数量取决于处理器的提交宽度。</li>
+<li><strong>TIP Registers</strong> 表格详细列出了所有 CSR 的内容及其含义：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>寄存器名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cycle</td>
+<td>采样发生的周期数</td>
+</tr>
+<tr>
+<td>Flags</td>
+<td>状态标志位集合</td>
+</tr>
+<tr>
+<td>Addr. 0</td>
+<td>第一个被选中的指令地址</td>
+</tr>
+<tr>
+<td>Addr. 1</td>
+<td>第二个被选中的指令地址</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>Addr. i</td>
+<td>第 i 个被选中的指令地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Valid</strong> 标志位指示对应地址寄存器中的数据是否有效。</li>
+<li><strong>Oldest ID</strong> 标志位指示哪个地址寄存器存储的是 ROB 中最老的指令地址。</li>
+<li><strong>Stalled</strong> 标志位指示采样时处理器是否处于停滞状态。</li>
+<li><strong>Frontend</strong> 标志位指示采样时 ROB 是否因前端停顿而为空。</li>
+<li><strong>Exception</strong> 标志位指示采样时是否发生了异常。</li>
+<li><strong>Flush</strong> 标志位指示采样时是否发生了流水线刷新。</li>
+<li><strong>Mispredicted</strong> 标志位指示采样时是否发生了分支预测错误。</li>
+<li>整个系统的工作流程是：<strong>PMU</strong> 触发采样 -&gt; <strong>TIP</strong> 根据 ROB 状态和 OIR 信息选择样本 -&gt; 将样本写入 <strong>CSRs</strong> -&gt; 软件通过读取 CSRs 获取样本数据。</li>
+<li>该设计确保了 TIP 能够实现 <strong>time-proportional attribution</strong>，即每个时钟周期都被准确归因到导致该周期延迟的指令上，从而提供高精度的性能分析。</li>
+</ul>
+<h3 id="figure-6-tip-sample-selection-logictip-classifies-samples-based-on-the-the-core-state-rob-flagsand-oir-flags">Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.<a class="headerlink" href="#figure-6-tip-sample-selection-logictip-classifies-samples-based-on-the-the-core-state-rob-flagsand-oir-flags" title="Permanent link">&para;</a></h3>
+<p><img alt="1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg" src="../images/1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>TIP sample selection logic</strong> 的详细电路图，用于在处理器的 <strong>ROB (Reorder Buffer)</strong> 和 <strong>OIR (Offending Instruction Register)</strong> 之间进行采样选择。</li>
+<li>该逻辑的核心功能是根据当前核心状态、ROB 标志和 OIR 标志对样本进行分类，并决定最终输出的地址和标志位。</li>
+<li>输入信号包括来自 ROB 的多个条目（Address, Valid, Commits）以及 Bank Pointer，还有来自 OIR 的 Address、Exception、Flushes 和 Mispredicted 标志。</li>
+<li>输出信号包括多个地址寄存器（Address 0 到 Address i）、Oldest ID、Valid 位、Stalled/Frontend 标志以及 Exception/Flush/Mispredicted 标志。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件编号</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>地址相关写使能控制，用于将 ROB 中的地址写入对应的 Address CSR。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Oldest ID 寄存器，记录当前 ROB 中最老指令所在的 Bank ID。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>多路选择器网络，用于在不同状态下选择正确的地址和有效位。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Stalled 和 Frontend 标志生成逻辑，指示当前是否处于停滞或前端耗尽状态。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>与门阵列，用于组合 ROB 条目的有效性和提交信号。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>最终有效位生成逻辑，决定哪些地址寄存器应被标记为有效。</td>
+</tr>
+<tr>
+<td>7</td>
+<td>异或门和与门组合，用于处理 OIR 相关的异常、冲刷和预测错误标志。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>标志写使能控制，用于更新 TIP 的状态标志寄存器。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>当 ROB 不为空时，TIP 会复制头部 ROB 条目的地址到其地址寄存器中，并根据提交和有效信号设置相应的有效位。</li>
+<li>如果所有头部 ROB 条目都无效，则 TIP 会使用 OIR 中的地址，并设置相应的异常、冲刷或预测错误标志。</li>
+<li>在 ROB 耗尽的情况下，TIP 会立即设置 Frontend 标志，并在第一个指令调度时将其地址复制到相应的地址 CSR 中。</li>
+<li>整个逻辑设计确保了 TIP 能够准确地根据 Oracle 的时间归因策略进行采样，同时保持硬件开销极低。</li>
+<li>关键路径不位于 BOOM 核心的关键路径上，因此不会影响处理器性能；如有必要，可对其进行流水线化处理。</li>
+</ul>
+<h3 id="table-1-simulated-configuration">Table 1: Simulated Configuration.<a class="headerlink" href="#table-1-simulated-configuration" title="Permanent link">&para;</a></h3>
+<p><img alt="24aeb798dbf27968fcbd4e8b4f053345a436dbf672c1c39bd9d4ca5ca79e6ab5.jpg" src="../images/24aeb798dbf27968fcbd4e8b4f053345a436dbf672c1c39bd9d4ca5ca79e6ab5.jpg" /></p>
+<ul>
+<li>
+<p>该图像为论文中的 <strong>Table 1: Simulated Configuration</strong>，详细列出了用于实验的模拟处理器架构与系统配置，是评估 TIP 与 Oracle 等性能分析器准确性的基础环境。</p>
+</li>
+<li>
+<p>核心配置：</p>
+</li>
+<li><strong>Core</strong>: 使用 <strong>OoO BOOM</strong>（Berkeley Out-of-Order Machine）核心，指令集为 <strong>RV64IMAFDCSUX</strong>，运行频率为 <strong>3.2 GHz</strong>。</li>
+<li><strong>Front-end</strong>: 前端支持 <strong>8-wide fetch</strong>，配备 <strong>32-entry fetch buffer</strong>、<strong>4-wide decode</strong>、<strong>28 KB TAGE branch predictor</strong>、<strong>40-entry fetch target queue</strong>，最多支持 <strong>20 outstanding branches</strong>。</li>
+<li><strong>Execute</strong>: 执行单元包含 <strong>128-entry ROB</strong>、<strong>128 个整数/浮点物理寄存器</strong>、<strong>24-entry dual-issue MEM queue</strong>、<strong>40-entry 4-issue INT queue</strong>、<strong>32-entry dual-issue FP queue</strong>，以及 <strong>32-entry load/store queue</strong>。</li>
+<li><strong>LSU</strong>: 加载存储单元配置为 <strong>32 KB 8-way I-cache</strong> 和 <strong>32 KB 8-way D-cache</strong>，均带 <strong>8 MSHRs</strong>，并启用 <strong>next-line prefetcher from L2</strong>。</li>
+<li><strong>L2/LLC</strong>: 二级缓存为 <strong>512 KB 8-way</strong>，带 <strong>12 MSHRs</strong>；最后一级缓存（LLC）为 <strong>4 MB 8-way</strong>，带 <strong>8 MSHRs</strong>。</li>
+<li><strong>TLB</strong>: 采用 <strong>Page Table Walker</strong>，<strong>32-entry fully-assoc L1 D-TLB</strong>、<strong>32-entry fully-assoc L1 I-TLB</strong>、<strong>512-entry direct-mapped L2 TLB</strong>。</li>
+<li><strong>Memory</strong>: 内存子系统为 <strong>16 GB DDR3 FR-FCFS quad-rank</strong>，最大带宽 <strong>25.6 GB/s</strong>，时序为 <strong>14-14-14 (CAS-RCD-RP)</strong> @ 1 GHz，支持 <strong>8 queue depth</strong> 和 <strong>32 max reads/writes</strong>。</li>
+<li>
+<p><strong>OS</strong>: 操作系统为 <strong>Buildroot, Linux 5.7.0</strong>。</p>
+</li>
+<li>
+<p>该配置代表一个典型的现代超标量乱序执行处理器，具备完整的前端、执行、缓存和内存子系统，确保了实验结果在真实硬件行为上的代表性。所有组件参数均精确设定，以支持对性能剖析器在不同场景下的误差量化分析。</p>
+</li>
+</ul>
+<h3 id="figure-7-normalized-cycle-stacks-collected-at-commit">Figure 7: Normalized cycle stacks collected at commit.<a class="headerlink" href="#figure-7-normalized-cycle-stacks-collected-at-commit" title="Permanent link">&para;</a></h3>
+<p><img alt="89e0efc6b7f05c2a61c2fcb5525fde475e82fdb48f1b43deb10cbea8d4cdacb5.jpg" src="../images/89e0efc6b7f05c2a61c2fcb5525fde475e82fdb48f1b43deb10cbea8d4cdacb5.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>commit</strong> 阶段收集的归一化周期堆栈（Normalized cycle stacks），用于分析不同基准测试程序的执行时间分布。</li>
+<li>每个柱状图代表一个 SPEC CPU2017 或 PARSEC 3.0 基准测试，按其主要性能瓶颈分类为三组：<strong>Compute</strong>、<strong>Flush</strong> 和 <strong>Stall</strong>。</li>
+<li>堆栈从底部到顶部依次表示不同类型的周期开销：</li>
+<li><strong>Execution</strong>：指令提交阶段的正常执行周期。</li>
+<li><strong>ALU stall</strong>：算术逻辑单元（ALU）相关停顿。</li>
+<li><strong>Load stall</strong>：加载指令导致的停顿（如缓存未命中）。</li>
+<li><strong>Store stall</strong>：存储指令导致的停顿。</li>
+<li><strong>Front-end</strong>：前端停顿（如指令缓存或 TLB 未命中）。</li>
+<li><strong>Mispredict</strong>：分支预测错误导致的流水线冲刷。</li>
+<li><strong>Misc. flush</strong>：其他类型的流水线冲刷（如异常、同步指令等）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>基准测试</th>
+<th>类别</th>
+<th>主要开销特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x264</td>
+<td>Compute</td>
+<td>执行周期占比高，少量前端和负载停顿</td>
+</tr>
+<tr>
+<td>namd</td>
+<td>Compute</td>
+<td>执行周期为主，少量 ALU 和负载停顿</td>
+</tr>
+<tr>
+<td>leela</td>
+<td>Compute</td>
+<td>执行周期占主导，少量负载和前端停顿</td>
+</tr>
+<tr>
+<td>imagick</td>
+<td>Flush</td>
+<td>明显的 <strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 占比高，执行周期次之</td>
+</tr>
+<tr>
+<td>nab</td>
+<td>Flush</td>
+<td><strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 占比显著</td>
+</tr>
+<tr>
+<td>perlbench</td>
+<td>Flush</td>
+<td><strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 占比较高</td>
+</tr>
+<tr>
+<td>fluidanimate</td>
+<td>Flush</td>
+<td><strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 占比高</td>
+</tr>
+<tr>
+<td>blackscholes</td>
+<td>Flush</td>
+<td><strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 占比高</td>
+</tr>
+<tr>
+<td>povray</td>
+<td>Flush</td>
+<td><strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 占比高</td>
+</tr>
+<tr>
+<td>bodytrack</td>
+<td>Flush</td>
+<td><strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 占比高</td>
+</tr>
+<tr>
+<td>gcc</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>canneal</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>lbm</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 占比极高，其次是 <strong>ALU stall</strong></td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>fotonik3d</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>bwaves</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>omnetpp</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>roms</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>streamcluster</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>xalancbmk</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>wrf</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>parest</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+<tr>
+<td>cactuBSSN</td>
+<td>Stall</td>
+<td><strong>Load stall</strong> 和 <strong>Front-end</strong> 占比高</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Compute</strong> 类型基准测试（如 x264, namd, leela）主要消耗在指令执行上，表明其计算密集且流水线效率较高。</li>
+<li><strong>Flush</strong> 类型基准测试（如 imagick, nab, perlbench）表现出较高的 <strong>Mispredict</strong> 和 <strong>Misc. flush</strong> 开销，说明其控制流复杂，分支预测失败频繁。</li>
+<li><strong>Stall</strong> 类型基准测试（如 gcc, canneal, lbm）则以 <strong>Load stall</strong> 和 <strong>Front-end</strong> 为主要瓶颈，反映其内存访问密集或前端供给不足。</li>
+<li>该图直观揭示了不同工作负载在处理器微架构层面的行为差异，为性能调优提供依据。例如，针对 <strong>Flush</strong> 类型应优化分支预测，而 <strong>Stall</strong> 类型则需关注内存子系统或指令预取策略。</li>
+</ul>
+<h3 id="figure8functio-elerorsfortederentprofs-ncindecuateatthefuctioleliftar-and-dispatch-are-largely-inaccurate-figure-9-basic-block-levelerrorsforthe-diferent-profilerssoftwareand-dispatcharenotshownbecauseoftheirhigherror-tiptip-ilpand-nciare-accurateat-the-basic-block-level-whereas-lciand-softwareand-dispatch-arenot">Figure8:Functio-elerorsfortederentprofs.-,NCI,ndecuateatthefuctioleliftar and Dispatch are largely inaccurate. Figure 9: Basic-block-levelerrorsforthe diferent profilers.(Softwareand Dispatcharenotshownbecauseoftheirhigherror TIP,TIP-ILP,and NCIare accurateat the basic block level, whereas LCI(and Softwareand Dispatch) arenot.<a class="headerlink" href="#figure8functio-elerorsfortederentprofs-ncindecuateatthefuctioleliftar-and-dispatch-are-largely-inaccurate-figure-9-basic-block-levelerrorsforthe-diferent-profilerssoftwareand-dispatcharenotshownbecauseoftheirhigherror-tiptip-ilpand-nciare-accurateat-the-basic-block-level-whereas-lciand-softwareand-dispatch-arenot" title="Permanent link">&para;</a></h3>
+<p><img alt="bfbf0262de34b390173ebada04712606812f9bdf7a23545576204fac8b897abb.jpg" src="../images/bfbf0262de34b390173ebada04712606812f9bdf7a23545576204fac8b897abb.jpg" /></p>
+<ul>
+<li>图片展示了不同性能分析器在<strong>基本块级别</strong>（Basic-block-level）的配置错误率，横轴按基准测试分类为 <strong>Compute</strong>、<strong>Flush</strong>、<strong>Stall</strong> 以及 <strong>Average</strong> 四组，纵轴为错误百分比（Error %），图例包含四种分析器：<strong>LCI</strong>、<strong>NCI</strong>、<strong>TIP-ILP</strong> 和 <strong>TIP</strong>。</li>
+<li><strong>TIP</strong> 在所有类别中均表现最优，平均错误率最低，尤其在 <strong>Stall</strong> 类别中显著优于其他分析器，例如在 <code>lbm</code> 基准测试中，<strong>TIP</strong> 错误率接近 0%，而 <strong>LCI</strong> 高达 <strong>56%</strong>。</li>
+<li><strong>LCI</strong> 在 <strong>Stall</strong> 类别中错误率极高，如 <code>lbm</code> 达到 <strong>56%</strong>，<code>streamcluster</code> 达到 <strong>33%</strong>，表明其在处理长延迟指令（如 LLC 缺失）时系统性地将时间归因于错误的基本块。</li>
+<li><strong>NCI</strong> 表现稳定但不如 TIP，平均错误率约为 2.3%，在部分基准测试如 <code>gcc</code> 和 <code>xalancbmk</code> 中略高于 TIP-ILP。</li>
+<li><strong>TIP-ILP</strong> 介于 NCI 与 TIP 之间，平均错误率为 1.2%，说明即使忽略 ILP（Instruction-Level Parallelism），其准确性仍优于传统方法。</li>
+<li>下表总结各分析器在不同类别下的平均错误率：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分析器</th>
+<th>Compute 平均错误率</th>
+<th>Flush 平均错误率</th>
+<th>Stall 平均错误率</th>
+<th>Overall 平均错误率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LCI</td>
+<td>~5%</td>
+<td>~8%</td>
+<td>~25%</td>
+<td><strong>11.9%</strong></td>
+</tr>
+<tr>
+<td>NCI</td>
+<td>~1%</td>
+<td>~2%</td>
+<td>~4%</td>
+<td><strong>2.3%</strong></td>
+</tr>
+<tr>
+<td>TIP-ILP</td>
+<td>~0.5%</td>
+<td>~1%</td>
+<td>~2%</td>
+<td><strong>1.2%</strong></td>
+</tr>
+<tr>
+<td>TIP</td>
+<td>~0.3%</td>
+<td>~0.5%</td>
+<td>~0.8%</td>
+<td><strong>0.7%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键结论</strong>：<strong>TIP</strong> 是唯一在基本块级别保持高准确性的分析器，<strong>LCI</strong> 因无法正确归因流水线停顿导致严重误差，<strong>TIP-ILP</strong> 和 <strong>NCI</strong> 虽可接受，但精度不及 TIP。该结果强化了细粒度分析对识别性能瓶颈的重要性。</li>
+</ul>
+<h3 id="figure-0instruction-levelerrorsforthe-different-profilerssoftwaredispatchandlciareomitted-becauseoftheirlarge-errors-tip-is-the-only-accurate-profiler-at-the-instruction-level">Figure 0:Instruction-levelerrorsforthe different profilers.(Software,Dispatch,andLCIareomitted becauseoftheirlarge errors.) TIP is the only accurate profiler at the instruction level.<a class="headerlink" href="#figure-0instruction-levelerrorsforthe-different-profilerssoftwaredispatchandlciareomitted-becauseoftheirlarge-errors-tip-is-the-only-accurate-profiler-at-the-instruction-level" title="Permanent link">&para;</a></h3>
+<p><img alt="0ef26dc64e0d6b1808cb1fd4314c1f7e2e7e3e0f8bfdfaf3ddf1db29b3c5dd22.jpg" src="../images/0ef26dc64e0d6b1808cb1fd4314c1f7e2e7e3e0f8bfdfaf3ddf1db29b3c5dd22.jpg" /></p>
+<ul>
+<li>图片展示了在指令级别上，三种不同性能分析器（NCI、TIP-ILP、TIP）的错误率对比，横轴按基准测试分类为 Compute、Flush、Stall 三类，以及总体平均值（Average），纵轴为错误率百分比。</li>
+<li><strong>TIP</strong> 在所有类别中均表现出最低的错误率，是唯一在指令级别保持高精度的分析器，其平均错误率仅为 <strong>1.6%</strong>。</li>
+<li><strong>TIP-ILP</strong> 虽然优于 NCI，但因未考虑指令级并行（ILP），在 Compute 类别中错误率显著上升，平均错误率为 <strong>7.2%</strong>。</li>
+<li><strong>NCI</strong> 错误率最高，尤其在 Flush 类别中表现最差，平均错误率达 <strong>9.3%</strong>，说明其在处理流水线冲刷时存在系统性归因错误。</li>
+<li>各类别的具体错误率数据如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>基准测试</th>
+<th>NCI 错误率</th>
+<th>TIP-ILP 错误率</th>
+<th>TIP 错误率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exchange2</td>
+<td>~15%</td>
+<td>~10%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>x264</td>
+<td>~8%</td>
+<td>~5%</td>
+<td>~3%</td>
+</tr>
+<tr>
+<td>deepsjeng</td>
+<td>~10%</td>
+<td>~7%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>namd</td>
+<td>~12%</td>
+<td>~8%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>leela</td>
+<td>~14%</td>
+<td>~9%</td>
+<td>~6%</td>
+</tr>
+<tr>
+<td>swaptions</td>
+<td>~10%</td>
+<td>~6%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>imagick</td>
+<td>~18%</td>
+<td>~10%</td>
+<td>~6%</td>
+</tr>
+<tr>
+<td>nab</td>
+<td>~12%</td>
+<td>~8%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>perlbench</td>
+<td>~14%</td>
+<td>~9%</td>
+<td>~6%</td>
+</tr>
+<tr>
+<td>fluidanimate</td>
+<td>~10%</td>
+<td>~7%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>blackscholes</td>
+<td>~10%</td>
+<td>~6%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>povray</td>
+<td>~10%</td>
+<td>~6%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>bodytrack</td>
+<td>~10%</td>
+<td>~6%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>gcc</td>
+<td>~10%</td>
+<td>~7%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>canneal</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>lbm</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>fotonik3d</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>bwaves</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>omnetpp</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>roms</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>streamcluster</td>
+<td>~10%</td>
+<td>~7%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>xalancbmk</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>wrf</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>parest</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>cam4</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>cactuBSSN</td>
+<td>~5%</td>
+<td>~4%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>Compute 平均</td>
+<td>~10%</td>
+<td>~7%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>Flush 平均</td>
+<td>~14%</td>
+<td>~9%</td>
+<td>~6%</td>
+</tr>
+<tr>
+<td>Stall 平均</td>
+<td>~6%</td>
+<td>~5%</td>
+<td>~3%</td>
+</tr>
+<tr>
+<td>All 平均</td>
+<td><strong>9.3%</strong></td>
+<td><strong>7.2%</strong></td>
+<td><strong>1.6%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图表右下角的 “All” 柱状图清晰显示：<strong>TIP 的平均错误率远低于 NCI 和 TIP-ILP</strong>，验证了其在指令级归因上的优越性。</li>
+<li>该图省略了 Software、Dispatch 和 LCI 分析器，因其错误率过高（分别达 61.8%、53.1%、55.4%），无法在相同尺度下有效比较。</li>
+</ul>
+<h3 id="figuresensitivityanalysesatsacuracycontinuestomeasurablyimprovebeyond4khzunliketheotherproflersbperdic-samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardwarecmakingncicommitparallelism-aware-increases-profile-errorin-contrast-to-tip">Figure:Sensitivityanalyses.(a)T'sacuracycontinuestomeasurablyimprovebeyond4KHzunliketheotherproflers.(b)Perdic samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardware.(c)MakingNCIcommitparallelism-aware increases profile error,in contrast to TIP.<a class="headerlink" href="#figuresensitivityanalysesatsacuracycontinuestomeasurablyimprovebeyond4khzunliketheotherproflersbperdic-samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardwarecmakingncicommitparallelism-aware-increases-profile-errorin-contrast-to-tip" title="Permanent link">&para;</a></h3>
+<p><img alt="7333895e2befd3c3ca79f69ecb0e3e0021db4409ce175551c517030c7be855e0.jpg" src="../images/7333895e2befd3c3ca79f69ecb0e3e0021db4409ce175551c517030c7be855e0.jpg" /></p>
+<ul>
+<li>图片展示了三个子图，分别对应论文中关于 TIP 与现有 Profiler 的敏感性分析结果，旨在验证 TIP 在不同采样策略和设计变体下的表现。</li>
+<li>子图 (a) 聚焦于<strong>采样频率对误差的影响</strong>。横轴为三种 Profiler：NCI、TIP-ILP 和 TIP；纵轴为 Profile Error（百分比）。不同颜色柱状图代表从 100 Hz 到 20 kHz 的采样频率。结果显示：</li>
+<li><strong>TIP 的误差随采样频率提升持续下降</strong>，尤其在 4 kHz 以上仍显著改善，例如 gcc 在 4 kHz 时误差为 5.0%，在 20 kHz 时降至 2.6%。</li>
+<li>NCI 和 TIP-ILP 在 4 kHz 后误差趋于饱和，表明其无法从更高采样率中获益。</li>
+<li>
+<p>此现象归因于 TIP 对 ILP 的正确处理——它将高并行提交周期的样本按比例分配给多个指令，而其他方法仅归因于单个指令。</p>
+</li>
+<li>
+<p>子图 (b) 比较<strong>周期性采样与随机采样的误差差异</strong>。横轴列出 27 个 SPEC CPU2017 和 PARSEC 基准测试程序，并按执行特征分为 Compute、Flush、Stall 三类，最后是平均值。深色柱为周期性采样，浅色柱为随机采样。关键发现包括：</p>
+</li>
+<li>大多数基准测试中，两种采样方式误差接近，<strong>平均误差从周期性的 1.6% 降至随机的 1.1%</strong>。</li>
+<li>少数 Stall-intensive 基准如 streamcluster、lbm、fotonik3d 显示更明显差异，因其具有重复性时间行为，易受周期采样偏差影响。</li>
+<li>
+<p>论文指出，尽管随机采样略优，但硬件实现更复杂，故推荐使用周期性采样。</p>
+</li>
+<li>
+<p>子图 (c) 展示<strong>引入并行感知机制后 NCI 的误差变化</strong>。采用箱线图形式，比较四种配置：NCI+ILP、NCI、TIP-ILP、TIP。数据显示：</p>
+</li>
+<li><strong>NCI+ILP 的平均误差高达 19.3%</strong>，远高于原始 NCI 的 9.3%，也高于 TIP-ILP 的 7.2% 和 TIP 的 1.6%。</li>
+<li>误差上升的原因在于：NCI+ILP 在长延迟停顿（如 LLC miss）后错误地将样本均分给即将提交的 n 条指令，而非像 TIP 那样归因于导致停顿的指令本身。</li>
+<li>这一结果强调：<strong>仅添加 ILP 支持不足以提升准确性，必须建立在正确的时序归因原则之上</strong>，这正是 TIP 的核心优势。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Profiler</th>
+<th>Avg Error (%)</th>
+<th>Key Insight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NCI</td>
+<td>9.3</td>
+<td>未考虑 ILP，且错误归因 flush/stall</td>
+</tr>
+<tr>
+<td>TIP-ILP</td>
+<td>7.2</td>
+<td>正确归因 flush，但忽略 ILP 导致偏置</td>
+</tr>
+<tr>
+<td>TIP</td>
+<td>1.6</td>
+<td>同时支持 ILP 与正确时序归因，误差最低</td>
+</tr>
+<tr>
+<td>NCI+ILP</td>
+<td>19.3</td>
+<td>引入 ILP 但无正确归因逻辑，误差反而恶化</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总结：该图通过三组实验有力支撑了论文核心主张——<strong>TIP 的准确性源于其“时间比例归因”原则与 ILP 意识的结合</strong>，而现有方法即使尝试改进（如增加 ILP 支持），若缺乏根本性归因机制，反而会加剧误差。</li>
+</ul>
+<h3 id="figure-12function-and-instruction-level-profiles-for-lmagick-for-tip-and-nci-compared-to-oracle">Figure 12:Function and instruction-level profiles for lmagick for TIP and NCI compared to Oracle.<a class="headerlink" href="#figure-12function-and-instruction-level-profiles-for-lmagick-for-tip-and-nci-compared-to-oracle" title="Permanent link">&para;</a></h3>
+<p><img alt="99f91bd24f194dab7e15d43027f3bce577f67b25b4c8f3acf67cd7c52910979c.jpg" src="../images/99f91bd24f194dab7e15d43027f3bce577f67b25b4c8f3acf67cd7c52910979c.jpg" /></p>
+<ul>
+<li>图片展示了在 SPEC CPU2017 基准测试程序 <strong>Imagick</strong> 中，针对 <strong>ceil</strong> 函数的性能剖析结果，对比了三种剖析器：<strong>Oracle</strong>（黄金标准）、<strong>TIP</strong>（本文提出）和 <strong>NCI</strong>（Intel PEBS 使用的启发式方法）。</li>
+<li>分析分为两个层级：<strong>函数级</strong>（Function-Level Profile）和<strong>指令级</strong>（Instruction-Level Profile），旨在揭示不同剖析器在定位性能瓶颈时的准确性差异。
+函数级剖析（图①）</li>
+<li>此部分显示了 <strong>Imagick</strong> 应用中几个最热函数所占的运行时间百分比。</li>
+<li>三个剖析器的结果高度一致，表明在函数粒度上，它们都能准确反映整体性能分布。</li>
+<li>关键数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>Oracle (%)</th>
+<th>TIP (%)</th>
+<th>NCI (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MeanSh..</td>
+<td>25.25%</td>
+<td>25.25%</td>
+<td>25.16%</td>
+</tr>
+<tr>
+<td>floor</td>
+<td>21.90%</td>
+<td>21.95%</td>
+<td>21.95%</td>
+</tr>
+<tr>
+<td>ceil</td>
+<td>21.57%</td>
+<td>21.63%</td>
+<td>21.63%</td>
+</tr>
+<tr>
+<td>Morpho..</td>
+<td>18.53%</td>
+<td>18.56%</td>
+<td>18.56%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：所有剖析器在函数级均表现良好，误差极小（平均约 0.3%-0.6%），无法帮助开发者识别具体性能问题。
+指令级剖析（图②、③）</li>
+<li>此部分深入到 <strong>ceil</strong> 函数内部，展示各指令所占该函数内执行时间的百分比。</li>
+<li><strong>Oracle</strong> 和 <strong>TIP</strong> 的结果高度吻合，而 <strong>NCI</strong> 则出现显著偏差，尤其在关键指令上。
+ceil 函数入口处指令（图②）</li>
+<li><strong>frflags</strong> 和 <strong>fsflags</strong> 是浮点状态寄存器操作指令，用于屏蔽函数内的状态变更。</li>
+<li><strong>Oracle</strong> 和 <strong>TIP</strong> 均正确指出这些指令消耗了约 <strong>24.99%</strong> 和 <strong>24.91%</strong> 的函数时间。</li>
+<li><strong>NCI</strong> 却将大部分时间错误归因于后续指令 <strong>feq.d</strong>（28.80%），而低估了 <strong>frflags/fsflags</strong>（仅 11.51%/11.53%）。</li>
+<li>这种错误归因会导致开发者误判为浮点比较单元（feq.d）或返回地址预测器（ret）是瓶颈。
+ceil 函数出口处指令（图③）</li>
+<li>在函数末尾，<strong>ret</strong> 指令的时间归因也存在巨大差异。</li>
+<li><strong>Oracle</strong> 和 <strong>TIP</strong> 均将其归因为 <strong>9.61%</strong> 和 <strong>9.63%</strong>。</li>
+<li><strong>NCI</strong> 则错误地将其归因为 <strong>23.09%</strong>，几乎翻倍。</li>
+<li>这进一步说明 <strong>NCI</strong> 在处理流水线刷新（如由 frflags/fsflags 引发）后，会错误地将延迟归因给“下一个提交指令”。
+核心发现</li>
+<li><strong>TIP</strong> 能够精确识别出 <strong>frflags</strong> 和 <strong>fsflags</strong> 是性能瓶颈，而 <strong>NCI</strong> 会误导开发者关注错误的指令。</li>
+<li>实际优化中，移除这些不必要的状态寄存器操作（替换为 nop），可带来 <strong>1.93×</strong> 的性能提升，验证了 <strong>TIP</strong> 的实用价值。</li>
+<li>该案例凸显了<strong>指令级剖析精度的重要性</strong>：函数级剖析无法定位问题，而低精度的指令级剖析（如 NCI）会提供错误指引。</li>
+</ul>
+<h3 id="figure-13-time-breakdown-for-the-four-most-runtimeintensive-functions-in-lmagick-comparing-the-original-to-our-optimized-versionthe-193x-speed-up-is-primarily-due-improved-processor-utilization">Figure 13: Time breakdown for the four most runtimeintensive functions in lmagick comparing the original to our optimized version.The 1.93x speed-up is primarily due improved processor utilization.<a class="headerlink" href="#figure-13-time-breakdown-for-the-four-most-runtimeintensive-functions-in-lmagick-comparing-the-original-to-our-optimized-versionthe-193x-speed-up-is-primarily-due-improved-processor-utilization" title="Permanent link">&para;</a></h3>
+<p><img alt="8607a46526ed4ab49f72ca6670440ed17d58e5b4a8af3879fe9cc11371250a67.jpg" src="../images/8607a46526ed4ab49f72ca6670440ed17d58e5b4a8af3879fe9cc11371250a67.jpg" /></p>
+<ul>
+<li>图片展示了 SPEC CPU2017 基准测试 <strong>Imagick</strong> 中四个最耗时函数（MeanShiftImage、floor、ceil、MorphologyApply）在原始版本（Orig.）与优化版本（Opt.）下的时间分解对比，旨在说明 <strong>TIP</strong> 识别出的性能瓶颈及其优化效果。</li>
+<li>该图采用堆叠柱状图形式，纵轴为执行时间（秒），横轴为函数名称。每个柱子按不同性能事件类型分层着色，右侧图例标明了各颜色对应的具体事件。</li>
+<li><strong>关键发现</strong>：优化版本整体执行时间显著缩短，尤其在 <strong>floor</strong> 和 <strong>ceil</strong> 函数中表现最为突出，这直接验证了 TIP 指出的 <strong>frflags/fsflags</strong> 指令导致频繁 <strong>Misc. flush</strong> 是性能瓶颈。</li>
+<li>优化后，<strong>Misc. flush</strong> 类别在 floor 和 ceil 中几乎消失，表明移除不必要的浮点状态寄存器操作有效消除了流水线冲刷开销。</li>
+<li>在 <strong>MeanShiftImage</strong> 函数中，虽然未直接修改其代码，但因调用的 <strong>ceil</strong> 和 <strong>floor</strong> 被优化，其执行时间也大幅下降（从约 300s 降至 200s），体现了优化的<strong>级联效应</strong>。</li>
+<li><strong>ALU stall</strong> 和 <strong>Load stall</strong> 在优化后也有所减少，说明处理器能更有效地隐藏延迟，<strong>IPC</strong> 从 1.2 提升至 2.3，进一步提升了整体效率。</li>
+<li>下表总结了各函数在优化前后的执行时间变化：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>原始版本时间 (s)</th>
+<th>优化版本时间 (s)</th>
+<th>时间减少比例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MeanShiftImage</td>
+<td>~300</td>
+<td>~200</td>
+<td>~33%</td>
+</tr>
+<tr>
+<td>floor</td>
+<td>~250</td>
+<td>~50</td>
+<td>~80%</td>
+</tr>
+<tr>
+<td>ceil</td>
+<td>~200</td>
+<td>~50</td>
+<td>~75%</td>
+</tr>
+<tr>
+<td>MorphologyApply</td>
+<td>~200</td>
+<td>~200</td>
+<td>无明显变化</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，该图直观证明了 <strong>TIP</strong> 的准确性——它不仅定位到具体指令级问题，还揭示了其对系统级性能的深远影响，最终实现了 <strong>1.93×</strong> 的整体性能提升。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

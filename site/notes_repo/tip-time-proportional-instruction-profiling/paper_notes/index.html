@@ -1,0 +1,1320 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/tip-time-proportional-instruction-profiling/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>TIP: Time-Proportional Instruction Profiling 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tip-time-proportional-instruction-profiling" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TIP: Time-Proportional Instruction Profiling 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-oracle-profiler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Oracle Profiler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-time-proportional-instruction-profiling-tip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Time-Proportional Instruction Profiling (TIP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-offending-instruction-register-oir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Offending Instruction Register (OIR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-instruction-level-parallelism-ilp-aware-attribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Instruction-Level Parallelism (ILP) Aware Attribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-four-state-commit-stage-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Four-State Commit Stage Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tip-time-proportional-instruction-profiling">TIP: Time-Proportional Instruction Profiling 论文解析<a class="headerlink" href="#tip-time-proportional-instruction-profiling" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>
+- Bjorn Gottschall
+- Lieven Eeckhout
+- Magnus Jahre</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>
+- MICRO-54: 54th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO '21)</p>
+<p><strong>发表年份 (Publication Year)</strong>
+- 2021</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong>
+- 解决现代高性能处理器上性能分析的难题，即现有性能剖析器（profilers）无法<strong>可靠地将执行时间归因于正确的指令</strong>。
+- 为性能剖析领域建立一个<strong>黄金标准（golden reference）</strong>，以量化现有剖析技术的误差。
+- 提出一种新的、<strong>高度准确且可实际部署</strong>的指令级性能剖析方法。</p>
+<p><strong>方法</strong>
+- <strong>提出 Oracle 剖析器</strong>：作为理论上的黄金标准，它通过<strong>时间比例归因（time-proportional attribution）</strong>原则，将每个时钟周期精确地归因于处理器暴露其延迟的指令。Oracle 考虑了四种核心状态：计算（Computing）、停滞（Stalled）、刷新（Flushed）和排空（Drained）。
+- <strong>量化现有剖析器的误差</strong>：利用 Oracle 作为基准，评估了四种主流剖析策略：
+  - <strong>Software-level profiling</strong> (如 Linux perf)
+  - <strong>Dispatch-tagging</strong> (如 AMD IBS, Arm SPE)
+  - <strong>Last-Committing Instruction (LCI)</strong>
+  - <strong>Next-Committing Instruction (NCI)</strong> (如 Intel PEBS)
+- <strong>设计并实现 TIP (Time-Proportional Instruction Profiling)</strong>：将 Oracle 的时间归因策略与<strong>统计采样</strong>相结合，在保持高精度的同时，将数据量从 Oracle 的 <strong>179 GB/s</strong> 降低到实用的 <strong>192 KB/s</strong>。
+- <strong>实验验证</strong>：在 <strong>Berkeley Out-of-Order Machine (BOOM)</strong> 核心上实现了 TIP，并使用 <strong>FireSim</strong> 全系统模拟器对 <strong>SPEC CPU2017</strong> 和 <strong>PARSEC</strong> 基准测试套件进行了完整模拟，以评估其准确性。</p>
+<p><img alt="" src="../images/6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" /></p>
+<p><em>Figure 3: Oracle profiler clock cycle attribution overview.</em></p>
+<p><strong>结果</strong>
+- <strong>现有剖析器存在显著系统性误差</strong>，其根本原因在于它们不是时间比例的，既不考虑<strong>指令级并行（ILP）</strong>，又会<strong>系统性地错误归因延迟</strong>。
+- <strong>指令级剖析误差对比</strong>如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">剖析器类型</th>
+<th style="text-align: left;">平均指令级误差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Software</td>
+<td style="text-align: left;"><strong>61.8%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Dispatch-tagging</td>
+<td style="text-align: left;"><strong>53.1%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">LCI</td>
+<td style="text-align: left;"><strong>55.4%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">NCI</td>
+<td style="text-align: left;"><strong>9.3%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TIP (本文提出)</strong></td>
+<td style="text-align: left;"><strong>1.6%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>TIP 的精度远超现有技术，将平均误差分别降低了 <strong>5.8× (vs NCI)</strong>、<strong>34.6× (vs LCI)</strong>、<strong>33.2× (vs Dispatch)</strong> 和 <strong>38.6× (vs Software)</strong>。</li>
+<li><strong>案例研究</strong>：在 SPEC CPU2017 的 <strong>Imagick</strong> 基准测试中，TIP 成功定位了由 <strong>Control Status Register (CSR)</strong> 指令引起的性能瓶颈，而 NCI 则错误地将时间归因于后续指令。</li>
+<li>通过将不必要的 CSR 指令替换为 <code>nop</code>，程序性能获得了 <strong>1.93×</strong> 的显著提升，这证明了 TIP 在实践中发现关键优化机会的能力。</li>
+</ul>
+<p><img alt="" src="../images/99f91bd24f194dab7e15d43027f3bce577f67b25b4c8f3acf67cd7c52910979c.jpg" /></p>
+<p><em>Figure 12:Function and instruction-level profiles for lmagick for TIP and NCI compared to Oracle.</em></p>
+<p><strong>结论</strong>
+- 现有硬件性能剖析器（包括最先进的 NCI）由于缺乏时间比例归因，在指令级粒度上存在<strong>不可忽视的系统性误差</strong>。
+- <strong>TIP</strong> 通过结合 Oracle 的精确归因逻辑与统计采样，成功实现了<strong>高精度</strong>（平均误差仅 <strong>1.6%</strong>）与<strong>实用性</strong>的统一。
+- TIP 的高精度对于指导开发者进行深层次的性能优化至关重要，能够揭示函数级或基本块级剖析无法发现的、由特定指令引发的性能问题，从而带来显著的实际性能收益。</p>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景与动机</strong></p>
+<ul>
+<li>现代高性能处理器采用高度并行的执行模型，使得将执行时间准确地归因于具体的指令变得极其困难。</li>
+<li>传统的 <strong>Software-level profiling</strong>（如 Linux perf）存在严重的 <strong>skid</strong> 问题，即采样点与实际造成性能瓶颈的指令相距甚远。</li>
+<li>现有的硬件辅助性能分析器（如 Intel <strong>PEBS</strong>、AMD <strong>IBS</strong>、Arm <strong>SPE</strong>）虽然通过在特定流水线阶段（如 Dispatch 或 Commit）采样来缓解 skid，但缺乏一个“黄金标准”来衡量其准确性。</li>
+<li>作者指出，这些现有方法的根本缺陷在于它们不是 <strong>time-proportional</strong>（时间比例）的，即未能将每个时钟周期正确地归因于处理器暴露其延迟的指令。这导致了系统性的错误归因，例如：<ul>
+<li>无法正确处理 <strong>ILP</strong>（Instruction-Level Parallelism），将并行提交的多条指令的执行时间错误地只归于其中一条。</li>
+<li>在处理器因长延迟操作（如缓存未命中）或 <strong>pipeline flush</strong>（流水线冲刷）而停顿时，错误地将时间归因于非根本原因的指令。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/501ae01efccae38527f4120367e437c0b10d9dacd28beb8f2b04c02048c0f44a.jpg" /></p>
+<p><em>Figure 1: Instruction-level profle error of state-of-the-art profilers compared to our Time-Proportional Instruction Profiler(TIP).Existing profilers are inaccurate due to lack of ILP support and systematic latency misattribution.</em></p>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li><strong>提出了 Oracle profiler</strong>：作为性能分析的 <strong>golden reference</strong>（黄金标准）。Oracle 通过在 <strong>commit stage</strong>（提交阶段）对每个时钟周期进行精确归因，确保了 <strong>time-proportional attribution</strong>。它定义了四种核心状态（Computing, Stalled, Flushed, Drained）来处理各种执行场景。</li>
+<li><strong>首次量化了现有分析器的误差</strong>：利用 Oracle 作为基准，论文首次系统地评估了主流分析器的指令级精度，结果如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Profiler Type</th>
+<th style="text-align: left;">Heuristic</th>
+<th style="text-align: left;">Avg. Instruction-Level Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Software</td>
+<td style="text-align: left;">Interrupt-based</td>
+<td style="text-align: left;"><strong>61.8%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Dispatch-tagging</td>
+<td style="text-align: left;">AMD IBS / Arm SPE</td>
+<td style="text-align: left;"><strong>53.1%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">LCI</td>
+<td style="text-align: left;">Last-Committing Instruction</td>
+<td style="text-align: left;"><strong>55.4%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">NCI</td>
+<td style="text-align: left;">Next-Committing Instruction (Intel PEBS)</td>
+<td style="text-align: left;"><strong>9.3%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>提出了 TIP </strong>(Time-Proportional Instruction Profiling)：一种兼具高精度和实用性的新分析器。TIP 的核心思想是将 Oracle 的时间归因策略与 <strong>statistical sampling</strong>（统计采样）相结合。<ul>
+<li>TIP 能够正确处理 <strong>ILP</strong>，在多指令并行提交时将时间均分。</li>
+<li>TIP 能够正确归因由 <strong>stall</strong>、<strong>flush</strong> 和 <strong>drain</strong> 引起的延迟到根本原因指令。</li>
+<li>实验表明，TIP 的平均指令级误差仅为 <strong>1.6%</strong>（最大 5.0%），远优于最先进的 NCI（9.3%）。</li>
+</ul>
+</li>
+<li><strong>通过实际案例验证了 TIP 的价值</strong>：在 SPEC CPU2017 的 <strong>Imagick</strong> 基准测试中，TIP 成功定位到因不必要的 <strong>Control Status Register </strong>(CSR) 操作导致的频繁流水线冲刷问题。通过优化（替换为 nop），性能提升了 <strong>1.93×</strong>，而 NCI 的分析结果则具有误导性。</li>
+</ul>
+<p><img alt="" src="../images/99f91bd24f194dab7e15d43027f3bce577f67b25b4c8f3acf67cd7c52910979c.jpg" /></p>
+<p><em>Figure 12:Function and instruction-level profiles for lmagick for TIP and NCI compared to Oracle.</em></p>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>本文提出了一套完整的性能分析框架，其核心目标是实现<strong>时间比例指令剖析 (Time-Proportional Instruction Profiling, TIP)</strong>。该框架由一个理论上的黄金标准和一个可实际部署的剖析器构成。</p>
+<ul>
+<li><strong>Oracle Profiler (黄金标准)</strong><ul>
+<li>这是一个<strong>不可实际部署</strong>但概念上完美的剖析器，用于为所有其他剖析技术提供准确度评估的基准。</li>
+<li>其核心原则是<strong>时间比例归因 (time-proportional attribution)</strong>：将执行过程中的<strong>每一个时钟周期</strong>都精确地归因于处理器在该周期内所暴露延迟的指令。</li>
+<li>Oracle 通过监控处理器的 <strong>Reorder Buffer (ROB)</strong> 提交阶段来工作，并根据 ROB 的状态将每个周期划分为四种基本状态进行归因：<ul>
+<li><strong>Computing (计算中)</strong>: 处理器正在提交指令。Oracle 将该周期平均分配给所有在该周期提交的指令（例如，在一个2-wide提交的处理器中，每个提交的指令获得0.5个周期）。</li>
+<li><strong>Stalled (停滞)</strong>: ROB 非空但无法提交，因为队首指令尚未执行完毕。Oracle 将整个周期归因于 ROB 队首的指令。</li>
+<li><strong>Flushed (已冲刷)</strong>: ROB 因错误预测（如分支预测错误）而变空。Oracle 将冲刷后 ROB 为空的周期归因于导致冲刷的指令（如错误预测的分支）。</li>
+<li><strong>Drained (已排空)</strong>: ROB 因前端停顿（如指令缓存未命中）而变空。Oracle 将排空期间的周期归因于第一个重新填充 ROB 的指令。</li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" /></p>
+<p><em>Figure 3: Oracle profiler clock cycle attribution overview.</em></p>
+<ul>
+<li><strong>TIP (Time-Proportional Instruction Profiler)</strong><ul>
+<li>TIP 是一个<strong>可实际部署</strong>的硬件剖析器，它将 Oracle 的时间归因策略与<strong>统计采样 (statistical sampling)</strong> 相结合，在保持高精度的同时大幅降低了数据开销。</li>
+<li>TIP 的硬件架构位于 <strong>Performance Monitoring Unit (PMU)</strong> 和 <strong>ROB</strong> 之间，主要包含两个功能单元：<ul>
+<li><strong>Offending Instruction Register (OIR)</strong>: 持续追踪最后一个提交的指令或导致异常/冲刷的指令。</li>
+<li><strong>Sample Selection Unit</strong>: 根据当前处理器核心的状态（通过检查 ROB 和 OIR 的标志位）来决定采样哪个或哪些指令。</li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/8bd1fee5cbdd6469c8627ea6a85340837aac4a580dea7fe52e3616e5a256dc55.jpg" /></p>
+<p><em>Figure 5: Structural overview of our Time-Proportional Instruction Profiler (TIP). TIP is triggered by the PMU,collects a sample,and finally exposes the sample to software.</em></p>
+<div class="highlight"><pre><span></span><code>-
+</code></pre></div>
+<p><img alt="" src="../images/1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg" /></p>
+<p><em>Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.</em></p>
+<div class="highlight"><pre><span></span><code>- TIP 的采样逻辑严格遵循 Oracle 的四种状态分类：
+    - 在 **Computing** 状态下，采样所有在该周期提交的指令。
+    - 在 **Stalled** 状态下，采样 ROB 队首的指令。
+    - 在 **Flushed/Drained** 状态下（ROB 为空），从 OIR 中采样相应的“罪魁祸首”指令。
+- 软件层面（如 Linux `perf`）通过读取 TIP 暴露的 **Control and Status Registers (CSRs)** 来收集样本。后处理程序会根据样本中的指令数量（n）将采样间隔的周期数平均分配（1/n）给每个被采样的指令地址，从而构建出最终的性能剖析文件。
+</code></pre></div>
+<hr />
+<p><strong>关键创新与对比</strong></p>
+<ul>
+<li><strong>与现有剖析器的根本区别</strong>：现有剖析器（如 Intel PEBS 的 <strong>NCI</strong>, Arm CoreSight 的 <strong>LCI</strong>, AMD IBS 的 <strong>Dispatch-tagging</strong>）均不满足时间比例归因原则，主要问题在于：<ul>
+<li><strong>缺乏 ILP (Instruction-Level Parallelism) 支持</strong>：在多指令并行提交时，只归因于单个指令，造成系统性偏差。</li>
+<li><strong>系统性延迟误归因</strong>：例如，NCI 会将分支预测错误后的冲刷延迟归因于下一个提交的指令，而非错误的分支本身。</li>
+</ul>
+</li>
+<li><strong>TIP 的优势</strong>：通过同时解决 ILP 归因和系统性误归因问题，TIP 实现了远超现有技术的精度。</li>
+</ul>
+<p><img alt="" src="../images/fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" /></p>
+<p><em>Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.</em></p>
+<hr />
+<p><strong>实验验证与性能开销</strong></p>
+<ul>
+<li><strong>实验平台</strong>：在 <strong>Berkeley Out-of-Order Machine (BOOM)</strong> RISC-V 核心上实现，并使用 <strong>FireSim</strong> FPGA 加速仿真器进行全系统评估。</li>
+<li><strong>精度结果</strong>：在 SPEC CPU2017 和 PARSEC 基准测试集上，TIP 的<strong>平均指令级剖析误差仅为 1.6%</strong>，远低于 NCI (9.3%)、LCI (55.4%) 和 Dispatch (53.1%)。</li>
+<li><strong>硬件开销</strong>：极其轻量，仅需约 <strong>57 字节</strong> 的额外存储（用于 OIR 和 CSRs）和少量组合逻辑，不在关键路径上。</li>
+<li><strong>数据速率</strong>：在 4KHz 采样频率下，数据生成速率为 <strong>352 KB/s</strong>，相比 NCI 的 224 KB/s 仅有轻微增加，且带来的性能开销可忽略不计（约 1.1%）。</li>
+</ul>
+<h3 id="1-oracle-profiler">1. Oracle Profiler<a class="headerlink" href="#1-oracle-profiler" title="Permanent link">&para;</a></h3>
+<p><strong>Oracle Profiler 的设计原理与核心机制</strong></p>
+<ul>
+<li>Oracle Profiler 被提出作为性能分析领域的 <strong>黄金参考 (golden reference)</strong>，其核心目标是实现 <strong>时间比例归因 (time-proportional attribution)</strong>。</li>
+<li>其根本原则是：<strong>每一个时钟周期</strong>都必须被精确地归因于在该周期内 <strong>处理器所暴露延迟 (exposes the latency of)</strong> 的指令。</li>
+<li>该设计聚焦于处理器的 <strong>提交阶段 (commit stage)</strong>，因为这是每条指令的延迟成本最终被解决并对外可见的地方。当指令无法被完全隐藏其执行延迟时，它会阻塞 <strong>重排序缓冲区 (ROB)</strong> 的头部，从而直接贡献于程序的总执行时间。</li>
+</ul>
+<p><strong>算法流程与四种核心状态</strong></p>
+<p>Oracle Profiler 通过监控每个时钟周期中 ROB 和处理器的状态，将其划分为四种互斥状态，并据此进行周期归因：</p>
+<ul>
+<li><strong>状态1: Computing (计算中)</strong></li>
+<li><strong>条件</strong>: ROB 非空，且处理器在该周期成功提交了 n 条指令。</li>
+<li><strong>归因策略</strong>: 将 <strong>1/n 个时钟周期</strong> 归因于每一条提交的指令。</li>
+<li>
+<p><strong>目的</strong>: 正确处理 <strong>指令级并行 (ILP)</strong>，确保并行提交的指令公平地分担该周期的时间成本。</p>
+</li>
+<li>
+<p><strong>状态2: Stalled (停滞)</strong></p>
+</li>
+<li><strong>条件</strong>: ROB 非空，但处理器在该周期未能提交任何指令（通常是因为 ROB 头部的指令尚未执行完毕）。</li>
+<li><strong>归因策略</strong>: 将 <strong>整个时钟周期</strong> 归因于 <strong>ROB 头部的指令</strong>，因为正是这条指令阻塞了提交流水线。</li>
+<li>
+<p><strong>目的</strong>: 精确捕获由长延迟操作（如缓存未命中）引起的性能瓶颈。</p>
+</li>
+<li>
+<p><strong>状态3: Flushed (冲刷)</strong></p>
+</li>
+<li><strong>条件</strong>: ROB 为空，原因是发生了 <strong>推测错误 (misspeculation)</strong>（如分支预测错误、内存顺序违规）或 <strong>异常 (exception)</strong>。</li>
+<li><strong>归因策略</strong>: <ul>
+<li>对于推测错误，将 ROB 为空期间的所有周期归因于 <strong>引发冲刷的指令</strong>（如预测错误的分支）。</li>
+<li>对于异常，将从异常触发到操作系统异常处理程序第一条指令被调度之间的所有周期，归因于 <strong>引发异常的指令</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>目的</strong>: 解决现有分析器（如 NCI）将冲刷后的空闲周期错误归因于后续指令的问题。</p>
+</li>
+<li>
+<p><strong>状态4: Drained (排空)</strong></p>
+</li>
+<li><strong>条件</strong>: ROB 为空，原因是 <strong>前端停顿 (front-end stall)</strong>（如指令缓存或 iTLB 未命中），而非推测错误。</li>
+<li><strong>归因策略</strong>: 将 ROB 为空期间的所有周期，归因于 <strong>在停顿结束后第一条进入 ROB 的指令</strong>。因为正是这条指令的缺失导致了前端停顿。</li>
+<li><strong>目的</strong>: 区分由后端资源争用和前端供给不足导致的性能损失。</li>
+</ul>
+<p><img alt="" src="../images/6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" /></p>
+<p><em>Figure 3: Oracle profiler clock cycle attribution overview.</em></p>
+<p><strong>与现有启发式方法的对比</strong></p>
+<p><img alt="" src="../images/fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" /></p>
+<p><em>Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.</em></p>
+<ul>
+<li><strong>NCI (Next-Committing Instruction)</strong>:</li>
+<li>在 <strong>Flushed</strong> 状态下，会将空闲周期错误地归因于下一条将要提交的指令，而非引发冲刷的罪魁祸首。</li>
+<li>
+<p>在 <strong>Computing</strong> 状态下，只选择一条指令进行归因，忽略了 ILP，导致归因偏差。</p>
+</li>
+<li>
+<p><strong>LCI (Last-Committed Instruction)</strong>:</p>
+</li>
+<li>在 <strong>Stalled</strong> 状态下，会持续将周期归因于上一条已提交的指令，而非当前阻塞 ROB 头部的指令。</li>
+<li>
+<p>在 <strong>Drained</strong> 状态下，同样会错误地归因于最后提交的指令。</p>
+</li>
+<li>
+<p><strong>Dispatch-tagging (如 AMD IBS)</strong>:</p>
+</li>
+<li>在指令 <strong>分发 (dispatch)</strong> 阶段进行采样，而非提交阶段。这会导致指令因后端阻塞而堆积在分发队列时被过度采样，无法反映其对执行时间的真实影响。</li>
+</ul>
+<p><strong>输入、输出及在整体研究中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>: 完整的、周期级的处理器微架构状态信息，包括 ROB 中每条指令的状态（有效、提交、异常、冲刷、预测错误等）、ROB 头尾指针以及前端状态。</li>
+<li><strong>输出</strong>: 一个理想的、无误差的性能剖析文件，其中 <strong>每一个动态指令</strong> 都被精确地分配了其应得的执行时间（以时钟周期为单位）。</li>
+<li><strong>在整体研究中的作用</strong>:</li>
+<li><strong>提供评估基准</strong>: Oracle 是衡量所有其他实际性能分析器（如 TIP, NCI, LCI）准确性的唯一可靠标准。</li>
+<li><strong>量化现有方法的误差</strong>: 通过与 Oracle 对比，论文首次量化了主流分析器的系统性误差，例如 NCI 平均误差为 <strong>9.3%</strong>，而软件分析高达 <strong>61.8%</strong>。</li>
+<li><strong>指导新方法设计</strong>: TIP 的设计直接继承了 Oracle 的时间归因策略，证明了其理论正确性。Oracle 揭示的问题（缺乏 ILP 支持、系统性延迟误归因）正是 TIP 旨在解决的核心痛点。</li>
+</ul>
+<h3 id="2-time-proportional-instruction-profiling-tip">2. Time-Proportional Instruction Profiling (TIP)<a class="headerlink" href="#2-time-proportional-instruction-profiling-tip" title="Permanent link">&para;</a></h3>
+<p><strong>TIP的核心设计思想</strong></p>
+<ul>
+<li>TIP旨在解决现有硬件性能分析器（如Intel PEBS的NCI、AMD IBS的Dispatch-tagging等）因<strong>非时间比例归因 (non-time-proportional attribution)</strong> 而导致的系统性误差。</li>
+<li>其核心是将<strong>Oracle profiler</strong>的理想化、精确到每个时钟周期的时间归因策略，与<strong>统计采样 (statistical sampling)</strong> 相结合，从而在保持极高精度的同时，将数据开销从Oracle的<strong>179 GB/s</strong>降低到实用的<strong>192 KB/s</strong>（在4KHz采样率下）。</li>
+</ul>
+<p><strong>Oracle Profiler的时间归因策略详解</strong></p>
+<p>Oracle作为黄金标准，其时间归因基于处理器Commit阶段的四种状态，确保每个时钟周期都被正确地归因于造成该周期延迟的指令。</p>
+<ul>
+<li><strong>State 1: Computing (计算状态)</strong></li>
+<li>当处理器在一个周期内提交 <code>n</code> 条指令时，Oracle将该周期平均分配，即每条指令获得 <code>1/n</code> 个周期。</li>
+<li>
+<p>这种方式正确地处理了<strong>指令级并行 (ILP)</strong>，避免了像NCI/LCI那样只将整个周期归因于单条指令的偏差。</p>
+</li>
+<li>
+<p><strong>State 2: Stalled (停顿状态)</strong></p>
+</li>
+<li>当ROB（Reorder Buffer）非空但无法提交指令时，说明ROB头部的指令尚未执行完毕，导致流水线停顿。</li>
+<li>
+<p>Oracle将该周期<strong>全部归因于ROB头部的指令</strong>，因为正是这条指令的长延迟（如缓存未命中）阻塞了后续提交。</p>
+</li>
+<li>
+<p><strong>State 3: Flushed (冲刷状态)</strong></p>
+</li>
+<li>当ROB因错误预测（如分支预测错误）或异常而被清空时，处理器会有一段空闲期。</li>
+<li>
+<p>Oracle将这段空闲期的所有周期<strong>归因于引发冲刷的那条指令</strong>（如错误预测的分支指令）。</p>
+</li>
+<li>
+<p><strong>State 4: Drained (排空状态)</strong></p>
+</li>
+<li>当ROB因前端停顿（如指令缓存未命中）而被排空时，处理器同样会空闲。</li>
+<li>Oracle将这段空闲期的所有周期<strong>归因于第一个因前端停顿而未能及时进入ROB的指令</strong>。</li>
+</ul>
+<p><img alt="" src="../images/6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" /></p>
+<p><em>Figure 3: Oracle profiler clock cycle attribution overview.</em></p>
+<p><strong>TIP的实现原理与算法流程</strong></p>
+<p>TIP通过硬件单元实现了Oracle策略的采样版本，其结构位于<strong>Performance Monitoring Unit (PMU)</strong> 和 <strong>ROB</strong> 之间。</p>
+<ul>
+<li><strong>核心硬件组件</strong>:</li>
+<li><strong>Offending Instruction Register (OIR)</strong>: 持续追踪最后一个提交的指令（用于Flush/Drain状态）和最后一个触发异常的指令。</li>
+<li>
+<p><strong>Sample Selection Unit</strong>: 根据当前处理器状态，决定采样哪些指令地址及其有效位。</p>
+</li>
+<li>
+<p><strong>采样逻辑流程</strong>:</p>
+</li>
+<li><strong>当ROB非空时</strong>:<ul>
+<li>TIP复制ROB头部（最多<code>b</code>条，<code>b</code>为提交宽度）的指令地址。</li>
+<li>如果当前周期有指令提交（Computing状态），则所有提交的指令地址均有效。</li>
+<li>如果当前周期无指令提交（Stalled状态），则只有ROB最老的那条指令地址有效。</li>
+</ul>
+</li>
+<li><strong>当ROB为空时</strong>:<ul>
+<li>TIP从OIR中读取地址。根据OIR中的标志位（如<code>Exception</code>, <code>Flush</code>, <code>Mispredicted</code>），判断是Flush状态还是Drain状态。</li>
+<li>对于Drain状态，TIP会等待第一条新指令被分发，并将其地址作为采样目标。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/8bd1fee5cbdd6469c8627ea6a85340837aac4a580dea7fe52e3616e5a256dc55.jpg" /></p>
+<p><em>Figure 5: Structural overview of our Time-Proportional Instruction Profiler (TIP). TIP is triggered by the PMU,collects a sample,and finally exposes the sample to software.</em></p>
+<p><img alt="" src="../images/1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg" /></p>
+<p><em>Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.</em></p>
+<p><strong>参数设置与硬件开销</strong></p>
+<ul>
+<li><strong>采样频率</strong>: 默认采用Linux perf的<strong>4 KHz</strong>，这是一个业界通用的平衡点。</li>
+<li><strong>硬件存储开销</strong>: 在一个4-wide的BOOM核心上，TIP仅需<strong>57字节</strong>的额外存储。</li>
+<li>OIR: 64-bit地址 + 3-bit标志 = 9字节。</li>
+<li>CSRs (Control and Status Registers): 包含cycle计数器、flags和4个地址寄存器，共48字节。</li>
+<li><strong>性能开销</strong>: 由于采样数据量略大（88字节/样本 vs PEBS默认56字节/样本），在Intel Core i7-4770上的实测运行时开销仅为<strong>1.1%</strong>，与关闭分析器相比几乎可以忽略。</li>
+</ul>
+<p><strong>输入输出关系及在性能分析中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>: </li>
+<li>来自PMU的周期性采样触发信号。</li>
+<li>来自ROB的头部指令地址、提交/有效信号、以及异常/冲刷等标志位。</li>
+<li><strong>输出</strong>: </li>
+<li>一组CSRs，包含采样的指令地址（最多<code>b</code>个）、周期计数器、以及描述当前状态的标志位（如<code>Stalled</code>, <code>Flush</code>等）。</li>
+<li><strong>在整体性能分析流程中的作用</strong>:</li>
+<li>TIP的硬件单元负责在每个采样点<strong>精确捕获</strong>符合Oracle归因策略的指令信息。</li>
+<li>这些原始样本被Linux perf等软件工具收集。</li>
+<li>在后处理阶段，软件根据TIP提供的地址和标志位，结合应用程序二进制文件，<strong>重建一个高度准确的性能剖析报告</strong>。该报告不仅能指出热点指令，还能通过标志位解释性能瓶颈的类型（如前端停顿、后端执行停顿、分支错误预测等）。</li>
+</ul>
+<p><strong>性能评估与关键指标</strong></p>
+<p>下表总结了不同分析器在指令级剖析上的平均误差，凸显了TIP的优越性。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Profiler</th>
+<th style="text-align: center;">平均指令级误差</th>
+<th style="text-align: center;">最大误差</th>
+<th style="text-align: center;">相对于NCI的误差降低倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Software</td>
+<td style="text-align: center;">61.8%</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">38.6x</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dispatch (IBS/SPE)</td>
+<td style="text-align: center;">53.1%</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">33.2x</td>
+</tr>
+<tr>
+<td style="text-align: left;">LCI</td>
+<td style="text-align: center;">55.4%</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">34.6x</td>
+</tr>
+<tr>
+<td style="text-align: left;">NCI (PEBS)</td>
+<td style="text-align: center;">9.3%</td>
+<td style="text-align: center;">21.0%</td>
+<td style="text-align: center;">1.0x</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TIP</strong></td>
+<td style="text-align: center;"><strong>1.6%</strong></td>
+<td style="text-align: center;"><strong>5.0%</strong></td>
+<td style="text-align: center;"><strong>5.8x</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/501ae01efccae38527f4120367e437c0b10d9dacd28beb8f2b04c02048c0f44a.jpg" /></p>
+<p><em>Figure 1: Instruction-level profle error of state-of-the-art profilers compared to our Time-Proportional Instruction Profiler(TIP).Existing profilers are inaccurate due to lack of ILP support and systematic latency misattribution.</em></p>
+<p><strong>实际应用价值</strong></p>
+<ul>
+<li>TIP的高精度在实践中至关重要。在SPEC CPU2017的<strong>Imagick</strong>基准测试中：</li>
+<li>NCI错误地将性能瓶颈归因于<code>feq.d</code>和<code>ret</code>指令。</li>
+<li><strong>TIP</strong>则正确地识别出问题根源是频繁执行的<strong>CSR (Control Status Register)</strong> 指令（<code>frflags</code>/<code>fsflags</code>），这些指令导致了代价高昂的<strong>pipeline flushes</strong>。</li>
+<li>通过将这些不必要的CSR指令替换为<code>nop</code>，程序性能获得了<strong>1.93倍</strong>的显著提升，这充分证明了TIP能够发现并指导解决那些被传统分析器掩盖的关键性能问题。</li>
+</ul>
+<p><img alt="" src="../images/99f91bd24f194dab7e15d43027f3bce577f67b25b4c8f3acf67cd7c52910979c.jpg" /></p>
+<p><em>Figure 12:Function and instruction-level profiles for lmagick for TIP and NCI compared to Oracle.</em></p>
+<h3 id="3-offending-instruction-register-oir">3. Offending Instruction Register (OIR)<a class="headerlink" href="#3-offending-instruction-register-oir" title="Permanent link">&para;</a></h3>
+<p><strong>Offending Instruction Register (OIR) 的核心作用与实现原理</strong></p>
+<ul>
+<li>OIR 是 TIP 硬件 profiler 中的一个<strong>关键寄存器</strong>，其主要功能是在 <strong>Reorder Buffer (ROB)</strong> 为空（即处于 <strong>Flushed</strong> 或 <strong>Drained</strong> 状态）时，为那些无法直接从 ROB 头部获取的“罪魁祸首”指令提供一个临时的存储位置，从而确保 <strong>时间归因的准确性</strong>。</li>
+<li>其设计动机源于 Oracle Profiler 的归因策略：当 ROB 因错误预测或前端停顿而变空时，空闲周期必须归因于导致该状态的<strong>根本原因指令</strong>（如 mispredicted branch）或<strong>首个恢复指令</strong>（如 cache miss 后的指令），而非一个不存在的指令。</li>
+</ul>
+<p><strong>OIR 的算法流程与工作逻辑</strong></p>
+<ul>
+<li><strong>持续追踪机制</strong>：</li>
+<li>OIR Update 单元在每个时钟周期都处于激活状态。</li>
+<li>当处理器正常提交指令时，OIR 会<strong>持续更新</strong>，记录下当前周期中<strong>最年轻</strong>（youngest）的已提交指令的地址及其相关标志位。</li>
+<li>
+<p>这些标志位至关重要，用于记录该指令是否是一个 <strong>mispredicted branch</strong> 或者是否触发了某种形式的 <strong>pipeline flush</strong>。</p>
+</li>
+<li>
+<p><strong>异常处理路径</strong>：</p>
+</li>
+<li>如果处理器检测到即将触发一个<strong>异常</strong>（exception），OIR Update 单元会立即将引发异常的指令地址和一个 <strong>exception flag</strong> 写入 OIR。</li>
+<li>
+<p>这确保了在后续因处理异常而导致 ROB 为空的周期里，TIP 能够正确地将这些周期归因于该异常指令。</p>
+</li>
+<li>
+<p><strong>采样决策中的应用</strong>：</p>
+</li>
+<li>当 TIP 的 Sample Selection 逻辑检测到 ROB 头部的所有条目都无效（即 ROB 为空）时，它会转向 OIR 获取信息。</li>
+<li>此时，TIP 会将 OIR 中存储的地址放入采样输出的地址寄存器（Address 0 CSR）中。</li>
+<li>同时，TIP 会根据 OIR 中存储的标志位，设置其自身的状态标志（如 <strong>Exception</strong>, <strong>Flush</strong>, 或 <strong>Mispredicted</strong>），以明确指示当前采样所处的处理器状态（Flushed 状态）。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg" /></p>
+<p><em>Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.</em></p>
+<p><strong>OIR 的输入、输出及硬件规格</strong></p>
+<ul>
+<li><strong>输入</strong>：</li>
+<li>来自 ROB 的信息：每个提交槽位的指令地址、有效位、提交信号，以及关键的指令属性标志（如 mispredicted, flush, exception）。</li>
+<li>
+<p>来自处理器核心的控制信号：用于判断是否即将发生异常。</p>
+</li>
+<li>
+<p><strong>输出</strong>：</p>
+</li>
+<li>一个 64 位的指令地址。</li>
+<li>
+<p>一组状态标志位（论文中提到为 <strong>3-bit flag</strong>），用于编码指令类型（mispredicted, flush, exception）。</p>
+</li>
+<li>
+<p><strong>硬件开销</strong>：</p>
+</li>
+<li>根据论文 3.2 节的分析，OIR 的存储开销极小，仅为 <strong>9 字节</strong>（64-bit 地址 + 3-bit 标志，在 RISC-V CSR 的 64-bit 对齐要求下）。</li>
+<li>其逻辑复杂度也很低，主要涉及多路选择器（multiplexor）来选择最年轻的提交指令。</li>
+</ul>
+<p><strong>OIR 在 TIP 整体架构中的定位</strong></p>
+<ul>
+<li>OIR 是连接 <strong>Oracle 归因理论</strong>与<strong>实际硬件采样</strong>的桥梁。它使得 TIP 能够在不记录每个周期所有信息（像 Oracle 那样产生 179 GB/s 数据）的前提下，依然能处理 ROB 为空这种复杂场景。</li>
+<li>它与 Sample Selection 单元紧密协作，共同实现了 Oracle 定义的四种核心状态（Computing, Stalled, Flushed, Drained）下的精确时间归因。</li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/8bd1fee5cbdd6469c8627ea6a85340837aac4a580dea7fe52e3616e5a256dc55.jpg" /></p>
+<p><em>Figure 5: Structural overview of our Time-Proportional Instruction Profiler (TIP). TIP is triggered by the PMU,collects a sample,and finally exposes the sample to software.</em></p>
+<h3 id="4-instruction-level-parallelism-ilp-aware-attribution">4. Instruction-Level Parallelism (ILP) Aware Attribution<a class="headerlink" href="#4-instruction-level-parallelism-ilp-aware-attribution" title="Permanent link">&para;</a></h3>
+<p><strong>核心观点</strong></p>
+<p>TIP (Time-Proportional Instruction Profiling) 的 <strong>ILP-Aware Attribution</strong> 机制是其超越现有分析器（如 NCI、LCI）准确性的关键。该机制确保在处理器利用指令级并行性（Instruction-Level Parallelism, ILP）于单个周期内提交多条指令时，执行时间能被公平、准确地分配给所有参与提交的指令，而非武断地归因于其中某一条。</p>
+<ul>
+<li>
+<p><strong>根本问题</strong>: 现有硬件分析器（如 Intel PEBS 的 <strong>NCI</strong> 和外部监控器的 <strong>LCI</strong>）在采样时，即使一个周期内有 <code>n</code> 条指令同时提交，也只会选择其中一条（下一条或上一条）作为该周期的“代表”。这导致了严重的系统性偏差：</p>
+<ul>
+<li>被选中的指令被过度归因（over-attributed）。</li>
+<li>未被选中的指令则被完全忽略，即使它们消耗了相同的处理器资源和时间。</li>
+<li>在高度并行化的代码区域，这种偏差会累积，使得性能画像失真，误导开发者。</li>
+</ul>
+</li>
+<li>
+<p><strong>TIP 的解决方案</strong>: TIP 严格遵循其 <strong>Oracle</strong> 黄金标准的指导原则，在“<strong>Computing State</strong>”（计算状态）下，将一个采样周期的时间平均分配给该周期内所有成功提交的指令。</p>
+<ul>
+<li>如果一个周期提交了 <code>n</code> 条指令，则每条指令被归因 <code>1/n</code> 个周期。</li>
+<li>这种做法直接反映了处理器的真实行为：<code>n</code> 条指令共享了同一个周期的执行带宽，因此对总执行时间的贡献也应均等。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" /></p>
+<p><em>Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.</em></p>
+<p><strong>算法流程与实现细节</strong></p>
+<p>TIP 的 ILP-Aware 归因逻辑紧密集成在其采样选择单元（Sample Selection Unit）中，具体流程如下：</p>
+<ul>
+<li><strong>状态检测</strong>: TIP 首先通过检查处理器的 <strong>Stalled</strong> 标志位来判断当前周期的状态。<ul>
+<li>如果 <strong>Stalled == 0</strong>，则处理器处于 <strong>Computing State</strong>，即正在提交指令。</li>
+</ul>
+</li>
+<li><strong>指令地址捕获</strong>: 在 <strong>Computing State</strong> 下，TIP 会从 <strong>Reorder Buffer (ROB)</strong> 的头部读取最多 <code>b</code> 个（<code>b</code> 为处理器提交宽度）指令地址，并将它们存入其内部的地址寄存器（Address CSRs）中。</li>
+<li><strong>有效位标记</strong>: TIP 同时会根据实际提交的指令数量，设置对应地址寄存器的 <strong>valid bits</strong>。例如，在一个 4-wide 的 BOOM 核心中，如果某周期只提交了 2 条指令，则只有前两个地址寄存器的 valid bit 会被置为 1。</li>
+<li><strong>后处理归因</strong>: 当性能分析软件（如 Linux perf）在应用结束后进行画像构建时，它会读取 TIP 的原始采样数据。<ul>
+<li>对于每个采样点，软件会统计其中有效的指令地址数量 <code>n</code>。</li>
+<li>然后，将该采样点所代表的周期数（通常由 PMU 的周期计数器提供）平均分为 <code>n</code> 份，并分别累加到这 <code>n</code> 条指令各自的计数器中。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg" /></p>
+<p><em>Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.</em></p>
+<p><strong>输入输出关系及整体作用</strong></p>
+<ul>
+<li><strong>输入</strong>:<ul>
+<li>处理器 ROB 在每个周期的提交信号（commit signals）和有效信号（valid signals）。</li>
+<li>性能监控单元（PMU）触发的采样事件。</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>一个包含多个指令地址、一个周期计数器值和状态标志位的复合采样记录。</li>
+</ul>
+</li>
+<li><strong>在 TIP 整体架构中的作用</strong>:<ul>
+<li><strong>消除 ILP 偏差</strong>: 这是 TIP 实现 <strong>time-proportional attribution</strong>（时间比例归因）的核心支柱之一。它确保了画像的准确性，尤其是在 <strong>Compute-Intensive</strong>（计算密集型）的基准测试中，这类程序大量依赖 ILP 来提升性能。</li>
+<li><strong>提供细粒度洞察</strong>: 通过公平地归因时间，开发者可以清晰地看到哪些指令序列真正构成了性能瓶颈，而不是被分析器的启发式策略所误导。</li>
+<li><strong>支撑高精度优化</strong>: 如论文中的 <strong>Imagick</strong> 案例所示，准确的指令级画像能够揭示出函数级或基本块级画像无法发现的深层次性能问题。</li>
+</ul>
+</li>
+</ul>
+<p><strong>实证效果对比</strong></p>
+<p>下表展示了不同分析器在指令级画像上的平均误差，突显了 ILP-Aware 归因的巨大价值。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Profiler</th>
+<th style="text-align: center;">平均指令级画像误差</th>
+<th style="text-align: center;">与 TIP 的误差倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>TIP</strong></td>
+<td style="text-align: center;"><strong>1.6%</strong></td>
+<td style="text-align: center;"><strong>1.0x</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">TIP-ILP (无 ILP 支持的 TIP)</td>
+<td style="text-align: center;">7.2%</td>
+<td style="text-align: center;">4.5x</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>NCI</strong> (Intel PEBS)</td>
+<td style="text-align: center;">9.3%</td>
+<td style="text-align: center;">5.8x</td>
+</tr>
+<tr>
+<td style="text-align: left;">LCI</td>
+<td style="text-align: center;">55.4%</td>
+<td style="text-align: center;">34.6x</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dispatch (AMD IBS / Arm SPE)</td>
+<td style="text-align: center;">53.1%</td>
+<td style="text-align: center;">33.2x</td>
+</tr>
+<tr>
+<td style="text-align: left;">Software</td>
+<td style="text-align: center;">61.8%</td>
+<td style="text-align: center;">38.6x</td>
+</tr>
+</tbody>
+</table>
+<p>该数据明确表明，仅通过引入 <strong>ILP-Aware Attribution</strong>（从 TIP-ILP 到 TIP），平均误差就从 <strong>7.2%</strong> 大幅降低至 <strong>1.6%</strong>，证明了此机制的有效性和必要性。相比之下，试图将 ILP 支持简单地嫁接到错误的归因策略上（如 NCI+ILP）不仅无效，反而会使误差恶化至 <strong>19.3%</strong>，进一步验证了 TIP 归因策略的正确性。</p>
+<h3 id="5-four-state-commit-stage-model">5. Four-State Commit Stage Model<a class="headerlink" href="#5-four-state-commit-stage-model" title="Permanent link">&para;</a></h3>
+<p><strong>Four-State Commit Stage Model 的实现原理与算法流程</strong></p>
+<p>Oracle Profiler 的核心在于其 <strong>Four-State Commit Stage Model</strong>，该模型通过精确识别处理器提交阶段（Commit Stage）的四种基本状态，为每个时钟周期提供<strong>时间-指令</strong>的精准归因。TIP 继承了这一原则性逻辑，并通过采样使其具备实用性。</p>
+<ul>
+<li><strong>State 1: Computing (计算状态)</strong><ul>
+<li><strong>触发条件</strong>: Reorder Buffer (ROB) 非空，且在当前周期有指令被提交。</li>
+<li><strong>归因逻辑</strong>: 将当前周期的时间平均分配给所有在该周期提交的指令。例如，在一个 <strong>2-wide commit</strong> 的处理器中，若指令 I1 和 I2 同时提交，则各自被归因 <strong>0.5 cycles</strong>。</li>
+<li><strong>关键洞察</strong>: 此逻辑正确处理了 <strong>Instruction-Level Parallelism (ILP)</strong>，确保并行提交的指令都能获得公平的时间归因。相比之下，NCI 和 LCI 等启发式方法仅选择单个指令，导致系统性偏差。</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" /></p>
+<p><em>Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.</em></p>
+<ul>
+<li>
+<p><strong>State 2: Stalled (阻塞状态)</strong></p>
+<ul>
+<li><strong>触发条件</strong>: ROB 非空，但在当前周期没有指令被提交。</li>
+<li><strong>归因逻辑</strong>: 将整个周期的时间归因于 <strong>ROB 头部（oldest entry）的指令</strong>。该指令通常是长延迟操作（如 LLC miss 的 load 指令），它阻塞了后续指令的提交，是性能瓶颈的直接体现。</li>
+<li><strong>关键洞察</strong>: 这是时间归因的核心原则——将时间归因于“暴露延迟”的指令。LCI 在此状态下会错误地将持续归因于上一个已提交的指令，而 NCI 则会在 stall 结束后的第一个提交周期才开始归因，均无法准确反映 stall 的真实成本。</li>
+</ul>
+</li>
+<li>
+<p><strong>State 3: Flushed (冲刷状态)</strong></p>
+<ul>
+<li><strong>触发条件</strong>: ROB 为空，且是由于 <strong>错误预测（misprediction）或异常（exception）</strong> 导致的流水线冲刷。</li>
+<li><strong>归因逻辑</strong>: <ul>
+<li>对于 <strong>分支误预测</strong>，将 ROB 为空期间的所有周期归因于 <strong>导致冲刷的分支指令</strong>。</li>
+<li>对于 <strong>异常</strong>（如 page fault），将从异常触发到操作系统异常处理程序第一条指令被分发之间的所有周期，归因于 <strong>引发异常的指令</strong>。</li>
+</ul>
+</li>
+<li><strong>关键洞察</strong>: NCI 在此状态下表现极差，因为它会将冲刷后 ROB 为空的周期归因于下一个将要提交的指令（即冲刷后路径上的第一条指令），完全掩盖了冲刷的根本原因。</li>
+</ul>
+</li>
+<li>
+<p><strong>State 4: Drained (排空状态)</strong></p>
+<ul>
+<li><strong>触发条件</strong>: ROB 为空，且是由于 <strong>前端停顿</strong>（如 instruction cache miss 或 iTLB miss）导致，而非冲刷。</li>
+<li><strong>归因逻辑</strong>: 将 ROB 为空期间的所有周期归因于 <strong>在停顿结束后第一个进入 ROB 的指令</strong>。因为正是这条指令的缺失（或其所在代码块的缺失）导致了前端无法继续供应指令。</li>
+<li><strong>关键洞察</strong>: LCI 在此状态下会错误地将排空周期归因于最后一个提交的指令，而 NCI 的归因在此场景下相对准确，但依然不如 Oracle/TIP 的原则性方法清晰。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>输入输出关系及在整体架构中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>: <ul>
+<li>处理器微架构的实时状态信号，主要包括：<ul>
+<li>ROB 的 <strong>head/tail pointers</strong> 和 <strong>valid/commit flags</strong>。</li>
+<li>指令的元数据，如是否为 <strong>mispredicted branch</strong>、是否触发 <strong>flush</strong> 或 <strong>exception</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>输出</strong>: <ul>
+<li>一个<strong>原则性的、逐周期的时间归因记录</strong>，将每个周期精确地映射到一个或多个动态指令上。</li>
+<li>对于 TIP，输出是符合上述四态模型的<strong>采样记录</strong>，包含指令地址、周期计数器以及状态标志位（如 Stalled, Flush, Exception 等）。</li>
+</ul>
+</li>
+<li><strong>在整体中的作用</strong>:<ul>
+<li><strong>作为黄金标准 (Golden Reference)</strong>: Oracle 的四态模型为评估所有现有和未来性能分析器的准确性提供了<strong>理论基准</strong>。论文首次量化了软件分析、Dispatch-tagging、LCI、NCI 等方法的系统性误差。</li>
+<li><strong>指导实用设计</strong>: TIP 的设计直接受此模型启发。TIP 的硬件单元（如 Offending Instruction Register - OIR）就是为了在采样时刻，能够根据当前状态（通过检查 ROB 和相关标志位）来决定应采样哪条（或哪些）指令，从而在统计采样的框架下逼近 Oracle 的准确性。</li>
+<li><strong>赋能精准优化</strong>: 正是这种基于四态模型的精准归因，使得 TIP 能够在 Imagick 案例中，将性能问题准确地定位到 <code>frflags</code>/<code>fsflags</code> 这类 CSR 指令上，而不是像 NCI 那样错误地指向 <code>feq.d</code> 或 <code>ret</code> 指令，从而揭示了真正的优化机会。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>关键参数与配置</strong></p>
+<p>论文在 FireSim 中使用了基于 <strong>Berkeley Out-of-Order Machine (BOOM)</strong> 的 4-wide 超标量核心进行评估。该模型的关键配置如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Core</strong></td>
+<td style="text-align: left;">BOOM v2, 4-wide superscalar, out-of-order</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Fetch/Issue/Commit Width</strong></td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Reorder Buffer (ROB)</strong></td>
+<td style="text-align: left;">64 entries</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L1 I/D Cache</strong></td>
+<td style="text-align: left;">32 KB, 8-way associative</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L2 Cache</strong></td>
+<td style="text-align: left;">512 KB, 8-way associative</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LLC</strong></td>
+<td style="text-align: left;">8 MB, 16-way associative</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Profiling Frequency</strong></td>
+<td style="text-align: left;">4 KHz (default)</td>
+</tr>
+</tbody>
+</table>
+<p>该配置确保了实验环境既能体现现代处理器的复杂性（如 OoO, wide-issue），又能通过 FPGA 加速完成全系统、完整运行的模拟，从而验证四态模型的有效性和普适性。</p>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>仿真平台</strong>: 使用 <strong>FireSim</strong>，这是一个基于 FPGA 的、周期精确的全系统模拟器。</li>
+<li><strong>处理器模型</strong>: 采用 <strong>Berkeley Out-of-Order Machine (BOOM)</strong> 的 4-wide 超标量乱序核心。具体配置见下表。</li>
+<li><strong>评估方法</strong>: 修改 FireSim 以在每个周期追踪 ROB（Reorder Buffer）头部条目的详细信息（指令地址、有效/提交/异常/刷新/误预测标志等）。这些追踪数据被发送到 CPU 端进行离线处理，从而在单次模拟运行中同时评估多种剖析器（包括 Oracle 和所有对比方案），确保了公平性。</li>
+<li><strong>基准测试集</strong>: 运行了 27 个 <strong>SPEC CPU2017</strong> 和 <strong>PARSEC 3.0</strong> 基准测试程序（使用 x264），并根据其执行特征分为三类：<ul>
+<li><strong>Compute-Intensive</strong>: 超过 50% 的时间用于提交指令。</li>
+<li><strong>Flush-Intensive</strong>: 不满足 Compute-Intensive 条件，且超过 3% 的时间用于流水线刷新。</li>
+<li><strong>Stall-Intensive</strong>: 其余大部分时间花在处理器停顿上的基准测试。</li>
+</ul>
+</li>
+<li><strong>误差量化</strong>: 定义了 profile error 为 <code>e = (Ctotal - Ccorrect) / Ctotal</code>，其中 <code>Ccorrect</code> 是被剖析器正确归因于符号（指令/基本块/函数）的周期数。该度量直接与 <strong>Oracle</strong> 剖析器的结果进行比较。</li>
+</ul>
+<p><img alt="" src="../images/24aeb798dbf27968fcbd4e8b4f053345a436dbf672c1c39bd9d4ca5ca79e6ab5.jpg" /></p>
+<p><em>Table 1: Simulated Configuration.</em></p>
+<p><img alt="" src="../images/89e0efc6b7f05c2a61c2fcb5525fde475e82fdb48f1b43deb10cbea8d4cdacb5.jpg" /></p>
+<p><em>Figure 7: Normalized cycle stacks collected at commit.</em></p>
+<p><strong>结果数据分析</strong></p>
+<ul>
+<li><strong>函数级剖析</strong>: 大多数硬件剖析器（NCI, LCI, TIP）都非常准确，平均误差低于 1.6%。<strong>Software</strong> (9.1%) 和 <strong>Dispatch</strong> (5.8%) 由于采样偏差而表现不佳。</li>
+<li><strong>基本块级剖析</strong>: 准确度开始分化。<strong>TIP</strong> (0.7%) 和 <strong>TIP-ILP</strong> (1.2%) 依然优秀，<strong>NCI</strong> (2.3%) 尚可，但 <strong>LCI</strong> 的平均误差飙升至 <strong>11.9%</strong>，在 lbm 基准上甚至达到 <strong>56.1%</strong>，因为它将长延迟停顿错误地归因于停顿前最后提交的指令。</li>
+<li><strong>指令级剖析</strong>: 这是区分剖析器准确性的关键层级。<ul>
+<li><strong>TIP</strong> 表现出色，平均误差仅为 <strong>1.6%</strong>（最大 5.0%）。</li>
+<li><strong>TIP-ILP</strong>（忽略 ILP 的 TIP 变体）和 <strong>NCI</strong> 的误差显著更高，分别为 <strong>7.2%</strong> 和 <strong>9.3%</strong>。</li>
+<li><strong>Software</strong>, <strong>Dispatch</strong>, 和 <strong>LCI</strong> 的平均误差极高，分别为 <strong>61.8%</strong>, <strong>53.1%</strong>, 和 <strong>55.4%</strong>。</li>
+</ul>
+</li>
+<li><strong>关键洞察</strong>: TIP 的优势来源于两个方面：<ol>
+<li>对于 <strong>Flush-Intensive</strong> 基准，TIP 能正确地将流水线刷新的开销归因于导致刷新的指令（如误预测分支），而 NCI 则错误地归因于刷新后下一个提交的指令。</li>
+<li>对于 <strong>Compute-Intensive</strong> 基准，TIP 通过 <strong>ILP accounting</strong>（将一个周期的开销平均分摊给所有并行提交的指令）避免了归因偏差，而 NCI 和 TIP-ILP 只归因于单个指令。</li>
+</ol>
+</li>
+</ul>
+<p><img alt="" src="../images/0ef26dc64e0d6b1808cb1fd4314c1f7e2e7e3e0f8bfdfaf3ddf1db29b3c5dd22.jpg" /></p>
+<p><em>Figure 0:Instruction-levelerrorsforthe different profilers.(Software,Dispatch,andLCIareomitted becauseoftheirlarge errors.) TIP is the only accurate profiler at the instruction level.</em></p>
+<p><strong>消融实验 (Ablation Studies)</strong></p>
+<ul>
+<li><strong>采样率敏感性分析</strong>:<ul>
+<li>所有剖析器的误差都随采样频率（从 100Hz 到 20KHz）的增加而降低。</li>
+<li><strong>TIP</strong> 的独特之处在于，即使在默认的 4KHz 以上，其准确度仍有<strong>显著提升空间</strong>（例如 gcc 的误差从 5.0% 降至 2.6%）。这是因为 TIP 的 ILP accounting 机制能从更高频率的采样中获益，更精细地刻画高 ILP 区域的行为。</li>
+<li>相比之下，NCI 和 TIP-ILP 的误差在 4KHz 后基本饱和。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/7333895e2befd3c3ca79f69ecb0e3e0021db4409ce175551c517030c7be855e0.jpg" /></p>
+<p><em>Figure:Sensitivityanalyses.(a)T'sacuracycontinuestomeasurablyimprovebeyond4KHzunliketheotherproflers.(b)Perdic samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardware.(c)MakingNCIcommitparallelism-aware increases profile error,in contrast to TIP.</em></p>
+<ul>
+<li>
+<p><strong>采样方法对比 (周期性 vs. 随机)</strong>:</p>
+<ul>
+<li>默认使用<strong>周期性采样</strong>（每 250μs 一次）。</li>
+<li><strong>随机采样</strong>（在每个 250μs 间隔内随机选择一个点）可以略微降低平均误差（从 1.6% 降至 1.1%），尤其对具有重复性执行模式的 <strong>Stall-Intensive</strong> 基准（如 streamcluster, lbm）有益。</li>
+<li>由于随机采样在硬件上实现更复杂，论文选择了更简单的周期性采样。</li>
+</ul>
+</li>
+<li>
+<p><strong>对 NCI 应用 ILP Accounting 的反直觉结果</strong>:</p>
+<ul>
+<li>为了验证 ILP accounting 的有效性是否依赖于正确的归因策略，作者创建了一个 <strong>NCI+ILP</strong> 变体，它将样本平均分给“下一个要提交”的 n 条指令。</li>
+<li>结果令人惊讶：<strong>NCI+ILP 的平均误差从 9.3% 恶化到了 19.3%</strong>。</li>
+<li><strong>原因</strong>: NCI 的根本问题在于其“下一个提交”的启发式规则本身就是错误的。在长延迟停顿（如 LLC miss）后，将开销分摊给紧接着提交的一批无关指令，比只归因于其中一个更糟糕。这证明了 <strong>TIP 的成功不仅在于支持 ILP，更在于其基于 Oracle 的、原则性的归因逻辑</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/99f91bd24f194dab7e15d43027f3bce577f67b25b4c8f3acf67cd7c52910979c.jpg" /></p>
+<p><em>Figure 12:Function and instruction-level profiles for lmagick for TIP and NCI compared to Oracle.</em></p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

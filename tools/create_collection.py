@@ -154,6 +154,19 @@ def generate_collection_data():
             venue = str(meta.get('venue', 'Unknown Venue')).strip()
             year = str(meta.get('year', '')).strip()
             
+            # 提取和处理 DOI
+            doi_raw = meta.get('doi')
+            doi = None
+            if doi_raw and str(doi_raw).strip().lower() not in ['null', 'none', '']:
+                doi_str = str(doi_raw).strip()
+                # 如果 DOI 包含完整 URL，提取 DOI 部分
+                if doi_str.startswith('http://doi.org/') or doi_str.startswith('https://doi.org/'):
+                    doi = doi_str.split('doi.org/')[-1]
+                elif doi_str.startswith('doi:'):
+                    doi = doi_str.replace('doi:', '').strip()
+                else:
+                    doi = doi_str
+            
             # 构建路径
             base_link = f"{relative_path_to_notes}/{source_folder}"
 
@@ -173,6 +186,10 @@ def generate_collection_data():
             links.append(f"[📄 论文笔记]({base_link}/paper_notes.md)")
             links.append(f"[📊 图表解析]({base_link}/figs_notes.md)")
             links.append(f"[👶 ELI5 解释]({base_link}/ELI5_notes.md)")
+            
+            # 如果 DOI 有效，添加直达原文链接（使用 HTML 格式以在新标签页打开）
+            if doi:
+                links.append(f'<a href="https://doi.org/{doi}" target="_blank" rel="noopener noreferrer">🔗 直达原文</a>')
             
             md_content.append(" | ".join(links))
             md_content.append("")

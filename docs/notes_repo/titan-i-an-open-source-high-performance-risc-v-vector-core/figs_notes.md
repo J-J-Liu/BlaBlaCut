@@ -12,18 +12,18 @@
 - **BYTESWAP** 和 **ASCII-TO-UTF32** 的加速比相对较低，但 DLEN1024 仍能提供约 **2.5x** 的性能提升，表明即使对于非计算密集型任务，更宽的数据通路也能带来显著收益。
 - 整体趋势显示，T1 的性能随 DLEN 增加而线性或超线性增长，验证了其微架构设计在扩展 DLP 方面的有效性。
 
-| 工作负载 | DLEN128 | DLEN256 | DLEN512 | DLEN1024 |
-|----------|---------|---------|---------|----------|
-| MEMSET | 1.0x | ~1.8x | ~3.0x | **~4.0x** |
-| ASCII-TO-UTF32 | 1.0x | ~1.5x | ~2.0x | **~2.5x** |
-| BYTESWAP | 1.0x | ~1.5x | ~2.0x | **~2.5x** |
-| LINEAR-NORMALIZATION | 1.0x | ~1.8x | ~3.0x | **~4.0x** |
-| SAXPY | 1.0x | ~2.0x | ~3.5x | **~4.5x** |
-| SGEMM | 1.0x | ~2.0x | ~3.5x | **~4.5x** |
+| 工作负载             | DLEN128 | DLEN256 | DLEN512 | DLEN1024  |
+| -------------------- | ------- | ------- | ------- | --------- |
+| MEMSET               | 1.0x    | ~1.8x   | ~3.0x   | **~4.0x** |
+| ASCII-TO-UTF32       | 1.0x    | ~1.5x   | ~2.0x   | **~2.5x** |
+| BYTESWAP             | 1.0x    | ~1.5x   | ~2.0x   | **~2.5x** |
+| LINEAR-NORMALIZATION | 1.0x    | ~1.8x   | ~3.0x   | **~4.0x** |
+| SAXPY                | 1.0x    | ~2.0x   | ~3.5x   | **~4.5x** |
+| SGEMM                | 1.0x    | ~2.0x   | ~3.5x   | **~4.5x** |
 
 - 此图表直观证明了 T1 架构通过增加 DLEN 来提升性能的设计理念，尤其在高并行度的 HPC 和 AI 工作负载中效果显著。
 
-### Figure 2: Static Cross Lane Access For widen and narrow; In this access pattern, the $i$ -th lane accessing the $(2i \bmod n)$ -th and $(2i + 1 \bmod n)$ -th lane.
+### Figure 2: Static Cross Lane Access For widen and narrow; In this access pattern, the $i$ -th lane accessing the $(2i \\bmod n)$ -th and $(2i + 1 \\bmod n)$ -th lane.
 
 ![c9f1ebfc49cf591efce07cdee26f0b97a7005fdc89d04f63dbc21e80997c49b0.jpg](images/c9f1ebfc49cf591efce07cdee26f0b97a7005fdc89d04f63dbc21e80997c49b0.jpg)
 
@@ -33,15 +33,15 @@
 - 下表列出了每个源lane对应的两个目标lane：
 
 | Source Lane (i) | Target Lane 1 (2i mod 8) | Target Lane 2 (2i + 1 mod 8) |
-| :-------------- | :----------------------- | :-------------------------- |
-| 0               | 0                        | 1                           |
-| 1               | 2                        | 3                           |
-| 2               | 4                        | 5                           |
-| 3               | 6                        | 7                           |
-| 4               | 0                        | 1                           |
-| 5               | 2                        | 3                           |
-| 6               | 4                        | 5                           |
-| 7               | 6                        | 7                           |
+| :-------------- | :----------------------- | :--------------------------- |
+| 0               | 0                        | 1                            |
+| 1               | 2                        | 3                            |
+| 2               | 4                        | 5                            |
+| 3               | 6                        | 7                            |
+| 4               | 0                        | 1                            |
+| 5               | 2                        | 3                            |
+| 6               | 4                        | 5                            |
+| 7               | 6                        | 7                            |
 
 - 从图中可见，**Lane 0** 的数据流向 **Lane 0** 和 **Lane 1**；**Lane 1** 的数据流向 **Lane 2** 和 **Lane 3**，以此类推。
 - 这种访问模式导致了复杂的交叉布线，例如 **Lane 3** 的数据需要跨越多个物理距离才能到达 **Lane 6** 和 **Lane 7**。
@@ -55,56 +55,63 @@
 - **整体架构概览**：图 3 展示了 Titan-I (T1) 的完整微架构，采用**分层、模块化设计**，核心组件包括 Scalar Core、Sequencer、Lanes、Permutation Unit 和 Memory Subsystem，通过清晰的数据流和控制流连接，实现高并发与低延迟。
 
 - **Scalar Core（标量核心）**：
-  - 位于架构顶部，负责指令获取（Fetch IN）、预解码（ID）、执行（EXEC）、内存操作（MEM）和提交（COMMIT）。
-  - 包含 ICache、IQ（Instruction Queue）、FP0/FP1（浮点单元）、LSU（Load/Store Unit）等传统标量流水线模块。
-  - 通过 **Vector Scoreboards** 与向量部分协同，支持 **issue-as-commit** 策略，允许标量指令在无真实依赖时提前提交，提升吞吐。
+
+    - 位于架构顶部，负责指令获取（Fetch IN）、预解码（ID）、执行（EXEC）、内存操作（MEM）和提交（COMMIT）。
+    - 包含 ICache、IQ（Instruction Queue）、FP0/FP1（浮点单元）、LSU（Load/Store Unit）等传统标量流水线模块。
+    - 通过 **Vector Scoreboards** 与向量部分协同，支持 **issue-as-commit** 策略，允许标量指令在无真实依赖时提前提交，提升吞吐。
 
 - **Sequencer（序列器）**：
-  - 作为向量控制中心，接收来自标量核心的指令，进行向量指令解码（IQ, ID），并生成控制信号分发至各组件。
-  - 内置 **VType Cache**，用于缓存 vsetvli 等配置指令，实现**配置指令融合**，避免因等待配置指令退休而造成的带宽损失。
-  - 通过 **Global Scoreboard (SB0)** 管理全局依赖，协调多个 Lane 的执行。
+
+    - 作为向量控制中心，接收来自标量核心的指令，进行向量指令解码（IQ, ID），并生成控制信号分发至各组件。
+    - 内置 **VType Cache**，用于缓存 vsetvli 等配置指令，实现**配置指令融合**，避免因等待配置指令退休而造成的带宽损失。
+    - 通过 **Global Scoreboard (SB0)** 管理全局依赖，协调多个 Lane 的执行。
 
 - **Lane（向量处理单元）**：
-  - 架构主体，由多个独立的 Lane 组成，每个 Lane 包含完整的执行流水线（FE, RF, EX, CM）。
-  - **FE（Frontend）**：从 Scoreboard 获取 uop 及其 mask，支持**speculative zero-mask elision**，跳过全零掩码的无效计算。
-  - **RF（Operand Sync）**：同步来自本地 VRF、跨 Lane 通道及前序流水线的源操作数。
-  - **EX（Execution）**：包含异构 VFU 阵列，如 ALU、MUL、FALU、FMAC，支持时间共享以节省面积。
-  - **CM（Commit）**：将结果写入 VRF 或发送至跨 Lane 通道，并向 Sequencer 发送完成信号。
-  - 每个 Lane 内部设有 **Chaining Record**，记录子字（ELEN × LaneScale）的写状态，支持**细粒度链式执行**。
+
+    - 架构主体，由多个独立的 Lane 组成，每个 Lane 包含完整的执行流水线（FE, RF, EX, CM）。
+    - **FE（Frontend）**：从 Scoreboard 获取 uop 及其 mask，支持**speculative zero-mask elision**，跳过全零掩码的无效计算。
+    - **RF（Operand Sync）**：同步来自本地 VRF、跨 Lane 通道及前序流水线的源操作数。
+    - **EX（Execution）**：包含异构 VFU 阵列，如 ALU、MUL、FALU、FMAC，支持时间共享以节省面积。
+    - **CM（Commit）**：将结果写入 VRF 或发送至跨 Lane 通道，并向 Sequencer 发送完成信号。
+    - 每个 Lane 内部设有 **Chaining Record**，记录子字（ELEN × LaneScale）的写状态，支持**细粒度链式执行**。
 
 - **Permutation Unit（置换单元）**：
-  - 位于中央，是 T1 实现高性能数据重排的核心。
-  - 包含 DLEN 宽度的 Crossbar 和专用 Permutation FUs，支持静态（如 extend, slide）和动态（如 rgather）跨 Lane 数据移动。
-  - 集成 **Shadow Mask (v0)** 寄存器缓存，避免每次 predicated 指令都需跨 Lane 广播 v0，显著降低布线压力。
-  - 通过 **Lane-to-Permutation** 数据通道更新 Shadow Mask，确保一致性。
+
+    - 位于中央，是 T1 实现高性能数据重排的核心。
+    - 包含 DLEN 宽度的 Crossbar 和专用 Permutation FUs，支持静态（如 extend, slide）和动态（如 rgather）跨 Lane 数据移动。
+    - 集成 **Shadow Mask (v0)** 寄存器缓存，避免每次 predicated 指令都需跨 Lane 广播 v0，显著降低布线压力。
+    - 通过 **Lane-to-Permutation** 数据通道更新 Shadow Mask，确保一致性。
 
 - **Memory Subsystem（内存子系统）**：
-  - 包含两个专用 LSU：
-    - **HBLSU（High Bandwidth LSU）**：优化单位步长访问，支持**内存交错（Memory Interleaving）**，允许 Load 和 Store 同时进行，提升带宽利用率。内置 Conflict Region Table (CRT) 管理地址冲突。
-    - **HOLSU（High Outstanding LSU）**：处理常量步长和索引访问，支持 ELEN 宽度的多条 Inflight Transactions，配合 **Memory Delay Slot** 机制隐藏长延迟。
-  - 支持 Segment Load/Store Regroup Unit，对非连续访问进行重新对齐，提高片内带宽效率。
+
+    - 包含两个专用 LSU：
+        - **HBLSU（High Bandwidth LSU）**：优化单位步长访问，支持**内存交错（Memory Interleaving）**，允许 Load 和 Store 同时进行，提升带宽利用率。内置 Conflict Region Table (CRT) 管理地址冲突。
+        - **HOLSU（High Outstanding LSU）**：处理常量步长和索引访问，支持 ELEN 宽度的多条 Inflight Transactions，配合 **Memory Delay Slot** 机制隐藏长延迟。
+    - 支持 Segment Load/Store Regroup Unit，对非连续访问进行重新对齐，提高片内带宽效率。
 
 - **关键创新点视觉呈现**：
-  - **Chaining**：图中用红色虚线框出 EX 到 CM 的路径，强调数据可直接转发，无需等待整条指令完成。
-  - **Memory Interleaving**：HBLSU 中 Load BIU 和 Store BIU 并行工作，体现负载/存储重叠。
-  - **Shadow Mask**：绿色方块明确标注 “Shadow Mask (v0) Flip-Flops”，突出其作为寄存器缓存的角色。
-  - **Lane Decoupling**：多个 Lane 模块并列，表明其物理隔离和独立运行能力。
+
+    - **Chaining**：图中用红色虚线框出 EX 到 CM 的路径，强调数据可直接转发，无需等待整条指令完成。
+    - **Memory Interleaving**：HBLSU 中 Load BIU 和 Store BIU 并行工作，体现负载/存储重叠。
+    - **Shadow Mask**：绿色方块明确标注 “Shadow Mask (v0) Flip-Flops”，突出其作为寄存器缓存的角色。
+    - **Lane Decoupling**：多个 Lane 模块并列，表明其物理隔离和独立运行能力。
 
 - **数据流与控制流**：
-  - 控制流主要由 Sequencer 驱动，通过 SB0 和各 Lane 的 SBn 协调。
-  - 数据流在 Lane 内部自上而下，在 Lane 之间通过 Permutation Unit 和 CrossLane Read/Write Bus 传输。
-  - 关键路径如 Load -> EX -> Store 被显式标出，展示链式执行的可行性。
+
+    - 控制流主要由 Sequencer 驱动，通过 SB0 和各 Lane 的 SBn 协调。
+    - 数据流在 Lane 内部自上而下，在 Lane 之间通过 Permutation Unit 和 CrossLane Read/Write Bus 传输。
+    - 关键路径如 Load -> EX -> Store 被显式标出，展示链式执行的可行性。
 
 - **性能优化技术总结表**：
 
-| 技术名称 | 所属模块 | 核心作用 | 性能收益 |
-|----------|----------|----------|----------|
-| Issue-as-commit | Scalar Core | 解耦标量与向量提交 | 提升标量吞吐，减少 stalls |
-| Configuration Fusion | Sequencer | 缓存并融合 vsetvli | 消除配置指令带宽开销 |
-| Fine-grained Chaining | Lane | 元素级数据转发 | 提升 ILP，减少延迟 |
-| Shadow Mask v0 | Permutation Unit | 缓存 mask 寄存器 | 减少跨 Lane 通信，提升带宽 |
-| Memory Interleaving | HBLSU | Load/Store 并行 | 提升内存带宽利用率 |
-| Memory Delay Slot | HOLSU | 掩盖索引访问延迟 | 提升长延迟操作下的效率 |
+| 技术名称              | 所属模块         | 核心作用           | 性能收益                   |
+| --------------------- | ---------------- | ------------------ | -------------------------- |
+| Issue-as-commit       | Scalar Core      | 解耦标量与向量提交 | 提升标量吞吐，减少 stalls  |
+| Configuration Fusion  | Sequencer        | 缓存并融合 vsetvli | 消除配置指令带宽开销       |
+| Fine-grained Chaining | Lane             | 元素级数据转发     | 提升 ILP，减少延迟         |
+| Shadow Mask v0        | Permutation Unit | 缓存 mask 寄存器   | 减少跨 Lane 通信，提升带宽 |
+| Memory Interleaving   | HBLSU            | Load/Store 并行    | 提升内存带宽利用率         |
+| Memory Delay Slot     | HOLSU            | 掩盖索引访问延迟   | 提升长延迟操作下的效率     |
 
 - **架构优势**：该图清晰展示了 T1 如何通过**硬件层面的精细划分**（Lane）、**智能的数据路由**（Permutation Unit）、**灵活的调度机制**（Chaining, Interleaving）以及**高效的控制解耦**（Scalar-Vector OoO），在保持 RISC-V Vector 规范兼容性的同时，实现了远超传统向量处理器和 GP-GPU 的性能与能效。
 
@@ -120,17 +127,17 @@
 - **Permutation 单元面积**增长最缓慢，几乎保持恒定，说明该模块设计具备良好的可扩展性，不随 VLEN 显著增加。
 - 下表总结关键数据点：
 
-| VLEN    | T1 总面积 (mm²) | Lane 面积 (mm²) | Permutation 面积 (mm²) |
-|---------|------------------|------------------|--------------------------|
-| 1,024   | ~0.7             | ~0.4             | ~0.1                     |
-| 2,048   | ~0.9             | ~0.5             | ~0.1                     |
-| 4,096   | ~1.1             | ~0.6             | ~0.1                     |
-| 8,192   | ~1.5             | ~0.8             | ~0.1                     |
-| 16,384  | ~2.2             | ~1.1             | ~0.1                     |
+| VLEN   | T1 总面积 (mm²) | Lane 面积 (mm²) | Permutation 面积 (mm²) |
+| ------ | --------------- | --------------- | ---------------------- |
+| 1,024  | ~0.7            | ~0.4            | ~0.1                   |
+| 2,048  | ~0.9            | ~0.5            | ~0.1                   |
+| 4,096  | ~1.1            | ~0.6            | ~0.1                   |
+| 8,192  | ~1.5            | ~0.8            | ~0.1                   |
+| 16,384 | ~2.2            | ~1.1            | ~0.1                   |
 
 - 该图验证了论文第 4 节所述的“**线性面积扩展**”特性，尤其凸显 **Permutation 单元**在高 VLEN 下仍能维持低面积开销的设计优势。
 
-### (b) DLEN Figure 4: Linearly Area Scaling of T1 design parameters, evaluated at TSMC N28 SVT technology at $65\%$ utilization. Four cases are examined: (1) when varying VLEN, DLEN is held at 128, $y$ -asix on the left-hand represents the total area of T1, whereas the right-hand $y$ -axis isolates the area of Lane and Permutation; (2) when varying DLEN, the ratio VLEN/DLEN remains 1; (3) when examining LaneScale, both VLEN and DLEN are set to 1024, $y$ -asix on the left-hand represents the total area of T1, whereas the right-hand $y$ -axis isolates the area of Lane; and (4) when assessing ChainingSize, VLEN and DLEN are maintained at 1024.
+### (b) DLEN Figure 4: Linearly Area Scaling of T1 design parameters, evaluated at TSMC N28 SVT technology at $65%$ utilization. Four cases are examined: (1) when varying VLEN, DLEN is held at 128, $y$ -asix on the left-hand represents the total area of T1, whereas the right-hand $y$ -axis isolates the area of Lane and Permutation; (2) when varying DLEN, the ratio VLEN/DLEN remains 1; (3) when examining LaneScale, both VLEN and DLEN are set to 1024, $y$ -asix on the left-hand represents the total area of T1, whereas the right-hand $y$ -axis isolates the area of Lane; and (4) when assessing ChainingSize, VLEN and DLEN are maintained at 1024.
 
 ![15ef027e157bafa427b723cccf13e78d14ad033b83ff8dc9bf6b7b2e6546e8e7.jpg](images/15ef027e157bafa427b723cccf13e78d14ad033b83ff8dc9bf6b7b2e6546e8e7.jpg)
 
@@ -143,7 +150,7 @@
 - 此结果支持论文核心论点：T1 通过创新的微架构（如粗粒度布图规划器、跨通道置换单元等），有效缓解了传统向量处理器在扩展 DLEN 时面临的布线拥塞和面积爆炸问题。
 
 | DLEN | 面积 (相对值) |
-|------|---------------|
+| ---- | ------------- |
 | 128  | ~0.5          |
 | 256  | ~1.5          |
 | 512  | ~3.0          |
@@ -158,14 +165,14 @@
 - 图片标题为 **(c) LaneScale**，属于论文图4的一部分，旨在展示 **T1** 架构在不同 **LaneScale** 参数下的面积变化趋势。
 - 该图表横轴表示 **LaneScale** 值，分别为 1、2、4；纵轴左侧为 **T1 总面积**（单位未标，但根据上下文应为相对值或 mm²），右侧为 **Lane 面积占比**（无量纲比例）。
 - 图中包含两条折线：
-  - **红色圆点线**代表 **T1 总面积**随 LaneScale 变化：从 LaneScale=1 时约6单位下降至 LaneScale=2 时约4.5单位，再降至 LaneScale=4 时约4单位，呈现**递减趋势**。
-  - **蓝色圆点线**代表 **Lane 面积**随 LaneScale 变化：从 LaneScale=1 时约3单位上升至 LaneScale=2 时约4.5单位，再升至 LaneScale=4 时约6单位，呈现**递增趋势**。
+    - **红色圆点线**代表 **T1 总面积**随 LaneScale 变化：从 LaneScale=1 时约6单位下降至 LaneScale=2 时约4.5单位，再降至 LaneScale=4 时约4单位，呈现**递减趋势**。
+    - **蓝色圆点线**代表 **Lane 面积**随 LaneScale 变化：从 LaneScale=1 时约3单位上升至 LaneScale=2 时约4.5单位，再升至 LaneScale=4 时约6单位，呈现**递增趋势**。
 - 两条曲线在 LaneScale=2 处相交，表明此时 **T1 总面积与 Lane 面积数值相等**。
 - 根据正文第4.2.2节及图4说明，当 VLEN 和 DLEN 固定为1024时，增大 LaneScale 会减少总芯片面积，因为多个物理 Lane 被聚合为一个逻辑 Lane，从而**共享控制逻辑和资源**，降低面积开销。
 - 下表总结关键数据点：
 
 | LaneScale | T1 总面积 (左轴) | Lane 面积 (右轴) |
-|-----------|------------------|------------------|
+| --------- | ---------------- | ---------------- |
 | 1         | ~6               | ~3               |
 | 2         | ~4.5             | ~4.5             |
 | 4         | ~4               | ~6               |
@@ -206,12 +213,12 @@
 - **Chaining**：支持向量指令间的细粒度数据前递。V0、V1、V2 三个向量指令可形成“ convoy ”，V1 在 V0 部分结果就绪后即可开始执行，无需等待 V0 完全完成，显著缩短整体延迟。
 - **Memory Delay Slot**：针对高延迟的索引内存访问（VIDX），允许独立的向量计算指令（VEX0）在其执行期间并行运行。此机制将长延迟操作“隐藏”在其他计算背后，提高核心利用率。
 
-| 技术名称             | 核心作用                                       | 关键指令示例                     | 性能收益点                 |
-|----------------------|------------------------------------------------|----------------------------------|----------------------------|
-| Memory Interleaving  | 解耦 Load/Store，允许同时进行                  | VLD, VSW                         | 提升内存通道利用率         |
-| Vector-Scalar OoO    | 标量与向量流水线独立乱序执行                   | s0-s1, v0-v15, v16               | 减少标量因向量阻塞的空闲   |
-| Chaining             | 向量指令间元素级数据前递，重叠执行             | V0 → V1 → V2                     | 缩短指令链总延迟           |
-| Memory Delay Slot    | 并行执行索引内存访问与独立计算                 | VIDX0, VEX0                      | 隐藏索引访问的高延迟       |
+| 技术名称            | 核心作用                           | 关键指令示例       | 性能收益点               |
+| ------------------- | ---------------------------------- | ------------------ | ------------------------ |
+| Memory Interleaving | 解耦 Load/Store，允许同时进行      | VLD, VSW           | 提升内存通道利用率       |
+| Vector-Scalar OoO   | 标量与向量流水线独立乱序执行       | s0-s1, v0-v15, v16 | 减少标量因向量阻塞的空闲 |
+| Chaining            | 向量指令间元素级数据前递，重叠执行 | V0 → V1 → V2       | 缩短指令链总延迟         |
+| Memory Delay Slot   | 并行执行索引内存访问与独立计算     | VIDX0, VEX0        | 隐藏索引访问的高延迟     |
 
 - 图中所有技术均围绕 **“减少停顿”** 和 **“增加并发”** 设计，是 T1 实现高 ILP 的核心微架构创新。
 - 红色虚线框表示潜在的依赖或同步点，黑色箭头表示指令执行流，灰色箭头表示数据前递路径。
@@ -230,12 +237,12 @@
 - 版图中可见清晰的金属布线层和标准单元排列，体现高度集成的物理设计。
 - 各模块间通过总线或互连网络连接，确保数据高效传输。
 
-| 模块名称         | 位置       | 功能描述                         |
-|------------------|------------|----------------------------------|
-| **T1**           | 中央偏右     | 高性能 RISC-V 向量处理器核心      |
-| **Application Core** | 左下角     | 控制与调度主核                   |
-| **SRAM**         | 左上、右上   | 高速缓存，支持向量运算数据吞吐    |
-| **SONOS Flash**  | 底部左右两侧 | 非易失存储，保存AI模型权重        |
+| 模块名称             | 位置         | 功能描述                       |
+| -------------------- | ------------ | ------------------------------ |
+| **T1**               | 中央偏右     | 高性能 RISC-V 向量处理器核心   |
+| **Application Core** | 左下角       | 控制与调度主核                 |
+| **SRAM**             | 左上、右上   | 高速缓存，支持向量运算数据吞吐 |
+| **SONOS Flash**      | 底部左右两侧 | 非易失存储，保存AI模型权重     |
 
 - 从版图密度看，**T1** 区域布线密集，反映其复杂微架构和高并行度设计。
 - **SRAM** 与 **T1** 紧邻布局，优化了内存访问延迟，提升整体能效。
@@ -257,12 +264,12 @@
 - 该版图设计紧凑，模块化程度高，符合 **T1** 架构在面积和功耗上的优化目标，特别是在 **28nm SONOS** 工艺下的实现。
 - 根据论文描述，此芯片配置为 **VLEN = 4096, DLEN = 512, ChainingSize = 4, LaneScale = 2**，旨在平衡性能与面积，适用于边缘AI推理任务。
 
-| 模块 | 功能 | 在版图中的位置 | 备注 |
-|------|------|----------------|------|
-| **Scalar Core** | 控制与标量运算 | 顶部 | 负责整体调度和标量指令执行 |
-| **Permutation Unit** | 数据重排与跨lane通信 | 中部 | 核心模块，支持高效数据移动 |
-| **Lane 0-7** | 并行向量计算 | 环绕中部 | 每个 Lane 独立处理向量指令 |
-| **LSU** | 内存访问 | 底部 | 支持高带宽加载和存储操作 |
+| 模块                 | 功能                 | 在版图中的位置 | 备注                       |
+| -------------------- | -------------------- | -------------- | -------------------------- |
+| **Scalar Core**      | 控制与标量运算       | 顶部           | 负责整体调度和标量指令执行 |
+| **Permutation Unit** | 数据重排与跨lane通信 | 中部           | 核心模块，支持高效数据移动 |
+| **Lane 0-7**         | 并行向量计算         | 环绕中部       | 每个 Lane 独立处理向量指令 |
+| **LSU**              | 内存访问             | 底部           | 支持高带宽加载和存储操作   |
 
 - 此版图直观展现了 **T1** 架构如何将逻辑上的 lane-based 设计转化为物理上的模块化布局，以实现高性能和高能效。
 
@@ -283,15 +290,15 @@
 - 整体布局紧凑，各模块紧密相邻，旨在最小化信号传输延迟，优化性能。这种设计与论文中提到的“粗粒度布线求解器”相呼应，以减少跨模块通信的延迟。
 - 此图直观地验证了论文第 4.2.4 节中对 **Lane** 结构的描述，即它由前端（FE）、操作数同步（RF）、执行单元（EX）、提交（CM）以及银行化的 **VRF** 组成，并通过内部交叉开关和记分板进行协调。
 
-| 模块名称 | 颜色 | 功能描述 |
-| :--- | :--- | :--- |
-| **VRF** | 浅蓝色 | 向量寄存器文件，存储大量向量数据。 |
+| 模块名称     | 颜色   | 功能描述                                |
+| :----------- | :----- | :-------------------------------------- |
+| **VRF**      | 浅蓝色 | 向量寄存器文件，存储大量向量数据。      |
 | **VFU XBar** | 深灰色 | 连接各个 VFU 的交叉开关，负责数据路由。 |
-| **Mul** | 紫色 | 执行乘法运算的功能单元。 |
-| **Float** | 红色 | 执行浮点运算的功能单元。 |
-| **ALU** | 绿色 | 执行整数算术和逻辑运算的功能单元。 |
-| **Div** | 黄色 | 执行除法运算的功能单元。 |
-| **SB0-SB3** | 深蓝色 | 记分板，用于管理指令依赖和乱序执行。 |
+| **Mul**      | 紫色   | 执行乘法运算的功能单元。                |
+| **Float**    | 红色   | 执行浮点运算的功能单元。                |
+| **ALU**      | 绿色   | 执行整数算术和逻辑运算的功能单元。      |
+| **Div**      | 黄色   | 执行除法运算的功能单元。                |
+| **SB0-SB3**  | 深蓝色 | 记分板，用于管理指令依赖和乱序执行。    |
 
 - 该物理实现证明了 T1 架构在芯片层面的可行性，其模块化设计允许根据具体应用需求（如加密或 AI 推理）灵活配置 **Lane** 的数量和内部功能单元的组合。
 
@@ -308,12 +315,12 @@
 - 该实现基于 **TSMC TN28HPC** 工艺，配置为 **4-lane T1**（VLEN = 4096, DLEN = 128, ChainingSize = 2），专为 **NTT** 加速设计，用于 **零知识证明** 应用。
 - 从版图密度看，**Lanes** 占据最大面积（约 70.28%），其次是 **Pipeline**（43.47%），**VRF**（21.26%），**VFU**（22.68%），符合其以数据并行为主的架构特点。
 
-| 模块 | 面积占比 | 功能 |
-|------|----------|------|
-| Lanes | 70.28% | 执行向量运算，支持并行处理 |
-| Pipeline | 43.47% | 处理指令流水线，管理数据流 |
-| VRF | 21.26% | 存储向量寄存器，支持大容量数据 |
-| VFU | 22.68% | 执行算术逻辑运算，包括整数和浮点 |
+| 模块     | 面积占比 | 功能                             |
+| -------- | -------- | -------------------------------- |
+| Lanes    | 70.28%   | 执行向量运算，支持并行处理       |
+| Pipeline | 43.47%   | 处理指令流水线，管理数据流       |
+| VRF      | 21.26%   | 存储向量寄存器，支持大容量数据   |
+| VFU      | 22.68%   | 执行算术逻辑运算，包括整数和浮点 |
 
 - 此版图证实了 T1 在实际芯片中的可实现性，并展示了其模块化、可扩展的设计理念，适用于高性能密码学加速场景。
 
@@ -331,7 +338,7 @@
 - 数据表明，T1 的高性能源于其高效的 DLEN-sized permutation 处理能力和以寄存器为中心的计算模型，避免了 GPU 对内存子系统的重度依赖。
 
 | 工作负载 | T1 (μs) | GA102 (μs) | GB202 (μs) |
-|----------|---------|------------|------------|
+| -------- | ------- | ---------- | ---------- |
 | NTT512   | ~5      | ~10        | ~7         |
 | NTT1024  | ~7      | ~15        | ~10        |
 | NTT2048  | ~10     | ~20        | ~15        |
@@ -349,26 +356,26 @@
 - 横轴为工作负载类型：**SGEMM**、**QUANT**、**SAXPY**、**PACK**。
 - 纵轴为相对性能倍数，数值越高表示性能越强。
 - 图中包含四组柱状图，分别代表不同配置的 T1：
-  - **D256V1K**: DLEN=256, VLEN=1024
-  - **D1KV4K**: DLEN=1024, VLEN=4096
-  - **D2561K-DRAM**: DLEN=256, VLEN=1024, 使用 DDR4-3200 内存
-  - **D1KV4K-DRAM**: DLEN=1024, VLEN=4096, 使用 DDR4-3200 内存
+    - **D256V1K**: DLEN=256, VLEN=1024
+    - **D1KV4K**: DLEN=1024, VLEN=4096
+    - **D2561K-DRAM**: DLEN=256, VLEN=1024, 使用 DDR4-3200 内存
+    - **D1KV4K-DRAM**: DLEN=1024, VLEN=4096, 使用 DDR4-3200 内存
 - **KP920** 的性能在所有工作负载上均被归一化为 1.0，作为比较基准。
 - 性能对比结果如下表所示：
 
 | Workload | D256V1K | D1KV4K | D2561K-DRAM | D1KV4K-DRAM | KP920 (Baseline) |
-|----------|---------|--------|-------------|-------------|------------------|
+| -------- | ------- | ------ | ----------- | ----------- | ---------------- |
 | SGEMM    | ~0.5x   | ~2.0x  | ~0.5x       | ~2.0x       | 1.0x             |
 | QUANT    | ~1.5x   | ~2.5x  | ~1.0x       | ~2.0x       | 1.0x             |
 | SAXPY    | ~0.5x   | ~2.0x  | ~0.5x       | ~2.0x       | 1.0x             |
 | PACK     | ~1.0x   | ~4.5x  | ~1.0x       | ~4.5x       | 1.0x             |
 
 - **关键发现**：
-  - 在 **PACK** 工作负载上，**D1KV4K** 配置的 T1 性能达到 KP920 的 **4.5 倍**，是所有组合中性能提升最显著的。
-  - 在 **QUANT** 工作负载上，**D1KV4K** 配置的 T1 性能约为 KP920 的 **2.5 倍**。
-  - **D1KV4K** 配置在所有工作负载上均优于 **D256V1K**，表明增大 DLEN 和 VLEN 可显著提升性能。
-  - 使用 **DDR4-3200** 内存的配置（D2561K-DRAM 和 D1KV4K-DRAM）性能略低于使用本地内存的配置，但在 **PACK** 上仍保持 **4.5 倍** 的优势。
-  - **SGEMM** 和 **SAXPY** 工作负载对内存带宽敏感，因此在 DRAM 配置下性能有所下降，但仍优于或持平于 KP920。
+    - 在 **PACK** 工作负载上，**D1KV4K** 配置的 T1 性能达到 KP920 的 **4.5 倍**，是所有组合中性能提升最显著的。
+    - 在 **QUANT** 工作负载上，**D1KV4K** 配置的 T1 性能约为 KP920 的 **2.5 倍**。
+    - **D1KV4K** 配置在所有工作负载上均优于 **D256V1K**，表明增大 DLEN 和 VLEN 可显著提升性能。
+    - 使用 **DDR4-3200** 内存的配置（D2561K-DRAM 和 D1KV4K-DRAM）性能略低于使用本地内存的配置，但在 **PACK** 上仍保持 **4.5 倍** 的优势。
+    - **SGEMM** 和 **SAXPY** 工作负载对内存带宽敏感，因此在 DRAM 配置下性能有所下降，但仍优于或持平于 KP920。
 
 ### (b) T1 Memory Scalability
 
@@ -378,19 +385,19 @@
 - 图表横轴包含两个工作负载：**QUANT** 和 **QUANT-DRAM**。前者代表理想内存环境（如本地SRAM），后者代表使用DDR4-3200主存的场景，用于对比T1在真实内存系统中的性能衰减。
 - 纵轴为归一化性能值，基准为 **HiSilicon KP920**，即所有柱状图高度均相对于KP920的性能进行标准化，数值大于1表示T1优于KP920。
 - 图例中包含五种T1配置和一种基准：
-  - **D128V512**：DLEN=128, VLEN=512
-  - **D256V1K**：DLEN=256, VLEN=1024
-  - **D512V2K**：DLEN=512, VLEN=2048
-  - **D1KV4K**：DLEN=1024, VLEN=4096
-  - **KP920**：HiSilicon TaiShan V120 (KP920) ARM SVE处理器，作为对比基准
+    - **D128V512**：DLEN=128, VLEN=512
+    - **D256V1K**：DLEN=256, VLEN=1024
+    - **D512V2K**：DLEN=512, VLEN=2048
+    - **D1KV4K**：DLEN=1024, VLEN=4096
+    - **KP920**：HiSilicon TaiShan V120 (KP920) ARM SVE处理器，作为对比基准
 
-| 配置        | QUANT 性能 | QUANT-DRAM 性能 |
-|-------------|------------|------------------|
-| D128V512    | ~0.4       | ~0.3             |
-| D256V1K     | ~0.7       | ~0.6             |
-| D512V2K     | ~1.1       | ~1.0             |
-| D1KV4K      | ~1.5       | **~1.54**        |
-| KP920       | 1.0        | 1.0              |
+| 配置     | QUANT 性能 | QUANT-DRAM 性能 |
+| -------- | ---------- | --------------- |
+| D128V512 | ~0.4       | ~0.3            |
+| D256V1K  | ~0.7       | ~0.6            |
+| D512V2K  | ~1.1       | ~1.0            |
+| D1KV4K   | ~1.5       | **~1.54**       |
+| KP920    | 1.0        | 1.0             |
 
 - 在 **QUANT** 工作负载下，随着DLEN和VLEN增大，T1性能持续提升，**D1KV4K** 达到 **1.5x** KP920性能。
 - 在 **QUANT-DRAM** 场景下，T1仍保持强劲表现，**D1KV4K** 实现 **1.54x** KP920性能，表明其即使在无本地缓存、仅依赖DDR4的情况下，仍能通过大VLEN和动态VL设置（strip-mining）有效掩盖内存延迟。
@@ -412,14 +419,13 @@
 - 性能数据总结如下表：
 
 | Benchmark | X60 (Baseline) | D128V512 | D256V1K | D512V2K | D1KV4K |
-|-----------|----------------|----------|----------|----------|----------|
-| SGEMM     | 1.0            | ~1.5x    | ~2.5x    | ~4.0x    | ~5.5x    |
-| QUANT     | 1.0            | ~1.8x    | ~3.0x    | ~5.0x    | ~6.5x    |
-| SAXPY     | 1.0            | ~1.2x    | ~2.0x    | ~3.5x    | ~5.0x    |
-| PACK      | 1.0            | ~1.0x    | ~2.0x    | ~4.0x    | ~6.0x    |
+| --------- | -------------- | -------- | ------- | ------- | ------ |
+| SGEMM     | 1.0            | ~1.5x    | ~2.5x   | ~4.0x   | ~5.5x  |
+| QUANT     | 1.0            | ~1.8x    | ~3.0x   | ~5.0x   | ~6.5x  |
+| SAXPY     | 1.0            | ~1.2x    | ~2.0x   | ~3.5x   | ~5.0x  |
+| PACK      | 1.0            | ~1.0x    | ~2.0x   | ~4.0x   | ~6.0x  |
 
 - 从图表和数据可以看出，**T1 在所有四个 HPC 工作负载上均显著优于 X60**。
 - 性能优势随着 T1 的 DLEN 和 VLEN 增加而扩大。例如，在 **PACK** 工作负载上，**D1KV4K** 配置的 T1 达到了 **约 6 倍于 X60 的性能**。
 - 论文正文指出，在相同的 256-bit 数据路径下，T1 的性能比 X60 高出 **2.02x 至 6.36x**；当 T1 的数据路径扩展到 1024 位时，这一优势进一步放大至 **约 8.05x**，这与图表中 D1KV4K 配置在多个工作负载上接近或超过 6x 的表现一致。
 - 此结果凸显了 T1 微架构设计的有效性，特别是在处理需要高数据并行度（DLP）和指令级并行度（ILP）的 HPC 应用时，即使在内存带宽受限的纯 DDR 模式下，也能实现远超现有 RVV 处理器的性能。
-

@@ -1,0 +1,1864 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/limoncello-prefetchers-for-scale/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Limoncello: Prefetchers for Scale 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#limoncello-prefetchers-for-scale" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Limoncello: Prefetchers for Scale 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-average-load-to-use-latency-per-dram-request-reduces-by-15-when-hardware-prefetchers-are-disabled-data-is-gathered-using-the-intel-mlc-tool-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1. Average load-to-use latency per DRAM request reduces by 15% when hardware prefetchers are disabled. Data is gathered using the Intel MLC tool [10].
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-memory-bandwidth-per-core-has-plateaued-over-several-generations-of-server-cpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. Memory bandwidth per core has plateaued over several generations of server CPUs.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-average-memory-bandwidth-usage-of-fleet-workloads-has-increased-over-the-last-4-years-each-point-in-the-graph-shows-memory-bandwidth-usage-per-compute-unit-averaged-across-all-workloads-in-the-fleet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. Average memory bandwidth usage of fleet workloads has increased over the last 4 years. Each point in the graph shows memory bandwidth usage per compute unit averaged across all workloads in the fleet.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-memory-bandwidth-can-saturate-with-just-50-cpu-utilization-in-a-bandwidth-bound-platform-sizes-of-the-markers-are-in-proportion-to-the-number-of-platform-servers-in-the-cpu-usage-bucket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. Memory bandwidth can saturate with just 50% CPU utilization in a bandwidth-bound platform. Sizes of the markers are in proportion to the number of platform servers in the CPU usage bucket.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-disabling-hardware-prefetchers-reduces-both-average-and-tail-memory-bandwidth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1. Disabling hardware prefetchers reduces both average and tail memory bandwidth.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-memory-bandwidth-usage-on-spec-with-and-without-hardware-prefetching-over-3-generations-of-a-server-platform-we-see-a-30-40-increase-in-memory-bandwidth-usage-when-hardware-prefetching-is-enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. Memory bandwidth usage on SPEC with and without hardware prefetching over 3 generations of a server platform. We see a 30-40% increase in memory bandwidth usage when hardware prefetching is enabled.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-limoncello-disables-hardware-prefetchers-when-memory-bandwidth-utilization-is-high-to-optimize-for-memory-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. Limoncello disables hardware prefetchers when memory bandwidth utilization is high to optimize for memory latency.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-memory-bandwidth-variability-in-a-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. Memory bandwidth variability in a machine.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-state-diagram-of-hard-limoncello-controller-for-modulating-hardware-prefetchers-green-lighter-indicates-hardware-prefetchers-are-off-blue-darker-that-they-are-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8. State diagram of Hard Limoncello controller for modulating hardware prefetchers. Green (lighter) indicates hardware prefetchers are off, blue (darker) that they are on.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-hardware-prefetcher-state-over-time-the-green-lines-in-the-figure-show-when-hardware-prefetchers-are-disabled-when-machine-load-exceeds-an-upper-threshold-hardware-prefetchers-are-disabled-and-remain-disabled-until-machine-load-returns-below-a-lower-threshold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9. Hardware prefetcher state over time. The green lines in the figure show when hardware prefetchers are disabled. When machine load exceeds an upper threshold, hardware prefetchers are disabled and remain disabled until machine load returns below a lower threshold.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-application-throughput-based-on-different-hard-limoncello-configurations-indicates-the-lower-and-upper-memory-bandwidth-thresholds-in-the-configuration-thresholds-are-expressed-as-a-percentage-of-memory-bandwidth-saturation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-change-in-cpu-cycles-from-hard-limoncello-functions-that-regress-in-performance-when-hardware-prefetchers-are-disabled-show-an-increase-in-cpu-cycles-green-and-an-increase-in-llc-mpki-blue-data-center-tax-functions-in-particular-show-performance-regressions-from-disabling-hardware-prefetchers-while-other-functions-tend-to-improve-in-performance-and-decrease-in-cycles-and-mpki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-aggregated-change-in-cpu-cycles-from-hard-limoncello-data-center-tax-functions-green-increased-in-cpu-cycles-under-hard-limoncello-in-contrast-overall-nondata-center-tax-functions-blue-decreased-in-cycles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12. Aggregated change in CPU cycles (%) from Hard Limoncello. Data center tax functions (green) increased in CPU cycles under Hard Limoncello. In contrast, overall nondata center tax functions (blue) decreased in cycles.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-software-prefetch-instructions-act-on-addresses-at-a-distance-and-can-prefetch-different-degrees-of-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13. Software prefetch instructions act on addresses at a distance and can prefetch different degrees of data.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-14-memcpy-argument-size-distribution-the-chart-shows-the-probability-density-function-pdf-of-the-number-of-times-each-copy-size-appears-in-the-profiling-data-most-copy-sizes-are-small" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 14. memcpy argument size distribution. The chart shows the probability density function (PDF) of the number of times each copy size appears in the profiling data. Most copy sizes are small.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8cjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#b-microbenchmark-exercising-different-prefetch-degrees-prefetching-is-fixed-at-a-distance-of-512-bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (b) Microbenchmark exercising different prefetch degrees. Prefetching is fixed at a distance of 512 bytes.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-15-soft-limoncello-memcpy-microbenchmarking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 15. Soft Limoncello memcpy microbenchmarking.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-16-limoncello-application-throughput-gain-application-throughput-increases-by-6-13-increase-dependent-on-the-cpu-utilization-level-of-the-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 16. Limoncello application throughput gain. Application throughput increases by 6-13% increase, dependent on the CPU utilization level of the machines.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-17-limoncello-memory-latency-reduction-memory-latency-reduces-by-13-in-the-median-and-10-in-the-p99" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 17. Limoncello memory latency reduction. Memory latency reduces by 13% in the median and 10% in the P99.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-18-limoncello-socket-bandwidth-usage-reduction-average-socket-bandwidth-reduces-by-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 18. Limoncello socket bandwidth usage reduction. Average socket bandwidth reduces by 15%.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-19-increase-in-cpu-utilization-due-to-limoncello-before-limoncello-memory-bandwidth-saturation-was-reached-in-the-40-50-cpu-utilization-band-figure-4-but-with-limoncello-memory-bandwidth-saturation-is-not-met-until-the-70-80-band-sizes-of-the-markers-are-in-proportion-to-the-fraction-of-platform-servers-in-the-cpu-usage-bucket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 19. Increase in CPU utilization due to Limoncello. Before Limoncello, memory bandwidth saturation was reached in the 40-50% CPU utilization band (Figure 4), but with Limoncello memory bandwidth saturation is not met until the 70-80% band. Sizes of the markers are in proportion to the fraction of platform servers in the CPU usage bucket.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-20-software-prefetcher-impact-in-limoncello-the-y-axis-shows-the-portion-of-fleetwide-cycles-spent-in-the-respective-function-categories-the-center-bar-green-shows-hard-limoncello-deployed-without-any-software-prefetchers-adding-software-prefetchers-into-limoncello-lowered-cpu-cycles-spent-in-targeted-functions-by-2-yellow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 20. Software prefetcher impact in Limoncello. The y-axis shows the portion of fleetwide cycles spent in the respective function categories. The center bar (green) shows Hard Limoncello deployed without any software prefetchers. Adding software prefetchers into Limoncello lowered CPU cycles spent in targeted functions by 2% (yellow).
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="limoncello-prefetchers-for-scale">Limoncello: Prefetchers for Scale 图表详解<a class="headerlink" href="#limoncello-prefetchers-for-scale" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-average-load-to-use-latency-per-dram-request-reduces-by-15-when-hardware-prefetchers-are-disabled-data-is-gathered-using-the-intel-mlc-tool-10">Figure 1. Average load-to-use latency per DRAM request reduces by 15% when hardware prefetchers are disabled. Data is gathered using the Intel MLC tool [10].<a class="headerlink" href="#figure-1-average-load-to-use-latency-per-dram-request-reduces-by-15-when-hardware-prefetchers-are-disabled-data-is-gathered-using-the-intel-mlc-tool-10" title="Permanent link">&para;</a></h3>
+<p><img alt="70c1e6e5d0f7a04b2ae909bf4643da3883694f8e6a4db837be8d58b4003dc590.jpg" src="../images/70c1e6e5d0f7a04b2ae909bf4643da3883694f8e6a4db837be8d58b4003dc590.jpg" /></p>
+<ul>
+<li>图表展示了在不同 <strong>Memory Bandwidth Utilization (%)</strong> 水平下，<strong>Load-to-Use Latency (ns)</strong> 的变化趋势，对比了 <strong>HW prefetcher on</strong>（蓝色线）与 <strong>HW prefetcher off</strong>（绿色线）两种状态。</li>
+<li>随着内存带宽利用率从 0% 上升至 100%，两条曲线均呈上升趋势，表明系统负载越高，内存访问延迟越大。</li>
+<li>在低带宽利用率区间（&lt;40%），两条曲线几乎重合，说明此时硬件预取器对延迟影响微乎其微。</li>
+<li>当带宽利用率超过 60% 后，<strong>HW prefetcher on</strong> 曲线开始显著高于 <strong>HW prefetcher off</strong> 曲线，尤其在 80%–100% 区间，差距急剧扩大，最高时差接近 50 ns。</li>
+<li>根据图注，<strong>关闭硬件预取器可使平均 DRAM 请求的 Load-to-Use Latency 降低 15%</strong>，这一收益在高负载场景尤为明显。</li>
+<li>数据采集工具为 <strong>Intel MLC tool</strong>，确保测量结果具备硬件级精度和代表性。</li>
+<li>关键结论：在资源受限、高利用率的数据中心环境中，<strong>硬件预取器反而加剧内存延迟</strong>，因其引入额外的内存请求流量，导致排队延迟增加和带宽争用。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Memory Bandwidth Utilization (%)</th>
+<th>HW Prefetcher On (ns)</th>
+<th>HW Prefetcher Off (ns)</th>
+<th>Latency Reduction (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>~120</td>
+<td>~120</td>
+<td>0</td>
+</tr>
+<tr>
+<td>50</td>
+<td>~170</td>
+<td>~160</td>
+<td>~6</td>
+</tr>
+<tr>
+<td>80</td>
+<td>~200</td>
+<td>~180</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>90</td>
+<td>~300</td>
+<td>~260</td>
+<td>~13</td>
+</tr>
+<tr>
+<td>100</td>
+<td>~390</td>
+<td>~340</td>
+<td><strong>~15</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图是论文核心动机的可视化支撑：传统硬件预取设计未考虑数据中心高并发、高带宽压力场景，导致“越预取，越慢”的反直觉现象。</li>
+</ul>
+<h3 id="figure-2-memory-bandwidth-per-core-has-plateaued-over-several-generations-of-server-cpus">Figure 2. Memory bandwidth per core has plateaued over several generations of server CPUs.<a class="headerlink" href="#figure-2-memory-bandwidth-per-core-has-plateaued-over-several-generations-of-server-cpus" title="Permanent link">&para;</a></h3>
+<p><img alt="310d236cef9efbbac6bf505a4f4f659ffa113952e47886aa28a943d27c10bfc0.jpg" src="../images/310d236cef9efbbac6bf505a4f4f659ffa113952e47886aa28a943d27c10bfc0.jpg" /></p>
+<ul>
+<li>图表展示了从2010年至2022年期间，服务器CPU代际演进中内存带宽（membw）与<strong>每核心内存带宽</strong>（membw per core）的增长趋势。</li>
+<li><strong>蓝色曲线</strong>代表总内存带宽（membw），呈现持续上升趋势，尤其在2014年后增长加速，至2022年达到约12倍增长。</li>
+<li><strong>绿色曲线</strong>代表每核心内存带宽（membw per core），在2010至2014年间略有波动，之后趋于平稳，基本维持在1倍左右水平，表明<strong>每核心可用带宽已进入平台期</strong>。</li>
+<li>该图直观印证了论文第2.1节所述：尽管服务器核心数持续增加，但受物理引脚数量限制，<strong>每核心内存带宽并未同步提升</strong>，成为系统性能瓶颈。</li>
+<li>数据对比显示，总带宽增长主要源于多核集成，而非单核带宽提升，凸显数据中心在高并发场景下面临的<strong>内存带宽资源稀缺性</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>年份</th>
+<th>总内存带宽增长 (membw)</th>
+<th>每核心内存带宽增长 (membw per core)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2010</td>
+<td>~1x</td>
+<td>~1x</td>
+</tr>
+<tr>
+<td>2012</td>
+<td>~1.5x</td>
+<td>~1x</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>~2x</td>
+<td>~0.8x</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>~5x</td>
+<td>~1x</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>~7x</td>
+<td>~1x</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>~8x</td>
+<td>~1x</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>~12x</td>
+<td>~1x</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此趋势为Limoncello系统设计提供关键背景：在<strong>带宽受限环境</strong>下，传统硬件预取器因加剧带宽竞争而降低效率，需转向更精细的软硬件协同预取策略。</li>
+</ul>
+<h3 id="figure-3-average-memory-bandwidth-usage-of-fleet-workloads-has-increased-over-the-last-4-years-each-point-in-the-graph-shows-memory-bandwidth-usage-per-compute-unit-averaged-across-all-workloads-in-the-fleet">Figure 3. Average memory bandwidth usage of fleet workloads has increased over the last 4 years. Each point in the graph shows memory bandwidth usage per compute unit averaged across all workloads in the fleet.<a class="headerlink" href="#figure-3-average-memory-bandwidth-usage-of-fleet-workloads-has-increased-over-the-last-4-years-each-point-in-the-graph-shows-memory-bandwidth-usage-per-compute-unit-averaged-across-all-workloads-in-the-fleet" title="Permanent link">&para;</a></h3>
+<p><img alt="abce43ffcaf54897322be4a91be7fe0a07d7ed1c1127e86727980fd925841c5e.jpg" src="../images/abce43ffcaf54897322be4a91be7fe0a07d7ed1c1127e86727980fd925841c5e.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 3</strong>，展示的是 Google 数据中心集群（fleet）中工作负载的平均内存带宽使用情况，时间跨度为过去四年。</li>
+<li>纵轴单位为 <strong>MB/s per compute unit</strong>，横轴为年份，从 2020 年至 2023 年。</li>
+<li>数据点以绿色圆点标记，连接成一条上升趋势线，表明内存带宽使用量呈持续增长态势。</li>
+<li>具体数值如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>年份</th>
+<th>内存带宽 (MB/s per compute unit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2020</td>
+<td>~520</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>~610</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>~670</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>~680</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>从 2020 到 2023 年，平均内存带宽使用量增长约 <strong>1.4 倍</strong>，年均增长率约为 <strong>10%</strong>。</li>
+<li>图表说明指出，该数据是按“compute unit”标准化后的结果，该单位抽象了物理 CPU 核心，代表跨平台一致的计算能力。</li>
+<li>此趋势反映了工作负载日益数据密集化，对内存带宽的需求持续攀升，与论文中“memory bandwidth is a scarce resource”的核心论点相呼应。</li>
+</ul>
+<h3 id="figure-4-memory-bandwidth-can-saturate-with-just-50-cpu-utilization-in-a-bandwidth-bound-platform-sizes-of-the-markers-are-in-proportion-to-the-number-of-platform-servers-in-the-cpu-usage-bucket">Figure 4. Memory bandwidth can saturate with just 50% CPU utilization in a bandwidth-bound platform. Sizes of the markers are in proportion to the number of platform servers in the CPU usage bucket.<a class="headerlink" href="#figure-4-memory-bandwidth-can-saturate-with-just-50-cpu-utilization-in-a-bandwidth-bound-platform-sizes-of-the-markers-are-in-proportion-to-the-number-of-platform-servers-in-the-cpu-usage-bucket" title="Permanent link">&para;</a></h3>
+<p><img alt="a7cc1f0e88e45f46c4c3b66c25de5db2f94e0cab72d6248a84a3db0e2d293c57.jpg" src="../images/a7cc1f0e88e45f46c4c3b66c25de5db2f94e0cab72d6248a84a3db0e2d293c57.jpg" /></p>
+<ul>
+<li>图表展示了两个服务器平台（platform 1 和 platform 2）在不同 CPU 利用率区间下的 <strong>内存带宽使用率</strong> 变化趋势，揭示了数据中心中内存带宽瓶颈对 CPU 利用率的制约。</li>
+<li><strong>横轴</strong>为 CPU 使用率区间（CPU Usage Bucket %），从 0-10% 到 100-110%，每个区间代表一个负载段；<strong>纵轴</strong>为平均内存带宽使用率百分比（Memory Bandwidth Usage %）。</li>
+<li>两条曲线分别对应两个平台：绿色圆点线代表 platform 1，绿色方块线代表 platform 2。两者趋势相似，均在 CPU 利用率约 50% 时达到内存带宽饱和点。</li>
+<li>图中有一条水平蓝色虚线标注 <strong>“memory bandwidth saturation”</strong>，表示平台内存带宽容量上限。当内存带宽使用率达到该线时，系统性能将急剧下降。</li>
+<li>在 CPU 利用率低于 50% 时，内存带宽使用率随 CPU 利用率上升而快速增加；超过 50% 后，曲线趋于平缓甚至略有下降，表明系统已受内存带宽限制，无法进一步提升吞吐。</li>
+<li>图中还有一条垂直黄色虚线标记 <strong>“target CPU usage”</strong>，位于 70-80% 区间，这是 Google 数据中心期望的最优 CPU 利用率目标。然而，此时内存带宽早已饱和，导致实际利用率无法达到目标。</li>
+<li>图中数据点大小与对应 CPU 使用率区间的服务器数量成正比，说明高利用率区间（如 60-70%）的服务器基数较大，但受限于内存带宽，其性能潜力未被完全释放。</li>
+<li>关键结论：在带宽受限的平台上，<strong>内存带宽可能在 CPU 利用率仅达 50% 时即已饱和</strong>，从而阻止服务器达到理想的 70-80% 利用率目标，造成大量 CPU 资源闲置。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>CPU Usage Bucket (%)</th>
+<th>Platform 1 Memory BW Usage (%)</th>
+<th>Platform 2 Memory BW Usage (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-10</td>
+<td>~5</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>10-20</td>
+<td>~35</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>20-30</td>
+<td>~55</td>
+<td>~45</td>
+</tr>
+<tr>
+<td>30-40</td>
+<td>~65</td>
+<td>~55</td>
+</tr>
+<tr>
+<td>40-50</td>
+<td>~75</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>50-60</td>
+<td>~80</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>60-70</td>
+<td>~80</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>70-80</td>
+<td>~75</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>80-90</td>
+<td>~60</td>
+<td>~55</td>
+</tr>
+<tr>
+<td>90-100</td>
+<td>~35</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>100-110</td>
+<td>~20</td>
+<td>~20</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图是 Limoncello 系统设计的核心动机之一：传统硬件预取器在高带宽压力下加剧拥堵，而 Limoncello 通过动态关闭硬件预取并插入软件预取，有效降低内存带宽占用，使系统能在更高 CPU 利用率下维持性能，突破“内存带宽墙”。</li>
+</ul>
+<h3 id="table-1-disabling-hardware-prefetchers-reduces-both-average-and-tail-memory-bandwidth">Table 1. Disabling hardware prefetchers reduces both average and tail memory bandwidth.<a class="headerlink" href="#table-1-disabling-hardware-prefetchers-reduces-both-average-and-tail-memory-bandwidth" title="Permanent link">&para;</a></h3>
+<p><img alt="3ded760aa91cf2009e7fd09df2699c7def831a9007b35a6b91944e30c0fcff59.jpg" src="../images/3ded760aa91cf2009e7fd09df2699c7def831a9007b35a6b91944e30c0fcff59.jpg" /></p>
+<ul>
+<li><strong>Table 1</strong> 展示了在 Google 数据中心集群中禁用硬件预取器（hardware prefetchers）对内存带宽的削减效果，数据按平台（Platform 1 和 Platform 2）和统计维度（Average, P99, Peak）分类。</li>
+<li>禁用硬件预取器显著降低了平均内存带宽使用量：<strong>Platform 1 下降 15.7%</strong>，<strong>Platform 2 下降 11.2%</strong>，表明硬件预取器是内存带宽消耗的主要来源。</li>
+<li>在尾部延迟（P99）场景下，<strong>Platform 1 的内存带宽减少 10.4%</strong>，而 <strong>Platform 2 仅减少 2.8%</strong>，说明不同平台对预取器的依赖程度存在差异。</li>
+<li>峰值（Peak）内存带宽方面，<strong>Platform 1 减少 5.6%</strong>，<strong>Platform 2 减少 5.5%</strong>，显示即使在极端负载下，禁用预取器仍能有效释放带宽资源。</li>
+<li>综合来看，该表支持论文核心观点：在高利用率系统中，硬件预取器会加剧内存带宽压力，禁用它们可优化系统性能。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Memory Bandwidth Reduction</th>
+<th>Platform 1</th>
+<th>Platform 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Average</td>
+<td><strong>15.7%</strong></td>
+<td><strong>11.2%</strong></td>
+</tr>
+<tr>
+<td>P99</td>
+<td><strong>10.4%</strong></td>
+<td><strong>2.8%</strong></td>
+</tr>
+<tr>
+<td>Peak</td>
+<td><strong>5.6%</strong></td>
+<td><strong>5.5%</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="figure-5-memory-bandwidth-usage-on-spec-with-and-without-hardware-prefetching-over-3-generations-of-a-server-platform-we-see-a-30-40-increase-in-memory-bandwidth-usage-when-hardware-prefetching-is-enabled">Figure 5. Memory bandwidth usage on SPEC with and without hardware prefetching over 3 generations of a server platform. We see a 30-40% increase in memory bandwidth usage when hardware prefetching is enabled.<a class="headerlink" href="#figure-5-memory-bandwidth-usage-on-spec-with-and-without-hardware-prefetching-over-3-generations-of-a-server-platform-we-see-a-30-40-increase-in-memory-bandwidth-usage-when-hardware-prefetching-is-enabled" title="Permanent link">&para;</a></h3>
+<p><img alt="e9f5394bb5b61d01afb6b7ae92ed7e48567a653627a765be2ee61e9b519a0b2a.jpg" src="../images/e9f5394bb5b61d01afb6b7ae92ed7e48567a653627a765be2ee61e9b519a0b2a.jpg" /></p>
+<ul>
+<li>图表展示了在三款不同代际的服务器平台上，启用与禁用 <strong>hardware prefetcher</strong> 对 <strong>SPEC</strong> 工作负载内存带宽使用的影响。</li>
+<li>纵坐标左侧为 <strong>Memory Bandwidth Usage (MB/s per core)</strong>，右侧为 <strong>Prefetch Traffic (%)</strong>，横坐标为 <strong>Server Generation</strong>（1、2、3 代）。</li>
+<li><strong>蓝色柱状图</strong> 表示启用硬件预取时的内存带宽使用量，<strong>绿色柱状图</strong> 表示禁用硬件预取时的内存带宽使用量，<strong>红色虚线折线图</strong> 表示预取流量占比。</li>
+<li>数据显示，启用硬件预取后，内存带宽使用量显著上升，<strong>预取流量占比在 30% 至 40% 之间波动</strong>，且随平台代际演进呈上升趋势。</li>
+<li>具体数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Server Generation</th>
+<th>Prefetcher On (MB/s/core)</th>
+<th>Prefetcher Off (MB/s/core)</th>
+<th>Prefetch Traffic (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>~550</td>
+<td>~400</td>
+<td>~38</td>
+</tr>
+<tr>
+<td>2</td>
+<td>~300</td>
+<td>~220</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>3</td>
+<td>~320</td>
+<td>~210</td>
+<td>~40</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>硬件预取器在提升缓存命中率的同时，带来了显著的内存带宽开销</strong>，尤其在新一代服务器上，其预取流量占比已高达 40%，加剧了带宽竞争压力。</li>
+</ul>
+<h3 id="figure-6-limoncello-disables-hardware-prefetchers-when-memory-bandwidth-utilization-is-high-to-optimize-for-memory-latency">Figure 6. Limoncello disables hardware prefetchers when memory bandwidth utilization is high to optimize for memory latency.<a class="headerlink" href="#figure-6-limoncello-disables-hardware-prefetchers-when-memory-bandwidth-utilization-is-high-to-optimize-for-memory-latency" title="Permanent link">&para;</a></h3>
+<p><img alt="b7414d1375f0d2bea85d371490ec0ede965ddc4f54ad9fcc5b29f6587e8c2b4f.jpg" src="../images/b7414d1375f0d2bea85d371490ec0ede965ddc4f54ad9fcc5b29f6587e8c2b4f.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 6</strong>，明确指出 <strong>Limoncello</strong> 在高内存带宽利用率时禁用硬件预取器（<strong>HW prefetcher</strong>），以优化内存延迟。</li>
+<li>横轴为 <strong>Memory Bandwidth Utilization (%)</strong>，范围从 0% 到 100%，表示系统当前内存带宽的使用比例。</li>
+<li>纵轴为 <strong>Latency (ns)</strong>，单位纳秒，衡量内存访问延迟，数值越低代表性能越好。</li>
+<li>图中包含两条曲线：</li>
+<li><strong>蓝色线（HW prefetcher on）</strong>：硬件预取器开启时的延迟表现。在低带宽利用率下延迟较低，但随着利用率上升，延迟急剧增加，在接近 100% 时延迟超过 350 ns。</li>
+<li><strong>绿色线（HW prefetcher off）</strong>：硬件预取器关闭时的延迟表现。整体延迟显著低于开启状态，尤其在高利用率区间（&gt;60%）优势明显，最高延迟约 320 ns。</li>
+<li>图表顶部标注了两个优化目标区域：</li>
+<li>左侧浅蓝色区域标注 <strong>optimized for cache hit rate</strong>，对应低带宽利用率场景，此时启用硬件预取器可提升缓存命中率。</li>
+<li>右侧浅绿色区域标注 <strong>optimized for latency</strong>，对应高带宽利用率场景，此时关闭硬件预取器可降低延迟。</li>
+<li><strong>Limoncello 的核心策略</strong>体现在该图中：动态切换硬件预取器状态——在低负载时启用以优化命中率，在高负载时禁用以优化延迟。</li>
+<li>数据对比显示，在 80% 以上带宽利用率时，关闭硬件预取器可带来约 <strong>15% 的延迟降低</strong>，与论文摘要中提到的“15% reduction in memory latency”一致。</li>
+<li>该图直观验证了论文的核心观点：在资源受限的数据中心环境中，<strong>硬件预取器在高带宽压力下反而成为性能瓶颈</strong>，通过软件控制动态禁用可释放带宽、降低延迟。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>带宽利用率区间</th>
+<th>HW Prefetcher 状态</th>
+<th>延迟趋势</th>
+<th>优化目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0% – 60%</td>
+<td>开启</td>
+<td>缓慢上升</td>
+<td>Cache Hit Rate</td>
+</tr>
+<tr>
+<td>&gt;60%</td>
+<td>关闭</td>
+<td>显著低于开启态</td>
+<td>Memory Latency</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图是 <strong>Limoncello 动态调控机制</strong>的可视化体现，支撑其“软硬协同”的设计哲学，无需硬件修改即可实现性能优化。</li>
+</ul>
+<h3 id="figure-7-memory-bandwidth-variability-in-a-machine">Figure 7. Memory bandwidth variability in a machine.<a class="headerlink" href="#figure-7-memory-bandwidth-variability-in-a-machine" title="Permanent link">&para;</a></h3>
+<p><img alt="f8375391a190e76aa8f5c48b1eecfb1c24693ca8ca0c946b1c76507f912f0632.jpg" src="../images/f8375391a190e76aa8f5c48b1eecfb1c24693ca8ca0c946b1c76507f912f0632.jpg" /></p>
+<ul>
+<li>图片展示了单台机器在60分钟内<strong>Memory Bandwidth (GB/s)</strong> 的波动情况，数据采样频率为每分钟一次。</li>
+<li>纵轴范围从80 GB/s到150 GB/s，横轴为时间（分钟），整体呈现<strong>高度波动性</strong>，无明显周期性或趋势。</li>
+<li>峰值出现在约第12分钟，达到<strong>150 GB/s</strong>；谷值出现在约第17分钟和第55分钟，接近<strong>75 GB/s</strong>。</li>
+<li>波动幅度大，相邻时间点间带宽变化可达<strong>30–50 GB/s</strong>，表明内存带宽负载极不稳定。</li>
+<li>该图用于说明<strong>Hard Limoncello</strong>控制器设计中引入<strong>hysteresis机制</strong>的必要性——避免因瞬时波动频繁开关硬件预取器，导致系统性能不稳定。</li>
+<li>数据来源为Google数据中心真实生产环境，反映大规模服务混合调度下的典型内存行为。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>时间区间 (min)</th>
+<th>带宽波动特征</th>
+<th>对应系统影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–10</td>
+<td>中等波动，峰值约120 GB/s</td>
+<td>负载适中，预取器可保持开启</td>
+</tr>
+<tr>
+<td>10–20</td>
+<td>高峰与深谷交替</td>
+<td>易触发误切换，需滞后阈值控制</td>
+</tr>
+<tr>
+<td>20–40</td>
+<td>多次剧烈震荡</td>
+<td>控制器需维持状态稳定以避免抖动</td>
+</tr>
+<tr>
+<td>40–60</td>
+<td>持续波动，末段略有回升</td>
+<td>表明负载动态变化是常态</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键结论</strong>：内存带宽作为决策信号具有高噪声特性，必须结合<strong>时间持续性判断</strong>与<strong>上下阈值差</strong>才能实现稳定、高效的预取器调控。</li>
+</ul>
+<h3 id="figure-8-state-diagram-of-hard-limoncello-controller-for-modulating-hardware-prefetchers-green-lighter-indicates-hardware-prefetchers-are-off-blue-darker-that-they-are-on">Figure 8. State diagram of Hard Limoncello controller for modulating hardware prefetchers. Green (lighter) indicates hardware prefetchers are off, blue (darker) that they are on.<a class="headerlink" href="#figure-8-state-diagram-of-hard-limoncello-controller-for-modulating-hardware-prefetchers-green-lighter-indicates-hardware-prefetchers-are-off-blue-darker-that-they-are-on" title="Permanent link">&para;</a></h3>
+<p><img alt="cf1f24671503c7109fc2f88e2d9996a177401528f4f9a43d4774e177d1db50f9.jpg" src="../images/cf1f24671503c7109fc2f88e2d9996a177401528f4f9a43d4774e177d1db50f9.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Hard Limoncello</strong> 控制器的状态机图，用于动态调节硬件预取器（Hardware Prefetchers, PF）的启用与禁用。</li>
+<li>状态机包含三个核心状态：<strong>PF = enabled</strong>（蓝色）、<strong>PF = disabled</strong>（绿色）、以及一个中间过渡状态 <strong>PF = disabled timeout = 0</strong>（绿色），用于实现滞后控制（hysteresis）。</li>
+<li>所有状态转换均基于两个关键变量：</li>
+<li><strong>membw</strong>：当前 socket 的内存带宽利用率。</li>
+<li><strong>timeout</strong>：计时器，用于确保状态切换前需维持条件达一定时长（Δ）。</li>
+<li>图中定义了三个阈值参数：</li>
+<li><strong>LT</strong>：Lower Threshold（下限阈值）</li>
+<li><strong>UT</strong>：Upper Threshold（上限阈值）</li>
+<li><strong>Δ</strong>：Time Threshold（时间阈值）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>当前状态</th>
+<th>触发条件</th>
+<th>下一状态</th>
+<th>动作说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PF = enabled</strong> (初始/重启)</td>
+<td>membw &lt; UT 且 timeout &gt; 0</td>
+<td>保持 enabled</td>
+<td>维持预取器开启，若带宽未超限且已过冷却期</td>
+</tr>
+<tr>
+<td><strong>PF = enabled</strong></td>
+<td>membw &gt; UT 且 timeout = 0</td>
+<td><strong>PF = disabled</strong></td>
+<td>带宽首次超过上限，启动禁用流程</td>
+</tr>
+<tr>
+<td><strong>PF = enabled</strong></td>
+<td>membw &gt; UT 且 timeout &gt; 0</td>
+<td>保持 enabled</td>
+<td>超限但未达持续时间 Δ，暂不切换</td>
+</tr>
+<tr>
+<td><strong>PF = disabled</strong></td>
+<td>membw &lt; LT 且 timeout = 0</td>
+<td><strong>PF = enabled</strong></td>
+<td>带宽回落至下限以下，立即启用预取器</td>
+</tr>
+<tr>
+<td><strong>PF = disabled</strong></td>
+<td>membw &lt; LT 且 timeout &gt; 0</td>
+<td>保持 disabled</td>
+<td>低于下限但未达持续时间 Δ，暂不启用</td>
+</tr>
+<tr>
+<td><strong>PF = disabled</strong></td>
+<td>membw &gt; LT 且 timeout = 0</td>
+<td><strong>PF = disabled timeout = 0</strong></td>
+<td>进入过渡态，准备重新评估是否恢复</td>
+</tr>
+<tr>
+<td><strong>PF = disabled timeout = 0</strong></td>
+<td>membw &lt; LT 且 timeout → 0</td>
+<td><strong>PF = enabled</strong></td>
+<td>满足恢复条件，立即启用预取器</td>
+</tr>
+<tr>
+<td><strong>PF = disabled timeout = 0</strong></td>
+<td>membw &gt; LT 且 timeout → 0</td>
+<td>保持该状态</td>
+<td>继续等待，不触发状态变更</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>颜色语义</strong>：</li>
+<li><strong>蓝色（深色）</strong>：表示硬件预取器处于 <strong>enabled</strong> 状态。</li>
+<li><strong>绿色（浅色）</strong>：表示硬件预取器处于 <strong>disabled</strong> 状态。</li>
+<li><strong>设计目的</strong>：</li>
+<li>避免因内存带宽瞬时波动导致预取器频繁开关，从而引发性能不稳定。</li>
+<li>通过设置 <strong>UT &gt; LT</strong> 和 <strong>Δ &gt; 0</strong> 实现<strong>滞后控制</strong>，确保系统在高负载时稳定禁用预取器，在低负载时稳定启用。</li>
+<li><strong>实际行为示例</strong>：</li>
+<li>若机器刚启动或重启，预取器默认为 <strong>enabled</strong>。</li>
+<li>当 membw 持续高于 UT 达到 Δ 时间后，控制器将 <strong>PF 禁用</strong>。</li>
+<li>只有当 membw 持续低于 LT 达到 Δ 时间后，控制器才会 <strong>重新启用 PF</strong>。</li>
+<li>在禁用状态下，若 membw 回落至 LT 以下但未持续足够时间，系统会进入 <strong>PF = disabled timeout = 0</strong> 状态，等待进一步确认。</li>
+</ul>
+<p>该状态机是 <strong>Limoncello</strong> 系统实现“按需启停硬件预取器”的核心机制，确保在高内存带宽压力下优化延迟，同时避免不必要的抖动。</p>
+<h3 id="figure-9-hardware-prefetcher-state-over-time-the-green-lines-in-the-figure-show-when-hardware-prefetchers-are-disabled-when-machine-load-exceeds-an-upper-threshold-hardware-prefetchers-are-disabled-and-remain-disabled-until-machine-load-returns-below-a-lower-threshold">Figure 9. Hardware prefetcher state over time. The green lines in the figure show when hardware prefetchers are disabled. When machine load exceeds an upper threshold, hardware prefetchers are disabled and remain disabled until machine load returns below a lower threshold.<a class="headerlink" href="#figure-9-hardware-prefetcher-state-over-time-the-green-lines-in-the-figure-show-when-hardware-prefetchers-are-disabled-when-machine-load-exceeds-an-upper-threshold-hardware-prefetchers-are-disabled-and-remain-disabled-until-machine-load-returns-below-a-lower-threshold" title="Permanent link">&para;</a></h3>
+<p><img alt="3b8ae1fad269622b13b3117e9bd874e7366350ad233a64a327f419d9a92bc0aa.jpg" src="../images/3b8ae1fad269622b13b3117e9bd874e7366350ad233a64a327f419d9a92bc0aa.jpg" /></p>
+<ul>
+<li>图表展示了 <strong>Hardware Prefetcher</strong> 在不同时间点的启用与禁用状态，以及 <strong>Memory Bandwidth Utilization (%)</strong> 的波动情况。</li>
+<li><strong>绿色实线</strong> 代表硬件预取器关闭（HW prefetcher off），<strong>蓝色实线</strong> 代表硬件预取器开启（HW prefetcher on）。</li>
+<li><strong>红色虚线</strong> 标注了两个关键阈值：<strong>upper threshold</strong>（80%）和 <strong>lower threshold</strong>（60%），用于控制预取器的开关逻辑。</li>
+<li>系统采用 <strong>滞回控制机制</strong>（hysteresis）：只有当内存带宽利用率持续高于 <strong>upper threshold</strong> 时才关闭预取器；只有当其持续低于 <strong>lower threshold</strong> 时才重新开启。</li>
+<li>时间轴从 0 到 25，观察到多次触发切换：</li>
+<li>在 t=0 附近，带宽利用率超过 80%，触发预取器关闭（绿线）。</li>
+<li>尽管在 t=7.5 时带宽回落至 80% 以下，但未跌破 60%，因此预取器保持关闭。</li>
+<li>直到 t=10 左右，带宽持续低于 60%，系统才重新启用预取器（蓝线）。</li>
+<li>在 t=20 之后，带宽再次飙升并突破 80%，预取器再次被禁用。</li>
+<li>此设计避免了因短时波动导致的频繁开关，从而提升系统稳定性与性能一致性。</li>
+<li>关键参数总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Upper Threshold</td>
+<td>80%</td>
+<td>触发关闭预取器的带宽利用率上限</td>
+</tr>
+<tr>
+<td>Lower Threshold</td>
+<td>60%</td>
+<td>触发开启预取器的带宽利用率下限</td>
+</tr>
+<tr>
+<td>控制策略</td>
+<td>滞回控制</td>
+<td>避免震荡，确保状态稳定</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观体现了 <strong>Hard Limoncello</strong> 的动态调控能力，是实现“高带宽时降延迟、低带宽时保命中率”核心目标的关键机制。</li>
+</ul>
+<h3 id="figure-10-application-throughput-based-on-different-hard-limoncello-configurations-indicates-the-lower-and-upper-memory-bandwidth-thresholds-in-the-configuration-thresholds-are-expressed-as-a-percentage-of-memory-bandwidth-saturation">Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.<a class="headerlink" href="#figure-10-application-throughput-based-on-different-hard-limoncello-configurations-indicates-the-lower-and-upper-memory-bandwidth-thresholds-in-the-configuration-thresholds-are-expressed-as-a-percentage-of-memory-bandwidth-saturation" title="Permanent link">&para;</a></h3>
+<p><img alt="f87ee1cc04803c903cca92fc251322ae427ec7ee7c745e093fdeff2dc08e636e.jpg" src="../images/f87ee1cc04803c903cca92fc251322ae427ec7ee7c745e093fdeff2dc08e636e.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Hard Limoncello</strong> 在不同配置下对应用吞吐量的影响，横轴为配置参数（表示内存带宽饱和阈值的百分比），纵轴为应用吞吐量提升百分比。</li>
+<li>配置参数格式为“下限/上限”，例如“60/80”表示当内存带宽利用率超过80%时关闭硬件预取器，低于60%时重新启用。</li>
+<li>从柱状图可见，<strong>60/80配置</strong>带来最高吞吐量提升，约为 <strong>3.0%</strong>，显著优于其他配置。</li>
+<li><strong>50/70配置</strong>次之，吞吐量提升约 <strong>1.0%</strong>；<strong>70/90配置</strong>最低，仅约 <strong>0.9%</strong>。</li>
+<li>数据表明，<strong>中等偏紧的阈值设置（如60/80）能最大化性能收益</strong>，过松（70/90）或过紧（50/70）均导致收益下降。</li>
+<li>此结果支撑了论文中关于通过<strong>动态调节硬件预取器开关时机</strong>以优化系统性能的核心设计。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>应用吞吐量提升 (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60/80</td>
+<td><strong>3.0</strong></td>
+</tr>
+<tr>
+<td>50/70</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>70/90</td>
+<td>0.9</td>
+</tr>
+</tbody>
+</table>
+<h3 id="figure-11-change-in-cpu-cycles-from-hard-limoncello-functions-that-regress-in-performance-when-hardware-prefetchers-are-disabled-show-an-increase-in-cpu-cycles-green-and-an-increase-in-llc-mpki-blue-data-center-tax-functions-in-particular-show-performance-regressions-from-disabling-hardware-prefetchers-while-other-functions-tend-to-improve-in-performance-and-decrease-in-cycles-and-mpki">Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.<a class="headerlink" href="#figure-11-change-in-cpu-cycles-from-hard-limoncello-functions-that-regress-in-performance-when-hardware-prefetchers-are-disabled-show-an-increase-in-cpu-cycles-green-and-an-increase-in-llc-mpki-blue-data-center-tax-functions-in-particular-show-performance-regressions-from-disabling-hardware-prefetchers-while-other-functions-tend-to-improve-in-performance-and-decrease-in-cycles-and-mpki" title="Permanent link">&para;</a></h3>
+<p><img alt="3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 11</strong>，展示的是在 <strong>Hard Limoncello</strong> 部署后，不同函数类型在 <strong>CPU cycles (%)</strong> 和 <strong>LLC misses (%)</strong> 上的变化情况。</li>
+<li>绿色柱状图代表 <strong>CPU cycles 增加百分比</strong>，蓝色柱状图代表 <strong>LLC misses 增加百分比</strong>，两者均以关闭硬件预取器（hardware prefetchers disabled）为基准进行对比。</li>
+<li><strong>数据中⼼税函数（data center tax functions）</strong> 在关闭硬件预取器后表现出显著性能退化：</li>
+<li><strong>hashing_1</strong>、<strong>hashing_2</strong>、<strong>compression_1</strong>、<strong>compression_2</strong>、<strong>data_movement_1</strong>、<strong>data_movement_2</strong>、<strong>data_transmission_1</strong>、<strong>data_transmission_2</strong> 均显示 CPU cycles 和 LLC misses 显著上升。</li>
+<li>例如，<strong>hashing_2</strong> 的 CPU cycles 增加超过 150%，LLC misses 增加接近 300%。</li>
+<li>相反，标记为 <strong>other_1 至 other_10</strong> 的函数大多呈现负增长，表明这些函数在关闭硬件预取器后性能反而提升，CPU cycles 和 LLC misses 下降。</li>
+<li>数据表明，<strong>数据中⼼税函数对硬件预取器高度依赖</strong>，其内存访问模式（如连续块访问、可预测序列）易被硬件预取器有效捕捉；而其他函数可能因预取不准确或污染缓存导致性能下降，关闭预取器反而有益。</li>
+<li>图表下方图例明确区分了绿色（CPU cycles）与蓝色（LLC misses），便于快速识别性能影响维度。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数类型</th>
+<th>CPU Cycles 增长趋势</th>
+<th>LLC Misses 增长趋势</th>
+<th>是否属于 data center tax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hashing_1</td>
+<td>↑↑↑</td>
+<td>↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>hashing_2</td>
+<td>↑↑↑↑</td>
+<td>↑↑↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>compression_1</td>
+<td>↑↑↑</td>
+<td>↑↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>compression_2</td>
+<td>↑↑↑</td>
+<td>↑↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>data_movement_1</td>
+<td>↑↑</td>
+<td>↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>data_movement_2</td>
+<td>↑↑↑</td>
+<td>↑↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>data_transmission_1</td>
+<td>↑↑</td>
+<td>↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>data_transmission_2</td>
+<td>↑↑↑</td>
+<td>↑↑↑</td>
+<td>是</td>
+</tr>
+<tr>
+<td>other_1 至 other_10</td>
+<td>↓ 或小幅 ↑</td>
+<td>↓ 或小幅 ↑</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此分析支撑了论文核心观点：<strong>在高带宽压力下关闭硬件预取器虽能降低整体延迟，但会损害特定关键函数性能，需通过 Soft Limoncello 的软件预取进行补偿</strong>。</li>
+</ul>
+<h3 id="figure-12-aggregated-change-in-cpu-cycles-from-hard-limoncello-data-center-tax-functions-green-increased-in-cpu-cycles-under-hard-limoncello-in-contrast-overall-nondata-center-tax-functions-blue-decreased-in-cycles">Figure 12. Aggregated change in CPU cycles (%) from Hard Limoncello. Data center tax functions (green) increased in CPU cycles under Hard Limoncello. In contrast, overall nondata center tax functions (blue) decreased in cycles.<a class="headerlink" href="#figure-12-aggregated-change-in-cpu-cycles-from-hard-limoncello-data-center-tax-functions-green-increased-in-cpu-cycles-under-hard-limoncello-in-contrast-overall-nondata-center-tax-functions-blue-decreased-in-cycles" title="Permanent link">&para;</a></h3>
+<p><img alt="d65b4e6c70306f8f96ede45bba9a365910221ff2137f82a038eece0f41d5cce7.jpg" src="../images/d65b4e6c70306f8f96ede45bba9a365910221ff2137f82a038eece0f41d5cce7.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 12</strong>，展示的是在 <strong>Hard Limoncello</strong> 启用后，不同函数类型在 CPU 周期上的变化百分比。</li>
+<li>横轴为 <strong>Function Type</strong>，包含五类：compression、data transmission、hashing、data movement 和 non-DC tax。</li>
+<li>纵轴为 <strong>Increase in CPU Cycles (%)</strong>，表示 CPU 周期增加的百分比，负值代表周期减少。</li>
+<li>数据显示，在 Hard Limoncello 下：</li>
+<li><strong>compression</strong> 函数导致 CPU 周期增加约 <strong>30%</strong>，是受影响最严重的类别。</li>
+<li><strong>data transmission</strong> 增加约 <strong>21%</strong>。</li>
+<li><strong>hashing</strong> 增加约 <strong>20%</strong>。</li>
+<li><strong>data movement</strong> 增加约 <strong>16%</strong>。</li>
+<li><strong>non-DC tax</strong> 函数则呈现轻微下降（约 -1%），表明其性能反而略有提升。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Function Type</th>
+<th>Increase in CPU Cycles (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compression</td>
+<td>~30%</td>
+</tr>
+<tr>
+<td>data transmission</td>
+<td>~21%</td>
+</tr>
+<tr>
+<td>hashing</td>
+<td>~20%</td>
+</tr>
+<tr>
+<td>data movement</td>
+<td>~16%</td>
+</tr>
+<tr>
+<td>non-DC tax</td>
+<td>~-1%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图例说明：绿色柱状图代表 <strong>Data center tax functions</strong>，它们在 Hard Limoncello 下 CPU 周期显著增加；蓝色柱状图代表 <strong>non-data center tax functions</strong>，整体周期减少。</li>
+<li>此结果印证了论文观点：<strong>Data center tax functions</strong> 对硬件预取器高度依赖，当预取器被禁用时，这些函数性能退化明显，因此成为 <strong>Soft Limoncello</strong> 软件预取插入的重点目标。</li>
+<li>相反，非数据中心税函数因避免了硬件预取带来的内存带宽竞争和缓存污染，反而获得性能增益。</li>
+</ul>
+<h3 id="figure-13-software-prefetch-instructions-act-on-addresses-at-a-distance-and-can-prefetch-different-degrees-of-data">Figure 13. Software prefetch instructions act on addresses at a distance and can prefetch different degrees of data.<a class="headerlink" href="#figure-13-software-prefetch-instructions-act-on-addresses-at-a-distance-and-can-prefetch-different-degrees-of-data" title="Permanent link">&para;</a></h3>
+<p><img alt="4098d85715938565609c51e7b2e3a06b4dabc3ef1336f982974514564aee44eb.jpg" src="../images/4098d85715938565609c51e7b2e3a06b4dabc3ef1336f982974514564aee44eb.jpg" /></p>
+<ul>
+<li>图片展示了软件预取（Software prefetch）的核心概念，即通过指定<strong>内存地址</strong>、<strong>预取距离</strong>（prefetch distance）和<strong>预取度</strong>（prefetch degree）来控制数据加载行为。</li>
+<li><strong>内存访问点</strong>位于地址 <code>0x080</code>，用黄色高亮标出，表示当前程序正在访问该位置的数据。</li>
+<li><strong>预取距离</strong>指从当前访问地址到预取起始地址之间的偏移量。图中显示预取从 <code>0x180</code> 开始，与 <code>0x080</code> 相距 4 个缓存行（假设每行 64 字节），即 <strong>prefetch distance = 4 cache lines</strong>。</li>
+<li><strong>预取度</strong>指一次性预取的数据量，图中绿色区域覆盖了 <code>0x180</code> 到 <code>0x200</code>，共包含 3 个缓存行（<code>0x180</code>, <code>0x1C0</code>, <code>0x200</code>），即 <strong>prefetch degree = 3 cache lines</strong>。</li>
+<li>图中箭头明确标注了三个关键参数：</li>
+<li>“memory access” 指向当前访问地址 <code>0x080</code>。</li>
+<li>“prefetched” 覆盖预取数据范围 <code>0x180–0x200</code>。</li>
+<li>“prefetch distance” 标注从 <code>0x080</code> 到 <code>0x180</code> 的跨度。</li>
+<li>“prefetch degree” 标注从 <code>0x180</code> 到 <code>0x200</code> 的数据量。</li>
+<li>此图用于说明在 Soft Limoncello 中，软件预取指令如何根据函数行为精确控制预取时机与数据量，避免硬件预取器的盲目性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory Access</td>
+<td>0x080</td>
+<td>当前程序实际访问的内存地址</td>
+</tr>
+<tr>
+<td>Prefetch Start</td>
+<td>0x180</td>
+<td>预取操作开始的内存地址</td>
+</tr>
+<tr>
+<td>Prefetch Distance</td>
+<td>4 cache lines</td>
+<td>从访问地址到预取起始地址的距离</td>
+</tr>
+<tr>
+<td>Prefetch Degree</td>
+<td>3 cache lines</td>
+<td>一次性预取的数据块数量</td>
+</tr>
+<tr>
+<td>Prefetched Range</td>
+<td>0x180 – 0x200</td>
+<td>实际被预取到缓存中的内存区域</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该设计允许开发者根据具体函数的内存访问模式（如 memcpy 的连续流式访问）定制预取策略，从而在关闭硬件预取器时仍能维持低 MPKI 和高性能。</li>
+</ul>
+<h3 id="figure-14-memcpy-argument-size-distribution-the-chart-shows-the-probability-density-function-pdf-of-the-number-of-times-each-copy-size-appears-in-the-profiling-data-most-copy-sizes-are-small">Figure 14. memcpy argument size distribution. The chart shows the probability density function (PDF) of the number of times each copy size appears in the profiling data. Most copy sizes are small.<a class="headerlink" href="#figure-14-memcpy-argument-size-distribution-the-chart-shows-the-probability-density-function-pdf-of-the-number-of-times-each-copy-size-appears-in-the-profiling-data-most-copy-sizes-are-small" title="Permanent link">&para;</a></h3>
+<p><img alt="52698e5aa656d107042a7cab73e8461e2944e881c20fd0aac6fba9c36f9ca0de.jpg" src="../images/52698e5aa656d107042a7cab73e8461e2944e881c20fd0aac6fba9c36f9ca0de.jpg" /></p>
+<ul>
+<li>图表展示的是 <strong>memcpy</strong> 函数调用时参数大小（即复制数据量）的 <strong>概率密度函数 (PDF)</strong> 分布，横轴为复制大小（字节），纵轴为对应大小出现的概率密度。</li>
+<li>从图中可见，<strong>绝大多数 memcpy 调用发生在小数据量区间</strong>，尤其集中在 <strong>10^0 到 10^2 字节</strong>范围内，峰值出现在约 <strong>10 字节</strong>附近，表明短拷贝是主流场景。</li>
+<li>在 <strong>10^2 字节以上</strong>，PDF 值迅速衰减，但仍有少量长尾分布，说明存在少数大块数据拷贝操作，这与论文中“<strong>大部分拷贝是短的，但存在长尾的大拷贝</strong>”的描述一致。</li>
+<li>该分布对 <strong>Soft Limoncello</strong> 的设计至关重要：由于硬件预取器需要“热身期”，在短拷贝中效果差；而软件预取可精准控制，因此系统选择<strong>针对大拷贝尺寸插入软件预取指令</strong>，以最大化收益。</li>
+<li>下表总结关键观察点：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>观察维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主要分布区间</td>
+<td><strong>1–100 字节</strong>，占绝大多数调用</td>
+</tr>
+<tr>
+<td>峰值位置</td>
+<td>约 <strong>10 字节</strong></td>
+</tr>
+<tr>
+<td>长尾特征</td>
+<td>存在少量 <strong>&gt;100 字节</strong> 的大拷贝，构成性能优化目标</td>
+</tr>
+<tr>
+<td>对 Limoncello 意义</td>
+<td>证明<strong>仅对大拷贝插入软件预取</strong>是合理策略，避免在短拷贝中浪费资源</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此分布支撑了论文中“<strong>通过分析调用参数大小分布来指导软件预取插入点</strong>”的方法论，体现了基于真实生产数据驱动优化的设计思想。</li>
+</ul>
+<h3 id="3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8cjpg">3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg<a class="headerlink" href="#3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8cjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg" src="../images/3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg" /></p>
+<ul>
+<li>图表展示了在不同 <strong>prefetch distance</strong>（预取距离）下，<strong>memcpy</strong> 操作的性能提升（Speedup %）随复制数据大小（Memcpy Size, KB）的变化趋势。</li>
+<li><strong>横轴</strong>为 memcpy 复制的数据量，范围从 0 到 1000 KB，采用对数刻度，重点覆盖小到中等规模的数据块。</li>
+<li><strong>纵轴</strong>为性能加速比，以百分比表示，正值代表性能提升，负值代表性能下降。</li>
+<li>图中包含六条曲线，分别对应不同的预取距离：<strong>32、64、128、256、512、1K</strong>（单位为字节），每条曲线用不同颜色标识。</li>
+<li>性能表现呈现明显规律：</li>
+<li>对于<strong>小数据块</strong>（&lt; 1KB），所有预取距离均导致性能下降或无显著收益，尤其在 0.25KB 附近出现负加速。</li>
+<li>当数据块增大至 <strong>4KB 以上</strong>，性能开始显著提升，且<strong>预取距离越大，加速效果越强</strong>。</li>
+<li>在 <strong>64KB 左右</strong>，<strong>512 和 1K 距离</strong>达到峰值加速，约 <strong>60%-70%</strong>。</li>
+<li>数据块继续增大（&gt; 256KB），所有曲线均出现性能回落，但大距离预取仍保持相对优势。</li>
+<li>关键观察：</li>
+<li><strong>短距离预取</strong>（如 32、64）仅在中等数据块（4–16KB）有轻微收益，整体表现平庸。</li>
+<li><strong>长距离预取</strong>（512、1K）在中大型数据块上表现最优，但需警惕在极小或极大块时的性能退化。</li>
+<li>最佳预取距离与数据块大小强相关，表明 <strong>Soft Limoncello</strong> 需根据运行时参数动态调整预取策略。</li>
+<li>数据摘要如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetch Distance (Bytes)</th>
+<th>Peak Speedup (%)</th>
+<th>Optimal Data Size Range (KB)</th>
+<th>Performance at Small Sizes (&lt;1KB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32</td>
+<td>~5%</td>
+<td>4–16</td>
+<td>Negative</td>
+</tr>
+<tr>
+<td>64</td>
+<td>~10%</td>
+<td>4–16</td>
+<td>Negative</td>
+</tr>
+<tr>
+<td>128</td>
+<td>~15%</td>
+<td>4–32</td>
+<td>Slightly negative</td>
+</tr>
+<tr>
+<td>256</td>
+<td>~35%</td>
+<td>16–64</td>
+<td>Near zero</td>
+</tr>
+<tr>
+<td>512</td>
+<td>~65%</td>
+<td>64–256</td>
+<td>Positive from 4KB</td>
+</tr>
+<tr>
+<td>1K</td>
+<td>~70%</td>
+<td>64–256</td>
+<td>Positive from 4KB</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图支撑了论文中关于 <strong>memcpy</strong> 作为软件预取目标的有效性，并验证了通过微基准测试优化预取参数（距离与度）可实现显著性能增益。</li>
+</ul>
+<h3 id="b-microbenchmark-exercising-different-prefetch-degrees-prefetching-is-fixed-at-a-distance-of-512-bytes">(b) Microbenchmark exercising different prefetch degrees. Prefetching is fixed at a distance of 512 bytes.<a class="headerlink" href="#b-microbenchmark-exercising-different-prefetch-degrees-prefetching-is-fixed-at-a-distance-of-512-bytes" title="Permanent link">&para;</a></h3>
+<p><img alt="dea517edd792c10c583301b3163656b05a2b31b4a095e4049b7577013eab80ec.jpg" src="../images/dea517edd792c10c583301b3163656b05a2b31b4a095e4049b7577013eab80ec.jpg" /></p>
+<ul>
+<li>图表展示的是 <strong>Soft Limoncello</strong> 在 <strong>memcpy</strong> 函数中，针对不同 <strong>prefetch degree</strong>（预取粒度）的性能表现，其 <strong>prefetch distance</strong> 固定为 512 字节。</li>
+<li>横轴为 <strong>Memcpy Size (KB)</strong>，范围从 0 到 1000 KB，代表数据拷贝操作的数据量大小。</li>
+<li>纵轴为 <strong>Speedup (%)</strong>，表示相对于基准（+HW,-SW）的性能提升百分比，正值代表加速，负值代表性能退化。</li>
+<li>图中共有六条曲线，分别对应不同的预取粒度：<strong>64、128、256、512、1K、2K</strong> 字节，颜色与图例一一对应。</li>
+<li>性能表现随数据量变化呈现非线性趋势：</li>
+<li>对于小数据量（如 &lt; 0.25 KB），所有预取策略均导致显著性能下降（负加速），尤其在 64 和 128 字节粒度下最严重。</li>
+<li>随着数据量增大（&gt; 1 KB），各粒度开始出现正向加速，且在 4–64 KB 区间内达到峰值。</li>
+<li>在 64 KB 左右，<strong>2K</strong> 粒度表现最佳，加速接近 60%；<strong>512</strong> 字节次之。</li>
+<li>当数据量超过 256 KB 后，各粒度加速效果趋于收敛，差异缩小。</li>
+<li>关键观察：</li>
+<li><strong>大粒度（如 2K）在中等至大数据量时表现最优</strong>，但对小数据量惩罚最大。</li>
+<li><strong>小粒度（如 64、128）在小数据量时性能恶化最严重</strong>，但在中等数据量时仍可提供适度加速。</li>
+<li>存在“甜点区”（sweet spot）：约 4–64 KB 数据量区间，是软件预取收益最高的区域。</li>
+<li>下表总结不同预取粒度在关键数据量点的表现：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Memcpy Size (KB)</th>
+<th>Prefetch Degree 64</th>
+<th>Prefetch Degree 128</th>
+<th>Prefetch Degree 256</th>
+<th>Prefetch Degree 512</th>
+<th>Prefetch Degree 1K</th>
+<th>Prefetch Degree 2K</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.25</td>
+<td>~ -50%</td>
+<td>~ -40%</td>
+<td>~ -30%</td>
+<td>~ -20%</td>
+<td>~ -10%</td>
+<td>~ -5%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>~ 0%</td>
+<td>~ 10%</td>
+<td>~ 20%</td>
+<td>~ 30%</td>
+<td>~ 35%</td>
+<td>~ 40%</td>
+</tr>
+<tr>
+<td>64</td>
+<td>~ 10%</td>
+<td>~ 20%</td>
+<td>~ 30%</td>
+<td>~ 40%</td>
+<td>~ 50%</td>
+<td>~ 60%</td>
+</tr>
+<tr>
+<td>256</td>
+<td>~ 15%</td>
+<td>~ 25%</td>
+<td>~ 35%</td>
+<td>~ 40%</td>
+<td>~ 45%</td>
+<td>~ 50%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>选择合适的 prefetch degree 至关重要</strong>，需根据实际工作负载的数据分布进行调优。Limoncello 通过微基准测试和负载测试迭代确定最优参数，以最大化性能收益并避免小数据量下的性能惩罚。</li>
+</ul>
+<h3 id="figure-15-soft-limoncello-memcpy-microbenchmarking">Figure 15. Soft Limoncello memcpy microbenchmarking.<a class="headerlink" href="#figure-15-soft-limoncello-memcpy-microbenchmarking" title="Permanent link">&para;</a></h3>
+<p><img alt="c973887d9e6d0cb8b5a3f95865fb46293b12d847cfec3903017767932b834c95.jpg" src="../images/c973887d9e6d0cb8b5a3f95865fb46293b12d847cfec3903017767932b834c95.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Soft Limoncello</strong> 在优化 <code>memcpy</code> 函数时的微基准测试结果，重点比较了不同硬件（HW）与软件（SW）预取器组合状态下的性能增益。</li>
+<li>横轴为三种预取器状态：<strong>-HW, -SW</strong>（硬件与软件预取器均关闭）、<strong>+HW, +SW</strong>（两者均开启）、<strong>-HW, +SW</strong>（仅开启软件预取器）。</li>
+<li>纵轴为 <strong>Speedup (%)</strong>，表示相对于基准配置（+HW, -SW）的性能提升百分比。</li>
+<li>数据表明：</li>
+<li><strong>-HW, -SW</strong> 配置下性能下降约 <strong>0.25%</strong>，说明在无任何预取机制时，<code>memcpy</code> 性能受损。</li>
+<li><strong>+HW, +SW</strong> 配置下性能提升约 <strong>1.45%</strong>，显示软硬结合可带来显著收益。</li>
+<li><strong>-HW, +SW</strong> 配置下性能提升约 <strong>1.15%</strong>，证明即使关闭硬件预取器，<strong>软件预取器仍能有效补偿性能损失</strong>。</li>
+<li>此图验证了 <strong>Limoncello 的核心设计哲学</strong>：在高带宽压力下关闭硬件预取器以降低内存延迟，同时通过精准插入软件预取指令维持性能。</li>
+<li>该结果支撑了论文中关于“<strong>数据中心税函数（如 memcpy）适合软件预取</strong>”的结论，因其访问模式明确、可预测，软件可精确控制预取地址、距离与度数。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher State</th>
+<th>Speedup (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-HW, -SW</td>
+<td>-0.25</td>
+</tr>
+<tr>
+<td>+HW, +SW</td>
+<td>+1.45</td>
+</tr>
+<tr>
+<td>-HW, +SW</td>
+<td>+1.15</td>
+</tr>
+</tbody>
+</table>
+<h3 id="figure-16-limoncello-application-throughput-gain-application-throughput-increases-by-6-13-increase-dependent-on-the-cpu-utilization-level-of-the-machines">Figure 16. Limoncello application throughput gain. Application throughput increases by 6-13% increase, dependent on the CPU utilization level of the machines.<a class="headerlink" href="#figure-16-limoncello-application-throughput-gain-application-throughput-increases-by-6-13-increase-dependent-on-the-cpu-utilization-level-of-the-machines" title="Permanent link">&para;</a></h3>
+<p><img alt="db405ad117eaf9d11098b26c5ca0ddf9ebd804ed9ab7149bbef4242cc6b884ff.jpg" src="../images/db405ad117eaf9d11098b26c5ca0ddf9ebd804ed9ab7149bbef4242cc6b884ff.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 16. Limoncello application throughput gain</strong>，展示的是 Limoncello 系统在不同 CPU 利用率下对应用吞吐量的提升效果。</li>
+<li>横轴表示 <strong>CPU利用率</strong>，分为三个区间：<strong>60%、70%、80%</strong>，代表服务器负载的不同阶段。</li>
+<li>纵轴为 <strong>Application Throughput (%)</strong>，即应用吞吐量的百分比变化，衡量 Limoncello 部署前后的性能增益。</li>
+<li>数据显示：</li>
+<li>在 <strong>60% CPU利用率</strong> 下，吞吐量提升微弱，约为 <strong>0.5%</strong>，表明系统负载较低时，Limoncello 的动态调节机制未被触发或影响有限。</li>
+<li>在 <strong>70% CPU利用率</strong> 下，吞吐量提升显著，达到 <strong>7%</strong> 左右，说明此时系统开始进入高负载状态，Limoncello 通过关闭硬件预取器并启用软件预取有效缓解内存带宽压力。</li>
+<li>在 <strong>80% CPU利用率</strong> 下，吞吐量提升最大，接近 <strong>17%</strong>，反映在峰值负载下，Limoncello 的优化策略（特别是 Soft Limoncello 对数据中心税函数的精准预取）发挥了最大效能。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>CPU Utilization</th>
+<th>Throughput Gain (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60%</td>
+<td>~0.5%</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>~7%</td>
+</tr>
+<tr>
+<td>80%</td>
+<td>~17%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：Limoncello 的性能收益与系统负载正相关，在 <strong>高利用率场景（70%-80%）</strong> 下表现最佳，验证了其“按需切换预取策略”的设计有效性。该结果也呼应论文摘要中提到的 <strong>10% 平均吞吐量提升</strong>，因实际部署中工作负载分布不均，平均值介于各区间之间。</li>
+</ul>
+<h3 id="figure-17-limoncello-memory-latency-reduction-memory-latency-reduces-by-13-in-the-median-and-10-in-the-p99">Figure 17. Limoncello memory latency reduction. Memory latency reduces by 13% in the median and 10% in the P99.<a class="headerlink" href="#figure-17-limoncello-memory-latency-reduction-memory-latency-reduces-by-13-in-the-median-and-10-in-the-p99" title="Permanent link">&para;</a></h3>
+<p><img alt="3c91155487617f08edd483be7d4f2988b11f9779218c551261842d1d7a821be7.jpg" src="../images/3c91155487617f08edd483be7d4f2988b11f9779218c551261842d1d7a821be7.jpg" /></p>
+<ul>
+<li>图表展示了 Limoncello 部署后对内存延迟的改善效果，纵轴为“<strong>Change in Memory Latency (%)</strong>”，横轴为三个性能分位点：<strong>P50（中位数）</strong>、<strong>P90</strong> 和 <strong>P99</strong>。</li>
+<li>所有柱状图均为绿色且向下延伸，表明在所有分位点上，<strong>内存延迟均显著降低</strong>，符合论文摘要和正文所述“15% 减少”及“13% 中位数减少”的结论。</li>
+<li>具体数值如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分位点</th>
+<th>内存延迟变化（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P50</td>
+<td><strong>约 -13%</strong></td>
+</tr>
+<tr>
+<td>P90</td>
+<td><strong>约 -8%</strong></td>
+</tr>
+<tr>
+<td>P99</td>
+<td><strong>约 -7%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>从数据趋势可见，<strong>中位数（P50）受益最大</strong>，而尾部延迟（P99）虽改善幅度较小，但仍实现<strong>约10%的降低</strong>，这对高负载服务的稳定性至关重要。</li>
+<li>此结果验证了 Limoncello 的核心机制：在高内存带宽利用率下关闭硬件预取器，可有效缓解内存系统排队延迟，从而降低整体访问延迟。</li>
+<li>图表未显示正向延迟增长，说明该优化策略在生产环境中具有<strong>稳定性和普适性</strong>，无副作用。</li>
+</ul>
+<h3 id="figure-18-limoncello-socket-bandwidth-usage-reduction-average-socket-bandwidth-reduces-by-15">Figure 18. Limoncello socket bandwidth usage reduction. Average socket bandwidth reduces by 15%.<a class="headerlink" href="#figure-18-limoncello-socket-bandwidth-usage-reduction-average-socket-bandwidth-reduces-by-15" title="Permanent link">&para;</a></h3>
+<p><img alt="a317eaaeb97264073e48804709ed99eb80087ec36a131cbb7bd8b5b529c9c4e6.jpg" src="../images/a317eaaeb97264073e48804709ed99eb80087ec36a131cbb7bd8b5b529c9c4e6.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Figure 18</strong>，标题为 “Limoncello socket bandwidth usage reduction”，核心结论是 <strong>平均 socket 带宽降低 15%</strong>。</li>
+<li>图表类型为垂直柱状图，纵轴为 “Change in Socket Memory Bandwidth Usage (%)”，横轴为三个统计维度：<strong>Avg（平均值）</strong>、<strong>P90（第90百分位）</strong>、<strong>P99（第99百分位）</strong>。</li>
+<li>所有柱体均为绿色，表示带宽使用量的<strong>减少</strong>，数值均为负值，说明 Limoncello 部署后对内存带宽消耗有显著抑制作用。</li>
+<li>具体数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>统计维度</th>
+<th>带宽变化百分比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avg</td>
+<td><strong>约 -13%</strong></td>
+</tr>
+<tr>
+<td>P90</td>
+<td><strong>约 -14%</strong></td>
+</tr>
+<tr>
+<td>P99</td>
+<td><strong>约 -10%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>从数据分布可见，<strong>中位数和高百分位（P90）的带宽节省更显著</strong>，而尾部（P99）节省略少，表明 Limoncello 对典型负载和重负载场景均有效，但极端尾部延迟场景优化幅度稍弱。</li>
+<li>此结果支撑论文核心主张：在高利用率系统中，<strong>关闭硬件 prefetcher 可大幅降低内存带宽压力</strong>，从而缓解内存瓶颈，提升整体吞吐。</li>
+<li>结合上下文，该带宽降低直接促成 <strong>CPU 利用率提升至 70–80% 区间而不触发内存饱和</strong>，是 Limoncello 实现 10% 应用吞吐提升的关键机制之一。</li>
+</ul>
+<h3 id="figure-19-increase-in-cpu-utilization-due-to-limoncello-before-limoncello-memory-bandwidth-saturation-was-reached-in-the-40-50-cpu-utilization-band-figure-4-but-with-limoncello-memory-bandwidth-saturation-is-not-met-until-the-70-80-band-sizes-of-the-markers-are-in-proportion-to-the-fraction-of-platform-servers-in-the-cpu-usage-bucket">Figure 19. Increase in CPU utilization due to Limoncello. Before Limoncello, memory bandwidth saturation was reached in the 40-50% CPU utilization band (Figure 4), but with Limoncello memory bandwidth saturation is not met until the 70-80% band. Sizes of the markers are in proportion to the fraction of platform servers in the CPU usage bucket.<a class="headerlink" href="#figure-19-increase-in-cpu-utilization-due-to-limoncello-before-limoncello-memory-bandwidth-saturation-was-reached-in-the-40-50-cpu-utilization-band-figure-4-but-with-limoncello-memory-bandwidth-saturation-is-not-met-until-the-70-80-band-sizes-of-the-markers-are-in-proportion-to-the-fraction-of-platform-servers-in-the-cpu-usage-bucket" title="Permanent link">&para;</a></h3>
+<p><img alt="8af0f9425ed82c6f02ff37be5554cb0bb55e78ec0ed8fef214d9ecb44f526ce4.jpg" src="../images/8af0f9425ed82c6f02ff37be5554cb0bb55e78ec0ed8fef214d9ecb44f526ce4.jpg" /></p>
+<ul>
+<li>图表展示了 Limoncello 部署前后，<strong>CPU 利用率</strong>与 <strong>Memory Bandwidth Usage</strong> 之间的关系，横轴为 CPU 使用率分桶（0-10% 至 100-110%），纵轴为内存带宽使用百分比。</li>
+<li>图中包含两条曲线：<strong>platform 1</strong>（绿色圆点）和 <strong>platform 2</strong>（绿色方块），代表两个不同代际的服务器平台，其趋势高度一致，表明 Limoncello 的效果具有跨平台一致性。</li>
+<li><strong>关键阈值线</strong>：图中蓝色水平线标注 “memory bandwidth saturation”，表示内存带宽饱和点，约为 70% 带宽利用率。黄色垂直虚线标注 “target CPU usage”，位于 70-80% CPU 利用率区间，是 Google 数据中心的目标利用率区间。</li>
+<li>在未部署 Limoncello 时（参考 Figure 4），内存带宽在 <strong>40-50% CPU 利用率</strong>区间即达到饱和，导致系统无法继续提升 CPU 利用率，造成资源闲置。</li>
+<li>部署 Limoncello 后，内存带宽饱和点被推迟至 <strong>70-80% CPU 利用率</strong>区间，使系统能够在更高 CPU 利用率下仍保持良好性能，从而显著提升整体资源利用率。</li>
+<li>图中数据点大小与该 CPU 使用率区间的服务器数量成正比，说明高利用率区间（如 70-80%）的服务器基数较大，Limoncello 对主流负载场景影响显著。</li>
+<li>下表总结关键拐点：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>CPU Usage Bucket</th>
+<th>Memory Bandwidth Usage (Before Limoncello)</th>
+<th>Memory Bandwidth Usage (After Limoncello)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>40-50%</td>
+<td>~70% (饱和)</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td>70-80%</td>
+<td>超过饱和点</td>
+<td>~70% (刚达饱和)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：Limoncello 通过动态关闭硬件预取器并插入软件预取指令，有效缓解了内存带宽争用，将系统可稳定运行的 CPU 利用率上限从 40-50% 提升至 70-80%，实现 <strong>资源利用率最大化</strong> 与 <strong>性能瓶颈后移</strong>。</li>
+</ul>
+<h3 id="figure-20-software-prefetcher-impact-in-limoncello-the-y-axis-shows-the-portion-of-fleetwide-cycles-spent-in-the-respective-function-categories-the-center-bar-green-shows-hard-limoncello-deployed-without-any-software-prefetchers-adding-software-prefetchers-into-limoncello-lowered-cpu-cycles-spent-in-targeted-functions-by-2-yellow">Figure 20. Software prefetcher impact in Limoncello. The y-axis shows the portion of fleetwide cycles spent in the respective function categories. The center bar (green) shows Hard Limoncello deployed without any software prefetchers. Adding software prefetchers into Limoncello lowered CPU cycles spent in targeted functions by 2% (yellow).<a class="headerlink" href="#figure-20-software-prefetcher-impact-in-limoncello-the-y-axis-shows-the-portion-of-fleetwide-cycles-spent-in-the-respective-function-categories-the-center-bar-green-shows-hard-limoncello-deployed-without-any-software-prefetchers-adding-software-prefetchers-into-limoncello-lowered-cpu-cycles-spent-in-targeted-functions-by-2-yellow" title="Permanent link">&para;</a></h3>
+<p><img alt="93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" src="../images/93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 20</strong>，主题是 <strong>Software prefetcher impact in Limoncello</strong>，展示的是在不同 Limoncello 配置下，各类数据中⼼税函数（DC Tax）所消耗的 CPU 周期百分比。</li>
+<li>Y 轴表示 <strong>CPU Cycles (%)</strong>，即整个集群中在对应函数类别上花费的 CPU 周期占比；X 轴按功能分类：compression、data transmission、hashing、data movement，以及聚合项 all targeted DC tax。</li>
+<li>图例包含三种配置：</li>
+<li><strong>No Limoncello</strong>（蓝色）：未启用任何 Limoncello 机制，作为基线。</li>
+<li><strong>Hard Limoncello</strong>（绿色）：仅启用硬件预取器动态关闭机制，未插入软件预取。</li>
+<li>
+<p><strong>Full Limoncello</strong>（黄色）：完整启用 Hard + Soft Limoncello，即动态关闭硬件预取并插入软件预取。</p>
+</li>
+<li>
+<p>数据趋势分析如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数类别</th>
+<th>No Limoncello (蓝)</th>
+<th>Hard Limoncello (绿)</th>
+<th>Full Limoncello (黄)</th>
+<th>变化说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compression</td>
+<td>~0.8%</td>
+<td>~1.1%</td>
+<td>~0.7%</td>
+<td>硬件关闭后性能下降，软件预取有效回补</td>
+</tr>
+<tr>
+<td>data transmission</td>
+<td>~4.2%</td>
+<td>~4.3%</td>
+<td>~3.4%</td>
+<td>软件预取显著降低开销</td>
+</tr>
+<tr>
+<td>hashing</td>
+<td>~1.0%</td>
+<td>~1.5%</td>
+<td>~1.2%</td>
+<td>软件预取部分抵消硬件关闭带来的损失</td>
+</tr>
+<tr>
+<td>data movement</td>
+<td>~2.9%</td>
+<td>~2.9%</td>
+<td>~2.4%</td>
+<td>软件预取带来明显优化</td>
+</tr>
+<tr>
+<td><strong>all targeted DC tax</strong></td>
+<td><strong>~9.0%</strong></td>
+<td><strong>~9.8%</strong></td>
+<td><strong>~7.8%</strong></td>
+<td><strong>整体节省约 2% CPU 周期</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：</li>
+<li>启用 <strong>Hard Limoncello</strong> 会导致所有 DC Tax 类别 CPU 周期上升，表明硬件预取器对这些函数有正向作用。</li>
+<li>加入 <strong>Soft Limoncello</strong> 后，所有类别均实现周期下降，尤其在 <strong>data transmission</strong> 和 <strong>data movement</strong> 上效果最显著。</li>
+<li>在聚合项 <strong>all targeted DC tax</strong> 中，从 <strong>9.8%</strong>（Hard Limoncello）降至 <strong>7.8%</strong>（Full Limoncello），验证了论文所述“<strong>lowered CPU cycles spent in targeted functions by 2%</strong>”。</li>
+<li>该图直观证明：<strong>软件预取能精准补偿硬件预取关闭带来的性能损失，并在高带宽压力下实现更优资源利用</strong>。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

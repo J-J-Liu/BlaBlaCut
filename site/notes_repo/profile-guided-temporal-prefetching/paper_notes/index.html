@@ -1,0 +1,1189 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/profile-guided-temporal-prefetching/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Profile-Guided Temporal Prefetching 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#profile-guided-temporal-prefetching" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Profile-Guided Temporal Prefetching 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-profile-guided-insertion-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Profile-Guided Insertion Policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-profile-guided-replacement-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Profile-Guided Replacement Policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-multi-path-victim-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Multi-path Victim Buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-adaptive-learning-across-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Adaptive Learning across Inputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-lightweight-counter-based-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Lightweight Counter-Based Profiling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="profile-guided-temporal-prefetching">Profile-Guided Temporal Prefetching 论文解析<a class="headerlink" href="#profile-guided-temporal-prefetching" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>
+- Mengming Li (HKUST)
+- Qijun Zhang (HKUST)
+- Yichuan Gao (Intel)
+- Wenji Fang (HKUST)
+- Yao Lu (HKUST)
+- Yongqing Ren (Intel)
+- Zhiyao Xie (HKUST)</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>
+- Proceedings of the <strong>52nd Annual International Symposium on Computer Architecture (ISCA ’25)</strong></p>
+<p><strong>发表年份 (Publication Year)</strong>
+- <strong>2025</strong></p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong>
+- 解决现有 <strong>Temporal Prefetching</strong>（时间局部性预取）方案在管理有限的 <strong>on-chip metadata storage</strong>（片上元数据存储）时效率低下的问题。
+- 现有硬件方案（如 <strong>Triangel</strong>）因缺乏对程序未来行为的洞察，其 <strong>insertion policy</strong>（插入策略）和 <strong>replacement policy</strong>（替换策略）无法有效平衡性能增益与存储开销，常错误地过滤掉有用的元数据或保留无用的元数据。
+- 现有的 <strong>Profile-Guided</strong>（配置文件引导）软件预取方案（如 <strong>RPG2</strong>）仅对具有规则步长模式的间接访问有效，无法处理指针追逐等复杂的不规则内存访问模式。</p>
+<p><strong>方法</strong>
+- 提出 <strong>Prophet</strong>，一个 <strong>hardware-software co-designed framework</strong>（硬件-软件协同设计框架），利用轻量级的 <strong>profile-guided</strong> 方法来优化硬件时间预取器的元数据表管理。
+- <strong>轻量级剖析 (Lightweight Profiling)</strong>：使用 <strong>PMU counters</strong>（性能监控单元计数器）而非完整的执行轨迹进行剖析，开销极低。
+- <strong>Hint 注入与动态调优 (Hint Injection &amp; Dynamic Tuning)</strong>：
+  - 通过离线分析计数器数据，为程序注入 <strong>hints</strong>（提示），以指导硬件预取器的 <strong>insertion policy</strong>, <strong>replacement policy</strong>, 和 <strong>resizing</strong>（重分配大小）操作。
+  - 设计了 <strong>Learning</strong> 机制，能够整合来自不同程序输入的剖析数据，使单个优化后的二进制文件能自适应多种输入。
+- <strong>兼容性设计 (Compatibility)</strong>：Prophet 与现有的硬件时间预取器（如 Triangel）共存，共享同一个元数据表，仅在频繁执行的工作负载上启用其优化策略。
+- <strong>关键技术组件</strong>：
+  - <strong>Profile-Guided Insertion Policy</strong>：基于指令级（PC-level）的预取准确率，过滤掉几乎不产生有用预取的内存指令。
+  - <strong>Profile-Guided Replacement Policy</strong>：为元数据条目分配基于预取准确率的优先级，在替换时优先淘汰低优先级条目。
+  - <strong>Multi-path Victim Buffer</strong>：为解决单个地址可能有多个 <strong>Markov targets</strong>（马尔可夫目标）的问题，引入一个辅助缓冲区来存储被驱逐但仍有价值的目标地址。</p>
+<p><img alt="" src="../images/03f7881b22054667421ffd95ff8a6892fe945c883875804a4a7995f14085fe71.jpg" /></p>
+<p><em>Figure 8: The percentage of Markov target number (T) in temporal prefetching. Figure 9: The Multi-path Victim Buffer.</em></p>
+<p><img alt="" src="../images/45d5a20ea75b4a6bd546801f0bdc339954d61e9e9c1520ac15d9b0b7c7b9d0c0.jpg" /></p>
+<p><strong>结果</strong>
+- 在 <strong>SPEC CPU</strong> 等代表性工作负载上，Prophet 相比基线（无时间预取器）实现了 <strong>34.58%</strong> 的 IPC 加速。
+- <strong>性能对比</strong>：
+  - 相比最先进的软件间接访问预取方案 <strong>RPG2</strong>（仅提升 <strong>0.1%</strong>），Prophet 性能高出 <strong>34.48%</strong>。
+  - 相比最先进的硬件时间预取器 <strong>Triangel</strong>（提升 <strong>20.35%</strong>），Prophet 性能高出 <strong>14.23%</strong>。
+- <strong>效能分析</strong>：
+  - Prophet 的性能增益主要来源于更高效的元数据管理，它同时提升了 <strong>prefetching coverage</strong>（预取覆盖率）和维持了高 <strong>prefetching accuracy</strong>（预取准确率）。</p>
+<p><img alt="" src="../images/dd6161f2d2a4bb372e253ed70069de47394af8c4f28967a03b94aed8798d4590.jpg" /></p>
+<p><em>Figure 12: Prefetching coverage and accuracy6.</em></p>
+<ul>
+<li><strong>自适应能力</strong>：通过 <strong>Learning</strong> 机制，Prophet 能够在一个优化的二进制文件中，为 <strong>gcc</strong> 等应用的不同输入实现接近最优的性能。</li>
+</ul>
+<p><img alt="" src="../images/43948fc9cbd2b8790f6e3b4be9949e5ea3476184e05ad873a7b24d42dea75539.jpg" /></p>
+<p><em>Figure 13: Prophet learns counters from gcc’s inputs.</em></p>
+<ul>
+<li><strong>开销</strong>：剖析、分析和指令开销均可忽略不计；相比 Triangel，仅引入 <strong>1.6%</strong> 的额外能耗开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方案</th>
+<th style="text-align: center;">相比基线 IPC 提升</th>
+<th style="text-align: center;">相比 RPG2 提升</th>
+<th style="text-align: center;">相比 Triangel 提升</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>RPG2</strong></td>
+<td style="text-align: center;">0.1%</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-34.48%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Triangel</strong></td>
+<td style="text-align: center;">20.35%</td>
+<td style="text-align: center;">20.25%</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Prophet</strong></td>
+<td style="text-align: center;"><strong>34.58%</strong></td>
+<td style="text-align: center;"><strong>34.48%</strong></td>
+<td style="text-align: center;"><strong>14.23%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论</strong>
+- Prophet 成功地将 <strong>profile-guided optimization</strong> 应用于 <strong>temporal prefetching</strong> 的元数据管理，克服了纯硬件方案因缺乏全局视野而导致的效率低下问题。
+- 通过使用 <strong>counters</strong> 进行轻量级剖析、注入 <strong>hints</strong> 指导硬件决策以及创新的 <strong>Learning</strong> 机制，Prophet 实现了 <strong>adaptable</strong>（自适应）、<strong>lightweight</strong>（轻量级）和 <strong>compatible</strong>（兼容性好）的优化。
+- Prophet 在处理复杂、不规则的内存访问模式上显著优于现有方案，为解决“内存墙”问题提供了一个高效且实用的新思路。</p>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong>
+- <strong>Temporal prefetching</strong>（时间局部性预取）是处理<strong>irregular memory access patterns</strong>（不规则内存访问模式）的有效技术，这类模式常见于指针和数据依赖的数据结构中。
+- 为了减少访问元数据的内存流量，近期研究将元数据存储从片外DRAM迁移到片上LLC中的<strong>metadata table</strong>（元数据表）。然而，片上存储资源有限，如何高效管理该表成为关键挑战。
+- 现有的硬件方案（如<strong>Triangel</strong>）在元数据表管理上存在缺陷：其插入策略（如<strong>PatternConf</strong>）过于保守，会错误地过滤掉能产生有用预取的元数据；而替换策略则未能有效区分元数据的价值。
+- 传统的<strong>Profile-Guided Optimization (PGO)</strong> 方案（如<strong>RPG2</strong>）主要针对具有规则步长（<strong>stride pattern</strong>）的间接访问，对于复杂的不规则模式（如<strong>pointer-chasing</strong>）效果甚微。</p>
+<p><img alt="" src="../images/f64615e99f4d91d134a25d18cf295fb61c22f1fbed751dcc5f71f019d4e29bdf.jpg" /></p>
+<p><em>Figure 1: The bottom figure shows a metadata access pattern: 1) Blue/Red dots are metadata accesses that result in useful/useless prefetches; 2) Blue/Red stars represent first metadata access with/without temporal patterns. Their corresponding metadata should/should not be inserted in the metadata table. The top figure shows how Triangel [7] applies its PatternConf to the highlighted metadata access pattern.</em></p>
+<p><strong>研究动机</strong>
+- 纯硬件方案缺乏对程序未来行为的洞察，仅依赖短期历史数据，难以应对元数据访问模式的高度动态性和方差。
+- 现有PGO方案无法有效处理复杂的时序模式，且通常对不同的程序输入缺乏适应性，一个输入上生成的优化提示（<strong>hints</strong>）在另一个输入上可能失效。
+- 需要一种既能利用<strong>profile-guided</strong>方法的全局视野来精确管理元数据，又能保持轻量级、兼容现有硬件且能适应不同输入的解决方案。</p>
+<p><img alt="" src="../images/fc5a8f18085c97344eaa1f7b6ee555a419994347ecdc8a800c2a773b0e43aa8f.jpg" /></p>
+<p><em>Figure 2: Comparison between Prophet and prior profileguided solutions. Prophet is lightweight as it only uses counters for profiling. Prophet can integrate counters from multiple inputs, enabling it to adapt to varying program inputs.</em></p>
+<p><strong>核心贡献</strong>
+- 提出了 <strong>Prophet</strong>，一个<strong>hardware-software co-designed</strong>框架，利用<strong>profile-guided</strong>方法优化硬件时序预取器的元数据表管理。
+- <strong>轻量级Profiling</strong>: 使用<strong>PMU counters</strong>而非完整的执行轨迹（<strong>traces</strong>）进行分析，显著降低了性能和存储开销。
+- <strong>自适应学习机制</strong>: 通过迭代地从不同程序输入中采样计数器并合并，使单个优化后的二进制文件能够适应多种输入场景。
+- <strong>精细化的元数据管理</strong>:
+  - <strong>插入策略</strong>: 基于指令级（<strong>PC-level</strong>）的<strong>prefetching accuracy</strong>，仅过滤掉几乎无时序模式的指令。
+  - <strong>替换策略</strong>: 在保留的元数据中，根据预取准确率分配优先级，优先替换低价值条目。
+  - <strong>引入Multi-path Victim Buffer</strong>: 解决单个地址对应多个<strong>Markov targets</strong>的问题，提升了对复杂时序模式的覆盖。
+- <strong>卓越的性能表现</strong>: 在SPEC CPU等基准测试中，Prophet相比最先进的<strong>Triangel</strong>实现了<strong>14.23%</strong>的性能提升，而传统PGO方案（<strong>RPG2</strong>）仅获得<strong>0.1%</strong>的增益。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">对比方案</th>
+<th style="text-align: center;">性能提升 (vs. 无预取)</th>
+<th style="text-align: center;">相比 Triangel 的优势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">RPG2</td>
+<td style="text-align: center;">0.1%</td>
+<td style="text-align: center;">-14.13%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Triangel</td>
+<td style="text-align: center;">20.35%</td>
+<td style="text-align: center;">Baseline</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Prophet</strong></td>
+<td style="text-align: center;"><strong>34.58%</strong></td>
+<td style="text-align: center;"><strong>+14.23%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/c292b6dcf5ca21eec55f21157ec744bbd51dac61368fe4184d415dc18d545f7c.jpg" /></p>
+<p><em>Figure 10: IPC speedup compared to RPG2 and Triangel.</em></p>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>Prophet 是一个 <strong>hardware-software co-designed framework</strong>，旨在通过 <strong>profile-guided methods</strong> 优化硬件 <strong>temporal prefetcher</strong> 的 <strong>metadata table management</strong>。其核心思想是利用离线分析获得的程序行为洞察，生成轻量级的 <strong>hints</strong> 注入到程序中，在运行时指导硬件 prefetcher 更高效地管理其有限的片上存储资源。</p>
+<ul>
+<li>Prophet <strong>与现有的硬件 temporal prefetcher（如 Triangel）共存</strong>，共享同一个 metadata table，但替换了其原有的、基于短期运行时信息的管理策略。</li>
+<li>整个框架的流程分为三个阶段：<strong>Profiling</strong>、<strong>Analysis</strong> 和 <strong>Learning</strong>，如 </li>
+</ul>
+<p><img alt="" src="../images/cdc63eedc1cc416850522da52d35cdfaeff157cce648ca2441e025af7cabe00d.jpg" /></p>
+<p><em>Figure 5: Prophet process overview. Step1: Prophet leverages the PMU to gather counters related to the temporal prefetcher’s performance. Step2: Prophet analyzes the collected counters to generate hints and then injects hints into the original binaries. Step 3: Prophet samples and learns counters across different program inputs.</em></p>
+<p>所示。
+- Prophet 的架构主要由三个 profile-guided 组件构成，如 </p>
+<p><img alt="" src="../images/564aa205d0725d8197f382aa5229d8b829958c18c8574b4402c6300b85b4e3af.jpg" /></p>
+<p><em>Figure 4: Prophet architecture overview. Prophet coexists with hardware temporal prefetchers by sharing the same metadata table but leveraging more accurate profile-guided methods for metadata table management.</em></p>
+<p>所示：
+  - <strong>Profile-Guided Insertion Policy</strong>: 决定哪些内存访问指令（PC）产生的请求应该被用来训练 prefetcher 并插入 metadata。
+  - <strong>Profile-Guided Replacement Policy</strong>: 为 metadata table 中的条目分配基于 <strong>prefetching accuracy</strong> 的优先级，以指导替换决策。
+  - <strong>Profile-Guided Resizing</strong>: 根据程序对 metadata 存储的峰值需求，预先设定 metadata table 的大小。</p>
+<p><strong>Hint 信息注入与传递机制</strong></p>
+<ul>
+<li>Prophet 生成两类 hint 信息：</li>
+<li><strong>PC-level hints</strong>: 针对特定内存指令，用于 insertion 和 replacement 策略。</li>
+<li><strong>Application-level hints</strong>: 全局性信息（如 metadata table 大小），通过在程序开头插入 <strong>CSR manipulation instruction</strong> 来设置。</li>
+<li>PC-level hints 通过两种方式注入到程序中：</li>
+<li><strong>Hint Buffer</strong>: 使用专用的 hint 指令将 hint 信息和 PC tag 存入一个靠近 prefetcher 的小缓冲区。</li>
+<li><strong>Reserved Bits/Instruction Prefix</strong>: 将 hint 直接嵌入到内存访问指令的保留位或 x86 前缀中。</li>
+</ul>
+<p><strong>自适应学习能力 (Adaptable Learning)</strong></p>
+<ul>
+<li>Prophet 能够通过 <strong>Learning</strong> 阶段，持续从不同的程序输入中采样新的性能计数器，并将其与历史数据合并。</li>
+<li>这种机制使得一个单一的优化二进制文件能够<strong>动态调整其 hints</strong>，从而在多种不同的输入集上都保持接近最优的性能，解决了传统 PGO 对输入敏感的问题，如 </li>
+</ul>
+<p><img alt="" src="../images/ff1182ed8877ef8021f216233158f49ec73c5e91c7b6639d5bd145831224a8e5.jpg" /></p>
+<p><em>Figure 6: The prefetching accuracy of temporal prefetching across different memory instructions in omnetpp.</em></p>
+<p>和 </p>
+<p><img alt="" src="../images/43948fc9cbd2b8790f6e3b4be9949e5ea3476184e05ad873a7b24d42dea75539.jpg" /></p>
+<p><em>Figure 13: Prophet learns counters from gcc’s inputs.</em></p>
+<p>所示。</p>
+<p><strong>增强的 Metadata 表达能力</strong></p>
+<ul>
+<li>为了解决单个地址可能对应多个未来访问目标（Markov targets）的问题，Prophet 引入了 <strong>Multi-path Victim Buffer</strong>。</li>
+<li>该缓冲区可以存储从主 metadata table 中被替换出去的、但仍有价值的额外 Markov targets，从而提升了对复杂 temporal patterns 的覆盖能力，如 </li>
+</ul>
+<p><img alt="" src="../images/03f7881b22054667421ffd95ff8a6892fe945c883875804a4a7995f14085fe71.jpg" /></p>
+<p><em>Figure 8: The percentage of Markov target number (T) in temporal prefetching. Figure 9: The Multi-path Victim Buffer.</em></p>
+<p>所示。</p>
+<h3 id="1-profile-guided-insertion-policy">1. Profile-Guided Insertion Policy<a class="headerlink" href="#1-profile-guided-insertion-policy" title="Permanent link">&para;</a></h3>
+<p><strong>实现原理与核心思想</strong></p>
+<ul>
+<li>Prophet 的 <strong>Profile-Guided Insertion Policy</strong> 旨在解决现有硬件预取器（如 Triangel）因依赖<strong>短时历史数据</strong>而导致的<strong>插入策略不准确</strong>问题。</li>
+<li>其核心思想是利用<strong>离线剖析 (Profiling)</strong> 阶段收集的<strong>长期、全局的程序执行信息</strong>，为每个内存访问指令（PC）计算一个<strong>真实的预取准确率 (prefetching accuracy)</strong>。</li>
+<li>基于这个准确率，该策略可以<strong>精准地识别并过滤掉</strong>那些几乎无法从时间局部性预取中受益的内存指令，从而避免将宝贵的片上元数据表空间浪费在无效条目上。</li>
+</ul>
+<p><strong>算法流程与输入输出</strong></p>
+<ul>
+<li><strong>输入</strong>:<ul>
+<li><strong>PMU 计数器数据</strong>: 在简化版预取器（固定1MB元数据表，预取度为1）下运行程序时，通过 Intel PEBS 收集的两个关键事件计数：<ul>
+<li><code>MEM_LOAD_RETIRED.L2_Prefetch_Issue</code>: 由该 PC 发出的 L2 预取请求数量。</li>
+<li><code>MEM_LOAD_RETIRED.L2_Prefetch_Useful</code>: 上述预取请求中被后续需求访问命中的数量。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>处理</strong>:<ul>
+<li>对每个 PC，计算其预取准确率：<code>Accuracy = L2_Prefetch_Useful / L2_Prefetch_Issue</code>。</li>
+<li>将计算出的准确率与一个<strong>极低的阈值 (extremely low threshold, denoted as <code>ACC_THRESHOLD</code>)</strong> 进行比较。</li>
+</ul>
+</li>
+<li><strong>决策与输出</strong>:<ul>
+<li>如果 <code>Accuracy &lt; ACC_THRESHOLD</code>，则判定该 PC <strong>几乎不表现出可被利用的时间局部性模式</strong>。</li>
+<li>生成一个 <strong>1-bit hint</strong>，指示硬件预取器<strong>完全丢弃</strong>来自该 PC 的所有需求请求，禁止为其插入任何元数据。</li>
+<li>这个 1-bit hint 会被<strong>注入到原始二进制程序</strong>中，通常通过 <strong>hint buffer</strong> 或 <strong>x86 指令前缀</strong>的方式携带。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/5ce262bc05d9a59c9b3f8f29f7631a80a388119b86b0db232336c3e95dfa2ba5.jpg" /></p>
+<p><strong>参数设置与设计考量</strong></p>
+<ul>
+<li><strong><code>ACC_THRESHOLD</code> 的设定</strong>:<ul>
+<li>该阈值被设计得<strong>非常低</strong>，目的是采取一种<strong>保守的过滤策略</strong>。</li>
+<li>如图16所示，阈值过高会错误地过滤掉有用的元数据，导致性能下降；阈值过低则无法有效节省存储空间。Prophet 选择一个平衡点，确保只过滤掉<strong>明确无用</strong>的指令。</li>
+<li>这种保守设计使其与 Triangel 的 <code>PatternConf</code> 机制形成鲜明对比，后者因对短期噪声过于敏感而容易错误地拒绝后续有用的访问（如图1所示）。</li>
+</ul>
+</li>
+<li><strong>Hint 注入方式</strong>:<ul>
+<li><strong>Hint Buffer</strong>: 在程序入口处插入专用 hint 指令，将 PC 和 hint 存入一个小容量（128-entry, ~0.19KB）的缓冲区。此方法兼容所有 ISA。</li>
+<li><strong>Instruction Prefix</strong>: 利用 x86 架构的指令前缀来携带 hint。由于仅针对最多128条关键指令，对 I-cache 的影响微乎其微（最大增加6字节）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>在 Prophet 整体框架中的作用</strong></p>
+<ul>
+<li><strong>提升元数据表利用率</strong>: 通过预先过滤掉无效的训练数据源，确保有限的片上存储空间被用于记录真正有价值的地址相关性。</li>
+<li><strong>奠定精细化管理基础</strong>: 作为第一道筛选关卡，Insertion Policy 为后续的 <strong>Profile-Guided Replacement Policy</strong> 提供了高质量的“候选池”。Replacement Policy 只需在这个已被净化的池子中，根据更细粒度的准确率进行优先级排序。</li>
+<li><strong>实现软硬协同</strong>: 该策略完美体现了 Prophet 的 co-design 思想：复杂的分析和决策在软件层面离线完成，硬件只需执行一个简单的、基于 hint 的开关操作，开销极低。</li>
+<li><strong>与学习机制结合</strong>: 在 <strong>Step 3: Learning</strong> 阶段，来自不同程序输入的准确率计数会通过特定公式（如 Equation 4）进行合并，使得生成的 hint 能够适应多种输入场景，保证单一优化二进制文件的广泛适用性。</li>
+</ul>
+<h3 id="2-profile-guided-replacement-policy">2. Profile-Guided Replacement Policy<a class="headerlink" href="#2-profile-guided-replacement-policy" title="Permanent link">&para;</a></h3>
+<p><strong>核心原理与动机</strong></p>
+<ul>
+<li>Prophet 的 <strong>Profile-Guided Replacement Policy</strong> 旨在解决现有硬件替换策略（如 Hawkeye, SRRIP）的根本缺陷：它们仅基于<strong>元数据的重用距离 (reuse distance)</strong> 进行决策，而忽略了该元数据是否能产生<strong>有用的预取 (useful prefetches)</strong>。</li>
+<li>如图1所示，元数据访问模式高度可变，重用距离方差极大，单纯预测重用距离效率低下。</li>
+<li>Prophet 的核心思想是将<strong>预取准确率 (prefetching accuracy)</strong> 作为关键指标，为每个内存指令（PC）分配一个<strong>细粒度的替换优先级 (replacement priority)</strong>。准确率越低的指令所产生的元数据，其优先级越低，在需要替换时会被优先驱逐。</li>
+</ul>
+<p><img alt="" src="../images/f64615e99f4d91d134a25d18cf295fb61c22f1fbed751dcc5f71f019d4e29bdf.jpg" /></p>
+<p><em>Figure 1: The bottom figure shows a metadata access pattern: 1) Blue/Red dots are metadata accesses that result in useful/useless prefetches; 2) Blue/Red stars represent first metadata access with/without temporal patterns. Their corresponding metadata should/should not be inserted in the metadata table. The top figure shows how Triangel [7] applies its PatternConf to the highlighted metadata access pattern.</em></p>
+<p><strong>算法流程与实现细节</strong></p>
+<ul>
+<li><strong>输入</strong>: 在 <strong>Profiling</strong> 阶段（Step 1），通过 PMU 的 PEBS 事件收集每个 PC 的两个计数器：</li>
+<li><code>MEM_LOAD_RETIRED.L2_Prefetch_Issue</code>: 发出的预取请求数。</li>
+<li><code>MEM_LOAD_RETIRED.L2_Prefetch_Useful</code>: 被需求请求命中的有用预取数。</li>
+<li><strong>计算预取准确率</strong>: 对于每个 PC，其预取准确率计算公式为：</li>
+<li><strong>Prefetching Accuracy = L2_Prefetch_Useful / L2_Prefetch_Issue</strong></li>
+<li><strong>分配优先级</strong>: 在 <strong>Analysis</strong> 阶段（Step 2），使用以下公式将连续的准确率映射为离散的优先级等级：</li>
+<li><strong>Priority Level = floor(Accuracy * n)</strong></li>
+<li>其中，<strong><code>n</code></strong> 是一个由设计者控制的参数，决定了优先级的粒度。论文评估后选择 <strong><code>n=2</code></strong>，即使用 <strong>2-bit</strong> 来表示 <strong>4个</strong> 优先级等级，在性能增益和存储开销之间取得平衡。</li>
+<li><strong>注入与记录</strong>: 分配的优先级被编码为 <strong>Hint</strong> 信息，并通过 <strong>Hint Buffer</strong> 或 <strong>指令前缀</strong> 注入到程序二进制文件中。当该 PC 产生的需求请求触发元数据插入时，其对应的 <strong>Priority Level</strong> 会被记录到 <strong>Prophet Replacement State</strong> 中，与元数据条目关联。</li>
+<li><strong>执行替换</strong>: 当元数据表满且需要插入新条目时，Prophet 替换策略首先筛选出具有<strong>最低优先级等级</strong>的所有条目作为<strong>候选受害者 (victim candidates)</strong>。然后，在这些候选者中应用 <strong>LRU (Least Recently Used)</strong> 策略来最终确定被替换的条目。</li>
+</ul>
+<p><img alt="" src="../images/37bc72061a8ee86cc1388e266f82418a26bef80f9a35efb33771fc0ce33ae8e8.jpg" /></p>
+<p><strong>在整体架构中的作用与优势</strong></p>
+<ul>
+<li><strong>与插入策略协同</strong>: 插入策略（Insertion Policy）会过滤掉预取准确率极低（低于阈值 <code>ACC_MIN</code>）的 PC，确保只有“有潜力”的元数据进入表中。替换策略则在此基础上，对已进入表中的元数据进行<strong>精细化管理</strong>，确保高价值（高准确率）的元数据能被长期保留。</li>
+<li><strong>提升元数据表利用率</strong>: 通过优先驱逐低价值元数据，为高价值元数据腾出空间，显著提高了有限的 <strong>on-chip metadata table</strong> 的利用效率。</li>
+<li><strong>直接提升性能</strong>: 如图19的特性分解所示，替换策略是 Prophet 性能提升的最大贡献者之一，尤其在 <strong>mcf</strong> 和 <strong>omnetpp</strong> 等对缓存污染敏感的工作负载上，分别带来了 <strong>14.53%</strong> 和 <strong>9.89%</strong> 的性能增益。</li>
+</ul>
+<p><img alt="" src="../images/b04aca2809679275bc2726da115f56cb8eeb55a5ce1539cdfa62fe0f42fc9fcf.jpg" /></p>
+<p><em>Figure 19: Prophet Features Breakdown.</em></p>
+<p><strong>参数敏感性与存储开销</strong></p>
+<ul>
+<li><strong>参数 <code>n</code> 的影响</strong>: </li>
+<li>增加 <code>n</code> 可以提供更细粒度的分类，从而可能带来更好的性能。</li>
+<li>但收益递减，且会线性增加 <strong>Prophet Replacement State</strong> 的存储开销。</li>
+<li><strong>存储开销</strong>: </li>
+<li>对于一个 1MB 的元数据表（196,608 个条目），每个条目需要 <strong>2-bit</strong> 的替换状态。</li>
+<li>总存储开销为 <strong>48 KB</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">默认值</th>
+<th style="text-align: left;">作用</th>
+<th style="text-align: left;">影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>n</code></strong></td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">控制优先级等级数量 (<code>n+1</code> levels)</td>
+<td style="text-align: left;">值越大，优先级越细，性能略好，但存储开销增加</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Replacement State</strong></td>
+<td style="text-align: left;">2-bit per entry</td>
+<td style="text-align: left;">存储元数据条目的优先级</td>
+<td style="text-align: left;">总开销 48 KB for 1MB table</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-multi-path-victim-buffer">3. Multi-path Victim Buffer<a class="headerlink" href="#3-multi-path-victim-buffer" title="Permanent link">&para;</a></h3>
+<p><strong>核心动机与问题定义</strong>
+- 现有的片上时序预取器（如 Triangel）在元数据表中为每个内存地址仅存储<strong>单个 Markov 目标</strong>，这无法有效处理现实应用中普遍存在的“一对多”访问模式。
+- 论文图8（<img alt="" src="images/03f7881b22054667421ffd95ff8a6892fe945c883875804a4a7995b0f14085fe71.jpg" />）的数据显示，在 SPEC CPU 基准测试中，超过 <strong>20%</strong> 的内存地址具有 <strong>2 个或更多</strong>的 Markov 目标。忽略这些额外目标会导致预取不准确和需求缺失（demand misses）。
+- 直接在主元数据表中存储多个目标会带来<strong>不可接受的存储开销</strong>。</p>
+<p><strong>Multi-path Victim Buffer 设计原理</strong>
+- Prophet 引入一个名为 <strong>Multi-path Victim Buffer</strong> 的专用缓冲区，其核心思想是：当元数据表因容量限制需要替换条目时，并非直接丢弃被替换条目中的 Markov 目标，而是根据其优先级决定是否将其存入此缓冲区。
+- 该缓冲区作为主元数据表的补充，专门用于保存那些<strong>有价值但暂时无法驻留主表</strong>的“第二选择”或“第三选择”目标地址。</p>
+<p><strong>算法流程与管理策略</strong>
+- <strong>插入 (Insertion)</strong>:
+    - 当一个 Markov 目标因主元数据表替换而被驱逐时，系统会检查其<strong>优先级级别</strong>（由公式2 </p>
+<p><img alt="" src="../images/37bc72061a8ee86cc1388e266f82418a26bef80f9a35efb33771fc0ce33ae8e8.jpg" /></p>
+<p>计算得出）。
+    - 仅当该优先级级别 <strong>大于</strong> 预设的极低阈值 <code>ACC_MIN</code> 时，该目标才会被存入 Multi-path Victim Buffer。这确保了缓冲区空间被高效利用，只保留高价值的目标。
+- <strong>替换 (Replacement)</strong>:
+    - Multi-path Victim Buffer 拥有自己独立的替换策略，复用 Prophet 的替换思想但针对其自身特点进行了调整。
+    - 如图9（</p>
+<p><img alt="" src="../images/9087072c5e87fbae1a8083cc16ac9ea23f8701942e4b8073e28bba47ab3c99c9.jpg" /></p>
+<p><em>Figure 7: Challenges of traditional profile-guided optimizations across different program inputs.</em></p>
+<p>）所示，缓冲区为每个 Markov 目标维护一个<strong>计数器</strong>。
+    - 每当该目标被访问（即被用于预取），其计数器值就递增。
+    - 在需要替换缓冲区条目时，其<strong>优先级级别被设定为该计数器的最大值</strong>，从而优先保留被频繁使用的多路径目标。
+- <strong>预取 (Prefetch)</strong>:
+    - 在正常的预取请求生成过程中（无论是来自主元数据表还是 Reuse Buffer），系统会<strong>同时触发</strong>对 Multi-path Victim Buffer 的查找。
+    - 使用相同的查找地址在 Multi-path Victim Buffer 中搜索。
+    - 如果发现匹配项，Prophet 会将这些额外的 Markov 目标也作为<strong>预取候选</strong>发出请求，从而覆盖更复杂的访问模式。</p>
+<p><strong>参数设置与权衡</strong>
+- 论文图16（</p>
+<p><img alt="" src="../images/614bba26570a1019f0a4d9f16f8e4c176817c5e30a6573597b0acebd3ac94c2f.jpg" /></p>
+<p><em>Figure 16: Sensitivity study.</em></p>
+<p>）的敏感性分析表明，为每个元数据条目在缓冲区中保留 <strong>1 个</strong>额外的 Markov 候选者是最佳选择。
+- 保留更多候选者虽然能略微提升预取覆盖率，但会带来负面效应：
+    - 对于 <strong>astar</strong> 这类对缓存污染和内存带宽浪费敏感的工作负载，过多的预取反而会<strong>降低性能</strong>。
+    - 考虑到图8显示大部分地址的 Markov 目标少于2个，保留过多候选者会造成<strong>不必要的存储开销</strong>。</p>
+<p><strong>输入输出关系及整体作用</strong>
+- <strong>输入</strong>: 来自主元数据表替换操作的、被驱逐的高优先级 Markov 目标；以及来自处理器核心的常规内存访问流（用于触发缓冲区查找）。
+- <strong>输出</strong>: 额外的、针对复杂“一对多”模式的预取请求。
+- <strong>在 Prophet 整体框架中的作用</strong>:
+    - 它是 Prophet <strong>高效元数据管理</strong>的关键一环，解决了传统设计无法处理多路径时序模式的根本缺陷。
+    - 通过精细管理（基于优先级的插入和基于使用频率的替换），它以可控的存储和带宽开销（论文指出仅增加 <strong>1.95%</strong> 内存带宽）显著提升了预取覆盖率。
+    - 其效果在特定工作负载上尤为突出，例如在 <strong>soplex</strong> 上贡献了 <strong>13.46%</strong> 的性能提升，并且甚至能改善对带宽敏感的 <strong>astar</strong> 的性能。</p>
+<h3 id="4-adaptive-learning-across-inputs">4. Adaptive Learning across Inputs<a class="headerlink" href="#4-adaptive-learning-across-inputs" title="Permanent link">&para;</a></h3>
+<p><strong>Adaptive Learning across Inputs 的实现原理</strong></p>
+<p>Prophet 的自适应学习机制旨在解决传统 Profile-Guided Optimization (PGO) 对不同程序输入敏感的核心痛点。其核心思想是通过一个持续的、增量的学习循环，将从新输入中采样的运行时计数器与历史数据合并，从而动态更新用于指导硬件预取器的 hints，最终使单一优化后的二进制文件能高效应对多样化的输入。</p>
+<ul>
+<li><strong>问题根源</strong>: 传统 PGO 为特定输入生成 hints，当程序执行路径因输入改变而变化时（如图7所示），原有 hints 可能失效。</li>
+<li>对于在所有输入下都执行的指令（如 Load A），hints 具有通用性。</li>
+<li>对于仅在特定输入下执行的指令（如 Load B/C），需要为新指令生成新 hints。</li>
+<li>对于在不同输入下行为不同的指令（如 Load E），需要动态调整其 hints。</li>
+<li><strong>解决方案</strong>: Prophet 引入了一个三步闭环流程：<strong>Profiling -&gt; Analysis -&gt; Learning</strong>。</li>
+<li><strong>Profiling</strong> 阶段使用简化的预取器和 PMU 计数器收集原始性能数据。</li>
+<li><strong>Analysis</strong> 阶段离线处理计数器，生成 PC-level 和 application-level 的 hints 并注入二进制文件。</li>
+<li><strong>Learning</strong> 阶段是自适应的关键，它周期性地触发新的 Profiling，并将新数据与历史数据合并，驱动下一轮 Analysis。</li>
+</ul>
+<p><img alt="" src="../images/7c02b23087cf7ba266a85777b00d226d3bba5ff2a1abc6b754dddc73a77c4a37.jpg" /></p>
+<p><strong>算法流程与数据合并策略</strong></p>
+<p>自适应学习的具体算法体现在对两类关键计数器的合并上：PC-level 的预取准确率和 application-level 的元数据表分配条目数。</p>
+<ul>
+<li><strong>PC-level 预取准确率合并</strong>:</li>
+<li>系统维护一个历史准确率值 <code>A_old</code>。</li>
+<li>当遇到新输入时，采样得到新的准确率 <code>A_new</code>。</li>
+<li>使用指数移动平均（Exponential Moving Average）进行合并，公式如下：
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>A_merged = A_old + (A_new - A_old) / N
+</code></pre></div>
+    其中 <code>N</code> 是一个由设计者预定义的参数，控制新数据的影响权重。</li>
+<li><strong>作用</strong>: <ul>
+<li>对于行为一致的指令（Load A），<code>A_new ≈ A_old</code>，合并后 <code>A_merged</code> 变化微小，hints 保持稳定。</li>
+<li>对于新出现的指令（Load C），<code>A_old</code> 不存在或为默认值，<code>A_merged</code> 主要由 <code>A_new</code> 决定，从而生成新 hints。</li>
+<li>对于行为变化的指令（Load E），<code>A_merged</code> 会向 <code>A_new</code> 偏移，实现 hints 的动态调整。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/35456cc33ab0d442a6cee8546bfa0dac04963ff9a6172c0bb272a68ad507d452.jpg" /></p>
+<ul>
+<li><strong>Application-level 元数据表大小合并</strong>:</li>
+<li>系统维护历史峰值分配条目数 <code>E_old</code>。</li>
+<li>采样新输入得到 <code>E_new</code>。</li>
+<li>采用保守策略进行合并：<code>E_merged = max(E_old, E_new)</code>。</li>
+<li><strong>作用</strong>: 确保元数据表的大小足以容纳所有已观测输入场景下的峰值需求，避免因空间不足而损害性能。</li>
+</ul>
+<p><img alt="" src="../images/80e116b52e63cd5dfbc8543d84386bc4f1af72640358658ff952a5835b48ef86.jpg" /></p>
+<p><strong>参数设置与输入输出关系</strong></p>
+<ul>
+<li><strong>关键参数</strong>:</li>
+<li><strong><code>N</code> (学习率参数)</strong>: 控制新输入数据对合并结果的影响速度。<code>N</code> 越大，系统越“健忘”，对新输入的响应越慢，但稳定性越高；<code>N</code> 越小，系统越“敏感”，能快速适应新输入，但可能因噪声数据而波动。</li>
+<li>
+<p><strong>Profiling 间隔</strong>: 并非每次程序执行都进行 Profiling。根据经验，每 10-100 次执行采样一次即可，这极大地降低了运行时开销。</p>
+</li>
+<li>
+<p><strong>输入与输出</strong>:</p>
+</li>
+<li><strong>输入</strong>: 多样化的程序输入（Program Inputs）。</li>
+<li><strong>内部状态</strong>: 历史计数器（<code>A_old</code>, <code>E_old</code>）。</li>
+<li><strong>处理</strong>: 在 Learning 阶段，新输入触发 Profiling，产生新计数器（<code>A_new</code>, <code>E_new</code>），并通过上述合并算法更新内部状态。</li>
+<li><strong>输出</strong>: 更新后的 hints，这些 hints 被用于下一轮的 Analysis 和二进制优化，最终影响硬件预取器的 <strong>Insertion Policy</strong>, <strong>Replacement Policy</strong>, and <strong>Resizing</strong> 行为。</li>
+</ul>
+<p><strong>在整体框架中的作用与效果</strong></p>
+<p>该自适应学习机制是 Prophet “Adaptable” 特性的基石，使其在实际部署中更具实用价值。</p>
+<ul>
+<li><strong>效果验证</strong>: 如图13所示，在 <code>gcc</code> 应用上，Prophet 从第一个输入 <code>gcc_166</code> 开始学习。随着逐步引入 <code>gcc_expr</code>, <code>gcc_typeck</code> 等新输入，其性能逐渐提升并最终接近为每个输入单独优化的“理想”性能（Direct）。</li>
+<li><strong>泛化能力</strong>: 如图14所示，该学习机制不仅适用于 <code>gcc</code>，还能有效泛化到 <code>astar</code> 和 <code>soplex</code> 等其他工作负载。</li>
+<li><strong>对比优势</strong>: 与 RPG2 等传统方案相比，Prophet 无需为每个新输入重新进行完整的 PGO 流程，而是能够增量式地利用历史知识，实现“一次优化，多输入受益”。</li>
+</ul>
+<p><img alt="" src="../images/43948fc9cbd2b8790f6e3b4be9949e5ea3476184e05ad873a7b24d42dea75539.jpg" /></p>
+<p><em>Figure 13: Prophet learns counters from gcc’s inputs.</em></p>
+<p><img alt="" src="../images/164d3bb1d2fd9886e1013c7d8d0b8f0dfb6bc7ee918477805957df89a0ce8a13.jpg" /></p>
+<p><em>Figure 14: Prophet’s learning feature can be generalized to other workloads, such as astar and soplex.</em></p>
+<h3 id="5-lightweight-counter-based-profiling">5. Lightweight Counter-Based Profiling<a class="headerlink" href="#5-lightweight-counter-based-profiling" title="Permanent link">&para;</a></h3>
+<p><strong>实现原理与核心思想</strong></p>
+<p>Prophet 的轻量级剖析（Lightweight Profiling）机制摒弃了传统方案中开销巨大的完整内存访问 <strong>trace</strong>，转而利用现代处理器内置的 <strong>Performance Monitoring Unit (PMU)</strong> 和 <strong>Processor Event-Based Sampling (PEBS)</strong> 功能，仅收集高度聚合的 <strong>计数器（counters）</strong>。这一设计的核心在于，通过少量、精准的硬件事件计数，即可推导出指导元数据表管理所需的全部关键指标。</p>
+<ul>
+<li><strong>关键洞察</strong>：论文指出，尽管单个元数据访问模式（如 Figure 1 所示）具有高度动态性和方差，但针对每个 <strong>Program Counter (PC)</strong> 的整体 <strong>prefetching accuracy</strong> 却呈现出稳定的、可分类的特性（如 Figure 6 所示）。这使得基于 PC 级别的计数器统计成为可能且有效。</li>
+<li><strong>目标指标</strong>：该机制旨在高效获取两大类信息：</li>
+<li><strong>PC-level 指标</strong>：每个内存访问指令（由其 PC 标识）的 <strong>prefetching accuracy</strong>，用于指导 <strong>插入策略（Insertion Policy）</strong> 和 <strong>替换策略（Replacement Policy）</strong>。</li>
+<li><strong>Application-level 指标</strong>：程序执行结束时 <strong>metadata table</strong> 的 <strong>allocated entries</strong> 数量，用于指导 <strong>resizing</strong> 操作。</li>
+</ul>
+<p><strong>算法流程与数据收集</strong></p>
+<p>剖析流程分为两个明确的数据收集阶段，均在 <strong>Step 1: Profiling</strong> 中完成，并依赖于一个简化的临时预取器配置。</p>
+<ul>
+<li><strong>简化预取器配置</strong>：</li>
+<li>插入策略被禁用。</li>
+<li>元数据表大小固定为 <strong>1 MB</strong>。</li>
+<li>预取度（prefetching degree）设为 <strong>1</strong>。</li>
+<li>
+<p>此配置确保了对所有内存指令的无偏评估，避免了现有优化策略对剖析结果的干扰。</p>
+</li>
+<li>
+<p><strong>PC-level Prefetching Accuracy 收集</strong>：</p>
+</li>
+<li>利用 <strong>Intel PEBS</strong> 功能，在特定硬件事件发生时记录上下文（主要是 PC）。</li>
+<li>启用并采样以下两个自定义事件（基于 <code>MEM_LOAD_RETIRED.L2_MISS</code> 事件修改而来）：<ul>
+<li><code>MEM_LOAD_RETIRED.L2_Prefetch_Issue</code>：记录发出的预取请求数量。</li>
+<li><code>MEM_LOAD_RETIRED.L2_Prefetch_Useful</code>：记录被后续需求请求命中的有用预取数量。</li>
+</ul>
+</li>
+<li>对于每个 PC，其 <strong>prefetching accuracy</strong> 通过以下公式计算：
+    <strong>prefetching_accuracy = L2_Prefetch_Useful / L2_Prefetch_Issue</strong></li>
+<li></li>
+</ul>
+<p><img alt="" src="../images/7c02b23087cf7ba266a85777b00d226d3bba5ff2a1abc6b754dddc73a77c4a37.jpg" /></p>
+<ul>
+<li><strong>Application-level Allocated Entries 收集</strong>：</li>
+<li>使用标准 <strong>PMU counters</strong>（非 PEBS）来追踪全局事件。</li>
+<li>定义两个计数器：<ul>
+<li><code>N_insertions</code>：元数据表的总插入次数。</li>
+<li><code>N_replacements</code>：元数据表的总替换（驱逐）次数。</li>
+</ul>
+</li>
+<li>程序结束时，<strong>allocated entries</strong> 的数量通过以下公式估算：
+    <strong>N_allocated = N_insertions - N_replacements</strong></li>
+</ul>
+<p><strong>输入输出关系及在 Prophet 整体框架中的作用</strong></p>
+<p>该剖析机制是 Prophet <strong>硬件-软件协同设计</strong>的起点，其输入和输出紧密衔接了离线分析与在线执行。</p>
+<ul>
+<li><strong>输入</strong>：</li>
+<li>目标应用程序的原始二进制文件。</li>
+<li>
+<p>一组或多组具有代表性的 <strong>program inputs</strong>。</p>
+</li>
+<li>
+<p><strong>输出</strong>：</p>
+</li>
+<li>一组结构化的 <strong>counter data</strong>，包含每个相关 PC 的 <code>(L2_Prefetch_Issue, L2_Prefetch_Useful)</code> 对，以及全局的 <code>(N_insertions, N_replacements)</code> 对。</li>
+<li>
+<p>这些数据是 <strong>Step 2: Analysis</strong> 的唯一输入，用于生成 <strong>hints</strong>。</p>
+</li>
+<li>
+<p><strong>在整体框架中的作用</strong>：</p>
+</li>
+<li><strong>奠基作用</strong>：为后续所有 profile-guided 优化（插入、替换、重设大小）提供真实、低开销的决策依据。相比硬件仅能依赖短时历史，这些计数器反映了程序在整个剖析运行周期内的长期行为。</li>
+<li><strong>实现“Adaptable”特性</strong>：在 <strong>Step 3: Learning</strong> 中，新输入产生的计数器会与历史计数器按特定公式（如 Equation 4 和 Equation 5）进行合并，使 hints 能够动态适应不同的程序输入。<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/35456cc33ab0d442a6cee8546bfa0dac04963ff9a6172c0bb272a68ad507d452.jpg" /></p>
+<div class="highlight"><pre><span></span><code>-
+</code></pre></div>
+<p><img alt="" src="../images/80e116b52e63cd5dfbc8543d84386bc4f1af72640358658ff952a5835b48ef86.jpg" /></p>
+<ul>
+<li><strong>保证“Lightweight”特性</strong>：整个剖析过程开销极低。根据论文引用 [15]，采样少量 PEBS 事件引入的性能开销 <strong>小于 2%</strong>，且并非每次程序执行都需要剖析，通常每 10-100 次执行一次即可。</li>
+</ul>
+<hr />
+<p><strong>开销与可行性分析</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">开销类型</th>
+<th style="text-align: left;">具体描述</th>
+<th style="text-align: left;">量化结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Profiling Overhead</strong></td>
+<td style="text-align: left;">运行时收集计数器的性能损失</td>
+<td style="text-align: left;"><strong>&lt; 2%</strong> (因仅采样2-3个PEBS事件和1个PMU事件)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Analysis Overhead</strong></td>
+<td style="text-align: left;">离线脚本处理计数器生成hints的时间</td>
+<td style="text-align: left;"><strong>&lt; 1秒</strong> (对所有评测workload)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Instruction Overhead</strong></td>
+<td style="text-align: left;">注入hints到二进制文件带来的额外指令</td>
+<td style="text-align: left;"><strong>可忽略</strong> (最多128条hint指令，对比数十亿条主程序指令)</td>
+</tr>
+</tbody>
+</table>
+<p>该设计充分利用了现有处理器架构（如 Intel Xeon）已支持的 PMU/PEBS 功能，无需任何额外的硬件追踪单元，因此具有极强的 <strong>现实可行性</strong> 和 <strong>部署便利性</strong>。</p>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>模拟平台</strong>: 采用 <strong>gem5</strong> 的全系统 (FS) 模式进行评估。</li>
+<li><strong>系统配置</strong>: 主要参数与 <strong>Triangel</strong> 论文保持一致，具体细节见下表。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>CPU</strong></td>
+<td style="text-align: left;">4 核 OoO CPU, 3.2GHz, 8-wide issue</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L1 Cache</strong></td>
+<td style="text-align: left;">64KB I/D, 4-way, 64B block, 4-cycle hit</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L2 Cache</strong></td>
+<td style="text-align: left;">1MB, 8-way, 64B block, 12-cycle hit</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LLC</strong></td>
+<td style="text-align: left;">8MB, 16-way, 64B block, shared with Markov table</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DRAM</strong></td>
+<td style="text-align: left;">4-channel DDR4-2400, 12.8GB/s per channel</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Prefetchers</strong></td>
+<td style="text-align: left;">L1: Stride; L2: Prophet/Triangel/RPG2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>工作负载</strong>: </li>
+<li>使用 <strong>SPEC CPU</strong> 中具有不规则内存访问模式的 benchmark（如 <code>mcf</code>, <code>omnetpp</code>, <code>gcc</code> 等）。</li>
+<li>同时包含 <strong>CRONO</strong> 图计算 benchmark 套件。</li>
+<li>采用 <strong>SimPoint</strong> 技术生成代表性检查点，并对结果进行加权平均。</li>
+<li><strong>基线对比</strong>:</li>
+<li><strong>硬件基线</strong>: <strong>Triangel</strong>，使用其开源实现。</li>
+<li><strong>软件基线</strong>: <strong>RPG2</strong>，通过 hint buffer 机制模拟其软件预取指令插入。</li>
+</ul>
+<p><img alt="" src="../images/cdeea9421676867d0db1f1eb1950265b2b90603710ddeb9ba0fb18da7d2dfb49.jpg" /></p>
+<hr />
+<p><strong>核心结果数据</strong></p>
+<ul>
+<li><strong>整体性能</strong>: 相比无时间预取器的基线，<strong>Prophet</strong> 平均 IPC 提升 <strong>34.58%</strong>，显著优于 <strong>Triangel</strong> (20.35%) 和 <strong>RPG2</strong> (0.1%)。</li>
+<li><strong>Prophet</strong> 相对于 <strong>Triangel</strong> 的性能增益为 <strong>14.23%</strong>。</li>
+<li><strong>Prophet</strong> 相对于 <strong>RPG2</strong> 的性能增益高达 <strong>34.48%</strong>。</li>
+</ul>
+<p><img alt="" src="../images/c292b6dcf5ca21eec55f21157ec744bbd51dac61368fe4184d415dc18d545f7c.jpg" /></p>
+<p><em>Figure 10: IPC speedup compared to RPG2 and Triangel.</em></p>
+<ul>
+<li><strong>内存流量</strong>: <strong>Prophet</strong> 引入的 DRAM 流量开销为 <strong>18.67%</strong>，仅比 <strong>Triangel</strong> (10.33%) 多出 <strong>5.35%</strong> 的额外开销，证明其高效性。</li>
+</ul>
+<p><img alt="" src="../images/deb3b0148e17069f7858e493333422789f93be9a924b11bcc7842ec4e07f7c59.jpg" /></p>
+<p><em>Figure 11: DRAM traffic compared to RPG2 and Triangel.</em></p>
+<ul>
+<li><strong>预取效果分析</strong>:</li>
+<li><strong>Prophet</strong> 将 <strong>demand misses</strong> 减少了 <strong>42.75%</strong>，而 <strong>Triangel</strong> 仅为 <strong>28.08%</strong>。</li>
+<li>两者的 <strong>prefetching accuracy</strong> 相当，表明 <strong>Prophet</strong> 的优势源于更高的 <strong>prefetching coverage</strong>，而非激进的、低精度的预取。</li>
+</ul>
+<p><img alt="" src="../images/dd6161f2d2a4bb372e253ed70069de47394af8c4f28967a03b94aed8798d4590.jpg" /></p>
+<p><em>Figure 12: Prefetching coverage and accuracy6.</em></p>
+<ul>
+<li><strong>图计算工作负载</strong>: 在 <strong>CRONO</strong> 上，<strong>Prophet</strong> (14.85%) 同样优于 <strong>RPG2</strong> (9.11%) 和 <strong>Triangel</strong> (8.41%)，证明其通用性。</li>
+</ul>
+<p><img alt="" src="../images/60f5a0202cc5a42b2fbcf37d2815c9b8a26693cdd85492046e2f8cef486f577a.jpg" /></p>
+<p><em>Figure 15: IPC speedup on graph workloads.</em></p>
+<hr />
+<p><strong>消融实验 (Ablation Study)</strong></p>
+<p>消融实验以 <strong>Triage4 + Triangel metadata format</strong> 为基础，逐项添加 <strong>Prophet</strong> 的特性，以量化各组件的贡献。</p>
+<p><img alt="" src="../images/b04aca2809679275bc2726da115f56cb8eeb55a5ce1539cdfa62fe0f42fc9fcf.jpg" /></p>
+<p><em>Figure 19: Prophet Features Breakdown.</em></p>
+<ul>
+<li><strong>Profile-Guided Replacement Policy</strong>:</li>
+<li>贡献最大，尤其在 <code>mcf</code> (+14.53%) 和 <code>omnetpp</code> (+9.89%) 等对缓存污染敏感的工作负载上效果显著。</li>
+<li>
+<p>通过保留高 <strong>prefetching accuracy</strong> 的元数据，有效提升了元数据表的利用率。</p>
+</li>
+<li>
+<p><strong>Profile-Guided Insertion Policy</strong>:</p>
+</li>
+<li>设计保守，避免了像 <strong>Triangel</strong> 的 <strong>PatternConf</strong> 那样错误过滤有用元数据的问题。</li>
+<li>
+<p>在 <code>mcf</code> 上带来 <strong>16.72%</strong> 的显著提升，并有效降低了内存流量。</p>
+</li>
+<li>
+<p><strong>Multi-path Victim Buffer</strong>:</p>
+</li>
+<li>用于处理单个地址对应多个 <strong>Markov targets</strong> 的复杂场景（如 <code>soplex</code>，+13.46%）。</li>
+<li>
+<p>仅引入 <strong>1.95%</strong> 的额外内存带宽开销，对 <code>astar</code> 等带宽敏感型应用影响甚微。</p>
+</li>
+<li>
+<p><strong>Profile-Guided Resizing</strong>:</p>
+</li>
+<li>对元数据需求较小的应用（如 <code>sphinx3</code>）最有效，可释放更多 LLC 空间，带来 <strong>1.5%</strong> 的性能增益。</li>
+<li>实验表明，动态调整元数据表大小带来的收益有限，因此采用基于峰值需求的静态分配是高效且实用的策略。</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

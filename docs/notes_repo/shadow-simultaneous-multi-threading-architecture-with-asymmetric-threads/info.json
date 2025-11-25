@@ -1,0 +1,23 @@
+{
+  "index": "shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads",
+  "paper_title": "SHADOW: Simultaneous Multi-Threading Architecture with Asymmetric Threads",
+  "metadata": {
+    "authors": [
+      "Ishita Chaturvedi",
+      "Bhargav Reddy Godala",
+      "Abiram Gangavaram",
+      "et al."
+    ],
+    "affiliations": [
+      "Princeton University",
+      "University of British Columbia",
+      "Microsoft",
+      "University of California Santa Cruz",
+      "AheadComputing"
+    ],
+    "venue": "MICRO",
+    "year": 2025,
+    "doi": "10.1145/3725843.3756070"
+  },
+  "description": "论文提出SHADOW，首个支持乱序（OoO）与顺序（InO）线程并发执行的非对称SMT架构，动态平衡指令级并行（ILP）与线程级并行（TLP）。通过软件工作窃取机制自适应分配负载，在9个基准测试中相比传统OoO CPU最高提速3.16倍，平均提升1.33倍，仅增加1%面积与功耗开销。"
+}

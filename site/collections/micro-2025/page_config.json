@@ -1,0 +1,8 @@
+{
+    "title": "MICRO 2025",
+    "description": "MICRO 2025 论文",
+    "papers": [
+        "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
+        "titan-i-an-open-source-high-performance-risc-v-vector-core"
+    ]
+}

@@ -1,0 +1,714 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/collections/awesome-data-prefetchers/">
+      
+      
+        <link rel="prev" href="../Recent/">
+      
+      
+        <link rel="next" href="../micro-2025/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Awesome Data Prefetchers - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#awesome-data-prefetchers" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Awesome Data Prefetchers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limoncello-prefetchers-for-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limoncello: Prefetchers for Scale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prodigy: Improving the Memory Latency of Data-Indirect Irregular Workloads Using Hardware-Software Co-Design
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profile-guided-temporal-prefetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile-Guided Temporal Prefetching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RICH Prefetcher: Storing Rich Information in Memory to Trade Capacity and Bandwidth for Latency Hiding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rnr-a-software-assisted-record-and-replay-hardware-prefetcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RnR: A Software-Assisted Record-and-Replay Hardware Prefetcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rpg2-robust-profile-guided-runtime-prefetch-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RPG2: Robust Profile-Guided Runtime Prefetch Generation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limoncello-prefetchers-for-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limoncello: Prefetchers for Scale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prodigy: Improving the Memory Latency of Data-Indirect Irregular Workloads Using Hardware-Software Co-Design
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profile-guided-temporal-prefetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile-Guided Temporal Prefetching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RICH Prefetcher: Storing Rich Information in Memory to Trade Capacity and Bandwidth for Latency Hiding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rnr-a-software-assisted-record-and-replay-hardware-prefetcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RnR: A Software-Assisted Record-and-Replay Hardware Prefetcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rpg2-robust-profile-guided-runtime-prefetch-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RPG2: Robust Profile-Guided Runtime Prefetch Generation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="awesome-data-prefetchers">Awesome Data Prefetchers<a class="headerlink" href="#awesome-data-prefetchers" title="Permanent link">&para;</a></h1>
+<p>数据预取器相关论文</p>
+<p>本页面共收录了 7 篇论文笔记。</p>
+<h2 id="feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers">Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers<a class="headerlink" href="#feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Santhosh Srinath, Onur Mutlu, Hyesoon Kim, et al.<br />
+<strong>Affiliations:</strong> Microsoft, Microsoft Research, The University of Texas at Austin<br />
+<strong>Venue:</strong> MICRO 2007</p>
+</blockquote>
+<p>提出反馈导向预取（FDP）机制，通过动态监控预取准确率、及时性和缓存污染来调整硬件预取器的激进程度和预取块在缓存LRU栈中的插入位置。在SPEC CPU2000上，相比最佳传统流式预取器，平均性能提升6.5%，内存带宽消耗降低18.7%。</p>
+<p><a href="../../notes_repo/feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="limoncello-prefetchers-for-scale">Limoncello: Prefetchers for Scale<a class="headerlink" href="#limoncello-prefetchers-for-scale" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Akanksha Jain, Hannah Lin, Carlos Villavieja, et al.<br />
+<strong>Affiliations:</strong> Google, University of Washington<br />
+<strong>Venue:</strong> ASPLOS 2024</p>
+</blockquote>
+<p>论文提出Limoncello，一种无需硬件修改的软硬协同预取系统。它在高内存带宽利用率时动态关闭硬件预取器以降低15%内存延迟，并通过大规模硬件消融研究识别出数据中心税函数（如memcpy、压缩、哈希）作为软件预取目标，精准插入软件预取指令。在Google生产集群部署后，系统在高负载下将应用吞吐量提升10%，同时减少15%的socket内存带宽。</p>
+<p><a href="../../notes_repo/limoncello-prefetchers-for-scale/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/limoncello-prefetchers-for-scale/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/limoncello-prefetchers-for-scale/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design">Prodigy: Improving the Memory Latency of Data-Indirect Irregular Workloads Using Hardware-Software Co-Design<a class="headerlink" href="#prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Nishil Talati, Kyle May, Armand Behroozi, et al.<br />
+<strong>Affiliations:</strong> University of Michigan, University of Wisconsin, Madison, University of Edinburgh<br />
+<strong>Venue:</strong> MICRO 2021</p>
+</blockquote>
+<p>提出Prodigy，一种软硬件协同设计的低开销预取方案，用于加速具有数据间接访问模式（单值和范围间接）的不规则工作负载。其核心是数据间接图（DIG）表示，由编译器自动生成并指导硬件预取器。在仅0.8KB存储开销下，相比无预取基线平均提速2.6倍、节能1.6倍，并显著优于现有先进预取器。</p>
+<p><a href="../../notes_repo/prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="profile-guided-temporal-prefetching">Profile-Guided Temporal Prefetching<a class="headerlink" href="#profile-guided-temporal-prefetching" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Mengming Li, Qijun Zhang, Yichuan Gao, et al.<br />
+<strong>Affiliations:</strong> Hong Kong University of Science and Technology (HKUST), Intel<br />
+<strong>Venue:</strong> ISCA 2025</p>
+</blockquote>
+<p>提出Prophet，一个软硬协同的Profile-Guided时序预取框架，通过轻量级计数器分析和动态提示注入，优化片上元数据表管理。相比SOTA硬件预取器Triangel，性能提升14.23%，显著优于软件方案RPG2（仅0.1%增益），且能自适应不同输入，开销可忽略。</p>
+<p><a href="../../notes_repo/profile-guided-temporal-prefetching/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/profile-guided-temporal-prefetching/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/profile-guided-temporal-prefetching/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding">RICH Prefetcher: Storing Rich Information in Memory to Trade Capacity and Bandwidth for Latency Hiding<a class="headerlink" href="#rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Ningzhi Ai, Wenjian He, Hu He, et al.<br />
+<strong>Affiliations:</strong> Huawei Technologies Co., Ltd, Tsinghua University<br />
+<strong>Venue:</strong> MICRO 2025</p>
+</blockquote>
+<p>针对高带宽/大容量但高延迟的未来内存系统，提出RICH预取器。其核心创新是利用丰富的元数据，通过多尺度区域（2KB/4KB/16KB）和多偏移触发机制协同工作，在保持高精度的同时提升覆盖率和及时性。为控制开销，采用片上/片下分层存储元数据。实验表明，在传统系统中性能优于Bingo 3.4%，在增加120ns延迟的高延迟系统中优势扩大至8.3%。</p>
+<p><a href="../../notes_repo/rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="rnr-a-software-assisted-record-and-replay-hardware-prefetcher">RnR: A Software-Assisted Record-and-Replay Hardware Prefetcher<a class="headerlink" href="#rnr-a-software-assisted-record-and-replay-hardware-prefetcher" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Chao Zhang, Yuan Zeng, John Shalf, et al.<br />
+<strong>Affiliations:</strong> Lehigh University, Lawrence Berkeley National Lab<br />
+<strong>Venue:</strong> HPCA 2023</p>
+</blockquote>
+<p>论文提出RnR，一种软硬件协同的记录-回放式硬件预取器，用于处理具有重复性不规则访存模式的应用（如图计算、稀疏矩阵运算）。通过轻量级编程接口，程序员指定数据结构和迭代边界，硬件记录首次缓存未命中序列并后续回放预取。该方法在PageRank等图应用上平均提速2.16倍，在稀疏迭代求解器上提速2.91倍，预取准确率和覆盖率均超95%。</p>
+<p><a href="../../notes_repo/rnr-a-software-assisted-record-and-replay-hardware-prefetcher/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/rnr-a-software-assisted-record-and-replay-hardware-prefetcher/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/rnr-a-software-assisted-record-and-replay-hardware-prefetcher/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="rpg2-robust-profile-guided-runtime-prefetch-generation">RPG2: Robust Profile-Guided Runtime Prefetch Generation<a class="headerlink" href="#rpg2-robust-profile-guided-runtime-prefetch-generation" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Yuxuan Zhang, Nathan Sobotka, Soyoon Park, et al.<br />
+<strong>Affiliations:</strong> University of Pennsylvania, University of California, Santa Cruz, Columbia University, University of Washington, Google, Intel<br />
+<strong>Venue:</strong> ASPLOS 2024</p>
+</blockquote>
+<p>RPG2 是一个纯软件的运行时系统，用于动态注入和调优数据预取。它通过在线分析程序行为，自动插入预取指令并实时调整预取距离，以应对不同输入和微架构下的性能敏感性。当预取有害时，RPG2 能回滚到原始代码。实验表明，RPG2 在多种负载上可获得最高2.15倍的加速，并有效避免了静态编译器无法处理的性能下降问题。</p>
+<p><a href="../../notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>
