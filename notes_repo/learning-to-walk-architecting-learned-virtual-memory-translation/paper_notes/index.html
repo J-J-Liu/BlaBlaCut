@@ -1,0 +1,1307 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/learning-to-walk-architecting-learned-virtual-memory-translation/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Learning to Walk: Architecting Learned Virtual Memory Translation 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-to-walk-architecting-learned-virtual-memory-translation" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Learning to Walk: Architecting Learned Virtual Memory Translation 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 基于成本模型的分层线性学习索引
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-gapped-page-tables-gpts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 支持高效插入的间隙页表 (Gapped Page Tables, GPTs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 自适应物理内存碎片的分配策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 单索引多页大小支持
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-mmu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 面向硬件的定点算术与MMU集成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="learning-to-walk-architecting-learned-virtual-memory-translation">Learning to Walk: Architecting Learned Virtual Memory Translation 论文解析<a class="headerlink" href="#learning-to-walk-architecting-learned-virtual-memory-translation" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Kaiyang Zhao</li>
+<li>Yuang Chen</li>
+<li>Xenia Xu</li>
+<li>Dan Schatzberg</li>
+<li>Nastaran Hajinaza</li>
+<li>Rupin Vakharwala</li>
+<li>Andy Anderson</li>
+<li>Dimitrios Skarlatos</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>58th IEEE/ACM International Symposium on Microarchitecture (MICRO '25)</li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li>2025</li>
+</ul>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决现代数据中心应用中，由 <strong>radix page tables</strong> 引起的虚拟内存地址转换性能瓶颈问题。该瓶颈源于其多级页表结构导致的长达 <strong>5 次串行内存访问</strong> 的页表遍历（page walk）。</li>
+<li>设计一种新型页表结构，能够实现接近理想的 <strong>单次内存访问</strong> 完成地址转换，同时克服现有方案（如 hashed page tables）的并行访问开销和物理内存连续性要求高等缺点。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Learned Virtual Memory (LVM)</strong>，一种基于 <strong>learned index</strong> 的页表结构。</li>
+<li>LVM 的核心创新在于用一个为虚拟内存定制的、轻量级的 <strong>learned index</strong> 替代传统哈希函数或固定树形结构。</li>
+<li>该 learned index 的关键设计包括：<ul>
+<li><strong>利用虚拟地址空间的规律性</strong>: 通过分析发现，应用程序的虚拟地址空间具有高度规律性（<strong>gap=1 的覆盖率最低为 78%</strong>），非常适合用简单模型学习。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/35825035cba1fcbe964374915b27bf6908134f680c77ff718b783731189465d7.jpg" /></p>
+<p><em>Figure 1:Address translations schemes.LVMavoids both the long sequential page walks of radix page tables and the high collision rates and parallel accesses of hashed page tables.</em></p>
+<ul>
+<li><strong>引入面向虚拟内存的成本模型 (Cost Model)</strong>: 该模型在 <strong>index 深度</strong>、<strong>宽度</strong> 和 <strong>碰撞率</strong> 之间进行权衡，以生成一个<strong>极小且高缓存命中率</strong>的索引结构。</li>
+</ul>
+<p><img alt="" src="../images/98e49af8997806c074d2f8b960bda8c6c0de51d9a147b4e11ca5c798ff6cb4ac.jpg" /></p>
+<ul>
+<li><strong>采用 Gapped Page Tables (GPTs)</strong>: 叶节点关联独立的 GPT，放松了对<strong>大块物理内存连续性</strong>的要求，能适应数据中心常见的碎片化环境。</li>
+</ul>
+<p><img alt="" src="../images/cc17c17fcdcf12bed79aae8fbc9965a310ff4ffc77f2b599efa53e84a5b7255d.jpg" /></p>
+<p><em>Figure 3: Median percentage of free memory in a Meta's datacenter that can be allocated contiguously at various sizes.</em></p>
+<ul>
+<li><strong>支持高效动态插入</strong>: 通过 <strong>minimum insertion distance</strong> 和 <strong>rescaling</strong> 技术，避免了昂贵的模型重训练。</li>
+</ul>
+<p><img alt="" src="../images/111b177f94b9495aec7c8c98908411b12c3a66c555af23ab68c2769ae247d893.jpg" /></p>
+<p><em>Figure 5: LVM out of bounds inserts close to the edge.</em></p>
+<ul>
+<li><strong>统一支持多页大小</strong>: 利用线性模型的不同斜率在同一索引结构中表示不同大小的页面（如 4KB, 2MB, 1GB）。</li>
+</ul>
+<p><img alt="" src="../images/5036b32f0d8bb584a8d1e234595089a4379c7d446fd0a9038b5b805535dc41ef.jpg" /></p>
+<p><em>Figure 6: Regular and huge pages as represented by LVM.</em></p>
+<ul>
+<li><strong>使用定点数运算</strong>: 确保硬件实现的高效性，避免浮点运算开销。</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li>在 Linux OS 扩展、RTL 综合和全系统仿真中对 LVM 进行了全面评估。</li>
+<li><strong>性能提升</strong>:<ul>
+<li>相比 radix page tables，<strong>平均减少 44% 的地址转换开销</strong>。</li>
+<li>应用程序执行时间获得 <strong>2%-27% 的加速</strong>。</li>
+<li>性能表现<strong>与理想页表（Ideal page table）相差在 1% 以内</strong>。</li>
+</ul>
+</li>
+<li><strong>硬件效率</strong>:<ul>
+<li><strong>LVM Walk Cache (LWC) 面积比 radix 的 PWC 减少 1.5 倍</strong>。</li>
+<li>RTL 实现显示，LVM 的硬件结构在面积、功耗上均优于 radix。</li>
+</ul>
+</li>
+<li><strong>架构特性</strong>:<ul>
+<li><strong>碰撞率极低</strong>：4KB 页面下平均仅 <strong>0.2%</strong>。</li>
+<li><strong>索引尺寸极小</strong>：稳态下平均仅需 <strong>162 字节</strong>，且不随应用内存占用增长而线性增长。</li>
+<li><strong>OS 管理开销可忽略</strong>：平均仅占总执行时间的 <strong>1.17%</strong>。</li>
+</ul>
+</li>
+<li><strong>对比其他方案</strong>:<ul>
+<li>显著优于 <strong>Elastic Cuckoo Page Tables (ECPT)</strong>，不仅性能更高，而且<strong>内存流量大幅降低</strong>（ECPT 的页表遍历流量是 radix 的 1.7-2.1 倍，而 LVM 则大幅减少）。</li>
+<li>优于 <strong>ASAP</strong>, <strong>Midgard</strong>, 和 <strong>Flattened Page Tables (FPT)</strong> 等先前工作。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方案</th>
+<th style="text-align: center;">相比 Radix 4KB 的平均加速</th>
+<th style="text-align: center;">页表遍历流量 (vs Radix 4KB)</th>
+<th style="text-align: center;">索引/缓存面积</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>LVM</strong></td>
+<td style="text-align: center;"><strong>14%</strong></td>
+<td style="text-align: center;"><strong>-43%</strong></td>
+<td style="text-align: center;"><strong>-1.5x</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">ECPT</td>
+<td style="text-align: center;">9%</td>
+<td style="text-align: center;">+70%</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: left;">ASAP</td>
+<td style="text-align: center;">-3%</td>
+<td style="text-align: center;">+</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: left;">Midgard</td>
+<td style="text-align: center;">3%</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论</strong></p>
+<ul>
+<li><strong>Learned Virtual Memory (LVM)</strong> 成功地将 <strong>learned indexes</strong> 的理念应用于虚拟内存地址翻译这一硬件关键路径。</li>
+<li>通过一系列针对虚拟内存特性的创新设计（成本模型、Gapped Page Tables、高效更新、多页大小支持等），LVM 克服了传统 learned indexes 在硬件场景下面临的模型过大、更新困难、依赖连续内存等核心挑战。</li>
+<li>LVM 能够提供接近理论最优的 <strong>单次访问地址翻译</strong> 性能，显著优于当前主流的 radix 和 hashed page tables，并且硬件开销更低，是一种面向未来大规模内存系统的、实用且高效的页表设计方案。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景与动机</strong></p>
+<ul>
+<li><strong>虚拟内存地址翻译已成为数据中心性能瓶颈</strong>。随着内存密集型应用的普及和内存容量（如通过 CXL 技术达到 TB 级）的激增，传统的 <strong>radix page tables</strong>（多级页表）因其需要多达 5 次串行内存访问（page walk）而带来巨大开销。</li>
+<li>行业报告显示，在 Google 和 Meta 的生产环境中，约 <strong>20% 的 CPU 周期</strong>被消耗在 page walk 上。</li>
+<li>现有优化方案存在明显缺陷：<ul>
+<li><strong>基于大页（huge pages）或内存连续性</strong>的方法依赖于物理内存的连续分配，这在高度碎片化的现代数据中心中是<strong>稀缺资源</strong>。</li>
+<li><strong>哈希页表（Hashed Page Tables, HPTs）</strong>，如 Elastic Cuckoo Page Tables (ECPT)，虽能并行化访问，但无法消除多次内存访问的本质，反而因并行探测（如 3-way cuckoo hashing）导致<strong>内存流量增加</strong>和<strong>缓存污染</strong>。</li>
+<li><strong>传统 Learned Indexes</strong> 虽在数据库领域取得成功，但其为软件设计，存在<strong>模型过大</strong>（数十MB）、<strong>依赖浮点运算</strong>、<strong>需要大块物理连续内存</strong>、<strong>难以高效支持动态插入</strong>等问题，完全不适用于对延迟和硬件实现有严苛要求的 MMU 地址翻译场景。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/35825035cba1fcbe964374915b27bf6908134f680c77ff718b783731189465d7.jpg" /></p>
+<p><em>Figure 1:Address translations schemes.LVMavoids both the long sequential page walks of radix page tables and the high collision rates and parallel accesses of hashed page tables.</em></p>
+<p><strong>核心贡献</strong></p>
+<p>论文提出了 <strong>Learned Virtual Memory (LVM)</strong>，一种专为硬件地址翻译设计的新型页表结构，旨在实现高效的单次内存访问翻译。其核心贡献包括：</p>
+<ul>
+<li><strong>验证了虚拟地址空间的规律性</strong>：通过对多样化的真实应用（包括 Meta 生产负载）进行分析，发现其虚拟页号（VPN）分布具有高度规律性（至少 <strong>78% 的 gap=1</strong>，即连续分配），这为使用 Learned Index 提供了理论基础。</li>
+</ul>
+<p><img alt="" src="../images/270ef296e3bc353f2e694574f851b56fe2fa4b44409ccaadfcd24697e12c09d4.jpg" /></p>
+<p><em>Figure 2: Virtual memory gap coverage of gap = 1.</em></p>
+<ul>
+<li>
+<p><strong>设计了面向虚拟内存的轻量级 Learned Index</strong>：</p>
+<ul>
+<li>采用<strong>简单的线性模型</strong>（<code>y = ax + b</code>）作为基础构建块，仅需存储斜率和截距，模型极小（平均 <strong>162 字节</strong>），易于缓存。</li>
+<li>引入<strong>定制化的成本模型</strong>，在模型深度、宽度和碰撞率之间进行权衡，确保翻译路径短且高效。</li>
+<li>使用<strong>定点数算术</strong>替代浮点运算，便于硬件实现。</li>
+<li>通过<strong>Gapped Page Tables (GPTs)</strong> 组织叶节点数据，并结合创新的<strong>重缩放（rescaling）</strong> 和<strong>最小插入距离</strong>技术，高效支持动态插入，避免了昂贵的全局重训练。</li>
+</ul>
+</li>
+<li>
+<p><strong>解决了物理内存碎片化问题</strong>：LVM 不要求大块物理连续内存。它能根据系统当前可用的物理连续性（研究发现数百 KB 的连续块依然丰富），动态创建多个小型 GPT，从而适应高度碎片化的环境。</p>
+</li>
+</ul>
+<p><img alt="" src="../images/cc17c17fcdcf12bed79aae8fbc9965a310ff4ffc77f2b599efa53e84a5b7255d.jpg" /></p>
+<p><em>Figure 3: Median percentage of free memory in a Meta's datacenter that can be allocated contiguously at various sizes.</em></p>
+<ul>
+<li>
+<p><strong>无缝支持多页大小</strong>：LVM 在单一 Learned Index 结构内，通过不同斜率的线性模型来表示不同大小的页面（如 4KB, 2MB, 1GB），无需为每种页大小维护独立的数据结构。</p>
+</li>
+<li>
+<p><strong>完整的软硬件协同设计</strong>：提供了 Linux 内核原型、RTL 硬件实现和全系统模拟评估。结果表明，LVM 相比 radix 页表，<strong>平均减少 44% 的地址翻译开销</strong>，应用执行时间<strong>提升 2-27%</strong>，性能<strong>接近理想单次访问页表</strong>（差距在 1% 以内），同时将页表遍历缓存（PWC）面积需求<strong>减少了 1.5 倍</strong>。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体架构概览</strong></p>
+<p>Learned Virtual Memory (LVM) 的核心目标是通过一个<strong>单次内存访问</strong>即可完成地址翻译，从而取代传统的多级 radix page tables。其整体架构围绕一个为虚拟内存系统量身定制的 <strong>learned index</strong> 展开，并由操作系统和硬件协同管理。</p>
+<ul>
+<li>LVM 的基本思想是用一个<strong>学习得到的函数</strong>（learned function）替代 hashed page tables 中的固定哈希函数，该函数能够根据应用虚拟地址空间（Virtual Address Space）的结构规律，直接预测出页表项（PTE）的物理位置。</li>
+<li>整个系统由两部分组成：<strong>OS 软件部分</strong>负责构建、训练和动态维护 learned index 与底层数据结构；<strong>硬件 MMU 部分</strong>则在 TLB miss 时，利用该 index 执行高效的地址翻译。</li>
+</ul>
+<p><img alt="" src="../images/67ce878333337a19fa9aa613f7cfe77c804f1fc138bd7d662ddc4ff3d861e3cd.jpg" /></p>
+<p><em>Figure 4: LVM learns the distribution of virtual addresses and maps them to page tables</em></p>
+<p><strong>核心组件与数据结构</strong></p>
+<p>LVM 的架构主要包含两个核心组件：<strong>Learned Index</strong> 和 <strong>Gapped Page Tables (GPTs)</strong>。</p>
+<ul>
+<li>
+<p><strong>Learned Index</strong></p>
+<ul>
+<li>组织为一个<strong>层次化模型</strong>（hierarchy of models），包含内部节点（internal nodes）和叶节点（leaf nodes）。</li>
+<li><strong>内部节点</strong>：负责将整个虚拟地址空间（VPN）划分为更小的子集，并通过一个简单的线性模型 <code>y = ax + b</code> 将输入的 VPN 映射到其子节点的索引。</li>
+<li><strong>叶节点</strong>：负责最终的映射，其线性模型将 VPN 直接映射到其对应 PTE 在 Gapped Page Table 中的<strong>物理地址</strong>。</li>
+<li>所有模型参数（斜率 <code>a</code> 和截距 <code>b</code>）均使用<strong>定点数</strong>（fixed-point arithmetic）表示，以满足硬件快速计算的要求，每个模型仅占用 <strong>16 字节</strong>。</li>
+<li>该索引的深度和宽度由一个<strong>成本模型</strong>（cost model）动态决定，该模型在<strong>预测精度</strong>、<strong>索引深度/宽度</strong>和<strong>缓存效率</strong>之间进行权衡，确保索引结构精简且高效。</li>
+</ul>
+</li>
+<li>
+<p><strong>Gapped Page Tables (GPTs)</strong></p>
+<ul>
+<li>每个叶节点都关联一个独立的 GPT，用于存储实际的 PTE。</li>
+<li>GPT 是一个带有<strong>空隙</strong>（gaps）的数组，这些空隙为未来的插入操作预留了空间，从而支持高效的动态更新。</li>
+<li><strong>关键设计</strong>：GPT <strong>不要求大块物理连续内存</strong>。LVM 会根据系统当前可用的物理内存碎片情况（通常为几百 KB 级别），动态分配多个小的、非连续的 GPT。叶节点的模型在训练时会直接学习 PTE 的<strong>绝对物理地址</strong>，而非相对偏移量。</li>
+</ul>
+</li>
+</ul>
+<p><strong>硬件支持架构</strong></p>
+<p>LVM 对硬件的改动被严格限制在 <strong>MMU</strong> 内部，保持了与现有系统的兼容性。</p>
+<ul>
+<li><strong>LVM Page Table Walker</strong>：替换了传统的页表遍历器。它包含一个加法器和一个乘法器，用于计算 learned index 中线性模型的输出。</li>
+<li><strong>LVM Walk Cache (LWC)</strong>：替换了传统的 Page Walk Cache (PWC)。它是一个全相联缓存，专门用于缓存 learned index 中的模型节点（slope 和 intercept）。<ul>
+<li>LWC 条目还包含<strong>地址空间标识符</strong>（ASID），以支持高效的上下文切换。</li>
+<li>由于 learned index 本身非常小（平均仅 <strong>162 字节</strong>），LVM 的 LWC 面积比 radix PWC <strong>小 1.5 倍</strong>，并且能实现 <strong>&gt;99%</strong> 的命中率。</li>
+</ul>
+</li>
+<li>其他 MMU 组件（如 L1/L2 TLB）和处理器缓存层次结构保持不变。</li>
+</ul>
+<p><img alt="" src="../images/5a32eb1b1c20144b52d4a65e744f22e53d70f5f62452ae1b4a6e561a9dfcadb9.jpg" /></p>
+<p><em>Figure 7: LVM hardware overview.</em></p>
+<p><strong>关键特性支持机制</strong></p>
+<ul>
+<li>
+<p><strong>高效动态插入</strong>（Efficient Insertion）</p>
+<ul>
+<li><strong>边界外插入</strong>（Out-of-bounds inserts）：利用应用倾向于连续扩展地址空间的特性，LVM 通过<strong>预分配最小插入距离</strong>（minimum insertion distance）和<strong>重缩放</strong>（rescaling）技术，在不重新训练模型的情况下处理新页面。</li>
+<li><strong>边界内插入</strong>（Within-bounds inserts）：利用 GPT 中的空隙直接插入；若发生冲突，则仅对局部叶节点进行轻量级重训练。</li>
+</ul>
+</li>
+<li>
+<p><strong>多页大小支持</strong>（Multiple Page Sizes）</p>
+<ul>
+<li>LVM 在<strong>单一 learned index</strong> 中无缝支持 4KB、2MB、1GB 等多种页大小。</li>
+<li>其原理是利用不同页大小在累积分布函数（CDF）上表现为<strong>不同斜率</strong>的线性段。大页（如 2MB）对应更平缓的斜率，因为其覆盖的 VPN 范围更广但只产生一个 PTE。</li>
+<li>PTE 本身包含<strong>2 位元数据</strong>来编码其页大小。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="images/5036b32f0d8bb584a8d1e2345950861ef.jpg" /></p>
+<h3 id="1_1">1. 基于成本模型的分层线性学习索引<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
+<p><strong>LVM学习索引的核心架构与成本模型</strong></p>
+<ul>
+<li>LVM的学习索引是一个<strong>分层的模型结构</strong>，旨在替代传统页表（如radix或hashed page tables）以实现高效的<strong>单次访问地址翻译</strong>。</li>
+<li>该索引的核心构建单元是<strong>线性模型</strong>（linear model），形式为 <code>y = ax + b</code>。每个节点（无论是内部节点还是叶节点）仅需存储<strong>斜率a</strong>和<strong>截距b</strong>两个参数。</li>
+<li>索引被组织成树状层次结构：<ul>
+<li><strong>内部节点</strong>（internal nodes）：负责将整个虚拟地址空间（VPN key space）划分为更小的子集，并将查询路由到正确的子节点。其输出 <code>y</code> 是一个子节点的索引。</li>
+<li><strong>叶节点</strong>（leaf nodes）：负责最终的映射，其输出 <code>y</code> 是<strong>页表项</strong>（PTE）在<strong>间隙页表</strong>（Gapped Page Table, GPT）中的物理地址。</li>
+</ul>
+</li>
+<li>整个索引的目标是学习虚拟页号（VPN）到其对应PTE物理地址的映射函数，利用了应用虚拟地址空间高度<strong>规则</strong>（regular）的特性。</li>
+</ul>
+<p><img alt="" src="../images/67ce878333337a19fa9aa613f7cfe77c804f1fc138bd7d662ddc4ff3d861e3cd.jpg" /></p>
+<p><em>Figure 4: LVM learns the distribution of virtual addresses and maps them to page tables</em></p>
+<p><strong>成本模型</strong>（Cost Model）</p>
+<ul>
+<li>成本模型是LVM设计的<strong>核心创新</strong>，用于在索引的<strong>深度</strong>（depth）、<strong>宽度</strong>（分支因子，branching factor）和<strong>碰撞率</strong>（collision rate）之间进行权衡，以优化整体翻译延迟和硬件缓存效率。</li>
+<li>该模型定义了一个<strong>翻译成本函数</strong> <code>C(n)</code>，用于评估一个拥有 <code>n</code> 个子节点的节点的优劣。成本函数综合考虑了以下因素：<ul>
+<li><strong>索引深度</strong>（d）：更深的索引意味着更多的间接访问，增加延迟。</li>
+<li><strong>索引大小</strong>（s）：更大的索引占用更多内存，降低在**LVM Walk Cache **(LWC) 中的缓存效率。</li>
+<li><strong>碰撞率</strong>（cr）：更高的碰撞率会导致额外的内存访问来解决冲突。</li>
+<li><strong>每次碰撞的平均额外访问次数</strong>（ma）。</li>
+</ul>
+</li>
+<li>成本函数的具体形式为加权和，通过调整权重 <code>x1</code>, <code>x2</code>, <code>x3</code> 来反映不同因素的重要性。论文中经验性地设置为 <code>x1 = 10</code>, <code>x2 = 5</code>, <code>x3 = 200</code>，表明对碰撞解决成本的惩罚最高。</li>
+</ul>
+<p><img alt="" src="../images/98e49af8997806c074d2f8b960bda8c6c0de51d9a147b4e11ca5c798ff6cb4ac.jpg" /></p>
+<ul>
+<li><strong>训练流程中的应用</strong>：<ul>
+<li>在训练一个节点时，成本模型首先估算该节点key space的复杂度（通过计算<strong>样条点</strong>（spline points）的数量）。</li>
+<li>模型围绕这个估算值（±2范围内）尝试不同的子节点数量 <code>n</code>。</li>
+<li>对每个候选的 <code>n</code>，计算其成本 <code>C(n)</code>。</li>
+<li>选择成本最低的 <code>n</code> 作为该节点的最终分支因子，并据此划分key space给子节点。</li>
+</ul>
+</li>
+<li><strong>硬性约束</strong>：<ul>
+<li><strong>深度限制</strong>（d_limit）：为了防止索引过深，LVM设置了硬性深度上限（论文中设为 <code>d_limit = 3</code>），确保硬件页表遍历器能在有限步数内完成查找。</li>
+<li><strong>覆盖率约束</strong>：模型会检查一个节点是否提供了足够的“每字节覆盖范围”。如果一个节点过于“稀疏”（即用很多字节只覆盖了很小的地址空间），则不会为其创建子节点，以保证索引的空间效率和缓存友好性。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及在LVM中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：待翻译的<strong>虚拟页号</strong>（VPN）。</li>
+<li><strong>处理流程</strong>：<ol>
+<li>从<strong>根节点</strong>开始，将VPN输入到根节点的线性模型中。</li>
+<li>模型输出一个子节点索引，根据此索引选择下一个要访问的内部节点。</li>
+<li>重复步骤2，直到到达一个<strong>叶节点</strong>。</li>
+<li>将VPN输入到叶节点的线性模型中，模型直接输出目标PTE所在的<strong>物理地址</strong>。</li>
+<li>硬件从该物理地址加载PTE，并进行标签匹配验证。</li>
+</ol>
+</li>
+<li><strong>输出</strong>：目标<strong>页表项</strong>（PTE）的物理地址。</li>
+<li><strong>在整体系统中的作用</strong>：<ul>
+<li><strong>替代传统页表遍历</strong>：将原本需要多次内存访问（radix）或多次并行访问（hashed）的页表遍历过程，简化为一次（或极少数几次）沿着学习索引的模型计算和一次PTE内存访问。</li>
+<li><strong>实现单次访问翻译</strong>：在绝大多数情况下（论文称99.4%），LVM能实现真正的单次内存访问完成地址翻译，性能接近<strong>理想页表</strong>（Ideal page table）。</li>
+<li><strong>硬件友好</strong>：线性模型仅需简单的<strong>定点乘加运算</strong>（fixed-point arithmetic），易于在硬件MMU中实现，且模型本身非常小巧（平均仅162字节），能被高效地缓存在**LVM Walk Cache **(LWC)中。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>关键参数与性能指标总结</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数/指标</th>
+<th style="text-align: left;">值/描述</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>模型类型</strong></td>
+<td style="text-align: left;">线性模型 (<code>y = ax + b</code>)</td>
+<td style="text-align: left;">简单、高效、可解释性强</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>成本模型权重</strong></td>
+<td style="text-align: left;"><code>x1=10, x2=5, x3=200</code></td>
+<td style="text-align: left;">高度惩罚碰撞解决成本</td>
+</tr>
+<tr>
+<td style="text-align: left;">**深度限制 **(d_limit)</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">保证硬件遍历效率</td>
+</tr>
+<tr>
+<td style="text-align: left;">**间隙数组缩放因子 **(ga_scale)</td>
+<td style="text-align: left;">1.3</td>
+<td style="text-align: left;">为未来插入预留空间</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>平均索引大小</strong></td>
+<td style="text-align: left;">162 bytes (THP)</td>
+<td style="text-align: left;">极小，缓存效率极高</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>平均碰撞率</strong></td>
+<td style="text-align: left;">0.6% (THP)</td>
+<td style="text-align: left;">远低于传统哈希表 (~19%)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>单次访问成功率</strong></td>
+<td style="text-align: left;">99.4%</td>
+<td style="text-align: left;">性能接近理想页表</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LWC命中率</strong></td>
+<td style="text-align: left;">&gt;99%</td>
+<td style="text-align: left;">得益于极小的索引尺寸</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-gapped-page-tables-gpts">2. 支持高效插入的间隙页表 (Gapped Page Tables, GPTs)<a class="headerlink" href="#2-gapped-page-tables-gpts" title="Permanent link">&para;</a></h3>
+<p><strong>间隙页表 (Gapped Page Tables, GPTs) 的设计原理与实现</strong></p>
+<p>LVM 采用 <strong>间隙页表 (Gapped Page Tables, GPTs)</strong> 作为其叶节点模型映射的目标存储结构，这是支持高效动态插入的核心机制。GPTs 通过在物理存储布局上预留空槽，并结合创新的软件管理策略，有效避免了传统 learned indexes 在面对动态数据时所需的昂贵重训练开销。</p>
+<ul>
+<li><strong>基本概念</strong>：每个 LVM 叶节点都关联一个独立的 GPT。该表在逻辑上是一个数组，但物理上被组织为一个 <strong>gapped array</strong>，即在初始化时就预分配了比当前所需更多的空间，这些未使用的空间被称为 <strong>gaps</strong>（间隙/空槽）。</li>
+<li><strong>核心目的</strong>：这些 gaps 为未来的 <strong>insertions</strong>（插入）操作提供了缓冲区，使得新加入的虚拟页号 (VPN) 可以直接放入由叶节点模型预测的位置或其附近，而无需立即修改模型本身。</li>
+<li><strong>物理内存适应性</strong>：GPTs 的设计巧妙地解决了数据中心中 <strong>physical memory fragmentation</strong>（物理内存碎片化）的问题。如图</li>
+</ul>
+<p><img alt="" src="../images/cc17c17fcdcf12bed79aae8fbc9965a310ff4ffc77f2b599efa53e84a5b7255d.jpg" /></p>
+<p><em>Figure 3: Median percentage of free memory in a Meta's datacenter that can be allocated contiguously at various sizes.</em></p>
+<p>所示，虽然数百 MB 的连续物理内存极为稀缺，但数百 KB 级别的连续块仍然普遍存在。因此，LVM 为每个叶节点分配独立的、较小的 GPT，而非一个巨大的连续页表，从而能灵活地利用系统中可用的物理内存碎片。</p>
+<p><strong>支持高效插入的关键技术</strong></p>
+<p>LVM 区分了两种主要的插入场景，并采用了不同的优化策略来处理，确保绝大多数插入操作都能在不触发模型重训练的情况下完成。</p>
+<ul>
+<li><strong>边界外插入 (Out-of-bounds inserts)</strong>：<ul>
+<li><strong>场景假设</strong>：应用程序倾向于以 <strong>contiguous</strong>（连续）的方式扩展其虚拟地址空间，因此新页面通常会分配在现有地址空间的边缘附近。</li>
+<li><strong>最小插入距离 (Minimum Insertion Distance)</strong>：当发生一次靠近边界的插入时，LVM 不会只为这一个新页面分配空间，而是会一次性将地址空间向该方向扩展一个预设的 <strong>minimum insertion distance</strong>（默认为 <strong>64MB</strong>）。这种批处理方式可以吸收后续可能发生的邻近插入，摊销管理开销。</li>
+<li><strong>叶节点重缩放 (Rescaling)</strong>：在扩展地址空间后，LVM 会相应地 <strong>expand the gapped page table</strong>（扩展间隙页表），增加新的空槽。关键在于，<strong>existing linear model is not modified</strong>（现有线性模型不被修改）。新旧 VPN 都使用同一个模型进行位置预测，新 VPN 被直接插入到扩展后的新区域中。这一过程完全避免了重训练。</li>
+<li><strong>流程示例</strong>：如图</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/111b177f94b9495aec7c8c98908411b12c3a66c555af23ab68c2769ae247d893.jpg" /></p>
+<p><em>Figure 5: LVM out of bounds inserts close to the edge.</em></p>
+<p>所示，当插入 VPN 1030 时，系统先将键范围扩展至 1050，然后按比例（<code>ga_scale=1.3</code>）扩展 GPT，并将新键插入到由原模型预测的位置。</p>
+<ul>
+<li><strong>边界内插入 (Within-bounds inserts) 与远端边界外插入</strong>：<ul>
+<li><strong>常规处理</strong>：对于落在现有键范围内的插入，LVM 直接查询叶节点模型，并尝试将新条目放入预测位置。得益于 GPT 中的 gaps，大多数情况下该位置是空的，插入可立即完成。</li>
+<li><strong>冲突处理</strong>：如果预测位置已被占用（发生碰撞），LVM 会执行一次 <strong>local retraining</strong>（局部重训练），仅针对该叶节点重新拟合线性模型，以容纳新键。这是一个轻量级操作。</li>
+<li><strong>极端情况</strong>：只有在局部重训练也无法成功（极其罕见）时，LVM 才会考虑重建父节点甚至整个索引。根据评估，这种情况在整个应用生命周期中平均只发生 <strong>2次</strong>，最坏情况下也仅有 <strong>3次</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与输入输出关系</strong></p>
+<p>GPTs 的行为由几个关键参数控制，这些参数定义了其与 learned index 模型的交互方式。</p>
+<ul>
+<li><strong>核心参数</strong>：<ul>
+<li><code>ga_scale</code> (<strong>Gapped Array Scale Factor</strong>): 默认值为 <strong>1.3</strong>。该因子决定了在构建 GPT 时，为每个现有 VPN 预留多少额外的空槽。例如，若有 N 个 VPN，则分配 <code>N * ga_scale</code> 个槽位。</li>
+<li><code>minimum insertion distance</code>: 默认值为 <strong>64MB</strong>，用于批处理边界扩展。</li>
+</ul>
+</li>
+<li><strong>输入输出关系</strong>：<ul>
+<li><strong>输入</strong>: 叶节点模型接收一个 <strong>Virtual Page Number (VPN)</strong> 作为输入。</li>
+<li><strong>模型计算</strong>: 模型执行一个简单的线性函数 <code>y = a*x + b</code>，其中 <code>x</code> 是 VPN。</li>
+<li><strong>输出</strong>: 输出 <code>y</code> 并非一个相对索引，而是经过特殊处理的 <strong>Physical Address (PA)</strong>。具体来说，在训练阶段，模型学习的目标是 <code>(PTE's index in GPT) + (Base Physical Address of the GPT)</code>。因此，模型的直接输出就是 PTE 在物理内存中的 <strong>absolute location</strong>（绝对位置），硬件页表遍历器可以直接用此地址去访存。</li>
+</ul>
+</li>
+<li><strong>在整体架构中的作用</strong>：GPTs 作为 learned index 的“叶子”，承担了最终的 PTE 存储功能。它们将 learned index 的预测能力与物理内存的实际布局解耦，使得 LVM 能够在保持模型简洁（仅需存储斜率和截距）的同时，灵活应对动态变化的虚拟地址空间和受限的物理内存条件，最终实现了接近 <strong>single-access address translation</strong>（单次访问地址翻译）的理想性能。</li>
+</ul>
+<h3 id="3_1">3. 自适应物理内存碎片的分配策略<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<p><strong>自适应物理内存碎片的分配策略</strong></p>
+<p>LVM 的核心创新之一在于其能够有效应对现代数据中心中普遍存在的<strong>物理内存碎片化</strong>问题。传统数据结构（如大型哈希表或某些学习型索引）通常要求大块（数百MB级别）的<strong>physically contiguous memory</strong>，这在生产环境中已被证明是<strong>infeasible</strong>。LVM 通过一种巧妙的设计，将对物理连续性的需求降低到系统中依然丰富的<strong>hundreds of KB</strong>级别。</p>
+<ul>
+<li><strong>设计动机与观察</strong><ul>
+<li>研究（如论文[95]及本文图3）表明，在Meta等公司的生产数据中心，<strong>数百兆字节 (hundreds of MBs)</strong> 级别的物理连续内存区域几乎不存在。</li>
+<li><img alt="" src="../images/cc17c17fcdcf12bed79aae8fbc9965a310ff4ffc77f2b599efa53e84a5b7255d.jpg" /></li>
+</ul>
+</li>
+</ul>
+<p><em>Figure 3: Median percentage of free memory in a Meta's datacenter that can be allocated contiguously at various sizes.</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 然而，**数百千字节 (hundreds of KBs)** 级别的小块连续内存仍然广泛可用，即使在高度碎片化的服务器上也是如此。
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>- 因此，LVM 的设计目标是将内存分配需求适配到这个可行的粒度上。
+</code></pre></div>
+<ul>
+<li>
+<p><strong>核心机制：Per-Leaf-Node Gapped Page Tables (GPTs)</strong></p>
+<ul>
+<li>LVM 的学习型索引的每个<strong>leaf node</strong>都关联一个独立的<strong>gapped page table (GPT)</strong>。</li>
+<li>这些 GPT 是小型的、概念上为数组的页表条目（PTEs）集合。</li>
+<li>关键点在于，<strong>不同的 leaf node 的 GPT 可以被分配在物理地址空间中完全不相邻的位置</strong>。这从根本上解耦了逻辑上的页表结构与物理内存布局的连续性要求。</li>
+</ul>
+</li>
+<li>
+<p><strong>算法流程与实现细节</strong></p>
+<ul>
+<li><strong>Leaf Node 训练阶段</strong>:<ul>
+<li>当一个 leaf node 需要被创建或重建时，LVM 会向操作系统内存分配器（如 Linux 的 buddy allocator）查询当前可用的最大物理连续块大小。</li>
+<li>基于查询到的<strong>available contiguity</strong>，LVM 动态决定该 leaf node 所需覆盖的虚拟地址范围以及其 GPT 的大小。</li>
+<li>如果可用的连续块较小，LVM 会选择创建<strong>更多的 leaf nodes</strong>，每个负责更小的虚拟地址子空间，从而确保每个 GPT 都能放入一个小的连续物理块中。</li>
+</ul>
+</li>
+<li><strong>模型学习与地址映射</strong>:<ul>
+<li>在训练 leaf node 的线性模型 <code>y = ax + b</code> 时，其输出 <code>y</code> 并非简单的 PTE 在本地 GPT 中的索引。</li>
+<li>相反，<code>y</code> 被直接训练为 PTE 的<strong>最终物理地址 (physical address)</strong>。</li>
+<li>这是通过在训练时将 GPT 的<strong>base physical address</strong> 加到 PTE 的本地索引上来实现的。即，模型学习的是 <code>(VPN, PA_of_PTE)</code> 的映射关系。</li>
+<li>因此，硬件在执行页表遍历时，leaf node 模型的输出可以直接用于访存，无需额外的基地址加法操作。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>参数设置与动态适应</strong></p>
+<ul>
+<li><strong>Gapped Array Scale Factor (<code>ga_scale</code>)</strong>: 论文中设定为 <strong>1.3</strong>。这意味着在分配 GPT 时，会预留 <strong>30%</strong> 的额外空间（gaps），用于支持未来的<strong>insertions</strong>而无需立即重建模型。</li>
+<li><strong>物理连续性阈值</strong>: 该策略没有一个固定的硬编码阈值，而是完全<strong>dynamic</strong>的。它依赖于 OS 分配器在运行时返回的实际可用连续块大小。评估中甚至测试了将最大连续分配限制在 <strong>256 KB</strong> 的极端情况，LVM 依然能保持高性能。</li>
+<li><strong>Free Memory Fragmentation Index (FMFI)</strong>: 为了量化碎片化程度，论文使用了 FMFI 指标，并在 <strong>0.8, 0.85, 0.9</strong> 等高碎片化水平下验证了 LVM 的鲁棒性。</li>
+</ul>
+</li>
+<li>
+<p><strong>在整体架构中的作用</strong></p>
+<ul>
+<li><strong>消除硬件瓶颈</strong>: 通过避免对大块连续内存的需求，LVM 移除了一个阻碍学习型索引在操作系统和硬件中落地的关键障碍。</li>
+<li><strong>保障单次访问翻译</strong>: 即使在物理内存高度碎片化的情况下，LVM 依然能维持其<strong>single-access translation</strong>的核心优势，因为每个 leaf node 的 GPT 本身是连续的，一次访存即可命中。</li>
+<li><strong>维持高缓存效率</strong>: 由于学习型索引本身非常小（见下表），且 GPT 的访问模式高效，LVM 的 <strong>LWC (LVM Walk Cache)</strong> 命中率能保持在 <strong>99%以上</strong>，远优于传统 radix 页表的 PWC。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>指标</strong></th>
+<th style="text-align: left;"><strong>LVM (4KB pages)</strong></th>
+<th style="text-align: left;"><strong>LVM (THP)</strong></th>
+<th style="text-align: left;"><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>稳态索引大小 (Steady-State Index Size)</strong></td>
+<td style="text-align: left;"><strong>112 bytes</strong></td>
+<td style="text-align: left;"><strong>162 bytes</strong></td>
+<td style="text-align: left;">极小的内存占用，易于缓存</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>峰值索引大小 (Peak Index Size)</strong></td>
+<td style="text-align: left;">~570 bytes</td>
+<td style="text-align: left;">~570 bytes</td>
+<td style="text-align: left;">仅在初始化训练阶段短暂出现</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LWC 命中率</strong></td>
+<td style="text-align: left;"><strong>&gt;99%</strong></td>
+<td style="text-align: left;"><strong>&gt;99%</strong></td>
+<td style="text-align: left;">得益于极小的索引尺寸</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>所需物理连续性</strong></td>
+<td style="text-align: left;"><strong>~Hundreds of KBs</strong></td>
+<td style="text-align: left;"><strong>~Hundreds of KBs</strong></td>
+<td style="text-align: left;">与生产环境现实相符</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>总结</strong></p>
+<p>LVM 的自适应分配策略是一种务实且高效的设计。它没有试图去解决物理内存碎片化这个系统级难题，而是通过<strong>per-leaf-node GPT</strong>的架构，将自身的需求调整到与系统能力相匹配的粒度。这种“<strong>顺应而非对抗</strong>”的思路，结合其学习型索引对虚拟地址空间<strong>regularity</strong>的利用，共同构成了 LVM 能够在真实世界复杂环境中提供接近理想性能的关键。</p>
+<h3 id="4">4. 单索引多页大小支持<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p><strong>LVM单索引多页大小支持的核心原理</strong></p>
+<p>LVM通过巧妙利用其<strong>线性模型</strong>（Linear Model）的数学特性，在单一的Learned Index结构中无缝支持多种页大小（如4KB、2MB、1GB），彻底规避了传统方案（如ECPT）为每种页大小维护独立数据结构所带来的开销和复杂性。</p>
+<ul>
+<li><strong>核心思想：斜率编码页大小</strong><ul>
+<li>在LVM的Learned Index中，每个<strong>叶节点</strong>（Leaf Node）的线性模型 <code>y = ax + b</code> 用于将<strong>虚拟页号</strong>（VPN）映射到<strong>页表项</strong>（PTE）在**Gapped Page Table **(GPT)中的物理位置。</li>
+<li><strong>页大小信息被隐式地编码在线性模型的斜率 <code>a</code> 中</strong>。具体而言：<ul>
+<li><strong>较小的页</strong>（如4KB）：在一个给定的VPN范围内，会存在更多的PTE。因此，其对应的线性模型具有<strong>更陡峭的斜率</strong>（higher slope），因为VPN的微小变化会导致PTE位置发生较大偏移。</li>
+<li><strong>较大的页</strong>（如2MB或1GB）：一个大页会覆盖一个连续的VPN范围（例如，一个2MB页覆盖512个4KB页）。对于这个范围内的所有VPN，它们都应指向同一个PTE。因此，其对应的线性模型具有<strong>更平缓的斜率</strong>（lower slope），理想情况下接近于0，表示一个宽泛的VPN区间映射到一个固定的PTE位置。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/5036b32f0d8bb584a8d1e234595089a4379c7d446fd0a9038b5b805535dc41ef.jpg" /></p>
+<p><em>Figure 6: Regular and huge pages as represented by LVM.</em></p>
+<ul>
+<li>
+<p><strong>训练与表示流程</strong></p>
+<ul>
+<li>在训练阶段，LVM的索引构建算法会处理混合了不同页大小的映射。</li>
+<li>对于一个<strong>大页</strong>（Huge Page），LVM仅使用其起始VPN（即第一个4KB子页的VPN）作为训练样本。例如，一个从VPN 1024开始的2MB页，其VPN范围是[1024, 1536)，但训练时只将VPN 1024及其目标PTE位置作为输入。</li>
+<li>线性回归过程会自动学习到一个能将整个[1024, 1536)区间内的任意VPN都“引导”至正确PTE位置的函数。这通常表现为一个低斜率的线，确保该区间内所有查询都能命中同一个PTE槽位。</li>
+</ul>
+</li>
+<li>
+<p><strong>地址翻译查询流程</strong></p>
+<ul>
+<li>当硬件MMU需要翻译一个虚拟地址（VA）时，它首先从中提取出<strong>4KB粒度的VPN</strong>。</li>
+<li>这个VPN被送入LVM的Learned Index进行遍历。</li>
+<li>无论该VPN属于一个4KB页还是一个更大的页（如2MB），索引都会根据其学到的模型（包含正确的斜率信息）计算出一个PTE的物理地址。</li>
+<li><strong>关键点</strong>：由于大页内部的所有4KB VPN在训练时都被“视为”指向同一个PTE，因此查询时对任何子VPN的计算结果都会收敛到该大页唯一的PTE上。</li>
+</ul>
+</li>
+<li>
+<p><strong>页大小的显式标识</strong></p>
+<ul>
+<li>虽然页大小信息已隐含在模型斜率中，但为了在翻译完成后明确告知处理器实际的页大小（以便正确计算物理地址），LVM在<strong>PTE本身</strong>中保留了显式的标识位。</li>
+<li>如论文所述，PTE使用<strong>两个比特位来编码页大小</strong>，明确指示该条目对应的是4KB、2MB还是1GB的页。这使得硬件能够正确地将页内偏移量与PPN组合，形成最终的物理地址。</li>
+</ul>
+</li>
+</ul>
+<p><strong>优势与作用</strong></p>
+<ul>
+<li><strong>消除冗余结构</strong>：无需为4KB、2MB、1GB等不同页大小分别维护独立的哈希表或索引树，极大地节省了内存开销，并简化了OS的管理逻辑。</li>
+<li><strong>维持单次访问</strong>：无论查询的地址属于何种页大小，LVM都能在<strong>绝大多数情况下</strong>（&gt;99%）通过一次内存访问完成翻译，完美实现了其“最优单次访问”的设计目标。</li>
+<li><strong>灵活性与可扩展性</strong>：该机制天然支持任意数量的页大小，只要在PTE中增加相应的标识位即可，无需修改Learned Index的核心架构。这为未来引入新的页大小提供了便利。</li>
+<li><strong>与现有机制兼容</strong>：LVM的设计完全兼容Linux的**Transparent Huge Pages **(THP)等现有大页管理机制，OS可以像往常一样决定何时以及如何使用大页，而LVM负责高效地处理底层的翻译。</li>
+</ul>
+<h3 id="5-mmu">5. 面向硬件的定点算术与MMU集成<a class="headerlink" href="#5-mmu" title="Permanent link">&para;</a></h3>
+<p><strong>定点算术实现原理与参数设置</strong></p>
+<ul>
+<li>LVM摒弃了传统Learned Index中计算开销大且硬件实现复杂的<strong>floating-point operations</strong>，转而采用高效的<strong>fixed-point arithmetic</strong>。</li>
+<li>其量化策略将每个模型参数（斜率a和截距b）表示为一个64位整数：<ul>
+<li><strong>44位</strong>用于表示<strong>integer part</strong>（整数部分）。</li>
+<li><strong>20位</strong>用于表示<strong>fractional part</strong>（小数部分）。</li>
+</ul>
+</li>
+<li>这种设计使得每个模型参数恰好占用<strong>8 bytes</strong>，每个内部或叶节点（包含a和b两个参数）总共占用<strong>16 bytes</strong>。</li>
+<li>在硬件页表遍历器中，仅需一个<strong>adder</strong>（加法器）和一个<strong>multiplier</strong>（乘法器）即可完成模型计算 <code>y = ax + b</code>，其中所有运算均在定点数域内进行，避免了浮点单元的面积和功耗开销。</li>
+</ul>
+<p><strong>LVM硬件MMU集成架构</strong></p>
+<ul>
+<li>LVM对硬件的修改被严格限制在<strong>Memory Management Unit (MMU)</strong> 内部，保持了与现有系统其余部分（如L1/L2 TLB）的兼容性。</li>
+<li>核心硬件组件包括：<ul>
+<li><strong>LVM Page Table Walker</strong>: 替代了传统的Radix页表遍历器。它负责在TLB未命中时，遍历Learned Index的层级模型。</li>
+<li><strong>LVM Walk Cache (LWC)</strong>: 替代了传统的Page Walk Cache (PWC)，用于缓存Learned Index中的模型节点。</li>
+</ul>
+</li>
+<li>硬件查找流程如下：<ol>
+<li>发生L2 TLB miss后，LVM页表遍历器启动。</li>
+<li>遍历器从根节点开始，利用当前虚拟页号（VPN）作为输入，通过其内置的定点算术单元计算出子节点的索引。</li>
+<li>遍历器查询LWC以获取该子节点的模型（slope和intercept）。如果LWC命中，则直接使用；否则，从主存中按需加载。</li>
+<li>此过程递归进行，直至到达叶节点。</li>
+<li>叶节点模型输出的是<strong>物理地址</strong>（Physical Address, PA），该地址直接指向目标<strong>Page Table Entry (PTE)</strong> 在Gapped Page Table中的位置。</li>
+<li>遍历器最终从内存层次结构中获取该PTE，完成地址翻译。</li>
+</ol>
+</li>
+</ul>
+<p><img alt="" src="../images/5a32eb1b1c20144b52d4a65e744f22e53d70f5f62452ae1b4a6e561a9dfcadb9.jpg" /></p>
+<p><em>Figure 7: LVM hardware overview.</em></p>
+<p><strong>LVM Walk Cache (LWC) 设计细节</strong></p>
+<ul>
+<li>LWC是一个<strong>fully associative</strong>（全相联）缓存，专门用于存储Learned Index节点的模型参数。</li>
+<li>每个LWC条目（entry）的详细结构如下：</li>
+</ul>
+<p><img alt="" src="../images/d9724a7398fccd86e00f2ecc10c3d035159592126c55925302a8b942631aab61.jpg" /></p>
+<p><em>Figure 8: LVM Page Walk Cache Entry.</em></p>
+<ul>
+<li>关键字段包括：<ul>
+<li><strong>Slope</strong> 和 <strong>Intercept</strong>: 各占8字节，共16字节，存储模型的核心参数。</li>
+<li><strong>Level</strong> 和 <strong>Offset</strong>: 用于在物理内存中唯一标识该节点的位置，因为同一层级的所有内部节点在物理上是连续存放的。</li>
+<li><strong>Address Space Identifier (ASID)</strong>: 支持多进程上下文切换，无需在进程切换时刷新整个LWC，提高了效率。</li>
+</ul>
+</li>
+<li>LWC的缓存行（cache line）大小为64字节，可容纳<strong>4个</strong>独立的16字节模型节点。</li>
+<li>由于Learned Index本身极其紧凑（平均稳态大小仅为<strong>112-162 bytes</strong>），LWC可以轻松缓存整个索引，从而获得极高的命中率（<strong>&gt;99%</strong> across all applications）。</li>
+</ul>
+<p><strong>硬件性能与资源开销</strong></p>
+<ul>
+<li>RTL实现和综合结果（基于22nm PDK）表明，LVM的硬件设计非常高效：<ul>
+<li>单个LVM页表遍历器的计算和LWC查找可以在<strong>2 cycles</strong>内完成（@2GHz）。</li>
+<li>单个遍历器的面积开销仅为 <strong>0.000637 mm²</strong>。</li>
+<li>LWC的面积开销为 <strong>0.00364 mm²</strong>，泄漏功耗为 <strong>0.588 mW</strong>。</li>
+</ul>
+</li>
+<li>与传统的Radix PWC相比，LVM的硬件结构在关键指标上实现了显著优化：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">LVM vs. Radix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Size in Bytes</strong></td>
+<td style="text-align: left;"><strong>3.0× improvement</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Area</strong></td>
+<td style="text-align: left;"><strong>1.5× improvement</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Power</strong></td>
+<td style="text-align: left;"><strong>1.9× improvement</strong></td>
+</tr>
+</tbody>
+</table>
+<p>这种高效的硬件集成，结合其微小的索引尺寸和单次访问的翻译特性，共同构成了LVM能够大幅降低MMU开销并接近理想页表性能的基石。</p>
+<hr />
+<h2 id="4_1">4. 实验方法与实验结果<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>仿真平台</strong>: 采用 <strong>SST</strong> (Structural Simulation Toolkit) 作为后端进行周期精确的架构仿真，并与 <strong>QEMU</strong> 前端集成以运行完整的 <strong>Linux kernel 5.15</strong> 系统。</li>
+<li><strong>内存模型</strong>: 使用 <strong>DRAMSim3</strong> 对主存进行建模。</li>
+<li><strong>工作负载</strong>: 覆盖了多样化的内存密集型应用，包括：<ul>
+<li><strong>graphBIG</strong> 套件中的六个图计算负载（BFS, DFS, CC, DC, PR, SSSP），内存占用约 <strong>75GB</strong>。</li>
+<li><strong>HPC</strong> 负载 <strong>GUPS</strong>。</li>
+<li><strong>BioBench2</strong> 中的生物信息学工具 <strong>MUMmer (MUMr)</strong>，内存占用 <strong>20GB</strong>。</li>
+<li>内存键值存储 <strong>Memcached (mem$)</strong>，内存占用高达 <strong>124GB</strong>。</li>
+</ul>
+</li>
+<li><strong>基线对比</strong>:<ul>
+<li><strong>Radix Page Tables</strong>: 标准的四级页表。</li>
+<li><strong>Elastic Cuckoo Page Tables (ECPT)</strong>: 代表当前最先进的哈希页表方案。</li>
+<li><strong>Ideal Page Table</strong>: 理想化的单次内存访问即可完成地址翻译的方案，用于衡量性能上限。</li>
+</ul>
+</li>
+<li><strong>配置变量</strong>: 所有方案均在 <strong>4KB</strong> 小页和启用 <strong>Transparent Huge Pages (THP)</strong> 的 <strong>2MB</strong> 大页两种模式下进行评估。</li>
+<li><strong>LVM实现</strong>: 通过一个 <strong>4200行C/C++代码</strong> 的用户态代理来管理LVM，该代理与修改后的Linux内核交互，以模拟硬件行为。</li>
+</ul>
+<p><strong>结果数据</strong></p>
+<ul>
+<li><strong>端到端性能加速</strong>:<ul>
+<li>相比 <strong>4KB Radix</strong>，LVM平均提速 <strong>14%</strong>（范围 <strong>5%-26%</strong>）。</li>
+<li>相比 <strong>THP Radix</strong>，LVM平均提速 <strong>7%</strong>（范围 <strong>2%-27%</strong>）。</li>
+<li>相比 <strong>4KB ECPT</strong>，LVM平均提速 <strong>5%</strong>。</li>
+<li>LVM的性能表现极为接近理想方案，平均仅相差 <strong>1%</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/ac97ace7c4cdd5c9018abb5257b62f9de08a5b62fc136badbe34d25e1476fee7.jpg" /></p>
+<p><em>Figure 9: End-to-end speedups.</em></p>
+<ul>
+<li><strong>MMU开销分析</strong>:<ul>
+<li>LVM将地址翻译相关的 <strong>MMU开销</strong> 平均降低了 <strong>39%</strong>（4KB）和 <strong>29%</strong>（THP）。</li>
+<li>在 <strong>Page Walk Cycles</strong> 上，LVM相比Radix平均减少 <strong>52%</strong>（4KB）和 <strong>44%</strong>（THP），其优势是ECPT的 <strong>2倍</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/e8eadb63a3ea24dac44b36c0b4e5391135f04bbb8f617e5eca0fbe8a8c0b63ea.jpg" /></p>
+<p><em>Figure 10: MMU overhead relative to radix.Results are normalized separately to radix 4KB and THP.</em></p>
+<ul>
+<li><strong>内存流量与缓存效率</strong>:<ul>
+<li>LVM大幅减少了 <strong>Page Walk Traffic</strong>，相比Radix平均降低 <strong>43%</strong>（4KB）和 <strong>34%</strong>（THP）。</li>
+<li>与ECPT相比，LVM的Page Walk内存访问次数减少了 <strong>2.9-3.1倍</strong>，因为ECPT使用并行访问，虽然降低了延迟但增加了带宽压力。</li>
+<li>LVM的 <strong>L2/L3 Cache MPKI</strong> 与Radix几乎持平（差异在 <strong>1%</strong> 以内），而ECPT则因并行访问导致缓存污染，MPKI显著增加（L2增加 <strong>44%</strong>，L3增加 <strong>40%</strong>）。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/7c943c701191721b696778e794e36e758044438744e09074c8ad4ea469203e28.jpg" /></p>
+<p><em>Figure 11: Page walk traffic relative to radix.Results are normalized separately to Radix 4KB and THP.</em></p>
+<p><img alt="" src="../images/5121d7e65b211b1a397c787a5536a290e563d13e9da09bd878489461b8f434e4.jpg" /></p>
+<p><em>Figure 12: Cache MPKI relative to radix page tables.</em></p>
+<ul>
+<li><strong>硬件特性</strong>:<ul>
+<li><strong>LVM Walk Cache (LWC)</strong> 的命中率极高，超过 <strong>99%</strong>，得益于其极小的索引尺寸。</li>
+<li>RTL综合结果显示，LVM的硬件结构在面积、功耗上均优于Radix。LVM的 <strong>Page Walk Cache</strong> 面积比Radix的 <strong>Page Walk Cache (PWC)</strong> 小 <strong>1.5倍</strong>，整体硬件结构面积小 <strong>3.0倍</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验与关键特性分析</strong></p>
+<ul>
+<li><strong>索引规模与可扩展性</strong>:<ul>
+<li>LVM的<strong>学习索引</strong>本身极其紧凑。在稳态下，4KB页模式平均仅需 <strong>112字节</strong>，THP模式平均 <strong>162字节</strong>。</li>
+<li>索引大小与应用的<strong>内存占用量无关</strong>。例如，<strong>memcached</strong> (124GB) 的索引比 <strong>MUMmer</strong> (20GB) 更小。即使将memcached的工作集从32GB扩展到240GB，其索引大小仍稳定在112字节，展现了卓越的可扩展性。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/495c260c5019e4457017d5d8c6e492911874e17d85981eae39023552279b56e0.jpg" /></p>
+<ul>
+<li>
+<p><strong>碰撞率与处理</strong>:</p>
+<ul>
+<li>得益于对虚拟地址空间规律性的学习，LVM的<strong>碰撞率</strong>极低，4KB模式下平均仅 <strong>0.2%</strong>，远优于传统哈希表（<strong>22%</strong>）。</li>
+<li>通过成本模型和错误边界约束（<strong>Cerr = 3</strong>），LVM确保了即使发生碰撞，也只需极少的额外内存访问（平均 <strong>2.36</strong> 次），保证了 <strong>99.4%</strong> 的翻译请求能在单次访问内完成。</li>
+</ul>
+</li>
+<li>
+<p><strong>物理内存碎片适应性</strong>:</p>
+<ul>
+<li>LVM通过<strong>Gapped Page Tables (GPTs)</strong> 和动态叶节点分配，能有效适应物理内存碎片。</li>
+<li>实验在不同碎片化水平（包括限制最大连续块为 <strong>256KB</strong> 和高 <strong>FMFI</strong> 值）下进行，LVM性能未受影响，始终保持高LWC命中率，证明了其对现实数据中心环境的鲁棒性。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/cc17c17fcdcf12bed79aae8fbc9965a310ff4ffc77f2b599efa53e84a5b7255d.jpg" /></p>
+<p><em>Figure 3: Median percentage of free memory in a Meta's datacenter that can be allocated contiguously at various sizes.</em></p>
+<ul>
+<li>
+<p><strong>操作系统开销</strong>:</p>
+<ul>
+<li>LVM的OS管理开销（包括初始化、插入、重训练）非常低。对于4KB页，平均仅占总执行时间的 <strong>1.17%</strong>；对于THP，更是低于 <strong>0.01%</strong>。</li>
+<li><strong>重训练</strong>事件极为罕见，在整个应用运行期间平均只发生 <strong>2次</strong>，且每次耗时不到 <strong>1.7ms</strong>，对尾部延迟无影响。</li>
+</ul>
+</li>
+<li>
+<p><strong>与其他工作的对比</strong>:</p>
+<ul>
+<li><strong>ASAP</strong>: 因需要大块物理连续内存且引入额外预取流量，性能不如LVM。</li>
+<li><strong>Midgard</strong>: 通过中间地址空间减少LLC命中时的页表遍历，但对主存访问无帮助。LVM在所有场景下均优于Midgard。</li>
+<li><strong>Flattened Page Tables (FPT)</strong>: 依赖大页物理连续性，在碎片化环境中性能退化至Radix水平，而LVM则不受影响。</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

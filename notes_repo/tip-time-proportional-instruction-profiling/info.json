@@ -3,7 +3,7 @@
   "paper_title": "TIP: Time-Proportional Instruction Profiling",
   "metadata": {
     "authors": [
-      "Bjorn Gottschall",
+      "Björn Gottschall",
       "Lieven Eeckhout",
       "Magnus Jahre"
     ],
@@ -12,7 +12,8 @@
       "Ghent University"
     ],
     "venue": "MICRO",
-    "year": 2021
+    "year": 2021,
+    "doi": "10.1145/3466752.3480058"
   },
-  "description": "论文提出Oracle性能分析器作为黄金标准，揭示现有硬件分析器（如Intel PEBS）因非时间比例采样导致平均9.3%的指令级误差。为此，作者设计了时间比例指令分析器TIP，通过结合Oracle的归因策略与统计采样，在BOOM处理器上将平均误差降至1.6%。利用TIP在SPEC CPU2017的Imagick基准中发现并修复了CSR指令引起的流水线刷新问题，实现了1.93倍性能提升。"
+  "description": "论文提出Oracle作为性能分析的黄金标准，并揭示现有硬件分析器（如Intel PEBS、AMD IBS）因非时间比例采样导致平均指令级误差高达9.3%-61.8%。为此，作者设计了TIP（Time-Proportional Instruction Profiling），结合Oracle的时间归因策略与统计采样，在BOOM处理器上实现仅1.6%的平均误差。TIP成功定位SPEC CPU2017中Imagick的CSR指令性能瓶颈，优化后获得1.93倍加速。"
 }

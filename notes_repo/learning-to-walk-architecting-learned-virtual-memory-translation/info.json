@@ -1,0 +1,21 @@
+{
+  "index": "learning-to-walk-architecting-learned-virtual-memory-translation",
+  "paper_title": "Learning to Walk: Architecting Learned Virtual Memory Translation",
+  "metadata": {
+    "authors": [
+      "Kaiyang Zhao",
+      "Yuang Chen",
+      "Xenia Xu",
+      "et al."
+    ],
+    "affiliations": [
+      "Carnegie Mellon University",
+      "Meta",
+      "Intel"
+    ],
+    "venue": "MICRO",
+    "year": 2025,
+    "doi": "10.1145/3725843.3756093"
+  },
+  "description": "论文提出Learned Virtual Memory (LVM)，一种基于学习型索引的页表结构，旨在实现高效的单次访问地址翻译。LVM通过动态适应应用虚拟地址空间的规律性，使用轻量级线性模型构建索引，解决了传统页表多级遍历和哈希页表高冲突率的问题。实验表明，LVM相比基数页表平均减少44%的地址翻译开销，提升应用执行速度2-27%，性能接近理想页表（差距<1%）。"
+}

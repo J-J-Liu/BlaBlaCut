@@ -436,32 +436,38 @@
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的软件预取（Software Prefetching）是个“一次性买卖”。编译器或开发者根据<strong>特定输入</strong>和<strong>特定硬件</strong>，把预取指令（比如 <code>_builtin_prefetch()</code>）硬编码进程序里。</li>
-<li>这在现实中非常脆弱。论文通过大量实验（如 Figure 1, 2, 3）证明：<strong>最优的预取距离</strong>（prefetch distance）对<strong>程序输入</strong>和<strong>处理器微架构</strong>极度敏感。</li>
+<li>这在现实中非常脆弱。论文通过大量实验（如 Figure 1, 2, 3）证明：<strong>最优的预取距离</strong>（prefetch distance）对<strong>程序输入</strong>和<strong>处理器微架构</strong>极度敏感。<ul>
 <li>同一个程序，换一个数据集，最佳预取距离可能从 1 变成 50。</li>
 <li>同一个程序和数据集，在 Haswell 和 Cascade Lake 上，预取甚至可能从“神助攻”变成“猪队友”，导致 <strong>50-70% 的严重性能下降</strong>（Figure 3）。</li>
+</ul>
+</li>
 <li>静态方案无法应对这种动态变化。你不可能为每个可能的输入和每种服务器 CPU 都维护一个单独的二进制文件。这就导致开发者对预取敬而远之，因为风险太高。</li>
 </ul>
 <p><strong>通俗比方 (The Analogy)</strong></p>
 <ul>
 <li>想象你在高速公路上开车去一个陌生城市。静态预取就像出发前，你根据地图App（基于某个假设的路况）规划好了一个固定的加油点。</li>
 <li>但如果路上突然大堵车（输入变了），或者你的车是电车而App按油车规划的（微架构变了），这个固定的加油点就完全失效了，你可能半路抛锚。</li>
-<li>RPG2 的做法完全不同：它给你车上装了一个<strong>智能副驾</strong>。这个副驾一边开车（程序运行），一边实时观察油表（性能计数器）、路况（内存访问模式），并能<strong>动态地、安全地</strong>决定：</li>
+<li>RPG2 的做法完全不同：它给你车上装了一个<strong>智能副驾</strong>。这个副驾一边开车（程序运行），一边实时观察油表（性能计数器）、路况（内存访问模式），并能<strong>动态地、安全地</strong>决定：<ol>
 <li><strong>要不要</strong>中途加油（插入预取）。</li>
 <li><strong>在哪里</strong>加油最合适（调整预取距离）。</li>
 <li>如果发现加油反而让车更慢了（比如排队太久），就立刻<strong>取消加油计划</strong>，让你按原速前进，保证不比原来更差。</li>
+</ol>
+</li>
 </ul>
 <p><strong>关键一招 (The "How")</strong></p>
 <p>RPG2 的核心创新在于构建了一个<strong>纯软件的、在线的、可回滚的</strong>预取优化闭环。它没有发明新的预取算法，而是巧妙地改造了整个优化流程：</p>
 <ul>
-<li><strong>作者并没有依赖静态编译</strong>，而是构建了一个四阶段的<strong>运行时系统</strong>（Figure 4）：</li>
+<li>
+<p><strong>作者并没有依赖静态编译</strong>，而是构建了一个四阶段的<strong>运行时系统</strong>（Figure 4）：</p>
+<ol>
 <li><strong>Profile</strong>（剖析）: 程序跑起来后，用硬件性能计数器（PEBS）实时找出造成 <strong>LLC Miss</strong> 的热点指令。</li>
 <li><strong>Generate</strong>（生成）: 利用 <strong>BOLT</strong>（一个二进制优化工具）作为后端，在<strong>不接触源码</strong>的情况下，为目标函数生成一个带预取内核（prefetch kernel）的新版本。这个内核被设计成逻辑上的 <strong>NOP</strong>，保证语义不变。</li>
-<li><strong>Insert</strong>（插入）: 这是最 tricky 的一步。作者没有简单地覆盖原函数，而是将新函数放在新地址，并实现了针对 <strong>C/C++</strong> 的 <strong>On-Stack Replacement </strong>(OSR)。这意味着即使函数正在执行中，也能安全地将执行流切换到带预取的新版本（Figure 6）。</li>
-<li>
-<p><strong>Tune &amp; Rollback</strong>（调优与回滚）: 系统会在线搜索最优的预取距离。最关键的是，如果发现<strong>任何</strong>预取距离都无法超越原始性能，它会利用 OSR <strong>无缝切回</strong>原始代码，彻底规避了预取带来的性能风险。</p>
+<li><strong>Insert</strong>（插入）: 这是最 tricky 的一步。作者没有简单地覆盖原函数，而是将新函数放在新地址，并实现了针对 <strong>C/C++</strong> 的 **On-Stack Replacement **(OSR)。这意味着即使函数正在执行中，也能安全地将执行流切换到带预取的新版本（Figure 6）。</li>
+<li><strong>Tune &amp; Rollback</strong>（调优与回滚）: 系统会在线搜索最优的预取距离。最关键的是，如果发现<strong>任何</strong>预取距离都无法超越原始性能，它会利用 OSR <strong>无缝切回</strong>原始代码，彻底规避了预取带来的性能风险。</li>
+</ol>
 </li>
 <li>
-<p>这套机制的核心保障是 <strong>BOLT Address Translation Table </strong>(BATT)，它像一张精确的地图，让系统能在新旧两个函数版本的任意指令间进行安全转换，从而实现了“<strong>大胆尝试，不行就撤</strong>”的鲁棒性。这正是 RPG2 名字中 “<strong>Robust</strong>” 的真正含义。</p>
+<p>这套机制的核心保障是 **BOLT Address Translation Table **(BATT)，它像一张精确的地图，让系统能在新旧两个函数版本的任意指令间进行安全转换，从而实现了“<strong>大胆尝试，不行就撤</strong>”的鲁棒性。这正是 RPG2 名字中 “<strong>Robust</strong>” 的真正含义。</p>
 </li>
 </ul>
 <h3 id="1-bolt-eli5">1. 基于BOLT的二进制代码分析与生成 (ELI5)<a class="headerlink" href="#1-bolt-eli5" title="Permanent link">&para;</a></h3>
@@ -480,11 +486,13 @@
 <p><strong>关键一招 (The "How")</strong></p>
 <ul>
 <li>作者并没有试图去修改或替换整个编译工具链，而是巧妙地将他们的预取逻辑封装成一个 <strong>BOLT Pass</strong>（具体叫 <code>InjectPrefetchPass</code>），直接作用于程序的 <strong>二进制文件</strong>。</li>
-<li>这个 Pass 的核心工作流是：</li>
+<li>这个 Pass 的核心工作流是：<ul>
 <li><strong>识别热点</strong>：通过分析 PEBS 采样到的 LLC Miss 信息，定位到造成最多缓存未命中的那几条 load 指令。</li>
 <li><strong>模式匹配</strong>：对这些 load 指令进行 <strong>backward slicing</strong>，追溯其地址计算依赖，并将其归类到预定义的三种可预取模式中（见 Table 1）。这一步的关键在于，它能处理复杂的 <strong>indirect memory access</strong>（如 <code>a[b[i]]</code>），而这正是硬件预取器的软肋。</li>
 <li><strong>生成内核</strong>：一旦模式匹配成功，就在对应的循环头（loop header）处，<strong>原地插入一段“预取内核”</strong>（prefetch kernel）。这个内核会精确地复制原始 load 的地址计算逻辑，但目标是提前 <code>d</code> 步计算出未来要访问的地址，并发出 <code>_mm_prefetch</code> 指令。</li>
 <li><strong>保证安全</strong>：生成的内核自带 <strong>bounds check</strong>（边界检查），防止因预取越界而引发段错误。同时，它被设计成一个逻辑上的 <strong>NOP</strong>，即除了预取行为外，不会改变任何寄存器或内存状态，确保语义正确性。</li>
+</ul>
+</li>
 <li>最终，BOLT 输出一个全新的、嵌入了智能预取逻辑的二进制文件，为后续的 <strong>在线调优</strong>（Phase 4）和 <strong>运行时替换</strong>（Phase 3）提供了基础。整个过程完全绕过了源代码，实现了对黑盒二进制程序的“外科手术式”优化。</li>
 </ul>
 <p><img alt="" src="../images/fe03b6d54b53d4bb1aba9836ed24b04e899a30c45027742e128f78d3060ab49c.jpg" /></p>
@@ -508,19 +516,25 @@
 <ul>
 <li><strong>第一步：制造“影子”</strong>。RPG2利用 <strong>BOLT</strong> 这个二进制优化框架，在离线状态下分析原始程序，生成一个全新的、包含预取内核（prefetch kernel）的函数版本。这个新函数是原始函数的“影子”，拥有相同的语义但更强的性能潜力。</li>
 <li><strong>第二步：安全注入</strong>。通过 <strong>LD_PRELOAD</strong> 注入一个名为 <code>libpg2</code> 的轻量级库到目标进程中。当需要进行优化时，RPG2的主控进程通过 <strong>ptrace</strong> 暂停目标进程，然后让 <code>libpg2</code> 在目标进程的地址空间内用 <code>mmap</code> 分配一块新内存，并将“影子函数”的代码拷贝进去。这样就避免了覆盖原始代码的风险。</li>
-<li><strong>第三步：实现在线栈替换（OSR）</strong>。这是最精妙的一步。问题在于，当目标进程被暂停时，它的调用栈上可能正有多个线程在执行原始函数的不同位置。简单地把未来的函数调用指向“影子函数”是不够的，必须把<strong>已经在执行中的函数调用也切换过去</strong>。</li>
+<li><strong>第三步：实现在线栈替换（OSR）</strong>。这是最精妙的一步。问题在于，当目标进程被暂停时，它的调用栈上可能正有多个线程在执行原始函数的不同位置。简单地把未来的函数调用指向“影子函数”是不够的，必须把<strong>已经在执行中的函数调用也切换过去</strong>。<ul>
 <li>RPG2利用了BOLT自带的 <strong>BOLT Address Translation Table (BATT)</strong>。这个表原本是为了支持对已优化二进制文件的再次优化而设计的，它精确记录了原始函数中每条指令与BOLT优化后函数中对应指令的地址映射关系。</li>
 <li>RPG2通过 <code>ptrace</code> 读取所有线程的程序计数器（PC），对于PC指向原始函数的线程，它查询BATT，找到对应的“影子函数”中的新地址，并直接修改该线程的PC。这样，当进程恢复运行时，线程就会从“影子函数”的对应位置继续执行，实现了真正的无缝切换。</li>
 <li>对于切换过程中可能出现在预取内核里的线程（这部分代码在原始函数里不存在，BATT无映射），RPG2采用保守策略：通过 <strong>ptrace单步执行</strong>，直到线程执行到BATT中有映射的代码位置，再进行转换。</li>
+</ul>
+</li>
 <li><strong>第四步：动态回滚</strong>。如果后续的性能监控发现预取有害，RPG2可以利用同样的BATT机制，将所有指向“影子函数”的调用和PC都<strong>反向映射</strong>回原始函数，完美地“撤销”整个优化操作，将性能恢复到基准线。</li>
 </ul>
 <p><img alt="" src="../images/d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" /></p>
 <p><em>Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.</em></p>
 <h3 id="3-eli5">3. 基于性能反馈的动态预取距离调优 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
-<p><strong>痛点直击</strong>
-- 传统的软件预取，无论是手动还是编译器自动插入，都面临一个致命问题：<strong>预取距离</strong>（prefetch distance）是“写死”的。这个距离一旦确定，就无法适应程序运行时的真实情况。
-- 这个“难受”体现在三个方面：
-  - <strong>输入敏感性</strong>：同一个程序，处理不同规模或结构的数据（比如图算法跑在不同的社交网络图上），其内存访问的节奏完全不同。对A数据集最优的距离，在B数据集上可能完全无效甚至有害。</p>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的软件预取，无论是手动还是编译器自动插入，都面临一个致命问题：<strong>预取距离</strong>（prefetch distance）是“写死”的。这个距离一旦确定，就无法适应程序运行时的真实情况。</li>
+<li>这个“难受”体现在三个方面：<ul>
+<li><strong>输入敏感性</strong>：同一个程序，处理不同规模或结构的数据（比如图算法跑在不同的社交网络图上），其内存访问的节奏完全不同。对A数据集最优的距离，在B数据集上可能完全无效甚至有害。</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/3a1ec04fb133efa439de9006c2e67e74495c23f7af7fed9cced3c6c8e6873d31.jpg" /></p>
 <p><em>Figure 1. The sssp benchmark from CRONO [2] has very different optimal prefetch distances (shaded regions) with different inputs.</em></p>
 <ul>
@@ -533,28 +547,38 @@
 </ul>
 <p><img alt="" src="../images/e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg" /></p>
 <p><em>Figure 3. The bfs benchmark from CRONO [2] often (but not always) suffers significant performance slowdown with prefetching.</em></p>
-<p><strong>通俗比方</strong>
-- 想象你在一条传送带上工作，你的任务是从传送带上拿零件组装产品。零件到达你面前需要固定的时间（<strong>内存延迟</strong>）。
-- 静态预取就像是老板根据昨天的经验，给你定下了一个规矩：“你必须在组装当前零件的同时，伸手去拿后面第N个零件”。但如果今天传送带速度变了（<strong>微架构不同</strong>），或者零件的大小和间距变了（<strong>输入数据不同</strong>），这个N值很可能就不合适了。拿早了手闲着（浪费精力/带宽），拿晚了就得干等（流水线停顿）。
-- RPG2的做法则像是给你配了一个智能助手。他先观察你工作几秒钟（<strong>Profiling</strong>），然后在你旁边装了一个可以随时调节的机械臂（<strong>注入预取代码</strong>）。接着，他不断微调机械臂抓取的提前量（<strong>动态调优</strong>），并通过看你单位时间能组装多少产品（<strong>IPC</strong>）来判断哪个提前量最好。如果发现怎么调都比你自己干还慢，他就干脆把机械臂收起来，让你恢复原样。</p>
-<p><strong>关键一招</strong>
-- RPG2最核心的创新在于，它没有试图在编译时“猜”出一个完美的预取距离，而是将这个决策推迟到<strong>运行时</strong>，并建立了一个<strong>闭环反馈系统</strong>。
-- 具体来说，它在原来的“分析-注入”流程后，增加了一个“<strong>监控-搜索-决策</strong>”的在线调优阶段：
-  - <strong>性能指标选择</strong>：它选用<strong>IPC</strong>（Instructions Per Cycle）作为“健康度”指标。这是一个非常聪明的选择，因为IPC直接反映了处理器流水线的充实程度，综合了缓存命中、带宽竞争等所有因素的最终效果，比单纯看缓存未命中率（MPKI）更能反映真实性能。
-  - <strong>高效的搜索策略</strong>：为了避免在巨大的距离空间（比如1-200）里盲目穷举，它设计了一个三阶段的智能搜索算法：
-    - <strong>梯度探测</strong>：从一个随机点出发，小步试探（±5），快速判断性能提升的方向。
-    - <strong>粗粒度跳跃</strong>：沿着有利方向指数级（翻倍）跳跃，快速逼近性能峰值区域。
-    - <strong>精细二分</strong>：在锁定的小范围内进行二分查找，精确定位局部最优解。
-  - <strong>安全回滚机制</strong>：整个调优过程是“无害”的。如果搜索完所有候选距离，发现最好的那个也比原始代码的IPC低，RPG2会果断地将执行流切换回未经修改的原始函数，确保性能不会因预取而受损。这个能力是任何静态方法都无法企及的。</p>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你在一条传送带上工作，你的任务是从传送带上拿零件组装产品。零件到达你面前需要固定的时间（<strong>内存延迟</strong>）。</li>
+<li>静态预取就像是老板根据昨天的经验，给你定下了一个规矩：“你必须在组装当前零件的同时，伸手去拿后面第N个零件”。但如果今天传送带速度变了（<strong>微架构不同</strong>），或者零件的大小和间距变了（<strong>输入数据不同</strong>），这个N值很可能就不合适了。拿早了手闲着（浪费精力/带宽），拿晚了就得干等（流水线停顿）。</li>
+<li>RPG2的做法则像是给你配了一个智能助手。他先观察你工作几秒钟（<strong>Profiling</strong>），然后在你旁边装了一个可以随时调节的机械臂（<strong>注入预取代码</strong>）。接着，他不断微调机械臂抓取的提前量（<strong>动态调优</strong>），并通过看你单位时间能组装多少产品（<strong>IPC</strong>）来判断哪个提前量最好。如果发现怎么调都比你自己干还慢，他就干脆把机械臂收起来，让你恢复原样。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>RPG2最核心的创新在于，它没有试图在编译时“猜”出一个完美的预取距离，而是将这个决策推迟到<strong>运行时</strong>，并建立了一个<strong>闭环反馈系统</strong>。</li>
+<li>具体来说，它在原来的“分析-注入”流程后，增加了一个“<strong>监控-搜索-决策</strong>”的在线调优阶段：<ul>
+<li><strong>性能指标选择</strong>：它选用<strong>IPC</strong>（Instructions Per Cycle）作为“健康度”指标。这是一个非常聪明的选择，因为IPC直接反映了处理器流水线的充实程度，综合了缓存命中、带宽竞争等所有因素的最终效果，比单纯看缓存未命中率（MPKI）更能反映真实性能。</li>
+<li><strong>高效的搜索策略</strong>：为了避免在巨大的距离空间（比如1-200）里盲目穷举，它设计了一个三阶段的智能搜索算法：<ul>
+<li><strong>梯度探测</strong>：从一个随机点出发，小步试探（±5），快速判断性能提升的方向。</li>
+<li><strong>粗粒度跳跃</strong>：沿着有利方向指数级（翻倍）跳跃，快速逼近性能峰值区域。</li>
+<li><strong>精细二分</strong>：在锁定的小范围内进行二分查找，精确定位局部最优解。</li>
+</ul>
+</li>
+<li><strong>安全回滚机制</strong>：整个调优过程是“无害”的。如果搜索完所有候选距离，发现最好的那个也比原始代码的IPC低，RPG2会果断地将执行流切换回未经修改的原始函数，确保性能不会因预取而受损。这个能力是任何静态方法都无法企及的。</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/bf9367c258960cd85482ea244dcca3e62c08a2ec04410b21469f291c936d59e6.jpg" /></p>
 <p><em>Figure 10. RPG2’s impact on IPC over time.</em></p>
 <h3 id="4-eli5">4. 安全回滚机制 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>profile-guided prefetching</strong>（如 APT-GET）是“一锤子买卖”：编译时根据某个输入或硬件环境，把预取指令和距离<strong>硬编码</strong>进二进制文件。</li>
-<li>这在现实中非常“难受”，因为：</li>
+<li>这在现实中非常“难受”，因为：<ul>
 <li>同一个程序，换一个<strong>输入数据</strong>（比如图的稀疏度不同），最优的预取距离可能天差地别（见 Figure 1）。</li>
 <li>同一个程序+输入，在不同的<strong>微架构</strong>（如 Haswell vs. Cascade Lake）上，预取甚至可能从“神助攻”变成“猪队友”（见 Figure 2 和 Figure 3）。</li>
+</ul>
+</li>
 <li>最致命的是，一旦预取配置不当，它会<strong>主动作恶</strong>：不仅浪费内存带宽，还会把有用的缓存行给挤出去，导致性能<strong>雪崩式下降</strong>。而静态方案对此毫无办法，只能眼睁睁看着。</li>
 </ul>
 <p><strong>通俗比方 (The Analogy)</strong></p>
@@ -567,17 +591,21 @@
 </ul>
 <p><strong>关键一招 (The "How")</strong></p>
 <ul>
-<li>作者并没有在原地修改代码，而是巧妙地采用了“<strong>影子函数</strong>”的设计。</li>
+<li>作者并没有在原地修改代码，而是巧妙地采用了“<strong>影子函数</strong>”的设计。<ul>
 <li>原始函数 <code>F0</code> 被完整保留，纹丝不动。</li>
 <li>优化后的新函数 <code>F1</code>（带预取内核）被生成并加载到<strong>新的内存地址</strong>。</li>
-<li>当需要回滚时，最关键的一步是处理那些“正在 <code>F0</code> 里执行”的线程（即 <strong>On-Stack Replacement, OSR</strong> 问题）。</li>
-<li>RPG2 利用了 BOLT 生成的 <strong>BATT </strong>(BOLT Address Translation Table)。这个表就像一本精确的“新旧地图坐标对照手册”，能将 <code>F1</code> 中任意指令的地址映射回 <code>F0</code> 中对应的原始地址。</li>
+</ul>
+</li>
+<li>当需要回滚时，最关键的一步是处理那些“正在 <code>F0</code> 里执行”的线程（即 <strong>On-Stack Replacement, OSR</strong> 问题）。<ul>
+<li>RPG2 利用了 BOLT 生成的 **BATT **(BOLT Address Translation Table)。这个表就像一本精确的“新旧地图坐标对照手册”，能将 <code>F1</code> 中任意指令的地址映射回 <code>F0</code> 中对应的原始地址。</li>
 <li>对于已经进入 <code>F1</code> 预取内核的线程（这部分在 <code>F0</code> 里没有对应物），RPG2 采用了一种“笨但可靠”的方法：通过 <strong>ptrace 单步执行</strong>，直到线程执行流回到 <code>F1</code> 的主体部分（这部分在 BATT 中有记录），然后再利用 BATT 完成地址翻译和跳转。</li>
+</ul>
+</li>
 <li>最终，通过修改所有相关线程的 <strong>PC </strong>(Program Counter) 和调用点，将整个程序的执行流<strong>干净利落地切换回 <code>F0</code></strong>，从而实现了零风险的性能兜底。</li>
 </ul>
 <p><img alt="" src="../images/d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" /></p>
 <p><em>Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.</em></p>
-<p>这个机制的核心价值在于，它将预取从一个“高风险、高回报”的赌博，变成了一个“<strong>有止损线的投资</strong>”。无论在线调优的结果如何，程序的性能下限都被牢牢锁定在原始基线水平，这极大地提升了预取技术在真实、多变环境中的<strong>鲁棒性 </strong>(Robustness) 和实用性。</p>
+<p>这个机制的核心价值在于，它将预取从一个“高风险、高回报”的赌博，变成了一个“<strong>有止损线的投资</strong>”。无论在线调优的结果如何，程序的性能下限都被牢牢锁定在原始基线水平，这极大地提升了预取技术在真实、多变环境中的**鲁棒性 **(Robustness) 和实用性。</p>
 
 
 

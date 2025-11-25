@@ -505,46 +505,70 @@
 
 <h1 id="prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design">Prodigy: Improving the Memory Latency of Data-Indirect Irregular Workloads Using Hardware-Software Co-Design 论文解析<a class="headerlink" href="#prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design" title="Permanent link">&para;</a></h1>
 <h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
-<p><strong>作者 (Authors)</strong>
-- Nishil Talati∗, Kyle May∗†, Armand Behroozi∗, Yichen Yang∗, Kuba Kaszyk‡, Christos Vasiladiotis‡, Tarunesh Verma∗, Lu Li‡, Brandon Nguyen∗, Jiawen Sun‡, John Magnus Morton‡, Agreen Ahmadi∗, Todd Austin∗, Michael O’Boyle‡, Scott Mahlke∗, Trevor Mudge∗, Ronald Dreslinski∗
-- ∗University of Michigan
-- †University of Wisconsin, Madison
-- ‡University of Edinburgh</p>
-<p><strong>发表期刊/会议 (Journal/Conference)</strong>
-- 该论文未在提供的文本中明确指出其发表的期刊或会议名称。但根据其格式和内容，可推断它是一篇计算机体系结构领域的学术论文，很可能发表在如 ISCA、MICRO、HPCA 或 ASPLOS 等顶级会议上。</p>
-<p><strong>发表年份 (Publication Year)</strong>
-- 文档中未直接提供发表年份。但通过参考文献可以推断，例如引用了2019年的Bingo prefetcher [13] 和2018年的Ainsworth and Jones的工作 [5]。结合论文内容和引用情况，该论文很可能发表于 <strong>2020年或之后</strong>。</p>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Nishil Talati∗, Kyle May∗†, Armand Behroozi∗, Yichen Yang∗, Kuba Kaszyk‡, Christos Vasiladiotis‡, Tarunesh Verma∗, Lu Li‡, Brandon Nguyen∗, Jiawen Sun‡, John Magnus Morton‡, Agreen Ahmadi∗, Todd Austin∗, Michael O’Boyle‡, Scott Mahlke∗, Trevor Mudge∗, Ronald Dreslinski∗</li>
+<li>∗University of Michigan</li>
+<li>†University of Wisconsin, Madison</li>
+<li>‡University of Edinburgh</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>该论文未在提供的文本中明确指出其发表的期刊或会议名称。但根据其格式和内容，可推断它是一篇计算机体系结构领域的学术论文，很可能发表在如 ISCA、MICRO、HPCA 或 ASPLOS 等顶级会议上。</li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li>文档中未直接提供发表年份。但通过参考文献可以推断，例如引用了2019年的Bingo prefetcher [13] 和2018年的Ainsworth and Jones的工作 [5]。结合论文内容和引用情况，该论文很可能发表于 <strong>2020年或之后</strong>。</li>
+</ul>
 <hr />
 <h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p><strong>目的</strong>
-- 解决 <strong>不规则工作负载</strong>（irregular workloads）因复杂的、数据依赖的内存访问模式而导致的严重 <strong>内存延迟瓶颈</strong> 问题。这类工作负载（如图计算、稀疏线性代数）通常使用 CSR/CSC 等压缩数据结构，缺乏空间和时间局部性，使得传统缓存和预取器失效。
-- 提出一种 <strong>低开销的硬件-软件协同设计</strong> 方案，以智能地预取数据，显著降低 DRAM 停滞时间。</p>
-<p><strong>方法</strong>
-- 提出 <strong>数据间接图 </strong>(Data Indirection Graph, DIG)：一种由软件生成、硬件消费的 <strong>紧凑语义表示</strong>，用于描述程序中关键数据结构的布局和遍历模式。
-  - DIG 的节点代表数据结构（包含基地址、容量、元素大小等信息）。
-  - DIG 的加权边代表两种核心的 <strong>数据依赖间接访问模式</strong>：
-    - <strong>单值间接寻址 </strong>(single-valued indirection)：用一个数据结构中的值作为索引去访问另一个数据结构（如用顶点ID访问其属性）。
-    - <strong>范围间接寻址 </strong>(ranged indirection)：用一个数据结构中的两个值（基址和边界）去访问另一个数据结构中的一系列连续元素（如在CSR格式中用offset数组查找邻居列表）。
-- 设计了一套完整的 <strong>软硬件协同流程</strong>：
-  - <strong>软件端</strong>：通过 <strong>LLVM编译器分析</strong> 自动提取程序语义，并将 DIG 编码到应用程序二进制文件中。也支持程序员手动插入 API 注解。
-  - <strong>硬件端</strong>：设计了一个 <strong>低开销的可编程硬件预取器</strong>，它从软件接收并存储 DIG，然后根据 DIG 动态地触发和推进预取序列。
-  - 引入 <strong>预取状态处理寄存器 </strong>(PFHR) 文件来跟踪多个并行的预取序列，实现非阻塞预取。
-  - 采用 <strong>自适应预取算法</strong>，能根据核心的执行速度动态调整预取距离，并在核心“追上”预取器时丢弃部分预取序列以保证 <strong>预取的时效性 </strong>(timeliness)。</p>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决 <strong>不规则工作负载</strong>（irregular workloads）因复杂的、数据依赖的内存访问模式而导致的严重 <strong>内存延迟瓶颈</strong> 问题。这类工作负载（如图计算、稀疏线性代数）通常使用 CSR/CSC 等压缩数据结构，缺乏空间和时间局部性，使得传统缓存和预取器失效。</li>
+<li>提出一种 <strong>低开销的硬件-软件协同设计</strong> 方案，以智能地预取数据，显著降低 DRAM 停滞时间。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 **数据间接图 **(Data Indirection Graph, DIG)：一种由软件生成、硬件消费的 <strong>紧凑语义表示</strong>，用于描述程序中关键数据结构的布局和遍历模式。<ul>
+<li>DIG 的节点代表数据结构（包含基地址、容量、元素大小等信息）。</li>
+<li>DIG 的加权边代表两种核心的 <strong>数据依赖间接访问模式</strong>：<ul>
+<li>**单值间接寻址 **(single-valued indirection)：用一个数据结构中的值作为索引去访问另一个数据结构（如用顶点ID访问其属性）。</li>
+<li>**范围间接寻址 **(ranged indirection)：用一个数据结构中的两个值（基址和边界）去访问另一个数据结构中的一系列连续元素（如在CSR格式中用offset数组查找邻居列表）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>设计了一套完整的 <strong>软硬件协同流程</strong>：<ul>
+<li><strong>软件端</strong>：通过 <strong>LLVM编译器分析</strong> 自动提取程序语义，并将 DIG 编码到应用程序二进制文件中。也支持程序员手动插入 API 注解。</li>
+<li><strong>硬件端</strong>：设计了一个 <strong>低开销的可编程硬件预取器</strong>，它从软件接收并存储 DIG，然后根据 DIG 动态地触发和推进预取序列。</li>
+<li>引入 **预取状态处理寄存器 **(PFHR) 文件来跟踪多个并行的预取序列，实现非阻塞预取。</li>
+<li>采用 <strong>自适应预取算法</strong>，能根据核心的执行速度动态调整预取距离，并在核心“追上”预取器时丢弃部分预取序列以保证 **预取的时效性 **(timeliness)。</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/0aab14dcd9203f49a1db8b1ac1541003f0871237dbe86509213aff373b5db95b.jpg" /></p>
 <p><em>Figure 5. Proposed Data Indirection Graph (DIG) representation—(a) example representation for BFS, (b) data structure memory layout and algorithmic traversal information captured by a DIG node and a weighted DIG edge respectively; two unique data-dependent indirection patterns supported by Prodigy—(c) single-valued indirection, and (d) ranged indirection.</em></p>
 <p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
-<p><strong>结果</strong>
-- 在 GAP、HPCG 和 NAS 基准测试套件的 29 个工作负载上进行评估，Prodigy 展现了卓越的性能和能效。
-- <strong>与无预取基线相比</strong>：
-  - 平均实现 <strong>2.6倍</strong> 的性能加速。
-  - 平均节省 <strong>1.6倍</strong> 的能耗。
-  - 平均减少了 <strong>80.3%</strong> 的 DRAM 停滞。
-- <strong>与前沿预取器相比</strong>：
-  - 性能优于 IMP [99] (<strong>2.3倍</strong>)、Ainsworth and Jones’ prefetcher [6] (<strong>1.5倍</strong>) 和 DROPLET [15] (<strong>1.6倍</strong>)。
-- <strong>硬件开销极低</strong>：
-  - 整个系统仅需 <strong>0.8KB</strong> 的存储开销（包括 DIG 表和 PFHR 文件）。
-  - 预取准确率平均达到 <strong>62.7%</strong>，并将 <strong>85.1%</strong> 的可预取 LLC 失效转化为缓存命中。</p>
+<p><strong>结果</strong></p>
+<ul>
+<li>在 GAP、HPCG 和 NAS 基准测试套件的 29 个工作负载上进行评估，Prodigy 展现了卓越的性能和能效。</li>
+<li><strong>与无预取基线相比</strong>：<ul>
+<li>平均实现 <strong>2.6倍</strong> 的性能加速。</li>
+<li>平均节省 <strong>1.6倍</strong> 的能耗。</li>
+<li>平均减少了 <strong>80.3%</strong> 的 DRAM 停滞。</li>
+</ul>
+</li>
+<li><strong>与前沿预取器相比</strong>：<ul>
+<li>性能优于 IMP [99] (<strong>2.3倍</strong>)、Ainsworth and Jones’ prefetcher [6] (<strong>1.5倍</strong>) 和 DROPLET [15] (<strong>1.6倍</strong>)。</li>
+</ul>
+</li>
+<li><strong>硬件开销极低</strong>：<ul>
+<li>整个系统仅需 <strong>0.8KB</strong> 的存储开销（包括 DIG 表和 PFHR 文件）。</li>
+<li>预取准确率平均达到 <strong>62.7%</strong>，并将 <strong>85.1%</strong> 的可预取 LLC 失效转化为缓存命中。</li>
+</ul>
+</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -555,7 +579,7 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>Prodigy </strong>(本工作)</td>
+<td style="text-align: left;">**Prodigy **(本工作)</td>
 <td style="text-align: center;"><strong>2.6×</strong></td>
 <td style="text-align: center;"><strong>0.8KB</strong></td>
 </tr>
@@ -580,10 +604,12 @@
 <p><em>Figure 14. CPI stack comparison and speedup achieved by Prodigy against a non-prefetching baseline. Left bar: CPI stack of baseline; right bar: CPI stack of Prodigy normalized to baseline. Lower is better for CPI, higher for speedup.</em></p>
 <p><img alt="" src="../images/d00ee4b8f0f82af8230492b59a95b3ea1eab8b03cd97c736631335f6fdb8a0bf.jpg" /></p>
 <p><em>Figure 17. Performance comparison of a non-prefetching baseline, Ainsworth and Jones’ prefetcher [6], DROPLET [15], IMP [99], and Prodigy (this work). Higher is better. Ainsworth &amp; Jones and DROPLET are graph-specific approaches, and hence are omitted from non-graph workloads.</em></p>
-<p><strong>结论</strong>
-- Prodigy 通过 <strong>DIG</strong> 这一创新的软硬件接口，成功地将程序的高级语义（数据结构布局和遍历模式）传递给硬件预取器。
-- 该方案结合了 <strong>软件的静态分析能力</strong> 和 <strong>硬件的动态运行时信息</strong>，实现了对复杂不规则内存访问模式的高效、及时预取。
-- Prodigy 是一种 <strong>通用、低开销且高效</strong> 的解决方案，能够显著提升多种不规则工作负载的性能和能效，证明了在 CPU 中集成此类专用、低成本加速器的巨大价值。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li>Prodigy 通过 <strong>DIG</strong> 这一创新的软硬件接口，成功地将程序的高级语义（数据结构布局和遍历模式）传递给硬件预取器。</li>
+<li>该方案结合了 <strong>软件的静态分析能力</strong> 和 <strong>硬件的动态运行时信息</strong>，实现了对复杂不规则内存访问模式的高效、及时预取。</li>
+<li>Prodigy 是一种 <strong>通用、低开销且高效</strong> 的解决方案，能够显著提升多种不规则工作负载的性能和能效，证明了在 CPU 中集成此类专用、低成本加速器的巨大价值。</li>
+</ul>
 <hr />
 <h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <p><strong>研究背景与动机</strong></p>
@@ -647,7 +673,7 @@
 <p><strong>整体技术架构</strong></p>
 <p>Prodigy 是一个 <strong>hardware-software co-design</strong> 系统，旨在通过智能预取（prefetching）来降低数据间接（data-indirect）不规则工作负载的内存延迟。其核心思想是结合软件提供的静态程序语义信息与硬件获取的动态运行时信息，以实现精准且及时的预取。</p>
 <ul>
-<li><strong>软件侧 (Software Side)</strong></li>
+<li><strong>软件侧 (Software Side)</strong><ul>
 <li>引入了一种名为 <strong>Data Indirection Graph (DIG)</strong> 的紧凑表示法，用于抽象和编码程序中关键数据结构的布局及其遍历模式。</li>
 <li>DIG 是一个有向加权图，其中：<ul>
 <li><strong>节点 (Nodes)</strong> 代表数据结构（如数组），包含其基地址、容量和元素大小等内存布局信息。</li>
@@ -661,10 +687,12 @@
 </li>
 <li>编译后的应用程序在运行时会将 DIG 表示加载到硬件预取器的本地内存中。</li>
 </ul>
+</li>
+</ul>
 <p><img alt="" src="../images/0aab14dcd9203f49a1db8b1ac1541003f0871237dbe86509213aff373b5db95b.jpg" /></p>
 <p><em>Figure 5. Proposed Data Indirection Graph (DIG) representation—(a) example representation for BFS, (b) data structure memory layout and algorithmic traversal information captured by a DIG node and a weighted DIG edge respectively; two unique data-dependent indirection patterns supported by Prodigy—(c) single-valued indirection, and (d) ranged indirection.</em></p>
 <ul>
-<li><strong>硬件侧 (Hardware Side)</strong></li>
+<li><strong>硬件侧 (Hardware Side)</strong><ul>
 <li>设计了一个<strong>低成本、可编程的硬件预取器</strong>，该预取器由软件生成的 DIG 进行配置。</li>
 <li>预取器包含以下关键硬件结构：<ul>
 <li><strong>DIG 存储表</strong>: 包括 <strong>node table</strong>, <strong>edge table</strong>, 和 <strong>edge index table</strong>，用于存储从软件传递过来的 DIG 信息。</li>
@@ -677,21 +705,27 @@
 </ul>
 </li>
 </ul>
+</li>
+</ul>
 <p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
 <ul>
-<li><strong>协同工作流程 (Co-Design Workflow)</strong></li>
+<li><strong>协同工作流程 (Co-Design Workflow)</strong><ul>
 <li><strong>编译时</strong>: 编译器分析源代码，提取语义信息并生成 DIG，将其编码为 API 调用嵌入二进制文件。</li>
 <li><strong>运行时初始化</strong>: 应用程序启动后，执行 API 调用，将 DIG 加载到预取器的本地 SRAM 中。</li>
 <li><strong>运行时执行</strong>: 预取器监听 L1D cache 的加载请求。一旦检测到对触发数据结构的访问，便根据 DIG 启动预取序列，并利用 PFHR 文件管理这些序列，动态地沿着不规则的数据结构进行预取。</li>
 </ul>
+</li>
+</ul>
 <p><img alt="" src="../images/ecc40e98e18c6bdb3873388b4b28409104be5c8b8557c3017f7867538f98fcb3.jpg" /></p>
 <p><em>Figure 1. Overview of our design and contributions. Prodigy software efficiently communicates key data structures and algorithmic traversal patterns, encoded in the proposed compact representation called the Data Indirection Graph (DIG), to the hardware for informed prefetching.</em></p>
 <ul>
-<li><strong>关键优势与开销</strong></li>
+<li><strong>关键优势与开销</strong><ul>
 <li><strong>性能</strong>: 平均获得 <strong>2.6×</strong> 的加速比（相比无预取基线），并优于多种 SOTA 预取器。</li>
 <li><strong>能效</strong>: 平均节省 <strong>1.6×</strong> 的能耗。</li>
 <li><strong>硬件成本</strong>: 总存储开销仅为 <strong>0.8KB</strong>，包括 DIG 表（0.53KB）和 PFHR 文件（0.26KB），硬件面积开销可忽略不计（约 0.004%）。</li>
+</ul>
+</li>
 </ul>
 <h3 id="1-data-indirection-graph-dig">1. Data Indirection Graph (DIG)<a class="headerlink" href="#1-data-indirection-graph-dig" title="Permanent link">&para;</a></h3>
 <p><strong>Data Indirection Graph (DIG) 的核心定义与目的</strong></p>
@@ -751,11 +785,10 @@
 <li><code>registerTrigEdge()</code>: 注册一个触发边（<code>w2</code>）。</li>
 </ul>
 </li>
-<li></li>
+<li><img alt="" src="../images/0b6da523b48b6c75839d56b9d66c41729fa8d4d48fd697f3049cfa5f363552da.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/0b6da523b48b6c75839d56b9d66c41729fa8d4d48fd697f3049cfa5f363552da.jpg" /></p>
 <p><em>Figure 6. Annotated BFS source code to construct the DIG.</em></p>
 <ul>
 <li><strong>自动构建（编译器分析）</strong>:<ul>
@@ -766,13 +799,12 @@
 <li><strong>触发边识别</strong>: 将没有入边的节点（通常是遍历的起点，如工作队列）标记为触发节点。</li>
 </ol>
 </li>
-<li></li>
+<li><img alt="" src="../images/5a39f8b3b22856f52bd442acfdfcc7d26236d6278afafe07daadef828aaf69dc.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/5a39f8b3b22856f52bd442acfdfcc7d26236d6278afafe07daadef828aaf69dc.jpg" /></p>
 <p><em>Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.</em></p>
-<div class="highlight"><pre><span></span><code>-
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 
 </code></pre></div>
 <p><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></p>
 <p><em>Figure 12. Design space exploration on the PFHR file size. Performance of each configuration is normalized to 4 entries.</em></p>
@@ -783,11 +815,10 @@
 <li><strong>Node Table</strong>: 存储所有 DIG 节点的信息。</li>
 <li><strong>Edge Table</strong>: 存储所有 DIG 边的信息。</li>
 <li><strong>Edge Index Table</strong>: 类似于软件中的偏移数组，用于快速查找从某个节点出发的所有出边。</li>
-<li></li>
+<li><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
 <ul>
 <li><strong>在预取流程中的作用</strong>:<ol>
@@ -799,11 +830,10 @@
 </ul>
 </li>
 <li><strong>状态跟踪</strong>: 整个预取链的状态由 <strong>PFHR (PreFetch status Handling Register)</strong> 文件跟踪，确保非阻塞和及时性。</li>
-<li></li>
+<li><img alt="" src="../images/9b80fb995e9c1e0049f74b0aa423412b98fedaf0d85e3e717e066d9fe2f62df0.jpg" /></li>
 </ol>
 </li>
 </ul>
-<p><img alt="" src="../images/9b80fb995e9c1e0049f74b0aa423412b98fedaf0d85e3e717e066d9fe2f62df0.jpg" /></p>
 <p><em>Figure 11. Prodigy operation: (a) prefetch sequence initialization, and (b) prefetch sequence advance.</em></p>
 <p><strong>DIG 的优势与开销</strong></p>
 <ul>
@@ -860,11 +890,10 @@
 </ul>
 </li>
 <li>基于这些信息，编译器在分配点之后立即插入一个 <strong><code>registerNode()</code></strong> API 调用，将该数据结构注册为 DIG 中的一个节点。</li>
-<li></li>
+<li><img alt="" src="../images/5a39f8b3b22856f52bd442acfdfcc7d26236d6278afafe07daadef828aaf69dc.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/5a39f8b3b22856f52bd442acfdfcc7d26236d6278afafe07daadef828aaf69dc.jpg" /></p>
 <p><em>Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.</em></p>
-<div class="highlight"><pre><span></span><code>- 图 (c) 展示了 LLVM IR，在两个 `malloc` 调用后，分别插入了 `registerNode` 调用，对应图 (a) 和 (b) 中的数组 `a` 和 `b`。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>- 图 (c) 展示了 LLVM IR，在两个 `malloc` 调用后，分别插入了 `registerNode` 调用，对应图 (a) 和 (b) 中的数组 `a` 和 `b`。
 </code></pre></div>
 <p><strong>边（Edge）识别与注册</strong></p>
 <p>在识别出节点后，编译器通过追踪数据流来发现节点之间的 <strong>indirection</strong>（间接访问）关系，并将其分类为 <strong>single-valued indirection</strong> 或 <strong>ranged indirection</strong>。</p>
@@ -874,11 +903,10 @@
 <li>它首先定位到计算 <code>a[i]</code> 地址的指令（<code>AddrCalc</code>）。</li>
 <li>然后追踪该地址加载（<code>Load</code>）的结果，并找到使用该结果去计算 <code>b[...]</code> 地址的后续指令。</li>
 <li>一旦确认这种依赖链，编译器就会插入一个 <strong><code>registerTravEdge()</code></strong> 调用，其参数为源数组 <code>a</code> 和目标数组 <code>b</code> 的基地址，并标记 <code>edge_type</code> 为 <strong>w0</strong>。</li>
-<li></li>
+<li><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></p>
 <p><em>Figure 12. Design space exploration on the PFHR file size. Performance of each configuration is normalized to 4 entries.</em></p>
 <p>中的伪代码 (b) 描述了这一过程。</p>
 <ul>
@@ -886,11 +914,10 @@
 <li>编译器寻找控制循环边界的数据访问，例如 <code>for (j = offset[i]; j &lt; offset[i+1]; j++) { ... edge_list[j] ... }</code>。</li>
 <li>它会检测到 <code>offset[i]</code> 和 <code>offset[i+1]</code> 这对值被用来界定对 <code>edge_list</code> 的连续访问范围。</li>
 <li>识别到这种模式后，编译器同样插入 <strong><code>registerTravEdge()</code></strong> 调用，但将 <code>edge_type</code> 标记为 <strong>w1</strong>。</li>
-<li></li>
+<li><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></p>
 <p><em>Figure 12. Design space exploration on the PFHR file size. Performance of each configuration is normalized to 4 entries.</em></p>
 <p>中的伪代码 (c) 描述了这一过程。</p>
 <p><strong>触发边（Trigger Edge）的确定</strong></p>
@@ -899,7 +926,7 @@
 <li>编译器采用一个简单的启发式规则：在已识别的所有遍历边构成的图中，<strong>没有入边（incoming edge）的节点</strong>被视为触发节点。</li>
 <li>这是因为这类节点通常是算法遍历的起点（例如 BFS 中的 <code>workQueue</code>）。</li>
 <li>对于每个触发节点，编译器会插入一个 <strong><code>registerTrigEdge()</code></strong> 调用。</li>
-<li>在 </li>
+<li>在</li>
 </ul>
 <p><img alt="" src="../images/5a39f8b3b22856f52bd442acfdfcc7d26236d6278afafe07daadef828aaf69dc.jpg" /></p>
 <p><em>Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.</em></p>
@@ -914,10 +941,12 @@
 <p><strong>核心观点</strong></p>
 <p>Prodigy 的硬件预取器是一个高度专业化、低开销的单元，其核心创新在于利用软件在编译时生成的 <strong>Data Indirection Graph (DIG)</strong> 来指导硬件进行精准的、基于语义的预取。该设计摒弃了传统预取器依赖地址相关性或模式匹配的通用方法，转而采用一种“<strong>软硬协同、语义驱动</strong>”的范式。</p>
 <ul>
-<li><strong>输入</strong>: 预取器的主要输入是两部分：</li>
-<li><strong>静态语义信息</strong>: 由软件（通过编译器或程序员注解）生成并加载到预取器本地 SRAM 中的 <strong>DIG</strong>。DIG 包含了数据结构的布局（基地址、容量、元素大小）和它们之间的访问关系（单值间接寻址 <code>w0</code>、范围间接寻址 <code>w1</code> 和触发边 <code>w2</code>）。</li>
 <li>
-<p><strong>动态运行时事件</strong>: 预取器通过侦听（snoop）L1D cache 的 <strong>demand load 请求</strong>来触发预取行为。当一个 demand load 的地址落在 DIG 中标记为“触发节点”的地址范围内时，预取序列被激活。</p>
+<p><strong>输入</strong>: 预取器的主要输入是两部分：</p>
+<ul>
+<li><strong>静态语义信息</strong>: 由软件（通过编译器或程序员注解）生成并加载到预取器本地 SRAM 中的 <strong>DIG</strong>。DIG 包含了数据结构的布局（基地址、容量、元素大小）和它们之间的访问关系（单值间接寻址 <code>w0</code>、范围间接寻址 <code>w1</code> 和触发边 <code>w2</code>）。</li>
+<li><strong>动态运行时事件</strong>: 预取器通过侦听（snoop）L1D cache 的 <strong>demand load 请求</strong>来触发预取行为。当一个 demand load 的地址落在 DIG 中标记为“触发节点”的地址范围内时，预取序列被激活。</li>
+</ul>
 </li>
 <li>
 <p><strong>输出</strong>: 预取器向内存子系统发出 <strong>non-binding prefetch requests</strong>（非绑定预取请求），将数据提前加载到 L1D cache 中，以隐藏后续计算的 DRAM 访问延迟。</p>
@@ -928,16 +957,20 @@
 <p><strong>硬件存储结构与算法流程</strong></p>
 <p>预取器的硬件实现围绕两个关键组件：用于存储 DIG 的本地内存和用于跟踪预取状态的寄存器文件。</p>
 <ul>
-<li><strong>DIG 存储结构</strong>:</li>
+<li><strong>DIG 存储结构</strong>:<ul>
 <li><strong>Node Table (节点表)</strong>: 存储每个数据结构节点的信息，包括 <code>base_addr</code>（基地址）、<code>bound_addr</code>（边界地址）和 <code>data_size</code>（元素大小）。这些信息将软件中的虚拟地址空间映射到硬件可理解的格式。</li>
 <li><strong>Edge Table (边表)</strong>: 存储节点间的间接访问关系，包括源节点和目标节点的基地址以及 <code>edge_type</code>（<code>w0</code>, <code>w1</code> 或 <code>w2</code>）。</li>
 <li><strong>Edge Index Table (边索引表)</strong>: 类似于 CSR 格式中的偏移数组，用于快速查找从某个源节点出发的所有出边，加速图遍历。</li>
 <li>这些表的总存储开销被严格控制在 <strong>0.8KB</strong> 以内，其中 DIG 表约占 <strong>0.53KB</strong>，PFHR 文件约占 <strong>0.26KB</strong>。</li>
 </ul>
+</li>
+</ul>
 <p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
 <ul>
-<li><strong>预取状态跟踪 (PFHR)</strong>:</li>
+<li>
+<p><strong>预取状态跟踪 (PFHR)</strong>:</p>
+<ul>
 <li>引入 <strong>PreFetch status Handling Register (PFHR) file</strong> 来管理多个并发的预取序列。</li>
 <li>每个 PFHR 条目包含：<ul>
 <li><code>Free</code>: 标记条目是否空闲。</li>
@@ -947,13 +980,13 @@
 <li><code>Offset bitmap</code>: 用于跟踪一个 cache line 内哪些字节已被预取。</li>
 </ul>
 </li>
-<li>
-<p>PFHR 的设计使预取器成为 <strong>non-blocking</strong>（非阻塞）的，允许同时发起多个长链预取请求，极大提升了吞吐量。</p>
+<li>PFHR 的设计使预取器成为 <strong>non-blocking</strong>（非阻塞）的，允许同时发起多个长链预取请求，极大提升了吞吐量。</li>
+</ul>
 </li>
 <li>
 <p><strong>预取算法流程</strong>:
-  预取过程分为初始化和推进两个阶段。</p>
-</li>
+    预取过程分为初始化和推进两个阶段。</p>
+<ul>
 <li><strong>预取序列初始化</strong>:<ul>
 <li>当侦听到对“触发节点”的 demand load 时，算法被激活。</li>
 <li>根据触发边 <code>w2</code> 中编码的 <strong>prefetch look-ahead distance</strong>（预取前瞻距离）参数，计算出需要提前预取的起始地址。该距离是一个启发式值，会根据 DIG 的关键路径深度动态调整（路径越深，距离越小）。</li>
@@ -963,10 +996,14 @@
 <li><strong>预取序列推进</strong>:<ul>
 <li>当一个预取请求的数据返回（prefetch fill）时，预取器通过 CAM 查找对应的 PFHR。</li>
 <li>利用 PFHR 中的 <code>Node ID</code> 查询 Edge Index Table 和 Edge Table，找到所有出边及其 <code>edge_type</code>。</li>
-<li>根据 <code>edge_type</code> 执行相应的间接寻址计算：</li>
+<li>根据 <code>edge_type</code> 执行相应的间接寻址计算：<ul>
 <li>对于 <strong>single-valued indirection (<code>w0</code>)</strong>: 将返回的数据值作为索引，结合目标节点的 <code>base_addr</code> 和 <code>data_size</code>，计算出下一个要预取的地址。</li>
 <li>对于 <strong>ranged indirection (<code>w1</code>)</strong>: 将返回的数据值（通常是一对 base/bound）解释为一个范围，并预取该范围内的所有连续元素。</li>
+</ul>
+</li>
 <li>为新计算出的地址分配新的 PFHR（如果目标是非叶节点），并发出新的预取请求，如此递归推进，直到到达 DIG 的叶节点。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1131,7 +1168,7 @@
 </ul>
 <p><img alt="" src="../images/9b80fb995e9c1e0049f74b0aa423412b98fedaf0d85e3e717e066d9fe2f62df0.jpg" /></p>
 <p><em>Figure 11. Prodigy operation: (a) prefetch sequence initialization, and (b) prefetch sequence advance.</em></p>
-<div class="highlight"><pre><span></span><code>*图 11 展示了初始化过程：当检测到对 `workQueue` (地址 `0x100`) 的需求访问时，根据预取距离 2，计算出要预取的地址 `0x108` 并发出请求。*
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>*图 11 展示了初始化过程：当检测到对 `workQueue` (地址 `0x100`) 的需求访问时，根据预取距离 2，计算出要预取的地址 `0x108` 并发出请求。*
 </code></pre></div>
 <ul>
 <li><strong>选择性丢弃预取序列</strong><ul>
@@ -1172,27 +1209,33 @@
 <ul>
 <li><strong>模拟平台</strong>: 使用 <strong>Sniper</strong> 多核模拟器，基于 <strong>Pin</strong> 工具构建，针对 x86 架构。</li>
 <li><strong>系统配置</strong>: 模拟一个 <strong>8-core</strong> 的共享内存系统，详细的缓存层次、频率等参数见下表。</li>
-<li><strong>工作负载</strong>:</li>
+<li><strong>工作负载</strong>:<ul>
 <li><strong>图算法</strong>: 来自 <strong>GAP benchmark suite</strong> 的 5 个算法 (bc, bfs, cc, pr, sssp)。</li>
 <li><strong>稀疏线性代数</strong>: 来自 <strong>HPCG benchmark suite</strong> 的 2 个算法 (spmv, symgs)。</li>
 <li><strong>计算流体动力学</strong>: 来自 <strong>NAS parallel benchmark suite</strong> 的 2 个算法 (cg, is)。</li>
+</ul>
+</li>
 <li><strong>数据集</strong>: 图算法使用来自 <strong>SNAP</strong> 和 <strong>UF sparse matrix collection</strong> 的 5 个真实世界大规模图数据集。非图算法使用各自基准套件提供的标准输入。</li>
-<li><strong>对比基线</strong>:</li>
+<li><strong>对比基线</strong>:<ul>
 <li><strong>无预取基线 (no-prefetching baseline)</strong>。</li>
 <li><strong>传统硬件预取器</strong>: GHB-based global/delta correlation (G/DC)。</li>
 <li><strong>SOTA 预取器</strong>: IMP [99], Ainsworth and Jones’ prefetcher [5], [6], DROPLET [15]。</li>
 <li><strong>软件预取</strong>: Ainsworth and Jones’ software预取方法 [8]。</li>
+</ul>
+</li>
 <li><strong>评估指标</strong>: 主要关注 <strong>性能 (Speedup)</strong>、<strong>能耗 (Energy Consumption)</strong> 和 <strong>硬件开销 (Hardware Overhead)</strong>。</li>
 </ul>
 <p><img alt="" src="../images/db9ed5ebd96dde6bda6c1ac2f5dff00cf70e47cedbc0a603524e9f5079ba74f7.jpg" /></p>
 <p><em>TABLE I BASELINE SYSTEM CONFIGURATION.</em></p>
 <p><strong>结果数据分析</strong></p>
 <ul>
-<li><strong>与无预取基线对比</strong>:</li>
+<li><strong>与无预取基线对比</strong>:<ul>
 <li>Prodigy 在全部 29 个工作负载上实现了 <strong>平均 2.6× 的性能加速</strong>。</li>
 <li><strong>DRAM stalls</strong> 平均减少了 <strong>80.3%</strong>，这是性能提升的主要来源。</li>
 <li>能耗方面，实现了 <strong>平均 1.6× 的节能</strong>，主要得益于执行时间缩短带来的静态能耗降低。</li>
 <li>对于 PageRank 算法在 livejournal 数据集上的具体表现，Prodigy 将 <strong>DRAM stalls 减少了 8.2×</strong>，并带来了 <strong>2.9× 的端到端加速</strong>，远超传统预取器。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/60e612ae3e0d3ad526ffa1008e788f3d86a97ac3e3828b39468a88bda747c0ec.jpg" /></p>
 <p><em>Figure 2. Reduction in ((a)) memory stalls and ((b)) speedup of different approaches normalized to a non-prefetching baseline for the PageRank algorithm on the livejournal data set.</em></p>
@@ -1201,24 +1244,28 @@
 <p><img alt="" src="../images/d57c282af4b5d41a92b05801502b9219569c661ac1f70bb00b5b16ede53f6f97.jpg" /></p>
 <p><em>Figure 19. Normalized energy comparison of a non-prefetching baseline (first bar) and Prodigy (second bar). Lower is better.</em></p>
 <ul>
-<li><strong>与 SOTA 硬件预取器对比</strong>:</li>
+<li><strong>与 SOTA 硬件预取器对比</strong>:<ul>
 <li>Prodigy 相对于其他先进预取器表现出显著优势：
-    | 对比对象 | 平均加速比 (vs. 无预取) | Prodigy 相对优势 |
-    | :--- | :---: | :---: |
-    | Ainsworth &amp; Jones [6] | ~1.7× | <strong>1.5×</strong> |
-    | DROPLET [15] | ~1.6× | <strong>1.6×</strong> |
-    | IMP [99] | ~1.1× | <strong>2.3×</strong> |</li>
+    | 对比对象              | 平均加速比 (vs. 无预取) | Prodigy 相对优势 |
+    | :-------------------- | :---------------------: | :--------------: |
+    | Ainsworth &amp; Jones [6] |          ~1.7×          |     <strong>1.5×</strong>     |
+    | DROPLET [15]          |          ~1.6×          |     <strong>1.6×</strong>     |
+    | IMP [99]              |          ~1.1×          |     <strong>2.3×</strong>     |</li>
 <li>性能优势的核心原因在于 <strong>更高的预取准确率 (62.7% vs. 44.6% for [6])</strong> 和对 <strong>ranged indirection</strong> 模式的完整支持，而许多先前工作仅支持 <strong>single-valued indirection</strong>。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/d00ee4b8f0f82af8230492b59a95b3ea1eab8b03cd97c736631335f6fdb8a0bf.jpg" /></p>
 <p><em>Figure 17. Performance comparison of a non-prefetching baseline, Ainsworth and Jones’ prefetcher [6], DROPLET [15], IMP [99], and Prodigy (this work). Higher is better. Ainsworth &amp; Jones and DROPLET are graph-specific approaches, and hence are omitted from non-graph workloads.</em></p>
 <p><img alt="" src="../images/c6bfdf45217d64a16760f5ee2a60db783ff64072a905f77dc7899a899d3cdba7.jpg" /></p>
 <p><em>TABLE III AVERAGE SPEEDUP COMPARISON OVER NO PREFETCHING.∗</em></p>
 <ul>
-<li><strong>预取有效性分析</strong>:</li>
+<li><strong>预取有效性分析</strong>:<ul>
 <li><strong>预取潜力</strong>: 分析表明，<strong>96.4%</strong> 的 LLC misses 理论上是可被 Prodigy 预取的。</li>
 <li><strong>实际效果</strong>: Prodigy 成功将 <strong>85.1%</strong> 的可预取 LLC misses 转化为 cache hits。</li>
 <li><strong>预取命中位置</strong>: 大部分被命中的预取数据位于 <strong>L1D cache</strong>，这带来了最低的访问延迟。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/7309c3e48556788a09b58488543a4e9e911306da18c674b69228cec095a3f45f.jpg" /></p>
 <p><em>Figure 13. Classification of LLC miss addresses into potentially prefetchable and non-prefetchable addresses.</em></p>
@@ -1228,31 +1275,39 @@
 <p><em>Figure 15. Location of prefetched data in the cache hierarchy when it is demanded. Blue is better.</em></p>
 <p><strong>消融实验与设计空间探索</strong></p>
 <ul>
-<li><strong>PFHR 文件大小的影响</strong>:</li>
+<li><strong>PFHR 文件大小的影响</strong>:<ul>
 <li>对 <strong>PFHR (PreFetch status Handling Register)</strong> 文件大小进行了探索，以平衡性能和硬件成本。</li>
 <li>结果显示，将 PFHR 数量从 4 增加到 <strong>16</strong> 可带来最高 <strong>30%</strong> 的性能提升。</li>
 <li>最终选择 <strong>16 个 PFHR</strong> 作为设计点，在性能和面积之间取得了良好折衷。但对某些工作负载（如 cc），过大的 PFHR 文件反而会因缓存污染而损害性能。</li>
 </ul>
+</li>
+</ul>
 <p><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></p>
 <p><em>Figure 12. Design space exploration on the PFHR file size. Performance of each configuration is normalized to 4 entries.</em></p>
 <ul>
-<li><strong>Ranged Indirection 的重要性</strong>:</li>
-<li>通过分析发现，<strong>ranged indirection</strong> 模式负责了图算法中 <strong>55.3%</strong> 的数据预取。</li>
 <li>
-<p>这一发现解释了为何仅支持 <strong>single-valued indirection</strong> 的预取器（如 IMP）性能受限，因为它们错过了大部分预取机会。</p>
+<p><strong>Ranged Indirection 的重要性</strong>:</p>
+<ul>
+<li>通过分析发现，<strong>ranged indirection</strong> 模式负责了图算法中 <strong>55.3%</strong> 的数据预取。</li>
+<li>这一发现解释了为何仅支持 <strong>single-valued indirection</strong> 的预取器（如 IMP）性能受限，因为它们错过了大部分预取机会。</li>
+</ul>
 </li>
 <li>
 <p><strong>与图重排序技术的结合</strong>:</p>
-</li>
+<ul>
 <li>即使在应用了 <strong>HubSort</strong> 等图重排序技术以增加局部性后，Prodigy 依然能带来 <strong>平均 2.3×</strong> 的额外性能提升。</li>
 <li>这证明了即使经过软件优化，不规则内存访问依然是瓶颈，硬件辅助预取仍然至关重要。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/fce634646e21c0b672857ed20c3e4da6e721a2a90ff10fc8ffa4660940af4f31.jpg" /></p>
 <p><em>Figure 18. Speedup of Prodigy compared to a non-prefetching baseline on reordered graph data sets using HubSort [14].</em></p>
 <ul>
-<li><strong>硬件开销</strong>:</li>
+<li><strong>硬件开销</strong>:<ul>
 <li>Prodigy 的总硬件存储开销仅为 <strong>0.8KB</strong>，其中 DIG 表占 <strong>0.53KB</strong>，PFHR 文件占 <strong>0.26KB</strong>。</li>
 <li>相比之下，其他 SOTA 方案的硬件开销要大得多（例如 [5] 需要 32KB），Prodigy 的开销可以忽略不计（约 CPU 芯片总面积的 <strong>0.004%</strong>）。</li>
+</ul>
+</li>
 </ul>
 <hr />
 

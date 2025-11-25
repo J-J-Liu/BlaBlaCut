@@ -558,11 +558,13 @@
 <ul>
 <li>图表展示了 <strong>sssp</strong> 基准测试在 <strong>Haswell</strong> 架构上的性能表现，横轴为 <strong>prefetch distance</strong>（预取距离），纵轴为 <strong>speedup</strong>（加速比），基准线为 1.0。</li>
 <li>四条曲线分别代表不同输入数据集：<strong>RO-edges</strong>（绿色）、<strong>amazon0601</strong>（蓝色）、<strong>gowalla</strong>（紫色）、<strong>NotreDame</strong>（橙色）。</li>
-<li>每条曲线的<strong>阴影区域</strong>标示了该输入下<strong>最优预取距离范围</strong>，即加速比最高的区间：</li>
+<li>每条曲线的<strong>阴影区域</strong>标示了该输入下<strong>最优预取距离范围</strong>，即加速比最高的区间：<ul>
 <li><strong>RO-edges</strong>：最优区间为 <strong>20–34</strong>，最高加速比接近 <strong>1.8x</strong>。</li>
 <li><strong>amazon0601</strong>：最优区间为 <strong>70–100</strong>，加速比稳定在 <strong>1.2x</strong> 左右。</li>
 <li><strong>gowalla</strong>：最优区间为 <strong>1–2</strong>，加速比约 <strong>1.2x</strong>，超过此范围性能迅速下降。</li>
 <li><strong>NotreDame</strong>：无明显最优区间，整体加速比接近或低于 1.0，部分距离甚至导致性能下降。</li>
+</ul>
+</li>
 <li>数据表明，<strong>同一程序在不同输入下，最优预取距离差异巨大</strong>，静态编译器难以统一优化。</li>
 <li>表格总结各输入最优预取距离与性能表现：</li>
 </ul>
@@ -609,11 +611,13 @@
 <p><img alt="03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg" src="../images/03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg" /></p>
 <ul>
 <li>图表展示了 <strong>CRONO</strong> 套件中的 <strong>pr</strong> 基准测试在不同微架构和输入下的性能表现，纵轴为 <strong>speedup（越高越好）</strong>，横轴为 <strong>prefetch distance</strong>。</li>
-<li>四条曲线分别代表两种输入（<strong>wiki-topcats</strong> 和 <strong>tvshow-edges</strong>）在两种微架构（<strong>Cascade Lake</strong> 和 <strong>Haswell</strong>）上的表现：</li>
+<li>四条曲线分别代表两种输入（<strong>wiki-topcats</strong> 和 <strong>tvshow-edges</strong>）在两种微架构（<strong>Cascade Lake</strong> 和 <strong>Haswell</strong>）上的表现：<ul>
 <li><strong>wiki-topcats Cascade Lake</strong>：虚线浅蓝色，整体表现优异，speedup 稳定在 1.75–2.00 区间。</li>
 <li><strong>tvshow-edges Haswell</strong>：实线深绿色，表现中等，speedup 在 1.00–1.25 之间波动。</li>
 <li><strong>wiki-topcats Haswell</strong>：实线浅蓝色，表现较差，speedup 接近 1.00，部分区域甚至低于 1.00。</li>
 <li><strong>tvshow-edges Cascade Lake</strong>：虚线深绿色，表现最差，speedup 多数时间低于 1.00，表明 prefetching 导致性能下降。</li>
+</ul>
+</li>
 <li>数据总结如下：</li>
 </ul>
 <table>
@@ -648,16 +652,18 @@
 <td>tvshow-edges</td>
 <td>Cascade Lake</td>
 <td>明显下降</td>
-<td>&lt;1.00</td>
+<td>\&lt;1.00</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>关键发现：</li>
+<li>关键发现：<ul>
 <li><strong>prefetching 的效果高度依赖于微架构与输入的组合</strong>，同一输入在不同微架构上可能产生完全相反的效果。</li>
 <li><strong>Cascade Lake</strong> 对 <strong>wiki-topcats</strong> 输入表现出极佳的 prefetch 效果，但对 <strong>tvshow-edges</strong> 输入则适得其反。</li>
 <li><strong>Haswell</strong> 上 <strong>tvshow-edges</strong> 输入受益于 prefetching，而 <strong>wiki-topcats</strong> 则几乎无收益。</li>
 <li>这种不一致性凸显了静态编译器难以准确预测最优 prefetch 配置的问题，也说明了 <strong>RPG2</strong> 这类动态调整系统的重要性。</li>
+</ul>
+</li>
 </ul>
 <h3 id="figure-3-the-bfs-benchmark-from-crono-2-often-but-not-always-suffers-significant-performance-slowdown-with-prefetching">Figure 3. The bfs benchmark from CRONO [2] often (but not always) suffers significant performance slowdown with prefetching.<a class="headerlink" href="#figure-3-the-bfs-benchmark-from-crono-2-often-but-not-always-suffers-significant-performance-slowdown-with-prefetching" title="Permanent link">&para;</a></h3>
 <p><img alt="e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg" src="../images/e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg" /></p>
@@ -714,13 +720,15 @@
 <ul>
 <li>图片展示了 RPG2 系统优化目标进程的四个核心阶段，从左至右依次为：<strong>Profile</strong>、<strong>Build new binary</strong>、<strong>Insert code</strong> 和 <strong>Tune</strong>。</li>
 <li>在第一阶段 <strong>Profile</strong> 中，RPG2 通过分析运行中的目标进程，识别出频繁触发 LLC miss 的指令。图中示例代码 <code>ld [r3+r2]→r4</code> 被标记为高频 LLC miss 源，其前向依赖链（backwards slice）被提取用于后续 prefetch kernel 构建。</li>
-<li>第二阶段 <strong>Build new binary</strong> 基于 BOLT 工具生成新二进制文件。图中红色高亮部分为插入的 <strong>prefetch kernel</strong>，包含：</li>
+<li>第二阶段 <strong>Build new binary</strong> 基于 BOLT 工具生成新二进制文件。图中红色高亮部分为插入的 <strong>prefetch kernel</strong>，包含：<ul>
 <li>寄存器保存（<code>push r5</code>）</li>
 <li>地址计算（<code>add r1, #20→r5</code>，其中 20 为初始 prefetch distance）</li>
 <li>边界检查（<code>cmp r5, #100; bgte cleanup</code>）</li>
 <li>预取指令（<code>pf [r3+r5]</code>）</li>
 <li>清理与恢复（<code>pop r5</code>）</li>
 <li>原始循环体继续执行</li>
+</ul>
+</li>
 <li>第三阶段 <strong>Insert code</strong> 将新函数 <code>newtop</code> 注入目标进程地址空间。此阶段需暂停进程，通过 <code>ptrace</code> 或 <code>libpg2</code> 实现代码替换，并更新所有指向原函数 <code>top</code> 的调用点和栈返回地址，确保控制流正确跳转至 <code>newtop</code>。</li>
 <li>第四阶段 <strong>Tune</strong> 对 prefetch distance 进行动态调整。图中显示将距离从 20 修改为 32（<code>add r1, #32→r2</code>），该过程通过修改机器码中的立即数实现，每次调整仅需重写少量字节，且伴随短暂进程暂停。</li>
 <li>整个流程强调 <strong>在线优化</strong> 与 <strong>无侵入式回退</strong>：若 tuning 后性能未提升，RPG2 可快速回滚至原始代码 <code>top</code>，避免性能损失。</li>
@@ -812,17 +820,21 @@
 <li>图片展示了 RPG2 系统对一段原始汇编代码进行优化的完整流程，核心目标是为<strong>间接内存访问</strong>（如 <code>ld [r3+r2]→r4</code>）插入<strong>prefetch kernel</strong>，同时保证语义不变。</li>
 <li>原始代码是一个循环体，包含两个关键加载指令：<code>ld [r0+r1]→r2</code> 和 <code>ld [r3+r2]→r4</code>。其中，后者是导致 LLC miss 的热点负载，被选为 prefetch 目标。</li>
 <li>RPG2 通过<strong>backwards slicing</strong>分析数据依赖链，从 <code>ld [r3+r2]→r4</code> 回溯至 <code>ld [r0+r1]→r2</code>，确认其属于 <code>a[??(b[j])]</code> 类型的间接访问模式，从而决定在<strong>外层循环头</strong>插入 prefetch kernel。</li>
-<li>优化后的代码结构清晰分为三部分：</li>
+<li>优化后的代码结构清晰分为三部分：<ul>
 <li><strong>Prefetch Kernel</strong>：位于 <code>newtop</code> 标签下，负责计算并执行 prefetch 指令。</li>
 <li><strong>Cleanup</strong>：恢复被借用寄存器的状态。</li>
 <li><strong>Original Loop Body</strong>：保持原有逻辑不变。</li>
-<li>具体优化步骤如下：</li>
+</ul>
+</li>
+<li>具体优化步骤如下：<ul>
 <li><strong>保存寄存器</strong>：<code>push r5</code> 将寄存器 <code>r5</code> 压栈，作为临时工作寄存器。</li>
 <li><strong>计算 prefetch 地址</strong>：<code>add r1, #20→r5</code> 计算 20 个迭代后的地址偏移量。</li>
 <li><strong>边界检查</strong>：<code>cmp r5, #100</code> 和 <code>bgte cleanup_</code> 确保不会访问非法内存。</li>
 <li><strong>执行 prefetch</strong>：<code>ld [r0+r5]→r5</code> 和 <code>pf [r3+r5]</code> 分别加载索引和发出 prefetch 指令。</li>
 <li><strong>恢复状态</strong>：<code>pop r5</code> 恢复原寄存器值。</li>
 <li><strong>执行原循环体</strong>：后续指令与原始代码完全一致。</li>
+</ul>
+</li>
 <li>整个过程体现了 RPG2 的设计哲学：<strong>NOP-like semantics</strong>，即 prefetch kernel 在功能上等价于空操作，仅增加预取行为，不改变程序逻辑。</li>
 <li>该图还用箭头标注了控制流路径，清晰展示了 prefetch kernel 如何无缝嵌入到原有循环中，确保程序正确性和性能提升。</li>
 </ul>
@@ -830,15 +842,19 @@
 <p><img alt="d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" src="../images/d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" /></p>
 <ul>
 <li>图片展示了 RPG2 系统在运行时进行 <strong>代码替换</strong> 的前后对比，核心目标是将原始函数 <code>f0</code> 替换为优化后的函数 <code>f1</code>，同时保持程序语义不变。</li>
-<li><strong>“before” 部分</strong>：</li>
+<li><strong>“before” 部分</strong>：<ul>
 <li>程序计数器（PC）指向函数 <code>f0</code> 的某条指令，表示当前正在执行 <code>f0</code>。</li>
 <li>函数 <code>g0</code> 和 <code>h0</code> 内部均包含对 <code>f0</code> 的调用指令（<code>call f0</code>），即它们的执行流会跳转到 <code>f0</code>。</li>
 <li>所有调用和执行都围绕 <code>f0</code> 进行，此时系统尚未应用任何优化。</li>
-<li><strong>“after” 部分</strong>：</li>
+</ul>
+</li>
+<li><strong>“after” 部分</strong>：<ul>
 <li>RPG2 将优化后的函数 <code>f1</code> 放置在内存中的新位置（红色区域），而原始函数 <code>f0</code> 仍保留在原处。</li>
 <li>所有原本调用 <code>f0</code> 的指令（如 <code>g0</code> 和 <code>h0</code> 中的 <code>call f0</code>）被修改为调用 <code>f1</code>（即 <code>call f1</code>）。</li>
 <li>PC 指针已更新，指向 <code>f1</code> 中对应的指令位置，确保线程从 <code>f0</code> 的执行点无缝切换到 <code>f1</code> 的对应位置。</li>
 <li>此设计允许 RPG2 在性能退化时快速回滚至 <code>f0</code>，无需重新编译或重启进程。</li>
+</ul>
+</li>
 <li>关键机制：RPG2 利用 <strong>BOLT Address Translation Table (BATT)</strong> 实现 <strong>On-Stack Replacement (OSR)</strong>，将 <code>f0</code> 的 PC 映射到 <code>f1</code> 的等效位置，从而支持在函数执行中途切换版本。</li>
 <li>优势总结：</li>
 </ul>
@@ -1243,14 +1259,18 @@
 <ul>
 <li>图表标题为 <strong>Figure 9</strong>，主题是 <strong>profiling phase duration</strong> 对 <strong>RPG2’s optimization activation</strong> 的影响。</li>
 <li>横轴表示 <strong>profiling phase duration</strong>，取值为 <strong>0.5s, 1s, 2s, 4s</strong>；纵轴为百分比，范围从 <strong>0% 到 100%</strong>。</li>
-<li>纵向堆叠柱状图分为三段：</li>
+<li>纵向堆叠柱状图分为三段：<ul>
 <li><strong>蓝色底部区域（always）</strong>：表示在所有运行中，RPG2 的优化阶段（代码生成、注入和调优）<strong>始终被激活</strong>。</li>
 <li><strong>浅蓝色中间区域（mixed）</strong>：表示优化阶段<strong>有时被激活，有时未被激活</strong>。</li>
 <li><strong>红色顶部区域（never）</strong>：表示优化阶段<strong>从未被激活</strong>。</li>
-<li>数据趋势显示：</li>
+</ul>
+</li>
+<li>数据趋势显示：<ul>
 <li>随着 <strong>profiling duration 增加</strong>，<strong>always 区域扩大</strong>，说明更长的采样时间提高了 RPG2 成功触发优化的概率。</li>
 <li><strong>never 区域缩小</strong>，表明较长的 profiling 减少了因数据不足导致优化失败的情况。</li>
 <li><strong>mixed 区域变化较小</strong>，说明部分输入对 profiling 时间不敏感。</li>
+</ul>
+</li>
 <li>具体数值估算（基于视觉比例）：</li>
 </ul>
 <table>
@@ -1299,13 +1319,17 @@
 <li>左图对应 higgs-retweet_network 输入，在 Haswell 机器上运行。初始 IPC 约为 <strong>0.44</strong>，在约 <strong>6 秒</strong>处因 RPG2 进入代码注入与调优阶段而短暂下降，随后稳定在 <strong>0.55</strong> 以上，最终选定 prefetch distance 为 <strong>62</strong>，实现 <strong>超过 25% 的 IPC 提升</strong>。</li>
 <li>右图对应 soc-sign-bitcoinalpha-edit 输入，在 Cascade Lake 机器上运行。初始 IPC 约为 <strong>2.0</strong>，在约 <strong>3 秒</strong>后进入 prefetch active 阶段（阴影区域），但 IPC 不升反降，表明 prefetching 有害性能；RPG2 在约 <strong>8 秒</strong>时检测到此情况并执行 rollback，恢复至原始代码，IPC 回升至 <strong>2.0</strong> 附近。</li>
 <li>两张图共同说明 RPG2 能动态响应程序行为：在有益时提升性能，在有害时快速回退，避免持续性能损失。</li>
-<li>关键操作时间点：</li>
+<li>关键操作时间点：<ul>
 <li><strong>代码注入与调优暂停</strong>：发生在第 6 秒（左图）和第 3–8 秒（右图），期间 IPC 波动。</li>
 <li><strong>Rollback 触发</strong>：右图中于第 8 秒完成，恢复原始性能。</li>
-<li>RPG2 的核心能力体现在：</li>
+</ul>
+</li>
+<li>RPG2 的核心能力体现在：<ul>
 <li><strong>实时监测 IPC 变化</strong>作为性能指标。</li>
 <li><strong>自动决策是否启用或禁用 prefetch</strong>，无需人工干预。</li>
 <li><strong>支持 On-Stack Replacement (OSR)</strong>，确保在函数执行中途也能安全切换代码版本。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1352,10 +1376,12 @@
 <li>图表展示了在 Cascade Lake 平台上运行 pr 基准测试时，<strong>speedup</strong> 与 <strong>LLC MPKI（Last-Level Cache Misses Per Kilo-Instruction）变化量</strong>之间的关系。</li>
 <li>横轴为“change in LLC MPKI”，表示相对于无 prefetch 基线的 LLC 缺失率变化，负值代表减少，正值代表增加；纵轴为 speedup，即性能加速比。</li>
 <li>数据点分布显示：<strong>大部分数据点集中在横轴负半轴</strong>，表明 RPG2 的 prefetch 机制普遍降低了 LLC MPKI，即减少了缓存缺失。</li>
-<li>尽管 LLC MPKI 降低，但 speedup 并未呈现强正相关性。例如：</li>
+<li>尽管 LLC MPKI 降低，但 speedup 并未呈现强正相关性。例如：<ul>
 <li>当 LLC MPKI 减少约 -15 时，speedup 可达 1.3–1.4；</li>
 <li>但当 LLC MPKI 减少至 -5 左右时，speedup 仍可高达 1.3；</li>
 <li>同时，部分数据点即使 LLC MPKI 几乎无变化（接近 0），speedup 仍维持在 1.1–1.2 区间。</li>
+</ul>
+</li>
 <li>存在少量数据点位于横轴右侧（LLC MPKI 增加），其 speedup 多数低于 1.0，说明 prefetch 在这些情况下反而导致性能下降。</li>
 <li>图中密集簇状分布于横轴接近 0、纵轴 1.0–1.2 区域，暗示部分输入下 prefetch 对 LLC MPKI 影响微弱，但仍有小幅性能提升，可能源于其他层级缓存或 DRAM 带宽优化。</li>
 <li>该图验证了论文第 4.4 节结论：<strong>LLC MPKI 不是衡量 prefetch 效果的可靠指标</strong>，因为性能提升不仅依赖于 LLC 缺失减少，还受其他内存层级行为和带宽竞争影响。</li>
@@ -1461,7 +1487,7 @@
 <ul>
 <li>该图片展示的是 <strong>Table 3</strong>，标题为“<strong>The influence of prefetch distance on performance</strong>”，用于量化不同程序输入和微架构下，预取距离对性能的影响模式。</li>
 <li>表格按 <strong>benchmark</strong>（pr, sssp, bfs, bc）和 <strong>microarchitecture</strong>（Cascade Lake, Haswell）分类，统计了每种组合下不同性能行为类型的输入数量。</li>
-<li>性能行为类型共八类，包括：</li>
+<li>性能行为类型共八类，包括：<ul>
 <li><strong>single optimal</strong>：存在唯一最优预取距离。</li>
 <li><strong>range optimal</strong>：存在一个连续的最优距离区间。</li>
 <li><strong>asymptotic</strong>：性能随距离增加趋于饱和。</li>
@@ -1470,6 +1496,8 @@
 <li><strong>Cascade bad</strong>：仅在 Cascade Lake 上有害。</li>
 <li><strong>noisy</strong>：行为过于随机，无法清晰归类。</li>
 <li><strong>other</strong>：其余未归入上述类别的行为。</li>
+</ul>
+</li>
 </ul>
 <p>以下是表格数据整理：</p>
 <table>

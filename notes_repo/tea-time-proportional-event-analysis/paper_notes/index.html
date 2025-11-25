@@ -494,77 +494,107 @@
 
 <h1 id="tea-time-proportional-event-analysis">TEA: Time-Proportional Event Analysis 论文解析<a class="headerlink" href="#tea-time-proportional-event-analysis" title="Permanent link">&para;</a></h1>
 <h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
-<p><strong>作者 (Authors)</strong>
-- Björn Gottschall
-- Lieven Eeckhout
-- Magnus Jahre</p>
-<p><strong>发表期刊/会议 (Journal/Conference)</strong>
-- Proceedings of the <strong>50th Annual International Symposium on Computer Architecture (ISCA ’23)</strong></p>
-<p><strong>发表年份 (Publication Year)</strong>
-- <strong>2023</strong></p>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Björn Gottschall</li>
+<li>Lieven Eeckhout</li>
+<li>Magnus Jahre</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>Proceedings of the <strong>50th Annual International Symposium on Computer Architecture (ISCA ’23)</strong></li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li><strong>2023</strong></li>
+</ul>
 <hr />
 <h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p><strong>目的</strong>
-- 解决当前性能分析工具无法有效解释“为何执行应用程序的性能关键指令会耗费时间”这一根本问题。
-- 提出一种能同时回答“哪些指令是性能关键的”（Q1）和“为何这些指令是性能关键的”（Q2）的统一分析方法。</p>
-<p><strong>方法</strong>
-- 提出 <strong>Time-Proportional Event Analysis (TEA)</strong>，其核心是创建 <strong>时间比例化的每指令周期栈 (Per-Instruction Cycle Stacks, PICS)</strong>。
-- PICS 通过在指令提交阶段进行统计采样，确保每个静态指令对总执行时间的贡献与其实际耗时成正比。
-- 为追踪导致性能损失的微架构事件，TEA 为每个动态指令分配一个 <strong>性能签名向量 (Performance Signature Vector, PSV)</strong>，用以记录该指令在其生命周期内所遭遇的性能事件。
-- 为平衡洞察力与开销，TEA 精心选择了 <strong>9个关键性能事件</strong>，覆盖了提交阶段的三种非计算状态：Stalled（执行停顿）、Drained（前端停顿）和 Flushed（流水线冲刷）。
-- TEA 在 <strong>Berkeley Out-of-Order Machine (BOOM)</strong> 核心中实现了RTL级硬件支持，并利用Linux perf进行样本收集和后处理以生成PICS。</p>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决当前性能分析工具无法有效解释“为何执行应用程序的性能关键指令会耗费时间”这一根本问题。</li>
+<li>提出一种能同时回答“哪些指令是性能关键的”（Q1）和“为何这些指令是性能关键的”（Q2）的统一分析方法。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Time-Proportional Event Analysis (TEA)</strong>，其核心是创建 <strong>时间比例化的每指令周期栈 (Per-Instruction Cycle Stacks, PICS)</strong>。</li>
+<li>PICS 通过在指令提交阶段进行统计采样，确保每个静态指令对总执行时间的贡献与其实际耗时成正比。</li>
+<li>为追踪导致性能损失的微架构事件，TEA 为每个动态指令分配一个 <strong>性能签名向量 (Performance Signature Vector, PSV)</strong>，用以记录该指令在其生命周期内所遭遇的性能事件。</li>
+<li>为平衡洞察力与开销，TEA 精心选择了 <strong>9个关键性能事件</strong>，覆盖了提交阶段的三种非计算状态：Stalled（执行停顿）、Drained（前端停顿）和 Flushed（流水线冲刷）。</li>
+<li>TEA 在 <strong>Berkeley Out-of-Order Machine (BOOM)</strong> 核心中实现了RTL级硬件支持，并利用Linux perf进行样本收集和后处理以生成PICS。</li>
+</ul>
 <p><img alt="" src="../images/a4284d00fc9253f43ab27e72c7760d5e67d36ff852e7b04dbc1205345da8368e.jpg" /></p>
 <p><em>Figure 3: Performance event hierarchy for the Stalled (ST) commit state.</em></p>
 <p><img alt="" src="../images/1c5f5c65e53685954b038cf73486a548a8f2907143fab503d8acc91916488c0d.jpg" /></p>
 <p><em>Figure 4: TEA microarchitecture.</em></p>
-<p><strong>结果</strong>
-- <strong>准确性</strong>: 与一个不可实现的“黄金参考”（捕获所有动态指令的所有周期）相比，TEA的平均误差仅为 <strong>2.1%</strong>。相比之下，AMD IBS、Arm SPE和IBM RIS的平均误差分别高达 <strong>55.6%</strong>、<strong>55.5%</strong> 和 <strong>56.0%</strong>。
-- <strong>开销</strong>: 
-  - <strong>性能开销</strong>: 平均仅为 <strong>1.1%</strong>。
-  - <strong>功耗开销</strong>: 每核仅增加约 <strong>3.2 mW</strong>（约 <strong>0.1%</strong>）。
-  - <strong>存储开销</strong>: 每核 <strong>249字节</strong>。
-- <strong>实用性</strong>: 
-  - 成功识别并优化了SPEC CPU2017基准测试中的两个案例：
-    - <strong>lbm</strong>: 通过TEA指导的软件预取优化，获得 <strong>1.28倍</strong> 加速。
-    - <strong>nab</strong>: 通过TEA发现浮点平方根指令因流水线冲刷而延迟执行，使用<code>–fast-math</code>编译选项后获得 <strong>2.45倍</strong> 加速。
-- <strong>对比分析</strong>: 
-  - 指令驱动方法（如IBS）因在fetch/dispatch阶段标记指令，导致性能剖析<strong>非时间比例化</strong>，严重失真。
-  - 事件驱动方法（如PMC计数）因无法区分<strong>隐藏</strong>与<strong>非隐藏</strong>的延迟，其事件计数与实际性能影响的相关性很差。</p>
+<p><strong>结果</strong></p>
+<ul>
+<li><strong>准确性</strong>: 与一个不可实现的“黄金参考”（捕获所有动态指令的所有周期）相比，TEA的平均误差仅为 <strong>2.1%</strong>。相比之下，AMD IBS、Arm SPE和IBM RIS的平均误差分别高达 <strong>55.6%</strong>、<strong>55.5%</strong> 和 <strong>56.0%</strong>。</li>
+<li><strong>开销</strong>:<ul>
+<li><strong>性能开销</strong>: 平均仅为 <strong>1.1%</strong>。</li>
+<li><strong>功耗开销</strong>: 每核仅增加约 <strong>3.2 mW</strong>（约 <strong>0.1%</strong>）。</li>
+<li><strong>存储开销</strong>: 每核 <strong>249字节</strong>。</li>
+</ul>
+</li>
+<li><strong>实用性</strong>:<ul>
+<li>成功识别并优化了SPEC CPU2017基准测试中的两个案例：<ul>
+<li><strong>lbm</strong>: 通过TEA指导的软件预取优化，获得 <strong>1.28倍</strong> 加速。</li>
+<li><strong>nab</strong>: 通过TEA发现浮点平方根指令因流水线冲刷而延迟执行，使用<code>–fast-math</code>编译选项后获得 <strong>2.45倍</strong> 加速。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>对比分析</strong>:<ul>
+<li>指令驱动方法（如IBS）因在fetch/dispatch阶段标记指令，导致性能剖析<strong>非时间比例化</strong>，严重失真。</li>
+<li>事件驱动方法（如PMC计数）因无法区分<strong>隐藏</strong>与<strong>非隐藏</strong>的延迟，其事件计数与实际性能影响的相关性很差。</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/06a45f0c65adb0893d2611eb63833d4c75d2658daa31b83ada7657858799aeb6.jpg" /></p>
 <p><em>Figure 5: Quantifying the error for the PICS obtained through IBS, SPE, RIS, NCI-TEA, and TEA. TEA achieves the highest accuracy within 2.1% (and at most 7.7%) compared to the golden reference.</em></p>
 <p><img alt="" src="../images/f038b33e872a951087c91f37efdf225c0f0ca0ea8fb4c1342f438b0afdb8dbd3.jpg" /></p>
 <p><em>Figure 6: PICS for the top-3 instructions as provided by IBS, TEA, and the golden reference (GR). The PICS provided by TEA are accurate compared to the golden reference, in contrast to IBS.</em></p>
 <p><img alt="" src="../images/50c548710d2cb6dfd0c158e39611a7a53a8ef3dd34c3922c9003e5c31c34f6fb.jpg" /></p>
 <p><em>Figure 7: Quantifying the correlation between event count and its impact on performance. Some event counts correlate strongly with their impact on performance while others do not.</em></p>
-<p><strong>结论</strong>
-- TEA通过创建<strong>时间比例化的PICS</strong>，成功地将性能剖析与性能事件分析统一起来，能够精准地解释性能瓶颈的根本原因。
-- 其精心设计的硬件支持在引入极低开销的同时，提供了远超现有技术（如IBS, SPE, RIS）的分析精度。
-- TEA的有效性已在真实基准测试中得到验证，能够指导开发者发现并解决那些传统工具难以定位的复杂性能问题，从而获得显著的性能提升。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li>TEA通过创建<strong>时间比例化的PICS</strong>，成功地将性能剖析与性能事件分析统一起来，能够精准地解释性能瓶颈的根本原因。</li>
+<li>其精心设计的硬件支持在引入极低开销的同时，提供了远超现有技术（如IBS, SPE, RIS）的分析精度。</li>
+<li>TEA的有效性已在真实基准测试中得到验证，能够指导开发者发现并解决那些传统工具难以定位的复杂性能问题，从而获得显著的性能提升。</li>
+</ul>
 <hr />
 <h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <p><strong>研究背景与动机</strong></p>
 <ul>
 <li>随着 <strong>Dennard scaling</strong> 和 <strong>Moore's law</strong> 的终结，CPU 架构转向异构化和专业化，使得优化串行 CPU 代码变得愈发关键（受 <strong>Amdahl’s Law</strong> 影响）。</li>
-<li>现有性能分析工具难以有效指导优化，因为它们无法同时回答两个核心问题：</li>
+<li>现有性能分析工具难以有效指导优化，因为它们无法同时回答两个核心问题：<ul>
 <li><strong>Q1</strong>: 应用程序在哪些指令上花费了最多时间？（即，哪些是指令是 <strong>performance-critical</strong>？）</li>
 <li><strong>Q2</strong>: 为什么这些指令是性能关键的？是由哪些 <strong>microarchitectural events</strong>（如缓存未命中、分支误预测）导致的？</li>
-<li>当前的性能分析方法存在根本性缺陷：</li>
+</ul>
+</li>
+<li>当前的性能分析方法存在根本性缺陷：<ul>
 <li><strong>Instruction-driven approaches</strong> (如 <strong>AMD IBS</strong>, <strong>Arm SPE</strong>, <strong>IBM RIS</strong>) 在 <strong>fetch</strong> 或 <strong>dispatch</strong> 阶段标记指令，导致其分析结果<strong>非时间比例</strong>（non-time-proportional），偏向于在前端停留时间长的指令，而非真正暴露延迟的指令。</li>
 <li><strong>Event-driven approaches</strong> 仅统计事件计数，但这些计数与事件对性能的实际影响（即造成的延迟）<strong>相关性很差</strong>，因为现代处理器的 <strong>latency hiding</strong> 机制会掩盖许多事件的影响。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/50c548710d2cb6dfd0c158e39611a7a53a8ef3dd34c3922c9003e5c31c34f6fb.jpg" /></p>
 <p><em>Figure 7: Quantifying the correlation between event count and its impact on performance. Some event counts correlate strongly with their impact on performance while others do not.</em></p>
 <p><strong>核心贡献</strong></p>
 <ul>
-<li>提出 <strong>Time-Proportional Event Analysis (TEA)</strong>，通过构建 <strong>时间比例的每指令周期栈 (Per-Instruction Cycle Stacks, PICS)</strong> 来统一回答 Q1 和 Q2。PICS 的特性是：</li>
+<li>提出 <strong>Time-Proportional Event Analysis (TEA)</strong>，通过构建 <strong>时间比例的每指令周期栈 (Per-Instruction Cycle Stacks, PICS)</strong> 来统一回答 Q1 和 Q2。PICS 的特性是：<ul>
 <li>栈的高度与该静态指令对总执行时间的贡献成正比（回答 Q1）。</li>
 <li>栈内各组成部分的大小与（组合）性能事件对整体性能的影响成正比（回答 Q2）。</li>
+</ul>
+</li>
 <li>设计并实现了 TEA 的硬件支持机制，包括为每个动态指令分配一个 <strong>Performance Signature Vector (PSV)</strong> 来追踪其经历的关键事件，并采用与 <strong>TIP</strong> 相同的时间比例采样策略。</li>
 <li>通过精心选择 <strong>9 个关键性能事件</strong>（基于事件层级结构），在保持极低开销的同时捕获了主要性能瓶颈。评估显示，<strong>99%</strong> 未被 TEA 事件标记的指令所造成的停顿少于 <strong>5.8</strong> 个时钟周期。</li>
-<li>在 <strong>BOOM</strong> 核心上的 RTL 实现证明了 TEA 的高效性：</li>
+<li>在 <strong>BOOM</strong> 核心上的 RTL 实现证明了 TEA 的高效性：<ul>
 <li><strong>存储开销</strong>：仅 <strong>249 字节/核</strong>。</li>
 <li><strong>功耗开销</strong>：约 <strong>3.2 mW (∼0.1%)</strong>。</li>
 <li><strong>性能开销</strong>：平均 <strong>1.1%</strong>。</li>
+</ul>
+</li>
 <li>TEA 的准确性远超现有技术。相比一个理想的“黄金标准”，TEA 的平均误差仅为 <strong>2.1%</strong>，而 <strong>IBS</strong>、<strong>SPE</strong> 和 <strong>RIS</strong> 的平均误差分别高达 <strong>55.6%</strong>、<strong>55.5%</strong> 和 <strong>56.0%</strong>。</li>
 </ul>
 <table>
@@ -612,29 +642,35 @@
 <h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
 <p><strong>整体技术架构</strong></p>
-<p>TEA (Time-Proportional Event Analysis) 的核心目标是构建 <strong>时间比例化</strong>（time-proportional）的 <strong>Per-Instruction Cycle Stacks </strong>(PICS)，以统一回答性能分析中的两个根本问题：哪些指令是性能关键的（Q1），以及为什么它们是性能关键的（Q2）。其架构围绕硬件支持、事件选择和软件后处理三个层面展开。</p>
+<p>TEA (Time-Proportional Event Analysis) 的核心目标是构建 <strong>时间比例化</strong>（time-proportional）的 **Per-Instruction Cycle Stacks **(PICS)，以统一回答性能分析中的两个根本问题：哪些指令是性能关键的（Q1），以及为什么它们是性能关键的（Q2）。其架构围绕硬件支持、事件选择和软件后处理三个层面展开。</p>
 <ul>
-<li><strong>硬件支持层</strong>：</li>
-<li>在处理器微架构中为每个动态执行的指令（或 µop）分配一个 <strong>Performance Signature Vector </strong>(PSV)。PSV 是一个位向量，每一位对应一个特定的性能事件。</li>
+<li><strong>硬件支持层</strong>：<ul>
+<li>在处理器微架构中为每个动态执行的指令（或 µop）分配一个 **Performance Signature Vector **(PSV)。PSV 是一个位向量，每一位对应一个特定的性能事件。</li>
 <li>PSV 在指令流经流水线的不同阶段被逐步填充。例如，在 Fetch 阶段记录指令缓存和 TLB 未命中，在 Dispatch 阶段检测 Store Queue 满，在 LSU 和 Cache 响应时记录数据缓存和 TLB 未命中，在 ROB 中记录导致 Flush 的事件（如分支误预测、异常）。</li>
-<li>TEA 复用并扩展了 <strong>TIP </strong>(Time-Proportional Instruction Profiling) 的采样逻辑，该逻辑位于 <strong>ROB </strong>(Re-Order Buffer)。它根据处理器在采样周期所处的 <strong>提交状态</strong>（Compute, Drained, Stalled, Flushed）来决定采样哪个（些）指令。</li>
-<li>采样到的指令地址和其完整的 PSV 被写入 <strong>Control and Status Registers </strong>(CSRs)，并通过中断传递给软件。</li>
+<li>TEA 复用并扩展了 **TIP **(Time-Proportional Instruction Profiling) 的采样逻辑，该逻辑位于 **ROB **(Re-Order Buffer)。它根据处理器在采样周期所处的 <strong>提交状态</strong>（Compute, Drained, Stalled, Flushed）来决定采样哪个（些）指令。</li>
+<li>采样到的指令地址和其完整的 PSV 被写入 **Control and Status Registers **(CSRs)，并通过中断传递给软件。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/1c5f5c65e53685954b038cf73486a548a8f2907143fab503d8acc91916488c0d.jpg" /></p>
 <p><em>Figure 4: TEA microarchitecture.</em></p>
 <ul>
-<li><strong>性能事件选择层</strong>：</li>
+<li><strong>性能事件选择层</strong>：<ul>
 <li>为了平衡洞察力与开销，TEA 精心选择了 <strong>9个关键性能事件</strong>，这些事件直接映射到三种非计算的提交状态（Drained, Stalled, Flushed）。</li>
 <li>事件选择基于 <strong>性能事件层级结构</strong>（hierarchies），优先捕获能解释长延迟的根本原因事件（如 L1 Miss），而非所有可能的衍生事件。</li>
 <li>这9个事件足以解释 <strong>99%</strong> 的、未被任何事件标记的指令所产生的短于 <strong>5.8</strong> 个时钟周期的停顿，证明了其有效性。</li>
 </ul>
+</li>
+</ul>
 <p><img alt="" src="../images/eb6db800b0743fd8564fb4a8f11a2c335ff65e65a3eaf511e8e7806f0bc37165.jpg" /></p>
 <p><em>Table 1: The performance events of TEA, IBS, SPE, and RIS.</em></p>
 <ul>
-<li><strong>软件后处理层</strong>：</li>
+<li><strong>软件后处理层</strong>：<ul>
 <li>采样中断处理程序将 CSR 中的数据（指令地址、PSV、时间戳等）连同进程/线程信息一起写入内存缓冲区。</li>
 <li>应用程序结束后，一个专用工具读取所有采样数据，并根据静态指令地址对样本进行聚合。</li>
 <li>对于每个静态指令，工具将其所有动态执行样本的周期数，按照 PSV 的值（即遭遇的 <strong>事件组合</strong>）进行分类累加，最终生成该指令的 <strong>PICS</strong>。PICS 的高度代表该指令对总执行时间的贡献（回答 Q1），各分块的大小代表不同（组合）事件对该指令执行时间的影响（回答 Q2）。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/6ab3d4d6d062d567eaece089793fa0b9b45668c215a54846790eeae0de6930ad.jpg" /></p>
 <p><em>Figure 1: Example explaining how TEA creates PICS. TEA explains how performance events cause performance loss.</em></p>
@@ -642,11 +678,13 @@
 <p>TEA 架构的关键优势在于其 <strong>时间比例性</strong>，这使其显著优于在 Fetch 或 Dispatch 阶段进行指令标记的现有方案（如 AMD IBS, Arm SPE）。</p>
 <p><img alt="" src="../images/74ab2ef30a3ba5d969cd61f92fd8e514ab517907f123077b196ef3f913d14afe.jpg" /></p>
 <p><em>Figure 2: Example comparing TEA to dispatch-tagging. TEA is time-proportional whereas dispatch-tagging is not.</em></p>
-<p>其开销被控制在极低水平：
-- <strong>存储开销</strong>：每个核心仅需 <strong>249 字节</strong>。
-- <strong>功耗开销</strong>：每个核心增加约 <strong>3.2 mW</strong>（约 <strong>0.1%</strong>）。
-- <strong>性能开销</strong>：依赖统计采样（4 KHz），平均仅为 <strong>1.1%</strong>。
-- <strong>准确性</strong>：相比无法实现的“黄金标准”，平均误差仅为 <strong>2.1%</strong>，远优于 IBS/SPE/RIS 的 <strong>~55.5%</strong> 平均误差。</p>
+<p>其开销被控制在极低水平：</p>
+<ul>
+<li><strong>存储开销</strong>：每个核心仅需 <strong>249 字节</strong>。</li>
+<li><strong>功耗开销</strong>：每个核心增加约 <strong>3.2 mW</strong>（约 <strong>0.1%</strong>）。</li>
+<li><strong>性能开销</strong>：依赖统计采样（4 KHz），平均仅为 <strong>1.1%</strong>。</li>
+<li><strong>准确性</strong>：相比无法实现的“黄金标准”，平均误差仅为 <strong>2.1%</strong>，远优于 IBS/SPE/RIS 的 <strong>~55.5%</strong> 平均误差。</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -823,9 +861,8 @@
 </ul>
 </li>
 <li>最终，完整的 9 位 PSV 被存储在该 µop 对应的 <strong>ROB 条目</strong>中，等待采样。</li>
-<li></li>
+<li><img alt="" src="../images/1c5f5c65e53685954b038cf73486a548a8f2907143fab503d8acc91916488c0d.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/1c5f5c65e53685954b038cf73486a548a8f2907143fab503d8acc91916488c0d.jpg" /></p>
 <p><em>Figure 4: TEA microarchitecture.</em></p>
 <p><strong>PSV 的算法流程：从追踪到采样</strong></p>
 <ul>
@@ -901,9 +938,8 @@
 </tbody>
 </table>
 <ul>
-<li></li>
+<li><img alt="" src="../images/eb6db800b0743fd8564fb4a8f11a2c335ff65e65a3eaf511e8e7806f0bc37165.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/eb6db800b0743fd8564fb4a8f11a2c335ff65e65a3eaf511e8e7806f0bc37165.jpg" /></p>
 <p><em>Table 1: The performance events of TEA, IBS, SPE, and RIS.</em></p>
 <ul>
 <li>这种选择策略非常有效：评估表明，对于那些未被分配任何事件但仍然造成提交停顿的指令，<strong>99%</strong> 的停顿时长都<strong>少于 5.8 个时钟周期</strong>，证明这 9 个事件足以捕获主要的性能瓶颈。</li>
@@ -924,15 +960,19 @@
 <p><strong>核心原理与算法流程</strong></p>
 <ul>
 <li>TEA 的根本出发点是：一个指令对程序总执行时间的真实贡献，只有在其 <strong>latency is exposed</strong>（延迟被暴露）时才能被准确衡量，而这恰好发生在 <strong>commit stage</strong>。</li>
-<li>在任意给定周期，处理器的 commit stage 必然处于以下四种状态之一：</li>
+<li>在任意给定周期，处理器的 commit stage 必然处于以下四种状态之一：<ul>
 <li><strong>Compute</strong>: 正在提交指令，此时指令的执行延迟被完全隐藏。</li>
 <li><strong>Stalled (ST)</strong>: ROB（Re-Order Buffer）头部的指令尚未执行完毕，导致提交停滞。</li>
 <li><strong>Drained (DR)</strong>: ROB 已空，通常是由于前端（如取指）停顿导致无新指令进入流水线。</li>
 <li><strong>Flushed (FL)</strong>: 由于错误预测、异常等原因，ROB 被清空，所有未提交的年轻指令被丢弃。</li>
+</ul>
+</li>
 <li><strong>关键洞察</strong>：只有 <strong>Stalled</strong>, <strong>Drained</strong>, 和 <strong>Flushed</strong> 这三种 <strong>non-compute states</strong>（非计算状态）会导致性能损失，因此性能分析的核心任务就是将这些状态精确地映射到其底层的 <strong>performance events</strong>（性能事件）上。</li>
-<li>为了高效完成此映射，TEA 构建了 <strong>event hierarchies</strong>（事件层次结构）。这些层次结构揭示了事件间的依赖关系：</li>
+<li>为了高效完成此映射，TEA 构建了 <strong>event hierarchies</strong>（事件层次结构）。这些层次结构揭示了事件间的依赖关系：<ul>
 <li><strong>Independent events</strong>（独立事件）：可以独立发生，例如 L1 数据缓存缺失和 L1 TLB 缺失。</li>
 <li><strong>Dependent events</strong>（依赖事件）：必须在前置事件发生后才可能发生，例如 LLC（Last-Level Cache）缺失的前提是 L1 缓存已经缺失。</li>
+</ul>
+</li>
 <li>基于此层次结构，TEA 采用了一种自上而下的选择策略：优先捕获层次结构中较高层级的 <strong>root events</strong>（根事件），因为它们能解释最广泛的下游停顿原因。例如，捕获 <strong>L1 data cache miss</strong> 比只捕获 <strong>LLC miss</strong> 更具解释力，因为前者包含了后者的所有情况以及 L1 命中的情况。</li>
 </ul>
 <p><img alt="" src="../images/a4284d00fc9253f43ab27e72c7760d5e67d36ff852e7b04dbc1205345da8368e.jpg" /></p>
@@ -1010,15 +1050,19 @@
 <p><strong>输入输出关系及整体作用</strong></p>
 <ul>
 <li><strong>输入</strong>: 处理器在运行时产生的原始微架构信号，例如缓存响应信号、TLB 查询结果、分支预测单元的 flush 信号、LSQ（Load/Store Queue）的满信号等。</li>
-<li><strong>处理过程</strong>: </li>
+<li><strong>处理过程</strong>:<ul>
 <li>为每个动态指令（或 µop）分配一个 <strong>Performance Signature Vector (PSV)</strong>，这是一个 <strong>9-bit</strong> 的位向量，每一位对应上述九个事件之一。</li>
 <li>在指令流经流水线各阶段时，硬件逻辑会根据发生的事件实时更新其 PSV。例如，在取指阶段设置 DR-L1/DR-TLB 位，在访存阶段设置 ST-L1/ST-TLB/ST-LLC 位，在 ROB 中记录 FL-MB/FL-EX/FL-MO 位。</li>
 <li><strong>Time-proportional sampling</strong>（时间比例采样）硬件会周期性地（如 4 KHz）检查 commit stage 的状态，并根据 TIP 的规则选择需要采样的指令（即当前暴露延迟的指令）。</li>
 <li>采样时，不仅捕获指令地址，还捕获其完整的 <strong>PSV</strong>。</li>
+</ul>
+</li>
 <li><strong>输出</strong>: 一个包含 <strong>(instruction address, PSV, timestamp, commit state)</strong> 的样本流。</li>
-<li><strong>在整体中的作用</strong>: 这些样本是构建 <strong>Per-Instruction Cycle Stacks (PICS)</strong> 的唯一原材料。通过在软件后处理阶段聚合所有具有相同静态指令地址和相同 PSV 签名的样本，TEA 能够精确地回答两个根本问题：</li>
+<li><strong>在整体中的作用</strong>: 这些样本是构建 <strong>Per-Instruction Cycle Stacks (PICS)</strong> 的唯一原材料。通过在软件后处理阶段聚合所有具有相同静态指令地址和相同 PSV 签名的样本，TEA 能够精确地回答两个根本问题：<ol>
 <li><strong>Q1 (Which?)</strong>: 每个静态指令对总执行时间的贡献（由其所有样本的总权重决定）。</li>
 <li><strong>Q2 (Why?)</strong>: 该贡献具体是由哪些（或哪些组合的）性能事件造成的（由 PSV 签名决定）。这种将时间消耗直接与因果事件挂钩的能力，是 TEA 相对于传统 <strong>instruction-driven</strong>（指令驱动）和 <strong>event-driven</strong>（事件驱动）方法的根本优势。</li>
+</ol>
+</li>
 </ul>
 <h3 id="4-time-proportional-sampling-logic">4. Time-Proportional Sampling Logic<a class="headerlink" href="#4-time-proportional-sampling-logic" title="Permanent link">&para;</a></h3>
 <p><strong>Time-Proportional Sampling Logic 的实现原理与流程</strong></p>

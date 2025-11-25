@@ -635,7 +635,7 @@
 <ul>
 <li>图表展示了在不同 <strong>Memory Bandwidth Utilization (%)</strong> 水平下，<strong>Load-to-Use Latency (ns)</strong> 的变化趋势，对比了 <strong>HW prefetcher on</strong>（蓝色线）与 <strong>HW prefetcher off</strong>（绿色线）两种状态。</li>
 <li>随着内存带宽利用率从 0% 上升至 100%，两条曲线均呈上升趋势，表明系统负载越高，内存访问延迟越大。</li>
-<li>在低带宽利用率区间（&lt;40%），两条曲线几乎重合，说明此时硬件预取器对延迟影响微乎其微。</li>
+<li>在低带宽利用率区间（\&lt;40%），两条曲线几乎重合，说明此时硬件预取器对延迟影响微乎其微。</li>
 <li>当带宽利用率超过 60% 后，<strong>HW prefetcher on</strong> 曲线开始显著高于 <strong>HW prefetcher off</strong> 曲线，尤其在 80%–100% 区间，差距急剧扩大，最高时差接近 50 ns。</li>
 <li>根据图注，<strong>关闭硬件预取器可使平均 DRAM 请求的 Load-to-Use Latency 降低 15%</strong>，这一收益在高负载场景尤为明显。</li>
 <li>数据采集工具为 <strong>Intel MLC tool</strong>，确保测量结果具备硬件级精度和代表性。</li>
@@ -947,12 +947,16 @@
 <li>图表标题为 <strong>Figure 6</strong>，明确指出 <strong>Limoncello</strong> 在高内存带宽利用率时禁用硬件预取器（<strong>HW prefetcher</strong>），以优化内存延迟。</li>
 <li>横轴为 <strong>Memory Bandwidth Utilization (%)</strong>，范围从 0% 到 100%，表示系统当前内存带宽的使用比例。</li>
 <li>纵轴为 <strong>Latency (ns)</strong>，单位纳秒，衡量内存访问延迟，数值越低代表性能越好。</li>
-<li>图中包含两条曲线：</li>
+<li>图中包含两条曲线：<ul>
 <li><strong>蓝色线（HW prefetcher on）</strong>：硬件预取器开启时的延迟表现。在低带宽利用率下延迟较低，但随着利用率上升，延迟急剧增加，在接近 100% 时延迟超过 350 ns。</li>
 <li><strong>绿色线（HW prefetcher off）</strong>：硬件预取器关闭时的延迟表现。整体延迟显著低于开启状态，尤其在高利用率区间（&gt;60%）优势明显，最高延迟约 320 ns。</li>
-<li>图表顶部标注了两个优化目标区域：</li>
+</ul>
+</li>
+<li>图表顶部标注了两个优化目标区域：<ul>
 <li>左侧浅蓝色区域标注 <strong>optimized for cache hit rate</strong>，对应低带宽利用率场景，此时启用硬件预取器可提升缓存命中率。</li>
 <li>右侧浅绿色区域标注 <strong>optimized for latency</strong>，对应高带宽利用率场景，此时关闭硬件预取器可降低延迟。</li>
+</ul>
+</li>
 <li><strong>Limoncello 的核心策略</strong>体现在该图中：动态切换硬件预取器状态——在低负载时启用以优化命中率，在高负载时禁用以优化延迟。</li>
 <li>数据对比显示，在 80% 以上带宽利用率时，关闭硬件预取器可带来约 <strong>15% 的延迟降低</strong>，与论文摘要中提到的“15% reduction in memory latency”一致。</li>
 <li>该图直观验证了论文的核心观点：在资源受限的数据中心环境中，<strong>硬件预取器在高带宽压力下反而成为性能瓶颈</strong>，通过软件控制动态禁用可释放带宽、降低延迟。</li>
@@ -1033,13 +1037,17 @@
 <ul>
 <li>图片展示的是 <strong>Hard Limoncello</strong> 控制器的状态机图，用于动态调节硬件预取器（Hardware Prefetchers, PF）的启用与禁用。</li>
 <li>状态机包含三个核心状态：<strong>PF = enabled</strong>（蓝色）、<strong>PF = disabled</strong>（绿色）、以及一个中间过渡状态 <strong>PF = disabled timeout = 0</strong>（绿色），用于实现滞后控制（hysteresis）。</li>
-<li>所有状态转换均基于两个关键变量：</li>
+<li>所有状态转换均基于两个关键变量：<ul>
 <li><strong>membw</strong>：当前 socket 的内存带宽利用率。</li>
 <li><strong>timeout</strong>：计时器，用于确保状态切换前需维持条件达一定时长（Δ）。</li>
-<li>图中定义了三个阈值参数：</li>
+</ul>
+</li>
+<li>图中定义了三个阈值参数：<ul>
 <li><strong>LT</strong>：Lower Threshold（下限阈值）</li>
 <li><strong>UT</strong>：Upper Threshold（上限阈值）</li>
 <li><strong>Δ</strong>：Time Threshold（时间阈值）</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1102,17 +1110,23 @@
 </tbody>
 </table>
 <ul>
-<li><strong>颜色语义</strong>：</li>
+<li><strong>颜色语义</strong>：<ul>
 <li><strong>蓝色（深色）</strong>：表示硬件预取器处于 <strong>enabled</strong> 状态。</li>
 <li><strong>绿色（浅色）</strong>：表示硬件预取器处于 <strong>disabled</strong> 状态。</li>
-<li><strong>设计目的</strong>：</li>
+</ul>
+</li>
+<li><strong>设计目的</strong>：<ul>
 <li>避免因内存带宽瞬时波动导致预取器频繁开关，从而引发性能不稳定。</li>
 <li>通过设置 <strong>UT &gt; LT</strong> 和 <strong>Δ &gt; 0</strong> 实现<strong>滞后控制</strong>，确保系统在高负载时稳定禁用预取器，在低负载时稳定启用。</li>
-<li><strong>实际行为示例</strong>：</li>
+</ul>
+</li>
+<li><strong>实际行为示例</strong>：<ul>
 <li>若机器刚启动或重启，预取器默认为 <strong>enabled</strong>。</li>
 <li>当 membw 持续高于 UT 达到 Δ 时间后，控制器将 <strong>PF 禁用</strong>。</li>
 <li>只有当 membw 持续低于 LT 达到 Δ 时间后，控制器才会 <strong>重新启用 PF</strong>。</li>
 <li>在禁用状态下，若 membw 回落至 LT 以下但未持续足够时间，系统会进入 <strong>PF = disabled timeout = 0</strong> 状态，等待进一步确认。</li>
+</ul>
+</li>
 </ul>
 <p>该状态机是 <strong>Limoncello</strong> 系统实现“按需启停硬件预取器”的核心机制，确保在高内存带宽压力下优化延迟，同时避免不必要的抖动。</p>
 <h3 id="figure-9-hardware-prefetcher-state-over-time-the-green-lines-in-the-figure-show-when-hardware-prefetchers-are-disabled-when-machine-load-exceeds-an-upper-threshold-hardware-prefetchers-are-disabled-and-remain-disabled-until-machine-load-returns-below-a-lower-threshold">Figure 9. Hardware prefetcher state over time. The green lines in the figure show when hardware prefetchers are disabled. When machine load exceeds an upper threshold, hardware prefetchers are disabled and remain disabled until machine load returns below a lower threshold.<a class="headerlink" href="#figure-9-hardware-prefetcher-state-over-time-the-green-lines-in-the-figure-show-when-hardware-prefetchers-are-disabled-when-machine-load-exceeds-an-upper-threshold-hardware-prefetchers-are-disabled-and-remain-disabled-until-machine-load-returns-below-a-lower-threshold" title="Permanent link">&para;</a></h3>
@@ -1122,11 +1136,13 @@
 <li><strong>绿色实线</strong> 代表硬件预取器关闭（HW prefetcher off），<strong>蓝色实线</strong> 代表硬件预取器开启（HW prefetcher on）。</li>
 <li><strong>红色虚线</strong> 标注了两个关键阈值：<strong>upper threshold</strong>（80%）和 <strong>lower threshold</strong>（60%），用于控制预取器的开关逻辑。</li>
 <li>系统采用 <strong>滞回控制机制</strong>（hysteresis）：只有当内存带宽利用率持续高于 <strong>upper threshold</strong> 时才关闭预取器；只有当其持续低于 <strong>lower threshold</strong> 时才重新开启。</li>
-<li>时间轴从 0 到 25，观察到多次触发切换：</li>
+<li>时间轴从 0 到 25，观察到多次触发切换：<ul>
 <li>在 t=0 附近，带宽利用率超过 80%，触发预取器关闭（绿线）。</li>
 <li>尽管在 t=7.5 时带宽回落至 80% 以下，但未跌破 60%，因此预取器保持关闭。</li>
 <li>直到 t=10 左右，带宽持续低于 60%，系统才重新启用预取器（蓝线）。</li>
 <li>在 t=20 之后，带宽再次飙升并突破 80%，预取器再次被禁用。</li>
+</ul>
+</li>
 <li>此设计避免了因短时波动导致的频繁开关，从而提升系统稳定性与性能一致性。</li>
 <li>关键参数总结如下：</li>
 </ul>
@@ -1196,9 +1212,11 @@
 <ul>
 <li>图表标题为 <strong>Figure 11</strong>，展示的是在 <strong>Hard Limoncello</strong> 部署后，不同函数类型在 <strong>CPU cycles (%)</strong> 和 <strong>LLC misses (%)</strong> 上的变化情况。</li>
 <li>绿色柱状图代表 <strong>CPU cycles 增加百分比</strong>，蓝色柱状图代表 <strong>LLC misses 增加百分比</strong>，两者均以关闭硬件预取器（hardware prefetchers disabled）为基准进行对比。</li>
-<li><strong>数据中⼼税函数（data center tax functions）</strong> 在关闭硬件预取器后表现出显著性能退化：</li>
+<li><strong>数据中⼼税函数（data center tax functions）</strong> 在关闭硬件预取器后表现出显著性能退化：<ul>
 <li><strong>hashing_1</strong>、<strong>hashing_2</strong>、<strong>compression_1</strong>、<strong>compression_2</strong>、<strong>data_movement_1</strong>、<strong>data_movement_2</strong>、<strong>data_transmission_1</strong>、<strong>data_transmission_2</strong> 均显示 CPU cycles 和 LLC misses 显著上升。</li>
 <li>例如，<strong>hashing_2</strong> 的 CPU cycles 增加超过 150%，LLC misses 增加接近 300%。</li>
+</ul>
+</li>
 <li>相反，标记为 <strong>other_1 至 other_10</strong> 的函数大多呈现负增长，表明这些函数在关闭硬件预取器后性能反而提升，CPU cycles 和 LLC misses 下降。</li>
 <li>数据表明，<strong>数据中⼼税函数对硬件预取器高度依赖</strong>，其内存访问模式（如连续块访问、可预测序列）易被硬件预取器有效捕捉；而其他函数可能因预取不准确或污染缓存导致性能下降，关闭预取器反而有益。</li>
 <li>图表下方图例明确区分了绿色（CPU cycles）与蓝色（LLC misses），便于快速识别性能影响维度。</li>
@@ -1278,12 +1296,14 @@
 <li>图表标题为 <strong>Figure 12</strong>，展示的是在 <strong>Hard Limoncello</strong> 启用后，不同函数类型在 CPU 周期上的变化百分比。</li>
 <li>横轴为 <strong>Function Type</strong>，包含五类：compression、data transmission、hashing、data movement 和 non-DC tax。</li>
 <li>纵轴为 <strong>Increase in CPU Cycles (%)</strong>，表示 CPU 周期增加的百分比，负值代表周期减少。</li>
-<li>数据显示，在 Hard Limoncello 下：</li>
+<li>数据显示，在 Hard Limoncello 下：<ul>
 <li><strong>compression</strong> 函数导致 CPU 周期增加约 <strong>30%</strong>，是受影响最严重的类别。</li>
 <li><strong>data transmission</strong> 增加约 <strong>21%</strong>。</li>
 <li><strong>hashing</strong> 增加约 <strong>20%</strong>。</li>
 <li><strong>data movement</strong> 增加约 <strong>16%</strong>。</li>
 <li><strong>non-DC tax</strong> 函数则呈现轻微下降（约 -1%），表明其性能反而略有提升。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1327,11 +1347,13 @@
 <li><strong>内存访问点</strong>位于地址 <code>0x080</code>，用黄色高亮标出，表示当前程序正在访问该位置的数据。</li>
 <li><strong>预取距离</strong>指从当前访问地址到预取起始地址之间的偏移量。图中显示预取从 <code>0x180</code> 开始，与 <code>0x080</code> 相距 4 个缓存行（假设每行 64 字节），即 <strong>prefetch distance = 4 cache lines</strong>。</li>
 <li><strong>预取度</strong>指一次性预取的数据量，图中绿色区域覆盖了 <code>0x180</code> 到 <code>0x200</code>，共包含 3 个缓存行（<code>0x180</code>, <code>0x1C0</code>, <code>0x200</code>），即 <strong>prefetch degree = 3 cache lines</strong>。</li>
-<li>图中箭头明确标注了三个关键参数：</li>
+<li>图中箭头明确标注了三个关键参数：<ul>
 <li>“memory access” 指向当前访问地址 <code>0x080</code>。</li>
 <li>“prefetched” 覆盖预取数据范围 <code>0x180–0x200</code>。</li>
 <li>“prefetch distance” 标注从 <code>0x080</code> 到 <code>0x180</code> 的跨度。</li>
 <li>“prefetch degree” 标注从 <code>0x180</code> 到 <code>0x200</code> 的数据量。</li>
+</ul>
+</li>
 <li>此图用于说明在 Soft Limoncello 中，软件预取指令如何根据函数行为精确控制预取时机与数据量，避免硬件预取器的盲目性。</li>
 </ul>
 <table>
@@ -1418,15 +1440,19 @@
 <li><strong>横轴</strong>为 memcpy 复制的数据量，范围从 0 到 1000 KB，采用对数刻度，重点覆盖小到中等规模的数据块。</li>
 <li><strong>纵轴</strong>为性能加速比，以百分比表示，正值代表性能提升，负值代表性能下降。</li>
 <li>图中包含六条曲线，分别对应不同的预取距离：<strong>32、64、128、256、512、1K</strong>（单位为字节），每条曲线用不同颜色标识。</li>
-<li>性能表现呈现明显规律：</li>
+<li>性能表现呈现明显规律：<ul>
 <li>对于<strong>小数据块</strong>（&lt; 1KB），所有预取距离均导致性能下降或无显著收益，尤其在 0.25KB 附近出现负加速。</li>
 <li>当数据块增大至 <strong>4KB 以上</strong>，性能开始显著提升，且<strong>预取距离越大，加速效果越强</strong>。</li>
 <li>在 <strong>64KB 左右</strong>，<strong>512 和 1K 距离</strong>达到峰值加速，约 <strong>60%-70%</strong>。</li>
 <li>数据块继续增大（&gt; 256KB），所有曲线均出现性能回落，但大距离预取仍保持相对优势。</li>
-<li>关键观察：</li>
+</ul>
+</li>
+<li>关键观察：<ul>
 <li><strong>短距离预取</strong>（如 32、64）仅在中等数据块（4–16KB）有轻微收益，整体表现平庸。</li>
 <li><strong>长距离预取</strong>（512、1K）在中大型数据块上表现最优，但需警惕在极小或极大块时的性能退化。</li>
 <li>最佳预取距离与数据块大小强相关，表明 <strong>Soft Limoncello</strong> 需根据运行时参数动态调整预取策略。</li>
+</ul>
+</li>
 <li>数据摘要如下：</li>
 </ul>
 <table>
@@ -1435,7 +1461,7 @@
 <th>Prefetch Distance (Bytes)</th>
 <th>Peak Speedup (%)</th>
 <th>Optimal Data Size Range (KB)</th>
-<th>Performance at Small Sizes (&lt;1KB)</th>
+<th>Performance at Small Sizes (\&lt;1KB)</th>
 </tr>
 </thead>
 <tbody>
@@ -1487,15 +1513,19 @@
 <li>横轴为 <strong>Memcpy Size (KB)</strong>，范围从 0 到 1000 KB，代表数据拷贝操作的数据量大小。</li>
 <li>纵轴为 <strong>Speedup (%)</strong>，表示相对于基准（+HW,-SW）的性能提升百分比，正值代表加速，负值代表性能退化。</li>
 <li>图中共有六条曲线，分别对应不同的预取粒度：<strong>64、128、256、512、1K、2K</strong> 字节，颜色与图例一一对应。</li>
-<li>性能表现随数据量变化呈现非线性趋势：</li>
+<li>性能表现随数据量变化呈现非线性趋势：<ul>
 <li>对于小数据量（如 &lt; 0.25 KB），所有预取策略均导致显著性能下降（负加速），尤其在 64 和 128 字节粒度下最严重。</li>
 <li>随着数据量增大（&gt; 1 KB），各粒度开始出现正向加速，且在 4–64 KB 区间内达到峰值。</li>
 <li>在 64 KB 左右，<strong>2K</strong> 粒度表现最佳，加速接近 60%；<strong>512</strong> 字节次之。</li>
 <li>当数据量超过 256 KB 后，各粒度加速效果趋于收敛，差异缩小。</li>
-<li>关键观察：</li>
+</ul>
+</li>
+<li>关键观察：<ul>
 <li><strong>大粒度（如 2K）在中等至大数据量时表现最优</strong>，但对小数据量惩罚最大。</li>
 <li><strong>小粒度（如 64、128）在小数据量时性能恶化最严重</strong>，但在中等数据量时仍可提供适度加速。</li>
 <li>存在“甜点区”（sweet spot）：约 4–64 KB 数据量区间，是软件预取收益最高的区域。</li>
+</ul>
+</li>
 <li>下表总结不同预取粒度在关键数据量点的表现：</li>
 </ul>
 <table>
@@ -1558,10 +1588,12 @@
 <li>图片展示了 <strong>Soft Limoncello</strong> 在优化 <code>memcpy</code> 函数时的微基准测试结果，重点比较了不同硬件（HW）与软件（SW）预取器组合状态下的性能增益。</li>
 <li>横轴为三种预取器状态：<strong>-HW, -SW</strong>（硬件与软件预取器均关闭）、<strong>+HW, +SW</strong>（两者均开启）、<strong>-HW, +SW</strong>（仅开启软件预取器）。</li>
 <li>纵轴为 <strong>Speedup (%)</strong>，表示相对于基准配置（+HW, -SW）的性能提升百分比。</li>
-<li>数据表明：</li>
+<li>数据表明：<ul>
 <li><strong>-HW, -SW</strong> 配置下性能下降约 <strong>0.25%</strong>，说明在无任何预取机制时，<code>memcpy</code> 性能受损。</li>
 <li><strong>+HW, +SW</strong> 配置下性能提升约 <strong>1.45%</strong>，显示软硬结合可带来显著收益。</li>
 <li><strong>-HW, +SW</strong> 配置下性能提升约 <strong>1.15%</strong>，证明即使关闭硬件预取器，<strong>软件预取器仍能有效补偿性能损失</strong>。</li>
+</ul>
+</li>
 <li>此图验证了 <strong>Limoncello 的核心设计哲学</strong>：在高带宽压力下关闭硬件预取器以降低内存延迟，同时通过精准插入软件预取指令维持性能。</li>
 <li>该结果支撑了论文中关于“<strong>数据中心税函数（如 memcpy）适合软件预取</strong>”的结论，因其访问模式明确、可预测，软件可精确控制预取地址、距离与度数。</li>
 </ul>
@@ -1593,10 +1625,12 @@
 <li>图表标题为 <strong>Figure 16. Limoncello application throughput gain</strong>，展示的是 Limoncello 系统在不同 CPU 利用率下对应用吞吐量的提升效果。</li>
 <li>横轴表示 <strong>CPU利用率</strong>，分为三个区间：<strong>60%、70%、80%</strong>，代表服务器负载的不同阶段。</li>
 <li>纵轴为 <strong>Application Throughput (%)</strong>，即应用吞吐量的百分比变化，衡量 Limoncello 部署前后的性能增益。</li>
-<li>数据显示：</li>
+<li>数据显示：<ul>
 <li>在 <strong>60% CPU利用率</strong> 下，吞吐量提升微弱，约为 <strong>0.5%</strong>，表明系统负载较低时，Limoncello 的动态调节机制未被触发或影响有限。</li>
 <li>在 <strong>70% CPU利用率</strong> 下，吞吐量提升显著，达到 <strong>7%</strong> 左右，说明此时系统开始进入高负载状态，Limoncello 通过关闭硬件预取器并启用软件预取有效缓解内存带宽压力。</li>
 <li>在 <strong>80% CPU利用率</strong> 下，吞吐量提升最大，接近 <strong>17%</strong>，反映在峰值负载下，Limoncello 的优化策略（特别是 Soft Limoncello 对数据中心税函数的精准预取）发挥了最大效能。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1730,13 +1764,19 @@
 <h3 id="figure-20-software-prefetcher-impact-in-limoncello-the-y-axis-shows-the-portion-of-fleetwide-cycles-spent-in-the-respective-function-categories-the-center-bar-green-shows-hard-limoncello-deployed-without-any-software-prefetchers-adding-software-prefetchers-into-limoncello-lowered-cpu-cycles-spent-in-targeted-functions-by-2-yellow">Figure 20. Software prefetcher impact in Limoncello. The y-axis shows the portion of fleetwide cycles spent in the respective function categories. The center bar (green) shows Hard Limoncello deployed without any software prefetchers. Adding software prefetchers into Limoncello lowered CPU cycles spent in targeted functions by 2% (yellow).<a class="headerlink" href="#figure-20-software-prefetcher-impact-in-limoncello-the-y-axis-shows-the-portion-of-fleetwide-cycles-spent-in-the-respective-function-categories-the-center-bar-green-shows-hard-limoncello-deployed-without-any-software-prefetchers-adding-software-prefetchers-into-limoncello-lowered-cpu-cycles-spent-in-targeted-functions-by-2-yellow" title="Permanent link">&para;</a></h3>
 <p><img alt="93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" src="../images/93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" /></p>
 <ul>
-<li>图表标题为 <strong>Figure 20</strong>，主题是 <strong>Software prefetcher impact in Limoncello</strong>，展示的是在不同 Limoncello 配置下，各类数据中⼼税函数（DC Tax）所消耗的 CPU 周期百分比。</li>
-<li>Y 轴表示 <strong>CPU Cycles (%)</strong>，即整个集群中在对应函数类别上花费的 CPU 周期占比；X 轴按功能分类：compression、data transmission、hashing、data movement，以及聚合项 all targeted DC tax。</li>
-<li>图例包含三种配置：</li>
+<li>
+<p>图表标题为 <strong>Figure 20</strong>，主题是 <strong>Software prefetcher impact in Limoncello</strong>，展示的是在不同 Limoncello 配置下，各类数据中⼼税函数（DC Tax）所消耗的 CPU 周期百分比。</p>
+</li>
+<li>
+<p>Y 轴表示 <strong>CPU Cycles (%)</strong>，即整个集群中在对应函数类别上花费的 CPU 周期占比；X 轴按功能分类：compression、data transmission、hashing、data movement，以及聚合项 all targeted DC tax。</p>
+</li>
+<li>
+<p>图例包含三种配置：</p>
+<ul>
 <li><strong>No Limoncello</strong>（蓝色）：未启用任何 Limoncello 机制，作为基线。</li>
 <li><strong>Hard Limoncello</strong>（绿色）：仅启用硬件预取器动态关闭机制，未插入软件预取。</li>
-<li>
-<p><strong>Full Limoncello</strong>（黄色）：完整启用 Hard + Soft Limoncello，即动态关闭硬件预取并插入软件预取。</p>
+<li><strong>Full Limoncello</strong>（黄色）：完整启用 Hard + Soft Limoncello，即动态关闭硬件预取并插入软件预取。</li>
+</ul>
 </li>
 <li>
 <p>数据趋势分析如下：</p>
@@ -1791,11 +1831,13 @@
 </tbody>
 </table>
 <ul>
-<li>关键结论：</li>
+<li>关键结论：<ul>
 <li>启用 <strong>Hard Limoncello</strong> 会导致所有 DC Tax 类别 CPU 周期上升，表明硬件预取器对这些函数有正向作用。</li>
 <li>加入 <strong>Soft Limoncello</strong> 后，所有类别均实现周期下降，尤其在 <strong>data transmission</strong> 和 <strong>data movement</strong> 上效果最显著。</li>
 <li>在聚合项 <strong>all targeted DC tax</strong> 中，从 <strong>9.8%</strong>（Hard Limoncello）降至 <strong>7.8%</strong>（Full Limoncello），验证了论文所述“<strong>lowered CPU cycles spent in targeted functions by 2%</strong>”。</li>
 <li>该图直观证明：<strong>软件预取能精准补偿硬件预取关闭带来的性能损失，并在高带宽压力下实现更优资源利用</strong>。</li>
+</ul>
+</li>
 </ul>
 
 

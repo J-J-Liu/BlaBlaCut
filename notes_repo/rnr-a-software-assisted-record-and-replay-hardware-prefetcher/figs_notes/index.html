@@ -580,13 +580,15 @@
 <ul>
 <li>图表标题为“Fig. 1. Prefetcher coverage and accuracy of PageRank [48] on amazon graph [32]”，展示的是在亚马逊图数据集上运行PageRank算法时，不同预取器的<strong>Miss Coverage</strong>（缺失覆盖率）与<strong>Prefetching Accuracy</strong>（预取准确率）的对比。</li>
 <li>横轴表示<strong>Prefetching Accuracy</strong>，范围从0%到100%；纵轴表示<strong>Miss Coverage</strong>，范围同样为0%到100%。理想点位于右上角（100%, 100%），代表完美预取器。</li>
-<li>图中包含五个预取器的数据点，分别用不同标记表示：</li>
+<li>图中包含五个预取器的数据点，分别用不同标记表示：<ul>
 <li><strong>Next-line [50]</strong>：位于左下角，准确率约10%，覆盖率约5%，表现最差。</li>
 <li><strong>Bingo [9]</strong>：准确率约20%，覆盖率约15%，略优于Next-line。</li>
 <li><strong>SteMS [52]</strong>：准确率约30%，覆盖率约25%，性能中等。</li>
 <li><strong>MISB [59]</strong>：准确率约65%，覆盖率约40%，表现较好。</li>
 <li><strong>DROPLET [10]</strong>：准确率约70%，覆盖率约60%，是传统硬件预取器中的佼佼者。</li>
 <li><strong>RnR</strong>：以红色星号标注，位于右上角，<strong>准确率接近100%，覆盖率也接近100%</strong>，显著优于所有其他预取器。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -644,25 +646,25 @@
 </li>
 <li>
 <p>子图 (b) 对比了三种预取机制：</p>
-</li>
+<ul>
 <li><strong>GHB Based Temporal Prefetcher</strong>：基于全局历史缓冲区，仅用地址索引，无法区分相似模式（如地址9后接12或20），易误预测。</li>
 <li><strong>ISB with PC Localization</strong>：引入程序计数器（PC）辅助区分，但仍依赖共享表，对长序列和混合模式效果有限。</li>
-<li>
-<p><strong>RnR with a Light Software Interface</strong>：由软件定义时空区域，在首次迭代记录 miss 序列及时间戳，后续迭代按精确时序重放，实现高精度与及时性。</p>
+<li><strong>RnR with a Light Software Interface</strong>：由软件定义时空区域，在首次迭代记录 miss 序列及时间戳，后续迭代按精确时序重放，实现高精度与及时性。</li>
+</ul>
 </li>
 <li>
 <p>子图 (c) 阐明 RnR 的工作流程：</p>
-</li>
+<ul>
 <li><strong>首次迭代（iter=1）</strong>：发生 cache miss 时，RnR 记录 miss 地址序列（如 Blk9, Blk20, Blk1）及元数据（timing info），存储于内存。</li>
-<li>
-<p><strong>后续迭代（iter&gt;1）</strong>：RnR 在相同时空区域触发重放，根据记录的 timing 控制预取节奏，将数据提前载入 private cache，避免 miss。</p>
+<li><strong>后续迭代（iter&gt;1）</strong>：RnR 在相同时空区域触发重放，根据记录的 timing 控制预取节奏，将数据提前载入 private cache，避免 miss。</li>
+</ul>
 </li>
 <li>
 <p>子图 (d) 强调<strong>时序控制的重要性</strong>：</p>
-</li>
+<ul>
 <li>若无控制（Late/Eearly），预取过早或过晚会导致数据被驱逐或错过使用时机，无法提升性能。</li>
-<li>
-<p>RnR 通过 window-based timing control，确保预取块在需求前“恰到好处”到达 L2 cache，实现 Timely Prefetch，显著提升性能。</p>
+<li>RnR 通过 window-based timing control，确保预取块在需求前“恰到好处”到达 L2 cache，实现 Timely Prefetch，显著提升性能。</li>
+</ul>
 </li>
 <li>
 <p>关键术语保留：LLC、GHB、ISB、PC、Temporal Region、Spatial Region、Private Cache、Metadata、Replay、Record。</p>
@@ -792,11 +794,13 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键设计点</strong>：</li>
+<li><strong>关键设计点</strong>：<ul>
 <li><strong>软件主导控制</strong>：所有状态转换均由软件显式调用函数触发，体现了“软件辅助”的核心思想。</li>
 <li><strong>灵活性</strong>：支持在 <strong>Record</strong> 和 <strong>Replay</strong> 状态之间暂停 (<code>pause</code>) 和恢复 (<code>resume</code>)，这对于处理上下文切换或动态调整非常关键。</li>
 <li><strong>生命周期管理</strong>：<code>start()</code> 和 <code>end()</code> 函数定义了预取器的完整生命周期，确保资源可以被正确分配和释放。</li>
 <li><strong>状态隔离</strong>：<strong>Record</strong> 和 <strong>Replay</strong> 是互斥的操作阶段，通过明确的状态转换保证了数据的一致性和操作的原子性。</li>
+</ul>
+</li>
 </ul>
 <h3 id="table-i-rnr-function-calls">TABLE I RNR FUNCTION CALLS.<a class="headerlink" href="#table-i-rnr-function-calls" title="Permanent link">&para;</a></h3>
 <p><img alt="966dc9051b6d765a5134684518bd561d7f427a86b9824e51dcb94d7aa52c2188.jpg" src="../images/966dc9051b6d765a5134684518bd561d7f427a86b9824e51dcb94d7aa52c2188.jpg" /></p>
@@ -873,25 +877,35 @@
 <ul>
 <li>该图展示了 RnR prefetcher 的系统架构，分为 <strong>Record</strong> 和 <strong>Replay</strong> 两个核心阶段，并通过软件接口与硬件协同工作。</li>
 <li>图中使用不同颜色箭头区分数据流：<strong>橙色</strong>代表软件控制信号，<strong>红色虚线</strong>代表 Record 阶段的数据路径，<strong>蓝色虚线</strong>代表 Replay 阶段的数据路径，<strong>黑色实线</strong>代表通用或共享路径。</li>
-<li><strong>Record 阶段</strong>（左侧）：</li>
+<li><strong>Record 阶段</strong>（左侧）：<ul>
 <li>当内存包访问命中预设地址范围时，会标记 <code>Packet Flag=1</code> 并递增 <code>Cur Struct Read</code> 计数器。</li>
 <li>若发生 L2 miss 且 <code>Packet Flag=1</code>，则将该 miss 地址写入 <strong>Seq Table Buffer</strong>，并更新长度。</li>
 <li>每当记录的 miss 数量达到 <code>Window Size</code>，将当前 <code>Cur Struct Read</code> 值写入 <strong>Div Table Buffer</strong>，用于后续节奏控制。</li>
 <li>元数据（Seq Table 和 Div Table）在缓冲区满时批量写回预留内存空间，通过 TLB 查询物理地址，每 4MB 页面仅查一次以减少开销。</li>
-<li><strong>Replay 阶段</strong>（右侧）：</li>
+</ul>
+</li>
+<li><strong>Replay 阶段</strong>（右侧）：<ul>
 <li>系统从预留内存预取 Seq Table 和 Div Table 到本地缓冲区，实现双缓冲机制。</li>
 <li>根据 <code>Cur Struct Read</code> 与 Div Table 中窗口阈值对比，动态调整 prefetch pace，确保 prefetch 与程序执行进度同步。</li>
 <li>Prefetch 请求直接发送至 L2 cache，避免污染 LLC，同时根据 <code>Prefetch Pace</code> 控制频率，减少与需求访问的竞争。</li>
-<li><strong>软件接口部分</strong>（顶部中央）：</li>
+</ul>
+</li>
+<li><strong>软件接口部分</strong>（顶部中央）：<ul>
 <li>软件通过设置寄存器控制 RnR 状态，包括 <code>Prefetch State</code>、<code>Window Size</code>、<code>Base Addr</code>、<code>Struct Len</code>、<code>Enable/Disable</code> 等。</li>
 <li>ASID 寄存器用于权限检查，确保多进程环境下的安全隔离。</li>
-<li><strong>关键组件交互</strong>：</li>
+</ul>
+</li>
+<li><strong>关键组件交互</strong>：<ul>
 <li><strong>Cache Controller</strong> 协调 L1/L2/LLC 与 RnR prefetcher 的数据流。</li>
 <li><strong>Stream Prefetcher</strong> 在 Record 阶段被禁用，避免干扰目标结构的 miss 记录。</li>
 <li><strong>Reserved Memory Space</strong> 存储序列和划分表，由程序员分配，支持跨上下文切换保留元数据。</li>
-<li><strong>状态机与控制逻辑</strong>：</li>
+</ul>
+</li>
+<li><strong>状态机与控制逻辑</strong>：<ul>
 <li>RnR 内部维护多个计数器和指针，如 <code>Cur Window</code>、<code>Cur Seq Table Len</code>、<code>Prefetch Pace</code>，确保 replay 时精确匹配 record 时的访问节奏。</li>
 <li>支持暂停（Pause）与恢复（Resume），便于上下文切换或动态调整。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1126,10 +1140,18 @@
 <h3 id="fig-6-speedup-over-no-prefetcher-baseline">Fig. 6. Speedup over no prefetcher baseline.<a class="headerlink" href="#fig-6-speedup-over-no-prefetcher-baseline" title="Permanent link">&para;</a></h3>
 <p><img alt="306e0cce2fbf83e249036af0d08066d768556de8201dfe528d2f51eba9b85833.jpg" src="../images/306e0cce2fbf83e249036af0d08066d768556de8201dfe528d2f51eba9b85833.jpg" /></p>
 <ul>
-<li>图表标题为 <strong>Fig. 6. Speedup over no prefetcher baseline</strong>，展示的是不同预取器在三种应用（PageRank、Hyper-Anf、spCG）上相对于无预取基线的性能加速比。</li>
-<li>横轴按应用分组：<strong>PageRank</strong>、<strong>Hyper-Anf</strong>、<strong>spCG</strong>，每组内包含多个输入数据集（如 urand、amazon、com-orkut、roadUSA 等），并以 <strong>GEOMEAN</strong> 表示几何平均值。</li>
-<li>纵轴为 <strong>Speedup</strong>，范围从 0.0 到 5.0，表示性能提升倍数。</li>
-<li>图例中包含八种预取器：</li>
+<li>
+<p>图表标题为 <strong>Fig. 6. Speedup over no prefetcher baseline</strong>，展示的是不同预取器在三种应用（PageRank、Hyper-Anf、spCG）上相对于无预取基线的性能加速比。</p>
+</li>
+<li>
+<p>横轴按应用分组：<strong>PageRank</strong>、<strong>Hyper-Anf</strong>、<strong>spCG</strong>，每组内包含多个输入数据集（如 urand、amazon、com-orkut、roadUSA 等），并以 <strong>GEOMEAN</strong> 表示几何平均值。</p>
+</li>
+<li>
+<p>纵轴为 <strong>Speedup</strong>，范围从 0.0 到 5.0，表示性能提升倍数。</p>
+</li>
+<li>
+<p>图例中包含八种预取器：</p>
+<ul>
 <li>next-line</li>
 <li>bingo</li>
 <li>SteMS</li>
@@ -1137,8 +1159,8 @@
 <li>droplet</li>
 <li>RnR</li>
 <li>RnR-Combined</li>
-<li>
-<p>Ideal</p>
+<li>Ideal</li>
+</ul>
 </li>
 <li>
 <p>各预取器表现总结如下：</p>
@@ -1217,17 +1239,23 @@
 <ul>
 <li>图片展示了在不同工作负载（PageRank、Hyper-Anf、spCG）和不同输入数据集上，各种预取器对 <strong>L2 MPKI</strong>（每千条指令的 L2 缓存未命中次数）的影响。</li>
 <li><strong>RnR</strong> 和 <strong>RnR-Combined</strong> 在绝大多数测试场景下实现了最低的 L2 MPKI，表明其在减少缓存未命中方面效果显著。</li>
-<li>对于 <strong>PageRank</strong> 工作负载：</li>
+<li>对于 <strong>PageRank</strong> 工作负载：<ul>
 <li>在 <strong>urand</strong> 输入上，RnR-Combined 将 MPKI 从约 80 降至接近 0，降幅超过 97%。</li>
 <li>在 <strong>amazon</strong> 和 <strong>com-orkut</strong> 上，RnR-Combined 也将 MPKI 降低至 10 以下，降幅分别约为 94.6% 和 98.9%。</li>
 <li>在 <strong>roadUSA</strong> 上，由于其较好的局部性，所有预取器表现都较好，但 RnR-Combined 仍保持最低 MPKI。</li>
-<li>对于 <strong>Hyper-Anf</strong> 工作负载：</li>
+</ul>
+</li>
+<li>对于 <strong>Hyper-Anf</strong> 工作负载：<ul>
 <li>在 <strong>urand</strong> 输入上，RnR-Combined 将 MPKI 从约 60 降至接近 0。</li>
 <li>在 <strong>amazon</strong> 和 <strong>com-orkut</strong> 上，RnR-Combined 同样将 MPKI 降至 10 以下。</li>
 <li>在 <strong>roadUSA</strong> 上，RnR-Combined 的 MPKI 略高于其他一些预取器，但仍处于较低水平。</li>
-<li>对于 <strong>spCG</strong> 工作负载：</li>
+</ul>
+</li>
+<li>对于 <strong>spCG</strong> 工作负载：<ul>
 <li>在 <strong>bimat</strong>、<strong>nlpkkt80</strong> 和 <strong>pdt01MYS</strong> 输入上，RnR-Combined 均将 MPKI 降至接近 0。</li>
 <li>在 <strong>GEOMEAN</strong>（几何平均值）上，RnR-Combined 的 MPKI 也远低于其他预取器。</li>
+</ul>
+</li>
 <li><strong>RnR-Combined</strong> 是指同时为规则和不规则访问的数据结构启用 RnR 预取器，而 <strong>RnR</strong> 仅针对不规则访问的数据结构。</li>
 <li>从图中可以看出，<strong>RnR-Combined</strong> 在大多数情况下优于 <strong>RnR</strong>，说明结合使用可以进一步提升性能。</li>
 <li>其他预取器如 <strong>nextline</strong>、<strong>bingo</strong>、<strong>SteMS</strong>、<strong>MISB</strong>、<strong>droplet</strong> 在不同输入上的表现差异较大，且普遍不如 RnR-Combined。</li>
@@ -1256,14 +1284,14 @@
 <tr>
 <td>PageRank</td>
 <td>amazon</td>
-<td>&lt;10</td>
+<td>\&lt;10</td>
 <td>约 50</td>
 <td>~94.6%</td>
 </tr>
 <tr>
 <td>PageRank</td>
 <td>com-orkut</td>
-<td>&lt;10</td>
+<td>\&lt;10</td>
 <td>约 50</td>
 <td>~98.9%</td>
 </tr>
@@ -1284,14 +1312,14 @@
 <tr>
 <td>Hyper-Anf</td>
 <td>amazon</td>
-<td>&lt;10</td>
+<td>\&lt;10</td>
 <td>约 40</td>
 <td>~75%</td>
 </tr>
 <tr>
 <td>Hyper-Anf</td>
 <td>com-orkut</td>
-<td>&lt;10</td>
+<td>\&lt;10</td>
 <td>约 40</td>
 <td>~75%</td>
 </tr>
@@ -1333,11 +1361,13 @@
 <ul>
 <li>图片展示了不同硬件预取器在三个应用（PageRank、Hyper-Anf、spCG）及其多个输入数据集上的<strong>Miss Coverage</strong>性能对比，覆盖范围从0%到100%。</li>
 <li><strong>RnR</strong>（Record-and-Replay）预取器在所有测试场景中均表现出<strong>最高或接近最高的覆盖率</strong>，尤其在不规则访问模式（如urand、com-orkut）下优势显著。</li>
-<li>对比其他预取器：</li>
+<li>对比其他预取器：<ul>
 <li><strong>nextline</strong>：作为基础流式预取器，在结构化数据（如roadUSA）上表现尚可，但在不规则图数据上覆盖率极低。</li>
 <li><strong>bingo</strong> 和 <strong>SteMS</strong>：空间/时空预取器，在局部性较好的数据（如roadUSA）上表现较好，但在随机图（urand）上覆盖率骤降。</li>
 <li><strong>MISB</strong>：基于时间相关性的预取器，受限于模式区分能力，在复杂图结构中覆盖率不稳定。</li>
 <li><strong>droplet</strong>：面向图算法的领域专用预取器，在Hyper-Anf上表现优于PageRank，但仍低于RnR。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1443,13 +1473,15 @@
 <h3 id="fig-9-prefetcher-accuracy">Fig. 9. Prefetcher accuracy.<a class="headerlink" href="#fig-9-prefetcher-accuracy" title="Permanent link">&para;</a></h3>
 <p><img alt="ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" src="../images/ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" /></p>
 <ul>
-<li>图片展示了不同硬件预取器在三个应用（PageRank、Hyper-Anf、spCG）及其多种输入数据集上的<strong>预取准确率（Accuracy）</strong>对比，横轴为应用与数据集组合，纵轴为准确率百分比。</li>
+<li>图片展示了不同硬件预取器在三个应用（PageRank、Hyper-Anf、spCG）及其多种输入数据集上的**预取准确率（Accuracy）**对比，横轴为应用与数据集组合，纵轴为准确率百分比。</li>
 <li><strong>RnR</strong> 预取器在所有测试场景中均表现出<strong>最高或接近最高的准确率</strong>，平均准确率达 <strong>97.18%</strong>，显著优于其他预取器。</li>
-<li>其他预取器表现如下：</li>
+<li>其他预取器表现如下：<ul>
 <li><strong>Next-line</strong>：在具有良好局部性的数据集（如 roadUSA）上表现尚可，但在随机图（urand）上准确率极低。</li>
 <li><strong>Bingo</strong> 和 <strong>SteMS</strong>：作为通用空间/时空预取器，在不规则访问模式下准确率普遍偏低，尤其在 urand 数据集上接近 0%。</li>
 <li><strong>MISB</strong>：作为基于时间相关性的预取器，在部分数据集上表现优于 Bingo 和 SteMS，但仍远低于 RnR。</li>
 <li><strong>DROPLET</strong>：专为图算法设计，在 Hyper-Anf 上表现较好，但在 PageRank-urand 上因间接访问延迟导致准确率下降。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1585,10 +1617,12 @@
 <li>图表标题为 <strong>Fig. 10. Effectiveness of replay timing control</strong>，旨在评估 RnR prefetcher 中回放时序控制机制的有效性。</li>
 <li>横轴按应用分类：<strong>PageRank</strong>、<strong>Hyper-Anf</strong> 和 <strong>spCG</strong>，每个应用下包含不同输入数据集：<strong>urand</strong>、<strong>amazon</strong>、<strong>com-orkut</strong>、<strong>roadUSA</strong> 和 <strong>GEO-MEAN</strong>（几何平均值）。</li>
 <li>纵轴表示 <strong>Speedup</strong>（加速比），范围从 0.0 到 4.0，用于衡量不同控制策略下的性能提升。</li>
-<li>图例说明三种控制策略：</li>
+<li>图例说明三种控制策略：<ul>
 <li><strong>no control</strong>（绿色柱）：无窗口或节奏控制，仅简单回放序列。</li>
 <li><strong>window control</strong>（黄色柱）：启用基于窗口的时序控制，根据记录的访问密度调整预取节奏。</li>
 <li><strong>window and pace control</strong>（橙色柱）：在窗口控制基础上进一步引入“pace control”，更精细地匹配需求访问频率。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1709,20 +1743,24 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
 <li>所有应用和输入中，<strong>window control</strong> 相较于 <strong>no control</strong> 均带来显著性能提升，平均加速比提升约 <strong>2.3x–3.0x</strong>。</li>
 <li><strong>window and pace control</strong> 在多数情况下略优于 <strong>window control</strong>，但提升幅度较小（通常 &lt; 0.2x），表明窗口控制已足够有效。</li>
 <li><strong>roadUSA</strong> 输入表现最佳，因其具有较好空间局部性，预取更容易命中且不被过早驱逐。</li>
 <li><strong>urand</strong> 输入表现最差，因随机连接导致高失效率和低局部性，但仍能通过时序控制获得明显收益。</li>
-<li>
-<p><strong>GEO-MEAN</strong> 显示整体趋势：<strong>window control</strong> 平均提供约 <strong>2.6x</strong> 加速，<strong>window and pace control</strong> 提升至约 <strong>2.7x</strong>。</p>
+<li><strong>GEO-MEAN</strong> 显示整体趋势：<strong>window control</strong> 平均提供约 <strong>2.6x</strong> 加速，<strong>window and pace control</strong> 提升至约 <strong>2.7x</strong>。</li>
+</ul>
 </li>
 <li>
 <p><strong>结论</strong>：</p>
-</li>
+<ul>
 <li><strong>Replay timing control</strong> 是 RnR prefetcher 高效性的核心机制，尤其 <strong>window control</strong> 能有效避免过早或过晚预取。</li>
 <li>引入 <strong>pace control</strong> 可微调预取节奏，但在大多数场景下收益有限，说明窗口粒度已足够精细。</li>
 <li>该机制对所有测试应用均有效，尤其在不规则访问模式（如 urand）中仍能维持高性能，验证了 RnR 设计的鲁棒性。</li>
+</ul>
+</li>
 </ul>
 <h3 id="fig-11-prefetch-timeliness-breakdown-left-bar-no-control-middle-bar-window-control-right-bar-windowpace-control">Fig. 11. Prefetch timeliness breakdown (Left bar: no control, middle bar: window control, right bar: window+pace control).<a class="headerlink" href="#fig-11-prefetch-timeliness-breakdown-left-bar-no-control-middle-bar-window-control-right-bar-windowpace-control" title="Permanent link">&para;</a></h3>
 <p><img alt="e29567a1f867a3ec9446532f77e60d81817bce404c33cc4aa71c595e7447696f.jpg" src="../images/e29567a1f867a3ec9446532f77e60d81817bce404c33cc4aa71c595e7447696f.jpg" /></p>
@@ -1730,10 +1768,12 @@
 <li>图片展示了 <strong>Fig. 11</strong>，标题为“Prefetch timeliness breakdown”，用于分析 RnR prefetcher 在不同控制策略下的预取及时性表现。</li>
 <li>横轴按应用和输入数据集分类，包括 <strong>PageRank</strong>、<strong>Hyper-Anf</strong> 和 <strong>spCG</strong>，每个应用下有多个输入（如 urand, amazon, com-orkut 等）。</li>
 <li>纵轴表示预取数据的百分比分布，分为四类：<strong>On time</strong>（准时）、<strong>Early</strong>（过早）、<strong>Late</strong>（过晚）、<strong>Out of window</strong>（窗口外）。</li>
-<li>每个数据集对应三组柱状图，分别代表三种控制策略：</li>
+<li>每个数据集对应三组柱状图，分别代表三种控制策略：<ul>
 <li>左侧柱：<strong>no control</strong>（无控制）</li>
 <li>中间柱：<strong>window control</strong>（窗口控制）</li>
 <li>右侧柱：<strong>window+pace control</strong>（窗口+节奏控制）</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1846,19 +1886,23 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
 <li><strong>无控制策略</strong>下，预取数据中“Early”比例较高，尤其在 <strong>urand</strong> 输入上可达 25%-30%，表明预取过早导致数据被提前驱逐。</li>
 <li>引入 <strong>window control</strong> 后，“On time”比例显著提升至 88%-98%，同时“Early”大幅下降，说明窗口机制有效匹配了程序执行节奏。</li>
 <li>进一步加入 <strong>pace control</strong> 对大多数输入提升有限，仅在 <strong>urand</strong> 类型输入上略有改善（减少 2%-4% 的“Early”），表明窗口控制已足够应对多数场景。</li>
-<li>
-<p>所有策略下“Out of window”均接近 0%，说明预取范围控制良好，未产生无效预取。</p>
+<li>所有策略下“Out of window”均接近 0%，说明预取范围控制良好，未产生无效预取。</li>
+</ul>
 </li>
 <li>
 <p><strong>结论</strong>：</p>
-</li>
+<ul>
 <li><strong>window control</strong> 是提升预取及时性的核心机制，能将“On time”比例稳定在 90% 以上。</li>
 <li><strong>pace control</strong> 作为补充，在极端不规则访问模式（如 urand）中可微调预取节奏，但对整体性能影响较小。</li>
 <li>RnR prefetcher 通过记录时序信息并动态调整预取节奏，实现了高及时性，避免了传统预取器因“过早”或“过晚”导致的缓存污染或延迟掩盖失效。</li>
+</ul>
+</li>
 </ul>
 <h3 id="fig-12-additional-off-chip-traffic">Fig. 12. Additional off-chip traffic.<a class="headerlink" href="#fig-12-additional-off-chip-traffic" title="Permanent link">&para;</a></h3>
 <p><img alt="34ddc8df05a02e0b0cace157d394113256b519d520f892e9c415ab307db106fd.jpg" src="../images/34ddc8df05a02e0b0cace157d394113256b519d520f892e9c415ab307db106fd.jpg" /></p>
@@ -1871,15 +1915,15 @@
 <li>在 PageRank 和 Hyper-Anf 中，<strong>DROPLET 的额外流量与 RnR 相近</strong>，但 RnR-Combined 因同时处理规则和不规则结构，流量略高。</li>
 <li><strong>MISB 和 bingo 产生最高额外流量</strong>，因其预测精度低，导致大量无效 prefetch 请求。</li>
 <li><strong>GEOMEAN 数据显示</strong>：
-  | Prefetcher     | PageRank | Hyper-Anf | spCG   |
-  |----------------|----------|-----------|--------|
-  | nextline       | 45.2%    | 58.4%     | —      |
-  | bingo          | 67.1%    | —         | —      |
-  | SteMS          | —        | —         | —      |
-  | MISB           | 19.7%    | —         | —      |
-  | droplet        | 12.2%    | —         | —      |
-  | RnR            | 12.0%    | —         | —      |
-  | RnR-Combined   | 27.6%    | —         | —      |</li>
+    | Prefetcher   | PageRank | Hyper-Anf | spCG |
+    | ------------ | -------- | --------- | ---- |
+    | nextline     | 45.2%    | 58.4%     | —    |
+    | bingo        | 67.1%    | —         | —    |
+    | SteMS        | —        | —         | —    |
+    | MISB         | 19.7%    | —         | —    |
+    | droplet      | 12.2%    | —         | —    |
+    | RnR          | 12.0%    | —         | —    |
+    | RnR-Combined | 27.6%    | —         | —    |</li>
 <li><strong>RnR 的低额外流量主要归因于其高准确率（&gt;97%）</strong>，减少了无效 prefetch；而 DROPLET 虽流量相近，但源于其地址生成延迟导致的低效。</li>
 <li><strong>Metadata traffic 是 RnR 额外流量的主要来源</strong>，但因其具有良好空间局部性，可高效利用 DRAM row buffer，对性能影响较小。</li>
 </ul>
@@ -1890,24 +1934,30 @@
 <li>图表横轴分为三组：<strong>PageRank</strong>、<strong>Hyper-Anf</strong> 和 <strong>spCG</strong>，每组下包含多个输入数据集，如 urand、amazon、com-orkut、roadUSA 等。</li>
 <li>纵轴为“Normalized Storage Overhead”，单位为百分比，表示元数据存储占原始输入数据集大小的比例。</li>
 <li>每个柱状图上方标注了实际存储开销（MB），下方为归一化后的百分比值。</li>
-<li><strong>PageRank</strong>：</li>
+<li><strong>PageRank</strong>：<ul>
 <li>urand 输入：<strong>471MB</strong>，占比 <strong>25%</strong>（最高）。</li>
 <li>amazon 输入：<strong>190.4MB</strong>，占比约 <strong>15%</strong>。</li>
 <li>com-orkut 输入：<strong>80.4MB</strong>，占比约 <strong>10%</strong>。</li>
 <li>roadUSA 输入：<strong>5.3MB</strong>，占比约 <strong>5%</strong>（最低，因局部性好）。</li>
 <li>GEOMEAN：<strong>87.2MB</strong>，占比约 <strong>10%</strong>。</li>
-<li><strong>Hyper-Anf</strong>：</li>
+</ul>
+</li>
+<li><strong>Hyper-Anf</strong>：<ul>
 <li>urand 输入：<strong>449MB</strong>，占比约 <strong>20%</strong>。</li>
 <li>amazon 输入：<strong>6.8MB</strong>，占比约 <strong>5%</strong>。</li>
 <li>com-orkut 输入：<strong>78.4MB</strong>，占比约 <strong>10%</strong>。</li>
 <li>roadUSA 输入：<strong>173MB</strong>，占比约 <strong>15%</strong>。</li>
 <li>GEOMEAN：<strong>70.1MB</strong>，占比约 <strong>10%</strong>。</li>
-<li><strong>spCG</strong>：</li>
+</ul>
+</li>
+<li><strong>spCG</strong>：<ul>
 <li>atmosmodj 输入：<strong>35.1MB</strong>，占比约 <strong>15%</strong>。</li>
 <li>bimat 输入：<strong>4.3MB</strong>，占比约 <strong>5%</strong>。</li>
 <li>nlpkkt80 输入：<strong>54.3MB</strong>，占比约 <strong>10%</strong>。</li>
 <li>pdi1HYS 输入：<strong>9.5MB</strong>，占比约 <strong>5%</strong>。</li>
 <li>GEOMEAN：<strong>16.7MB</strong>，占比约 <strong>5%</strong>。</li>
+</ul>
+</li>
 <li>总体趋势显示，<strong>局部性差的数据集（如 urand）导致更高的存储开销</strong>，而局部性好的数据集（如 roadUSA、bimat）则显著降低开销。</li>
 <li>存储开销主要来自 <strong>sequence table</strong>，因其记录每个 L2 miss 地址；window division table 开销极小，仅记录每窗口的访问计数。</li>
 <li>平均而言，RnR 在 PageRank、spCG、Hyper-Anf 上分别需 <strong>12.1%、11.58%、13.0%</strong> 的输入数据集大小作为元数据存储空间。</li>
@@ -2035,7 +2085,7 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键对比</strong>：RnR 的核心优势在于其<strong>软件辅助的记录与重放机制</strong>，能够精准捕捉重复的不规则访问模式，从而实现高准确率和覆盖率。相比之下，其他预取器多依赖历史预测，难以处理复杂或相似的访问序列。此外，RnR 的硬件开销极低（&lt;1KB），而 MISB 和 Bingo 分别需要 49KB 和 119KB 的硬件资源。</li>
+<li><strong>关键对比</strong>：RnR 的核心优势在于其<strong>软件辅助的记录与重放机制</strong>，能够精准捕捉重复的不规则访问模式，从而实现高准确率和覆盖率。相比之下，其他预取器多依赖历史预测，难以处理复杂或相似的访问序列。此外，RnR 的硬件开销极低（\&lt;1KB），而 MISB 和 Bingo 分别需要 49KB 和 119KB 的硬件资源。</li>
 <li><strong>存储开销</strong>：RnR 的存储开销为输入数据的12%，高于 MISB 的8%，但显著低于 Bingo 的119KB 硬件开销。这表明 RnR 在保持高性能的同时，实现了合理的资源平衡。</li>
 <li><strong>触发机制</strong>：RnR 的触发时机由软件控制，结合重放时序控制机制，确保预取的及时性。而其他预取器多依赖缓存访问或未命中事件，可能导致预取过早或过晚。</li>
 </ul>

@@ -1,0 +1,2276 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/berti-an-accurate-local-delta-data-prefetcher/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Berti: an Accurate Local-Delta Data Prefetcher 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#berti-an-accurate-local-delta-data-prefetcher" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Berti: an Accurate Local-Delta Data Prefetcher 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-prefetch-accuracy-and-dynamic-energy-consumption-of-the-memory-hierarchy-for-state-of-the-art-prefetchers-ipcp-40-mlop-48-spp-ppf-17-and-bingo-13-averaged-across-single-threaded-traces-from-memory-intensive-spec-cpu2017-55-and-gap-14-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1. Prefetch accuracy and dynamic energy consumption of the memory hierarchy for state-of-the-art prefetchers (IPCP [40], MLOP [48], SPP-PPF [17], and Bingo [13]) averaged across single-threaded traces from memory-intensive SPEC CPU2017 [55] and GAP [14] workloads.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-strides-local-deltas-and-timely-local-deltas-the-values-on-the-timeline-2-5-7-represent-the-addresses-referenced-by-the-same-instruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. Strides, local deltas, and timely local deltas. The values on the timeline (2, 5, 7 ...) represent the addresses referenced by the same instruction.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-best-delta-selected-by-bop-based-on-global-deltas-and-berti-based-on-per-ip-local-deltas-for-mcf-1554b-prefetch-coverage-is-shown-in-grayscale-bop-selects-62-as-the-best-delta-red-line-which-is-not-always-accurate-and-provides-a-coverage-of-only-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. Best delta selected by BOP (based on global deltas) and Berti (based on per-IP local deltas) for mcf-1554B. Prefetch coverage is shown in grayscale. BOP selects +62 as the best delta (red line), which is not always accurate and provides a coverage of only 2%.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-learning-timely-deltas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. Learning timely deltas.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-berti-design-overview-hardware-extensions-are-shown-in-gray" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. Berti design overview. Hardware extensions are shown in gray.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-history-table-and-table-of-deltas-entry-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. History table and Table of deltas entry format.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-i-storage-overhead-of-berti" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table I STORAGE OVERHEAD OF BERTI.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-ii-simulation-parameters-of-the-baseline-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table II SIMULATION PARAMETERS OF THE BASELINE SYSTEM.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iii-configurations-of-evaluated-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table III CONFIGURATIONS OF EVALUATED PREFETCHERS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-speedup-vs-storage-requirements-speedup-is-normalized-to-l1d-ip-stride-and-averaged-across-memory-intensive-spec-cpu2017-and-gap-traces-xy-denotes-prefetcher-x-at-l1d-and-prefetcher-y-at-l2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. Speedup vs. storage requirements. Speedup is normalized to L1D IP-stride and averaged across memory-intensive SPEC CPU2017 and GAP traces. X+Y denotes prefetcher X at L1D and prefetcher Y at L2.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-speedup-of-l1d-prefetchers-compared-to-a-system-with-l1d-ip-stride-for-memory-intensive-spec-cpu2017-and-gap-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8. Speedup of L1D prefetchers compared to a system with L1D IP-stride for memory-intensive SPEC CPU2017 and GAP traces.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-speedup-with-berti-as-an-l1d-prefetcher-for-a-44-spec-cpu2017-and-b-20-gap-memory-intensive-traces-normalized-to-l1d-ip-stride-geomean-all-corresponds-to-the-geometric-mean-of-all-the-95-spec-cpu2017-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9. Speedup with Berti as an L1D prefetcher for (a) 44 SPEC CPU2017 and (b) 20 GAP memory-intensive traces normalized to L1D IP-stride. Geomean-all corresponds to the geometric mean of all the 95 SPEC CPU2017 traces.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-prefetch-accuracy-at-the-l1d-percentages-of-useful-requests-are-broken-down-into-timely-gray-and-late-black-prefetch-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10. Prefetch accuracy at the L1D. Percentages of useful requests are broken down into timely (gray) and late (black) prefetch requests.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-prefetch-coverage-in-terms-of-average-l1d-l2-and-llc-demand-mpkis-for-all-l1d-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11. Prefetch coverage in terms of average L1D, L2, and LLC demand MPKIs for all L1D prefetchers.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-spedup-with-multi-level-prefetching-normalized-to-l1d-ipstride" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12. Spedup with multi-level prefetching normalized to L1D IPstride.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-prefetch-coverage-in-terms-of-average-l2-and-llc-demand-mpkis-with-multi-level-prefetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13. Prefetch coverage in terms of average L2 and LLC demand MPKIs with multi-level prefetching.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-14-l2-llc-and-dram-demand-and-prefetch-traffic-normalized-to-no-prefetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 14. L2, LLC and DRAM demand and prefetch traffic normalized to no-prefetching.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-15-dynamic-energy-consumption-in-the-memory-hierarchy-normalized-to-no-prefetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 15. Dynamic energy consumption in the memory hierarchy normalized to no-prefetching.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-16-performance-of-l1d-prefetchers-in-constrained-dram-bandwidth-in-mtps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 16. Performance of L1D prefetchers in constrained DRAM bandwidth, in MTPS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-17-performance-of-multi-level-prefetching-in-constrained-dram-bandwidth-in-mtps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 17. Performance of multi-level prefetching in constrained DRAM bandwidth, in MTPS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-18-speedup-for-cloudsuite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 18. Speedup for CloudSuite.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-19-speedup-with-and-without-misb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 19. Speedup with and without MISB.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-20-summary-of-multi-core-speedups-relative-to-a-system-with-l1d-ip-stride-prefetcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 20. Summary of multi-core speedups relative to a system with L1D IP-stride prefetcher.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-21-normalized-speedup-with-different-l1d-and-l2-confidence-watermarks-averaged-across-memory-intensive-spec-cpu2017-and-gap-benchmarks-speedup-is-rounded-to-two-decimal-places-1085-is-rounded-to-109" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 21. Normalized speedup with different L1D and L2 confidence watermarks averaged across memory intensive SPEC CPU2017 and GAP benchmarks. Speedup is rounded to two decimal places (1.085 is rounded to 1.09).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-22-speedup-vs-size-of-berti-tables-and-number-of-deltas-025-to-4-correspond-to-one-fourth-and-four-times-respectively" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 22. Speedup vs. size of Berti tables and number of deltas. 0.25× to 4× correspond to one-fourth and four times, respectively.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#858152efcb118d2661e170e4085b1cb236c59b9d382bdd500282fe619d17036fjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        858152efcb118d2661e170e4085b1cb236c59b9d382bdd500282fe619d17036f.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7f32b701fd7b08333cbcccd3884aa33e80ae1d5bc0fb7634b8f5ba832223222ejpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7f32b701fd7b08333cbcccd3884aa33e80ae1d5bc0fb7634b8f5ba832223222e.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="berti-an-accurate-local-delta-data-prefetcher">Berti: an Accurate Local-Delta Data Prefetcher 图表详解<a class="headerlink" href="#berti-an-accurate-local-delta-data-prefetcher" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-prefetch-accuracy-and-dynamic-energy-consumption-of-the-memory-hierarchy-for-state-of-the-art-prefetchers-ipcp-40-mlop-48-spp-ppf-17-and-bingo-13-averaged-across-single-threaded-traces-from-memory-intensive-spec-cpu2017-55-and-gap-14-workloads">Figure 1. Prefetch accuracy and dynamic energy consumption of the memory hierarchy for state-of-the-art prefetchers (IPCP [40], MLOP [48], SPP-PPF [17], and Bingo [13]) averaged across single-threaded traces from memory-intensive SPEC CPU2017 [55] and GAP [14] workloads.<a class="headerlink" href="#figure-1-prefetch-accuracy-and-dynamic-energy-consumption-of-the-memory-hierarchy-for-state-of-the-art-prefetchers-ipcp-40-mlop-48-spp-ppf-17-and-bingo-13-averaged-across-single-threaded-traces-from-memory-intensive-spec-cpu2017-55-and-gap-14-workloads" title="Permanent link">&para;</a></h3>
+<p><img alt="61753161e45e9cbf84aeb666f0ae8b8514db7db4c30ba5eef0543c9c6a6869e2.jpg" src="../images/61753161e45e9cbf84aeb666f0ae8b8514db7db4c30ba5eef0543c9c6a6869e2.jpg" /></p>
+<ul>
+<li>图片包含四个子图，分别展示在 SPEC CPU2017-MemInt 和 GAP 工作负载下，四种主流预取器（MLOP、IPCP、Bingo、SPP-PPF）与本文提出的 <strong>Berti</strong> 在 <strong>预取准确率</strong> 和 <strong>动态能耗</strong> 上的对比。</li>
+<li>所有数据均为单线程内存密集型轨迹的平均值，旨在突出 Berti 的优势。</li>
+<li><strong>预取准确率</strong>（图 a）：</li>
+<li>在 SPEC CPU2017-MemInt 上，Berti 准确率最高，接近 90%，显著优于 MLOP（约 75%）、IPCP（约 70%）、Bingo（约 80%）和 SPP-PPF（约 80%）。</li>
+<li>在 GAP 工作负载上，Berti 准确率同样领先，约为 85%，而其他预取器表现较差：IPCP 约 50%，Bingo 约 30%，SPP-PPF 约 40%，MLOP 约 75%。</li>
+<li>这表明 Berti 在不同工作负载下均能保持高准确率，尤其在复杂访问模式（如 GAP）中优势明显。</li>
+<li><strong>动态能耗</strong>（图 b）：</li>
+<li>能耗以“无预取”为基准归一化（1.0），数值越高表示能耗增加越多。</li>
+<li>在 SPEC CPU2017-MemInt 上，Berti 能耗最低（约 1.1），远低于 IPCP（约 1.3）、MLOP（约 1.3）、Bingo（约 1.3）和 SPP-PPF（约 1.2）。</li>
+<li>在 GAP 上，Berti 能耗仍最低（约 1.1），而 Bingo 能耗最高（约 1.8），IPCP 和 SPP-PPF 分别约为 1.2 和 1.7。</li>
+<li>高准确率直接转化为低能耗，Berti 通过减少无效预取请求，有效降低内存层次结构的动态能耗。</li>
+<li>数据总结如下表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器</th>
+<th>SPEC CPU2017-MemInt 准确率</th>
+<th>GAP 准确率</th>
+<th>SPEC CPU2017-MemInt 能耗</th>
+<th>GAP 能耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLOP (L1D)</td>
+<td>~75%</td>
+<td>~75%</td>
+<td>~1.3</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>IPCP (L1D)</td>
+<td>~70%</td>
+<td>~50%</td>
+<td>~1.3</td>
+<td>~1.2</td>
+</tr>
+<tr>
+<td>Bingo (L2)</td>
+<td>~80%</td>
+<td>~30%</td>
+<td>~1.3</td>
+<td>~1.8</td>
+</tr>
+<tr>
+<td>SPP-PPF (L2)</td>
+<td>~80%</td>
+<td>~40%</td>
+<td>~1.2</td>
+<td>~1.7</td>
+</tr>
+<tr>
+<td><strong>Berti (L1D)</strong></td>
+<td><strong>~90%</strong></td>
+<td><strong>~85%</strong></td>
+<td><strong>~1.1</strong></td>
+<td><strong>~1.1</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>综合来看，Berti 在准确率和能耗两个关键指标上均优于现有预取器，验证了其基于局部及时 delta 的设计有效性。</li>
+</ul>
+<h3 id="figure-2-strides-local-deltas-and-timely-local-deltas-the-values-on-the-timeline-2-5-7-represent-the-addresses-referenced-by-the-same-instruction">Figure 2. Strides, local deltas, and timely local deltas. The values on the timeline (2, 5, 7 ...) represent the addresses referenced by the same instruction.<a class="headerlink" href="#figure-2-strides-local-deltas-and-timely-local-deltas-the-values-on-the-timeline-2-5-7-represent-the-addresses-referenced-by-the-same-instruction" title="Permanent link">&para;</a></h3>
+<p><img alt="b74b15fdee8589931ff6fe5d15d903ab9ff5c33bf8cbfcf16a437047ad294cb9.jpg" src="../images/b74b15fdee8589931ff6fe5d15d903ab9ff5c33bf8cbfcf16a437047ad294cb9.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 2</strong>，用于解释 <strong>strides</strong>、<strong>local deltas</strong> 和 <strong>timely local deltas</strong> 三者之间的区别，所有地址均来自同一指令（IP）的访问序列。</li>
+<li>时间轴上标记的地址序列为：<strong>2, 5, 7, 10, 12, 15</strong>，代表该指令在不同时间点访问的缓存行地址。</li>
+<li><strong>Stride</strong> 定义为连续两次访问地址之差。例如，从地址 12 到 15 的 stride 为 <strong>+3</strong>，图中用短弧线标注。</li>
+<li><strong>Local delta</strong> 定义为当前访问地址与历史任意一次访问地址之差。例如，访问地址 15 时，其 local deltas 包括：</li>
+<li>从地址 7 计算得 +8</li>
+<li>从地址 10 计算得 +5</li>
+<li>从地址 12 计算得 +3
+    图中用多条长弧线表示这些可能的 delta 值。</li>
+<li><strong>Timely local delta</strong> 强调“及时性”，即在足够早的时间点发起预取，以确保数据在需要时已到达 L1D。图中显示：</li>
+<li>若在地址 5 发起预取，使用 delta <strong>+10</strong> 可覆盖地址 15</li>
+<li>若在地址 2 发起预取，使用 delta <strong>+13</strong> 可覆盖地址 15
+    这两个 delta 被标注为 <strong>timely local deltas</strong>，并用最长的弧线连接。</li>
+<li>关键对比：</li>
+<li>Stride 是局部、连续的步长。</li>
+<li>Local delta 是全局历史中的任意偏移。</li>
+<li>Timely local delta 是能实现“提前预取”的有效偏移，对性能提升至关重要。</li>
+<li>下表总结三种概念在地址 15 处的值：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>对应 delta 值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stride</td>
+<td>+3</td>
+<td>仅基于前一访问地址</td>
+</tr>
+<tr>
+<td>Local Delta</td>
+<td>+8, +5, +3</td>
+<td>基于所有历史访问地址</td>
+</tr>
+<tr>
+<td>Timely Local Delta</td>
+<td><strong>+13, +10</strong></td>
+<td>能在足够早时间点发起预取的 delta</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图中红色高亮的地址 <strong>15</strong> 是目标预取地址，所有箭头和弧线最终指向它，强调预取的目标性和时效性。</li>
+<li>该图直观说明了 Berti 预取器的核心思想：不依赖固定 stride 或全局 offset，而是根据每条指令的历史访问模式，选择<strong>最及时且覆盖度高的 local delta</strong>进行预取，从而提高准确率和性能。</li>
+</ul>
+<h3 id="figure-3-best-delta-selected-by-bop-based-on-global-deltas-and-berti-based-on-per-ip-local-deltas-for-mcf-1554b-prefetch-coverage-is-shown-in-grayscale-bop-selects-62-as-the-best-delta-red-line-which-is-not-always-accurate-and-provides-a-coverage-of-only-2">Figure 3. Best delta selected by BOP (based on global deltas) and Berti (based on per-IP local deltas) for mcf-1554B. Prefetch coverage is shown in grayscale. BOP selects +62 as the best delta (red line), which is not always accurate and provides a coverage of only 2%.<a class="headerlink" href="#figure-3-best-delta-selected-by-bop-based-on-global-deltas-and-berti-based-on-per-ip-local-deltas-for-mcf-1554b-prefetch-coverage-is-shown-in-grayscale-bop-selects-62-as-the-best-delta-red-line-which-is-not-always-accurate-and-provides-a-coverage-of-only-2" title="Permanent link">&para;</a></h3>
+<p><img alt="4e8844a11efa68128cf674df9b11e8d0d49eaa0d1952ce5362166c5549f26762.jpg" src="../images/4e8844a11efa68128cf674df9b11e8d0d49eaa0d1952ce5362166c5549f26762.jpg" /></p>
+<ul>
+<li>图片展示了在 mcf-1554B 基准测试中，<strong>BOP</strong> 与 <strong>Berti</strong> 两种预取器所选择的“最佳 delta”及其对应的预取覆盖率。</li>
+<li>横轴为不同的 <strong>IP（Instruction Pointer）</strong>，纵轴为“Best Delta”值，右侧色标表示“Coverage”（覆盖率），从 0.0（白色）到 1.0（黑色）。</li>
+<li><strong>BOP</strong> 选择了一个全局统一的 delta 值 <strong>+62</strong>，以红色水平线标示。该值对所有 IP 均适用，但其覆盖范围极低，仅为 <strong>2%</strong>，说明其在多数 IP 上无法有效预取。</li>
+<li><strong>Berti</strong> 则为每个 IP 选择不同的局部 delta 值，用灰色水平条形表示。这些条形长度不一、位置各异，反映不同 IP 的访问模式差异。</li>
+<li>灰度颜色深浅代表该 delta 在对应 IP 下的覆盖率：越深表示覆盖率越高。可见部分 IP 的 delta 覆盖率接近 1.0（深灰至黑色），而其他 IP 覆盖率较低（浅灰或白色）。</li>
+<li>该图直观证明了使用 <strong>per-IP local deltas</strong> 的必要性：全局 delta（如 BOP）无法适应不同指令的访问模式，导致覆盖率低下；而 Berti 的局部 delta 能更精准匹配各 IP 的行为，从而提升整体预取效率。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器</th>
+<th>Delta 类型</th>
+<th>Delta 值</th>
+<th>覆盖率</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BOP</td>
+<td>Global Delta</td>
+<td>+62</td>
+<td>2%</td>
+<td>统一值，适应性差</td>
+</tr>
+<tr>
+<td>Berti</td>
+<td>Per-IP Local Delta</td>
+<td>多变</td>
+<td>0.0–1.0</td>
+<td>按 IP 定制，精度高</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>核心结论：<strong>Berti 的 per-IP 局部 delta 机制显著优于 BOP 的全局 delta 机制</strong>，能针对不同指令上下文动态调整预取策略，从而获得更高覆盖率和预取准确性。</li>
+</ul>
+<h3 id="figure-4-learning-timely-deltas">Figure 4. Learning timely deltas.<a class="headerlink" href="#figure-4-learning-timely-deltas" title="Permanent link">&para;</a></h3>
+<p><img alt="e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /></p>
+<ul>
+<li>图片展示了 Berti 预取器如何学习 <strong>timely deltas</strong> 的三个阶段，核心目标是识别在当前访问发生前，哪些历史访问若发起预取请求，能恰好在数据被需求时送达 L1D。</li>
+<li>该图以时间轴形式呈现，每个点代表由同一指令指针（IP）发起的内存访问地址，红色圆点表示当前正在处理的访问事件。</li>
+<li><strong>(a) 访问地址 10</strong>：此时系统刚完成对地址 10 的访问并测量其获取延迟。回溯历史访问序列（2, 5, 7），发现没有任何一个历史访问点能在“fetch latency”时间内发起预取请求覆盖到地址 10，因此 <strong>未找到任何 timely delta</strong>。</li>
+<li><strong>(b) 访问地址 12</strong>：在访问地址 12 并测量其延迟后，系统再次回溯历史访问序列（2, 5, 7, 10）。通过计算，发现从地址 2 发起预取请求，经过“time to fetch 12”的延迟后，正好可以覆盖到地址 12。因此，系统学习到一个 <strong>timely delta (+10)</strong>。</li>
+<li><strong>(c) 访问地址 15</strong>：在访问地址 15 并测量其延迟后，系统回溯更长的历史序列（2, 5, 7, 10, 12）。计算发现，从地址 2 发起预取可覆盖 15（delta +13），从地址 5 发起预取也可覆盖 15（delta +10）。因此，系统学习到两个 <strong>timely deltas (+13, +10)</strong>。</li>
+<li>此过程的关键在于，Berti 不仅记录访问地址，还记录其发生的时间戳，并结合测量到的 <strong>L1D miss latency</strong> 来判断历史访问是否具备“及时性”，从而精确地学习出对当前访问最有效的预取偏移量。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">阶段</th>
+<th style="text-align: left;">当前访问地址</th>
+<th style="text-align: left;">历史访问序列</th>
+<th style="text-align: left;">是否找到 Timely Delta</th>
+<th style="text-align: left;">找到的 Timely Deltas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">(a)</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">2, 5, 7</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">无</td>
+</tr>
+<tr>
+<td style="text-align: left;">(b)</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">2, 5, 7, 10</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">+10</td>
+</tr>
+<tr>
+<td style="text-align: left;">(c)</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">2, 5, 7, 10, 12</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">+13, +10</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这种机制确保了 Berti 学习到的 delta 是基于实际硬件延迟的、真正“及时”的预取策略，而非简单的地址差值或固定步长，从而显著提升了预取的准确性和有效性。</li>
+</ul>
+<h3 id="figure-5-berti-design-overview-hardware-extensions-are-shown-in-gray">Figure 5. Berti design overview. Hardware extensions are shown in gray.<a class="headerlink" href="#figure-5-berti-design-overview-hardware-extensions-are-shown-in-gray" title="Permanent link">&para;</a></h3>
+<p><img alt="4687673a72ee43cb3b2eafce7f9b78d9575373cf70b658c43ba276687ce6368a.jpg" src="../images/4687673a72ee43cb3b2eafce7f9b78d9575373cf70b658c43ba276687ce6368a.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Berti</strong> 数据预取器的硬件设计概览，其核心组件和数据流被清晰标注，<strong>灰色部分</strong>代表为实现 Berti 功能而新增的硬件扩展。</li>
+<li>整个系统围绕 <strong>L1D cache</strong> 构建，所有内存访问（<strong>VA</strong>）首先经过 <strong>L1 dTLB</strong> 进行地址转换，若命中则直接访问 L1D；若未命中，则通过 <strong>STLB</strong> 获取物理地址（<strong>PA</strong>），并触发对下一级缓存（<strong>L2</strong>）的访问。</li>
+<li>当发生 <strong>L1D miss</strong> 时，请求会被送入 <strong>MSHR</strong>。MSHR 不仅负责管理缺失状态，还承担了记录 <strong>Latency</strong> 的关键角色，这是 Berti 实现“及时性”预取的核心机制。</li>
+<li><strong>History table</strong> 是 Berti 学习机制的核心。它接收来自 L1D 的 <strong>IP, VA</strong> 信息，并在发生 <strong>Fill</strong> 或 <strong>Hit_p</strong> 事件时，根据存储的 <strong>Latency</strong> 信息，执行 <strong>Search</strong> 操作以发现“及时的 delta”。该表采用 <strong>8-set, 16-way</strong> 的结构，支持并发的 <strong>Write</strong> 和 <strong>Search</strong> 操作。</li>
+<li><strong>Table of deltas</strong> 负责存储和管理学习到的 delta 及其覆盖度（coverage）。它是一个 <strong>16-entry fully-associative</strong> 缓存，根据从 History table 搜集到的 <strong>Timely deltas</strong> 来更新其内部条目。每个条目包含 delta 值、覆盖率计数器和预取目标层级的状态。</li>
+<li>预取请求的生成由 <strong>Table of deltas</strong> 控制。当 L1D 发生访问时，会查询此表，根据 delta 的状态（如 <strong>L1D pre f</strong> 或 <strong>L2 pre f</strong>）和当前 <strong>MSHR occupancy</strong>，决定是否以及向哪个层级（L1D 或 L2）发出预取请求。这些请求最终被放入 <strong>PQ (Prefetch Queue)</strong> 中等待处理。</li>
+<li><strong>PQ</strong> 作为预取请求的缓冲区，按 <strong>FIFO</strong> 顺序处理请求。它同样被扩展以记录请求的时间戳，以便在后续填充时计算延迟。</li>
+<li>整个设计的关键在于利用 <strong>虚拟地址 (VA)</strong> 进行训练和预测，这使得 Berti 能够进行跨页预取，并且其学习过程与指令指针 (<strong>IP</strong>) 紧密绑定，实现了真正的“本地化”预取。其硬件开销极低，总存储需求仅为 <strong>2.55 KB</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">功能</th>
+<th style="text-align: left;">关键特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>History table</strong></td>
+<td style="text-align: left;">记录最近的 IP 和 VA 访问历史</td>
+<td style="text-align: left;">8-set, 16-way, FIFO 替换策略, 支持 Write/Search 并发</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Table of deltas</strong></td>
+<td style="text-align: left;">存储学习到的 delta 及其覆盖率</td>
+<td style="text-align: left;">16-entry fully-associative, FIFO 替换策略, 包含 coverage counter 和 prefetch status</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MSHR</strong></td>
+<td style="text-align: left;">管理 L1D miss 状态</td>
+<td style="text-align: left;">扩展了 12-bit Latency 字段用于测量填充延迟</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>PQ</strong></td>
+<td style="text-align: left;">缓冲预取请求</td>
+<td style="text-align: left;">扩展了 16-bit Timestamp 字段用于计算延迟</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L1 dTLB / STLB</strong></td>
+<td style="text-align: left;">地址转换</td>
+<td style="text-align: left;">提供 PA 以访问缓存或 DRAM</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该设计巧妙地将预取的“准确性”和“及时性”结合在一起：通过精确测量延迟来学习“及时”的 delta，再通过高置信度的覆盖率筛选机制来保证“准确”，从而在极小的硬件开销下实现了卓越的性能和能效。</li>
+</ul>
+<h3 id="figure-6-history-table-and-table-of-deltas-entry-format">Figure 6. History table and Table of deltas entry format.<a class="headerlink" href="#figure-6-history-table-and-table-of-deltas-entry-format" title="Permanent link">&para;</a></h3>
+<p><img alt="89d6667fb897e3b9b23adea64286b26a9ecd370b1b3075753ef7ba0dac6e385c.jpg" src="../images/89d6667fb897e3b9b23adea64286b26a9ecd370b1b3075753ef7ba0dac6e385c.jpg" /></p>
+<ul>
+<li>图片展示了 Berti 预取器中两个核心数据结构的条目格式：<strong>History table</strong> 和 <strong>Table of deltas</strong>，用于记录和管理本地 delta 信息。</li>
+<li><strong>History table</strong> 条目包含三个字段：</li>
+<li><strong>IP tag</strong>: 7 位，用于标识指令指针（Instruction Pointer）的低位部分，作为索引标签。</li>
+<li><strong>line address</strong>: 24 位，存储目标缓存行地址的低位部分。</li>
+<li><strong>timestamp</strong>: 16 位，记录该访问发生的时间戳，用于后续计算预取延迟。</li>
+<li><strong>Table of deltas</strong> 条目结构更为复杂，包含一个头部和多个 delta 记录：</li>
+<li><strong>IP tag</strong>: 10 位，基于 IP 的哈希值，用于快速查找对应指令的 delta 表。</li>
+<li><strong>counter</strong>: 4 位，记录当前 delta 表条目被搜索的次数，用于触发覆盖率计算。</li>
+<li><strong>delta array</strong>: 包含最多 16 个 delta 记录，每个记录由三部分组成：<ul>
+<li><strong>delta</strong>: 13 位，表示具体的地址差值（即本地 delta 值）。</li>
+<li><strong>coverage</strong>: 4 位，表示该 delta 的覆盖率（以百分比形式量化）。</li>
+<li><strong>status</strong>: 2 位，指示该 delta 应该预取到哪个缓存层级（L1D、L2 或不预取）。</li>
+</ul>
+</li>
+<li>该设计体现了 Berti 的核心思想：通过追踪每个 IP 的历史访问，学习其特有的、及时的本地 delta，并根据其覆盖率动态决定预取行为，从而实现高精度和低开销。</li>
+</ul>
+<h3 id="table-i-storage-overhead-of-berti">Table I STORAGE OVERHEAD OF BERTI.<a class="headerlink" href="#table-i-storage-overhead-of-berti" title="Permanent link">&para;</a></h3>
+<p><img alt="92c023f5b766e980c7be588e6c1f07838123c1cbad5b89621d965b1c52a79a49.jpg" src="../images/92c023f5b766e980c7be588e6c1f07838123c1cbad5b89621d965b1c52a79a49.jpg" /></p>
+<ul>
+<li><strong>Berti</strong> 的硬件存储开销总计为 <strong>2.55 KB</strong>，由多个关键结构组成，设计精简且高效。</li>
+<li>各组件存储分配如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>结构名称</th>
+<th>配置描述</th>
+<th>存储占用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>History table</td>
+<td>8-set, 16-way (128-entry) cache, FIFO替换策略；每项：7-bit IP tag, 24-bit address, 16-bit timestamp</td>
+<td><strong>0.74 KB</strong></td>
+</tr>
+<tr>
+<td>Table of deltas</td>
+<td>16-entry, fully-associative, 4-bit FIFO替换策略；每项：10-bit IP tag, 4-bit counter, 16个delta数组（每个含13-bit delta, 4-bit coverage, 2-bit status）</td>
+<td><strong>0.62 KB</strong></td>
+</tr>
+<tr>
+<td>PQ + MSHR</td>
+<td>16+16 entries, 每项16-bit timestamp</td>
+<td><strong>0.06 KB</strong></td>
+</tr>
+<tr>
+<td>L1D</td>
+<td>768 cache lines, 每行12-bit latency</td>
+<td><strong>1.13 KB</strong></td>
+</tr>
+<tr>
+<td><strong>总计</strong></td>
+<td>—</td>
+<td><strong>2.55 KB</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>History table</strong> 用于记录最近的访问历史，支持按IP索引和搜索，是学习及时delta的基础。</li>
+<li><strong>Table of deltas</strong> 是核心预测结构，通过统计delta的覆盖率决定是否触发预取，并标记预取层级（L1D/L2/不预取）。</li>
+<li><strong>PQ + MSHR</strong> 扩展了时间戳字段，用于测量预取和需求访问的延迟，是实现“及时性”判断的关键。</li>
+<li><strong>L1D</strong> 增加了延迟字段，用于在命中时触发历史搜索，确保训练数据的准确性。</li>
+<li>整体设计避免复杂运算（如乘法），结构简单，对时序无影响，符合L1D级预取器的低开销要求。</li>
+</ul>
+<h3 id="table-ii-simulation-parameters-of-the-baseline-system">Table II SIMULATION PARAMETERS OF THE BASELINE SYSTEM.<a class="headerlink" href="#table-ii-simulation-parameters-of-the-baseline-system" title="Permanent link">&para;</a></h3>
+<p><img alt="7eed2de8d27d2ab2cbf9bf11cef48a2b103c31a7911f2533c4ae3ebe80f4c7c9.jpg" src="../images/7eed2de8d27d2ab2cbf9bf11cef48a2b103c31a7911f2533c4ae3ebe80f4c7c9.jpg" /></p>
+<ul>
+<li>该表格详细列出了用于评估 Berti 预取器的<strong>基线系统模拟参数</strong>，其设计目标是模拟 Intel Sunny Cove 微架构。</li>
+<li>核心配置为 <strong>Out-of-order</strong> 执行，配备 <strong>hashed perceptron branch predictor</strong>，运行频率为 <strong>4 GHz</strong>，具有 <strong>6-issue width</strong> 和 <strong>4-retire width</strong>，以及一个 <strong>352-entry ROB</strong>。</li>
+<li>TLB 配置包括：</li>
+<li><strong>L1 iTLB/dTLB</strong>: 64 条目，4-way，1 周期访问延迟。</li>
+<li><strong>STLB</strong>: 2048 条目，16-way，8 周期访问延迟。</li>
+<li>MMU 缓存（PSCL）配置为多级结构，支持并行查找，具体为：</li>
+<li><strong>2-entry PSCL5</strong></li>
+<li><strong>4-entry PSCL4</strong></li>
+<li><strong>8-entry PSCL3</strong></li>
+<li><strong>32-entry PSCL2</strong></li>
+<li>总体查找延迟为 <strong>1 周期</strong>。</li>
+<li>L1I 缓存为 <strong>32 KB</strong>, <strong>8-way</strong>, 访问延迟 <strong>4 周期</strong>。</li>
+<li>L1D 缓存为 <strong>48 KB</strong>, <strong>12-way</strong>, 访问延迟 <strong>5 周期</strong>，并内置一个 <strong>24-entry, fully associative IP-stride prefetcher</strong>。</li>
+<li>L2 缓存为 <strong>512 KB</strong>, <strong>8-way associative</strong>, 访问延迟 <strong>10 周期</strong>，采用 <strong>SRRIP</strong> 替换策略，且为 <strong>non-inclusive</strong>。</li>
+<li>LLC 缓存为 <strong>2 MB/core</strong>, <strong>16-way</strong>, 访问延迟 <strong>20 周期</strong>，采用 <strong>DRRIP</strong> 替换策略，同样为 <strong>non-inclusive</strong>。</li>
+<li>MSHR 配置为：</li>
+<li><strong>L1I/L1D/L2</strong>: 每核心 <strong>8/16/32</strong> 个条目。</li>
+<li><strong>LLC</strong>: 每核心 <strong>64</strong> 个条目。</li>
+<li>DRAM 控制器配置为：</li>
+<li><strong>One channel/4-cores</strong>, 支持 <strong>6400 MTPS</strong> 的带宽。</li>
+<li>采用 <strong>FR-FCFS</strong> 调度策略。</li>
+<li><strong>64-entry RQ</strong> 和 <strong>WQ</strong>。</li>
+<li>读请求优先于写请求。</li>
+<li>写水位标记为 <strong>7/8th</strong>。</li>
+<li>DRAM 芯片参数如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Row-buffer</td>
+<td style="text-align: left;">4 KB per bank</td>
+</tr>
+<tr>
+<td style="text-align: left;">Page Policy</td>
+<td style="text-align: left;">open page</td>
+</tr>
+<tr>
+<td style="text-align: left;">Burst Length</td>
+<td style="text-align: left;">16</td>
+</tr>
+<tr>
+<td style="text-align: left;">tRP</td>
+<td style="text-align: left;">12.5 ns</td>
+</tr>
+<tr>
+<td style="text-align: left;">tRCD</td>
+<td style="text-align: left;">12.5 ns</td>
+</tr>
+<tr>
+<td style="text-align: left;">tCAS</td>
+<td style="text-align: left;">12.5 ns</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体系统设计旨在提供详细的内存层次结构建模，以准确评估预取器在真实硬件环境下的性能和能耗表现。</li>
+</ul>
+<h3 id="table-iii-configurations-of-evaluated-prefetchers">Table III CONFIGURATIONS OF EVALUATED PREFETCHERS.<a class="headerlink" href="#table-iii-configurations-of-evaluated-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="a5c1bae204696a9cc15e8503fc34a1234957d5d856e1cd026c56d288383a73eb.jpg" src="../images/a5c1bae204696a9cc15e8503fc34a1234957d5d856e1cd026c56d288383a73eb.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table III</strong>，标题为“CONFIGURATIONS OF EVALUATED PREFETCHERS”，列出了四种被评估的硬件预取器的具体配置参数。</li>
+<li>表格包含两列：第一列为预取器名称及其引用文献编号；第二列为对应的硬件结构与参数配置。</li>
+<li>所有预取器均基于 <strong>ChampSim</strong> 模拟器实现，并针对论文中表 II 的系统参数进行了精细调优。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器名称 (引用)</th>
+<th>配置详情</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SPP-PPF [17]</strong></td>
+<td>256-entry ST, 512-entry 4-way PT, 8-entry GHR, Perceptron weights with entries: 4096×4, 2048×2, 1024×2, and 128×1, 1024-entry prefetch table, 1024-entry reject table</td>
+</tr>
+<tr>
+<td><strong>Bingo [13]</strong></td>
+<td>2 KB region, 64/128/4K-entry FT/AT/PHT</td>
+</tr>
+<tr>
+<td><strong>MLOP [48]</strong></td>
+<td>128-entry AMT, 500-update, 16-degree</td>
+</tr>
+<tr>
+<td><strong>IPCP [40]</strong></td>
+<td>128-entry IP table, 8-entry RST table, and 128-entry CSPT table</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>SPP-PPF</strong> 配置最为复杂，包含多个表结构（ST、PT、GHR）及多组 Perceptron 权重，还设有 prefetch 和 reject 表用于过滤。</li>
+<li><strong>Bingo</strong> 使用区域划分和多种大小的 FT/AT/PHT 表，强调对短事件与长事件模式的关联建模。</li>
+<li><strong>MLOP</strong> 配置相对简洁，核心为 128-entry AMT（Address Mapping Table），并设定更新周期与 look-ahead 度数。</li>
+<li><strong>IPCP</strong> 基于指令指针分类，使用 IP 表、RST 表和 CSPT 表分别处理不同访问模式（常量步长、复杂步长、全局流）。</li>
+<li>所有配置均体现其设计目标：在有限存储开销下最大化预取覆盖率与准确性。</li>
+</ul>
+<h3 id="figure-7-speedup-vs-storage-requirements-speedup-is-normalized-to-l1d-ip-stride-and-averaged-across-memory-intensive-spec-cpu2017-and-gap-traces-xy-denotes-prefetcher-x-at-l1d-and-prefetcher-y-at-l2">Figure 7. Speedup vs. storage requirements. Speedup is normalized to L1D IP-stride and averaged across memory-intensive SPEC CPU2017 and GAP traces. X+Y denotes prefetcher X at L1D and prefetcher Y at L2.<a class="headerlink" href="#figure-7-speedup-vs-storage-requirements-speedup-is-normalized-to-l1d-ip-stride-and-averaged-across-memory-intensive-spec-cpu2017-and-gap-traces-xy-denotes-prefetcher-x-at-l1d-and-prefetcher-y-at-l2" title="Permanent link">&para;</a></h3>
+<p><img alt="d292cd0ecf22d3d0888a54fc7b934a814275e859eb274b9ec2e6c64a1bb327b3.jpg" src="../images/d292cd0ecf22d3d0888a54fc7b934a814275e859eb274b9ec2e6c64a1bb327b3.jpg" /></p>
+<ul>
+<li>图表标题为“Figure 7. Speedup vs. storage requirements”，展示的是不同预取器在<strong>存储开销</strong>与<strong>性能加速比</strong>之间的权衡关系，加速比以 <strong>L1D IP-stride</strong> 为基准，数据来源于 <strong>SPEC CPU2017</strong> 和 <strong>GAP</strong> 中的内存密集型工作负载。</li>
+<li>图中每个点代表一种预取配置，横轴为预取器所需的<strong>存储容量（KB）</strong>，纵轴为<strong>几何平均加速比</strong>。图例说明：X+Y 表示 X 部署在 L1D，Y 部署在 L2。</li>
+<li>数据点按预取器类型用不同形状标记：</li>
+<li>圆形：仅部署于 <strong>L1D</strong> 的预取器</li>
+<li>方形：仅部署于 <strong>L2</strong> 的预取器</li>
+<li>菱形：<strong>多级（L1D + L2）</strong> 预取组合</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器配置</th>
+<th>存储需求 (KB)</th>
+<th>加速比 (Geometric Mean)</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Berti</td>
+<td>~5</td>
+<td><strong>1.085</strong></td>
+<td>L1D</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~5</td>
+<td>~1.06</td>
+<td>L1D</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>~10</td>
+<td>~1.03</td>
+<td>L1D</td>
+</tr>
+<tr>
+<td>SPP-PPF</td>
+<td>~40</td>
+<td>~1.065</td>
+<td>L2</td>
+</tr>
+<tr>
+<td>Bingo</td>
+<td>~50</td>
+<td>~1.09</td>
+<td>L2</td>
+</tr>
+<tr>
+<td>Berti+SPP-PPF</td>
+<td>~41.8</td>
+<td><strong>1.10</strong></td>
+<td>多级</td>
+</tr>
+<tr>
+<td>Berti+Bingo</td>
+<td>~55</td>
+<td>~1.095</td>
+<td>多级</td>
+</tr>
+<tr>
+<td>MLOP+Bingo</td>
+<td>~60</td>
+<td>~1.085</td>
+<td>多级</td>
+</tr>
+<tr>
+<td>IPCP+IPCP</td>
+<td>~10</td>
+<td>~1.06</td>
+<td>多级</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Berti</strong> 在仅使用约 <strong>5 KB</strong> 存储的情况下，实现了约 <strong>1.085</strong> 的加速比，显著优于同为 L1D 预取器的 <strong>IPCP</strong>（~1.06）和 <strong>MLOP</strong>（~1.03），证明其在<strong>极低存储开销下仍能提供高性价比性能提升</strong>。</li>
+<li>最高性能点是 <strong>Berti+SPP-PPF</strong> 组合，加速比达 <strong>1.10</strong>，但存储开销增至 <strong>41.8 KB</strong>，相比 Berti 单独部署仅带来约 <strong>1.5%</strong> 的额外性能增益。</li>
+<li>值得注意的是，<strong>Berti 单独部署（L1D）的性能优于所有不含 Berti 的多级预取组合</strong>，如 MLOP+Bingo 或 IPCP+Bingo，表明其在 L1D 层面的精准性足以超越传统多级方案。</li>
+<li><strong>Bingo</strong> 作为 L2 预取器，在约 <strong>50 KB</strong> 存储下达到 <strong>1.09</strong> 加速比，性能接近 Berti+SPP-PPF，但其存储开销远高于 Berti。</li>
+<li>图表清晰揭示了 Berti 的核心优势：<strong>以最小存储代价（2.55 KB 实际开销）实现最高单层性能，并在多级配置中仍保持领先或高效补充</strong>，验证了其“本地化、及时性、高精度”设计哲学的有效性。</li>
+</ul>
+<h3 id="figure-8-speedup-of-l1d-prefetchers-compared-to-a-system-with-l1d-ip-stride-for-memory-intensive-spec-cpu2017-and-gap-traces">Figure 8. Speedup of L1D prefetchers compared to a system with L1D IP-stride for memory-intensive SPEC CPU2017 and GAP traces.<a class="headerlink" href="#figure-8-speedup-of-l1d-prefetchers-compared-to-a-system-with-l1d-ip-stride-for-memory-intensive-spec-cpu2017-and-gap-traces" title="Permanent link">&para;</a></h3>
+<p><img alt="26a8a8b83a919f217592c906fb9008f2206cc5428ddb2efeb276b02e29ebc624.jpg" src="../images/26a8a8b83a919f217592c906fb9008f2206cc5428ddb2efeb276b02e29ebc624.jpg" /></p>
+<ul>
+<li>图片展示了三种 L1D 预取器（<strong>MLOP</strong>、<strong>IPCP</strong> 和 <strong>Berti</strong>）在内存密集型 <strong>SPEC CPU2017</strong> 和 <strong>GAP</strong> 工作负载下的性能加速比，基准为 <strong>L1D IP-stride</strong> 预取器。</li>
+<li><strong>SPEC CPU2017-MemInt</strong> 类别中：</li>
+<li><strong>MLOP</strong> 的加速比约为 <strong>1.08</strong>。</li>
+<li><strong>IPCP</strong> 的加速比略高于 MLOP，约为 <strong>1.09</strong>。</li>
+<li><strong>Berti</strong> 表现最佳，加速比达到 <strong>1.11</strong>，显著优于前两者。</li>
+<li><strong>GAP</strong> 类别中：</li>
+<li><strong>MLOP</strong> 的加速比低于基准，约为 <strong>0.93</strong>，表明其在此类工作负载下性能退化。</li>
+<li><strong>IPCP</strong> 的加速比约为 <strong>0.96</strong>，同样低于基准，但优于 MLOP。</li>
+<li><strong>Berti</strong> 是唯一在 GAP 工作负载下实现正向加速的预取器，加速比约为 <strong>1.02</strong>。</li>
+<li>总体来看，<strong>Berti</strong> 在两类工作负载中均表现最优，尤其在 <strong>GAP</strong> 上优势明显，证明其对不规则访问模式具有更强适应性。</li>
+<li>数据对比表如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器</th>
+<th>SPEC CPU2017-MemInt 加速比</th>
+<th>GAP 加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLOP</td>
+<td>~1.08</td>
+<td>~0.93</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~1.09</td>
+<td>~0.96</td>
+</tr>
+<tr>
+<td>Berti</td>
+<td><strong>~1.11</strong></td>
+<td><strong>~1.02</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>Berti</strong> 不仅在常规工作负载（SPEC CPU2017）中提供最高加速，在挑战性更高的不规则访问模式（GAP）中仍能保持性能提升，验证了其基于局部及时 delta 的设计有效性。</li>
+</ul>
+<h3 id="figure-9-speedup-with-berti-as-an-l1d-prefetcher-for-a-44-spec-cpu2017-and-b-20-gap-memory-intensive-traces-normalized-to-l1d-ip-stride-geomean-all-corresponds-to-the-geometric-mean-of-all-the-95-spec-cpu2017-traces">Figure 9. Speedup with Berti as an L1D prefetcher for (a) 44 SPEC CPU2017 and (b) 20 GAP memory-intensive traces normalized to L1D IP-stride. Geomean-all corresponds to the geometric mean of all the 95 SPEC CPU2017 traces.<a class="headerlink" href="#figure-9-speedup-with-berti-as-an-l1d-prefetcher-for-a-44-spec-cpu2017-and-b-20-gap-memory-intensive-traces-normalized-to-l1d-ip-stride-geomean-all-corresponds-to-the-geometric-mean-of-all-the-95-spec-cpu2017-traces" title="Permanent link">&para;</a></h3>
+<p><img alt="0db06433bf7ad3dbba5955420816b51ec48d81a0d840ad7c9f951b293ca24aae.jpg" src="../images/0db06433bf7ad3dbba5955420816b51ec48d81a0d840ad7c9f951b293ca24aae.jpg" /></p>
+<ul>
+<li>图片包含两个子图，分别展示 Berti 作为 L1D prefetcher 在 <strong>SPEC CPU2017</strong> 和 <strong>GAP</strong> 工作负载下的性能加速比（Speedup），基准为 <strong>L1D IP-stride</strong>。</li>
+<li>子图 (a) 展示了 44 个内存密集型 SPEC CPU2017 基准测试的加速比。横轴为各基准测试名称，纵轴为 Speedup 值。图中用三种颜色柱状图表示三种 prefetcher：<strong>MLOP</strong>（浅灰）、<strong>IPCP</strong>（中灰）、<strong>Berti</strong>（黑）。</li>
+<li>子图 (b) 展示了 20 个 GAP 基准测试的加速比。布局与 (a) 类似，但基准测试名称不同。</li>
+<li>在 SPEC CPU2017 中，<strong>Berti</strong> 在多个基准测试上表现最优，例如 <code>mcf_s-1554</code> 达到 <strong>1.6x</strong> 加速，<code>cactuBSSN_s-2421</code> 达到 <strong>1.7x</strong>。但在 <code>cactuBSSN_s-3477</code> 上，<strong>MLOP</strong> 表现更好。</li>
+<li>在 GAP 中，<strong>Berti</strong> 在大多数基准测试上优于 <strong>IPCP</strong> 和 <strong>MLOP</strong>，例如 <code>bc-5</code>、<code>bfs-10</code>、<code>sssp-10</code> 等。但在 <code>bfs-8</code>、<code>bfs-10</code>、<code>bfs-14</code> 上，<strong>IPCP</strong> 或 <strong>MLOP</strong> 略优。</li>
+<li>两个子图均在最右侧显示几何平均值（<strong>GEOMEAN</strong>）。SPEC CPU2017 的 GEOMEAN 显示 <strong>Berti</strong> 为 <strong>1.4x</strong>，<strong>IPCP</strong> 为 <strong>1.4x</strong>，<strong>MLOP</strong> 为 <strong>1.4x</strong>；GAP 的 GEOMEAN 显示 <strong>Berti</strong> 为 <strong>1.0x</strong>，<strong>IPCP</strong> 为 <strong>0.9x</strong>，<strong>MLOP</strong> 为 <strong>0.9x</strong>。</li>
+<li>图中部分柱状图顶部标注了具体加速比数值，如 <code>gcc_s-1850</code> 的 <strong>Berti</strong> 为 <strong>1.5x</strong>，<code>bwaves_s-2609</code> 的 <strong>Berti</strong> 为 <strong>1.6x</strong>。</li>
+<li>图例位于每个子图上方，清晰标明三种 prefetcher 对应的颜色。</li>
+<li>整体来看，<strong>Berti</strong> 在 SPEC CPU2017 上表现稳定且多数情况下领先，在 GAP 上则显著优于其他两种 prefetcher，尤其在不规则访问模式下优势明显。</li>
+</ul>
+<h3 id="figure-10-prefetch-accuracy-at-the-l1d-percentages-of-useful-requests-are-broken-down-into-timely-gray-and-late-black-prefetch-requests">Figure 10. Prefetch accuracy at the L1D. Percentages of useful requests are broken down into timely (gray) and late (black) prefetch requests.<a class="headerlink" href="#figure-10-prefetch-accuracy-at-the-l1d-percentages-of-useful-requests-are-broken-down-into-timely-gray-and-late-black-prefetch-requests" title="Permanent link">&para;</a></h3>
+<p><img alt="cbd4fe566452727c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg" src="../images/cbd4fe566452727c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 10</strong>，即 L1D 预取准确率的分解图，将有用请求按“及时”（Timely）和“延迟”（Late）两类进行区分。</li>
+<li>图表分为两个子图：(a) <strong>SPEC17-MemInt</strong> 和 (b) <strong>GAP</strong>，分别代表不同工作负载下的预取表现。</li>
+<li>所有柱状图均采用堆叠形式，灰色部分表示 <strong>Timely</strong> 请求占比，黑色部分表示 <strong>Late</strong> 请求占比，总高度代表整体预取准确率。</li>
+<li>在 <strong>SPEC17-MemInt</strong> 工作负载中：</li>
+<li><strong>IP-stride</strong> 准确率约 80%，其中约 75% 为 Timely，5% 为 Late。</li>
+<li><strong>MLOP</strong> 准确率约 65%，其中约 60% 为 Timely，5% 为 Late。</li>
+<li><strong>IPCP</strong> 准确率约 60%，其中约 55% 为 Timely，5% 为 Late。</li>
+<li><strong>Berti</strong> 准确率接近 <strong>90%</strong>，其中约 88% 为 Timely，仅约 2% 为 Late，显著优于其他预取器。</li>
+<li>在 <strong>GAP</strong> 工作负载中：</li>
+<li><strong>IP-stride</strong> 准确率约 75%，其中约 70% 为 Timely，5% 为 Late。</li>
+<li><strong>MLOP</strong> 准确率约 45%，其中约 35% 为 Timely，10% 为 Late。</li>
+<li><strong>IPCP</strong> 准确率约 20%，其中约 15% 为 Timely，5% 为 Late。</li>
+<li><strong>Berti</strong> 准确率约 <strong>85%</strong>，其中约 83% 为 Timely，仅约 2% 为 Late，优势更为明显。</li>
+<li>数据对比表明，<strong>Berti</strong> 不仅在整体准确率上领先，在 <strong>Timely</strong> 请求比例上也远超其他预取器，尤其在 GAP 这类不规则访问模式下表现突出。</li>
+<li>表格总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器</th>
+<th>SPEC17-MemInt 准确率</th>
+<th>SPEC17-Timely</th>
+<th>SPEC17-Late</th>
+<th>GAP 准确率</th>
+<th>GAP-Timely</th>
+<th>GAP-Late</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IP-stride</td>
+<td>~80%</td>
+<td>~75%</td>
+<td>~5%</td>
+<td>~75%</td>
+<td>~70%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>~65%</td>
+<td>~60%</td>
+<td>~5%</td>
+<td>~45%</td>
+<td>~35%</td>
+<td>~10%</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~60%</td>
+<td>~55%</td>
+<td>~5%</td>
+<td>~20%</td>
+<td>~15%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td><strong>Berti</strong></td>
+<td><strong>~90%</strong></td>
+<td><strong>~88%</strong></td>
+<td><strong>~2%</strong></td>
+<td><strong>~85%</strong></td>
+<td><strong>~83%</strong></td>
+<td><strong>~2%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>Berti</strong> 通过本地化、及时性感知的 Delta 选择机制，实现了高准确率与高及时性兼顾，有效减少无效预取和延迟请求，是当前最高效的 L1D 预取方案之一。</li>
+</ul>
+<h3 id="figure-11-prefetch-coverage-in-terms-of-average-l1d-l2-and-llc-demand-mpkis-for-all-l1d-prefetchers">Figure 11. Prefetch coverage in terms of average L1D, L2, and LLC demand MPKIs for all L1D prefetchers.<a class="headerlink" href="#figure-11-prefetch-coverage-in-terms-of-average-l1d-l2-and-llc-demand-mpkis-for-all-l1d-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="53c8582eeb0e26a3b2639cda0060bb7bedef2622cf80658ffe1d4e5909a69e82.jpg" src="../images/53c8582eeb0e26a3b2639cda0060bb7bedef2622cf80658ffe1d4e5909a69e82.jpg" /></p>
+<ul>
+<li>图片展示了在不同 L1D prefetcher 配置下，<strong>L1D、L2 和 LLC</strong> 三个层级的 <strong>Demand MPKI</strong>（每千条指令的缺失次数）对比，用于评估 prefetch coverage。</li>
+<li>数据分为两个子图：(a) <strong>SPEC17-MemInt</strong> 和 (b) <strong>GAP</strong> 工作负载。</li>
+<li>所有数据均基于 <strong>L1D prefetchers</strong> 的表现，包括 <strong>No-pref</strong>（无预取）、<strong>IP-stride</strong>、<strong>MLOP</strong>、<strong>IPCP</strong> 和 <strong>Berti</strong>。</li>
+<li><strong>Berti</strong> 在所有层级和工作负载中均表现出最低或接近最低的 MPKI，表明其具有最佳的预取覆盖能力。</li>
+<li>在 SPEC17-MemInt 中：</li>
+<li>L1D MPKI：Berti 约为 30，显著低于 No-pref（约 45）和 IP-stride（约 38）。</li>
+<li>L2 MPKI：Berti 约为 15，优于 MLOP（约 18）和 IPCP（约 17）。</li>
+<li>LLC MPKI：Berti 约为 10，明显低于其他所有配置。</li>
+<li>在 GAP 工作负载中：</li>
+<li>L1D MPKI：Berti 约为 80，略低于 IPCP（约 82），远优于 No-pref（约 90）。</li>
+<li>L2 MPKI：Berti 约为 20，优于 MLOP（约 25）和 IPCP（约 23）。</li>
+<li>LLC MPKI：Berti 约为 15，显著低于其他所有配置。</li>
+<li>总体来看，<strong>Berti</strong> 在减少各级缓存缺失方面表现最优，尤其在 <strong>LLC 层级</strong>，其覆盖效果最为突出。</li>
+<li>表格化数据摘要如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher</th>
+<th>L1D MPKI (SPEC17)</th>
+<th>L2 MPKI (SPEC17)</th>
+<th>LLC MPKI (SPEC17)</th>
+<th>L1D MPKI (GAP)</th>
+<th>L2 MPKI (GAP)</th>
+<th>LLC MPKI (GAP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No-pref</td>
+<td>~45</td>
+<td>~30</td>
+<td>~25</td>
+<td>~90</td>
+<td>~30</td>
+<td>~25</td>
+</tr>
+<tr>
+<td>IP-stride</td>
+<td>~38</td>
+<td>~20</td>
+<td>~15</td>
+<td>~85</td>
+<td>~25</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>~32</td>
+<td>~18</td>
+<td>~12</td>
+<td>~83</td>
+<td>~25</td>
+<td>~18</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~31</td>
+<td>~17</td>
+<td>~11</td>
+<td>~82</td>
+<td>~23</td>
+<td>~17</td>
+</tr>
+<tr>
+<td><strong>Berti</strong></td>
+<td><strong>~30</strong></td>
+<td><strong>~15</strong></td>
+<td><strong>~10</strong></td>
+<td><strong>~80</strong></td>
+<td><strong>~20</strong></td>
+<td><strong>~15</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Berti</strong> 的优势在于其基于 <strong>local deltas</strong> 的机制，能够更精准地预测未来访问，从而减少不必要的预取和缓存污染，提升整体覆盖效率。</li>
+</ul>
+<h3 id="figure-12-spedup-with-multi-level-prefetching-normalized-to-l1d-ipstride">Figure 12. Spedup with multi-level prefetching normalized to L1D IPstride.<a class="headerlink" href="#figure-12-spedup-with-multi-level-prefetching-normalized-to-l1d-ipstride" title="Permanent link">&para;</a></h3>
+<p><img alt="3668f5fc38f8417c788c8697f8f50b2b2d3c0ada4e9752cc3cd3dc2da778d05b.jpg" src="../images/3668f5fc38f8417c788c8697f8f50b2b2d3c0ada4e9752cc3cd3dc2da778d05b.jpg" /></p>
+<ul>
+<li>图片展示了多级预取（multi-level prefetching）方案相对于基线 L1D IP-stride 的性能加速比（Speedup），数据分为 SPEC17-MemInt 和 GAP 两个工作负载集。</li>
+<li><strong>Berti</strong> 在 L1D 单独使用时，已展现出卓越性能，在 SPEC17-MemInt 上达到约 <strong>1.12x</strong> 加速，在 GAP 上约为 <strong>1.03x</strong>。</li>
+<li>多级组合中，<strong>Berti+SPP-PPF</strong> 在 SPEC17-MemInt 上表现最佳，加速比接近 <strong>1.15x</strong>，在 GAP 上约为 <strong>1.04x</strong>。</li>
+<li><strong>MLOP+Bingo</strong> 组合在 SPEC17-MemInt 上也表现强劲，约 <strong>1.13x</strong>，但在 GAP 上仅略高于基线（约 <strong>1.01x</strong>）。</li>
+<li><strong>IPCP+IPCP</strong>（L1D + L2 均用 IPCP）在 SPEC17-MemInt 上约为 <strong>1.11x</strong>，在 GAP 上则低于基线（约 <strong>0.98x</strong>），显示其在不规则访问模式下效果不佳。</li>
+<li><strong>Berti+Bingo</strong> 在 SPEC17-MemInt 上加速比为 <strong>1.11x</strong>，在 GAP 上为 <strong>1.02x</strong>，表明 Berti 与 Bingo 结合仍具竞争力。</li>
+<li>总体来看，<strong>Berti 作为 L1D 预取器单独使用时，性能已优于多数多级组合</strong>，尤其在 GAP 工作负载上优势明显。</li>
+<li>表格总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取组合</th>
+<th>SPEC17-MemInt Speedup</th>
+<th>GAP Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLOP+Bingo</td>
+<td>~1.13</td>
+<td>~1.01</td>
+</tr>
+<tr>
+<td>IPCP+IPCP</td>
+<td>~1.11</td>
+<td>~0.98</td>
+</tr>
+<tr>
+<td>Berti+SPP-PPF</td>
+<td>~1.15</td>
+<td>~1.04</td>
+</tr>
+<tr>
+<td>MLOP+SPP-PPF</td>
+<td>~1.12</td>
+<td>~1.02</td>
+</tr>
+<tr>
+<td>Berti+Bingo</td>
+<td>~1.11</td>
+<td>~1.02</td>
+</tr>
+<tr>
+<td><strong>Berti (L1D only)</strong></td>
+<td><strong>~1.12</strong></td>
+<td><strong>~1.03</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据表明，尽管添加 L2 预取器可带来小幅提升，但<strong>Berti 本身已足够高效</strong>，无需复杂多级结构即可实现高性价比性能增益。</li>
+</ul>
+<h3 id="figure-13-prefetch-coverage-in-terms-of-average-l2-and-llc-demand-mpkis-with-multi-level-prefetching">Figure 13. Prefetch coverage in terms of average L2 and LLC demand MPKIs with multi-level prefetching.<a class="headerlink" href="#figure-13-prefetch-coverage-in-terms-of-average-l2-and-llc-demand-mpkis-with-multi-level-prefetching" title="Permanent link">&para;</a></h3>
+<p><img alt="6127f456b06e02846743ed259c809d104ead213f4a87d27a5427463c3fede01d.jpg" src="../images/6127f456b06e02846743ed259c809d104ead213f4a87d27a5427463c3fede01d.jpg" /></p>
+<ul>
+<li>图片展示了多级预取（multi-level prefetching）在不同工作负载下对 L2 和 LLC 层级的 <strong>Demand MPKI</strong>（每千条指令的缺失次数）的影响，分为 (a) SPEC17-MemInt 和 (b) GAP 两组。</li>
+<li>所有柱状图均对比了六种预取配置：MLOP、IPCP、Berti、MLOP+Bingo、IPCP+IPCP、Berti+SPP-PPF。</li>
+<li>在 <strong>SPEC17-MemInt</strong> 工作负载中：</li>
+<li>L2 层：所有预取器均显著降低 MPKI，其中 <strong>Berti+SPP-PPF</strong> 表现最优，MPKI 约为 8；MLOP 单独使用时 MPKI 最高（约 14），而 MLOP+Bingo 和 IPCP+IPCP 接近 Berti 的表现。</li>
+<li>LLC 层：<strong>Berti+SPP-PPF</strong> 同样表现最佳（MPKI ≈ 5），其次是 Berti 单独使用（≈6），MLOP+Bingo 和 IPCP+IPCP 表现相近（≈7），MLOP 和 IPCP 单独使用效果最差（≈10）。</li>
+<li>在 <strong>GAP</strong> 工作负载中：</li>
+<li>L2 层：<strong>Berti+SPP-PPF</strong> 和 <strong>Berti</strong> 单独使用表现接近且最优（MPKI ≈ 30），MLOP+Bingo 和 IPCP+IPCP 次之（≈35），MLOP 和 IPCP 单独使用效果较差（≈45）。</li>
+<li>LLC 层：<strong>Berti+SPP-PPF</strong> 和 <strong>Berti</strong> 均将 MPKI 降至极低水平（≈5），远优于其他组合（MLOP+Bingo 和 IPCP+IPCP 约为 15，MLOP 和 IPCP 约为 20）。</li>
+<li>数据总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>SPEC17-MemInt L2 MPKI</th>
+<th>SPEC17-MemInt LLC MPKI</th>
+<th>GAP L2 MPKI</th>
+<th>GAP LLC MPKI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLOP</td>
+<td>~14</td>
+<td>~10</td>
+<td>~45</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~12</td>
+<td>~9</td>
+<td>~45</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>Berti</td>
+<td>~9</td>
+<td>~6</td>
+<td>~30</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>MLOP+Bingo</td>
+<td>~10</td>
+<td>~7</td>
+<td>~35</td>
+<td>~15</td>
+</tr>
+<tr>
+<td>IPCP+IPCP</td>
+<td>~10</td>
+<td>~7</td>
+<td>~35</td>
+<td>~15</td>
+</tr>
+<tr>
+<td>Berti+SPP-PPF</td>
+<td><strong>~8</strong></td>
+<td><strong>~5</strong></td>
+<td><strong>~30</strong></td>
+<td><strong>~5</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键观察：<strong>Berti</strong> 无论单独使用还是与 L2 预取器结合，在 <strong>LLC 层均表现出色</strong>，尤其在 GAP 工作负载中几乎消除 LLC 缺失。这表明其本地化及时 delta 机制能有效减少高层缓存压力。</li>
+<li>多级预取在 SPEC17 中提升明显，但在 GAP 中提升有限，说明 <strong>Berti 本身已足够高效</strong>，额外 L2 预取收益较小。</li>
+<li><strong>Berti+SPP-PPF</strong> 是整体表现最优的组合，尤其在 SPEC17 中对 L2 和 LLC 均有显著优化，但其硬件开销远高于 Berti 单独使用。</li>
+</ul>
+<h3 id="figure-14-l2-llc-and-dram-demand-and-prefetch-traffic-normalized-to-no-prefetching">Figure 14. L2, LLC and DRAM demand and prefetch traffic normalized to no-prefetching.<a class="headerlink" href="#figure-14-l2-llc-and-dram-demand-and-prefetch-traffic-normalized-to-no-prefetching" title="Permanent link">&para;</a></h3>
+<p><img alt="cf5b73b2fd454291dd75367f85d1da4445ae767b3f3e64ba8855cf65d88e4e99.jpg" src="../images/cf5b73b2fd454291dd75367f85d1da4445ae767b3f3e64ba8855cf65d88e4e99.jpg" /></p>
+<ul>
+<li>图片展示了在不同 prefetcher 配置下，内存层级（L1D 到 L2、L2 到 LLC、LLC 到 DRAM）的归一化流量，基准为无 prefetching 的系统。</li>
+<li><strong>图 (a) 针对 memory-intensive SPEC CPU2017 工作负载</strong>，显示了 IP-Stride、MLOP、MLOP+Bingo、MLOP+SPP-PPF、IPCP、IPCP+IPCP、Berti、Berti+Bingo 和 Berti+SPP-PPF 等配置的流量变化。</li>
+<li><strong>图 (b) 针对 GAP 工作负载</strong>，结构与 (a) 相同，但数据反映 GAP 特有的访问模式。</li>
+<li>在 SPEC CPU2017 中，<strong>Berti 单独作为 L1D prefetcher 时，各层级流量增长最小</strong>，表明其高准确率有效减少了无用数据传输。</li>
+<li>对于 GAP 工作负载，<strong>Berti 同样表现出最低的流量增长</strong>，尤其在 L2 到 LLC 和 LLC 到 DRAM 层级，优于 IPCP 和 MLOP。</li>
+<li>当 Berti 与 L2 prefetcher（如 Bingo 或 SPP-PPF）组合时，虽然性能略有提升，但<strong>流量显著增加</strong>，尤其是在 LLC 到 DRAM 层级，说明 L2 prefetcher 引入了大量冗余请求。</li>
+<li><strong>IPCP 和 MLOP 在两种工作负载下均导致较高流量</strong>，尤其是 IPCP，在 GAP 中的流量增幅远超其他方案，与其低准确率一致。</li>
+<li>下表总结了关键配置在 SPEC CPU2017 和 GAP 中的归一化流量趋势：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher Configuration</th>
+<th>SPEC CPU2017 (L1D→L2)</th>
+<th>SPEC CPU2017 (L2→LLC)</th>
+<th>SPEC CPU2017 (LLC→DRAM)</th>
+<th>GAP (L1D→L2)</th>
+<th>GAP (L2→LLC)</th>
+<th>GAP (LLC→DRAM)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IP-Stride</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>~1.5</td>
+<td>~1.2</td>
+<td>~1.7</td>
+<td>~1.9</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~1.4</td>
+<td>~1.3</td>
+<td>~1.3</td>
+<td>~1.8</td>
+<td>~1.9</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td><strong>Berti</strong></td>
+<td><strong>~1.1</strong></td>
+<td><strong>~1.1</strong></td>
+<td><strong>~1.1</strong></td>
+<td><strong>~1.1</strong></td>
+<td><strong>~1.3</strong></td>
+<td><strong>~1.4</strong></td>
+</tr>
+<tr>
+<td>Berti + Bingo</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>~1.6</td>
+<td>~1.3</td>
+<td>~1.7</td>
+<td>~1.9</td>
+</tr>
+<tr>
+<td>Berti + SPP-PPF</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>~1.5</td>
+<td>~1.3</td>
+<td>~1.7</td>
+<td>~1.8</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，<strong>Berti 以极低的存储开销实现了最优的流量控制</strong>，验证了其“高准确率”设计目标，尤其在面对不规则访问模式（如 GAP）时优势明显。</li>
+</ul>
+<h3 id="figure-15-dynamic-energy-consumption-in-the-memory-hierarchy-normalized-to-no-prefetching">Figure 15. Dynamic energy consumption in the memory hierarchy normalized to no-prefetching.<a class="headerlink" href="#figure-15-dynamic-energy-consumption-in-the-memory-hierarchy-normalized-to-no-prefetching" title="Permanent link">&para;</a></h3>
+<p><img alt="389cf37418d52bf3dc4786d370e70de9a5480bd679944be886c7c2e146992d71.jpg" src="../images/389cf37418d52bf3dc4786d370e70de9a5480bd679944be886c7c2e146992d71.jpg" /></p>
+<ul>
+<li>图片展示了不同 prefetcher 配置下，内存层级的动态能耗相对于无 prefetching 基线的归一化值，数据分为 SPEC17-MemInt 和 GAP 两组工作负载。</li>
+<li><strong>Berti</strong> 在两种工作负载下均表现出最低的能耗开销，是能效最高的方案。</li>
+<li>对于 SPEC17-MemInt，Berti 的归一化能耗约为 <strong>1.09</strong>，显著低于 MLOP（约 1.3）、IPCP（约 1.4）和所有多级组合（如 Berti+Bingo 约 1.5、MLOP+Bingo 约 1.6）。</li>
+<li>对于 GAP 工作负载，Berti 的归一化能耗约为 <strong>1.14</strong>，与 MLOP（约 1.14）相当，但远优于 IPCP（约 1.87）及所有多级组合（如 Berti+SPP-PPF 约 1.5、MLOP+Bingo 约 1.8）。</li>
+<li>多级 prefetching 组合普遍带来更高的能耗，尤其在 GAP 上，Bingo 和 SPP-PPF 的加入导致能耗大幅上升，例如 MLOP+Bingo 达到约 <strong>1.8</strong>。</li>
+<li>数据表明，Berti 的高准确率（约 87%）直接转化为更低的无效流量和更少的 DRAM 访问，从而实现最优能效。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher Configuration</th>
+<th>SPEC17-MemInt (Normalized Energy)</th>
+<th>GAP (Normalized Energy)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No Prefetching</td>
+<td>1.00</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>IP-stride</td>
+<td>~1.35</td>
+<td>~1.25</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>~1.30</td>
+<td>~1.14</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~1.40</td>
+<td>~1.87</td>
+</tr>
+<tr>
+<td><strong>Berti</strong></td>
+<td><strong>~1.09</strong></td>
+<td><strong>~1.14</strong></td>
+</tr>
+<tr>
+<td>MLOP + SPP-PPF</td>
+<td>~1.50</td>
+<td>~1.50</td>
+</tr>
+<tr>
+<td>MLOP + Bingo</td>
+<td>~1.60</td>
+<td>~1.80</td>
+</tr>
+<tr>
+<td>IPCP + IPCP</td>
+<td>~1.45</td>
+<td>~1.90</td>
+</tr>
+<tr>
+<td>Berti + SPP-PPF</td>
+<td>~1.45</td>
+<td>~1.50</td>
+</tr>
+<tr>
+<td>Berti + Bingo</td>
+<td>~1.50</td>
+<td>~1.60</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：Berti 不仅性能领先，其<strong>低存储开销（2.55 KB）</strong>与<strong>高准确率</strong>共同实现了内存系统动态能耗的最小化，尤其在复杂访问模式的 GAP 工作负载上优势明显。</li>
+</ul>
+<h3 id="figure-16-performance-of-l1d-prefetchers-in-constrained-dram-bandwidth-in-mtps">Figure 16. Performance of L1D prefetchers in constrained DRAM bandwidth, in MTPS.<a class="headerlink" href="#figure-16-performance-of-l1d-prefetchers-in-constrained-dram-bandwidth-in-mtps" title="Permanent link">&para;</a></h3>
+<p><img alt="7e999c65bd4761c4645fd700c1797fcbe5234969cf078616c28705f3b4ec9c70.jpg" src="../images/7e999c65bd4761c4645fd700c1797fcbe5234969cf078616c28705f3b4ec9c70.jpg" /></p>
+<ul>
+<li>图片展示了在不同 DRAM 带宽约束下，三种 L1D prefetcher（<strong>MLOP</strong>、<strong>IPCP</strong>、<strong>Berti</strong>）的性能表现，以 Speedup 为衡量指标，基准为无 prefetcher 的系统。</li>
+<li>图表分为两个子图：(a) 针对 <strong>SPEC17-MemInt</strong> 工作负载，(b) 针对 <strong>GAP</strong> 工作负载。横轴为 DRAM 带宽（单位 MTPS），分别为 6400、3200、1600；纵轴为 Speedup。</li>
+<li>在 SPEC17-MemInt 场景下：</li>
+<li><strong>Berti</strong> 表现最优，Speedup 从 6400 MTPS 时的约 1.12 略降至 1600 MTPS 时的 1.10，整体波动极小。</li>
+<li><strong>IPCP</strong> 次之，Speedup 从约 1.09 缓慢下降至 1.08。</li>
+<li><strong>MLOP</strong> 最差，Speedup 从约 1.08 下降至 1.07，且始终低于其他两者。</li>
+<li>在 GAP 场景下：</li>
+<li><strong>Berti</strong> 同样保持最高性能，Speedup 维持在 1.05 上下，几乎不受带宽影响。</li>
+<li><strong>IPCP</strong> 和 <strong>MLOP</strong> 性能接近，均略低于 Berti，且随带宽降低略有下降，但幅度微弱。</li>
+<li>数据总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher</th>
+<th>Workload</th>
+<th>6400 MTPS</th>
+<th>3200 MTPS</th>
+<th>1600 MTPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Berti</td>
+<td>SPEC17-MemInt</td>
+<td>~1.12</td>
+<td>~1.11</td>
+<td>~1.10</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>SPEC17-MemInt</td>
+<td>~1.09</td>
+<td>~1.085</td>
+<td>~1.08</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>SPEC17-MemInt</td>
+<td>~1.08</td>
+<td>~1.075</td>
+<td>~1.07</td>
+</tr>
+<tr>
+<td>Berti</td>
+<td>GAP</td>
+<td>~1.05</td>
+<td>~1.05</td>
+<td>~1.05</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>GAP</td>
+<td>~1.00</td>
+<td>~0.99</td>
+<td>~0.98</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>GAP</td>
+<td>~0.93</td>
+<td>~0.92</td>
+<td>~0.91</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>Berti 在所有带宽条件下均表现出最强的鲁棒性与性能优势</strong>，尤其在高压力场景（如低带宽 + GAP 工作负载）下，其性能远超 MLOP 和 IPCP，证明其设计在资源受限环境下依然高效。</li>
+</ul>
+<h3 id="figure-17-performance-of-multi-level-prefetching-in-constrained-dram-bandwidth-in-mtps">Figure 17. Performance of multi-level prefetching in constrained DRAM bandwidth, in MTPS.<a class="headerlink" href="#figure-17-performance-of-multi-level-prefetching-in-constrained-dram-bandwidth-in-mtps" title="Permanent link">&para;</a></h3>
+<p><img alt="38544d9d6754f20cebd1e284d6b746f2e656c0b77c53f2df4c4b9327deda275b.jpg" src="../images/38544d9d6754f20cebd1e284d6b746f2e656c0b77c53f2df4c4b9327deda275b.jpg" /></p>
+<ul>
+<li>图片展示了在不同 DRAM 带宽约束下，多种多级预取组合（multi-level prefetching combinations）的性能表现，以 <strong>Speedup</strong> 为纵轴，<strong>MTPS</strong>（Million Transfers Per Second）为横轴，分为两个子图：(a) SPEC17-MemInt 和 (b) GAP。</li>
+<li>所有数据点均基于与无预取基线相比的性能提升，<strong>Speedup = 1.00 表示无性能增益</strong>。</li>
+<li>图例中包含五种预取组合：</li>
+<li>MLOP+Bingo（菱形）</li>
+<li>IPCP+IPCP（方块）</li>
+<li>Berti+SPP-PPF（实心圆）</li>
+<li>MLOP+SPP-PPF（空心菱形）</li>
+<li>Berti+Bingo（实心菱形）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取组合</th>
+<th>图 (a) SPEC17-MemInt 性能趋势</th>
+<th>图 (b) GAP 性能趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLOP+Bingo</td>
+<td>从 6400 MTPS 到 1600 MTPS 略微下降，约 1.10 → 1.08</td>
+<td>基本持平，维持在 1.00–1.01 之间</td>
+</tr>
+<tr>
+<td>IPCP+IPCP</td>
+<td>从 6400 MTPS 到 1600 MTPS 略微下降，约 1.08 → 1.05</td>
+<td>基本持平，略低于 1.00</td>
+</tr>
+<tr>
+<td>Berti+SPP-PPF</td>
+<td>从 6400 MTPS 到 1600 MTPS 略微下降，约 1.12 → 1.09</td>
+<td>基本持平，维持在 1.00–1.01 之间</td>
+</tr>
+<tr>
+<td>MLOP+SPP-PPF</td>
+<td>从 6400 MTPS 到 1600 MTPS 略微下降，约 1.09 → 1.07</td>
+<td>基本持平，略低于 1.00</td>
+</tr>
+<tr>
+<td>Berti+Bingo</td>
+<td>从 6400 MTPS 到 1600 MTPS 略微下降，约 1.11 → 1.08</td>
+<td>基本持平，略高于 1.00</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 <strong>SPEC17-MemInt</strong> 工作负载中，所有预取组合在带宽降低时性能略有下降，但降幅极小（最大不超过 0.05），表明这些预取器对 DRAM 带宽变化具有较强鲁棒性。</li>
+<li>在 <strong>GAP</strong> 工作负载中，所有组合性能基本不受带宽影响，<strong>Speedup 均接近 1.00</strong>，说明 GAP 的内存访问模式对预取不敏感或带宽不是瓶颈。</li>
+<li><strong>Berti+SPP-PPF</strong> 在 SPEC17-MemInt 中始终表现最优，即使在最低带宽 1600 MTPS 下仍保持约 1.09 的加速比。</li>
+<li><strong>IPCP+IPCP</strong> 在两种工作负载下均表现最弱，尤其在 GAP 中甚至略低于基线。</li>
+<li>结论：<strong>多级预取组合在带宽受限环境下仍能保持稳定性能，Berti 作为 L1D 预取器在高带宽和低带宽下均表现出色，尤其在 SPEC17-MemInt 中优势明显。</strong></li>
+</ul>
+<h3 id="figure-18-speedup-for-cloudsuite">Figure 18. Speedup for CloudSuite.<a class="headerlink" href="#figure-18-speedup-for-cloudsuite" title="Permanent link">&para;</a></h3>
+<p><img alt="c2096c417f3361eddee914accc1d436bcbf7a0617d2a5acc9293e173f009adb4.jpg" src="../images/c2096c417f3361eddee914accc1d436bcbf7a0617d2a5acc9293e173f009adb4.jpg" /></p>
+<ul>
+<li>
+<p>图片为 <strong>Figure 18</strong>，标题为 “Speedup for CloudSuite”，展示的是在 <strong>CloudSuite</strong> 工作负载下不同 prefetcher 组合的性能加速比（Speedup）。</p>
+</li>
+<li>
+<p>横轴列出五个 CloudSuite 应用：<strong>Cassandra</strong>、<strong>Classification</strong>、<strong>Cloud9</strong>、<strong>Nutch</strong> 和 <strong>Streaming</strong>。</p>
+</li>
+<li>
+<p>纵轴表示 Speedup，基准为 <strong>L1D IP-stride</strong>，即所有加速比均相对于该基线。</p>
+</li>
+<li>
+<p>图例中包含六种配置：</p>
+</li>
+<li>
+<p><strong>MLOP</strong>（浅灰色实心）</p>
+</li>
+<li><strong>IPCP</strong>（深灰色实心）</li>
+<li><strong>Berti+Bingo</strong>（斜线填充）</li>
+<li><strong>MLOP+Bingo</strong>（网格填充）</li>
+<li><strong>IPCP+IPCP</strong>（点状填充）</li>
+<li><strong>Berti+SPP-PPF</strong>（交叉斜线填充）</li>
+<li>
+<p><strong>Berti</strong>（黑色实心）</p>
+</li>
+<li>
+<p><strong>关键观察</strong>：</p>
+</li>
+<li>
+<p>在 <strong>Classification</strong> 应用中，<strong>Berti</strong> 表现突出，其加速比显著高于其他所有配置，接近 <strong>1.05</strong>，而其他配置大多低于或等于 <strong>1.00</strong>。</p>
+</li>
+<li>在 <strong>Cassandra</strong> 中，<strong>Berti+SPP-PPF</strong> 和 <strong>Berti+Bingo</strong> 表现最佳，加速比约为 <strong>1.07–1.08</strong>，优于单独使用 Berti 或其他组合。</li>
+<li>在 <strong>Cloud9</strong>、<strong>Nutch</strong> 和 <strong>Streaming</strong> 中，各配置表现接近，多数在 <strong>1.00–1.02</strong> 之间，无明显优劣。</li>
+<li>
+<p><strong>Berti</strong> 单独运行时，在除 Classification 外的其他应用中表现稳定，基本持平或略优于 MLOP 和 IPCP。</p>
+</li>
+<li>
+<p><strong>数据汇总表</strong>：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Application</th>
+<th>MLOP</th>
+<th>IPCP</th>
+<th>Berti+Bingo</th>
+<th>MLOP+Bingo</th>
+<th>IPCP+IPCP</th>
+<th>Berti+SPP-PPF</th>
+<th>Berti</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cassandra</td>
+<td>~1.02</td>
+<td>~1.03</td>
+<td>~1.07</td>
+<td>~1.06</td>
+<td>~1.04</td>
+<td>~1.08</td>
+<td>~1.05</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>~0.98</td>
+<td>~0.99</td>
+<td>~1.00</td>
+<td>~0.99</td>
+<td>~0.99</td>
+<td>~1.00</td>
+<td><strong>~1.05</strong></td>
+</tr>
+<tr>
+<td>Cloud9</td>
+<td>~1.01</td>
+<td>~1.01</td>
+<td>~1.02</td>
+<td>~1.01</td>
+<td>~1.01</td>
+<td>~1.02</td>
+<td>~1.01</td>
+</tr>
+<tr>
+<td>Nutch</td>
+<td>~1.00</td>
+<td>~1.00</td>
+<td>~1.01</td>
+<td>~1.00</td>
+<td>~1.00</td>
+<td>~1.01</td>
+<td>~1.00</td>
+</tr>
+<tr>
+<td>Streaming</td>
+<td>~1.00</td>
+<td>~1.00</td>
+<td>~1.01</td>
+<td>~1.00</td>
+<td>~1.00</td>
+<td>~1.01</td>
+<td>~1.00</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>结论</strong>：</li>
+<li><strong>Berti</strong> 在 <strong>Classification</strong> 上展现出独特优势，是唯一能带来显著加速的方案。</li>
+<li>对于 <strong>Cassandra</strong>，结合 L2 prefetcher（如 SPP-PPF 或 Bingo）可进一步提升性能。</li>
+<li>在其余 CloudSuite 应用中，各 prefetcher 配置差异不大，说明这些工作负载对 prefetching 敏感度较低。</li>
+<li>整体而言，<strong>Berti</strong> 在 CloudSuite 场景下具备良好的适应性和稳定性，尤其在特定应用中表现卓越。</li>
+</ul>
+<h3 id="figure-19-speedup-with-and-without-misb">Figure 19. Speedup with and without MISB.<a class="headerlink" href="#figure-19-speedup-with-and-without-misb" title="Permanent link">&para;</a></h3>
+<p><img alt="f0ad7314ee6fb097bc497bd065f4702529e4d448f61b15ae83945f583532a2f6.jpg" src="../images/f0ad7314ee6fb097bc497bd065f4702529e4d448f61b15ae83945f583532a2f6.jpg" /></p>
+<ul>
+<li>图片为 <strong>Figure 19</strong>，标题为 “Speedup with and without MISB”，展示的是在不同工作负载下，结合或不结合 <strong>MISB</strong>（Managed Irregular Stream Buffer） prefetcher 时的性能加速比（Speedup）。</li>
+<li>横轴分为三组：<strong>SPEC17-MemInt</strong>、<strong>GAP</strong> 和 <strong>Cloud</strong>，分别代表内存密集型的 SPEC CPU2017、GAP 基准测试和 CloudSuite 应用。</li>
+<li>纵轴为 Speedup，基准为 1.0，表示无 prefetcher 的性能。</li>
+<li>图例中包含六种组合：</li>
+<li>MLOP</li>
+<li>IPCP</li>
+<li>Berti</li>
+<li>MLOP+SPP-PPF</li>
+<li>IPCP+IPCP</li>
+<li>Berti+SPP-PPF</li>
+<li>MLOP+MISB</li>
+<li>IPCP+MISB</li>
+<li>Berti+MISB</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>最佳组合</th>
+<th>加速比（Speedup）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC17-MemInt</td>
+<td><strong>Berti+MISB</strong></td>
+<td>~1.18</td>
+</tr>
+<tr>
+<td>GAP</td>
+<td><strong>Berti+MISB</strong></td>
+<td>~1.05</td>
+</tr>
+<tr>
+<td>Cloud</td>
+<td><strong>Berti+MISB</strong></td>
+<td>~1.08</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 <strong>SPEC17-MemInt</strong> 中，<strong>Berti+MISB</strong> 组合表现最佳，加速比接近 1.18；而单独使用 Berti 也优于 MLOP 和 IPCP。</li>
+<li>在 <strong>GAP</strong> 工作负载中，<strong>Berti+MISB</strong> 同样领先，但整体加速比较低（约 1.05），说明该类负载对 prefetcher 效果有限。</li>
+<li>在 <strong>Cloud</strong> 工作负载中，<strong>Berti+MISB</strong> 再次取得最高加速比（约 1.08），尤其在 Cassandra 和 Classification 上效果显著。</li>
+<li><strong>MISB</strong> 作为 L2 层的 temporal prefetcher，在与 Berti 结合后能进一步提升性能，特别是在 CloudSuite 场景下。</li>
+<li>单独比较 L1D prefetchers，<strong>Berti</strong> 在所有三组中均优于 MLOP 和 IPCP，验证其高准确性和及时性优势。</li>
+<li>尽管 MISB 带来性能增益，但其存储开销高达 <strong>98 KB</strong>（含 32 KB metadata cache 和 17 KB Bloom filter），需权衡成本与收益。</li>
+</ul>
+<h3 id="figure-20-summary-of-multi-core-speedups-relative-to-a-system-with-l1d-ip-stride-prefetcher">Figure 20. Summary of multi-core speedups relative to a system with L1D IP-stride prefetcher.<a class="headerlink" href="#figure-20-summary-of-multi-core-speedups-relative-to-a-system-with-l1d-ip-stride-prefetcher" title="Permanent link">&para;</a></h3>
+<p><img alt="2399bb0f4c22cb63e6612888988aa041dbcbd1c53d70679f5cec45a399b16cf1.jpg" src="../images/2399bb0f4c22cb63e6612888988aa041dbcbd1c53d70679f5cec45a399b16cf1.jpg" /></p>
+<ul>
+<li>图片展示了在多核系统中，不同 prefetcher 组合相对于 L1D IP-stride 基线的性能加速比（Speedup），数据基于 200 个异构混合负载的平均值。</li>
+<li><strong>Berti</strong> 在单级预取配置下表现最优，其加速比达到 <strong>1.16</strong>，显著优于 MLOP（约 1.12）和 IPCP（约 1.14）。</li>
+<li>多级预取组合中，<strong>Berti+Bingo</strong> 和 <strong>Berti+SPP-PPF</strong> 表现最佳，加速比分别约为 <strong>1.18</strong> 和 <strong>1.17</strong>，略高于 MLOP+Bingo 和 IPCP+IPCP。</li>
+<li>尽管多级预取组合性能略有提升，但 Berti 单独作为 L1D 预取器已能提供接近最优性能，且硬件开销更低。</li>
+<li>数据表明，在多核环境下，Berti 的本地化、及时性 delta 预取机制能有效应对共享 DRAM 带宽竞争，保持高覆盖率。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher Configuration</th>
+<th>Speedup (Multi-core)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLOP</td>
+<td>~1.12</td>
+</tr>
+<tr>
+<td>IPCP</td>
+<td>~1.14</td>
+</tr>
+<tr>
+<td><strong>Berti</strong></td>
+<td><strong>~1.16</strong></td>
+</tr>
+<tr>
+<td>MLOP + Bingo</td>
+<td>~1.17</td>
+</tr>
+<tr>
+<td>MLOP + SPP-PPF</td>
+<td>~1.16</td>
+</tr>
+<tr>
+<td>IPCP + IPCP</td>
+<td>~1.16</td>
+</tr>
+<tr>
+<td><strong>Berti + Bingo</strong></td>
+<td><strong>~1.18</strong></td>
+</tr>
+<tr>
+<td><strong>Berti + SPP-PPF</strong></td>
+<td><strong>~1.17</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图例清晰区分了单级与多级预取策略，其中 Berti 以纯黑色填充条形图表示，突出其核心地位。</li>
+<li>结论：Berti 不仅在单核场景下表现优异，在多核混合负载中仍保持领先，验证了其设计在复杂环境下的鲁棒性。</li>
+</ul>
+<h3 id="figure-21-normalized-speedup-with-different-l1d-and-l2-confidence-watermarks-averaged-across-memory-intensive-spec-cpu2017-and-gap-benchmarks-speedup-is-rounded-to-two-decimal-places-1085-is-rounded-to-109">Figure 21. Normalized speedup with different L1D and L2 confidence watermarks averaged across memory intensive SPEC CPU2017 and GAP benchmarks. Speedup is rounded to two decimal places (1.085 is rounded to 1.09).<a class="headerlink" href="#figure-21-normalized-speedup-with-different-l1d-and-l2-confidence-watermarks-averaged-across-memory-intensive-spec-cpu2017-and-gap-benchmarks-speedup-is-rounded-to-two-decimal-places-1085-is-rounded-to-109" title="Permanent link">&para;</a></h3>
+<p><img alt="4a12a3b3d96dbbf8433945d01658207113105ef3a53fa392a974724ecdaa3778.jpg" src="../images/4a12a3b3d96dbbf8433945d01658207113105ef3a53fa392a974724ecdaa3778.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Figure 21</strong>，用于分析 <strong>Berti</strong> 预取器在不同 <strong>L1D confidence</strong> 和 <strong>L2 confidence</strong> 水印配置下的归一化性能加速比（speedup），数据基于内存密集型的 <strong>SPEC CPU2017</strong> 和 <strong>GAP</strong> 基准测试集平均得出。</li>
+<li>图中每个单元格代表一组特定的 L1D 和 L2 置信度水印组合所对应的性能加速比，数值已四舍五入至两位小数。</li>
+<li>右侧颜色条表示加速比范围：从深色（1.10）到浅色（0.80），颜色越深表示性能提升越高。</li>
+<li><strong>最佳性能区域</strong>集中在 L1D 置信度为 60–80、L2 置信度为 30–50 的区间，其中多个组合达到 <strong>1.09</strong> 的最高加速比。</li>
+<li>当 L1D 置信度过高（如 90 或 100）或过低（如 0 或 10），性能明显下降，最低值降至 <strong>0.84</strong>。</li>
+<li>L2 置信度对性能影响相对平缓，但在 L1D 置信度适中时，L2 置信度在 30–50 区间内能维持较高性能。</li>
+<li>下表列出部分关键配置及其对应加速比：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>L1D Confidence</th>
+<th>L2 Confidence</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60</td>
+<td>40</td>
+<td>1.09</td>
+</tr>
+<tr>
+<td>70</td>
+<td>30</td>
+<td>1.09</td>
+</tr>
+<tr>
+<td>80</td>
+<td>30</td>
+<td>1.09</td>
+</tr>
+<tr>
+<td>90</td>
+<td>90</td>
+<td>0.91</td>
+</tr>
+<tr>
+<td>100</td>
+<td>100</td>
+<td>0.84</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1.02</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>论文作者最终选择的配置是 <strong>L1D &gt; 65%</strong> 和 <strong>L2 在 35%–65%</strong>，该配置在保证高准确率的同时实现最大加速比，符合“甜点”设计原则。</li>
+<li>实验表明，极端水印设置会同时损害覆盖度与准确率，从而降低整体性能；而适度宽松的水印策略反而能获得更稳定的高性能表现。</li>
+</ul>
+<h3 id="figure-22-speedup-vs-size-of-berti-tables-and-number-of-deltas-025-to-4-correspond-to-one-fourth-and-four-times-respectively">Figure 22. Speedup vs. size of Berti tables and number of deltas. 0.25× to 4× correspond to one-fourth and four times, respectively.<a class="headerlink" href="#figure-22-speedup-vs-size-of-berti-tables-and-number-of-deltas-025-to-4-correspond-to-one-fourth-and-four-times-respectively" title="Permanent link">&para;</a></h3>
+<p><img alt="bfb45b72321f62154d8853a2de580f24fc0839105ec810edf4a43fc3a60a8226.jpg" src="../images/bfb45b72321f62154d8853a2de580f24fc0839105ec810edf4a43fc3a60a8226.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Berti</strong> 预取器在不同硬件表大小配置下的性能表现，横轴为表尺寸缩放比例（0.25× 至 4×），纵轴为相对于基线的 <strong>Speedup</strong>。</li>
+<li>图中包含三条曲线，分别对应三种关键结构：<strong>History Table</strong>（黑色方块）、<strong>Table of deltas</strong>（灰色菱形）和 <strong>Num. Deltas</strong>（白色圆圈）。</li>
+<li><strong>History Table</strong> 的性能对尺寸变化不敏感，在 0.5× 以上即达到稳定，最大 Speedup 约为 <strong>1.08</strong>。</li>
+<li><strong>Table of deltas</strong> 对尺寸极为敏感：从 0.25× 的 <strong>0.97</strong> 急剧上升至 1× 的 <strong>1.08</strong>，之后趋于平稳；若缩小至 0.25×，性能下降 <strong>12.1%</strong>。</li>
+<li><strong>Num. Deltas</strong> 表现最稳健：即使减少至 0.25×，仅损失 <strong>1.2%</strong> 性能；扩大至 4× 也无明显增益。</li>
+<li>特殊案例 <strong>CactuBSSN</strong> 在表尺寸增至 1024 entries × 1024 sets 时，性能提升高达 <strong>22%</strong>，表明其对大容量历史记录有强依赖。</li>
+<li>综合来看，<strong>Table of deltas</strong> 是性能瓶颈所在，其最小有效尺寸为 1×；而 <strong>History Table</strong> 和 <strong>Num. Deltas</strong> 可适度裁剪以节省资源。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>结构名称</th>
+<th>0.25× Speedup</th>
+<th>1× Speedup</th>
+<th>4× Speedup</th>
+<th>性能敏感度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>History Table</td>
+<td>~1.06</td>
+<td>~1.08</td>
+<td>~1.08</td>
+<td>低</td>
+</tr>
+<tr>
+<td>Table of deltas</td>
+<td>~0.97</td>
+<td>~1.08</td>
+<td>~1.08</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>Num. Deltas</td>
+<td>~1.07</td>
+<td>~1.08</td>
+<td>~1.08</td>
+<td>低</td>
+</tr>
+</tbody>
+</table>
+<h3 id="858152efcb118d2661e170e4085b1cb236c59b9d382bdd500282fe619d17036fjpg">858152efcb118d2661e170e4085b1cb236c59b9d382bdd500282fe619d17036f.jpg<a class="headerlink" href="#858152efcb118d2661e170e4085b1cb236c59b9d382bdd500282fe619d17036fjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="858152efcb118d2661e170e4085b1cb236c59b9d382bdd500282fe619d17036f.jpg" src="../images/858152efcb118d2661e170e4085b1cb236c59b9d382bdd500282fe619d17036f.jpg" /></p>
+<ul>
+<li>图片展示了一张包含三列数据的表格，用于对比三种不同 L1D 数据预取器（Prefetch）在 SPEC CPU2017 内存密集型工作负载下的性能表现。</li>
+<li>表格中的三列分别为：<strong>Prefetch</strong>（预取器名称）、<strong>Speedup</strong>（相对于基线 IP-stride 的性能加速比）、<strong>L1D Accuracy</strong>（L1 数据缓存预取准确率）。</li>
+<li>三种预取器及其对应数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetch</th>
+<th>Speedup</th>
+<th>L1D Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IPCP</strong></td>
+<td>09%</td>
+<td>64.9%</td>
+</tr>
+<tr>
+<td><strong>MLOP</strong></td>
+<td>08%</td>
+<td>68.0%</td>
+</tr>
+<tr>
+<td><strong>Berti</strong></td>
+<td><strong>12%</strong></td>
+<td><strong>88.0%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Berti</strong> 在两项指标上均显著优于其他两种预取器。其 <strong>12% 的加速比</strong> 是三者中最高的，表明其能更有效地提升处理器性能；同时，其 <strong>88.0% 的预取准确率</strong> 远高于 IPCP（64.9%）和 MLOP（68.0%），说明其预取请求绝大多数是有效的，极少产生无用数据流量。</li>
+<li>该结果验证了论文的核心主张：基于局部指令指针（IP）的及时 delta 预取机制（Berti）能够实现高覆盖、高精度和高时效性，从而在有限存储开销下获得最优性能与能效。</li>
+</ul>
+<h3 id="7f32b701fd7b08333cbcccd3884aa33e80ae1d5bc0fb7634b8f5ba832223222ejpg">7f32b701fd7b08333cbcccd3884aa33e80ae1d5bc0fb7634b8f5ba832223222e.jpg<a class="headerlink" href="#7f32b701fd7b08333cbcccd3884aa33e80ae1d5bc0fb7634b8f5ba832223222ejpg" title="Permanent link">&para;</a></h3>
+<p><img alt="7f32b701fd7b08333cbcccd3884aa33e80ae1d5bc0fb7634b8f5ba832223222e.jpg" src="../images/7f32b701fd7b08333cbcccd3884aa33e80ae1d5bc0fb7634b8f5ba832223222e.jpg" /></p>
+<ul>
+<li>图片展示了一个用于计算 <strong>L1D Accuracy</strong> 的数学公式，该公式在论文的附录 G 中被定义为衡量预取器效率的关键指标。</li>
+<li>公式结构清晰，分子部分为 <code>L1DPrefetchLate + L1DPrefetchTimely</code>，分母部分为 <code>L1DPrefetchFill</code>。</li>
+<li>分子中的 <code>L1DPrefetchLate</code> 代表在 L1 数据缓存（L1D）中因预取请求过晚而到达的预取填充次数；<code>L1DPrefetchTimely</code> 代表及时到达的预取填充次数。两者相加即为所有成功的预取填充总数。</li>
+<li>分母 <code>L1DPrefetchFill</code> 表示由预取器触发并最终填充到 L1D 缓存中的总请求数量，无论其是否及时或有用。</li>
+<li>根据论文附录 G 的说明，此公式的计算结果代表了预取器带来的“无用流量”比例的反面，即 <strong>预取准确率</strong>。例如，90% 的准确率意味着只有 10% 的预取数据是无用的。</li>
+<li>该公式与 ChampSim 模拟器默认报告的 L1D 准确率不同，后者可能包含更多上下文信息。Berti 论文采用此自定义公式以更精确地反映预取器对系统流量的实际影响。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1DPrefetchLate</strong></td>
+<td>在 L1D 中迟到的预取填充次数</td>
+</tr>
+<tr>
+<td><strong>L1DPrefetchTimely</strong></td>
+<td>在 L1D 中及时到达的预取填充次数</td>
+</tr>
+<tr>
+<td><strong>L1DPrefetchFill</strong></td>
+<td>预取器触发并成功填充到 L1D 的总次数</td>
+</tr>
+<tr>
+<td><strong>L1D Accuracy</strong></td>
+<td><code>(L1DPrefetchLate + L1DPrefetchTimely) / L1DPrefetchFill</code>，表示预取的有效性</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此公式的设计核心在于强调 <strong>预取的实用性</strong>，而非单纯的成功率。它将所有成功填充（无论及时与否）视为“有用”，从而直接量化了预取器引入的冗余流量比例。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

@@ -15,7 +15,8 @@
       "Xinpian Technology Co., Ltd."
     ],
     "venue": "MICRO",
-    "year": 2025
+    "year": 2025,
+    "doi": "10.1145/3725843.3756059"
   },
-  "description": "提出Titan-I (T1)，一个开源、高性能的乱序RISC-V向量核，通过粗粒度布局规划器、数据通路级置换单元和掩码寄存器缓存解决VLEN/DLEN扩展难题，并采用细粒度链接、提交即发射等技术提升ILP。在密码学 workload 上，T1以40%面积实现对Nvidia 3090/5090最高2.41倍/1.85倍加速；在HPC上，以19%面积达到HiSilicon TaiShan V120性能，并在4倍数据通路扩展下获得4.59倍加速。"
+  "description": "提出Titan-I (T1)，一个开源、高性能的乱序RISC-V向量核，通过粗粒度布局求解器、全数据通路置换单元和掩码寄存器缓存解决扩展VLEN/DLEN时的布线瓶颈。结合细粒度链接、提交即发射等技术优化ILP。在密码学 workload 上比Nvidia 3090/5090快2.41x/1.85x，在HPC上比HiSilicon KP920快4.59x（4倍数据通路），面积仅为其19%。"
 }

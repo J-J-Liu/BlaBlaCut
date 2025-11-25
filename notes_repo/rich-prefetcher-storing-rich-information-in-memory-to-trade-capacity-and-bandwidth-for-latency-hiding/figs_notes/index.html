@@ -764,9 +764,11 @@
 <li>左侧图示为 <strong>single-offset trigger mechanism</strong> 的局限性：在 4 KB 空间区域内，两个访问流 A 和 B 均从地址 0x1 开始访问，但后续路径不同（A 访问 0x4, 0xc；B 访问 0xc, 0x1），单偏移机制仅凭首个偏移量无法区分二者，导致误预测。</li>
 <li>右侧图示为 <strong>multi-offset trigger mechanism</strong> 的优势：通过记录多个访问偏移（如 0x1 和 0x4 对应流 A，0x1 和 0xc 对应流 B），系统可识别出两个流虽起始相同，但后续行为不同，从而分别建模并准确预测。</li>
 <li>该机制的核心在于利用 <strong>多偏移信息</strong> 验证访问模式的连续性和方向性，避免将“common-origin, later-divergent”流错误归类为同一模式。</li>
-<li>图中明确标注了两个访问流的具体地址序列：</li>
+<li>图中明确标注了两个访问流的具体地址序列：<ul>
 <li>流 A 地址：<strong>0x1, 0x4, 0xc</strong></li>
 <li>流 B 地址：<strong>0x1, 0xc, 0x4</strong></li>
+</ul>
+</li>
 <li>此设计直接支持 RICH prefetcher 中对 16 KB 区域采用 (PC, 5 offsets) 触发策略，以提升大区域预取的准确性，同时牺牲部分覆盖率换取高精度。</li>
 </ul>
 <table>
@@ -799,12 +801,16 @@
 <h3 id="figure-3-by-using-more-access-offsets-in-a-trigger-we-can-trade-off-between-the-accuracy-and-coverage-of-prefetching-specifically-a-band-c-correspond-to-16-kb-region-4-kbregion-and-2-kb-region">Figure 3: By using more access offsets in a trigger, we can trade off between the accuracy and coverage of prefetching. Specifically, a), b),and c) correspond to 16 KB-region, 4 KBregion, and 2 KB-region.<a class="headerlink" href="#figure-3-by-using-more-access-offsets-in-a-trigger-we-can-trade-off-between-the-accuracy-and-coverage-of-prefetching-specifically-a-band-c-correspond-to-16-kb-region-4-kbregion-and-2-kb-region" title="Permanent link">&para;</a></h3>
 <p><img alt="1f10b5e59c03da97147d1e6f49132168e55c6d8bffc6ba398eef1107e5abb7ce.jpg" src="../images/1f10b5e59c03da97147d1e6f49132168e55c6d8bffc6ba398eef1107e5abb7ce.jpg" /></p>
 <ul>
-<li>图片展示了在不同空间区域大小（16 KB、4 KB、2 KB）下，使用不同数量的访问偏移量（offsets）作为触发条件时，预取器的 <strong>Accuracy</strong>（准确率）、<strong>Coverage</strong>（覆盖率）和 <strong>Timeliness</strong>（及时性）三者之间的权衡关系。</li>
-<li>三个子图分别对应：</li>
+<li>
+<p>图片展示了在不同空间区域大小（16 KB、4 KB、2 KB）下，使用不同数量的访问偏移量（offsets）作为触发条件时，预取器的 <strong>Accuracy</strong>（准确率）、<strong>Coverage</strong>（覆盖率）和 <strong>Timeliness</strong>（及时性）三者之间的权衡关系。</p>
+</li>
+<li>
+<p>三个子图分别对应：</p>
+<ul>
 <li><strong>a) 16 KB-region</strong>：随着触发条件中包含的偏移量从 (PC,1 offset) 增加到 (PC,10 offsets)，<strong>Accuracy</strong> 从约50%显著上升至接近100%，而 <strong>Coverage</strong> 则从约50%持续下降至约20%，<strong>Timeliness</strong> 基本保持稳定在75%-80%区间。</li>
 <li><strong>b) 4 KB-region</strong>：随着偏移量从 (PC,1 offset) 增加到 (PC,8 offsets)，<strong>Accuracy</strong> 从约65%上升至约95%，<strong>Coverage</strong> 从约60%下降至约25%，<strong>Timeliness</strong> 稍有下降但仍维持在75%左右。</li>
-<li>
-<p><strong>c) 2 KB-region</strong>：随着偏移量从 (PC,1 offset) 增加到 (PC,8 offsets)，<strong>Accuracy</strong> 从约65%上升至约95%，<strong>Coverage</strong> 从约60%下降至约25%，<strong>Timeliness</strong> 略有波动但基本稳定在70%以上。</p>
+<li><strong>c) 2 KB-region</strong>：随着偏移量从 (PC,1 offset) 增加到 (PC,8 offsets)，<strong>Accuracy</strong> 从约65%上升至约95%，<strong>Coverage</strong> 从约60%下降至约25%，<strong>Timeliness</strong> 略有波动但基本稳定在70%以上。</li>
+</ul>
 </li>
 <li>
 <p>数据趋势总结如下：</p>
@@ -841,22 +847,28 @@
 </tbody>
 </table>
 <ul>
-<li>核心结论：</li>
+<li>核心结论：<ul>
 <li>增加触发条件中的访问偏移量可有效提升 <strong>Accuracy</strong>，尤其在大区域（如16 KB）中效果显著，能将准确率从不足50%提升至90%以上。</li>
 <li>代价是 <strong>Coverage</strong> 显著降低，因为更严格的触发条件导致更少的预取机会被激活。</li>
 <li><strong>Timeliness</strong> 受影响较小，表明该机制主要影响预测是否发生，而非预测时机。</li>
-<li>RICH设计据此采用差异化策略：对16 KB区域采用<strong>(PC,5 offsets)</strong>以追求高精度，对4 KB区域采用<strong>(PC,3 offsets)</strong>平衡精度与覆盖，对2 KB区域保留<strong>(PC,1 offset)</strong>或<strong>(PC,address)</strong>以最大化覆盖。</li>
+<li>RICH设计据此采用差异化策略：对16 KB区域采用**(PC,5 offsets)<strong>以追求高精度，对4 KB区域采用</strong>(PC,3 offsets)<strong>平衡精度与覆盖，对2 KB区域保留</strong>(PC,1 offset)<strong>或</strong>(PC,address)**以最大化覆盖。</li>
+</ul>
+</li>
 </ul>
 <h3 id="24623341e46f13ed9c6004980d11054a104d928f1085abdd3d49c538fd7c2597jpg">24623341e46f13ed9c6004980d11054a104d928f1085abdd3d49c538fd7c2597.jpg<a class="headerlink" href="#24623341e46f13ed9c6004980d11054a104d928f1085abdd3d49c538fd7c2597jpg" title="Permanent link">&para;</a></h3>
 <p><img alt="24623341e46f13ed9c6004980d11054a104d928f1085abdd3d49c538fd7c2597.jpg" src="../images/24623341e46f13ed9c6004980d11054a104d928f1085abdd3d49c538fd7c2597.jpg" /></p>
 <ul>
-<li>图片展示了 RICH 预取器在不同区域大小和触发机制下的 <strong>Accuracy</strong>（准确率）与 <strong>Coverage</strong>（覆盖率）对比，直观呈现了其多尺度设计的核心权衡策略。</li>
-<li>数据以柱状图形式呈现，蓝色代表 Accuracy，橙色代表 Coverage，横轴为四种不同的预取配置：</li>
+<li>
+<p>图片展示了 RICH 预取器在不同区域大小和触发机制下的 <strong>Accuracy</strong>（准确率）与 <strong>Coverage</strong>（覆盖率）对比，直观呈现了其多尺度设计的核心权衡策略。</p>
+</li>
+<li>
+<p>数据以柱状图形式呈现，蓝色代表 Accuracy，橙色代表 Coverage，横轴为四种不同的预取配置：</p>
+<ul>
 <li>16 KB-region (PC, 5 offsets)</li>
 <li>4 KB-region (PC, 3 offsets)</li>
 <li>2 KB-region (PC, offset)</li>
-<li>
-<p>2 KB-region (PC, address)</p>
+<li>2 KB-region (PC, address)</li>
+</ul>
 </li>
 <li>
 <p>各配置性能数据如下表所示：</p>
@@ -894,12 +906,14 @@
 </tbody>
 </table>
 <ul>
-<li>分析表明，RICH 的设计实现了明确的性能取舍：</li>
+<li>
+<p>分析表明，RICH 的设计实现了明确的性能取舍：</p>
+<ul>
 <li><strong>大区域（16KB）</strong>：采用 (PC, 5 offsets) 触发，追求 <strong>高准确率</strong>（~90%），但牺牲了部分覆盖率（~30%），适用于对误预取代价敏感的场景。</li>
 <li><strong>中区域（4KB）</strong>：采用 (PC, 3 offsets) 触发，在准确率（~85%）和覆盖率（~40%）之间取得平衡。</li>
 <li><strong>小区域（2KB）</strong>：采用 (PC, offset) 触发，优先保证 <strong>高覆盖率</strong>（~60%），准确率相对较低（~65%），用于捕捉更广泛的访问模式。</li>
-<li>
-<p><strong>特殊小区域（2KB）</strong>：采用 (PC, address) 触发，其准确率与 16KB 区域相当（~90%），但覆盖率极低（~10%），因其触发条件苛刻（需精确地址匹配），主要用于特定高精度需求。</p>
+<li><strong>特殊小区域（2KB）</strong>：采用 (PC, address) 触发，其准确率与 16KB 区域相当（~90%），但覆盖率极低（~10%），因其触发条件苛刻（需精确地址匹配），主要用于特定高精度需求。</li>
+</ul>
 </li>
 <li>
 <p>此图表是 RICH 设计哲学的直接体现：通过 <strong>多级触发机制</strong> 和 <strong>区域仲裁策略</strong>，动态选择最优预取粒度，从而在整体上实现 <strong>高准确率、高覆盖率和高及时性</strong> 的协同优化。</p>
@@ -911,9 +925,11 @@
 <li>图表标题为 <strong>Figure 5</strong>，其核心结论是：将 <strong>16 KB PHT</strong> 放置在片外（off-chip）仍能保留大部分预取机会，即使存在额外的内存访问延迟。</li>
 <li>横轴表示 <strong>Additional Memory Access Latency</strong>，从 0 ns 到 50 ns，以 10 ns 为步长递增，模拟未来高延迟内存系统场景。</li>
 <li>纵轴表示 <strong>Late Prefetches</strong>，即“迟到预取”的比例，范围从 5% 到 20%，衡量因元数据加载延迟导致预取请求未能及时完成的比例。</li>
-<li>数据趋势显示，随着额外延迟增加，<strong>Late Prefetches</strong> 比例呈缓慢上升趋势：</li>
+<li>数据趋势显示，随着额外延迟增加，<strong>Late Prefetches</strong> 比例呈缓慢上升趋势：<ul>
 <li>在 0 ns 延迟时，约为 <strong>11%</strong>。</li>
 <li>在 50 ns 延迟时，上升至约 <strong>15%</strong>。</li>
+</ul>
+</li>
 <li>这表明即使引入高达 50 ns 的额外延迟，<strong>RICH prefetcher</strong> 仍能维持超过 <strong>85%</strong> 的预取机会未被浪费，验证了其对延迟的容忍能力。</li>
 <li>此设计策略有效平衡了 <strong>on-chip area overhead</strong> 与 <strong>off-chip latency penalty</strong>，通过将大区域模式（16 KB-region patterns）卸载到主存，显著节省芯片面积，同时性能损失可控。</li>
 <li>该结果支撑论文中提出的 <strong>hierarchical storage design</strong>，即高频模式保留在片上缓存，低频模式存储于片外，实现成本与性能的最优折衷。</li>
@@ -960,12 +976,12 @@
 </li>
 <li>
 <p>元数据被划分为四类：</p>
-</li>
+<ul>
 <li><strong>Large region’s patterns</strong> (16 KB-region)</li>
 <li><strong>Small region’s patterns</strong> (4 KB &amp; 2 KB-region)</li>
 <li><strong>Training metadata</strong></li>
-<li>
-<p><strong>Control metadata</strong></p>
+<li><strong>Control metadata</strong></li>
+</ul>
 </li>
 <li>
 <p>各类元数据的特性与 RICH 的决策如下表所示：</p>
@@ -1018,10 +1034,12 @@
 </tbody>
 </table>
 <ul>
-<li>关键设计洞察：</li>
+<li>关键设计洞察：<ul>
 <li><strong>大区域模式</strong>因面积开销巨大且对延迟容忍度高，采用<strong>分层存储</strong>：高频访问部分缓存在片上（PHT Cache），低频部分卸载至片外主存，以平衡性能与成本。</li>
 <li><strong>小区域模式</strong>、<strong>训练元数据</strong>和<strong>控制元数据</strong>均因访问频率高或对延迟敏感，被强制部署在<strong>片上</strong>，确保快速响应。</li>
 <li>此分类策略是 RICH 实现“用容量和带宽换延迟隐藏”核心思想的关键支撑，有效规避了传统预取器受限于片上资源的瓶颈。</li>
+</ul>
+</li>
 </ul>
 <h3 id="table-3-cover-ratio-under-a-2oo-entry-storage-constraint-of-16-kb-region-patterns">Table 3: Cover ratio under a 2oo-entry storage constraint of 16 KB-region patterns<a class="headerlink" href="#table-3-cover-ratio-under-a-2oo-entry-storage-constraint-of-16-kb-region-patterns" title="Permanent link">&para;</a></h3>
 <p><img alt="d417f552a078a504ce1cacd72bd72cd0368bfab1846fdf206b707c34f0b9c683.jpg" src="../images/d417f552a078a504ce1cacd72bd72cd0368bfab1846fdf206b707c34f0b9c683.jpg" /></p>
@@ -1166,14 +1184,18 @@
 <h3 id="figure-7-training-process-of-each-region">Figure 7: Training process of each region<a class="headerlink" href="#figure-7-training-process-of-each-region" title="Permanent link">&para;</a></h3>
 <p><img alt="c49cb9eed60e1589e32c457860160eb03726c6dd85d44f26a30a787f94f2b35d.jpg" src="../images/c49cb9eed60e1589e32c457860160eb03726c6dd85d44f26a30a787f94f2b35d.jpg" /></p>
 <ul>
-<li>图片展示了 RICH 预取器中每个区域（2KB、4KB、16KB）的<strong>训练过程</strong>，核心机制基于 <strong>Filter Table (FT)</strong> 和 <strong>Accumulation Table (AT)</strong> 两个表协同工作。</li>
-<li>训练流程以一个 (PC, 2 offsets) 触发器为例，图中用编号 (1) 到 (5) 标示了关键步骤：</li>
+<li>
+<p>图片展示了 RICH 预取器中每个区域（2KB、4KB、16KB）的<strong>训练过程</strong>，核心机制基于 <strong>Filter Table (FT)</strong> 和 <strong>Accumulation Table (AT)</strong> 两个表协同工作。</p>
+</li>
+<li>
+<p>训练流程以一个 (PC, 2 offsets) 触发器为例，图中用编号 (1) 到 (5) 标示了关键步骤：</p>
+<ul>
 <li><strong>(1) 初始访问 P+3</strong>：当程序首次访问某个区域内的偏移量 3 时，该信息被记录在 FT 中，但此时不启动模式学习。</li>
 <li><strong>(2) 第二次访问 P+1</strong>：后续访问偏移量 1，FT 再次记录。此时系统仍处于“过滤”阶段，等待更多不同偏移量来确认访问模式的有效性。</li>
 <li><strong>(3) 第三次访问 P+2</strong>：当观察到第三个不同的偏移量（此处为 2）时，FT 条目被“提升”至 AT。AT 初始化一个位向量（Pattern），并开始记录所有已访问的偏移量。</li>
 <li><strong>(4) 后续访问 P+4</strong>：随着更多访问发生（如偏移量 4），AT 持续更新其位向量，将新访问的偏移位置位（例如，从 <code>001110</code> 更新为 <code>011110</code>）。</li>
-<li>
-<p><strong>(5) 区域驱逐</strong>：当该区域被 L2 缓存驱逐或 AT 达到容量上限时，最终形成的完整模式会被传输至 <strong>Pattern History Table (PHT)</strong> 用于后续预测。</p>
+<li><strong>(5) 区域驱逐</strong>：当该区域被 L2 缓存驱逐或 AT 达到容量上限时，最终形成的完整模式会被传输至 <strong>Pattern History Table (PHT)</strong> 用于后续预测。</li>
+</ul>
 </li>
 <li>
 <p>下表总结了 FT 和 AT 在各步骤中的状态变化：</p>
@@ -1216,43 +1238,74 @@
 </tbody>
 </table>
 <ul>
-<li>关键设计点：</li>
+<li>关键设计点：<ul>
 <li><strong>多偏移触发机制</strong>：通过要求至少观察到多个不同偏移量（如 2 或 5 个），有效过滤掉噪声访问，确保只有稳定的空间局部性模式才被学习。</li>
 <li><strong>分阶段学习</strong>：FT 负责初步筛选，AT 负责精确建模，这种分离设计降低了硬件复杂度和误学习风险。</li>
 <li><strong>LRU 替换策略</strong>：三个区域的 PHT 均采用 LRU 策略管理条目，保证常用模式优先保留。</li>
 <li><strong>触发器定义</strong>：触发器由程序计数器 (PC) 和一组偏移量组成，是识别特定访问模式的关键标识符。</li>
 </ul>
+</li>
+</ul>
 <h3 id="figure-8-the-region-arbitration-unit-selects-the-appropriate-region-to-prefetch-step-p3">Figure 8: The Region Arbitration unit selects the appropriate region to prefetch (Step P3)<a class="headerlink" href="#figure-8-the-region-arbitration-unit-selects-the-appropriate-region-to-prefetch-step-p3" title="Permanent link">&para;</a></h3>
 <p><img alt="e7db11d6666a6329d6f2f885db1cc278ea284b557d2571e2444b5f024a5d2ead.jpg" src="../images/e7db11d6666a6329d6f2f885db1cc278ea284b557d2571e2444b5f024a5d2ead.jpg" /></p>
 <ul>
-<li><strong>Region Arbitration</strong> 单元负责在多个可能触发的预取区域中选择最优的一个，以避免重复或冲突的预取操作。</li>
-<li>该单元接收来自 <strong>2KB、4KB 和 16KB PHTs</strong> 的查找命中信号作为输入，启动优先级仲裁流程。</li>
-<li><strong>Priority Selection</strong> 模块根据预定义的优先级顺序决定哪个区域应被选中：</li>
+<li>
+<p><strong>Region Arbitration</strong> 单元负责在多个可能触发的预取区域中选择最优的一个，以避免重复或冲突的预取操作。</p>
+</li>
+<li>
+<p>该单元接收来自 <strong>2KB、4KB 和 16KB PHTs</strong> 的查找命中信号作为输入，启动优先级仲裁流程。</p>
+</li>
+<li>
+<p><strong>Priority Selection</strong> 模块根据预定义的优先级顺序决定哪个区域应被选中：</p>
+<ul>
 <li>最高优先级：<strong>2KB by (PC, address)</strong></li>
 <li>其次：<strong>16KB</strong></li>
 <li>再次：<strong>4KB</strong></li>
-<li>
-<p>最低：<strong>2KB by (PC, offset)</strong></p>
+<li>最低：<strong>2KB by (PC, offset)</strong></li>
+</ul>
 </li>
 <li>
 <p>选定区域后，系统会检查其是否与任何<strong>更高优先级的 Inflight Prefetch Region</strong> 存在重叠：</p>
-</li>
+<ul>
 <li>若存在重叠（Y），则当前请求被 <strong>Ignored</strong>，防止冗余预取。</li>
-<li>
-<p>若无重叠（N），则允许生成预取请求并送入 <strong>Prefetch Buffer</strong>。</p>
+<li>若无重叠（N），则允许生成预取请求并送入 <strong>Prefetch Buffer</strong>。</li>
+</ul>
 </li>
 <li>
-<p><strong>Inflight Prefetch Table</strong> 用于跟踪当前正在执行的预取任务，包含以下字段：
-  | Region number | Number of prefetches left | Region type             |
-  |---------------|---------------------------|-------------------------|
-  | 0x70          | 15                        | 2KB by (PC, address)    |
-  | 0x60          | 64                        | 16KB                    |
-  | ...           | ...                       | ...                     |</p>
+<p><strong>Inflight Prefetch Table</strong> 用于跟踪当前正在执行的预取任务，包含以下字段：</p>
+<table>
+<thead>
+<tr>
+<th>Region number</th>
+<th>Number of prefetches left</th>
+<th>Region type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x70</td>
+<td>15</td>
+<td>2KB by (PC, address)</td>
+</tr>
+<tr>
+<td>0x60</td>
+<td>64</td>
+<td>16KB</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li>
 <p>表格中的条目会随着预取进度动态更新，当 “Number of prefetches left” 归零时，对应条目被移除。</p>
 </li>
-<li>此机制确保了预取行为既高效又不浪费带宽，尤其在多尺度区域同时活跃时，能有效协调资源分配。</li>
+<li>
+<p>此机制确保了预取行为既高效又不浪费带宽，尤其在多尺度区域同时活跃时，能有效协调资源分配。</p>
+</li>
 </ul>
 <h3 id="table-4-breakdown-of-on-chip-storage-overheads">Table 4: Breakdown of on-chip storage overheads<a class="headerlink" href="#table-4-breakdown-of-on-chip-storage-overheads" title="Permanent link">&para;</a></h3>
 <p><img alt="aaf6a2c49ab61c4dae46cc589d72aba6cc85e21d45cac2fc2ee3ba31749afe78.jpg" src="../images/aaf6a2c49ab61c4dae46cc589d72aba6cc85e21d45cac2fc2ee3ba31749afe78.jpg" /></p>
@@ -1333,7 +1386,9 @@
 <h3 id="table-5-simulated-system">Table 5: Simulated system<a class="headerlink" href="#table-5-simulated-system" title="Permanent link">&para;</a></h3>
 <p><img alt="73c48b90f5023bb454bfcb01a1da86144aceb0984be2c4bb5a7d33e2bf5e8ab6.jpg" src="../images/73c48b90f5023bb454bfcb01a1da86144aceb0984be2c4bb5a7d33e2bf5e8ab6.jpg" /></p>
 <ul>
-<li>该表格详细列出了论文中用于评估 RICH prefetcher 的模拟系统配置，涵盖了从核心微架构到主存的各个层级。</li>
+<li>
+<p>该表格详细列出了论文中用于评估 RICH prefetcher 的模拟系统配置，涵盖了从核心微架构到主存的各个层级。</p>
+</li>
 <li>
 <p>核心（Core）部分描述了处理器的前端和执行单元：</p>
 <ul>
@@ -1616,15 +1671,19 @@
 <li>图片展示了 <strong>Figure 11</strong>，标题为“Detailed speedup achieved by Bingo, PMP and RICH on representative traces”，用于比较三种预取器在多个代表性工作负载上的性能加速比。</li>
 <li>横轴列出了 40 个 SPEC CPU、Ligra 和 Parsec 工作负载的缩写名称，如 <code>602.gcc-754</code>、<code>603.bwaves-891</code>、<code>459.GemsFDTD-765B</code> 等，覆盖了科学计算、编译器、图形处理等场景。</li>
 <li>纵轴表示“Speedup over no prefetching”，即相对于无预取基线的性能加速倍数，范围从 0 到 3.8。</li>
-<li>图中使用三种颜色柱状图分别代表：</li>
+<li>图中使用三种颜色柱状图分别代表：<ul>
 <li>蓝色：<strong>PMP</strong></li>
 <li>橙色：<strong>Bingo</strong></li>
 <li>黄色：<strong>RICH</strong></li>
+</ul>
+</li>
 <li>在绝大多数工作负载上，<strong>RICH</strong> 的加速比高于 <strong>Bingo</strong> 和 <strong>PMP</strong>，表明其综合性能更优。</li>
-<li>部分工作负载上，<strong>RICH</strong> 的加速比显著领先，例如：</li>
+<li>部分工作负载上，<strong>RICH</strong> 的加速比显著领先，例如：<ul>
 <li><code>603.bwaves-891</code>：RICH 达到 <strong>3.8</strong>，Bingo 为 3.6，PMP 为 2.5</li>
 <li><code>601.bwaves-1740</code>：RICH 达到 <strong>4.8</strong>，Bingo 为 3.8，PMP 为 2.8</li>
 <li><code>459.GemsFDTD-765B</code>：RICH 达到 <strong>4.8</strong>，Bingo 为 3.6，PMP 为 2.5</li>
+</ul>
+</li>
 <li>在少数工作负载上（如 <code>605.mcf-782</code>、<code>605.mcf-1152</code>），三者性能接近，但 <strong>RICH</strong> 仍保持微弱优势。</li>
 <li>数据表格化如下：</li>
 </ul>
@@ -1683,15 +1742,19 @@
 <p><img alt="836cb4d99b3e3003a70b1aa2323b5614058be871a892e135c08b4851954d72e4.jpg" src="../images/836cb4d99b3e3003a70b1aa2323b5614058be871a892e135c08b4851954d72e4.jpg" /></p>
 <ul>
 <li>图片包含两个子图，分别展示 RICH prefetcher 在不同工作负载下的区域贡献和平均缺失访问时间（AMAT）表现。</li>
-<li>子图 a) 标题为“Contribution of Each Region to Prefetch Coverage”，显示了 <strong>2 KB-region</strong>、<strong>4 KB-region</strong> 和 <strong>16 KB-region</strong> 在四个基准测试套件（Parsec、Ligra、SPEC06、SPEC17）中的覆盖贡献比例。</li>
+<li>子图 a) 标题为“Contribution of Each Region to Prefetch Coverage”，显示了 <strong>2 KB-region</strong>、<strong>4 KB-region</strong> 和 <strong>16 KB-region</strong> 在四个基准测试套件（Parsec、Ligra、SPEC06、SPEC17）中的覆盖贡献比例。<ul>
 <li>Parsec：2 KB-region 约占 0.5，4 KB-region 约占 0.2，16 KB-region 约占 0.3。</li>
 <li>Ligra：2 KB-region 约占 0.3，4 KB-region 约占 0.2，16 KB-region 约占 0.5。</li>
 <li>SPEC06：2 KB-region 约占 0.4，4 KB-region 约占 0.2，16 KB-region 约占 0.4。</li>
 <li>SPEC17：2 KB-region 约占 0.3，4 KB-region 约占 0.2，16 KB-region 约占 0.5。</li>
-<li>子图 b) 标题为“Average Miss Access Time (AMAT) (cycles)”，比较了三种 prefetcher（PMP、Bingo、RICH）在 L1D、L2C、LLC 和 Main Memory 层级上的 AMAT。</li>
+</ul>
+</li>
+<li>子图 b) 标题为“Average Miss Access Time (AMAT) (cycles)”，比较了三种 prefetcher（PMP、Bingo、RICH）在 L1D、L2C、LLC 和 Main Memory 层级上的 AMAT。<ul>
 <li>PMP：L1D 约 5 cycles，L2C 约 5 cycles，LLC 约 10 cycles，Main Memory 约 30 cycles，总计约 50 cycles。</li>
 <li>Bingo：L1D 约 5 cycles，L2C 约 5 cycles，LLC 约 10 cycles，Main Memory 约 25 cycles，总计约 45 cycles。</li>
 <li>RICH：L1D 约 5 cycles，L2C 约 5 cycles，LLC 约 5 cycles，Main Memory 约 20 cycles，总计约 35 cycles。</li>
+</ul>
+</li>
 <li>数据表明，<strong>RICH 在所有层级上均实现了最低的 AMAT</strong>，尤其在 Main Memory 层级显著优于 Bingo 和 PMP。</li>
 <li>各区域对覆盖的贡献因工作负载而异，说明 <strong>RICH 的多区域设计能自适应不同程序的内存访问模式</strong>。</li>
 <li>综合来看，RICH 通过有效利用多尺度区域和分层存储策略，在保持高准确率的同时显著提升覆盖和及时性，从而降低整体访问延迟。</li>
@@ -1838,7 +1901,7 @@
 <li>图表标题为 <strong>Figure 15</strong>，旨在展示 <strong>Multi-offset trigger mechanism</strong> 对 RICH 的显著增益，以及将部分 <strong>16 KB-region patterns</strong> 卸载至片外对性能影响有限。</li>
 <li>图表上半部分为折线图，横轴表示七种不同配置（从 (1) 到 (7)），纵轴为“Performance Gain over No Prefetching”，范围从 10% 至 50%。</li>
 <li>折线图显示：<strong>2 KB-region only</strong> 配置性能增益约 35%，<strong>4 KB-region only</strong> 约 25%，<strong>16 KB-region only</strong> 最低约 18%，随后逐步提升至 <strong>RICH</strong> 配置的约 40%。</li>
-<li>下半部分表格详细列出各配置的关键特性与片上开销：</li>
+<li>下半部分表格详细列出各配置的关键特性与片上开销：<ul>
 <li><strong>(1) 2KB-region only</strong>：仅支持 2KB 区域，无多区域、多偏移、区域仲裁或片外存储，片上开销 22 KB。</li>
 <li><strong>(2) 4KB-region only</strong>：仅支持 4KB 区域，片上开销 10 KB。</li>
 <li><strong>(3) 16KB-region only</strong>：仅支持 16KB 区域，片上开销 137 KB。</li>
@@ -1846,6 +1909,8 @@
 <li><strong>(5) Multi-region multi-trigger</strong>：加入多偏移触发机制，片上开销仍为 174 KB。</li>
 <li><strong>(6) All-on-chip</strong>：在 (5) 基础上增加区域仲裁，片上开销增至 175 KB。</li>
 <li><strong>(7) RICH (proposed)</strong>：完整设计，包含区域仲裁与片外协作策略，片上开销大幅降至 <strong>47.3 KB</strong>。</li>
+</ul>
+</li>
 <li>关键结论：引入 <strong>multi-offset trigger</strong> 和 <strong>region arbitration</strong> 显著提升性能；而将部分 16KB 模式卸载至片外，仅导致约 <strong>0.5% 性能损失</strong>，验证了其高效性。</li>
 <li>数据表明，<strong>RICH 在保持高性能的同时，片上资源消耗仅为传统全片上方案的约 27%</strong>，体现其在高带宽、大容量内存系统中的设计优势。</li>
 </ul>

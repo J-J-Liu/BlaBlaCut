@@ -1,0 +1,750 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/berti-an-accurate-local-delta-data-prefetcher/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Berti: an Accurate Local-Delta Data Prefetcher 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#berti-an-accurate-local-delta-data-prefetcher" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Berti: an Accurate Local-Delta Data Prefetcher 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-local-delta-learning-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Local-Delta Learning (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-timely-delta-detection-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Timely Delta Detection (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-coverage-based-prefetch-filtering-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Coverage-Based Prefetch Filtering (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-multi-level-prefetch-orchestration-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Multi-Level Prefetch Orchestration (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-efficient-hardware-implementation-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Efficient Hardware Implementation (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="berti-an-accurate-local-delta-data-prefetcher">Berti: an Accurate Local-Delta Data Prefetcher 通俗讲解<a class="headerlink" href="#berti-an-accurate-local-delta-data-prefetcher" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<p>现有的硬件预取器（如 BOP、MLOP）有一个根本性的“难受”之处：它们用一个 <strong>global delta</strong>（全局偏移量）来指导整个程序的预取。这就像试图用一把万能钥匙去开一栋大楼里所有的门——在某些特定房间里（由特定指令 IP 访问的内存区域），这把钥匙可能完全无效，甚至会错过大量唾手可得的机会。</p>
+<ul>
+<li>这种“一刀切”的策略在面对 <strong>多IP交织访问</strong> 的场景时尤其痛苦。例如，在 <code>mcf</code> 这个 benchmark 中，多个不同的指令（IP）各自有自己独特的访问模式（local delta），但全局预取器只能看到一个混乱的混合地址流，最终选出一个对谁都“不太合适”的平均偏移量，导致 <strong>prefetch coverage</strong>（预取覆盖率）极低。</li>
+<li>即便是先进的 IPCP 预取器，虽然它能按 IP 分类，但它主要关注 <strong>stride</strong>（步长，即连续两次访问的差值），并且 <strong>忽略了timeliness</strong>（及时性）。它可能准确地预测了下一个地址，但如果这个预取请求发出得太晚，数据在真正需要时还没到 L1D，那这次预取就是一次昂贵的浪费，甚至会污染缓存。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<p>想象你是一个图书管理员（L1D cache），负责为一群教授（不同的 IPs）提前准备好他们下节课要用的书。</p>
+<ul>
+<li><strong>旧方法（Global Delta）</strong> 就像你观察所有教授借书的记录，然后算出一个“最受欢迎的书离当前书架第几排”，比如“+5排”。然后不管哪个教授来，你都去他当前书的+5排拿书。结果，物理教授需要的是隔壁的实验手册（+1排），而文学教授想找的是楼上的古籍（+10排），你的“+5排”策略对谁都没帮上忙。</li>
+<li><strong>Berti 的做法</strong> 则是给每位教授建一个专属的小本子（per-IP history table）。这个小本子不仅记下他上次借了什么书（地址），还精确记下他下次课是什么时候（通过测量 <strong>fetch latency</strong> 来推算）。这样，当物理教授刚拿起一本基础教材时，你就知道必须立刻去+1排拿实验手册，否则就来不及了；而当文学教授翻到某一页时，你就知道可以悠闲地去+10排准备古籍。关键是，你只在他过去的行为<strong>反复证明</strong>这个动作有效（<strong>high coverage</strong>）时，才执行这个预取操作，避免白忙活。</li>
+</ul>
+<p><img alt="" src="../images/4e8844a11efa68128cf674df9b11e8d0d49eaa0d1952ce5362166c5549f26762.jpg" /> <em>Figure 3. Best delta selected by BOP (based on global deltas) and Berti (based on per-IP local deltas) for mcf-1554B. Prefetch coverage is shown in grayscale. BOP selects +62 as the best delta (red line), which is not always accurate and provides a coverage of only 2%.</em></p>
+<p><strong>关键一招 (The "How")</strong></p>
+<p>Berti 的核心创新在于将 <strong>delta 的定义、学习和应用</strong> 全面 <strong>local化</strong> 和 <strong>timeliness-aware化</strong>，并通过一个简单的置信度机制保证高精度。</p>
+<ul>
+<li>
+<p><strong>定义扭转</strong>：它没有沿用传统的 <strong>stride</strong>（连续访问差），而是定义了 <strong>local delta</strong> —— 同一个 IP 发出的任意两次需求访问之间的地址差。这极大地扩展了可发现的模式范围，不再局限于简单的等差数列。</p>
+</li>
+<li>
+<p><strong>学习机制扭转</strong>：最关键的一招是，它在每次 L1D 填充（fill）时，利用精确测量的 <strong>fetch latency</strong>（获取延迟），反向推算出“为了这次填充是及时的，预取请求应该在哪个历史时间点发出”。然后，它计算从那个“理想的触发点”到当前地址的差值，这就是一个 <strong>timely local delta</strong>。这个过程巧妙地将“及时性”这个模糊概念，转化为了一个可精确计算和学习的具体数值。</p>
+</li>
+</ul>
+<p><img alt="" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /> <em>Figure 4. Learning timely deltas.</em></p>
+<ul>
+<li><strong>决策机制扭转</strong>：Berti 并不会对所有学到的 delta 都进行预取。它只为那些 <strong>coverage</strong>（覆盖率，即该 delta 在历史中成功触发及时预取的频率）超过特定阈值的 delta 才发出预取请求。这种“非高置信度不行动”的策略，是其实现 <strong>~90% accuracy</strong>（准确率）的根本原因，直接解决了传统预取器产生大量无用流量、浪费带宽和能耗的顽疾。</li>
+</ul>
+<p>最终，Berti 用仅 <strong>2.55 KB</strong> 的极小硬件开销，实现了性能和能效的显著提升，证明了在 L1D 层面，精细化、上下文感知的预取策略远比粗放的全局策略更为有效。</p>
+<h3 id="1-local-delta-learning-eli5">1. Local-Delta Learning (ELI5)<a class="headerlink" href="#1-local-delta-learning-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 <strong>global-delta prefetcher</strong>（如 BOP、MLOP）把所有内存访问混在一起找规律，这在现实程序里非常“难受”。因为一个程序里成千上万个指令（IP）各自有自己独立的访问模式，强行用一个“全局最优”的 delta 去预测所有访问，结果就是<strong>顾此失彼</strong>。</li>
+<li>具体来说，在像 <code>mcf</code> 这样的 benchmark 中，不同 IP 的访问模式完全不同。BOP 找到的全局 delta <strong>+62</strong> 对大部分 IP 根本无效，导致 <strong>prefetch coverage 只有 2%</strong>，几乎白忙活。</li>
+<li>即便是先进的 L1D prefetcher 如 <strong>IPCP</strong>，虽然能按 IP 分类，但它关注的是 <strong>stride</strong>（连续两次访问的差值），而不是 <strong>delta</strong>（当前访问与历史上任意一次访问的差值）。这使得它无法处理非连续、乱序（out-of-order）或复杂的访问模式，<strong>灵活性不足</strong>。</li>
+</ul>
+<p><img alt="" src="../images/4e8844a11efa68128cf674df9b11e8d0d49eaa0d1952ce5362166c5549f26762.jpg" /> <em>Figure 3. Best delta selected by BOP (based on global deltas) and Berti (based on per-IP local deltas) for mcf-1554B. Prefetch coverage is shown in grayscale. BOP selects +62 as the best delta (red line), which is not always accurate and provides a coverage of only 2%.</em></p>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个图书管理员，负责给不同的教授提前准备好他们要借的书。</li>
+<li><strong>Global-delta 方法</strong> 就像你只看整个图书馆的借阅排行榜，发现《量子力学导论》最火，于是就给每个教授都提前摆上这本书。结果，数学系的教授根本不需要它，而物理系的教授可能下周才需要，你上周就摆出来，占地方还容易弄丢。</li>
+<li><strong>Local-delta 方法（Berti）</strong> 则聪明得多：你为每位教授单独建一个小本子，记录他过去每次来借了什么书，以及他下次来之前多久你需要把书准备好（<strong>timeliness</strong>）。你发现张教授每次借完《线性代数》后，两周后一定会来借《矩阵分析》，那么你就在他借《线性代数》时，立刻去库房把《矩阵分析》调出来。这个“两周后”对应的就是一个<strong>高覆盖、及时的 local delta</strong>。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有抛弃 delta 的核心思想，而是做了一个关键扭转：<strong>将 delta 的计算范围从“全局所有访问”缩小到“同一个 IP 的历史访问”</strong>。</li>
+<li>更妙的是，Berti 不是简单地记录所有 local delta，而是引入了 <strong>timeliness</strong> 和 <strong>coverage</strong> 两个维度来筛选：</li>
+<li><strong>Timeliness</strong>: 通过精确测量 <strong>L1D miss latency</strong>，反推出为了不错过下一次访问，必须在什么时候发出 prefetch 请求。只有那些能“赶得上”的历史访问，才会被用来计算 delta。</li>
+<li><strong>Coverage</strong>: 统计每个 timely local delta 在历史中出现的频率。只有那些 <strong>coverage 超过阈值</strong>（如 65%）的 delta，才会被用来生成 prefetch 请求。</li>
+<li>这个逻辑转换体现在硬件设计上，就是增加了两个核心结构：</li>
+<li><strong>History Table</strong>: 按 IP 索引，记录该 IP 最近的访问地址和时间戳。</li>
+<li><strong>Table of Deltas</strong>: 为每个 IP 维护一个 delta 列表，并动态更新其 coverage 和 prefetch 等级（L1D/L2/No）。</li>
+</ul>
+<p><img alt="" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /> <em>Figure 4. Learning timely deltas.</em></p>
+<p>这种设计让 Berti 实现了惊人的效果：<strong>87.2% 的 prefetch accuracy</strong>，远超 IPCP (50.6%) 和 MLOP (62.4%)，同时将内存层次的动态能耗降低了 <strong>33.6%</strong>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Prefetcher</th>
+<th style="text-align: center;">Avg. Accuracy (SPEC+GAP)</th>
+<th style="text-align: center;">L1D Speedup vs. IP-Stride</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">IP-Stride</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Baseline</td>
+</tr>
+<tr>
+<td style="text-align: left;">MLOP</td>
+<td style="text-align: center;">62.4%</td>
+<td style="text-align: center;">+5.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">IPCP</td>
+<td style="text-align: center;">50.6%</td>
+<td style="text-align: center;">+5.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Berti</strong></td>
+<td style="text-align: center;"><strong>87.2%</strong></td>
+<td style="text-align: center;"><strong>+8.5%</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-timely-delta-detection-eli5">2. Timely Delta Detection (ELI5)<a class="headerlink" href="#2-timely-delta-detection-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的 <strong>delta prefetcher</strong>（比如 BOP、MLOP）最大的问题在于，它们只关心“<strong>有没有用</strong>”，而不关心“<strong>来不来得及</strong>”。</li>
+<li>它们会记录所有历史访问之间的地址差（deltas），然后选一个出现频率最高的 delta 来预取。但问题是，当你在地址 X 发生一次 cache miss 时，如果用一个很小的 delta（比如 +2）去预取 X+2，这个请求很可能是在你<strong>已经需要 X+2 的时候才发出</strong>的，结果就是 <strong>prefetch request 到达 L1D 时已经晚了</strong>，变成了 <strong>late prefetch</strong>，对性能毫无帮助，反而浪费了宝贵的 <strong>L1D bandwidth</strong> 和 <strong>DRAM energy</strong>。</li>
+<li>更糟糕的是，在 <strong>out-of-order execution</strong> 的环境下，内存访问顺序会被打乱，基于连续 stride 的传统方法（如 IP-stride）很容易失效，而全局 delta 方法又无法区分不同指令（IP）的行为，导致 <strong>coverage</strong> 很低。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你在玩一个接球游戏。球（数据）从远处以不同的速度飞来。你的任务不是接到每一个球，而是<strong>提前判断哪个球会砸到你头上，并在它飞到一半时就伸手去接</strong>。</li>
+<li>一个笨办法是：记录下过去所有球的落点间隔，然后下次看到一个球，就按最常见的间隔去猜下一个球的位置。但这忽略了<strong>球的速度</strong>！如果球飞得很快，你必须更早地伸手。</li>
+<li><strong>Timely Delta Detection</strong> 就像是给每个球都装了一个计时器。当你被一个球砸中（L1D miss）时，你立刻回看录像：“<strong>如果我想提前接到这个球，我最早应该在哪个时间点、看到哪个位置的球时就出手？</strong>” 这个“出手时机”和“目标位置”的差值，才是那个真正 <strong>timely and useful</strong> 的 delta。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者并没有像以前那样，盲目地收集所有历史 deltas。他做了一个非常巧妙的<strong>因果倒推</strong>：</li>
+<li><strong>第一步：精确计时</strong>。利用 <strong>MSHR</strong> (Miss Status Holding Register) 和 <strong>PQ</strong> (Prefetch Queue) 中的 <strong>timestamp</strong> 字段，精确测量出每一次 <strong>L1D fill</strong>（无论是 demand 还是 prefetch 触发的）所花费的真实延迟（fetch latency）。</li>
+<li><strong>第二步：反向查找</strong>。当一次 <strong>demand miss</strong> 被处理完（fill 到 L1D）后，Berti 知道了这次访问花了多少个周期（latency）。于是，它立刻去查询由<strong>同一个 IP</strong> 产生的历史访问记录（History Table），找出那些<strong>发生时间足够早</strong>的访问——早到什么程度呢？早到“<strong>如果当时就用（当前地址 - 历史地址）这个 delta 发起预取，数据刚好能在我需要它之前到达 L1D</strong>”。</li>
+<li><strong>第三步：只学有用的</strong>。通过这种方式，Berti 学到的每一个 delta 都自带了 <strong>timeliness</strong> 属性。它只会去统计和使用这些“<strong>经过验证是及时的</strong>” deltas 的 <strong>coverage</strong>（覆盖率）。这从根本上保证了，当它用某个高 coverage 的 delta 发起预取时，这个请求<strong>几乎总是 timely and useful</strong> 的。</li>
+</ul>
+<p><img alt="" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /> <em>Figure 4. Learning timely deltas.</em></p>
+<p>这张图完美诠释了这个过程。当访问地址 12 时，系统测得其 fetch latency 为 5 个周期。那么，一个 timely 的预取请求必须在时间点 <code>T(12) - 5</code> 之前发出。回溯历史，只有地址 2 的访问时间满足这个条件，因此 delta <code>+10</code> (12-2) 被标记为 <strong>timely delta</strong>。而地址 7 和 10 的访问都太晚了，它们产生的 delta (<code>+5</code>, <code>+2</code>) 即使被用来预取，也会迟到，所以被直接忽略。这就是 Berti 实现 <strong>近 90% 准确率</strong> 的核心秘密。</p>
+<h3 id="3-coverage-based-prefetch-filtering-eli5">3. Coverage-Based Prefetch Filtering (ELI5)<a class="headerlink" href="#3-coverage-based-prefetch-filtering-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 delta prefetcher（比如 <strong>BOP</strong> 和 <strong>MLOP</strong>）最大的问题在于“<strong>盲目自信</strong>”。它们找到一个全局最优的 offset 或 delta，就不管三七二十一地到处用。这在访问模式简单、统一的程序里还好，但在现实世界中，尤其是像 <strong>GAP</strong> 这类图计算负载里，不同指令（IP）的访问模式千差万别。</li>
+<li>结果就是，一个对 IP A 很好的 delta，用在 IP B 上可能完全错误，产生大量 <strong>useless prefetches</strong>（无用预取）。这些无用数据不仅浪费了宝贵的 <strong>L1D bandwidth</strong> 和 <strong>MSHR slots</strong>，还会污染缓存，把真正有用的数据挤出去，最终反而<strong>降低性能</strong>并<strong>大幅增加动态能耗</strong>。如 Figure 1 所示，现有方案的无用预取比例高得惊人。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个图书管理员（Prefetcher），负责给不同的教授（IP）提前准备好他们可能要看的书（Cache Lines）。</li>
+<li>老派的做法（全局 delta）是：你观察到整个图书馆借阅量最大的一本书是《量子力学导论》，于是你就疯狂地给每个教授的桌上都堆满这本书。结果，研究古典文学的教授对此嗤之以鼻，他的桌子被占满了，反而找不到自己要的《荷马史诗》。</li>
+<li><strong>Coverage-Based Prefetch Filtering</strong> 的做法则聪明得多：你为每位教授单独建立一个小本本（Per-IP History）。每次教授成功借到一本书，你就在他的小本本上记下：“上次他看《A》的时候，紧接着就要了《B》，这个‘从A到B’的请求模式很有效”。经过一段时间，你发现对于教授 X，“从A到B”这个模式在他 <strong>65%</strong> 以上的借书请求中都出现了。这时你才确信，下次看到他看《A》，就可以放心大胆地把《B》提前放到他桌上。对于那些只出现过一两次的“奇怪”模式，你选择忽略，因为它们很可能是偶然的，不值得信任。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>Berti 的核心创新在于，它没有直接用“哪个 delta 最近出现过”来决定是否预取，而是引入了一个 <strong>基于覆盖率的置信度过滤机制</strong>。</li>
+<li>具体来说，它在原来的预取流程中，巧妙地插入了两个关键步骤：</li>
+<li><strong>第一步：精确计算 Coverage</strong>。对于每个 IP 学习到的每一个 timely delta，Berti 都会统计它在该 IP 的历史访问中“成功覆盖”了多少次未来的访问。Coverage = (该 delta 成功预测的次数) / (总的学习周期数)。这本质上是在衡量这个 delta 的<strong>稳定性和普适性</strong>。</li>
+<li><strong>第二步：设置 Confidence Watermarks</strong>。Berti 并不会对所有学到的 delta 都发出预取请求。它设定了严格的阈值（例如 <strong>&gt;65%</strong> 为高置信度）。只有当一个 delta 的 coverage 超过这个高水位线时，Berti 才认为它足够可靠，值得用来生成预取请求。低于此阈值的 delta 会被直接过滤掉。</li>
+<li>这个逻辑转换将预取决策从“<strong>我看到了什么</strong>”（reactive）转变为“<strong>我对什么有十足把握</strong>”（proactive &amp; selective）。正如 Figure 10 所示，这一招让 Berti 的 <strong>prefetch accuracy</strong> 飙升至近 <strong>90%</strong>，远超 IPCP (50.6%) 和 MLOP (62.4%)，从而在提升性能的同时，显著降低了内存层次的动态能耗（Figure 15）。</li>
+</ul>
+<p><img alt="" src="../images/cbd4fe566452727c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg" /> <em>Figure 10. Prefetch accuracy at the L1D. Percentages of useful requests are broken down into timely (gray) and late (black) prefetch requests.</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Prefetcher</th>
+<th style="text-align: center;">Avg. Accuracy (SPEC+GAP)</th>
+<th style="text-align: center;">L1D Prefetches Filled in L1D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Berti</strong></td>
+<td style="text-align: center;"><strong>87.2%</strong></td>
+<td style="text-align: center;">High-confidence deltas only</td>
+</tr>
+<tr>
+<td style="text-align: left;">MLOP</td>
+<td style="text-align: center;">62.4%</td>
+<td style="text-align: center;">Best global delta, less filtering</td>
+</tr>
+<tr>
+<td style="text-align: left;">IPCP</td>
+<td style="text-align: center;">50.6%</td>
+<td style="text-align: center;">Composite, but GS class adds noise</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-multi-level-prefetch-orchestration-eli5">4. Multi-Level Prefetch Orchestration (ELI5)<a class="headerlink" href="#4-multi-level-prefetch-orchestration-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的硬件预取器（prefetcher）往往是个“愣头青”：一旦它觉得某个模式靠谱，就会一股脑地把数据往最顶层的 <strong>L1D cache</strong> 里塞。这在理想情况下很好，但在现实世界中会引发两个严重问题：</li>
+<li><strong>资源争抢 (Resource Contention)</strong>：L1D 的 <strong>MSHR (Miss Status Holding Registers)</strong> 和 <strong>Prefetch Queue (PQ)</strong> 资源极其有限。如果一个信心不足的预取请求占用了这些宝贵资源，可能会挤掉真正紧急的、由核心指令发出的需求请求（demand request），反而拖慢了整体速度。</li>
+<li><strong>无谓开销 (Wasted Effort)</strong>：如果预取的数据最终没被用上（低准确率），那么把它从内存一路搬到 L1D 所消耗的 <strong>带宽</strong> 和 <strong>能量</strong> 就完全浪费了。更糟糕的是，它还可能污染 L1D，把有用的数据挤出去。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你是一个高效的仓库经理（Berti），负责给前线工人（CPU Core）提前备货（数据）。</li>
+<li>你的手下有不同的运输车队：</li>
+<li><strong>L1D 车队</strong>：速度最快，但车少（MSHR/PQ 有限），而且只能停在离工人最近的“黄金停车位”（L1D）。</li>
+<li><strong>L2 车队</strong>：速度稍慢，但车位多一些。</li>
+<li><strong>LLC 车队</strong>：速度最慢，但仓库巨大。</li>
+<li>以前的经理（如 IPCP, MLOP）的做法是：只要听说某件货可能有用，就立刻派最快的 L1D 车队去拉，不管这消息有多可靠，也不管停车场有没有空位。</li>
+<li>你的新策略是：先评估这个消息的<strong>可信度</strong>（coverage）。如果可信度极高（比如90%），并且“黄金停车位”还有空（MSHR occupancy 低），那就派最快的 L1D 车队直达。如果可信度中等（比如50%），那就只送到 L2 仓库，这样既做了准备，又不占用最紧张的资源。如果可信度很低，干脆就不送，省下油钱（energy）和路权（bandwidth）。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>Berti 的精妙之处在于，它没有采用“全有或全无”的粗暴策略，而是在预取决策流程中引入了一个<strong>动态分级调度机制</strong>。这个机制的核心是两个输入和一套<strong>watermark</strong>（水位线）规则：</li>
+<li><strong>输入1: Delta Coverage</strong>：衡量某个 delta 模式在过去成功预测需求的频率，代表其<strong>准确性</strong>。</li>
+<li><strong>输入2: L1D MSHR Occupancy</strong>：反映当前 L1D 处理单元的繁忙程度，代表<strong>资源压力</strong>。</li>
+<li>基于这两个输入，Berti 动态决定预取请求的“投递地址”：</li>
+<li>如果 <code>Coverage &gt; High-Watermark (65%)</code> <strong>且</strong> <code>MSHR Occupancy &lt; Occupancy-Watermark (70%)</code>，则预取到 <strong>L1D</strong>。</li>
+<li>否则，如果 <code>Coverage &gt; Medium-Watermark (35%)</code>，则预取到 <strong>L2</strong>。</li>
+<li>否则，不进行预取。</li>
+<li>这个逻辑转换看似简单，但它巧妙地将<strong>预取的准确性</strong>和<strong>系统当前的资源状态</strong>耦合在一起，实现了在<strong>timeliness</strong>（及时性）、<strong>accuracy</strong>（准确性）和<strong>resource efficiency</strong>（资源效率）三者之间取得最佳平衡。论文中的 Figure 5 清晰地展示了这一决策流程是如何嵌入到硬件设计中的。
+  <img alt="" src="../images/4687673a72ee43cb3b2eafce7f9b78d9575373cf70b658c43ba276687ce6368a.jpg" /> <em>Figure 5. Berti design overview. Hardware extensions are shown in gray.</em></li>
+</ul>
+<p>这种策略直接带来了两大好处：</p>
+<ul>
+<li><strong>极高的准确率</strong>：通过高水位线过滤，只有最有把握的请求才能进入 L1D，避免了污染。如 Figure 10 所示，Berti 的准确率高达 <strong>87.2%</strong>，远超 IPCP (50.6%) 和 MLOP (62.4%)。</li>
+<li><strong>显著的节能效果</strong>：减少了无谓的数据搬运，使得内存层次结构的动态能耗大幅降低。如 Figure 15 所示，相比 IPCP，Berti 在 SPEC CPU2017 和 GAP 上分别节省了 <strong>21.1%</strong> 和 <strong>72.6%</strong> 的动态能耗。</li>
+</ul>
+<h3 id="5-efficient-hardware-implementation-eli5">5. Efficient Hardware Implementation (ELI5)<a class="headerlink" href="#5-efficient-hardware-implementation-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 <strong>L1D prefetcher</strong> 设计面临一个经典困境：<strong>存储开销</strong>（storage overhead）和<strong>性能收益</strong>之间难以平衡。L1D 空间极其宝贵，任何硬件结构都必须非常精简。</li>
+<li>像 <strong>IPCP</strong> 这样的 SOTA prefetcher 虽然强大，但它内部集成了多个子模块（CS, CPLX, GS），逻辑复杂，其硬件实现虽然也小，但仍有优化空间。</li>
+<li>更关键的是，很多 prefetcher 的训练和预测逻辑耦合紧密，需要复杂的计算单元（比如 perceptron 或 hash 计算），这不仅增加面积，还可能影响时序。</li>
+<li>Berti 的目标很明确：用<strong>极简的硬件</strong>（just <strong>2.55 KB</strong>）实现<strong>高精度</strong>的 local-delta 预取，这意味着它的所有数据结构和逻辑都必须是“傻瓜式”的，只做最必要的事。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个图书管理员（Prefetcher），你的任务是根据读者（IP）最近借过的书（addresses），预测他下一步会借什么书，并提前把书放到前台（L1D）。</li>
+<li>以前的做法可能是给每个读者建一个复杂的兴趣模型（比如 IPCP 的分类器），或者记录整个图书馆的借阅流（global delta）。</li>
+<li>Berti 的做法更接地气：它只给每个读者维护两张<strong>便签纸</strong>。</li>
+<li>第一张便签（<strong>History Table</strong>）就贴在读者档案上，简单记下他最近几次借了哪几本书以及借书的时间戳。</li>
+<li>第二张便签（<strong>Table of Deltas</strong>）是他的“成功经验本”，只记录那些被证明能准确预测他下次借书行为的“书距”（delta），并且给每个“书距”打个分（coverage counter）。</li>
+<li>整个过程没有任何复杂的推理，就是纯粹的经验主义：看到读者来借书，就翻翻他的“成功经验本”，如果某个“书距”得分够高，就按这个距离去书架上把下一本可能要借的书拿过来。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<p>作者并没有设计一个复杂的预测引擎，而是巧妙地将整个 prefetching 流程拆解为两个完全独立、极度简化的硬件表，并利用简单的计数和比较逻辑来驱动决策。</p>
+<ul>
+<li>
+<p><strong>第一步：用最朴素的方式记录历史</strong></p>
+</li>
+<li>
+<p><strong>History Table</strong> 被设计成一个 <strong>8-set, 16-way</strong> 的缓存，直接用 <strong>IP</strong> 作为索引。</p>
+</li>
+<li>
+<p>每个条目只存三样东西：<strong>IP tag</strong>、<strong>地址</strong>（VA）、<strong>时间戳</strong>。这是一个纯粹的“日志”结构，写入和查找都非常快，且完全在关键路径之外。</p>
+</li>
+<li>
+<p><strong>第二步：用计数器代替复杂模型来做决策</strong></p>
+</li>
+<li>
+<p><strong>Table of Deltas</strong> 是一个 <strong>16-entry fully-associative</strong> 表，同样用 <strong>IP</strong>（哈希后）作为 tag。</p>
+</li>
+<li>它的核心是一个 <strong>4-bit counter</strong> 和一个包含 <strong>16 个 delta</strong> 的数组。每个 delta 条目有自己的 <strong>4-bit coverage counter</strong>。</li>
+<li><strong>最关键的简化在于</strong>：覆盖度（coverage）的计算不是通过复杂的在线学习，而是通过一个<strong>周期性的相位重置</strong>（phase reset）机制。每当主 counter 溢出（达到16次搜索），就根据每个 delta 的 coverage counter 值（比如 &gt;10 就是 65%+）来决定其状态（<code>L1D_pref</code>, <code>L2_pref</code>, <code>No_pref</code>），然后清零所有计数器，开始新一轮的学习。</li>
+<li>
+<p>这个“<strong>计数-阈值-重置</strong>”的循环，用最廉价的硬件（几个加法器和比较器）就实现了对 delta “信心”的动态评估，完全避开了 perceptron 或复杂的 confidence calculation。</p>
+</li>
+<li>
+<p><strong>第三步：硬件开销的极致控制</strong></p>
+</li>
+<li>
+<p>所有操作都基于简单的整数加法（计算 delta）、比较（检查阈值）和计数。</p>
+</li>
+<li>没有乘法器、没有复杂的 ALU、没有庞大的 CAM。</li>
+<li>正如论文中的 <strong>Table I</strong> 所示，整个设计的存储开销被精确地控制在 <strong>2.55 KB</strong>。</li>
+</ul>
+<p><img alt="" src="../images/92c023f5b766e980c7be588e6c1f07838123c1cbad5b89621d965b1c52a79a49.jpg" /> <em>Table I STORAGE OVERHEAD OF BERTI.</em></p>
+<p>这种设计哲学就是：<strong>用空间换逻辑的极度简化</strong>。它牺牲了一定的理论最优性（比如无法捕捉极其复杂的模式），但换来了在 L1D 这个寸土寸金的地方几乎可以忽略不计的硬件成本和极高的能效比，而这正是工业界最看重的。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

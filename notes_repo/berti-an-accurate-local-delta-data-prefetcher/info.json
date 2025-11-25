@@ -1,0 +1,21 @@
+{
+  "index": "berti-an-accurate-local-delta-data-prefetcher",
+  "paper_title": "Berti: an Accurate Local-Delta Data Prefetcher",
+  "metadata": {
+    "authors": [
+      "Agustín Navarro-Torres",
+      "Biswabandan Panda",
+      "Jesus Alastruey-Benedé",
+      "et al."
+    ],
+    "affiliations": [
+      "Universidad de Zaragoza",
+      "Indian Institute of Technology Bombay",
+      "University of Murcia"
+    ],
+    "venue": "10.1109/MICRO56248.2022.00072",
+    "year": 2022,
+    "doi": null
+  },
+  "description": "论文提出Berti，一种基于本地及时性delta的L1数据缓存预取器。其核心创新在于为每个指令指针(IP)学习高覆盖率的及时性本地delta，而非使用全局delta，从而显著提升准确率。实验表明，Berti仅用2.55KB存储开销，在SPEC CPU2017和GAP负载上相比IP-stride和SOTA预取器IPCP分别提升性能8.5%和3.5%，并减少内存层次动态能耗33.6%。"
+}

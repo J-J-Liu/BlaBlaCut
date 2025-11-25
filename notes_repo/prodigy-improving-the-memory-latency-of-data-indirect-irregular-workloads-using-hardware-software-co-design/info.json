@@ -10,11 +10,12 @@
     ],
     "affiliations": [
       "University of Michigan",
-      "University of Wisconsin, Madison",
-      "University of Edinburgh"
+      "University of Edinburgh",
+      "University of Wisconsin, Madison"
     ],
-    "venue": "MICRO",
-    "year": 2021
+    "venue": "HPCA",
+    "year": 2021,
+    "doi": "10.1109/HPCA51647.2021.00061"
   },
-  "description": "提出Prodigy，一种软硬件协同设计的低开销预取方案，用于加速具有数据间接访问模式（单值和范围间接）的不规则工作负载。其核心是数据间接图（DIG）表示，由编译器自动生成并指导硬件预取器。在仅0.8KB存储开销下，相比无预取基线平均提速2.6倍、节能1.6倍，并显著优于现有先进预取器。"
+  "description": "论文提出Prodigy，一种软硬件协同设计的低开销预取方案，用于加速具有数据间接访问模式（如图计算、稀疏线性代数）的不规则工作负载。其核心是数据间接图（DIG）表示法，结合编译器静态分析与硬件动态预取，仅用0.8KB存储开销，平均性能提升2.6倍，能效提升1.6倍，并优于多种前沿预取器。"
 }

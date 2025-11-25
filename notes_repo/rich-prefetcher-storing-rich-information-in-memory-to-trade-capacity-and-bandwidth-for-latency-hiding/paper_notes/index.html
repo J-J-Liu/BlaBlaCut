@@ -426,23 +426,6 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#-516kb90" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        - 实验表明，使用5个偏移可将16KB区域的预取准确性提升至90%以上，有效避免了因误预取大量无用缓存行而造成的带宽浪费和缓存污染。
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="- 实验表明，使用5个偏移可将16KB区域的预取准确性提升至90%以上，有效避免了因误预取大量无用缓存行而造成的带宽浪费和缓存污染。">
-      <ul class="md-nav__list">
-        
           <li class="md-nav__item">
   <a href="#2_1" class="md-nav__link">
     <span class="md-ellipsis">
@@ -511,98 +494,125 @@
 
 <h1 id="rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding">RICH Prefetcher: Storing Rich Information in Memory to Trade Capacity and Bandwidth for Latency Hiding 论文解析<a class="headerlink" href="#rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding" title="Permanent link">&para;</a></h1>
 <h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
-<p><strong>作者 (Authors)</strong>
-- Ningzhi Ai
-- Wenjian He
-- Hu He
-- Jing Xia
-- Heng Liao
-- Guowei Zhang</p>
-<p><strong>发表期刊/会议 (Journal/Conference)</strong>
-- 58th IEEE/ACM International Symposium on Microarchitecture (MICRO '25)</p>
-<p><strong>发表年份 (Publication Year)</strong>
-- 2025</p>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Ningzhi Ai</li>
+<li>Wenjian He</li>
+<li>Hu He</li>
+<li>Jing Xia</li>
+<li>Heng Liao</li>
+<li>Guowei Zhang</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>58th IEEE/ACM International Symposium on Microarchitecture (MICRO '25)</li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li>2025</li>
+</ul>
 <hr />
 <h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p><strong>目的</strong>
-- 针对未来内存系统（如 <strong>Non-Volatile Memory (NVM)</strong> 和 <strong>CXL-based memory pooling</strong>）呈现出的 <strong>高带宽、大容量但高延迟</strong> 的趋势，解决传统硬件预取器（prefetcher）因受限于片上存储面积而无法充分利用丰富元数据（rich metadata）来有效隐藏延迟的问题。
-- 旨在设计一种新型预取器，能够战略性地利用额外的内存容量和带宽，以换取更优的延迟隐藏能力。</p>
-<p><strong>方法</strong>
-- 提出 <strong>RICH Prefetcher</strong>，其核心设计理念是通过消耗内存容量和带宽来换取更低的有效访问延迟。
-- <strong>多尺度空间局部性利用</strong>：
-  - 支持 <strong>2 KB</strong>、<strong>4 KB</strong> 和 <strong>16 KB</strong> 三种不同大小的空间区域进行预取。
-  - 为不同区域设计差异化的触发机制：对 <strong>16 KB 大区域</strong>采用 <strong>(PC, 5 offsets)</strong> 的多偏移触发机制以保证<strong>高精度</strong>；对 <strong>2 KB/4 KB 小区域</strong>采用更轻量级的触发（如 Bingo 的 <strong>(PC, address)</strong>）以保证<strong>高覆盖率</strong>。
-  - 设计了<strong>区域仲裁单元 (Region Arbitration)</strong>，根据精度和性能优先级（16KB &gt; 4KB &gt; 2KB，但 (PC, address) 触发的 2KB 优先级最高）选择最优的预取区域，并引入去重机制避免重叠预取。
-- <strong>分层元数据存储</strong>：
-  - 对元数据按<strong>访问频率</strong>、<strong>延迟容忍度</strong>和<strong>面积开销</strong>进行分类。
-  - <strong>片上存储</strong>：存放对延迟敏感的小区域（2KB/4KB）模式、训练元数据和控制元数据。
-  - <strong>片外存储</strong>：将访问不频繁、面积开销大的 <strong>16 KB 区域模式表 (PHT)</strong> 存放在主存中，并在片上保留一个小型缓存。仅当模式的预取计数（prefetch count）超过阈值（如30）时，才将其写入片外存储，以减少不必要的片外访问。
-  - </p>
-<p><img alt="" src="../images/caca357af3f3213087919d97821353c5fd143706cce1834eabdabd91fa574906.jpg" /></p>
+<p><strong>目的</strong></p>
+<ul>
+<li>针对未来内存系统（如 <strong>Non-Volatile Memory (NVM)</strong> 和 <strong>CXL-based memory pooling</strong>）呈现出的 <strong>高带宽、大容量但高延迟</strong> 的趋势，解决传统硬件预取器（prefetcher）因受限于片上存储面积而无法充分利用丰富元数据（rich metadata）来有效隐藏延迟的问题。</li>
+<li>旨在设计一种新型预取器，能够战略性地利用额外的内存容量和带宽，以换取更优的延迟隐藏能力。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>RICH Prefetcher</strong>，其核心设计理念是通过消耗内存容量和带宽来换取更低的有效访问延迟。</li>
+<li><strong>多尺度空间局部性利用</strong>：<ul>
+<li>支持 <strong>2 KB</strong>、<strong>4 KB</strong> 和 <strong>16 KB</strong> 三种不同大小的空间区域进行预取。</li>
+<li>为不同区域设计差异化的触发机制：对 <strong>16 KB 大区域</strong>采用 <strong>(PC, 5 offsets)</strong> 的多偏移触发机制以保证<strong>高精度</strong>；对 <strong>2 KB/4 KB 小区域</strong>采用更轻量级的触发（如 Bingo 的 <strong>(PC, address)</strong>）以保证<strong>高覆盖率</strong>。</li>
+<li>设计了<strong>区域仲裁单元 (Region Arbitration)</strong>，根据精度和性能优先级（16KB &gt; 4KB &gt; 2KB，但 (PC, address) 触发的 2KB 优先级最高）选择最优的预取区域，并引入去重机制避免重叠预取。</li>
+</ul>
+</li>
+<li><strong>分层元数据存储</strong>：<ul>
+<li>对元数据按<strong>访问频率</strong>、<strong>延迟容忍度</strong>和<strong>面积开销</strong>进行分类。</li>
+<li><strong>片上存储</strong>：存放对延迟敏感的小区域（2KB/4KB）模式、训练元数据和控制元数据。</li>
+<li><strong>片外存储</strong>：将访问不频繁、面积开销大的 <strong>16 KB 区域模式表 (PHT)</strong> 存放在主存中，并在片上保留一个小型缓存。仅当模式的预取计数（prefetch count）超过阈值（如30）时，才将其写入片外存储，以减少不必要的片外访问。</li>
+<li><img alt="" src="../images/caca357af3f3213087919d97821353c5fd143706cce1834eabdabd91fa574906.jpg" /></li>
+</ul>
+</li>
+</ul>
 <p><em>Table 2: Categorization of RICH's metadata</em></p>
-<p><strong>结果</strong>
-- 在标准单核系统中，RICH 相比当前最先进的 <strong>Bingo</strong> 预取器实现了 <strong>3.4%</strong> 的平均性能提升。
-- 在模拟未来高延迟内存系统（增加 <strong>120 ns</strong> 内存延迟）的场景下，RICH 的优势更为显著，性能提升分别达到 <strong>8.3%</strong>（对比 Bingo）和 <strong>6.2%</strong>（对比 PMP）。
-- RICH 在关键指标上全面超越基线：
-  - <strong>覆盖率 (Coverage)</strong>: <strong>75%</strong> vs. Bingo 的 64%。
-  - <strong>及时性 (Timeliness)</strong>: <strong>91%</strong> vs. Bingo 的 78%。
-  - <strong>准确率 (Accuracy)</strong>: <strong>76.3%</strong>，与 Bingo 的 76.6% 基本持平。
-- 即使将部分 16KB 模式表放置在片外，性能损失也仅为 <strong>0.5%</strong>，验证了分层存储策略的有效性。
-- </p>
-<p><img alt="" src="../images/ea6cb47571db4912102c6d7d95ce78ada61a7820c3f3c835589744805aeb2767.jpg" /></p>
+<p><strong>结果</strong></p>
+<ul>
+<li>在标准单核系统中，RICH 相比当前最先进的 <strong>Bingo</strong> 预取器实现了 <strong>3.4%</strong> 的平均性能提升。</li>
+<li>在模拟未来高延迟内存系统（增加 <strong>120 ns</strong> 内存延迟）的场景下，RICH 的优势更为显著，性能提升分别达到 <strong>8.3%</strong>（对比 Bingo）和 <strong>6.2%</strong>（对比 PMP）。</li>
+<li>RICH 在关键指标上全面超越基线：<ul>
+<li><strong>覆盖率 (Coverage)</strong>: <strong>75%</strong> vs. Bingo 的 64%。</li>
+<li><strong>及时性 (Timeliness)</strong>: <strong>91%</strong> vs. Bingo 的 78%。</li>
+<li><strong>准确率 (Accuracy)</strong>: <strong>76.3%</strong>，与 Bingo 的 76.6% 基本持平。</li>
+</ul>
+</li>
+<li>即使将部分 16KB 模式表放置在片外，性能损失也仅为 <strong>0.5%</strong>，验证了分层存储策略的有效性。</li>
+<li><img alt="" src="../images/ea6cb47571db4912102c6d7d95ce78ada61a7820c3f3c835589744805aeb2767.jpg" /></li>
+</ul>
 <p><em>Figure 10: RICH improves coverage and timeliness while maintaining comparable accuracy</em></p>
 <ul>
-<li></li>
+<li><img alt="" src="../images/ac26fd56c7458e04d1de3b82eefd5b28980b072696244293935ceee8ea963cc4.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/ac26fd56c7458e04d1de3b82eefd5b28980b072696244293935ceee8ea963cc4.jpg" /></p>
 <p><em>Figure 14: Performance under different memory bandwidth</em></p>
-<p><strong>结论</strong>
-- RICH 预取器通过创新的<strong>多尺度区域预取</strong>和<strong>分层元数据存储</strong>机制，成功地将丰富的元数据转化为显著的性能收益，尤其适用于<strong>高延迟、高带宽</strong>的未来内存架构。
-- 该设计证明了在内存资源日益丰富的背景下，硬件预取器的设计范式可以从“<strong>最小化元数据</strong>”转向“<strong>战略性利用丰富元数据</strong>”，从而更有效地应对内存墙挑战。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li>RICH 预取器通过创新的<strong>多尺度区域预取</strong>和<strong>分层元数据存储</strong>机制，成功地将丰富的元数据转化为显著的性能收益，尤其适用于<strong>高延迟、高带宽</strong>的未来内存架构。</li>
+<li>该设计证明了在内存资源日益丰富的背景下，硬件预取器的设计范式可以从“<strong>最小化元数据</strong>”转向“<strong>战略性利用丰富元数据</strong>”，从而更有效地应对内存墙挑战。</li>
+</ul>
 <hr />
 <h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <p><strong>研究背景</strong></p>
 <ul>
 <li>现代内存技术的发展趋势是<strong>高带宽</strong>（high bandwidth）和<strong>大容量</strong>（high capacity），但代价是<strong>访问延迟</strong>（access latency）显著增加。</li>
-<li>这一趋势体现在多个层面：</li>
+<li>这一趋势体现在多个层面：<ul>
 <li><strong>设备层面</strong>：如<strong>非易失性内存</strong>（NVM）等新型存储介质，虽然密度高、成本低，但访问延迟远高于传统 DRAM。</li>
-<li><strong>系统层面</strong>：如基于 <strong>CXL </strong>(Compute Express Link) 的内存池化架构，通过共享内存扩展了有效容量，但也引入了额外的访问延迟。</li>
+<li><strong>系统层面</strong>：如基于 **CXL **(Compute Express Link) 的内存池化架构，通过共享内存扩展了有效容量，但也引入了额外的访问延迟。</li>
+</ul>
+</li>
 <li>传统的硬件预取器（如 SMS, Bingo, PMP）主要为<strong>面积效率</strong>（area efficiency）而设计，通常将元数据（metadata）存储在片上，这限制了其能捕获的内存访问模式的多样性，尤其难以处理跨越多个页面的大范围空间局部性。</li>
 </ul>
 <p><strong>研究动机</strong></p>
 <ul>
 <li>面对高延迟内存，传统的“精简元数据”设计哲学已不再适用。高带宽、大容量的内存系统有能力承载和传输更丰富的信息，这为设计更强大的预取器提供了机会。</li>
-<li>然而，直接扩展现有预取器的元数据规模会面临两个核心挑战：</li>
+<li>然而，直接扩展现有预取器的元数据规模会面临两个核心挑战：<ul>
 <li><strong>如何将丰富的元数据有效转化为性能收益</strong>？简单地扩大规模往往遭遇<strong>边际效益递减</strong>（law of diminishing marginal returns）。</li>
 <li><strong>如何以最小的开销实现这些元数据</strong>？将所有元数据放在片上会消耗大量宝贵的<strong>片上面积</strong>（on-chip area），而完全依赖片外存储则会因获取元数据本身的高延迟而抵消预取带来的好处。</li>
+</ul>
+</li>
 </ul>
 <p><strong>核心贡献</strong></p>
 <p>RICH 预取器通过一种创新的设计，巧妙地利用了未来内存系统的特性，实现了用<strong>容量和带宽换取延迟隐藏</strong>的目标。</p>
 <ul>
-<li><strong>提出了一种多尺度、多触发机制的预取策略</strong>，结合了大区域和小区域预取的优势：</li>
+<li><strong>提出了一种多尺度、多触发机制的预取策略</strong>，结合了大区域和小区域预取的优势：<ul>
 <li><strong>大区域</strong>（16 KB）：采用<strong>多偏移触发</strong>（multi-offset trigger）机制（如 (PC, 5 offsets)），通过观察多个访问地址后再触发预取，确保了<strong>高精度</strong>（high accuracy），适合发射长距离、高带宽的预取流以提升<strong>及时性</strong>（timeliness）。</li>
 <li><strong>小区域</strong>（2 KB/4 KB）：采用轻量级触发（如 Bingo 的 (PC, address) 或 (PC, 3 offsets)），优先保证<strong>高覆盖率</strong>（high coverage），即使预测错误，其惩罚（浪费的带宽和缓存污染）也较小。</li>
 <li><strong>区域仲裁机制</strong>：当多个区域同时被触发时，根据预设的优先级（2KB-(PC,address) &gt; 16KB &gt; 4KB &gt; 2KB-(PC,offset)）和去重逻辑选择最优的预取请求，避免了冗余和冲突。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/422c82dae797ba1a7110178407e9347cf3d4bdb82956c403ca656ded0eb8e80a.jpg" /></p>
 <p><em>Figure 2: The multi-offset trigger mechanism can distinguish "common-origin, later-divergent" access streams</em></p>
 <p><img alt="" src="../images/1f10b5e59c03da97147d1e6f49132168e55c6d8bffc6ba398eef1107e5abb7ce.jpg" /></p>
 <p><em>Figure 3: By using more access offsets in a trigger, we can trade off between the accuracy and coverage of prefetching. Specifically, a), b),and c) correspond to 16 KB-region, 4 KBregion, and 2 KB-region.</em></p>
 <ul>
-<li><strong>设计了一种分层的片上/片下元数据存储机制</strong>，以最小化整体开销：</li>
+<li><strong>设计了一种分层的片上/片下元数据存储机制</strong>，以最小化整体开销：<ul>
 <li><strong>片上存储</strong>：存放对延迟敏感的组件，包括 2KB/4KB 区域的模式表（PHT）、训练单元（Training Unit）和控制元数据。</li>
 <li><strong>片下存储</strong>（主存）：存放访问频率较低、但占用空间巨大的 16KB 区域模式。该设计利用了 16KB 大预取流本身对元数据访问延迟的<strong>天然容忍度</strong>（latency tolerance）。</li>
 <li><strong>两级缓存结构</strong>：为 16KB 模式设计了一个小型的片上 PHT Cache，并配合一个 Valid Map 来管理片外存储的有效性，仅当模式的预取计数（prefetch count）超过阈值时才进行片外读写，有效减少了不必要的片外访问。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/caca357af3f3213087919d97821353c5fd143706cce1834eabdabd91fa574906.jpg" /></p>
 <p><em>Table 2: Categorization of RICH's metadata</em></p>
 <p><img alt="" src="../images/8a2bbe0f30407dfa37e775c401d9144a90a7e78df58cfb7eabcdb2ec24266775.jpg" /></p>
 <p><em>Figure 4: Achieving high accuracy in large spatial regions and high coverage in small spatial regions by using different numbers of trigger offsets Figure 5: Placing 16 KB PHT off-chip keeps most prefetch opportunities, even with additional memory access latency</em></p>
 <ul>
-<li><strong>实验评估结果显著</strong>：</li>
+<li><strong>实验评估结果显著</strong>：<ul>
 <li>在常规系统中，RICH 相比当前最先进的 Bingo 预取器实现了 <strong>3.4%</strong> 的性能提升。</li>
 <li>在模拟未来高延迟内存系统（额外增加 120ns 延迟）的场景下，RICH 的优势更为突出，性能提升分别达到 <strong>8.3%</strong>（vs. Bingo）和 <strong>6.2%</strong>（vs. PMP）。</li>
 <li>RICH 在<strong>覆盖率</strong>和<strong>及时性</strong>上均有大幅提升，同时保持了与 Bingo 相当的<strong>准确性</strong>。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/ea6cb47571db4912102c6d7d95ce78ada61a7820c3f3c835589744805aeb2767.jpg" /></p>
 <p><em>Figure 10: RICH improves coverage and timeliness while maintaining comparable accuracy</em></p>
@@ -616,41 +626,53 @@
 <p><strong>多尺度空间预取与仲裁机制</strong></p>
 <ul>
 <li>RICH 同时支持 <strong>2 KB</strong>、<strong>4 KB</strong> 和 <strong>16 KB</strong> 三种不同粒度的空间区域预取，以适应不同工作负载对空间局部性的多样化需求。</li>
-<li>为平衡<strong>准确性 </strong>(Accuracy)与<strong>覆盖率 </strong>(Coverage)，RICH 为不同区域大小设计了差异化的触发机制：</li>
+<li>为平衡**准确性 <strong>(Accuracy)与</strong>覆盖率 **(Coverage)，RICH 为不同区域大小设计了差异化的触发机制：<ul>
 <li><strong>16 KB 大区域</strong>：采用 <strong>(PC, 5 offsets)</strong> 的<strong>多偏移触发</strong>机制。该机制通过观察一个区域内至少5个不同的访问偏移量后再触发预取，显著提高了预测的准确性（&gt;90%），但牺牲了部分覆盖率。这解决了传统单偏移触发在大区域上因“同源异流”（common-origin, later-divergent）访问模式而导致的高误预取率问题。</li>
 <li><strong>4 KB 中区域</strong>：采用 <strong>(PC, 3 offsets)</strong> 触发机制，作为准确性和覆盖率的折中。</li>
 <li><strong>2 KB 小区域</strong>：沿用 <strong>Bingo</strong> 的触发方式，包括 <strong>(PC, offset)</strong> 和 <strong>(PC, address)</strong>。其中 <strong>(PC, address)</strong> 触发能捕获部分时间局部性，且因其误预取代价低，被赋予最高优先级。</li>
-<li>当多个区域同时被触发时，RICH 通过一个<strong>区域仲裁单元 </strong>(Region Arbitration) 进行决策：</li>
+</ul>
+</li>
+<li>当多个区域同时被触发时，RICH 通过一个**区域仲裁单元 **(Region Arbitration) 进行决策：<ul>
 <li>采用<strong>固定优先级策略</strong>：2KB-(PC,address) &gt; 16KB &gt; 4KB &gt; 2KB-(PC,offset)。</li>
 <li>引入<strong>去重机制</strong>：一旦大区域（如16KB）预取被触发，在其完成前会阻止其覆盖范围内的小区域（如4KB、2KB）再次触发，以避免冗余和低效的预取。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/e7db11d6666a6329d6f2f885db1cc278ea284b557d2571e2444b5f024a5d2ead.jpg" /></p>
 <p><em>Figure 8: The Region Arbitration unit selects the appropriate region to prefetch (Step P3)</em></p>
 <p><strong>片上/片下分层元数据存储</strong></p>
 <ul>
 <li>RICH 对其元数据进行细致分类，并根据<strong>访问频率</strong>、<strong>延迟容忍度</strong>和<strong>面积开销</strong>将其智能地分配到片上或片下存储，以最小化整体开销。</li>
-<li><strong>适合片下存储的元数据</strong>：</li>
+<li><strong>适合片下存储的元数据</strong>：<ul>
 <li><strong>16 KB 区域的模式历史表 </strong>(PHT)：这些模式向量（256-bit）数量庞大，全部放在片上会导致超过 <strong>100 KB</strong> 的昂贵开销。由于16KB预取本身具有高延迟容忍度（一次预取大量数据），因此大部分低频访问的16KB模式被卸载到<strong>主存</strong>中。</li>
 <li>采用<strong>两级存储策略</strong>：一个小型的 <strong>256-entry 片上 PHT Cache</strong> 缓存高频模式，而完整的 <strong>4096-entry PHT</strong> 存储在片下主存（占用 <strong>128 KB</strong>）。</li>
 <li>引入<strong>写回过滤机制</strong>：只有当一个16KB模式的预取计数（即位向量中'1'的数量）超过阈值（如30）时，才将其从片上缓存写回到片下PHT，以减少不必要的片外访问。</li>
-<li><strong>适合片上存储的元数据</strong>：</li>
+</ul>
+</li>
+<li><strong>适合片上存储的元数据</strong>：<ul>
 <li><strong>2 KB 和 4 KB 区域的 PHT</strong>：对延迟敏感，必须保留在片上以保证及时响应。</li>
-<li><strong>训练单元 </strong>(Training Unit)：包含<strong>过滤表 </strong>(FT) 和<strong>累积表 </strong>(AT)，用于在线学习访问模式，需频繁与L2 Cache交互。</li>
-<li><strong>控制元数据</strong>：如<strong>飞行中预取表 </strong>(Inflight Prefetch Table) 和仲裁逻辑，面积小但访问频繁。</li>
+<li>**训练单元 <strong>(Training Unit)：包含</strong>过滤表 <strong>(FT) 和</strong>累积表 **(AT)，用于在线学习访问模式，需频繁与L2 Cache交互。</li>
+<li><strong>控制元数据</strong>：如**飞行中预取表 **(Inflight Prefetch Table) 和仲裁逻辑，面积小但访问频繁。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/caca357af3f3213087919d97821353c5fd143706cce1834eabdabd91fa574906.jpg" /></p>
 <p><em>Table 2: Categorization of RICH's metadata</em></p>
 <p><strong>端到端工作流程</strong></p>
 <ul>
 <li><strong>训练过程</strong>：当发生L2 Cache Miss或命中预取行时，训练单元会记录访问信息。对于每个区域，先在FT中记录访问，当观察到足够多的不同偏移后，将模式提升到AT中累积成位向量，最终存入对应的PHT。</li>
-<li><strong>片上预测过程</strong>：</li>
+<li><strong>片上预测过程</strong>：<ul>
 <li><strong>查找阶段</strong>：Lookup Units 使用FIFO缓冲区收集最近的访问偏移，以形成触发条件。</li>
 <li><strong>查询阶段</strong>：满足触发条件后，查询对应的片上PHT。若16KB PHT未命中，则进入片下预测流程。</li>
 <li><strong>仲裁阶段</strong>：Region Arbitration单元根据优先级和去重规则，决定最终执行哪个区域的预取请求。</li>
-<li><strong>片下预测过程 </strong>(仅16KB)：</li>
+</ul>
+</li>
+<li>**片下预测过程 **(仅16KB)：<ul>
 <li>当片上PHT未命中但片下Valid Map指示存在有效模式时，异步发起片外元数据加载请求。</li>
 <li>在等待元数据返回期间，系统会跟踪处理器对目标16KB区域的“<strong>迟到访问</strong>”（late prefetches），并在元数据返回后，从预取流中剔除这些已被访问的子区域，以避免无用预取。</li>
 <li>最终，修剪后的预取请求被送入仲裁单元并生成预取流。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/6e338dab1c2f2dec78cf49ff7a45c67ddb5f075d83e56eb99f94a5a78cca2ac0.jpg" /></p>
 <p><em>Figure 6: Architecture of RICH</em></p>
@@ -658,14 +680,20 @@
 <p><strong>多尺度空间预取与多偏移触发机制的实现原理</strong></p>
 <p>RICH预取器的核心创新在于其<strong>多尺度空间预取</strong>（multi-scale spatial prefetching）与<strong>多偏移触发</strong>（multi-offset trigger）机制，该机制通过动态选择不同粒度的空间区域并匹配相应的触发策略，以协同优化<strong>覆盖率</strong>（Coverage）和<strong>准确性</strong>（Accuracy）。</p>
 <ul>
-<li><strong>区域尺寸与触发条件的差异化设计</strong>：</li>
-<li><strong>16KB大区域</strong>：采用 <strong>(PC, 5 offsets)</strong> 触发条件。此设计旨在解决“<strong>common-origin, later-divergent</strong>”（同源异流）问题，即多个访问流起始于同一偏移但后续轨迹不同。通过观察前5个不同的访问偏移，可以高置信度地验证访问流的方向，从而实现<strong>accuracy-first</strong>（精度优先）策略。<h2 id="-516kb90">- 实验表明，使用5个偏移可将16KB区域的预取<strong>准确性提升至90%以上</strong>，有效避免了因误预取大量无用缓存行而造成的带宽浪费和缓存污染。<a class="headerlink" href="#-516kb90" title="Permanent link">&para;</a></h2>
+<li><strong>区域尺寸与触发条件的差异化设计</strong>：<ul>
+<li><strong>16KB大区域</strong>：采用 <strong>(PC, 5 offsets)</strong> 触发条件。此设计旨在解决“<strong>common-origin, later-divergent</strong>”（同源异流）问题，即多个访问流起始于同一偏移但后续轨迹不同。通过观察前5个不同的访问偏移，可以高置信度地验证访问流的方向，从而实现<strong>accuracy-first</strong>（精度优先）策略。<ul>
+<li>实验表明，使用5个偏移可将16KB区域的预取<strong>准确性提升至90%以上</strong>，有效避免了因误预取大量无用缓存行而造成的带宽浪费和缓存污染。</li>
+<li><img alt="" src="../images/1f10b5e59c03da97147d1e6f49132168e55c6d8bffc6ba398eef1107e5abb7ce.jpg" /></li>
+</ul>
 </li>
 </ul>
-<p><img alt="" src="../images/1f10b5e59c03da97147d1e6f49132168e55c6d8bffc6ba398eef1107e5abb7ce.jpg" /></p>
+</li>
+</ul>
 <p><em>Figure 3: By using more access offsets in a trigger, we can trade off between the accuracy and coverage of prefetching. Specifically, a), b),and c) correspond to 16 KB-region, 4 KBregion, and 2 KB-region.</em></p>
 <ul>
-<li><strong>4KB中等区域</strong>：采用 <strong>(PC, 3 offsets)</strong> 触发条件。作为16KB和2KB之间的折衷，在保证较高准确性的同时，提供比16KB更广的覆盖范围。</li>
+<li>
+<p><strong>4KB中等区域</strong>：采用 <strong>(PC, 3 offsets)</strong> 触发条件。作为16KB和2KB之间的折衷，在保证较高准确性的同时，提供比16KB更广的覆盖范围。</p>
+</li>
 <li>
 <p><strong>2KB小区域</strong>：沿用Bingo的两种触发方式：</p>
 <ul>
@@ -675,56 +703,61 @@
 </li>
 <li>
 <p><strong>输入与输出关系</strong>：</p>
-</li>
+<ul>
 <li><strong>输入</strong>：处理器核心产生的L2缓存未命中（demand miss）或对预取数据的命中（hit on prefetch）事件，包含<strong>程序计数器</strong>（PC）和<strong>虚拟地址</strong>（address）。</li>
 <li><strong>处理流程</strong>：<ol>
 <li><strong>偏移收集</strong>：Lookup Unit为每个活动的区域维护一个FIFO缓冲区，持续收集访问偏移。16KB区域的FIFO深度为5，4KB为3，2KB则无需FIFO。</li>
 <li><strong>触发判定</strong>：当FIFO被填满（对于16KB/4KB）或发生单次访问（对于2KB）时，生成对应的触发事件。</li>
-<li><strong>模式查询</strong>：使用触发事件（如哈希后的(PC, 5 offsets)）查询片上<strong>Pattern History Table </strong>(PHT)。</li>
+<li><strong>模式查询</strong>：使用触发事件（如哈希后的(PC, 5 offsets)）查询片上**Pattern History Table **(PHT)。</li>
 <li><strong>区域仲裁</strong>：若多个区域同时触发，则根据预设的<strong>固定优先级</strong>进行仲裁。</li>
 </ol>
 </li>
 <li><strong>输出</strong>：一个经过仲裁的、最优的预取请求，包含目标区域标签和对应的位向量（bit-vector）模式，用于生成具体的预取流。</li>
 </ul>
+</li>
+</ul>
 <p><strong>区域仲裁与协同工作机制</strong></p>
 <p>为避免不同尺度预取间的冗余和冲突，RICH设计了一套精细的<strong>Region Arbitration</strong>（区域仲裁）单元。</p>
 <ul>
-<li><strong>仲裁优先级规则</strong>（从高到低）：</li>
+<li>
+<p><strong>仲裁优先级规则</strong>（从高到低）：</p>
+<ol>
 <li><strong>2KB区域</strong>（由 (PC, address) 触发）</li>
 <li><strong>16KB区域</strong>（由 (PC, 5 offsets) 触发）</li>
 <li><strong>4KB区域</strong>（由 (PC, 3 offsets) 触发）</li>
-<li>
-<p><strong>2KB区域</strong>（由 (PC, offset) 触发）</p>
+<li><strong>2KB区域</strong>（由 (PC, offset) 触发）</li>
+</ol>
 </li>
 <li>
 <p><strong>去重机制</strong>（De-duplication）：</p>
-</li>
+<ul>
 <li>一旦一个大区域（如16KB）的预取被触发并开始执行，在其完成前，会阻止其内部所有子区域（4KB和2KB）的预取触发。</li>
 <li>这一机制基于一个关键洞察：<strong>大区域预取在多偏移触发下具有更高的准确性</strong>，应优先保障其执行，避免被低准确性的小区预取干扰。</li>
 <li>同时，为了防止大区域预取因触发条件苛刻（需5次访问）而导致机会丢失，<strong>小区域预取可以先行启动</strong>，确保在大区域模式确认前不丢失早期的预取机会。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/e7db11d6666a6329d6f2f885db1cc278ea284b557d2571e2444b5f024a5d2ead.jpg" /></p>
 <p><em>Figure 8: The Region Arbitration unit selects the appropriate region to prefetch (Step P3)</em></p>
 <p><strong>参数设置与性能权衡</strong></p>
 <p>该机制的关键参数（如偏移数量、PHT大小）均经过实验调优，以在性能和开销间取得最佳平衡。</p>
 <ul>
-<li><strong>多偏移触发的权衡效应</strong>：</li>
+<li><strong>多偏移触发的权衡效应</strong>：<ul>
 <li>增加触发所需的偏移数量会<strong>显著提高准确性</strong>，但会<strong>降低覆盖率</strong>，因为更严格的触发条件更难被满足。</li>
-<li></li>
+<li><img alt="" src="../images/422c82dae797ba1a7110178407e9347cf3d4bdb82956c403ca656ded0eb8e80a.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/422c82dae797ba1a7110178407e9347cf3d4bdb82956c403ca656ded0eb8e80a.jpg" /></p>
+</li>
+</ul>
 <p><em>Figure 2: The multi-offset trigger mechanism can distinguish "common-origin, later-divergent" access streams</em></p>
-<p>展示了多偏移如何区分同源异流的访问模式。
-  - </p>
+<p>展示了多偏移如何区分同源异流的访问模式。</p>
 <p><img alt="" src="../images/1f10b5e59c03da97147d1e6f49132168e55c6d8bffc6ba398eef1107e5abb7ce.jpg" /></p>
 <p><em>Figure 3: By using more access offsets in a trigger, we can trade off between the accuracy and coverage of prefetching. Specifically, a), b),and c) correspond to 16 KB-region, 4 KBregion, and 2 KB-region.</em></p>
 <p>的图表(a)(b)(c)清晰地量化了在16KB、4KB、2KB区域上，偏移数量与准确率、覆盖率之间的此消彼长关系。</p>
 <ul>
-<li><strong>PHT容量敏感性</strong>：</li>
+<li><strong>PHT容量敏感性</strong>：<ul>
 <li><strong>2KB PHT</strong>：由于(PC, address)触发会产生大量条目，其性能在4096个条目时达到饱和。</li>
 <li><strong>4KB PHT</strong>：在1024个条目时性能饱和。</li>
-<li><strong>16KB PHT </strong>(片上缓存)：仅需256个条目即可获得接近最优的性能，这得益于其<strong>分层存储设计</strong>——低频模式被卸载到片外内存，片上缓存只需保留高频热点模式。<ul>
-<li></li>
+<li><strong>16KB PHT </strong>(片上缓存)：仅需256个条目即可获得接近最优的性能，这得益于其<strong>分层存储设计</strong>——低频模式被卸载到片外内存，片上缓存只需保留高频热点模式。</li>
 </ul>
 </li>
 </ul>
@@ -738,7 +771,7 @@
 <li><strong>提升覆盖率</strong>：通过2KB小区域的广泛触发，捕获了传统4KB固定粒度预取器无法覆盖的细粒度或跨页空间局部性。</li>
 <li><strong>提升及时性</strong>（Timeliness）：通过16KB大区域的批量预取，充分利用高带宽内存的优势，在一次触发中填充大量数据，显著增加了预取距离，使数据更可能在处理器真正需要时已存在于缓存中。</li>
 <li><strong>维持高准确性</strong>：通过为大区域引入多偏移验证，从根本上解决了大区域预取易误判的难题，使得激进的预取策略变得可行且高效。</li>
-<li><strong>最终效果</strong>：如 </li>
+<li><strong>最终效果</strong>：如</li>
 </ul>
 <p><img alt="" src="../images/ea6cb47571db4912102c6d7d95ce78ada61a7820c3f3c835589744805aeb2767.jpg" /></p>
 <p><em>Figure 10: RICH improves coverage and timeliness while maintaining comparable accuracy</em></p>
@@ -800,11 +833,13 @@
 <p>RICH prefetcher 的核心创新之一是其分层元数据存储架构，该架构旨在利用未来高带宽、大容量但高延迟的内存系统特性，在不显著增加片上面积开销的前提下，有效管理用于多尺度空间预取的丰富元数据。</p>
 <ul>
 <li><strong>设计驱动力</strong>: 传统的预取器受限于片上存储（on-chip storage）的稀缺性，通常将所有元数据（如 Pattern History Table, PHT）保存在芯片上，这严重限制了可学习模式的复杂度和数量。RICH 则反其道而行之，主动利用片外主存（off-chip main memory）的巨大容量来存放部分元数据。</li>
-<li><strong>分类依据</strong>: RICH 根据三个关键维度对元数据进行分类，以决定其存储位置：</li>
+<li><strong>分类依据</strong>: RICH 根据三个关键维度对元数据进行分类，以决定其存储位置：<ul>
 <li><strong>访问频率 (Access Frequency)</strong>: 高频访问的元数据应置于片上以保证低延迟。</li>
 <li><strong>延迟容忍度 (Latency Tolerance)</strong>: 某些元数据的使用场景天然能容忍较高的访问延迟。</li>
 <li><strong>面积开销 (Area Overheads)</strong>: 大型数据结构会消耗大量宝贵的片上资源。</li>
-<li><strong>具体策略</strong>: 基于上述分析，RICH 将不同区域大小的预取模式进行差异化处理：</li>
+</ul>
+</li>
+<li><strong>具体策略</strong>: 基于上述分析，RICH 将不同区域大小的预取模式进行差异化处理：<ul>
 <li><strong>2KB 和 4KB 区域模式</strong>: 这些模式对延迟极为敏感，因为它们需要快速响应单次或少数几次缓存未命中。因此，它们的 PHT 被完全放置在<strong>片上</strong>。</li>
 <li><strong>16KB 区域模式</strong>: 这些模式具有独特的性质，使其非常适合片外存储：<ul>
 <li><strong>高延迟容忍度</strong>: 一次成功的 16KB 区域预取可以带来多达 256 条缓存线（cache line）的数据，即使获取其元数据有延迟，只要在处理器访问到该区域末尾前完成，依然能提供巨大的性能收益。实验表明，即使增加 <strong>50ns</strong> 的额外延迟，预取机会的损失也<strong>小于15%</strong>。</li>
@@ -813,21 +848,31 @@
 </ul>
 </li>
 </ul>
+</li>
+</ul>
 <p><img alt="" src="../images/8a2bbe0f30407dfa37e775c401d9144a90a7e78df58cfb7eabcdb2ec24266775.jpg" /></p>
 <p><em>Figure 4: Achieving high accuracy in large spatial regions and high coverage in small spatial regions by using different numbers of trigger offsets Figure 5: Placing 16 KB PHT off-chip keeps most prefetch opportunities, even with additional memory access latency</em></p>
 <p><strong>16KB 区域元数据的分层存储实现</strong></p>
 <p>为了高效管理 16KB 区域的元数据，RICH 采用了一种类似缓存的层级结构。</p>
 <ul>
-<li><strong>片上组件</strong>:</li>
+<li><strong>片上组件</strong>:<ul>
 <li><strong>16KB PHT Cache</strong>: 一个小型的、全相联或高相联的片上缓存，容量为 <strong>256 个条目</strong>。它专门用于缓存<strong>高频访问</strong>的 16KB 区域模式，以实现快速访问。</li>
 <li><strong>Valid Map Unit</strong>: 一个 <strong>4096 位</strong>的位图（bit-vector），用于标记哪些 16KB 模式当前有效并存在于片外存储中。每个位对应一个唯一的 <strong>12-bit trigger ID</strong>。</li>
-<li><strong>片外组件</strong>:</li>
+</ul>
+</li>
+<li><strong>片外组件</strong>:<ul>
 <li><strong>Off-chip PHT</strong>: 位于主存中的一个专用数组，可容纳 <strong>4096</strong> 个 16KB 区域模式。每个模式是一个 <strong>256-bit</strong> 的位向量，总计占用 <strong>128KB</strong> 主存空间。</li>
-<li><strong>地址映射机制</strong>:</li>
+</ul>
+</li>
+<li><strong>地址映射机制</strong>:<ul>
 <li>采用 <strong>12-bit trigger ID</strong> 作为索引，实现了片上 Valid Map、片上 PHT Cache（作为标签）和片外 PHT 之间的<strong>一对一映射</strong>。这种设计简化了查找逻辑，避免了复杂的哈希冲突处理。</li>
-<li><strong>写回与过滤策略</strong>:</li>
+</ul>
+</li>
+<li><strong>写回与过滤策略</strong>:<ul>
 <li>并非所有在片上 PHT Cache 中被淘汰的模式都会被写入片外 PHT。</li>
 <li>系统引入了一个 <strong>prefetch count threshold</strong>（预取计数阈值），只有当一个模式的位向量中 '1' 的数量（即预期能预取的缓存线数）<strong>超过阈值（默认为30）</strong> 时，才认为其价值足够高，值得进行片外存储操作。这有效减少了不必要的片外读写，避免了因元数据访问导致的 <strong>row buffer misses</strong> 性能损失。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/caca357af3f3213087919d97821353c5fd143706cce1834eabdabd91fa574906.jpg" /></p>
 <p><em>Table 2: Categorization of RICH's metadata</em></p>
@@ -837,16 +882,22 @@
 <p>分层存储架构深度集成到 RICH 的预测流程中，确保了高效和正确性。</p>
 <ul>
 <li><strong>输入</strong>: 预测单元接收到由 <strong>(PC, 5 offsets)</strong> 触发的 16KB 区域预取请求。</li>
-<li><strong>片上查找</strong>:</li>
+<li><strong>片上查找</strong>:<ul>
 <li>首先计算 <strong>12-bit trigger ID</strong>，并在 <strong>16KB PHT Cache</strong> 中查找。</li>
 <li>如果命中（Hit），则立即使用该模式生成预取流。</li>
-<li><strong>片外查找（Miss 处理）</strong>:</li>
+</ul>
+</li>
+<li><strong>片外查找（Miss 处理）</strong>:<ul>
 <li>如果片上未命中，则查询 <strong>Valid Map Unit</strong>。</li>
 <li>如果 Valid Map 对应位为 <strong>1</strong>，说明有效模式存在于片外。此时，控制单元会<strong>异步</strong>发起一个从主存加载该模式的请求。</li>
 <li>在等待片外数据返回期间，处理器可能已经访问了该 16KB 区域的部分内容。为此，系统会跟踪这些“<strong>late prefetches</strong>”（晚期预取），并以 <strong>2KB 子区域</strong>为粒度进行标记（共8位）。</li>
-<li><strong>输出与整合</strong>:</li>
+</ul>
+</li>
+<li><strong>输出与整合</strong>:<ul>
 <li>当片外模式数据返回后，它会被同时存入 <strong>16KB PHT Cache</strong>，并根据 <strong>late prefetches</strong> 的标记信息对模式进行修剪（trimming），避免对已访问过的子区域重复预取。</li>
 <li>修剪后的模式被送入 <strong>Region Arbitration</strong> 单元，参与最终的预取决策。</li>
+</ul>
+</li>
 <li><strong>整体作用</strong>: 该架构成功地将<strong>绝大部分</strong>（通过 Valid Map 管理）16KB 模式的存储负担卸载到片外，同时通过一个小巧的片上缓存和智能的过滤/修剪机制，将片外访问带来的延迟开销降至最低，实现了<strong>面积开销</strong>与<strong>性能收益</strong>的最佳平衡。评估显示，相比将所有元数据放在片上的方案，此分层设计仅带来 <strong>0.5%</strong> 的性能损失。</li>
 </ul>
 <p><img alt="" src="../images/aaf6a2c49ab61c4dae46cc589d72aba6cc85e21d45cac2fc2ee3ba31749afe78.jpg" /></p>
@@ -878,16 +929,15 @@
 <li>在<strong>高内存延迟</strong>场景下（如增加60ns或120ns），更高的阈值（如30）更为合适，以确保只有能带来巨大收益的模式才值得承担高昂的访问延迟。</li>
 </ul>
 </li>
-<li></li>
+<li><img alt="" src="../images/2b17544a46a6e5d8b489a68317ee3077425179981f2709c8e913cdccf424b403.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/2b17544a46a6e5d8b489a68317ee3077425179981f2709c8e913cdccf424b403.jpg" /></p>
 <p><em>Figure 17: Sensitivity to different prefetch count thresholds for 16 KB-region under different memory latencies</em></p>
 <ul>
 <li>这一敏感性分析证明了该过滤机制的有效性和必要性，它能根据系统特性动态调整策略，最大化性能。</li>
 </ul>
 <p><strong>输入输出关系及在整体架构中的作用</strong></p>
 <ul>
-<li><strong>输入</strong>: <ul>
+<li><strong>输入</strong>:<ul>
 <li>从Training Unit生成的16KB区域模式及其对应的<strong>预取计数</strong>。</li>
 <li>On-chip PHT Cache的<strong>驱逐信号</strong>。</li>
 <li>Prediction Unit发出的<strong>片上未命中信号</strong>和Valid Map的<strong>有效性查询结果</strong>。</li>
@@ -911,29 +961,37 @@
 <ul>
 <li><strong>仿真平台与配置</strong>：实验基于 <strong>ChampSim</strong> 仿真器，模拟一个 <strong>Intel Alder Lake 性能核 (P-Core)</strong> 的单核及四核系统。L2 Cache 大小为 <strong>2 MB</strong>，主内存访问延迟在基线配置下为 <strong>210 ns</strong>。</li>
 <li><strong>对比对象</strong>：RICH 与四种先进的空间预取器进行对比，分别是 <strong>Bingo</strong>、<strong>PMP</strong>、<strong>SPP-PPF</strong> 和 <strong>SMS</strong>。所有预取器均部署在 <strong>L2 Cache</strong> 层级。</li>
-<li><strong>工作负载</strong>：</li>
+<li><strong>工作负载</strong>：<ul>
 <li>使用了超过 <strong>100 条</strong>来自 <strong>SPEC CPU 2006/2017</strong>、<strong>Ligra</strong> 和 <strong>Parsec</strong> 的 traces。</li>
 <li>排除了 L2 <strong>MPKI (Misses Per Kilo Instructions)</strong> 小于 2 的 traces，以聚焦于内存敏感型应用。</li>
 <li>单核评估使用全部 traces；多核评估包括 <strong>同构 (homogeneous)</strong> 和 <strong>异构 (heterogeneous)</strong> 工作负载组合。</li>
+</ul>
+</li>
 <li><strong>评估指标</strong>：主要性能指标为 <strong>Speedup</strong>（相对于无预取基线），并辅以 <strong>Accuracy</strong>（准确率）、<strong>Coverage</strong>（覆盖率）和 <strong>Timeliness</strong>（及时性）进行深入分析。</li>
 </ul>
 <p><img alt="" src="../images/73c48b90f5023bb454bfcb01a1da86144aceb0984be2c4bb5a7d33e2bf5e8ab6.jpg" /></p>
 <p><em>Table 5: Simulated system</em></p>
 <p><strong>核心结果数据</strong></p>
 <ul>
-<li><strong>单核性能</strong>：在标准延迟下，RICH 相对于无预取基线平均提升 <strong>39%</strong>。与 SOTA 预取器相比：</li>
+<li><strong>单核性能</strong>：在标准延迟下，RICH 相对于无预取基线平均提升 <strong>39%</strong>。与 SOTA 预取器相比：<ul>
 <li>超越 <strong>Bingo</strong> <strong>3.4%</strong></li>
 <li>超越 <strong>PMP</strong> <strong>4.4%</strong></li>
 <li>超越 <strong>SMS</strong> <strong>6.6%</strong></li>
 <li>超越 <strong>SPP-PPF</strong> <strong>16.8%</strong></li>
-<li><strong>高延迟场景下的优势</strong>：当主存延迟额外增加 <strong>120 ns</strong> 时，RICH 的优势显著扩大：</li>
+</ul>
+</li>
+<li><strong>高延迟场景下的优势</strong>：当主存延迟额外增加 <strong>120 ns</strong> 时，RICH 的优势显著扩大：<ul>
 <li>超越 <strong>Bingo</strong> <strong>8.3%</strong></li>
 <li>超越 <strong>PMP</strong> <strong>6.2%</strong>
-  这证明了 RICH 在未来高延迟内存系统（如 CXL, NVM）中的巨大潜力。</li>
-<li><strong>性能指标分解</strong>：RICH 的成功源于其在关键指标上的全面优化：</li>
+    这证明了 RICH 在未来高延迟内存系统（如 CXL, NVM）中的巨大潜力。</li>
+</ul>
+</li>
+<li><strong>性能指标分解</strong>：RICH 的成功源于其在关键指标上的全面优化：<ul>
 <li><strong>Coverage</strong>: <strong>75%</strong> (vs. Bingo 的 64%)</li>
 <li><strong>Timeliness</strong>: <strong>91%</strong> (vs. Bingo 的 78%)</li>
 <li><strong>Accuracy</strong>: <strong>76.3%</strong> (与 Bingo 的 76.6% 基本持平)</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/ea6cb47571db4912102c6d7d95ce78ada61a7820c3f3c835589744805aeb2767.jpg" /></p>
 <p><em>Figure 10: RICH improves coverage and timeliness while maintaining comparable accuracy</em></p>

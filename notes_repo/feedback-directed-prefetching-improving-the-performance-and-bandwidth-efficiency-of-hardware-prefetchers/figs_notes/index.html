@@ -900,7 +900,7 @@
 <li>左侧 IPC 图中，纵轴范围从 0.00 到 5.00，横轴列出各基准程序名称（如 bzip2, gap, mcf 等），并以不同灰度柱体表示四种预取配置：<strong>No prefetching</strong>, <strong>Very Conservative</strong>, <strong>Middle-of-the-Road</strong>, <strong>Very Aggressive</strong>。</li>
 <li>右侧准确率图中，纵轴范围从 0.00 到 1.00，横轴与左图一致，柱体仅展示三种预取配置：<strong>Very Conservative</strong>, <strong>Middle-of-the-Road</strong>, <strong>Very Aggressive</strong>，未包含 No prefetching。</li>
 <li>从 IPC 图可见，<strong>Very Aggressive</strong> 配置在多数程序（如 wupwise, mgrid）上显著提升性能，但在部分程序（如 ammp, applu）上导致性能严重下降，甚至低于 <strong>No prefetching</strong>。</li>
-<li>从准确率图可见，<strong>Very Aggressive</strong> 配置在大部分程序上保持较高准确率（&gt;0.8），但在 ammp、applu、galgel 等程序上准确率极低（&lt;0.4），与 IPC 下降趋势高度相关。</li>
+<li>从准确率图可见，<strong>Very Aggressive</strong> 配置在大部分程序上保持较高准确率（&gt;0.8），但在 ammp、applu、galgel 等程序上准确率极低（\&lt;0.4），与 IPC 下降趋势高度相关。</li>
 <li>两图共同揭示一个关键结论：<strong>预取器的性能收益与其准确率强相关</strong>。高准确率时，激进预取带来高收益；低准确率时，激进预取反而造成性能损失。</li>
 <li>数据概览如下表：</li>
 </ul>
@@ -1137,12 +1137,14 @@
 <li>该图片展示了一个用于<strong>反馈导向预取（Feedback Directed Prefetching, FDP）</strong>机制中的<strong>计数器更新公式</strong>，其核心目的是在程序执行的不同阶段动态调整预取器行为。</li>
 <li>公式定义为：<code>CounterValue = ½ CounterValueAtTheBeginningOfTheInterval + ½ CounterValueDuringInterval</code>，表明当前计数值是<strong>上一采样区间末值</strong>与<strong>当前区间内新增值</strong>的<strong>等权重平均</strong>。</li>
 <li>此设计赋予<strong>近期行为更高权重</strong>，同时保留历史趋势信息，使系统能快速响应程序相位变化，避免因瞬时波动导致误判。</li>
-<li>该公式应用于FDP中所有关键指标计数器，包括：</li>
+<li>该公式应用于FDP中所有关键指标计数器，包括：<ul>
 <li><code>pref-total</code>（总预取请求数）</li>
 <li><code>used-total</code>（有用预取数）</li>
 <li><code>late-total</code>（迟到预取数）</li>
 <li><code>pollution-total</code>（由预取引发的需求缺失数）</li>
 <li><code>demand-total</code>（总需求缺失数）</li>
+</ul>
+</li>
 <li>计数器更新触发条件基于<strong>L2缓存块驱逐次数</strong>，当驱逐计数器<code>eviction-count</code>超过静态阈值<code>Tinterval</code>（实验中设为8192）时，启动一次采样间隔结束与计数器更新。</li>
 <li>该机制确保了反馈信息的<strong>时效性与稳定性</strong>，是实现动态调整预取器激进程度和缓存插入策略的基础。</li>
 </ul>
@@ -1206,10 +1208,12 @@
 <ul>
 <li>该图片展示的是 <strong>Table 2</strong>，标题为 “How to adapt? Use of the three metrics to adjust the aggressiveness of the prefetcher”，用于说明如何根据三个反馈指标动态调整硬件预取器的激进程度。</li>
 <li>表格共包含 <strong>12 种情况（Case 1–12）</strong>，每种情况由三个输入指标决定：<strong>Prefetch Accuracy</strong>（预取准确率）、<strong>Prefetch Lateness</strong>（预取延迟）、<strong>Cache Pollution</strong>（缓存污染），并据此决定 <strong>Dynamic Configuration Counter Update</strong>（动态配置计数器更新）及其原因。</li>
-<li>三个输入指标被划分为不同等级：</li>
+<li>三个输入指标被划分为不同等级：<ul>
 <li>Prefetch Accuracy：High、Medium、Low</li>
 <li>Prefetch Lateness：Late、Not-Late</li>
 <li>Cache Pollution：Polluting、Not-Polluting</li>
+</ul>
+</li>
 <li>输出动作包括三种：<strong>Increment</strong>（增加激进程度）、<strong>Decrement</strong>（降低激进程度）、<strong>No Change</strong>（保持不变），并附带简要理由。</li>
 </ul>
 <p>以下是表格内容的结构化呈现：</p>
@@ -1311,24 +1315,28 @@
 </tbody>
 </table>
 <ul>
-<li>关键观察：</li>
+<li>关键观察：<ul>
 <li>当预取<strong>准确率高且无污染</strong>时（如 Case 3），系统维持当前配置，视为“最佳状态”。</li>
 <li>当预取<strong>延迟高但准确率高</strong>时（如 Case 1, 2, 5），系统倾向于<strong>增加激进程度</strong>以提升及时性，即使存在污染也优先保证命中。</li>
 <li>当预取<strong>准确率低或造成污染</strong>时（如 Case 4, 6, 8, 9, 10, 12），系统倾向于<strong>降低激进程度</strong>，以节省带宽或减少污染。</li>
 <li><strong>Case 11</strong> 是唯一在低准确率下仍保持不变的情况，前提是预取不延迟且无污染——表明系统认为此时预取虽不精准但尚可接受，无需调整。</li>
+</ul>
+</li>
 <li>该表是 <strong>Feedback Directed Prefetching (FDP)</strong> 机制的核心决策逻辑，体现了其<strong>动态适应性</strong>和<strong>多维度权衡能力</strong>。</li>
 </ul>
 <h3 id="5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5cjpg">5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5c.jpg<a class="headerlink" href="#5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5cjpg" title="Permanent link">&para;</a></h3>
 <p><img alt="5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5c.jpg" src="../images/5149595d2a64efbab3f11de1ed2f84818ee3734e5d23f036f1d78e03ff35ec5c.jpg" /></p>
 <ul>
 <li>该图片展示了一个包含六个关键阈值参数的表格，这些参数用于控制 <strong>Feedback Directed Prefetching (FDP)</strong> 机制在运行时动态调整预取器行为。</li>
-<li>表格中的参数及其默认值如下：</li>
+<li>表格中的参数及其默认值如下：<ul>
 <li><strong>Ahigh</strong>: 0.75 —— 用于判断预取准确率是否“高”的阈值。</li>
 <li><strong>Alow</strong>: 0.40 —— 用于判断预取准确率是否“低”的阈值。</li>
 <li><strong>Tlateness</strong>: 0.01 —— 用于判断预取是否“延迟”的阈值（即延迟比例超过此值则视为“late”）。</li>
 <li><strong>Tpollution</strong>: 0.005 —— 用于判断预取是否造成“高污染”的阈值（即污染比例超过此值则视为“polluting”）。</li>
 <li><strong>Phigh</strong>: 0.25 —— 用于判断缓存污染程度是否“高”的阈值（决定插入位置为 LRU）。</li>
 <li><strong>Plow</strong>: 0.005 —— 用于判断缓存污染程度是否“低”的阈值（决定插入位置为 MID）。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1381,16 +1389,22 @@
 <ul>
 <li><strong>处理器核心架构</strong>：采用 <strong>4 GHz</strong> 主频的超标量、乱序执行设计，具备 <strong>20-cycle</strong> 的最小分支预测错误惩罚机制。</li>
 <li><strong>分支预测器</strong>：配置为 <strong>aggressive hybrid branch predictor</strong>，包含 <strong>64K-entry gshare</strong>、<strong>64K-entry per-address</strong> 与 <strong>64K-entry selector</strong>，并精确建模错误路径执行行为。</li>
-<li><strong>指令窗口与执行核心</strong>：</li>
+<li><strong>指令窗口与执行核心</strong>：<ul>
 <li>指令窗口支持 <strong>128-entry reorder buffer</strong>，配备 <strong>128-entry INT</strong> 和 <strong>128-entry FP physical register files</strong>，以及 <strong>64-entry store buffer</strong>。</li>
 <li>执行核心为 <strong>8-wide</strong>，除浮点除法外均完全流水线化，并配备完整旁路网络。</li>
-<li><strong>片上缓存系统</strong>：</li>
+</ul>
+</li>
+<li><strong>片上缓存系统</strong>：<ul>
 <li><strong>L1 Instruction Cache</strong>：容量 <strong>64KB</strong>，延迟 <strong>2-cycle</strong>。</li>
 <li><strong>L1 Data Cache</strong>：容量 <strong>64KB</strong>，<strong>4-way set associative</strong>，<strong>8 banks</strong>，延迟 <strong>2-cycle</strong>，支持每周期 <strong>4 load accesses</strong>。</li>
 <li><strong>L2 Cache</strong>：容量 <strong>1MB</strong>，<strong>16-way unified</strong>，<strong>8 banks</strong>，延迟 <strong>10-cycle</strong>，配备 <strong>128 L2 MSHRs</strong>，<strong>1 read port</strong> 与 <strong>1 write port</strong>，采用 <strong>LRU replacement policy</strong>，块大小为 <strong>64B</strong>。</li>
-<li><strong>总线与内存子系统</strong>：</li>
+</ul>
+</li>
+<li><strong>总线与内存子系统</strong>：<ul>
 <li>主内存延迟为 <strong>500-cycle</strong>，采用 <strong>32 DRAM banks</strong>，<strong>32B-wide split-transaction core-to-memory bus</strong>，频率比为 <strong>4:1</strong>，带宽上限为 <strong>4.5 GB/s</strong>。</li>
 <li>最大允许 <strong>128 outstanding misses</strong> 至主存，精确建模银行冲突、带宽争用及队列延迟。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1587,29 +1601,33 @@
 <h3 id="figure-5-dynamic-adjustment-of-prefetcher-aggressiveness">Figure 5. Dynamic adjustment of prefetcher aggressiveness<a class="headerlink" href="#figure-5-dynamic-adjustment-of-prefetcher-aggressiveness" title="Permanent link">&para;</a></h3>
 <p><img alt="48a7f881981e7386629c8a257bcbbd0852280640199823f654041d147eb8296a.jpg" src="../images/48a7f881981e7386629c8a257bcbbd0852280640199823f654041d147eb8296a.jpg" /></p>
 <ul>
-<li>图片展示了 <strong>Figure 5</strong>，标题为“Dynamic adjustment of prefetcher aggressiveness”，用于比较不同预取器配置在17个SPEC CPU2000基准程序上的性能表现，以 <strong>Instructions per Cycle (IPC)</strong> 为衡量指标。</li>
-<li>图中包含五种预取器配置的柱状图对比：</li>
+<li>
+<p>图片展示了 <strong>Figure 5</strong>，标题为“Dynamic adjustment of prefetcher aggressiveness”，用于比较不同预取器配置在17个SPEC CPU2000基准程序上的性能表现，以 <strong>Instructions per Cycle (IPC)</strong> 为衡量指标。</p>
+</li>
+<li>
+<p>图中包含五种预取器配置的柱状图对比：</p>
+<ul>
 <li><strong>No prefetching</strong>（无预取）</li>
 <li><strong>Very Conservative</strong>（非常保守）</li>
 <li><strong>Middle-of-the-Road</strong>（中等）</li>
 <li><strong>Very Aggressive</strong>（非常激进）</li>
-<li>
-<p><strong>Dynamic Aggressiveness</strong>（动态激进性，即本文提出的FDP机制）</p>
+<li><strong>Dynamic Aggressiveness</strong>（动态激进性，即本文提出的FDP机制）</li>
+</ul>
 </li>
 <li>
 <p>各配置在不同基准程序上的IPC表现差异显著，例如：</p>
-</li>
+<ul>
 <li>在 <strong>mgrid</strong>、<strong>wupwise</strong>、<strong>equake</strong> 等程序上，<strong>Very Aggressive</strong> 和 <strong>Dynamic Aggressiveness</strong> 表现优异，IPC远高于其他配置。</li>
-<li>
-<p>在 <strong>applu</strong>、<strong>ammp</strong>、<strong>galgel</strong> 等程序上，<strong>Very Aggressive</strong> 导致IPC大幅下降，而 <strong>Dynamic Aggressiveness</strong> 成功避免了性能退化，甚至优于 <strong>No prefetching</strong>。</p>
+<li>在 <strong>applu</strong>、<strong>ammp</strong>、<strong>galgel</strong> 等程序上，<strong>Very Aggressive</strong> 导致IPC大幅下降，而 <strong>Dynamic Aggressiveness</strong> 成功避免了性能退化，甚至优于 <strong>No prefetching</strong>。</li>
+</ul>
 </li>
 <li>
 <p><strong>Dynamic Aggressiveness</strong> 的优势体现在：</p>
-</li>
+<ul>
 <li>在大多数程序上接近或达到最佳传统配置的性能。</li>
 <li>在原本因激进预取导致性能下降的程序（如 <strong>applu</strong>、<strong>ammp</strong>）上，通过动态调整，将性能损失从48%以上降低至6%以内。</li>
-<li>
-<p>平均IPC比 <strong>Very Aggressive</strong> 高出 <strong>4.7%</strong>，比 <strong>Middle-of-the-Road</strong> 高出 <strong>11.9%</strong>。</p>
+<li>平均IPC比 <strong>Very Aggressive</strong> 高出 <strong>4.7%</strong>，比 <strong>Middle-of-the-Road</strong> 高出 <strong>11.9%</strong>。</li>
+</ul>
 </li>
 <li>
 <p>下表总结部分关键程序的IPC表现：</p>
@@ -1665,12 +1683,14 @@
 <ul>
 <li>图片展示了 <strong>Figure 6. Distribution of the dynamic aggressiveness level</strong>，即在 <strong>Dynamic Aggressiveness</strong> 机制下，不同采样区间内动态配置计数器（Dynamic Configuration Counter）的分布情况。</li>
 <li>横轴为 SPEC CPU2000 基准测试程序名称，纵轴为“采样区间的百分比”，表示在程序运行期间，各配置等级被选中的时间占比。</li>
-<li>配置等级共五级，从 <strong>Very Conservative (1)</strong> 到 <strong>Very Aggressive (5)</strong>，分别用不同填充图案和颜色表示：</li>
+<li>配置等级共五级，从 <strong>Very Conservative (1)</strong> 到 <strong>Very Aggressive (5)</strong>，分别用不同填充图案和颜色表示：<ul>
 <li>Very Conservative (1)：浅灰色斜线</li>
 <li>Conservative (2)：中灰色</li>
 <li>Middle-of-the-Road (3)：白色</li>
 <li>Aggressive (4)：深灰色</li>
 <li>Very Aggressive (5)：黑色</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1769,23 +1789,27 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li><strong>关键观察</strong>：<ul>
 <li>对于 <strong>applu、ammp、galgel</strong> 等程序，FDP 机制自动选择 <strong>Very Conservative (1)</strong> 配置，以避免预取造成的性能退化。</li>
 <li>对于 <strong>wupwise、mgrid、equake</strong> 等程序，FDP 机制几乎全程启用 <strong>Very Aggressive (5)</strong>，最大化性能收益。</li>
 <li>这种动态调整能力使 FDP 能在不同程序相位中自适应地选择最优预取强度，从而在整体上提升性能并消除传统固定配置带来的负向影响。</li>
+</ul>
+</li>
 </ul>
 <h3 id="figure-7-dynamic-adjustment-of-prefetch-insertion-policy">Figure 7. Dynamic adjustment of prefetch insertion policy<a class="headerlink" href="#figure-7-dynamic-adjustment-of-prefetch-insertion-policy" title="Permanent link">&para;</a></h3>
 <p><img alt="faeff948fd441f807661f315188552e676e2224832ec7abc50f8b273ddf8009c.jpg" src="../images/faeff948fd441f807661f315188552e676e2224832ec7abc50f8b273ddf8009c.jpg" /></p>
 <ul>
 <li>图片展示了 <strong>Figure 7. Dynamic adjustment of prefetch insertion policy</strong>，用于评估不同缓存插入策略对性能（IPC）的影响。</li>
 <li>横轴为 SPEC CPU2000 基准测试程序，纵轴为每周期指令数（Instructions per Cycle），衡量性能。</li>
-<li>图中包含六种插入策略的对比：</li>
+<li>图中包含六种插入策略的对比：<ul>
 <li><strong>No prefetching</strong>：无预取。</li>
 <li><strong>LRU</strong>：预取块插入 LRU 位置。</li>
 <li><strong>LRU-4</strong>：插入第 floor(n/4) 个最久未使用位置。</li>
 <li><strong>MID</strong>：插入第 floor(n/2) 个最久未使用位置。</li>
 <li><strong>MRU</strong>：插入 MRU 位置（默认策略）。</li>
 <li><strong>Dynamic Insertion</strong>：动态调整插入位置（基于污染反馈）。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1822,12 +1846,14 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键发现</strong>：</li>
+<li>
+<p><strong>关键发现</strong>：</p>
+<ul>
 <li><strong>Dynamic Insertion</strong> 在几乎所有程序中都能自动选择最优插入位置，实现“自适应”优化。</li>
 <li>在 <strong>applu</strong> 和 <strong>ammp</strong> 等易受污染影响的程序中，Dynamic Insertion 显著优于 MRU，接近 LRU 表现。</li>
 <li>在 <strong>wupwise</strong>、<strong>mgrid</strong> 等高收益程序中，Dynamic Insertion 接近 MRU，避免了 LRU 的性能损失。</li>
-<li>
-<p>静态策略无法兼顾所有程序特性，而动态机制通过运行时反馈实现了全局最优。</p>
+<li>静态策略无法兼顾所有程序特性，而动态机制通过运行时反馈实现了全局最优。</li>
+</ul>
 </li>
 <li>
 <p>结论：<strong>动态插入策略</strong> 能根据实际污染情况智能调整预取块在 LRU 栈中的位置，从而在不增加硬件复杂度的前提下，显著提升整体性能和带宽效率。</p>
@@ -1838,10 +1864,12 @@
 <ul>
 <li>图片展示了在采用 <strong>Dynamic Insertion</strong> 机制时，不同 SPEC CPU2000 基准程序中预取块（prefetched blocks）被插入到 L2 缓存 LRU 栈不同位置的百分比分布。</li>
 <li>横轴为各基准程序名称，纵轴为“<strong>Percentage of prefetch insertions</strong>”，即预取块插入操作在总预取中的占比。</li>
-<li>图例说明三种插入位置策略：</li>
+<li>图例说明三种插入位置策略：<ul>
 <li><strong>LRU</strong>：最久未使用位置（深灰色实心）</li>
 <li><strong>LRU-4</strong>：第 floor(n/4) 个最久未使用位置（斜线填充）</li>
 <li><strong>MID</strong>：中间位置（浅灰色实心）</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1940,23 +1968,31 @@
 </tbody>
 </table>
 <ul>
-<li>关键观察：</li>
+<li>关键观察：<ul>
 <li>对于 <strong>applu、ammp、galgel</strong> 这三个传统上因预取导致性能下降的程序，<strong>Dynamic Insertion</strong> 机制显著倾向于将预取块插入到 <strong>LRU</strong> 位置，以减少缓存污染。</li>
 <li>对于其他大多数程序（如 <strong>wupwise、mgrid、equake</strong>），机制选择插入到 <strong>MID</strong> 或 <strong>LRU-4</strong> 位置，平衡了保留有用数据与避免污染的需求。</li>
 <li>该图直观验证了 FDP 机制能根据运行时检测到的 <strong>cache pollution</strong> 水平，动态调整插入策略，从而在不同程序上实现最优性能。</li>
 </ul>
+</li>
+</ul>
 <h3 id="figure-9-overall-performance-of-fdp">Figure 9. Overall performance of FDP<a class="headerlink" href="#figure-9-overall-performance-of-fdp" title="Permanent link">&para;</a></h3>
 <p><img alt="ad3a41f6c96bd07ee1044157778e6e3516c03903241a6d77c514c279a7088bf1.jpg" src="../images/ad3a41f6c96bd07ee1044157778e6e3516c03903241a6d77c514c279a7088bf1.jpg" /></p>
 <ul>
-<li>图片展示了 <strong>Figure 9. Overall performance of FDP</strong>，对比了五种不同 prefetching 策略在 17 个 SPEC CPU2000 基准程序上的 IPC（Instructions per Cycle）性能表现。</li>
-<li>横轴为各基准程序名称，纵轴为 IPC 值，单位为 Instructions per Cycle。</li>
-<li>图例包含五种策略：</li>
+<li>
+<p>图片展示了 <strong>Figure 9. Overall performance of FDP</strong>，对比了五种不同 prefetching 策略在 17 个 SPEC CPU2000 基准程序上的 IPC（Instructions per Cycle）性能表现。</p>
+</li>
+<li>
+<p>横轴为各基准程序名称，纵轴为 IPC 值，单位为 Instructions per Cycle。</p>
+</li>
+<li>
+<p>图例包含五种策略：</p>
+<ul>
 <li><strong>No prefetching</strong>：无预取。</li>
 <li><strong>Very Aggressive</strong>：传统最激进预取配置。</li>
 <li><strong>Dynamic Insertion</strong>：仅动态调整预取块插入位置。</li>
 <li><strong>Dynamic Aggressiveness</strong>：仅动态调整预取器激进度。</li>
-<li>
-<p><strong>Dyn. Aggressiveness + Dyn. Insertion</strong>：同时动态调整激进度与插入位置，即完整的 <strong>Feedback Directed Prefetching (FDP)</strong>。</p>
+<li><strong>Dyn. Aggressiveness + Dyn. Insertion</strong>：同时动态调整激进度与插入位置，即完整的 <strong>Feedback Directed Prefetching (FDP)</strong>。</li>
+</ul>
 </li>
 <li>
 <p>性能对比数据摘要如下：</p>
@@ -2129,25 +2165,33 @@
 </tbody>
 </table>
 <ul>
-<li>关键观察：</li>
+<li>关键观察：<ul>
 <li><strong>FDP (Dyn. Aggressiveness + Dyn. Insertion)</strong> 在几乎所有基准程序上均达到或接近最高 IPC，显著优于其他单一策略。</li>
 <li>在 <strong>ammp</strong> 和 <strong>applu</strong> 上，传统 <strong>Very Aggressive</strong> 配置导致性能严重下降（IPC 分别降至 ~0.7 和 ~0.9），而 <strong>FDP</strong> 成功恢复并提升性能至 ~1.4 和 ~1.5，<strong>完全消除负向影响</strong>。</li>
 <li><strong>gmean</strong>（几何平均）显示，FDP 相比最佳传统配置（Very Aggressive）提升 <strong>6.5%</strong>，验证论文核心结论。</li>
 <li>单独使用 <strong>Dynamic Aggressiveness</strong> 或 <strong>Dynamic Insertion</strong> 均有收益，但二者结合效果更优，体现机制互补性。</li>
 <li>对于 <strong>mcf</strong> 和 <strong>art</strong> 等对预取不敏感的程序，所有策略性能相近，FDP 未引入额外开销。</li>
 </ul>
+</li>
+</ul>
 <h3 id="figure-10-effect-of-fdp-on-memory-bandwidth-consumption">Figure 10. Effect of FDP on memory bandwidth consumption<a class="headerlink" href="#figure-10-effect-of-fdp-on-memory-bandwidth-consumption" title="Permanent link">&para;</a></h3>
 <p><img alt="6f57ce72dd5d5d7e89f67eb0a9231507b83e472974a8cedd5496d046f28bb57d.jpg" src="../images/6f57ce72dd5d5d7e89f67eb0a9231507b83e472974a8cedd5496d046f28bb57d.jpg" /></p>
 <ul>
-<li>图片标题为 <strong>Figure 10. Effect of FDP on memory bandwidth consumption</strong>，展示的是反馈导向预取（FDP）机制对内存带宽消耗的影响，以 <strong>BPKI</strong>（Memory Bus Accesses per thousand retired Instructions）为衡量单位。</li>
-<li>图表横轴列出 17 个 SPEC CPU2000 内存密集型基准程序，纵轴表示 BPKI 值，范围从 0 到 70。</li>
-<li>图例包含五种配置：</li>
+<li>
+<p>图片标题为 <strong>Figure 10. Effect of FDP on memory bandwidth consumption</strong>，展示的是反馈导向预取（FDP）机制对内存带宽消耗的影响，以 <strong>BPKI</strong>（Memory Bus Accesses per thousand retired Instructions）为衡量单位。</p>
+</li>
+<li>
+<p>图表横轴列出 17 个 SPEC CPU2000 内存密集型基准程序，纵轴表示 BPKI 值，范围从 0 到 70。</p>
+</li>
+<li>
+<p>图例包含五种配置：</p>
+<ul>
 <li><strong>No prefetching</strong>：无预取</li>
 <li><strong>Very Conservative</strong>：非常保守预取</li>
 <li><strong>Middle-of-the-Road</strong>：中等预取</li>
 <li><strong>Very Aggressive</strong>：非常激进预取</li>
-<li>
-<p><strong>Dynamic Aggressiveness + Dynamic Insertion</strong>：FDP 动态调整激进性与插入策略</p>
+<li><strong>Dynamic Aggressiveness + Dynamic Insertion</strong>：FDP 动态调整激进性与插入策略</li>
+</ul>
 </li>
 <li>
 <p>各配置在不同基准程序上的 BPKI 表现如下：</p>
@@ -2312,13 +2356,15 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
 <li><strong>Very Aggressive</strong> 配置在多个程序（如 applu、ammp、art）上显著增加 BPKI，表明其带来大量无效或污染性预取请求。</li>
 <li><strong>Dynamic Aggressiveness + Dynamic Insertion</strong> 在所有程序上均优于 <strong>Very Aggressive</strong>，尤其在 <strong>applu</strong> 和 <strong>ammp</strong> 上，BPKI 从约 30 降至约 12，降幅达 <strong>60%</strong>。</li>
 <li>在 <strong>art</strong> 程序中，FDP 将 BPKI 从 65 降至 50，节省约 <strong>23%</strong> 带宽。</li>
 <li>对于 <strong>mcf</strong>，FDP 与传统配置差异较小，说明该程序预取效率高，动态调整空间有限。</li>
-<li>
-<p><strong>FDP 平均降低 18.7% 内存带宽消耗</strong>，同时提升性能，实现带宽效率优化。</p>
+<li><strong>FDP 平均降低 18.7% 内存带宽消耗</strong>，同时提升性能，实现带宽效率优化。</li>
+</ul>
 </li>
 <li>
 <p>总体趋势显示，FDP 机制能智能识别并抑制低效预取行为，在保持高性能的同时大幅减少内存总线访问次数，尤其在传统激进预取导致性能退化的程序上效果显著。</p>
@@ -2420,10 +2466,18 @@
 <h3 id="figure-12-bandwidth-consumption-of-prefetch-cache-vs-fdp">Figure 12. Bandwidth consumption of prefetch cache vs. FDP<a class="headerlink" href="#figure-12-bandwidth-consumption-of-prefetch-cache-vs-fdp" title="Permanent link">&para;</a></h3>
 <p><img alt="26fb57050fca59062249afbb0507bc33eb46646d3a5fedcbe87771851247f7cd.jpg" src="../images/26fb57050fca59062249afbb0507bc33eb46646d3a5fedcbe87771851247f7cd.jpg" /></p>
 <ul>
-<li>图表标题为 <strong>Figure 12. Bandwidth consumption of prefetch cache vs. FDP</strong>，展示不同预取机制在内存带宽消耗（BPKI）上的对比。</li>
-<li>横轴列出 <strong>SPEC CPU2000</strong> 套件中的多个基准测试程序，包括 bzip2、gap、mcf、vortex、ammp、applu、art、equake、galgel、mgrid、sixtrack、swim、wupwise、amean 等。</li>
-<li>纵轴表示 <strong>BPKI（Memory Bus Accesses per thousand retired Instructions）</strong>，数值越高代表内存带宽消耗越大。</li>
-<li>图例包含七种配置：</li>
+<li>
+<p>图表标题为 <strong>Figure 12. Bandwidth consumption of prefetch cache vs. FDP</strong>，展示不同预取机制在内存带宽消耗（BPKI）上的对比。</p>
+</li>
+<li>
+<p>横轴列出 <strong>SPEC CPU2000</strong> 套件中的多个基准测试程序，包括 bzip2、gap、mcf、vortex、ammp、applu、art、equake、galgel、mgrid、sixtrack、swim、wupwise、amean 等。</p>
+</li>
+<li>
+<p>纵轴表示 <strong>BPKI（Memory Bus Accesses per thousand retired Instructions）</strong>，数值越高代表内存带宽消耗越大。</p>
+</li>
+<li>
+<p>图例包含七种配置：</p>
+<ul>
 <li><strong>No prefetching</strong>：无预取，作为基线。</li>
 <li><strong>Very Aggressive (base)</strong>：传统非常激进的流式预取器，直接插入 L2 缓存。</li>
 <li><strong>2KB, fully-associative</strong>：2KB 全相联预取缓存。</li>
@@ -2431,18 +2485,18 @@
 <li><strong>32KB, 16-way</strong>：32KB 16路组相联预取缓存。</li>
 <li><strong>64KB, 16-way</strong>：64KB 16路组相联预取缓存。</li>
 <li><strong>1MB, 16-way</strong>：1MB 16路组相联预取缓存。</li>
-<li>
-<p><strong>Dyn. Aggr. + Dyn. Ins.</strong>：本文提出的 <strong>Feedback Directed Prefetching (FDP)</strong>，动态调整预取激进度与插入策略。</p>
+<li><strong>Dyn. Aggr. + Dyn. Ins.</strong>：本文提出的 <strong>Feedback Directed Prefetching (FDP)</strong>，动态调整预取激进度与插入策略。</li>
+</ul>
 </li>
 <li>
 <p>关键观察：</p>
-</li>
+<ul>
 <li><strong>Very Aggressive (base)</strong> 在多数程序中带宽消耗最高，尤其在 art、equake、mgrid、sixtrack、swim 等程序上显著高于其他方案。</li>
 <li><strong>FDP (Dyn. Aggr. + Dyn. Ins.)</strong> 在几乎所有程序中均表现出<strong>最低或接近最低的 BPKI</strong>，表明其在减少内存带宽消耗方面极为高效。</li>
 <li>预取缓存方案（如 2KB、8KB）虽然能降低污染，但因容量小导致预取块被提前驱逐，反而在部分程序（如 art、equake）中带宽消耗仍较高。</li>
 <li>大容量预取缓存（如 32KB、64KB、1MB）虽能降低污染，但硬件成本高，且带宽消耗仍高于 FDP。例如，在 art 和 equake 上，<strong>FDP 的 BPKI 明显低于 32KB 和 64KB 预取缓存</strong>。</li>
-<li>
-<p>在 ammp、applu 等原本因预取而性能下降的程序中，FDP 不仅避免了性能损失，还大幅降低了带宽消耗，远优于 Very Aggressive 配置。</p>
+<li>在 ammp、applu 等原本因预取而性能下降的程序中，FDP 不仅避免了性能损失，还大幅降低了带宽消耗，远优于 Very Aggressive 配置。</li>
+</ul>
 </li>
 <li>
 <p>数据对比摘要：</p>
@@ -2588,12 +2642,14 @@
 <li>图片包含两个并列的柱状图，分别展示 <strong>FDP</strong> 对 <strong>GHB-based C/DC prefetcher</strong> 的影响：左侧为 <strong>IPC performance</strong>，右侧为 <strong>BPKI memory bandwidth consumption</strong>。</li>
 <li>两图横轴均为 SPEC CPU2000 基准测试程序，包括 <code>bzip2</code>, <code>gap</code>, <code>mcf</code>, <code>parser</code>, <code>vortex</code>, <code>vpr</code>, <code>ammp</code>, <code>applu</code>, <code>art</code>, <code>equake</code>, <code>facerec</code>, <code>galgel</code>, <code>mesa</code>, <code>mgrid</code>, <code>sixtrack</code>, <code>swim</code>, <code>wupwise</code>, <code>amean</code>。</li>
 <li>纵轴左侧为 <strong>Instructions per Cycle (IPC)</strong>，范围从 0.0 到 4.5；右侧为 <strong>BPKI (Bus Accesses Per Kilo Instructions)</strong>，范围从 0 到 45。</li>
-<li>图例统一包含五种配置：</li>
+<li>图例统一包含五种配置：<ul>
 <li>No prefetching</li>
 <li>Very Conservative</li>
 <li>Middle-of-the-Road</li>
 <li>Very Aggressive</li>
 <li><strong>Dynamic Aggressiveness + Dynamic Insertion (FDP)</strong></li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -2632,19 +2688,21 @@
 </tbody>
 </table>
 <ul>
-<li>在 <strong>IPC 性能</strong>方面：</li>
+<li>
+<p>在 <strong>IPC 性能</strong>方面：</p>
+<ul>
 <li>FDP 在大多数程序上表现与 <strong>Very Aggressive</strong> 相当或略优。</li>
 <li>在 <strong>applu</strong> 和 <strong>ammp</strong> 等传统激进预取器性能受损的程序上，FDP 显著优于 <strong>Very Aggressive</strong>，避免了性能退化。</li>
-<li>
-<p>平均值（amean）显示 FDP 提供了与 <strong>Very Aggressive</strong> 接近的最高 IPC。</p>
+<li>平均值（amean）显示 FDP 提供了与 <strong>Very Aggressive</strong> 接近的最高 IPC。</li>
+</ul>
 </li>
 <li>
 <p>在 <strong>带宽消耗 (BPKI)</strong> 方面：</p>
-</li>
+<ul>
 <li>FDP 的带宽消耗远低于 <strong>Very Aggressive</strong>，尤其在 <strong>applu</strong>, <strong>art</strong>, <strong>galgel</strong> 等程序中降幅明显。</li>
 <li>FDP 的 BPKI 水平与 <strong>Middle-of-the-Road</strong> 相当甚至更低，表明其在保持高性能的同时大幅节省带宽。</li>
-<li>
-<p>这验证了论文中提到的“FDP 消耗 20.8% 更少内存带宽”的结论。</p>
+<li>这验证了论文中提到的“FDP 消耗 20.8% 更少内存带宽”的结论。</li>
+</ul>
 </li>
 <li>
 <p>综合来看，FDP 机制成功实现了 <strong>动态调整预取器行为</strong>，在不同程序阶段自动选择最优配置，从而在不牺牲性能的前提下显著降低带宽压力。</p>
@@ -2705,33 +2763,43 @@
 </tbody>
 </table>
 <ul>
-<li>关键观察：</li>
+<li>关键观察：<ul>
 <li>当 <strong>L2 缓存增大至 2MB</strong> 时，FDP 的 <strong>BPKI 降低幅度最大（-29.6%）</strong>，说明在更大缓存下，FDP 对减少无效预取和污染的优化效果更明显。</li>
 <li>当 <strong>内存延迟增加至 1000 cycles</strong> 时，FDP 的 <strong>IPC 提升达到最高值（8.4%）</strong>，这验证了论文结论：<strong>内存延迟越高，预取器的有效性越关键，FDP 的性能增益也越大</strong>。</li>
 <li>在 <strong>512KB L2 缓存</strong> 下，FDP 的 <strong>IPC 提升为 0%</strong>，但 <strong>BPKI 仍降低 13.9%</strong>，表明即使在小缓存场景下，FDP 也能有效节省带宽，尽管性能提升受限于缓存容量。</li>
 <li>所有实验中，<strong>BPKI 均为负值</strong>，意味着 FDP 在所有配置下都成功降低了内存带宽消耗。</li>
+</ul>
+</li>
 </ul>
 <h3 id="table-7-change-in-ipc-and-bpki-with-fdp-when-l2-size-and-memory-latency-are-varie-figure-14-ipc-performance-left-and-memory-bandwidth-consumption-in-bpki-right-impact-of-fdp-on-the-remaining-spec-benchmarks">Table 7. Change in IPC and BPKI with FDP when L2 size and memory latency are varie Figure 14. IPC performance (left) and memory bandwidth consumption in BPKI (right) impact of FDP on the remaining SPEC benchmarks<a class="headerlink" href="#table-7-change-in-ipc-and-bpki-with-fdp-when-l2-size-and-memory-latency-are-varie-figure-14-ipc-performance-left-and-memory-bandwidth-consumption-in-bpki-right-impact-of-fdp-on-the-remaining-spec-benchmarks" title="Permanent link">&para;</a></h3>
 <p><img alt="bca6b5831f5210421dbbde98a9d7118894da8e095be2dd131d9ea6bebf9c9de8.jpg" src="../images/bca6b5831f5210421dbbde98a9d7118894da8e095be2dd131d9ea6bebf9c9de8.jpg" /></p>
 <ul>
 <li>图片包含两个并列的柱状图，分别展示 <strong>FDP</strong> 对剩余 9 个 SPEC CPU2000 基准程序在 <strong>IPC</strong> 和 <strong>BPKI</strong> 上的影响。</li>
 <li>左侧图表纵轴为 <strong>Instructions per Cycle (IPC)</strong>，右侧图表纵轴为 <strong>BPKI (Memory Bus Accesses per thousand retired Instructions)</strong>，横轴均为基准程序名称：crafty, eon, gcc, gzip, perlbench, twolf, apsi, fma3d, lucas, gmean。</li>
-<li>图例统一包含五种配置：</li>
+<li>图例统一包含五种配置：<ul>
 <li>No prefetching</li>
 <li>Very Conservative</li>
 <li>Middle-of-the-Road</li>
 <li>Very Aggressive</li>
 <li><strong>Dyn. Aggressive. + Dyn. Insertion</strong>（即 FDP 最终方案）</li>
-<li>在 IPC 性能方面：</li>
+</ul>
+</li>
+<li>在 IPC 性能方面：<ul>
 <li>多数程序中，<strong>FDP 方案（Dyn. Aggressive. + Dyn. Insertion）</strong> 的 IPC 表现与最佳传统配置（通常是 Middle-of-the-Road）持平或略优。</li>
 <li><strong>gcc</strong> 程序表现突出，FDP 相比 Middle-of-the-Road 配置提升约 <strong>3.0%</strong>。</li>
 <li><strong>gmean</strong>（几何平均值）显示 FDP 提供 <strong>0.4%</strong> 的平均 IPC 增益。</li>
-<li>在 BPKI 带宽消耗方面：</li>
+</ul>
+</li>
+<li>在 BPKI 带宽消耗方面：<ul>
 <li>FDP 方案在多数程序中显著降低带宽消耗，尤其在 <strong>gcc</strong> 和 <strong>fma3d</strong> 中效果明显。</li>
 <li><strong>gmean</strong> 显示 FDP 平均减少 <strong>0.2%</strong> 的 BPKI。</li>
-<li>关键结论：</li>
+</ul>
+</li>
+<li>关键结论：<ul>
 <li>对于这 9 个非内存密集型程序，FDP 未造成性能损失，且在部分程序（如 gcc）上带来可观收益。</li>
 <li>FDP 通过动态调整有效抑制了传统激进预取器在这些程序中可能引发的 <strong>L2 cache pollution</strong>，特别是在 gcc 中避免了因指令块被驱逐导致的长延迟缓存缺失。</li>
+</ul>
+</li>
 <li>数据汇总如下：</li>
 </ul>
 <table>

@@ -525,18 +525,22 @@
 <ul>
 <li>图片包含两个并列的柱状图，分别标记为 (a) Average error 和 (b) Imagick，用于对比不同性能分析器在指令级别上的错误率。</li>
 <li>两个图表均以“Error”为纵轴，单位为百分比（%），范围从0%到60%；横轴列出五种分析器：Software、Dispatch、LCI、NCI 和 TIP。</li>
-<li><strong>图 (a) Average error</strong> 展示了所有基准测试的平均错误率：</li>
+<li><strong>图 (a) Average error</strong> 展示了所有基准测试的平均错误率：<ul>
 <li>Software 分析器错误率最高，约为 <strong>61.8%</strong>。</li>
 <li>Dispatch 分析器错误率为 <strong>53.1%</strong>。</li>
 <li>LCI 分析器错误率为 <strong>55.4%</strong>。</li>
 <li>NCI 分析器错误率为 <strong>9.3%</strong>。</li>
 <li>TIP 分析器错误率最低，仅为 <strong>1.6%</strong>。</li>
-<li><strong>图 (b) Imagick</strong> 展示了 SPEC CPU2017 基准测试 Imagick 的特定错误率：</li>
+</ul>
+</li>
+<li><strong>图 (b) Imagick</strong> 展示了 SPEC CPU2017 基准测试 Imagick 的特定错误率：<ul>
 <li>Software 错误率仍最高，接近 <strong>60%</strong>。</li>
 <li>Dispatch 错误率约为 <strong>40%</strong>。</li>
 <li>LCI 错误率约为 <strong>35%</strong>。</li>
 <li>NCI 错误率约为 <strong>20%</strong>。</li>
 <li>TIP 错误率极低，几乎不可见，约为 <strong>1.6%</strong>。</li>
+</ul>
+</li>
 <li>从数据可见，TIP 在平均和特定场景下均显著优于现有分析器，其错误率仅为 NCI 的约六分之一。</li>
 <li>所有现有分析器（Software、Dispatch、LCI、NCI）错误率较高，主要归因于 <strong>缺乏 ILP 支持</strong> 和 <strong>系统性延迟归因错误</strong>。</li>
 <li>TIP 的设计结合了 Oracle 分析器的时间归因策略与统计采样，从而在保持高精度的同时实现实际部署可行性。</li>
@@ -546,20 +550,26 @@
 <ul>
 <li>图片标题为 Figure 2，旨在对比不同性能分析采样策略在处理器流水线中的采样位置及其带来的偏差。</li>
 <li><strong>核心结论</strong>：LCI、NCI 和 TIP 在 <strong>Commit 阶段</strong>采样，而 Dispatch（及 Software）在 <strong>Dispatch 或 Fetch 阶段</strong>采样。后者因忽略指令在 ROB 中的阻塞时间，导致采样偏差。</li>
-<li>图 (a) 展示了典型的 <strong>Out-of-order 架构</strong>流程：</li>
+<li>图 (a) 展示了典型的 <strong>Out-of-order 架构</strong>流程：<ul>
 <li>指令从 Inst. Cache/TLB 获取，经 Decode、Register Rename 后进入 Dispatch。</li>
 <li>Dispatch 将指令分发至 Issue Buffer，再由 Execution Units 执行。</li>
 <li>最终指令按序提交至 Commit 阶段，同时更新 ROB。</li>
 <li>PMU 可从 LCI、NCI、TIP 三种策略中选择采样点。</li>
-<li>图 (b) 举例说明 <strong>Dispatch 采样机制</strong>：</li>
+</ul>
+</li>
+<li>图 (b) 举例说明 <strong>Dispatch 采样机制</strong>：<ul>
 <li>Load 指令（I10）因数据未就绪，在 ROB 头部阻塞（Stalled），导致后续指令（如 I18, I19）无法被调度。</li>
 <li>此时 Dispatch 阶段因背压停滞，I10 被持续采样——尽管它并未真正“执行”，而是因等待资源被“卡住”。</li>
 <li>这种采样方式错误地将延迟归因于 I10，而非其根本原因（Load 依赖）。</li>
-<li>图 (c) 展示 <strong>Commit 时间线</strong>：</li>
+</ul>
+</li>
+<li>图 (c) 展示 <strong>Commit 时间线</strong>：<ul>
 <li>横轴为周期（Cycles），纵轴为指令编号。</li>
 <li>Load 指令（I10）在第 3 周期才完成执行并提交，此前周期均处于阻塞状态。</li>
 <li>若在 Commit 阶段采样，则 Load 指令将在多个周期内被采样，真实反映其对执行时间的影响。</li>
 <li>若在 Dispatch 阶段采样，则可能在早期周期采样到 I10，造成误导性归因。</li>
+</ul>
+</li>
 <li>下表总结不同采样策略的特性：</li>
 </ul>
 <table>
@@ -613,7 +623,7 @@
 <p><img alt="6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" src="../images/6e2d7747de5315ff69260c6883954eb63d63469c99a152dd40bae57e5366e196.jpg" /></p>
 <ul>
 <li>图片展示了 Oracle Profiler 在每个时钟周期内如何对处理器状态进行分类并分配时间的逻辑流程图，其核心是基于 <strong>ROB (Reorder Buffer)</strong> 的状态判断。</li>
-<li>流程始于“<strong>Every clock cycle</strong>”，首先判断“<strong>One or more instructions in the ROB?</strong>”：</li>
+<li>流程始于“<strong>Every clock cycle</strong>”，首先判断“<strong>One or more instructions in the ROB?</strong>”：<ul>
 <li>若为“<strong>Yes</strong>”，则进入下一判断：“<strong>Committing one or more instructions?</strong>”。<ul>
 <li>若为“<strong>Yes</strong>”，则进入 <strong>State 1: Computing</strong>。在此状态下，该时钟周期的时间被<strong>平均分配</strong>给所有正在提交的指令（即 <code>1/n</code> 周期，其中 <code>n</code> 为提交的指令数）。</li>
 <li>若为“<strong>No</strong>”，则进入 <strong>State 2: Stalled</strong>。在此状态下，该时钟周期的时间被归因于<strong>阻塞提交的指令</strong>，即位于 ROB 头部的指令。</li>
@@ -622,6 +632,8 @@
 <li>若为“<strong>No</strong>”，则进入下一判断：“<strong>Is the ROB empty due to a flush?</strong>”。<ul>
 <li>若为“<strong>Yes</strong>”，则进入 <strong>State 3: Flushed</strong>。在此状态下，该时钟周期的时间被归因于<strong>导致流水线冲刷的指令</strong>（例如，错误预测的分支指令）。</li>
 <li>若为“<strong>No</strong>”，则进入 <strong>State 4: Drained</strong>。在此状态下，该时钟周期的时间被归因于<strong>清空 ROB 后第一个进入 ROB 的指令</strong>，通常是由于前端停顿（如指令缓存未命中）造成的。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -665,7 +677,7 @@
 <ul>
 <li>图片展示了在 <strong>2-wide out-of-order processor</strong> 上，<strong>Oracle</strong>、<strong>NCI</strong> 和 <strong>LCI</strong> 三种性能分析器在四种核心状态下的采样行为对比：<strong>(a) Computing</strong>、<strong>(b) Stalled</strong>、<strong>(c) Flushed</strong>、<strong>(d) Drained</strong>。</li>
 <li>每个子图包含三部分：<strong>ROB state</strong>（重排序缓冲区状态随周期变化）、<strong>Profile</strong>（各分析器对指令的周期归因数值）、以及红色标注的错误说明。
-(a) Computing 状态</li>
+    (a) Computing 状态</li>
 <li>处理器在每个周期提交两个指令（如 I1/I2, I3/I4...），处于正常计算状态。</li>
 <li><strong>Oracle</strong> 正确将每个周期的 1 个时钟周期平均分配给两个提交指令（即每个指令 0.5 周期）。</li>
 <li><strong>NCI</strong> 仅记录下一个提交指令（如周期1记录 I2），忽略另一个（I1），导致 <strong>ILP 未被计入</strong>。</li>
@@ -724,48 +736,15 @@
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>- 周期2至41，处理器因 Load 指令未完成而停滞，仅在周期42恢复提交。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>Oracle</strong> 将40个停滞周期全部归因于阻塞提交的 Load 指令，并在周期42将0.5周期归因于 Load 和 I3。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>NCI</strong> 在周期42正确归因于 I3，但完全忽略 Load 的停滞贡献（归因0），<strong>未能处理 ILP</strong>。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>LCI</strong> 错误地将41个周期归因于 I1（最后提交指令），仅在周期42归因1周期给 Load，造成严重 <strong>Stall misattribution</strong>。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- 表格总结：</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 </tbody>
 </table>
+<ul>
+<li>周期2至41，处理器因 Load 指令未完成而停滞，仅在周期42恢复提交。</li>
+<li><strong>Oracle</strong> 将40个停滞周期全部归因于阻塞提交的 Load 指令，并在周期42将0.5周期归因于 Load 和 I3。</li>
+<li><strong>NCI</strong> 在周期42正确归因于 I3，但完全忽略 Load 的停滞贡献（归因0），<strong>未能处理 ILP</strong>。</li>
+<li><strong>LCI</strong> 错误地将41个周期归因于 I1（最后提交指令），仅在周期42归因1周期给 Load，造成严重 <strong>Stall misattribution</strong>。</li>
+<li>表格总结：</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -810,48 +789,15 @@
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>- 分支指令在周期1提交后被发现预测错误，导致后续指令（I3/I4）被清除（squashed），处理器空转至周期6才重新调度新指令。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>Oracle</strong> 将分支指令归因4.5周期（含其自身0.5 + 清除期间4周期），并归因1周期给 I5（首次调度指令）。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>NCI</strong> 完全忽略分支指令（归因0），并将清除期间的4周期归因于 I5（下一个提交指令），造成 <strong>Flush misattribution</strong>。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>LCI</strong> 正确归因分支指令4.5周期，但在周期6归因5周期给 I5，存在轻微偏差。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- 表格总结：</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 </tbody>
 </table>
+<ul>
+<li>分支指令在周期1提交后被发现预测错误，导致后续指令（I3/I4）被清除（squashed），处理器空转至周期6才重新调度新指令。</li>
+<li><strong>Oracle</strong> 将分支指令归因4.5周期（含其自身0.5 + 清除期间4周期），并归因1周期给 I5（首次调度指令）。</li>
+<li><strong>NCI</strong> 完全忽略分支指令（归因0），并将清除期间的4周期归因于 I5（下一个提交指令），造成 <strong>Flush misattribution</strong>。</li>
+<li><strong>LCI</strong> 正确归因分支指令4.5周期，但在周期6归因5周期给 I5，存在轻微偏差。</li>
+<li>表格总结：</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -888,48 +834,15 @@
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>- 周期1提交 I1/I2 后，因指令缓存缺失导致 ROB 排空，直至周期42才重新调度 I3。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>Oracle</strong> 归因0.5周期给 I1/I2，41周期给 I3（含排空40周期 + 阻塞1周期）。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>NCI</strong> 正确归因 I3 41周期（下一个提交指令），表现良好。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- <strong>LCI</strong> 错误归因 I2 41周期（最后提交指令），完全忽略 I3，造成 <strong>Drain misattribution</strong>。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>- 表格总结：</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 </tbody>
 </table>
+<ul>
+<li>周期1提交 I1/I2 后，因指令缓存缺失导致 ROB 排空，直至周期42才重新调度 I3。</li>
+<li><strong>Oracle</strong> 归因0.5周期给 I1/I2，41周期给 I3（含排空40周期 + 阻塞1周期）。</li>
+<li><strong>NCI</strong> 正确归因 I3 41周期（下一个提交指令），表现良好。</li>
+<li><strong>LCI</strong> 错误归因 I2 41周期（最后提交指令），完全忽略 I3，造成 <strong>Drain misattribution</strong>。</li>
+<li>表格总结：</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -977,16 +890,20 @@
 <li>图片展示了 <strong>Time-Proportional Instruction Profiler (TIP)</strong> 的结构概览，其核心功能是响应 <strong>PMU</strong> 事件、采集样本并最终将样本暴露给软件层。</li>
 <li>TIP 位于 <strong>PMU</strong> 与 <strong>CPU</strong> 的 <strong>ROB (Reorder Buffer)</strong> 之间，通过紧密耦合 ROB 实现精确的指令级时间归因。</li>
 <li><strong>PMU</strong> 模块包含两个关键寄存器：<strong>Event</strong> 和 <strong>Cycle</strong>。当满足采样条件时，<strong>Event</strong> 触发 TIP 开始工作，<strong>Cycle</strong> 记录当前周期数。</li>
-<li><strong>TIP</strong> 模块由三个主要部分组成：</li>
+<li><strong>TIP</strong> 模块由三个主要部分组成：<ul>
 <li><strong>OIR Update</strong>：负责更新 <strong>Offending Instruction Register (OIR)</strong>，记录可能引发流水线刷新或异常的指令地址及标志。</li>
 <li><strong>OIR</strong>：存储最近提交或触发异常的指令信息，用于处理 ROB 为空（Flushed 或 Drained 状态）时的归因。</li>
 <li><strong>Sample Selection</strong>：根据当前处理器状态和 ROB 内容，选择正确的指令地址和状态标志进行采样。</li>
+</ul>
+</li>
 <li><strong>CPU</strong> 部分展示了 <strong>ROB</strong> 的结构，它由多个 <strong>Bank</strong> 组成，每个 Bank 可以存储一条指令。图中示例为 3 个 Bank，分别存储了 Inst.0 到 Inst.7。</li>
 <li><strong>ROB</strong> 的状态由 <strong>Bank Pointer</strong> 和 <strong>Column Pointer</strong> 共同管理，用于定位 ROB 中最老的有效指令（即 Head of ROB）。</li>
-<li><strong>Sample Selection</strong> 单元输出的样本数据存储在一组 <strong>CSRs (Control Status Registers)</strong> 中，包括：</li>
+<li><strong>Sample Selection</strong> 单元输出的样本数据存储在一组 <strong>CSRs (Control Status Registers)</strong> 中，包括：<ul>
 <li><strong>Cycle</strong>：记录采样发生时的周期数。</li>
 <li><strong>Flags</strong>：记录采样时的状态标志，如 Stalled, Frontend, Exception, Flush, Mispredicted 等。</li>
 <li><strong>Addr. 0, Addr. 1, ..., Addr. i</strong>：存储被选中的指令地址，数量取决于处理器的提交宽度。</li>
+</ul>
+</li>
 <li><strong>TIP Registers</strong> 表格详细列出了所有 CSR 的内容及其含义：</li>
 </ul>
 <table>
@@ -1099,7 +1016,7 @@
 </li>
 <li>
 <p>核心配置：</p>
-</li>
+<ul>
 <li><strong>Core</strong>: 使用 <strong>OoO BOOM</strong>（Berkeley Out-of-Order Machine）核心，指令集为 <strong>RV64IMAFDCSUX</strong>，运行频率为 <strong>3.2 GHz</strong>。</li>
 <li><strong>Front-end</strong>: 前端支持 <strong>8-wide fetch</strong>，配备 <strong>32-entry fetch buffer</strong>、<strong>4-wide decode</strong>、<strong>28 KB TAGE branch predictor</strong>、<strong>40-entry fetch target queue</strong>，最多支持 <strong>20 outstanding branches</strong>。</li>
 <li><strong>Execute</strong>: 执行单元包含 <strong>128-entry ROB</strong>、<strong>128 个整数/浮点物理寄存器</strong>、<strong>24-entry dual-issue MEM queue</strong>、<strong>40-entry 4-issue INT queue</strong>、<strong>32-entry dual-issue FP queue</strong>，以及 <strong>32-entry load/store queue</strong>。</li>
@@ -1107,8 +1024,8 @@
 <li><strong>L2/LLC</strong>: 二级缓存为 <strong>512 KB 8-way</strong>，带 <strong>12 MSHRs</strong>；最后一级缓存（LLC）为 <strong>4 MB 8-way</strong>，带 <strong>8 MSHRs</strong>。</li>
 <li><strong>TLB</strong>: 采用 <strong>Page Table Walker</strong>，<strong>32-entry fully-assoc L1 D-TLB</strong>、<strong>32-entry fully-assoc L1 I-TLB</strong>、<strong>512-entry direct-mapped L2 TLB</strong>。</li>
 <li><strong>Memory</strong>: 内存子系统为 <strong>16 GB DDR3 FR-FCFS quad-rank</strong>，最大带宽 <strong>25.6 GB/s</strong>，时序为 <strong>14-14-14 (CAS-RCD-RP)</strong> @ 1 GHz，支持 <strong>8 queue depth</strong> 和 <strong>32 max reads/writes</strong>。</li>
-<li>
-<p><strong>OS</strong>: 操作系统为 <strong>Buildroot, Linux 5.7.0</strong>。</p>
+<li><strong>OS</strong>: 操作系统为 <strong>Buildroot, Linux 5.7.0</strong>。</li>
+</ul>
 </li>
 <li>
 <p>该配置代表一个典型的现代超标量乱序执行处理器，具备完整的前端、执行、缓存和内存子系统，确保了实验结果在真实硬件行为上的代表性。所有组件参数均精确设定，以支持对性能剖析器在不同场景下的误差量化分析。</p>
@@ -1119,7 +1036,7 @@
 <ul>
 <li>图片展示了在 <strong>commit</strong> 阶段收集的归一化周期堆栈（Normalized cycle stacks），用于分析不同基准测试程序的执行时间分布。</li>
 <li>每个柱状图代表一个 SPEC CPU2017 或 PARSEC 3.0 基准测试，按其主要性能瓶颈分类为三组：<strong>Compute</strong>、<strong>Flush</strong> 和 <strong>Stall</strong>。</li>
-<li>堆栈从底部到顶部依次表示不同类型的周期开销：</li>
+<li>堆栈从底部到顶部依次表示不同类型的周期开销：<ul>
 <li><strong>Execution</strong>：指令提交阶段的正常执行周期。</li>
 <li><strong>ALU stall</strong>：算术逻辑单元（ALU）相关停顿。</li>
 <li><strong>Load stall</strong>：加载指令导致的停顿（如缓存未命中）。</li>
@@ -1127,6 +1044,8 @@
 <li><strong>Front-end</strong>：前端停顿（如指令缓存或 TLB 未命中）。</li>
 <li><strong>Mispredict</strong>：分支预测错误导致的流水线冲刷。</li>
 <li><strong>Misc. flush</strong>：其他类型的流水线冲刷（如异常、同步指令等）。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1528,27 +1447,33 @@
 <h3 id="figuresensitivityanalysesatsacuracycontinuestomeasurablyimprovebeyond4khzunliketheotherproflersbperdic-samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardwarecmakingncicommitparallelism-aware-increases-profile-errorin-contrast-to-tip">Figure:Sensitivityanalyses.(a)T'sacuracycontinuestomeasurablyimprovebeyond4KHzunliketheotherproflers.(b)Perdic samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardware.(c)MakingNCIcommitparallelism-aware increases profile error,in contrast to TIP.<a class="headerlink" href="#figuresensitivityanalysesatsacuracycontinuestomeasurablyimprovebeyond4khzunliketheotherproflersbperdic-samplingisonlyslightlymoreinacuratethanrandomsamplingwhilebeingsimplertoimplementinhardwarecmakingncicommitparallelism-aware-increases-profile-errorin-contrast-to-tip" title="Permanent link">&para;</a></h3>
 <p><img alt="7333895e2befd3c3ca79f69ecb0e3e0021db4409ce175551c517030c7be855e0.jpg" src="../images/7333895e2befd3c3ca79f69ecb0e3e0021db4409ce175551c517030c7be855e0.jpg" /></p>
 <ul>
-<li>图片展示了三个子图，分别对应论文中关于 TIP 与现有 Profiler 的敏感性分析结果，旨在验证 TIP 在不同采样策略和设计变体下的表现。</li>
-<li>子图 (a) 聚焦于<strong>采样频率对误差的影响</strong>。横轴为三种 Profiler：NCI、TIP-ILP 和 TIP；纵轴为 Profile Error（百分比）。不同颜色柱状图代表从 100 Hz 到 20 kHz 的采样频率。结果显示：</li>
+<li>
+<p>图片展示了三个子图，分别对应论文中关于 TIP 与现有 Profiler 的敏感性分析结果，旨在验证 TIP 在不同采样策略和设计变体下的表现。</p>
+</li>
+<li>
+<p>子图 (a) 聚焦于<strong>采样频率对误差的影响</strong>。横轴为三种 Profiler：NCI、TIP-ILP 和 TIP；纵轴为 Profile Error（百分比）。不同颜色柱状图代表从 100 Hz 到 20 kHz 的采样频率。结果显示：</p>
+<ul>
 <li><strong>TIP 的误差随采样频率提升持续下降</strong>，尤其在 4 kHz 以上仍显著改善，例如 gcc 在 4 kHz 时误差为 5.0%，在 20 kHz 时降至 2.6%。</li>
 <li>NCI 和 TIP-ILP 在 4 kHz 后误差趋于饱和，表明其无法从更高采样率中获益。</li>
-<li>
-<p>此现象归因于 TIP 对 ILP 的正确处理——它将高并行提交周期的样本按比例分配给多个指令，而其他方法仅归因于单个指令。</p>
+<li>此现象归因于 TIP 对 ILP 的正确处理——它将高并行提交周期的样本按比例分配给多个指令，而其他方法仅归因于单个指令。</li>
+</ul>
 </li>
 <li>
 <p>子图 (b) 比较<strong>周期性采样与随机采样的误差差异</strong>。横轴列出 27 个 SPEC CPU2017 和 PARSEC 基准测试程序，并按执行特征分为 Compute、Flush、Stall 三类，最后是平均值。深色柱为周期性采样，浅色柱为随机采样。关键发现包括：</p>
-</li>
+<ul>
 <li>大多数基准测试中，两种采样方式误差接近，<strong>平均误差从周期性的 1.6% 降至随机的 1.1%</strong>。</li>
 <li>少数 Stall-intensive 基准如 streamcluster、lbm、fotonik3d 显示更明显差异，因其具有重复性时间行为，易受周期采样偏差影响。</li>
-<li>
-<p>论文指出，尽管随机采样略优，但硬件实现更复杂，故推荐使用周期性采样。</p>
+<li>论文指出，尽管随机采样略优，但硬件实现更复杂，故推荐使用周期性采样。</li>
+</ul>
 </li>
 <li>
 <p>子图 (c) 展示<strong>引入并行感知机制后 NCI 的误差变化</strong>。采用箱线图形式，比较四种配置：NCI+ILP、NCI、TIP-ILP、TIP。数据显示：</p>
-</li>
+<ul>
 <li><strong>NCI+ILP 的平均误差高达 19.3%</strong>，远高于原始 NCI 的 9.3%，也高于 TIP-ILP 的 7.2% 和 TIP 的 1.6%。</li>
 <li>误差上升的原因在于：NCI+ILP 在长延迟停顿（如 LLC miss）后错误地将样本均分给即将提交的 n 条指令，而非像 TIP 那样归因于导致停顿的指令本身。</li>
 <li>这一结果强调：<strong>仅添加 ILP 支持不足以提升准确性，必须建立在正确的时序归因原则之上</strong>，这正是 TIP 的核心优势。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1589,7 +1514,7 @@
 <ul>
 <li>图片展示了在 SPEC CPU2017 基准测试程序 <strong>Imagick</strong> 中，针对 <strong>ceil</strong> 函数的性能剖析结果，对比了三种剖析器：<strong>Oracle</strong>（黄金标准）、<strong>TIP</strong>（本文提出）和 <strong>NCI</strong>（Intel PEBS 使用的启发式方法）。</li>
 <li>分析分为两个层级：<strong>函数级</strong>（Function-Level Profile）和<strong>指令级</strong>（Instruction-Level Profile），旨在揭示不同剖析器在定位性能瓶颈时的准确性差异。
-函数级剖析（图①）</li>
+    函数级剖析（图①）</li>
 <li>此部分显示了 <strong>Imagick</strong> 应用中几个最热函数所占的运行时间百分比。</li>
 <li>三个剖析器的结果高度一致，表明在函数粒度上，它们都能准确反映整体性能分布。</li>
 <li>关键数据如下：</li>
@@ -1632,20 +1557,20 @@
 </table>
 <ul>
 <li>结论：所有剖析器在函数级均表现良好，误差极小（平均约 0.3%-0.6%），无法帮助开发者识别具体性能问题。
-指令级剖析（图②、③）</li>
+    指令级剖析（图②、③）</li>
 <li>此部分深入到 <strong>ceil</strong> 函数内部，展示各指令所占该函数内执行时间的百分比。</li>
 <li><strong>Oracle</strong> 和 <strong>TIP</strong> 的结果高度吻合，而 <strong>NCI</strong> 则出现显著偏差，尤其在关键指令上。
-ceil 函数入口处指令（图②）</li>
+    ceil 函数入口处指令（图②）</li>
 <li><strong>frflags</strong> 和 <strong>fsflags</strong> 是浮点状态寄存器操作指令，用于屏蔽函数内的状态变更。</li>
 <li><strong>Oracle</strong> 和 <strong>TIP</strong> 均正确指出这些指令消耗了约 <strong>24.99%</strong> 和 <strong>24.91%</strong> 的函数时间。</li>
 <li><strong>NCI</strong> 却将大部分时间错误归因于后续指令 <strong>feq.d</strong>（28.80%），而低估了 <strong>frflags/fsflags</strong>（仅 11.51%/11.53%）。</li>
 <li>这种错误归因会导致开发者误判为浮点比较单元（feq.d）或返回地址预测器（ret）是瓶颈。
-ceil 函数出口处指令（图③）</li>
+    ceil 函数出口处指令（图③）</li>
 <li>在函数末尾，<strong>ret</strong> 指令的时间归因也存在巨大差异。</li>
 <li><strong>Oracle</strong> 和 <strong>TIP</strong> 均将其归因为 <strong>9.61%</strong> 和 <strong>9.63%</strong>。</li>
 <li><strong>NCI</strong> 则错误地将其归因为 <strong>23.09%</strong>，几乎翻倍。</li>
 <li>这进一步说明 <strong>NCI</strong> 在处理流水线刷新（如由 frflags/fsflags 引发）后，会错误地将延迟归因给“下一个提交指令”。
-核心发现</li>
+    核心发现</li>
 <li><strong>TIP</strong> 能够精确识别出 <strong>frflags</strong> 和 <strong>fsflags</strong> 是性能瓶颈，而 <strong>NCI</strong> 会误导开发者关注错误的指令。</li>
 <li>实际优化中，移除这些不必要的状态寄存器操作（替换为 nop），可带来 <strong>1.93×</strong> 的性能提升，验证了 <strong>TIP</strong> 的实用价值。</li>
 <li>该案例凸显了<strong>指令级剖析精度的重要性</strong>：函数级剖析无法定位问题，而低精度的指令级剖析（如 NCI）会提供错误指引。</li>

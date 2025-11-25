@@ -534,35 +534,39 @@
 <h3 id="figure-1-example-explaining-how-tea-creates-pics-tea-explains-how-performance-events-cause-performance-loss">Figure 1: Example explaining how TEA creates PICS. TEA explains how performance events cause performance loss.<a class="headerlink" href="#figure-1-example-explaining-how-tea-creates-pics-tea-explains-how-performance-events-cause-performance-loss" title="Permanent link">&para;</a></h3>
 <p><img alt="6ab3d4d6d062d567eaece089793fa0b9b45668c215a54846790eeae0de6930ad.jpg" src="../images/6ab3d4d6d062d567eaece089793fa0b9b45668c215a54846790eeae0de6930ad.jpg" /></p>
 <ul>
-<li>图片展示了 <strong>TEA</strong> 如何通过采样和 <strong>Performance Signature Vector (PSV)</strong> 生成 <strong>Per-Instruction Cycle Stacks (PICS)</strong>，以解释性能损失的根源。</li>
+<li>
+<p>图片展示了 <strong>TEA</strong> 如何通过采样和 <strong>Performance Signature Vector (PSV)</strong> 生成 <strong>Per-Instruction Cycle Stacks (PICS)</strong>，以解释性能损失的根源。</p>
+</li>
 <li>
 <p>图中分为三个部分：(a) TEA 采样数据表、(b) 示例代码、(c) 最终生成的 PICS 图表。</p>
 </li>
 <li>
 <p><strong>图 (a) TEA samples</strong>：</p>
-</li>
+<ul>
 <li>表格记录了 5 次采样（Sample 1 至 Sample 5），每行包含：<ul>
 <li><strong>Timestamp</strong>：采样发生的时间点（单位：时钟周期）。</li>
 <li><strong>Instruction address</strong>：被采样的指令地址（如 I1, I4 等）。</li>
-<li><strong>PSV</strong>：三位二进制向量，分别对应三种性能事件：</li>
+<li><strong>PSV</strong>：三位二进制向量，分别对应三种性能事件：<ul>
 <li>第一位：<strong>I$ miss</strong>（指令缓存未命中）</li>
 <li>第二位：<strong>D$ miss</strong>（数据缓存未命中）</li>
 <li>第三位：<strong>Branch mispredict</strong>（分支预测错误）</li>
 </ul>
 </li>
+</ul>
+</li>
 <li>PSV 中“1”表示该指令在采样时刻正受此事件影响，“0”表示无影响。</li>
-<li>
-<p>示例：</p>
-<ul>
+<li>示例：<ul>
 <li>Sample 1：I1 被采样，PSV 为 <code>1 0 0</code> → 仅受 <strong>I$ miss</strong> 影响。</li>
 <li>Sample 2：I4 被采样，PSV 为 <code>0 1 0</code> → 仅受 <strong>D$ miss</strong> 影响。</li>
 <li>Sample 3：I1 被采样，PSV 为 <code>0 0 1</code> → 仅受 <strong>Branch mispredict</strong> 影响。</li>
 <li>Sample 4 &amp; 5：I1–I4 并行提交，PSV 全为 <code>0 0 0</code> → 无性能事件，归入 <strong>Base</strong> 类别。</li>
 </ul>
 </li>
+</ul>
+</li>
 <li>
 <p><strong>图 (b) Example code</strong>：</p>
-</li>
+<ul>
 <li>展示了一段简短循环代码，包含四条核心指令：<ul>
 <li><code>I1 lw a4, (a5)</code>：加载指令，可能触发 <strong>D$ miss</strong>。</li>
 <li><code>I2 addw a0, a0, a4</code>：算术运算。</li>
@@ -570,12 +574,12 @@
 <li><code>I4 bne a5, a3, I1</code>：条件跳转，可能触发 <strong>Branch mispredict</strong>。</li>
 </ul>
 </li>
-<li>
-<p>代码结构说明了为何 I1 和 I4 是性能关键指令。</p>
+<li>代码结构说明了为何 I1 和 I4 是性能关键指令。</li>
+</ul>
 </li>
 <li>
 <p><strong>图 (c) Time-proportional PICS</strong>：</p>
-</li>
+<ul>
 <li>横轴为 <strong>Clock Cycles</strong>，纵轴为 <strong>Static instructions</strong>（I1–I4）。</li>
 <li>每个指令的柱状图按 PSV 分类，显示其贡献的周期数：<ul>
 <li><strong>Base</strong>（浅蓝）：无性能事件，正常执行。</li>
@@ -585,37 +589,43 @@
 </ul>
 </li>
 <li>总计：I1 占用约 3k 周期（含两次事件），I4 占用约 1k 周期，I2/I3 各占约 0.5k 周期（并行执行分摊）。</li>
-<li>
-<p><strong>关键结论</strong>：TEA 准确将性能损失归因于具体指令及其触发的事件，实现时间比例分配。</p>
+<li><strong>关键结论</strong>：TEA 准确将性能损失归因于具体指令及其触发的事件，实现时间比例分配。</li>
+</ul>
 </li>
 <li>
 <p><strong>核心机制总结</strong>：</p>
-</li>
+<ul>
 <li>TEA 在 <strong>commit stage</strong> 采样，确保时间比例性。</li>
 <li>通过 <strong>PSV</strong> 记录每个动态指令所经历的性能事件组合。</li>
-<li>
-<p>最终聚合所有采样，按静态指令和事件类型构建 <strong>PICS</strong>，直观揭示性能瓶颈。</p>
+<li>最终聚合所有采样，按静态指令和事件类型构建 <strong>PICS</strong>，直观揭示性能瓶颈。</li>
+</ul>
 </li>
 <li>
 <p><strong>对比传统方法</strong>：</p>
-</li>
+<ul>
 <li>若使用 <strong>dispatch-tagging</strong>（如 IBS/SPE/RIS），可能错误采样 I5 或 I8，而非实际阻塞提交的 I1。</li>
 <li>TEA 避免此类偏差，提供更准确的性能归因。</li>
+</ul>
+</li>
 </ul>
 <h3 id="figure-2-example-comparing-tea-to-dispatch-tagging-tea-is-time-proportional-whereas-dispatch-tagging-is-not">Figure 2: Example comparing TEA to dispatch-tagging. TEA is time-proportional whereas dispatch-tagging is not.<a class="headerlink" href="#figure-2-example-comparing-tea-to-dispatch-tagging-tea-is-time-proportional-whereas-dispatch-tagging-is-not" title="Permanent link">&para;</a></h3>
 <p><img alt="74ab2ef30a3ba5d969cd61f92fd8e514ab517907f123077b196ef3f913d14afe.jpg" src="../images/74ab2ef30a3ba5d969cd61f92fd8e514ab517907f123077b196ef3f913d14afe.jpg" /></p>
 <ul>
 <li>图片展示了 <strong>TEA</strong> 与 <strong>Dispatch-tagging</strong>（如 IBS）在性能事件追踪机制上的核心差异，旨在说明为何 TEA 是 <strong>time-proportional</strong> 而后者不是。</li>
 <li>图中包含两个子图：(a) TEA 的工作流程；(b) Dispatch-tagging 的工作流程。两者均基于一个典型的乱序执行处理器流水线，包括 Fetch、Decode、Rename、Dispatch、Issue Buffers、Commit 等阶段。</li>
-<li>在 (a) TEA 部分：</li>
+<li>在 (a) TEA 部分：<ul>
 <li><strong>Performance Signature Vector (PSV)</strong> 格式位于顶部，包含多个性能事件位，如 ICACHE/TLB miss、L1I miss、ITLB miss、Branch mispredict、LLC miss、L1D miss、DTLB miss。</li>
 <li>PSV 在指令进入流水线时被初始化并随指令流动，在不同阶段根据发生的事件更新相应位。</li>
 <li><strong>Sampler</strong> 位于 <strong>Re-Order Buffer (ROB)</strong> 头部之后，采样的是当前暴露延迟的指令（即 ROB 头部指令），确保采样点反映真实性能瓶颈。</li>
 <li>示例中，指令 I1 因 L1D miss 和 DTLB miss 被阻塞在 ROB 头部，Sampler 采样 I1 及其 PSV（1000000），正确归因于该指令。</li>
-<li>在 (b) Dispatch-tagging 部分：</li>
+</ul>
+</li>
+<li>在 (b) Dispatch-tagging 部分：<ul>
 <li>采样器位于 <strong>Dispatch</strong> 阶段，标记的是当前被调度的指令（如 I5），而非 ROB 头部指令。</li>
 <li>尽管此时 I1 仍在 ROB 头部阻塞，但采样器却记录了 I5 的 PSV（1000000），这导致性能事件被错误归因到非关键指令。</li>
 <li>这种机制忽略了指令在 commit 阶段的实际影响，因此 <strong>不具备 time-proportionality</strong>。</li>
+</ul>
+</li>
 <li>关键对比表格：</li>
 </ul>
 <table>
@@ -655,9 +665,11 @@
 </tbody>
 </table>
 <ul>
-<li>图中数字标注了关键步骤：</li>
+<li>图中数字标注了关键步骤：<ul>
 <li>①～⑤ 为 TEA 流程中的事件传播与采样；</li>
 <li>⑥～⑦ 为 Dispatch-tagging 中的错误采样点。</li>
+</ul>
+</li>
 <li>总结：该图通过直观对比揭示了 TEA 的核心优势——<strong>在 commit 阶段采样以确保时间比例性</strong>，从而准确识别性能瓶颈指令及其相关事件，而传统 dispatch-tagging 方法因采样点前置导致归因偏差，无法提供准确的性能分析。</li>
 </ul>
 <h3 id="figure-3-performance-event-hierarchy-for-the-stalled-st-commit-state">Figure 3: Performance event hierarchy for the Stalled (ST) commit state.<a class="headerlink" href="#figure-3-performance-event-hierarchy-for-the-stalled-st-commit-state" title="Permanent link">&para;</a></h3>
@@ -666,17 +678,21 @@
 <li>图片展示了 <strong>Stalled (ST) commit state</strong> 下的性能事件层级结构，旨在说明如何通过选择关键事件来平衡分析的可解释性与硬件开销。</li>
 <li>该图分为三个主要层级（Level 1, Level 2, Level 3），从底层的通用事件逐步向上抽象为更具体的依赖或独立事件。</li>
 <li><strong>Level 1</strong> 包含最基础的事件：<strong>Data Load Stall (DLS)</strong>，代表所有数据加载相关的停顿。</li>
-<li><strong>Level 2</strong> 分为两类：</li>
+<li><strong>Level 2</strong> 分为两类：<ul>
 <li><strong>Independent events</strong>：如 <strong>L1 data cache miss</strong> 和 <strong>L1 data TLB miss</strong>，它们可独立发生，互不影响。</li>
 <li><strong>Dependent events</strong>：如 <strong>L2 data TLB miss</strong>，它依赖于 L1 TLB miss 的发生。</li>
+</ul>
+</li>
 <li><strong>Level 3</strong> 展示了更高层的依赖事件，例如 <strong>LLC miss</strong>，它依赖于 L1 数据缓存未命中。</li>
 <li>图中用虚线框标出 <strong>Dependent events</strong>，强调其依赖关系；实线箭头表示事件之间的因果或依赖路径。</li>
 <li>右侧部分展示了不同事件集合对应的 <strong>PSV (Performance Signature Vector)</strong> 格式，每个 PSV 由多个位组成，每位对应一个事件。</li>
-<li>PSV 示例包括：</li>
+<li>PSV 示例包括：<ul>
 <li>仅包含 DLS 的单一位 PSV。</li>
 <li>包含 L1D 和 L1TLB 的两位 PSV。</li>
 <li>包含 L1D、L1TLB 和 LLC 的三位 PSV。</li>
 <li>包含 L1D、L1TLB、LLC 和 L2TLB 的四位 PSV。</li>
+</ul>
+</li>
 <li>通过选择不同层级的事件组合，可以在保持低开销的同时提升分析的粒度和可解释性。</li>
 <li>作者指出，保留根事件（如 L1 miss）对于避免丢失可解释性至关重要，即使捕获了更高级别的事件（如 LLC miss）。</li>
 </ul>
@@ -685,10 +701,12 @@
 <ul>
 <li>该图片为 <strong>Table 1</strong>，标题为 “The performance events of TEA, IBS, SPE, and RIS”，用于对比四种性能分析工具所支持的性能事件。</li>
 <li>表格包含四列：<strong>Event</strong>（事件名称）、<strong>Description</strong>（事件描述）、以及三列分别对应 <strong>TEA</strong>、<strong>IBS</strong>、<strong>SPE</strong> 和 <strong>RIS</strong> 的支持情况（用勾号 √ 或叉号 × 表示）。</li>
-<li>所有事件按其所属的 <strong>commit state</strong> 分组：</li>
+<li>所有事件按其所属的 <strong>commit state</strong> 分组：<ul>
 <li><strong>DR-</strong>（Drained 状态）：包括 DR-L1（L1 instruction cache miss）、DR-TLB（L1 instruction TLB miss）、DR-SQ（Store instruction stalled at dispatch）。</li>
 <li><strong>FL-</strong>（Flushed 状态）：包括 FL-MB（Mispredicted branch）、FL-EX（Instruction caused exception）、FL-MO（Memory ordering violation）。</li>
 <li><strong>ST-</strong>（Stalled 状态）：包括 ST-L1（L1 data cache miss）、ST-TLB（L1 data TLB miss）、ST-LLC（LLC miss caused by a load instruction）。</li>
+</ul>
+</li>
 </ul>
 <p>以下是各工具对事件的支持情况汇总：</p>
 <table>
@@ -798,52 +816,64 @@
 <li><strong>ALU / FPU</strong> 阶段：不直接产生新事件，但执行结果可能影响后续状态。</li>
 <li><strong>Writeback</strong> 阶段：将最终的 PSV 更新回 ROB 条目，确保在 commit 时 PSV 包含所有相关事件。</li>
 <li><strong>Re-Order Buffer (ROB)</strong> 是 PSV 的最终存储位置，每个条目包含一个 <strong>9b PSV</strong>，对应 TEA 支持的九个性能事件：
-  | 事件类型 | 事件名称 | 说明 |
-  |----------|----------|------|
-  | Drained (DR) | DR-L1 | L1 指令缓存未命中 |
-  | Drained (DR) | DR-TLB | L1 指令 TLB 未命中 |
-  | Drained (DR) | DR-SQ | Store Queue 满导致 ROB drain |
-  | Flushed (FL) | FL-MB | 分支预测错误 |
-  | Flushed (FL) | FL-EX | 异常发生 |
-  | Flushed (FL) | FL-MO | 内存顺序违规 |
-  | Stalled (ST) | ST-L1 | L1 数据缓存未命中 |
-  | Stalled (ST) | ST-TLB | L1 数据 TLB 未命中 |
-  | Stalled (ST) | ST-LLC | LLC 数据缓存未命中 |</li>
+    | 事件类型     | 事件名称 | 说明                         |
+    | ------------ | -------- | ---------------------------- |
+    | Drained (DR) | DR-L1    | L1 指令缓存未命中            |
+    | Drained (DR) | DR-TLB   | L1 指令 TLB 未命中           |
+    | Drained (DR) | DR-SQ    | Store Queue 满导致 ROB drain |
+    | Flushed (FL) | FL-MB    | 分支预测错误                 |
+    | Flushed (FL) | FL-EX    | 异常发生                     |
+    | Flushed (FL) | FL-MO    | 内存顺序违规                 |
+    | Stalled (ST) | ST-L1    | L1 数据缓存未命中            |
+    | Stalled (ST) | ST-TLB   | L1 数据 TLB 未命中           |
+    | Stalled (ST) | ST-LLC   | LLC 数据缓存未命中           |</li>
 <li><strong>Sample Selection</strong> 单元连接 ROB 头部，根据当前 commit 状态（Compute, Stalled, Drained, Flushed）选择要采样的指令及其 PSV。它继承自 TIP [22] 的时间比例采样逻辑。</li>
 <li><strong>PMU (Performance Monitoring Unit)</strong> 通过周期计数器触发采样事件，通知 Sample Selection 单元。</li>
 <li><strong>Control Status Registers (CSRs)</strong> 存储采样结果，包括时间戳、标志位、指令地址和 PSV，随后触发中断供软件读取。</li>
-<li><strong>关键设计原则</strong>：</li>
+<li><strong>关键设计原则</strong>：<ul>
 <li><strong>时间比例性</strong>：采样点位于 commit 阶段，确保样本反映的是实际暴露延迟的指令。</li>
 <li><strong>事件完整性</strong>：PSV 跟踪所有在指令生命周期内发生的性能事件，而非仅前端事件。</li>
 <li><strong>低开销</strong>：通过精心选择事件集（仅 9 个）和复用现有结构（如 ROB 条目），将存储开销控制在 249 字节/核。</li>
 <li><strong>非关键路径</strong>：所有 TEA 逻辑均不在处理器的关键路径上，不影响时钟频率。</li>
-<li><strong>采样流程</strong>：</li>
+</ul>
+</li>
+<li><strong>采样流程</strong>：<ol>
 <li>PMU 计数器达到阈值，触发采样事件。</li>
 <li>Sample Selection 根据 ROB 状态选择指令。</li>
 <li>读取该指令的 PSV 和地址。</li>
 <li>将样本写入 CSRs。</li>
 <li>触发中断，软件读取并存储样本。</li>
+</ol>
+</li>
 <li><strong>与传统方法对比</strong>：不同于 IBS/SPE/RIS 在 fetch/dispatch 阶段标记指令，TEA 在 commit 阶段采样，避免了因前端阻塞导致的样本偏差，从而实现更高的准确性（平均误差 2.1%）。</li>
 </ul>
 <h3 id="table-2-baseline-architecture-configuration">Table 2: Baseline architecture configuration.<a class="headerlink" href="#table-2-baseline-architecture-configuration" title="Permanent link">&para;</a></h3>
 <p><img alt="76d7052a3fe24470118c7419e0884689b88544d5d9360f69e5dc810d236b1921.jpg" src="../images/76d7052a3fe24470118c7419e0884689b88544d5d9360f69e5dc810d236b1921.jpg" /></p>
 <ul>
 <li>该表格详细列出了用于评估 TEA 的基准架构配置，核心为 <strong>OoO BOOM [58]</strong>，运行在 <strong>RV64IMAFDCSUX</strong> 指令集架构上，主频为 <strong>3.2 GHz</strong>。</li>
-<li>前端（Front-end）配置包括：</li>
+<li>前端（Front-end）配置包括：<ul>
 <li><strong>8-wide fetch</strong>，配备 <strong>48-entry fetch buffer</strong> 和 <strong>4-wide decode</strong>。</li>
 <li>使用 <strong>28 KB TAGE branch predictor</strong>，支持最多 <strong>30 outstanding branches</strong>。</li>
 <li>配备 <strong>60-entry fetch target queue</strong>。</li>
-<li>执行单元（Execute）部分包含：</li>
+</ul>
+</li>
+<li>执行单元（Execute）部分包含：<ul>
 <li><strong>192-entry ROB</strong>（Reorder Buffer），以及 <strong>192 integer/floating-point physical registers</strong>。</li>
 <li><strong>48-entry dual-issue memory queue</strong>、<strong>80-entry 4-issue integer queue</strong> 和 <strong>48-entry dual-issue floating-point queue</strong>。</li>
-<li>加载/存储单元（LSU）配置如下：</li>
+</ul>
+</li>
+<li>加载/存储单元（LSU）配置如下：<ul>
 <li><strong>64-entry load/store queue</strong>。</li>
 <li>L1 缓存：<strong>32 KB 8-way I-cache</strong> 和 <strong>32 KB 8-way D-cache</strong>，配备 <strong>16 MSHRs</strong>、<strong>64 SDQ/RPQ entries</strong> 及 <strong>next-line prefetcher</strong>。</li>
 <li>LLC（Last Level Cache）：<strong>2 MiB 16-way dual-bank</strong>，配备 <strong>12 MSHRs</strong>。</li>
 <li>TLB：采用 <strong>Page Table Walker</strong>，包含 <strong>32-entry fully-assoc L1 D-TLB</strong> 和 <strong>32-entry fully-assoc L1 I-TLB</strong>，以及 <strong>1024-entry direct-mapped L2 TLB</strong>。</li>
-<li>内存子系统（Memory）配置为：</li>
+</ul>
+</li>
+<li>内存子系统（Memory）配置为：<ul>
 <li><strong>16 GB DDR3 FR-FCFS quad-rank</strong>，最大带宽 <strong>16 GB/s</strong>。</li>
 <li>内存延迟为 <strong>14-14-14 (CAS-RCD-RP)</strong> @ 1 GHz，支持 <strong>8 queue depth</strong> 和 <strong>32 max reads/writes</strong>。</li>
+</ul>
+</li>
 <li>操作系统（OS）为 <strong>Buildroot, Linux 5.7.0</strong>。</li>
 </ul>
 <table>
@@ -947,7 +977,7 @@
 <td>~78%</td>
 <td>~79%</td>
 <td>~10%</td>
-<td><strong>&lt;1%</strong></td>
+<td><strong>\&lt;1%</strong></td>
 </tr>
 <tr>
 <td>omnetpp</td>
@@ -1158,15 +1188,19 @@
 <ul>
 <li>图片展示了在不同分析粒度下，多种性能分析技术的误差分布情况，具体分为 <strong>(a) Instruction</strong>（指令级）和 <strong>(b) Function</strong>（函数级）两个子图。</li>
 <li>误差以箱线图形式呈现，纵轴为 <strong>Error</strong>（误差百分比），横轴为不同技术：<strong>IBS</strong>、<strong>SPE</strong>、<strong>RIS</strong>、<strong>NCI-TEA</strong> 和 <strong>TEA</strong>。</li>
-<li>在 <strong>Instruction 粒度</strong>（图 a）中：</li>
+<li>在 <strong>Instruction 粒度</strong>（图 a）中：<ul>
 <li>IBS、SPE、RIS 的误差中位数均在 <strong>60% 左右</strong>，且分布范围广，最大误差接近 <strong>80%</strong>。</li>
 <li>NCI-TEA 显著优于前三者，中位数误差降至约 <strong>20%</strong>。</li>
 <li><strong>TEA 表现最优</strong>，中位数误差低于 <strong>5%</strong>，且分布极窄，最大误差不超过 <strong>10%</strong>。</li>
-<li>在 <strong>Function 粒度</strong>（图 b）中：</li>
+</ul>
+</li>
+<li>在 <strong>Function 粒度</strong>（图 b）中：<ul>
 <li>所有技术的误差均有所下降，但相对排名不变。</li>
 <li>IBS、SPE、RIS 中位数误差仍高于 <strong>40%</strong>。</li>
 <li>NCI-TEA 中位数误差约为 <strong>15%</strong>。</li>
 <li><strong>TEA 依旧最精准</strong>，中位数误差接近 <strong>0%</strong>，最大误差小于 <strong>5%</strong>。</li>
+</ul>
+</li>
 <li>误差数据对比表：</li>
 </ul>
 <table>
@@ -1200,7 +1234,7 @@
 </tr>
 <tr>
 <td><strong>TEA</strong></td>
-<td><strong>&lt;5%</strong></td>
+<td><strong>\&lt;5%</strong></td>
 <td><strong>~0%</strong></td>
 </tr>
 </tbody>
@@ -1213,14 +1247,18 @@
 <ul>
 <li>图片展示了 <strong>Figure 10</strong>，用于对比 <strong>TEA</strong> 与 <strong>IBS</strong> 在分析 SPEC CPU2017 基准程序 <strong>lbm</strong> 时的性能剖析结果，核心目标是揭示哪种工具能准确识别性能瓶颈指令。</li>
 <li>图 (a) 为 <strong>TEA 生成的 PICS</strong>，图 (b) 为 <strong>IBS 生成的 PICS</strong>。两者均以条形图形式展示各指令在执行周期中的分布，横轴为周期数（Cycles），纵轴为指令及其操作码。</li>
-<li><strong>TEA 的 PICS 显示</strong>：</li>
+<li><strong>TEA 的 PICS 显示</strong>：<ul>
 <li>最显著的性能瓶颈是 <code>lw t4,152(a0)</code> 指令，其贡献了约 <strong>692B 周期</strong>。</li>
 <li>该指令的性能损失主要归因于 <strong>ST-LLC</strong>（L3 缓存未命中）和 <strong>ST-TLB</strong>（数据 TLB 未命中）事件组合，表明其负载延迟无法被隐藏。</li>
 <li>其他指令如 <code>fld ft6,(a0)</code>、<code>andi t5,t4,1</code> 等贡献较小，且无显著性能事件标记。</li>
-<li><strong>IBS 的 PICS 显示</strong>：</li>
+</ul>
+</li>
+<li><strong>IBS 的 PICS 显示</strong>：<ul>
 <li>性能热点被错误地归因于多个浮点运算指令，如 <code>fmul.d fs9,fs5,fs8</code>、<code>fdiv.d fs1,fs5,fs5</code> 等。</li>
 <li>这些指令在 IBS 下显示高周期消耗，但实际并非性能瓶颈，而是因为它们在前端被调度时，真正的瓶颈指令 <code>lw</code> 正处于 ROB 头部阻塞状态。</li>
 <li>IBS 未能正确关联性能事件与真正导致停滞的指令，导致误导性结论。</li>
+</ul>
+</li>
 <li>两图对比凸显 <strong>TEA 的时间比例特性</strong>：它只在指令暴露延迟时采样（即 commit 阶段），从而准确归因性能损失；而 <strong>IBS 在 dispatch 阶段采样</strong>，捕获的是前端行为，而非实际影响执行时间的指令。</li>
 <li>关键术语保留英文：<strong>PICS</strong>（Per-Instruction Cycle Stacks）、<strong>TEA</strong>（Time-Proportional Event Analysis）、<strong>IBS</strong>（Instruction-Based Sampling）、<strong>ST-LLC</strong>、<strong>ST-TLB</strong>。</li>
 <li>数据对比表：</li>
@@ -1260,7 +1298,7 @@
 <ul>
 <li>图片展示了在不同预取距离（Prefetch Distance, Pf 1 至 Pf 8）下，lbm 基准程序中最关键的 load 和 store 指令的 <strong>Per-Instruction Cycle Stacks (PICS)</strong> 及其对应的 <strong>Speedup</strong>。</li>
 <li>左侧 Y 轴为 <strong>Cycles</strong>，右侧 Y 轴为 <strong>Speedup</strong>，X 轴为预取距离配置，从原始版本（Orig.）到 Pf 8。</li>
-<li>图中柱状图表示各事件类别对执行周期的贡献，颜色对应不同性能事件：</li>
+<li>图中柱状图表示各事件类别对执行周期的贡献，颜色对应不同性能事件：<ul>
 <li><strong>base</strong>: 无性能事件的基础执行周期。</li>
 <li><strong>others</strong>: 其他未分类事件。</li>
 <li><strong>ST-TLB</strong>: 数据 TLB 缺失导致的停滞。</li>
@@ -1268,6 +1306,8 @@
 <li><strong>DR-SQ</strong>: 存储队列满导致的前端排空。</li>
 <li><strong>ST-L1</strong>: L1 数据缓存缺失。</li>
 <li><strong>ST-LLC</strong>: LLC 缓存缺失。</li>
+</ul>
+</li>
 <li>红色折线表示相对于原始版本的 <strong>Speedup</strong>，随预取距离增加先上升后下降，在 Pf 4 达到峰值约 <strong>1.28×</strong>。</li>
 <li>在原始版本中，load 指令（ld）主导周期消耗，主要归因于 <strong>ST-LLC</strong>（562B cycles），表明其工作集超出 LLC 容量。</li>
 <li>随着预取距离增加，<strong>ST-LLC</strong> 周期显著减少，<strong>ST-L1</strong> 周期上升，说明预取成功将部分 LLC 缺失转化为 L1 命中。</li>

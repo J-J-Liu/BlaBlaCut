@@ -654,9 +654,15 @@
 <h3 id="fig-4-partial-cfg-dump-for-a-function-with-c-exceptions">Fig. 4: Partial CFG dump for a function with C++ exceptions.<a class="headerlink" href="#fig-4-partial-cfg-dump-for-a-function-with-c-exceptions" title="Permanent link">&para;</a></h3>
 <p><img alt="589fdcad7be5dd03055853b805001b2026035c0bb367cd0ba63a6622982d632d.jpg" src="../images/589fdcad7be5dd03055853b805001b2026035c0bb367cd0ba63a6622982d632d.jpg" /></p>
 <ul>
-<li>图片展示了 BOLT 工具对一个包含 C++ 异常处理的函数 <code>_Z11filter_onlyi</code> 进行控制流图（CFG）分析后的部分输出，用于说明其内部如何表示和处理二进制代码。</li>
-<li>输出内容以结构化文本形式呈现，包含函数元信息、基本块（Basic Block, BB）定义及其指令序列，并标注了异常处理相关的元数据。</li>
-<li><strong>函数元信息</strong>：</li>
+<li>
+<p>图片展示了 BOLT 工具对一个包含 C++ 异常处理的函数 <code>_Z11filter_onlyi</code> 进行控制流图（CFG）分析后的部分输出，用于说明其内部如何表示和处理二进制代码。</p>
+</li>
+<li>
+<p>输出内容以结构化文本形式呈现，包含函数元信息、基本块（Basic Block, BB）定义及其指令序列，并标注了异常处理相关的元数据。</p>
+</li>
+<li>
+<p><strong>函数元信息</strong>：</p>
+<ul>
 <li>函数名：<code>_Z11filter_onlyi</code></li>
 <li>状态：CFG 已构建</li>
 <li>地址：<code>0x400ab1</code></li>
@@ -666,54 +672,54 @@
 <li>基本块数量：5</li>
 <li>CFI 指令数：4</li>
 <li>执行计数：104</li>
-<li>
-<p>配置文件准确率：100.0%</p>
+<li>配置文件准确率：100.0%</li>
+</ul>
 </li>
 <li>
 <p><strong>基本块 <code>.LBB07</code></strong>：</p>
-</li>
+<ul>
 <li>包含 11 条指令，对齐方式为 1。</li>
 <li>入口点，执行计数为 104。</li>
 <li>包含 CFI 指令用于记录栈帧状态变化。</li>
 <li>最后一条指令 <code>callq _Z3fooi</code> 被标记为可能抛出异常，其处理程序为 <code>.LLP0</code>，动作编号为 1。</li>
-<li>
-<p>后继块为 <code>.Ltmp9</code>（误预测数 0，计数 100），着陆垫为 <code>.LLP0</code>（计数 4）。</p>
+<li>后继块为 <code>.Ltmp9</code>（误预测数 0，计数 100），着陆垫为 <code>.LLP0</code>（计数 4）。</li>
+</ul>
 </li>
 <li>
 <p><strong>基本块 <code>.LLP0</code></strong>：</p>
-</li>
+<ul>
 <li>包含 2 条指令，对齐方式为 1。</li>
 <li>标记为“着陆垫”（Landing Pad），执行计数为 4。</li>
 <li>CFI 状态为 3。</li>
 <li>抛出者（Throwers）为 <code>.LBB07</code>。</li>
 <li>指令包括比较和跳转，用于异常分发逻辑。</li>
-<li>
-<p>后继块为 <code>.Ltmp10</code>（误预测数 0，计数 4）和 <code>.LFT8</code>（推断计数 0）。</p>
+<li>后继块为 <code>.Ltmp10</code>（误预测数 0，计数 4）和 <code>.LFT8</code>（推断计数 0）。</li>
+</ul>
 </li>
 <li>
 <p><strong>关键术语与注释</strong>：</p>
-</li>
+<ul>
 <li><strong>CFI</strong>（Call Frame Information）：用于支持栈展开和异常处理的调试信息。</li>
 <li><strong>Landing Pad</strong>：异常处理的入口点，当异常被抛出时，控制流会跳转至此处。</li>
 <li><strong>Exec Count</strong>：该基本块在采样期间被执行的次数，用于指导优化决策。</li>
-<li>
-<p><strong>Profile Acc</strong>：配置文件数据的准确性评估，此处为 100%，表明数据完整可靠。</p>
+<li><strong>Profile Acc</strong>：配置文件数据的准确性评估，此处为 100%，表明数据完整可靠。</li>
+</ul>
 </li>
 <li>
 <p><strong>BOLT 的处理能力体现</strong>：</p>
-</li>
+<ul>
 <li>能够识别并保留 DWARF 调试信息中的 CFI 指令。</li>
 <li>在重写二进制时，能重建所有 CFI 信息，确保异常处理机制正常工作。</li>
-<li>
-<p>支持对包含复杂控制流（如异常处理）的函数进行精确的 CFG 构建和优化。</p>
+<li>支持对包含复杂控制流（如异常处理）的函数进行精确的 CFG 构建和优化。</li>
+</ul>
 </li>
 <li>
 <p><strong>输出格式特点</strong>：</p>
-</li>
+<ul>
 <li>使用缩进和标签清晰划分不同部分。</li>
 <li>指令旁附有源码位置（如 <code>exception4.cpp:22</code>），便于调试和验证。</li>
-<li>
-<p>注释中包含操作语义（如 <code>OpDefCfaOffset</code>、<code>OpOffset Reg6</code>），反映底层机器指令行为。</p>
+<li>注释中包含操作语义（如 <code>OpDefCfaOffset</code>、<code>OpOffset Reg6</code>），反映底层机器指令行为。</li>
+</ul>
 </li>
 <li>
 <p><strong>表格化摘要</strong>：</p>
@@ -906,14 +912,22 @@
 <h3 id="fig-6-performance-improvements-for-clang">Fig. 6: Performance improvements for Clang.<a class="headerlink" href="#fig-6-performance-improvements-for-clang" title="Permanent link">&para;</a></h3>
 <p><img alt="3cccaad1e2b7c410eea87bee35bb1ec8f00ac352f8e98786071c2f532a75d60d.jpg" src="../images/3cccaad1e2b7c410eea87bee35bb1ec8f00ac352f8e98786071c2f532a75d60d.jpg" /></p>
 <ul>
-<li>图片为柱状图，标题为“Fig. 6: Performance improvements for Clang”，展示 BOLT 对 Clang 编译器性能的提升效果。</li>
-<li>图表横轴包含四个测试场景：<strong>input1</strong>、<strong>input2</strong>、<strong>input3</strong> 和 <strong>clang-build</strong>，分别代表不同规模的源文件编译和完整 Clang 构建过程。</li>
-<li>纵轴为 <strong>% Speedup</strong>，表示相对于基线的性能加速百分比。</li>
-<li>图例包含三种优化配置：</li>
+<li>
+<p>图片为柱状图，标题为“Fig. 6: Performance improvements for Clang”，展示 BOLT 对 Clang 编译器性能的提升效果。</p>
+</li>
+<li>
+<p>图表横轴包含四个测试场景：<strong>input1</strong>、<strong>input2</strong>、<strong>input3</strong> 和 <strong>clang-build</strong>，分别代表不同规模的源文件编译和完整 Clang 构建过程。</p>
+</li>
+<li>
+<p>纵轴为 <strong>% Speedup</strong>，表示相对于基线的性能加速百分比。</p>
+</li>
+<li>
+<p>图例包含三种优化配置：</p>
+<ul>
 <li><strong>BOLT</strong>（蓝色）：仅应用 BOLT 优化。</li>
 <li><strong>PGO+LTO</strong>（橙色）：应用 Profile-Guided Optimization 与 Link-Time Optimization。</li>
-<li>
-<p><strong>PGO+LTO+BOLT</strong>（绿色）：在 PGO+LTO 基础上再应用 BOLT。</p>
+<li><strong>PGO+LTO+BOLT</strong>（绿色）：在 PGO+LTO 基础上再应用 BOLT。</li>
+</ul>
 </li>
 <li>
 <p>各测试场景具体数据如下：</p>
@@ -956,20 +970,24 @@
 </tbody>
 </table>
 <ul>
-<li>关键观察：</li>
+<li>关键观察：<ul>
 <li>在所有测试中，<strong>PGO+LTO+BOLT 组合方案均取得最高加速比</strong>，表明 BOLT 与传统编译时优化互补。</li>
 <li><strong>BOLT 单独使用时性能优于 PGO+LTO</strong>，尤其在 input1 和 clang-build 场景下优势明显。</li>
 <li><strong>clang-build 场景下，BOLT 贡献了约 19.5% 的额外加速</strong>（49.42% - 29.93%），验证其对大型前端绑定应用的有效性。</li>
 <li>随着输入规模增大（从 input1 到 clang-build），BOLT 相对于 PGO+LTO 的增益比例下降，但仍保持显著正向贡献。</li>
 </ul>
+</li>
+</ul>
 <h3 id="fig-7-performance-improvements-for-gcc-lto-was-not-used-due-to-build-errors">Fig. 7: Performance improvements for GCC. LTO was not used due to build errors.<a class="headerlink" href="#fig-7-performance-improvements-for-gcc-lto-was-not-used-due-to-build-errors" title="Permanent link">&para;</a></h3>
 <p><img alt="ca60e3bd7000d865561ead6b9968df590e79be9fbcf17695e7bd10f49c2d43f6.jpg" src="../images/ca60e3bd7000d865561ead6b9968df590e79be9fbcf17695e7bd10f49c2d43f6.jpg" /></p>
 <ul>
 <li>图片展示了 <strong>GCC</strong> 编译器在不同优化配置下的性能提升百分比，横轴为四种不同的测试场景（input1, input2, input3, clang-build），纵轴为 <strong>% Speedup</strong>。</li>
-<li>三种优化策略以不同颜色柱状图表示：</li>
+<li>三种优化策略以不同颜色柱状图表示：<ul>
 <li><strong>蓝色</strong>：仅使用 <strong>BOLT</strong> 优化。</li>
 <li><strong>橙色</strong>：仅使用 <strong>PGO</strong>（Profile-Guided Optimization）。</li>
 <li><strong>绿色</strong>：<strong>PGO + BOLT</strong> 联合优化。</li>
+</ul>
+</li>
 <li>数据表明，在所有测试场景中，<strong>PGO + BOLT</strong> 的组合均带来最高性能增益，证明两者优化策略具有<strong>互补性</strong>。</li>
 <li>各场景具体数据如下：</li>
 </ul>
@@ -1083,12 +1101,14 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察点</strong>：</li>
+<li><strong>关键观察点</strong>：<ul>
 <li><strong>taken forward branches</strong> 和 <strong>taken conditional branches</strong> 在两种基准下均大幅减少，分别达 <strong>-83.9%</strong> 和 <strong>-70.6%</strong>（相对基线），表明 BOLT 通过优化基本块布局显著减少了“跳转”路径，提升了 I-cache 局部性。</li>
 <li><strong>non-taken conditional branches</strong> 增加，说明 BOLT 将冷路径移出热路径，使原本“不跳转”的分支变多，符合其“热路径直通化”策略。</li>
 <li>即使在已应用 <strong>PGO+LTO</strong> 的高度优化二进制上，BOLT 仍能带来可观改进，例如 <strong>taken branches</strong> 减少 <strong>44.3%</strong>，证明其优化与编译器级优化互补。</li>
 <li><strong>executed instructions</strong> 仅小幅减少（-0.7% over PGO+LTO），说明 BOLT 主要优化的是代码布局而非指令数量，其核心价值在于提升前端硬件结构（如 I-cache、branch predictor）效率。</li>
 <li>数据表明，BOLT 对 <strong>forward branches</strong> 的优化效果最强，这与其“将最常执行的后继块设为 fall-through”的基本块重排策略一致。</li>
+</ul>
+</li>
 </ul>
 <h3 id="fig-8-breakdown-of-improvements-on-different-metrics-for-hhvm-higher-is-better-icf-refers-to-identical-code-folding-optimizations-are-always-added-on-top-of-the-previous-bar-ie-bb-reordering-has-function-reordering-huge-pages-and-basic-block-reordering-all-turned-on">Fig. 8: Breakdown of improvements on different metrics for HHVM (higher is better). ICF refers to identical code folding. Optimizations are always added on top of the previous bar, i.e., +BB reordering has function reordering, huge pages and basic block reordering all turned on.<a class="headerlink" href="#fig-8-breakdown-of-improvements-on-different-metrics-for-hhvm-higher-is-better-icf-refers-to-identical-code-folding-optimizations-are-always-added-on-top-of-the-previous-bar-ie-bb-reordering-has-function-reordering-huge-pages-and-basic-block-reordering-all-turned-on" title="Permanent link">&para;</a></h3>
 <p><img alt="569b3fd76debb85483f3a23d97f914d555e9dd8bd042b436e9e68f9d5b989474.jpg" src="../images/569b3fd76debb85483f3a23d97f914d555e9dd8bd042b436e9e68f9d5b989474.jpg" /></p>
@@ -1274,10 +1294,12 @@
 <li>图片展示了 Clang 编译器在自身编译过程中，即使启用了 <strong>PGO</strong>（Profile-Guided Optimization），仍产生的一个<strong>不良代码布局</strong>实例。</li>
 <li>该函数名为 <code>clang::Redeclarable&lt;clang::TagDecl&gt;::DeclLink::getNext(...)</code>，其内部包含三个基本块：<code>.Ltmp1100284</code>、<code>.LFT680413</code> 和 <code>.Ltmp1100279</code>。</li>
 <li>核心问题是：<strong>冷代码块 <code>.LFT680413</code> 被夹在两个热代码块之间</strong>，且这两个热块通过一个向前的、高频率执行的分支相连。</li>
-<li>执行计数（Exec Count）数据清晰表明了各块的热度：</li>
+<li>执行计数（Exec Count）数据清晰表明了各块的热度：<ul>
 <li><code>.Ltmp1100284</code>: 1,635,334 次执行</li>
 <li><code>.LFT680413</code>: <strong>0</strong> 次执行（完全冷）</li>
 <li><code>.Ltmp1100279</code>: 1,769,771 次执行</li>
+</ul>
+</li>
 <li>这种布局导致处理器在执行完热块 <code>.Ltmp1100284</code> 后，必须跳过中间的冷块 <code>.LFT680413</code> 才能到达下一个热块 <code>.Ltmp1100279</code>，这会破坏指令缓存（I-cache）和分支预测器的效率。</li>
 <li>从源码注释看，<code>.LFT680413</code> 对应的源文件是 <code>ExternalASTSource.h:462:19</code>，其功能是检查指针是否为零并跳转。虽然该逻辑本身可能不冷，但在当前这个特定的调用点被内联后，其执行路径变得完全不活跃。</li>
 <li><strong>BOLT 的作用</strong>正是识别这种由编译器内联造成的“虚假”冷热混合布局，并在二进制层面重新排列基本块，将冷代码移出热路径，从而提升性能。</li>
@@ -1286,13 +1308,19 @@
 <h3 id="fig-11-heat-maps-for-instruction-memory-accesses-of-clang-binaries-heat-is-in-a-log-scale">Fig. 11: Heat maps for instruction memory accesses of Clang binaries. Heat is in a log scale.<a class="headerlink" href="#fig-11-heat-maps-for-instruction-memory-accesses-of-clang-binaries-heat-is-in-a-log-scale" title="Permanent link">&para;</a></h3>
 <p><img alt="b590ebb8ac0b3b1a5d3672ac5a0e9b0879269cafba90a4a25e50454447075cac.jpg" src="../images/b590ebb8ac0b3b1a5d3672ac5a0e9b0879269cafba90a4a25e50454447075cac.jpg" /></p>
 <ul>
-<li>图片展示了 Clang 编译器在三种不同优化配置下，其指令内存访问的热力图，用于直观比较代码布局对 I-cache 利用率的影响。</li>
-<li>热力图采用<strong>对数刻度</strong>（log scale）来表示访问频率，颜色从白色（未访问）到深红色（高频访问），右侧色标范围为 0 至 10。</li>
-<li>三张子图分别对应：</li>
+<li>
+<p>图片展示了 Clang 编译器在三种不同优化配置下，其指令内存访问的热力图，用于直观比较代码布局对 I-cache 利用率的影响。</p>
+</li>
+<li>
+<p>热力图采用<strong>对数刻度</strong>（log scale）来表示访问频率，颜色从白色（未访问）到深红色（高频访问），右侧色标范围为 0 至 10。</p>
+</li>
+<li>
+<p>三张子图分别对应：</p>
+<ul>
 <li><strong>(a) baseline</strong>: 未经任何 PGO 或 BOLT 优化的原始二进制。</li>
 <li><strong>(b) PGO+LTO</strong>: 经过编译时反馈驱动优化（PGO）和链接时优化（LTO）后的二进制。</li>
-<li>
-<p><strong>(c) PGO+LTO+BOLT</strong>: 在 PGO+LTO 基础上再应用 BOLT 后的二进制。</p>
+<li><strong>(c) PGO+LTO+BOLT</strong>: 在 PGO+LTO 基础上再应用 BOLT 后的二进制。</li>
+</ul>
 </li>
 <li>
 <p>通过对比三张图，可以观察到以下关键变化：</p>
@@ -1337,10 +1365,12 @@
 <li>图片展示了在 HHVM 应用上，使用 <strong>LBR</strong>（Last Branch Records）进行性能优化后，不同指标的提升百分比。图表标题明确指出“<strong>higher is better</strong>”，即数值越高代表优化效果越好。</li>
 <li>图表横轴列出了六个关键性能指标：Instructions、Branch-miss、I-cache-miss、LLC-miss、iTLB-miss 和 CPU time。</li>
 <li>纵轴表示 <strong>% Reduction</strong>，即相对于未使用 LBR 的基线，各项指标的减少百分比。</li>
-<li>图例包含三种优化场景：</li>
+<li>图例包含三种优化场景：<ul>
 <li><strong>Functions</strong>（蓝色柱）：仅对函数进行重排序。</li>
 <li><strong>BBs</strong>（橙色柱）：仅对基本块（Basic Blocks）进行重排序及其他优化。</li>
 <li><strong>Both</strong>（绿色柱）：同时应用函数重排序和基本块重排序等所有优化。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1391,14 +1421,16 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键发现</strong>：</li>
+<li>
+<p><strong>关键发现</strong>：</p>
+<ul>
 <li><strong>iTLB-miss</strong> 在 “Both” 场景下获得最大改善，达到 <strong>8.2%</strong> 的减少，表明 LBR 对指令 TLB 命中率有显著正面影响。</li>
 <li><strong>CPU time</strong> 在 “Both” 场景下减少 <strong>2.16%</strong>，说明综合优化能有效降低整体执行时间。</li>
 <li><strong>I-cache-miss</strong> 在 “Both” 场景下减少 <strong>5.16%</strong>，显示代码布局优化对指令缓存效率提升明显。</li>
 <li><strong>Branch-miss</strong> 在 “BBs” 和 “Both” 场景下均接近 2.8%，说明基本块重排序对分支预测准确率提升至关重要。</li>
 <li>函数重排序（Functions）单独作用时，除 iTLB-miss 外，其他指标改善有限，表明其主要贡献在于函数间局部性优化。</li>
-<li>
-<p><strong>BBs 优化对细粒度指标（如 Branch-miss, I-cache-miss）影响更大</strong>，而 <strong>Both 组合优化带来最全面且最高的性能收益</strong>。</p>
+<li><strong>BBs 优化对细粒度指标（如 Branch-miss, I-cache-miss）影响更大</strong>，而 <strong>Both 组合优化带来最全面且最高的性能收益</strong>。</li>
+</ul>
 </li>
 <li>
 <p>总体而言，该图证实了 <strong>LBR 提供的精确分支采样数据对 BOLT 的基本块重排序优化至关重要</strong>，尤其在改善 i-TLB 和 I-cache 表现方面效果突出，最终转化为可观的 CPU 时间节省。</p>

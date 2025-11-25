@@ -494,48 +494,72 @@
 
 <h1 id="feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers">Feedback Directed Prefetching: Improving the Performance and Bandwidth-Efficiency of Hardware Prefetchers 论文解析<a class="headerlink" href="#feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers" title="Permanent link">&para;</a></h1>
 <h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
-<p><strong>作者 (Authors)</strong>
-- Santhosh Srinath†‡
-- Onur Mutlu§
-- Hyesoon Kim‡
-- Yale N. Patt‡</p>
-<p><strong>发表期刊/会议 (Journal/Conference)</strong>
-- 该论文未在提供的文本中明确指出其发表的期刊或会议名称。</p>
-<p><strong>发表年份 (Publication Year)</strong>
-- 该论文未在提供的文本中明确指出其发表年份。</p>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Santhosh Srinath†‡</li>
+<li>Onur Mutlu§</li>
+<li>Hyesoon Kim‡</li>
+<li>Yale N. Patt‡</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>该论文未在提供的文本中明确指出其发表的期刊或会议名称。</li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li>该论文未在提供的文本中明确指出其发表年份。</li>
+</ul>
 <hr />
 <h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p><strong>目的</strong>
-- 解决传统硬件数据预取器（hardware data prefetcher）存在的两大核心问题：<strong>性能不稳定</strong>（在某些程序上因过度激进的预取导致性能严重下降）和<strong>内存带宽效率低下</strong>（产生大量无用预取，浪费带宽并引发缓存污染）。
-- 提出一种通用的、基于动态反馈的机制，以提升预取器的<strong>性能</strong>和<strong>带宽效率</strong>。</p>
-<p><strong>方法</strong>
-- 提出 <strong>Feedback Directed Prefetching (FDP)</strong> 机制，通过实时监控三个关键指标来动态调整预取行为：
-  - <strong>Prefetch Accuracy </strong>(预取准确率)：衡量预取的数据块中有多少被后续的实际需求（demand access）所使用。
-  - <strong>Prefetch Lateness </strong>(预取延迟)：衡量有用的预取请求中有多少未能及时返回，导致需求访问时仍需等待。
-  - <strong>Prefetcher-Generated Cache Pollution </strong>(预取器引发的缓存污染)：衡量因预取数据而被驱逐、且后续又被需求访问的缓存块数量。
-- 设计了低成本的硬件结构来收集上述反馈信息：
-  - 使用 <strong>pref-bit</strong> 标记预取块，并通过计数器 <code>pref-total</code> 和 <code>used-total</code> 计算准确率。
-  - 利用 <strong>MSHR </strong>(Miss Status Holding Register) 中的 <code>pref-bit</code> 和计数器 <code>late-total</code> 来检测延迟的预取。
-  - 采用 <strong>Bloom filter</strong> 结构（一个4096-entry的位向量）来近似估算缓存污染，避免了为每个被驱逐块维护状态的高昂开销 </p>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决传统硬件数据预取器（hardware data prefetcher）存在的两大核心问题：<strong>性能不稳定</strong>（在某些程序上因过度激进的预取导致性能严重下降）和<strong>内存带宽效率低下</strong>（产生大量无用预取，浪费带宽并引发缓存污染）。</li>
+<li>提出一种通用的、基于动态反馈的机制，以提升预取器的<strong>性能</strong>和<strong>带宽效率</strong>。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Feedback Directed Prefetching (FDP)</strong> 机制，通过实时监控三个关键指标来动态调整预取行为：<ul>
+<li>**Prefetch Accuracy **(预取准确率)：衡量预取的数据块中有多少被后续的实际需求（demand access）所使用。</li>
+<li>**Prefetch Lateness **(预取延迟)：衡量有用的预取请求中有多少未能及时返回，导致需求访问时仍需等待。</li>
+<li>**Prefetcher-Generated Cache Pollution **(预取器引发的缓存污染)：衡量因预取数据而被驱逐、且后续又被需求访问的缓存块数量。</li>
+</ul>
+</li>
+<li>设计了低成本的硬件结构来收集上述反馈信息：<ul>
+<li>使用 <strong>pref-bit</strong> 标记预取块，并通过计数器 <code>pref-total</code> 和 <code>used-total</code> 计算准确率。</li>
+<li>利用 **MSHR **(Miss Status Holding Register) 中的 <code>pref-bit</code> 和计数器 <code>late-total</code> 来检测延迟的预取。</li>
+<li>采用 <strong>Bloom filter</strong> 结构（一个4096-entry的位向量）来近似估算缓存污染，避免了为每个被驱逐块维护状态的高昂开销</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/00535b5d378692089bc46ed2258d275e0e6d1cd80ea05c2799eef09253a25325.jpg" /></p>
 <p><em>Figure 3. IPC performance (left) and prefetch lateness (right) with different aggressiveness configurations Figure 4. Filter to estimate prefetcher-generated cache pollution</em></p>
-<p>。
-- 基于采样间隔（以L2缓存驱逐次数为单位）收集的指标，动态调整两个方面：
-  1.  <strong>预取器的激进度 </strong>(Aggressiveness)：通过一个3-bit的饱和计数器，在“非常保守”到“非常激进”五个配置间切换。调整策略综合考虑了准确率、延迟和污染三个指标 </p>
+<p>。</p>
+<ul>
+<li>基于采样间隔（以L2缓存驱逐次数为单位）收集的指标，动态调整两个方面：<ol>
+<li>**预取器的激进度 **(Aggressiveness)：通过一个3-bit的饱和计数器，在“非常保守”到“非常激进”五个配置间切换。调整策略综合考虑了准确率、延迟和污染三个指标</li>
+</ol>
+</li>
+</ul>
 <p><img alt="" src="../images/259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg" /></p>
 <p>。
-  2.  <strong>预取块的缓存插入位置 </strong>(Cache Insertion Policy)：根据估算的污染程度，动态决定将预取块插入LRU栈的 <strong>MRU</strong>（最近使用）、<strong>MID</strong>（中间）、<strong>LRU-4</strong> 或 <strong>LRU</strong>（最久未使用）位置。</p>
-<p><strong>结果</strong>
-- 在17个内存密集型SPEC CPU2000基准测试上，与表现最佳的传统流式预取器（Very Aggressive）相比：
-  - FDP（同时调整激进度和插入策略）实现了 <strong>6.5%</strong> 的平均性能（IPC）提升。
-  - 内存带宽消耗（BPKI）减少了 <strong>18.7%</strong>。
-- 与消耗相似带宽的传统预取器（Middle-of-the-Road）相比，FDP提供了 <strong>13.6%</strong> 的更高性能。
-- <strong>完全消除了</strong>传统激进预取器在 <code>ammp</code> 和 <code>applu</code> 等基准测试上的巨大性能损失 </p>
+2. **预取块的缓存插入位置 **(Cache Insertion Policy)：根据估算的污染程度，动态决定将预取块插入LRU栈的 <strong>MRU</strong>（最近使用）、<strong>MID</strong>（中间）、<strong>LRU-4</strong> 或 <strong>LRU</strong>（最久未使用）位置。</p>
+<p><strong>结果</strong></p>
+<ul>
+<li>在17个内存密集型SPEC CPU2000基准测试上，与表现最佳的传统流式预取器（Very Aggressive）相比：<ul>
+<li>FDP（同时调整激进度和插入策略）实现了 <strong>6.5%</strong> 的平均性能（IPC）提升。</li>
+<li>内存带宽消耗（BPKI）减少了 <strong>18.7%</strong>。</li>
+</ul>
+</li>
+<li>与消耗相似带宽的传统预取器（Middle-of-the-Road）相比，FDP提供了 <strong>13.6%</strong> 的更高性能。</li>
+<li><strong>完全消除了</strong>传统激进预取器在 <code>ammp</code> 和 <code>applu</code> 等基准测试上的巨大性能损失</li>
+</ul>
 <p><img alt="" src="../images/ad3a41f6c96bd07ee1044157778e6e3516c03903241a6d77c514c279a7088bf1.jpg" /></p>
 <p><em>Figure 9. Overall performance of FDP</em></p>
-<p>。
-- FDP机制具有良好的通用性，在 <strong>Global-History-Buffer </strong>(GHB) 和 <strong>PC-based stride prefetcher</strong> 上同样有效。
-- 硬件开销极低，仅为 <strong>2.54 KB</strong>，不到1MB L2缓存数据存储大小的0.25%。</p>
+<p>。</p>
+<ul>
+<li>FDP机制具有良好的通用性，在 **Global-History-Buffer **(GHB) 和 <strong>PC-based stride prefetcher</strong> 上同样有效。</li>
+<li>硬件开销极低，仅为 <strong>2.54 KB</strong>，不到1MB L2缓存数据存储大小的0.25%。</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -561,29 +585,33 @@
 <td style="text-align: left;">1.13x</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>Very Aggressive </strong>(Best Conventional)</td>
+<td style="text-align: left;">**Very Aggressive **(Best Conventional)</td>
 <td style="text-align: left;"><strong>1.18x</strong></td>
 <td style="text-align: left;"><strong>1.30x</strong></td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>FDP </strong>(Proposed)</td>
-<td style="text-align: left;"><strong>1.26x </strong>(+6.5%)</td>
-<td style="text-align: left;"><strong>1.06x </strong>(-18.7%)</td>
+<td style="text-align: left;">**FDP **(Proposed)</td>
+<td style="text-align: left;">**1.26x **(+6.5%)</td>
+<td style="text-align: left;">**1.06x **(-18.7%)</td>
 </tr>
 </tbody>
 </table>
-<p><strong>结论</strong>
-- 将<strong>动态反馈</strong>机制引入硬件预取器设计是提升其性能和带宽效率的有效途径。
-- <strong>综合考量准确率、延迟和缓存污染</strong>这三个维度，比仅依赖单一指标（如准确率）能带来更显著的收益（+3.4%性能，-2.5%带宽）。
-- 所提出的低成本硬件方案（特别是基于Bloom filter的污染估算和动态LRU插入策略）具有很高的实用价值和可扩展性，适用于多种现代预取器架构。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li>将<strong>动态反馈</strong>机制引入硬件预取器设计是提升其性能和带宽效率的有效途径。</li>
+<li><strong>综合考量准确率、延迟和缓存污染</strong>这三个维度，比仅依赖单一指标（如准确率）能带来更显著的收益（+3.4%性能，-2.5%带宽）。</li>
+<li>所提出的低成本硬件方案（特别是基于Bloom filter的污染估算和动态LRU插入策略）具有很高的实用价值和可扩展性，适用于多种现代预取器架构。</li>
+</ul>
 <hr />
 <h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <p><strong>研究背景与动机</strong></p>
 <ul>
 <li>现代高性能处理器普遍采用<strong>硬件数据预取 (hardware data prefetching)</strong> 技术来隐藏巨大的<strong>主存延迟 (main memory latency)</strong>，通过预测程序的内存访问模式并提前将数据加载到缓存中。</li>
-<li>尽管预取能显著提升许多程序的性能，但它也存在两大严重弊端：</li>
+<li>尽管预取能显著提升许多程序的性能，但它也存在两大严重弊端：<ul>
 <li><strong>带宽浪费与争用</strong>: 不准确的预取请求会消耗宝贵的<strong>内存带宽 (memory bandwidth)</strong>，并与关键的<strong>需求请求 (demand requests)</strong> 产生争用，反而增加延迟。</li>
 <li><strong>缓存污染 (cache pollution)</strong>: 预取的数据可能驱逐掉未来会被程序真正使用的缓存块，不仅降低性能，还会因需要重新加载被驱逐的数据而进一步浪费带宽。</li>
+</ul>
+</li>
 <li>传统的预取器（如<strong>流式预取器 (stream-based prefetcher)</strong>）通常采用<strong>静态的、固定激进度 (fixed aggressiveness)</strong> 配置。如图1所示，这种“一刀切”的策略在某些基准测试（如 <code>ammp</code>, <code>applu</code>）上会导致<strong>严重的性能下降</strong>，迫使现代处理器不得不采用相对保守的策略，从而牺牲了在其他程序上的潜在性能收益。</li>
 </ul>
 <p><img alt="" src="../images/b0ccac832bd92283fd730c808fc1fd78ed36dba08792d2e31becc85ffcda9309.jpg" /></p>
@@ -593,18 +621,22 @@
 </ul>
 <p><strong>核心贡献</strong></p>
 <ul>
-<li>提出了一种名为<strong>反馈导向预取 (Feedback Directed Prefetching, FDP)</strong> 的通用动态调节框架，该框架通过实时监控三个关键指标来调整预取器的行为：</li>
+<li>提出了一种名为<strong>反馈导向预取 (Feedback Directed Prefetching, FDP)</strong> 的通用动态调节框架，该框架通过实时监控三个关键指标来调整预取器的行为：<ul>
 <li><strong>预取准确率 (Prefetch Accuracy)</strong>: 衡量预取地址的预测准确性。</li>
 <li><strong>预取及时性/延迟 (Prefetch Lateness)</strong>: 衡量预取数据是否在需求到来前已就绪。</li>
 <li><strong>预取器引发的缓存污染 (Prefetcher-Generated Cache Pollution)</strong>: 衡量预取操作导致的有用数据被驱逐的程度。</li>
+</ul>
+</li>
 <li>设计了一种<strong>低成本、基于布隆过滤器 (Bloom filter)</strong> 的硬件机制，用于在运行时高效地估算<strong>缓存污染</strong>，解决了精确追踪污染开销过大的难题。</li>
 </ul>
 <p><img alt="" src="../images/00535b5d378692089bc46ed2258d275e0e6d1cd80ea05c2799eef09253a25325.jpg" /></p>
 <p><em>Figure 3. IPC performance (left) and prefetch lateness (right) with different aggressiveness configurations Figure 4. Filter to estimate prefetcher-generated cache pollution</em></p>
 <ul>
-<li>FDP 从两个维度动态调整预取行为：</li>
+<li>FDP 从两个维度动态调整预取行为：<ul>
 <li><strong>动态调节预取激进度</strong>: 根据上述三个指标的反馈，使用一个<strong>饱和计数器 (saturating counter)</strong> 在多个预设配置（从非常保守到非常激进）之间切换。</li>
 <li><strong>动态调节缓存插入策略</strong>: 根据估算的缓存污染程度，决定将预取块插入到 LRU 栈的不同位置（如 MRU, MID, LRU-4, LRU），以平衡保留有用预取和减少污染之间的矛盾。</li>
+</ul>
+</li>
 <li>实验结果表明，FDP 在 <strong>SPEC CPU2000</strong> 的 17 个内存密集型基准测试上，相比性能最佳的传统流式预取器配置，实现了 <strong>6.5%</strong> 的平均性能提升，并减少了 <strong>18.7%</strong> 的内存带宽消耗。更重要的是，它<strong>完全消除了</strong>传统激进预取在 <code>ammp</code> 和 <code>applu</code> 等程序上的巨大性能损失。</li>
 <li>FDP 具有<strong>良好的通用性</strong>，同样适用于 <strong>GHB-based delta correlation prefetcher</strong> 和 <strong>PC-based stride prefetcher</strong>，证明了其作为一种通用优化框架的价值。其硬件开销仅为 <strong>2.54 KB</strong>，且不增加关键路径延迟。</li>
 </ul>
@@ -614,37 +646,45 @@
 <p><strong>整体技术架构</strong></p>
 <p>本文提出的 <strong>Feedback Directed Prefetching (FDP)</strong> 是一种动态反馈机制，旨在通过实时监控硬件预取器（Hardware Prefetcher）的运行效果，来动态调整其行为，从而在提升性能的同时降低内存带宽消耗。其核心架构围绕三个关键指标的收集、分析与反馈执行展开。</p>
 <ul>
-<li><strong>反馈信息收集层 (Feedback Collection Layer)</strong></li>
+<li>
+<p><strong>反馈信息收集层 (Feedback Collection Layer)</strong></p>
+<ul>
 <li>该层负责在硬件层面实时估算三个核心指标：<ul>
 <li><strong>Prefetch Accuracy (预取准确率)</strong>: 通过在 L2 缓存的每个 tag 条目中增加一个 <strong>pref-bit</strong> 标记位，并配合两个计数器 <strong>preftotal</strong> (总预取数) 和 <strong>used-total</strong> (有用预取数) 来计算。当预取块被需求访问时，该位被重置并增加 used-total。</li>
 <li><strong>Prefetch Lateness (预取延迟度)</strong>: 利用 <strong>Miss Status Holding Register (MSHR)</strong> 结构。MSHR 中的每个条目也包含一个 <strong>pref-bit</strong>。当一个需求请求命中了一个 pref-bit 被置位的 MSHR 条目时，说明该预取是延迟的，此时递增 <strong>late-total</strong> 计数器。</li>
 <li><strong>Prefetcher-Generated Cache Pollution (预取器引发的缓存污染)</strong>: 采用基于 <strong>Bloom filter</strong> 概念的硬件结构（称为 pollution filter）来低成本地近似估算。该 filter 是一个位向量，用于追踪因预取而被驱逐的需求块。当发生需求缺失时，查询此 filter 可判断该缺失是否由预取引起，并更新 <strong>pollution-total</strong> 计数器。</li>
 </ul>
 </li>
-<li>
-<p>所有指标的收集都采用<strong>基于采样的区间更新策略</strong>，以适应程序的阶段性行为变化。一个采样区间的长度由 L2 缓存的驱逐块数量（<strong>eviction-count</strong>）决定，而非固定时间周期。</p>
+<li>所有指标的收集都采用<strong>基于采样的区间更新策略</strong>，以适应程序的阶段性行为变化。一个采样区间的长度由 L2 缓存的驱逐块数量（<strong>eviction-count</strong>）决定，而非固定时间周期。</li>
+</ul>
 </li>
 <li>
 <p><strong>决策与调整层 (Decision &amp; Adaptation Layer)</strong></p>
-</li>
+<ul>
 <li>在每个采样区间结束时，系统会根据收集到的三个指标的加权平均值，与预设的静态阈值进行比较，从而做出调整决策。</li>
 <li>FDP 通过两种互补的方式来调整预取器行为：<ul>
-<li><strong>动态调整预取器激进程度 (Dynamic Aggressiveness)</strong>:</li>
+<li><strong>动态调整预取器激进程度 (Dynamic Aggressiveness)</strong>:<ul>
 <li>使用一个 <strong>3-bit 饱和计数器 (Dynamic Configuration Counter)</strong> 来表示当前的预取配置，范围从 <strong>Very Conservative</strong> 到 <strong>Very Aggressive</strong>。</li>
 <li>根据 <strong>Accuracy</strong>, <strong>Lateness</strong>, 和 <strong>Pollution</strong> 三个指标的组合情况（共12种场景），查表（Table 2）决定是增加、减少还是保持计数器的值，从而动态改变 <strong>Prefetch Distance</strong> 和 <strong>Prefetch Degree</strong>。</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg" /></p>
-<div class="highlight"><pre><span></span><code>- **动态调整预取块缓存插入策略 (Dynamic Insertion Policy)**:
-  - 不再将所有预取块无差别地插入 LRU 栈的 **MRU (Most-Recently-Used)** 位置。
-  - 而是根据估算的 **Cache Pollution** 程度，动态选择插入位置：**MID** (中间位置), **LRU-4** (四分之一位置), 或 **LRU** (最不常用位置)。污染越高，插入位置越靠近 LRU 端，以减少对有用数据的干扰。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- **动态调整预取块缓存插入策略 (Dynamic Insertion Policy)**:
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  - 不再将所有预取块无差别地插入 LRU 栈的 **MRU (Most-Recently-Used)** 位置。
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  - 而是根据估算的 **Cache Pollution** 程度，动态选择插入位置：**MID** (中间位置), **LRU-4** (四分之一位置), 或 **LRU** (最不常用位置)。污染越高，插入位置越靠近 LRU 端，以减少对有用数据的干扰。
 </code></pre></div>
 <ul>
-<li><strong>适用性与评估</strong></li>
+<li><strong>适用性与评估</strong><ul>
 <li>FDP 被设计为一个通用框架，论文验证了其在 <strong>Stream-based prefetcher</strong>, <strong>Global-History-Buffer (GHB) based delta correlation prefetcher</strong>, 和 <strong>PC-based stride prefetcher</strong> 三种主流硬件预取器上的有效性。</li>
 <li>实验结果表明，FDP 在 <strong>SPEC CPU2000</strong> 套件的 17 个内存密集型基准测试中，相比最佳的传统预取器配置，实现了 <strong>6.5%</strong> 的平均性能提升和 <strong>18.7%</strong> 的内存带宽节省。</li>
 <li>其硬件开销极低，仅为 <strong>2.54 KB</strong> 的额外存储，且不增加关键路径延迟。</li>
+</ul>
+</li>
 </ul>
 <h3 id="1_1">1. 动态反馈驱动的预取器激进度调整<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
 <p><strong>动态反馈驱动的预取器激进度调整机制</strong></p>
@@ -799,9 +839,8 @@
 </ul>
 </li>
 <li>动态策略成功地为不同基准测试选择了最优或接近最优的静态策略。例如，在 <code>applu</code> 和 <code>ammp</code> 等高污染基准上，动态策略大部分时间选择 <strong>LRU</strong> 插入；而在 <code>wupwise</code> 等低污染基准上，则更多地使用 <strong>MID</strong> 或更靠前的位置。</li>
-<li></li>
+<li><img alt="" src="../images/70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg" /></p>
 <p><em>Figure 8. Distribution of the insertion position of prefetched blocks</em></p>
 <ul>
 <li>性能对比数据显示，<strong>Dynamic Insertion</strong> 策略相比最佳静态策略（LRU-4）还能再提升 <strong>1.9%</strong> 的性能，充分证明了其有效性。</li>
@@ -940,53 +979,55 @@
 <p><strong>消融实验</strong></p>
 <p>论文通过一系列消融实验，验证了 FDP 中各个组件的有效性和必要性。</p>
 <ul>
-<li><strong>动态调整预取激进度 (Dynamic Aggressiveness) vs. 静态配置</strong>：</li>
+<li><strong>动态调整预取激进度 (Dynamic Aggressiveness) vs. 静态配置</strong>：<ul>
 <li>仅使用动态调整激进度（固定 MRU 插入策略），其平均性能就超过了所有静态配置（No, Very Conservative, Middle-of-the-Road, Very Aggressive）。</li>
 <li>与 <strong>Very Aggressive</strong> 配置相比，性能提升 <strong>4.7%</strong>，并几乎完全消除了 <code>ammp</code> 和 <code>applu</code> 上的性能损失。</li>
-<li></li>
+<li><img alt="" src="../images/48a7f881981e7386629c8a257bcbbd0852280640199823f654041d147eb8296a.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/48a7f881981e7386629c8a257bcbbd0852280640199823f654041d147eb8296a.jpg" /></p>
+</li>
+</ul>
 <p><em>Figure 5. Dynamic adjustment of prefetcher aggressiveness</em></p>
 <ul>
 <li>机制能自适应地为不同程序选择最优的激进度级别，例如在 <code>wupwise</code> 上几乎总是选择 <strong>Very Aggressive</strong>，而在 <code>ammp</code> 上几乎总是选择 <strong>Very Conservative</strong>。</li>
-<li></li>
+<li><img alt="" src="../images/d34f1b5fcd4997faab231c40bef64baa6eebc82d6e893cc3bc30c93e0cbaff9b.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/d34f1b5fcd4997faab231c40bef64baa6eebc82d6e893cc3bc30c93e0cbaff9b.jpg" /></p>
 <p><em>Figure 6. Distribution of the dynamic aggressiveness level</em></p>
 <ul>
-<li><strong>动态调整缓存插入策略 (Dynamic Insertion) vs. 静态策略</strong>：</li>
+<li><strong>动态调整缓存插入策略 (Dynamic Insertion) vs. 静态策略</strong>：<ul>
 <li>在固定 <strong>Very Aggressive</strong> 配置下，动态插入策略的性能优于任何静态策略（MRU, MID, LRU-4, LRU）。</li>
 <li>与最佳静态策略 <strong>LRU-4</strong> 相比，性能提升 <strong>1.9%</strong>；与基线 <strong>MRU</strong> 相比，性能提升 <strong>5.1%</strong>。</li>
-<li></li>
+<li><img alt="" src="../images/faeff948fd441f807661f315188552e676e2224832ec7abc50f8b273ddf8009c.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/faeff948fd441f807661f315188552e676e2224832ec7abc50f8b273ddf8009c.jpg" /></p>
+</li>
+</ul>
 <p><em>Figure 7. Dynamic adjustment of prefetch insertion policy</em></p>
 <ul>
 <li>该机制能根据污染情况动态选择插入位置，例如在 <code>ammp</code> 上主要使用 <strong>LRU</strong> 位置以减少污染。</li>
-<li></li>
+<li><img alt="" src="../images/70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg" /></p>
 <p><em>Figure 8. Distribution of the insertion position of prefetched blocks</em></p>
 <ul>
-<li><strong>仅使用预取准确率 (Accuracy-only) vs. 完整反馈机制</strong>：</li>
-<li>一个仅基于 <strong>Prefetch Accuracy</strong> 来调整激进度的简化版 FDP，其性能和带宽效率均低于完整的 FDP。</li>
 <li>
-<p>完整的 FDP（同时考虑 <strong>Accuracy</strong>, <strong>Timeliness/Lateness</strong>, <strong>Pollution</strong>）比仅用准确率的版本性能高 <strong>3.4%</strong>，带宽消耗低 <strong>2.5%</strong>。这证明了综合多维度反馈信息的重要性。</p>
+<p><strong>仅使用预取准确率 (Accuracy-only) vs. 完整反馈机制</strong>：</p>
+<ul>
+<li>一个仅基于 <strong>Prefetch Accuracy</strong> 来调整激进度的简化版 FDP，其性能和带宽效率均低于完整的 FDP。</li>
+<li>完整的 FDP（同时考虑 <strong>Accuracy</strong>, <strong>Timeliness/Lateness</strong>, <strong>Pollution</strong>）比仅用准确率的版本性能高 <strong>3.4%</strong>，带宽消耗低 <strong>2.5%</strong>。这证明了综合多维度反馈信息的重要性。</li>
+</ul>
 </li>
 <li>
 <p><strong>FDP vs. 预取缓存 (Prefetch Cache)</strong>：</p>
-</li>
+<ul>
 <li>为了对比解决缓存污染的另一种方案，作者将 FDP 与使用专用 <strong>prefetch cache</strong> 的方案进行了比较。</li>
 <li>FDP（直接预取到 L2）的性能比使用 <strong>32KB prefetch cache</strong> 的激进预取器高 <strong>5.3%</strong>，并且带宽消耗更低。</li>
 <li>FDP 在性能上接近 <strong>64KB prefetch cache</strong> 的方案，但硬件开销远小于后者。</li>
-<li></li>
+<li><img alt="" src="../images/db1b40b8af8daaa8871a965a13cda94e0a885f14747451c3269479bc3f4270c2.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/db1b40b8af8daaa8871a965a13cda94e0a885f14747451c3269479bc3f4270c2.jpg" /></p>
+</li>
+</ul>
 <p><em>Figure 11. Performance of prefetch cache vs. FDP</em></p>
 <ul>
-<li></li>
+<li><img alt="" src="../images/26fb57050fca59062249afbb0507bc33eb46646d3a5fedcbe87771851247f7cd.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/26fb57050fca59062249afbb0507bc33eb46646d3a5fedcbe87771851247f7cd.jpg" /></p>
 <p><em>Figure 12. Bandwidth consumption of prefetch cache vs. FDP</em></p>
 <hr />
 

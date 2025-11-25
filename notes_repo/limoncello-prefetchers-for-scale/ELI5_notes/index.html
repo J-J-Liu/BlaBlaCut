@@ -467,31 +467,45 @@
 <p><img alt="" src="../images/3c91155487617f08edd483be7d4f2988b11f9779218c551261842d1d7a821be7.jpg" /></p>
 <p><em>Figure 17. Limoncello memory latency reduction. Memory latency reduces by 13% in the median and 10% in the P99.</em></p>
 <h3 id="1-hard-limoncello-eli5">1. Hard Limoncello (ELI5)<a class="headerlink" href="#1-hard-limoncello-eli5" title="Permanent link">&para;</a></h3>
-<p><strong>痛点直击 (The "Why")</strong>
-- 传统硬件预取器（Hardware Prefetcher）的设计哲学是“不惜一切代价减少 Cache Miss”，这在内存带宽充裕的实验室环境（如跑 SPEC benchmark）下很有效。
-- 但在 Google 这样的<strong>高利用率数据中心</strong>里，情况完全相反：内存带宽是<strong>稀缺资源</strong>，早已成为瓶颈。此时，硬件预取器还在拼命地、不加区分地预取数据，结果就是：
-  - <strong>浪费宝贵的内存带宽</strong>：预取了很多可能根本用不上的数据。
-  - <strong>加剧内存拥塞</strong>：导致真正需要的数据（demand request）排队等待时间变长，即 <strong>load-to-use latency</strong> 暴增。
-  - 简单说，就是“好心办坏事”——为了省一点 CPU 周期去等 Cache，却花了更多时间在内存队列里干等。</p>
-<p><strong>通俗比方 (The Analogy)</strong>
-- 想象一个繁忙的港口（内存控制器），货船（内存请求）络绎不绝。
-- 硬件预取器就像是一个过于热心的仓库管理员，他看到某艘船要来卸货，就自作主张地让好几艘空船（预取请求）提前开到港口边等着装货。
-- 在港口空闲时（低带宽利用率），这没问题，甚至能加快速度。
-- 但在港口已经堵得水泄不通时（高带宽利用率），这些空船不仅占着宝贵的泊位，还挡住了真正要装卸货物的船只，导致整个港口的<strong>吞吐效率</strong>反而下降了。
-- “Hard Limoncello” 就像是港口的智能调度系统：一旦发现港口拥堵指数（<strong>内存带宽利用率</strong>）超过警戒线，就立刻下令让那个热心过头的管理员“闭嘴休息”，停止派发空船，把所有资源都留给真正有需求的船只。</p>
-<p><strong>关键一招 (The "How")</strong>
-- 作者没有去修改或替换硬件预取器本身（那需要芯片厂商介入，成本太高），而是做了一个纯软件的“开关控制器”。
-- 这个控制器的核心逻辑非常清晰，但设计得很稳健：
-  - <strong>动态阈值判断</strong>：持续监控每个 CPU Socket 的 <strong>内存带宽利用率</strong>。
-    - 当利用率超过一个<strong>高阈值</strong>（例如 80%）时，通过写 <strong>MSR (Model-Specific Register)</strong> 直接 <strong>关闭硬件预取器</strong>。
-    - 当利用率回落到一个<strong>低阈值</strong>（例如 60%）以下时，再重新打开。
-  - <strong>引入迟滞机制 (Hysteresis)</strong>：这是防止系统在阈值边缘疯狂抖动的关键。高低阈值之间留出一个缓冲区，并且要求状态必须<strong>持续一段时间</strong>才触发切换，保证了系统的稳定性。</p>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统硬件预取器（Hardware Prefetcher）的设计哲学是“不惜一切代价减少 Cache Miss”，这在内存带宽充裕的实验室环境（如跑 SPEC benchmark）下很有效。</li>
+<li>但在 Google 这样的<strong>高利用率数据中心</strong>里，情况完全相反：内存带宽是<strong>稀缺资源</strong>，早已成为瓶颈。此时，硬件预取器还在拼命地、不加区分地预取数据，结果就是：<ul>
+<li><strong>浪费宝贵的内存带宽</strong>：预取了很多可能根本用不上的数据。</li>
+<li><strong>加剧内存拥塞</strong>：导致真正需要的数据（demand request）排队等待时间变长，即 <strong>load-to-use latency</strong> 暴增。</li>
+<li>简单说，就是“好心办坏事”——为了省一点 CPU 周期去等 Cache，却花了更多时间在内存队列里干等。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象一个繁忙的港口（内存控制器），货船（内存请求）络绎不绝。</li>
+<li>硬件预取器就像是一个过于热心的仓库管理员，他看到某艘船要来卸货，就自作主张地让好几艘空船（预取请求）提前开到港口边等着装货。</li>
+<li>在港口空闲时（低带宽利用率），这没问题，甚至能加快速度。</li>
+<li>但在港口已经堵得水泄不通时（高带宽利用率），这些空船不仅占着宝贵的泊位，还挡住了真正要装卸货物的船只，导致整个港口的<strong>吞吐效率</strong>反而下降了。</li>
+<li>“Hard Limoncello” 就像是港口的智能调度系统：一旦发现港口拥堵指数（<strong>内存带宽利用率</strong>）超过警戒线，就立刻下令让那个热心过头的管理员“闭嘴休息”，停止派发空船，把所有资源都留给真正有需求的船只。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有去修改或替换硬件预取器本身（那需要芯片厂商介入，成本太高），而是做了一个纯软件的“开关控制器”。</li>
+<li>这个控制器的核心逻辑非常清晰，但设计得很稳健：<ul>
+<li><strong>动态阈值判断</strong>：持续监控每个 CPU Socket 的 <strong>内存带宽利用率</strong>。<ul>
+<li>当利用率超过一个<strong>高阈值</strong>（例如 80%）时，通过写 <strong>MSR (Model-Specific Register)</strong> 直接 <strong>关闭硬件预取器</strong>。</li>
+<li>当利用率回落到一个<strong>低阈值</strong>（例如 60%）以下时，再重新打开。</li>
+</ul>
+</li>
+<li><strong>引入迟滞机制 (Hysteresis)</strong>：这是防止系统在阈值边缘疯狂抖动的关键。高低阈值之间留出一个缓冲区，并且要求状态必须<strong>持续一段时间</strong>才触发切换，保证了系统的稳定性。</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/cf1f24671503c7109fc2f88e2d9996a177401528f4f9a43d4774e177d1db50f9.jpg" /></p>
 <p><em>Figure 8. State diagram of Hard Limoncello controller for modulating hardware prefetchers. Green (lighter) indicates hardware prefetchers are off, blue (darker) that they are on.</em></p>
 <ul>
-<li>这一招的本质，是在系统运行时<strong>动态地在两种模式间切换</strong>：</li>
+<li>这一招的本质，是在系统运行时<strong>动态地在两种模式间切换</strong>：<ul>
 <li><strong>低负载模式</strong>：开启硬件预取，优化 <strong>Cache Miss Rate</strong>。</li>
 <li><strong>高负载模式</strong>：关闭硬件预取，优化 <strong>Memory Latency</strong> 和 <strong>Memory Bandwidth</strong> 效率。</li>
+</ul>
+</li>
 <li>最终效果立竿见影：在高负载下，<strong>内存延迟降低了 15%</strong>，为后续的性能提升打下了基础。</li>
 </ul>
 <p><img alt="" src="../images/a317eaaeb97264073e48804709ed99eb80087ec36a131cbb7bd8b5b529c9c4e6.jpg" /></p>
@@ -501,9 +515,11 @@
 <ul>
 <li>传统硬件 Prefetcher 在 <strong>高内存带宽利用率</strong> 的数据中心场景下，会“好心办坏事”。</li>
 <li>它们为了追求 <strong>高缓存命中率 (cache hit rate)</strong>，会非常 <strong>aggressive（激进）</strong> 地发出大量预取请求。</li>
-<li>这导致两个严重问题：</li>
+<li>这导致两个严重问题：<ul>
 <li><strong>浪费宝贵的内存带宽</strong>：预取的数据可能根本用不上，或者被其他任务挤掉，变成 <strong>cache pollution（缓存污染）</strong>。</li>
 <li><strong>增加内存延迟</strong>：过多的预取请求在内存控制器排队，让真正需要数据的 <strong>demand request（需求请求）</strong> 等得更久。</li>
+</ul>
+</li>
 <li>当系统关闭硬件 Prefetcher 来缓解上述问题时，又会带来新麻烦：那些 <strong>访问模式简单、规律性强</strong> 的关键函数（论文里叫 <strong>data center tax functions</strong>）会因为缺少预取而 <strong>性能骤降</strong>，表现为 <strong>LLC MPKI（Last Level Cache Misses Per Kilo Instructions）</strong> 急剧上升。</li>
 </ul>
 <p><strong>通俗比方 (The Analogy)</strong></p>
@@ -516,8 +532,10 @@
 <p><strong>关键一招 (The "How")</strong></p>
 <ul>
 <li>作者没有试图去修改或替换硬件 Prefetcher，而是设计了一套 <strong>精准外科手术式</strong> 的软件预取策略。</li>
-<li>其核心逻辑转换在于 <strong>目标选择</strong> 和 <strong>插入方式</strong>：</li>
+<li>其核心逻辑转换在于 <strong>目标选择</strong> 和 <strong>插入方式</strong>：<ul>
 <li><strong>目标选择</strong>：通过在 <strong>真实生产环境（fleet-wide）</strong> 中进行大规模 <strong>硬件消融实验（ablation study）</strong>——即在成千上万台机器上关闭硬件 Prefetcher——来观察哪些函数 <strong>真正受害</strong>。他们发现，<strong>data center tax functions</strong>（如 <code>memcpy</code>、压缩、哈希等）是主要受害者。这些函数的特点是 <strong>访问模式高度可预测</strong>（通常是顺序访问大块内存），非常适合软件预取。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/f87ee1cc04803c903cca92fc251322ae427ec7ee7c745e093fdeff2dc08e636e.jpg" /></p>
 <p><em>Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.</em></p>
@@ -564,9 +582,11 @@
 <li>作者没有试图去模拟或预测 workload 行为，而是进行了一次史无前例的大规模 <strong>硬件消融实验 (hardware ablation study)</strong>。</li>
 <li>具体操作就是：在<strong>数十万台生产机器</strong>上，真的把 <strong>hardware prefetchers 给关掉</strong>。</li>
 <li>然后，利用 Google 强大的 <strong>fleetwide profiling infrastructure</strong>，以前所未有的粒度（函数级别）去测量这次“关停”带来的影响。</li>
-<li>通过对比实验组（prefetchers off）和对照组（prefetchers on）的性能数据，他们能精确地定位到：</li>
+<li>通过对比实验组（prefetchers off）和对照组（prefetchers on）的性能数据，他们能精确地定位到：<ul>
 <li>哪些函数在硬件预取关闭后，<strong>LLC MPKI</strong> 急剧上升。</li>
 <li>哪些函数因此消耗了更多的 <strong>CPU cycles</strong>。</li>
+</ul>
+</li>
 <li>这些“受伤最重”的函数，就是所谓的 <strong>data center tax functions</strong>（如 memcpy, compression, hashing 等），它们被证明是<strong>高度可预取 (prefetch-friendly)</strong> 的，并且是软件预取的最佳目标。</li>
 <li>这个方法的精妙之处在于，它把一个“预测问题”（predict where to prefetch）转化成了一个“观测问题”（observe what breaks when you remove prefetching）。观测结果直接、可靠，并且天然具备 fleet-wide 的代表性。</li>
 </ul>
@@ -592,23 +612,29 @@
 <p><strong>关键一招</strong></p>
 <p>作者并没有凭空猜测或依赖不具代表性的 microbenchmarks，而是构建了一个<strong>数据驱动的闭环调优流程</strong>：</p>
 <ul>
-<li><strong>第一步：利用硬件消融实验定位“痛点函数”</strong>。</li>
-<li>通过在真实生产环境中大规模关闭 <strong>hardware prefetchers</strong>，并利用全局性能分析工具，精确识别出哪些函数（如 memcpy, compression）在缺失硬件预取后性能暴跌（表现为 <strong>LLC MPKI</strong> 和 <strong>CPU cycles</strong> 大幅增加）。</li>
 <li>
-<p>这些函数就是值得投入精力进行软件预取优化的高价值目标。</p>
+<p><strong>第一步：利用硬件消融实验定位“痛点函数”</strong>。</p>
+<ul>
+<li>通过在真实生产环境中大规模关闭 <strong>hardware prefetchers</strong>，并利用全局性能分析工具，精确识别出哪些函数（如 memcpy, compression）在缺失硬件预取后性能暴跌（表现为 <strong>LLC MPKI</strong> 和 <strong>CPU cycles</strong> 大幅增加）。</li>
+<li>这些函数就是值得投入精力进行软件预取优化的高价值目标。</li>
+</ul>
 </li>
 <li>
 <p><strong>第二步：用真实世界的数据指导参数搜索空间</strong>。</p>
-</li>
+<ul>
 <li>对于像 <code>memcpy</code> 这样的目标函数，他们没有对所有调用一视同仁。通过分析 <strong>fleetwide profiling</strong> 数据，发现大多数调用是小尺寸的，但性能回退主要来自<strong>大尺寸的 memcpy 调用</strong>。</li>
 <li>因此，他们<strong>将软件预取的优化重点聚焦在大尺寸调用上</strong>，这极大地缩小了需要调优的场景范围，使优化更有针对性。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/52698e5aa656d107042a7cab73e8461e2944e881c20fd0aac6fba9c36f9ca0de.jpg" /></p>
 <p><em>Figure 14. memcpy argument size distribution. The chart shows the probability density function (PDF) of the number of times each copy size appears in the profiling data. Most copy sizes are small.</em></p>
 <ul>
-<li><strong>第三步：在精心设计的微基准上进行系统性参数扫描</strong>。</li>
+<li><strong>第三步：在精心设计的微基准上进行系统性参数扫描</strong>。<ul>
 <li>他们使用能反映真实 fleet 行为的微基准（如 <strong>Fleetbench</strong>, <strong>LLVM libc benchmarks</strong>）。</li>
 <li>在这些基准上，<strong>固定其他变量，只改变一个参数</strong>（例如，固定 <strong>prefetch degree</strong> 为 256 bytes，扫描不同的 <strong>prefetch distance</strong>），观察性能变化。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg" /></p>
 <ul>
@@ -617,8 +643,10 @@
 <p><img alt="" src="../images/dea517edd792c10c583301b3163656b05a2b31b4a095e4049b7577013eab80ec.jpg" /></p>
 <p><em>(b) Microbenchmark exercising different prefetch degrees. Prefetching is fixed at a distance of 512 bytes.</em></p>
 <ul>
-<li><strong>第四步：回归验证，确保真实收益</strong>。</li>
+<li><strong>第四步：回归验证，确保真实收益</strong>。<ul>
 <li>找到理论上的最优参数组合后，必须回到更复杂的 <strong>load tests</strong> 中进行验证，确保在接近真实生产环境的压力下，这些预取指令依然能带来净性能收益，而不是在简单 microbenchmark 上的“虚假繁荣”。</li>
+</ul>
+</li>
 </ul>
 <p>这个流程的精髓在于，它用<strong>真实、大规模的生产数据</strong>替换了传统软件预取中充满不确定性的“猜测”和“假设”，将一个模糊的工程问题转化为了一个可量化、可验证的数据科学问题。</p>
 

@@ -475,17 +475,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#-ocolos-l1i-mpki-l1-itlb-mpki-taken-branches" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        - OCOLOS 成功减少了前端瓶颈，具体表现为 L1i MPKI (每千条指令的 L1 指令缓存未命中数)、iTLB MPKI 和 taken branches (已执行分支) 的显著下降。
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -505,46 +494,68 @@
 
 <h1 id="ocolos-online-code-layout-optimizations">OCOLOS: Online COde Layout OptimizationS 论文解析<a class="headerlink" href="#ocolos-online-code-layout-optimizations" title="Permanent link">&para;</a></h1>
 <h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
-<p><strong>作者 (Authors)</strong>
-- Yuxuan Zhang (University of Pennsylvania)
-- Tanvir Ahmed Khan (University of Michigan)
-- Gilles Pokam (Intel Corporation)
-- Baris Kasikci (University of Michigan)
-- Heiner Litz (University of California, Santa Cruz)
-- Joseph Devietti (University of Pennsylvania)</p>
-<p><strong>发表期刊/会议 (Journal/Conference)</strong>
-- 该论文未在提供的文本中明确指出其发表的期刊或会议名称。</p>
-<p><strong>发表年份 (Publication Year)</strong>
-- 该论文未在提供的文本中明确指出其发表年份。</p>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Yuxuan Zhang (University of Pennsylvania)</li>
+<li>Tanvir Ahmed Khan (University of Michigan)</li>
+<li>Gilles Pokam (Intel Corporation)</li>
+<li>Baris Kasikci (University of Michigan)</li>
+<li>Heiner Litz (University of California, Santa Cruz)</li>
+<li>Joseph Devietti (University of Pennsylvania)</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>该论文未在提供的文本中明确指出其发表的期刊或会议名称。</li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li>该论文未在提供的文本中明确指出其发表年份。</li>
+</ul>
 <hr />
 <h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p><strong>目的</strong>
-- 解决传统 <strong>Profile-Guided Optimization (PGO)</strong> 在 <strong>unmanaged languages</strong>（如 C/C++）中面临的三大核心挑战：
-  - <strong>Profile 滞后性</strong>：离线收集的 profile 数据可能与当前程序的实际输入或行为不匹配，导致优化效果不佳甚至有害。
-  - <strong>代码变更映射困难</strong>：应用程序频繁更新后，旧版本的 profile 数据难以准确映射到新版本的代码上，造成优化机会丢失。
-  - <strong>运维负担</strong>：管理和部署 profile 数据增加了系统复杂性。</p>
-<p><strong>方法</strong>
-- 提出 <strong>OCOLOS</strong>，首个面向 <strong>unmanaged code</strong> 的 <strong>online PGO</strong> 系统，其核心思想是在程序运行时动态进行代码布局优化。
-- <strong>核心设计原则</strong>：
-  - <strong>保留原始代码地址 (preserve addresses of C0 instructions)</strong>：通过将优化后的新代码 <strong>C1</strong> 注入到新的内存地址，同时保留原始代码 <strong>C0</strong>，避免因代码移动而破坏无法追踪的代码指针（如栈上的返回地址、<code>setjmp/longjmp</code> 保存的地址等）。
-  - <strong>在常见路径上运行优化代码 (run C1 code in the common case)</strong>：通过更新可追踪的代码指针（如 v-table 中的函数指针、直接调用指令），将执行流引导至性能更优的 <strong>C1</strong> 代码。
-  - <strong>固定成本模型 (fixed-costs only)</strong>：确保优化过程只产生一次性的开销，避免持续的运行时性能损耗。
-- <strong>关键技术实现</strong>：
-  - 利用 <strong>BOLT</strong> 作为后端优化引擎，对运行中的程序进行 <strong>hardware performance profiling</strong>（通过 Linux <code>perf</code> 和 Intel LBR）。
-  - 使用 <strong>ptrace</strong> API 暂停目标进程，并通过 <strong>LD_PRELOAD</strong> 注入的库高效地将 BOLT 生成的优化代码 <strong>C1</strong> 复制到目标进程地址空间。
-  - 为支持 <strong>continuous optimization</strong>，引入了针对 <strong>return addresses</strong> 和 <strong>function pointers</strong> 的特殊处理机制，并通过一个简单的 <strong>LLVM compiler pass</strong> 在函数指针创建时进行拦截和重定向，确保所有动态创建的函数指针都指向原始代码 <strong>C0</strong>。
-  - 针对短时任务（如软件构建），设计了 <strong>BATCH ACCELERATOR MODE (BAM)</strong> 模式，通过透明地替换后续 <code>exec</code> 调用的二进制文件来应用优化，完全规避了运行时暂停的开销。</p>
-<p><strong>结果</strong>
-- <strong>性能提升显著</strong>：在多个真实世界的大规模应用上验证了 OCOLOS 的有效性。
-  - <strong>MySQL</strong> 性能最高提升 <strong>1.41×</strong>。
-  - <strong>Verilator</strong> 硬件模拟器性能最高提升 <strong>2.20×</strong>。
-  - <strong>Clang</strong> 编译器构建任务通过 BAM 模式加速 <strong>1.14×</strong>。
-- <strong>与离线 PGO 对比</strong>：OCOLOS 的性能非常接近使用“神谕”（oracle）profile 的离线 BOLT（平均仅慢 <strong>4.6%</strong>），但远优于使用聚合平均 profile 的离线 BOLT（平均快 <strong>8.9%</strong>）。
-- <strong>开销可控</strong>：
-  - <strong>内存开销</strong>：适度，例如 MongoDB 仅增加约 <strong>208 MiB</strong>。
-  - <strong>暂停时间</strong>：代码替换阶段需要短暂的“stop-the-world”暂停，例如 MySQL 为 <strong>669 毫秒</strong>。
-  - <strong>恢复时间</strong>：以 MySQL 为例，在完成优化后约 <strong>30 秒</strong> 即可弥补优化过程中的性能损失，此后均为净收益。
-- <strong>微架构层面影响</strong>：OCOLOS 成功减少了 <strong>L1i misses</strong>、<strong>iTLB misses</strong> 和 <strong>taken branches</strong> 的数量，有效缓解了处理器前端瓶颈。</p>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决传统 <strong>Profile-Guided Optimization (PGO)</strong> 在 <strong>unmanaged languages</strong>（如 C/C++）中面临的三大核心挑战：<ul>
+<li><strong>Profile 滞后性</strong>：离线收集的 profile 数据可能与当前程序的实际输入或行为不匹配，导致优化效果不佳甚至有害。</li>
+<li><strong>代码变更映射困难</strong>：应用程序频繁更新后，旧版本的 profile 数据难以准确映射到新版本的代码上，造成优化机会丢失。</li>
+<li><strong>运维负担</strong>：管理和部署 profile 数据增加了系统复杂性。</li>
+</ul>
+</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>OCOLOS</strong>，首个面向 <strong>unmanaged code</strong> 的 <strong>online PGO</strong> 系统，其核心思想是在程序运行时动态进行代码布局优化。</li>
+<li><strong>核心设计原则</strong>：<ul>
+<li><strong>保留原始代码地址 (preserve addresses of C0 instructions)</strong>：通过将优化后的新代码 <strong>C1</strong> 注入到新的内存地址，同时保留原始代码 <strong>C0</strong>，避免因代码移动而破坏无法追踪的代码指针（如栈上的返回地址、<code>setjmp/longjmp</code> 保存的地址等）。</li>
+<li><strong>在常见路径上运行优化代码 (run C1 code in the common case)</strong>：通过更新可追踪的代码指针（如 v-table 中的函数指针、直接调用指令），将执行流引导至性能更优的 <strong>C1</strong> 代码。</li>
+<li><strong>固定成本模型 (fixed-costs only)</strong>：确保优化过程只产生一次性的开销，避免持续的运行时性能损耗。</li>
+</ul>
+</li>
+<li><strong>关键技术实现</strong>：<ul>
+<li>利用 <strong>BOLT</strong> 作为后端优化引擎，对运行中的程序进行 <strong>hardware performance profiling</strong>（通过 Linux <code>perf</code> 和 Intel LBR）。</li>
+<li>使用 <strong>ptrace</strong> API 暂停目标进程，并通过 <strong>LD_PRELOAD</strong> 注入的库高效地将 BOLT 生成的优化代码 <strong>C1</strong> 复制到目标进程地址空间。</li>
+<li>为支持 <strong>continuous optimization</strong>，引入了针对 <strong>return addresses</strong> 和 <strong>function pointers</strong> 的特殊处理机制，并通过一个简单的 <strong>LLVM compiler pass</strong> 在函数指针创建时进行拦截和重定向，确保所有动态创建的函数指针都指向原始代码 <strong>C0</strong>。</li>
+<li>针对短时任务（如软件构建），设计了 <strong>BATCH ACCELERATOR MODE (BAM)</strong> 模式，通过透明地替换后续 <code>exec</code> 调用的二进制文件来应用优化，完全规避了运行时暂停的开销。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li><strong>性能提升显著</strong>：在多个真实世界的大规模应用上验证了 OCOLOS 的有效性。<ul>
+<li><strong>MySQL</strong> 性能最高提升 <strong>1.41×</strong>。</li>
+<li><strong>Verilator</strong> 硬件模拟器性能最高提升 <strong>2.20×</strong>。</li>
+<li><strong>Clang</strong> 编译器构建任务通过 BAM 模式加速 <strong>1.14×</strong>。</li>
+</ul>
+</li>
+<li><strong>与离线 PGO 对比</strong>：OCOLOS 的性能非常接近使用“神谕”（oracle）profile 的离线 BOLT（平均仅慢 <strong>4.6%</strong>），但远优于使用聚合平均 profile 的离线 BOLT（平均快 <strong>8.9%</strong>）。</li>
+<li><strong>开销可控</strong>：<ul>
+<li><strong>内存开销</strong>：适度，例如 MongoDB 仅增加约 <strong>208 MiB</strong>。</li>
+<li><strong>暂停时间</strong>：代码替换阶段需要短暂的“stop-the-world”暂停，例如 MySQL 为 <strong>669 毫秒</strong>。</li>
+<li><strong>恢复时间</strong>：以 MySQL 为例，在完成优化后约 <strong>30 秒</strong> 即可弥补优化过程中的性能损失，此后均为净收益。</li>
+</ul>
+</li>
+<li><strong>微架构层面影响</strong>：OCOLOS 成功减少了 <strong>L1i misses</strong>、<strong>iTLB misses</strong> 和 <strong>taken branches</strong> 的数量，有效缓解了处理器前端瓶颈。</li>
+</ul>
 <p><img alt="" src="../images/03462190a504c6c3d45aa8242db29f6a42b3f3f31372f1d4bc22036c945330dc.jpg" /></p>
 <p><em>Fig. 8: Microarchitectural events (per 1,000 instructions) for MySQL inputs</em></p>
 <ul>
@@ -552,10 +563,12 @@
 </ul>
 <p><img alt="" src="../images/8c5a2e1fd6f29e0b258245eab53f4bc990c70a1ec0c322c1b9947d6171cc006f.jpg" /></p>
 <p><em>Fig. 9: TopDown’s [109] Front-end Latency and Retire percentages allow us to accurately classify which workloads will benefit from OCOLOS and which won’t.</em></p>
-<p><strong>结论</strong>
-- OCOLOS 成功地将 <strong>online PGO</strong> 的优势带给了 <strong>unmanaged languages</strong>，克服了传统离线 PGO 的 profile 滞后和映射难题。
-- 通过创新的 <strong>代码共存</strong> 和 <strong>指针重定向</strong> 策略，OCOLOS 能够在无需修改应用源码的前提下，安全、高效地对复杂的多线程应用（如 MySQL, MongoDB）进行在线代码替换。
-- 其 <strong>固定成本模型</strong> 和针对批处理场景的 <strong>BAM</strong> 模式，使其在数据中心等环境中具有很高的实用价值和部署潜力。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li>OCOLOS 成功地将 <strong>online PGO</strong> 的优势带给了 <strong>unmanaged languages</strong>，克服了传统离线 PGO 的 profile 滞后和映射难题。</li>
+<li>通过创新的 <strong>代码共存</strong> 和 <strong>指针重定向</strong> 策略，OCOLOS 能够在无需修改应用源码的前提下，安全、高效地对复杂的多线程应用（如 MySQL, MongoDB）进行在线代码替换。</li>
+<li>其 <strong>固定成本模型</strong> 和针对批处理场景的 <strong>BAM</strong> 模式，使其在数据中心等环境中具有很高的实用价值和部署潜力。</li>
+</ul>
 <hr />
 <h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <p><strong>研究背景与动机</strong></p>
@@ -753,29 +766,33 @@
 <p>OCOLOS 的核心创新在于其实现了针对 <strong>unmanaged languages</strong>（如 C/C++）的 <strong>安全在线代码替换机制</strong>。该机制巧妙地规避了在运行时修改代码所带来的指针失效风险，其设计围绕三个核心原则展开。</p>
 <p><strong>设计原则与实现原理</strong></p>
 <ul>
-<li><strong>Design Principle #1: preserve addresses of C0 instructions</strong> (保留原始代码 C0 的指令地址)。</li>
+<li>
+<p><strong>Design Principle #1: preserve addresses of C0 instructions</strong> (保留原始代码 C0 的指令地址)。</p>
+<ul>
 <li>OCOLOS <strong>不会</strong>直接覆写原始代码段（称为 <strong>C0</strong>）。</li>
 <li>相反，它会将经过 BOLT 优化后的新代码（称为 <strong>C1</strong>）<strong>注入</strong>到进程地址空间的一个新位置。</li>
-<li>
-<p>原始代码 <strong>C0</strong> 被完整保留，这确保了任何指向 C0 的、无法被追踪或更新的指针（例如通过 <code>setjmp/longjmp</code> 保存的指令指针、或被混淆的函数指针）依然有效，从而保证了程序的正确性。</p>
+<li>原始代码 <strong>C0</strong> 被完整保留，这确保了任何指向 C0 的、无法被追踪或更新的指针（例如通过 <code>setjmp/longjmp</code> 保存的指令指针、或被混淆的函数指针）依然有效，从而保证了程序的正确性。</li>
+</ul>
 </li>
 <li>
 <p><strong>Design Principle #2: run C1 code in the common case</strong> (在常见情况下执行 C1 代码)。</p>
-</li>
+<ul>
 <li>为了获得性能收益，OCOLOS 需要将执行流尽可能多地引导至优化后的 <strong>C1</strong> 代码。</li>
 <li>它通过有选择地更新<strong>关键且可追踪的代码指针</strong>来实现这一目标，主要包括：<ul>
 <li><strong>虚表 (v-table)</strong> 中的函数指针。</li>
 <li><strong>直接调用 (direct calls)</strong> 指令的目标地址。</li>
 </ul>
 </li>
-<li>
-<p>这种策略接受一个权衡：少数情况下（例如通过未被更新的旧函数指针调用），程序仍会执行 C0 代码，但这部分开销很小，并且一旦进入 C0，后续的直接调用或虚函数调用通常会再次跳转回 C1。</p>
+<li>这种策略接受一个权衡：少数情况下（例如通过未被更新的旧函数指针调用），程序仍会执行 C0 代码，但这部分开销很小，并且一旦进入 C0，后续的直接调用或虚函数调用通常会再次跳转回 C1。</li>
+</ul>
 </li>
 <li>
 <p><strong>Design Principle #3: code replacement can incur fixed costs, but must avoid all possible recurring costs</strong> (代码替换可以产生一次性开销，但必须避免所有可能的持续性开销)。</p>
-</li>
+<ul>
 <li>OCOLOS 的设计避免了像传统 <strong>Dynamic Binary Instrumentation (DBI)</strong> 框架（如 Pin, DynamoRIO）那样的持续性性能损耗。</li>
 <li>其主要开销发生在代码替换的短暂“<strong>stop-the-world</strong>”阶段，之后程序以接近原生的速度运行在 C1 上。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/8e4009da7cb85456e504591a7cb55b364aebc5c3d4c6534f6c0e172f2fb96366.jpg" /></p>
 <p><em>Figure 4b: Starting state of the address space (left) and state after code replacement (right)</em></p>
@@ -818,41 +835,49 @@
 <p><strong>处理连续优化与函数指针</strong></p>
 <p>为了支持 <strong>Continuous Optimization</strong>（持续优化），即从 C1 升级到 C2，OCOLOS 引入了额外的机制来处理栈上活跃的函数和动态创建的函数指针。</p>
 <ul>
-<li><strong>栈上函数处理</strong>:</li>
+<li>
+<p><strong>栈上函数处理</strong>:</p>
+<ul>
 <li>如果一个正在 C1 中执行的函数（例如 <code>b1</code>）需要被替换为 C2，OCOLOS 无法简单地让其返回到 C2 中的 <code>b2</code>，因为 <code>b2</code> 的指令布局可能已完全不同。</li>
 <li>解决方案是，在 C2 中为该栈上函数创建一个 <strong>精确副本</strong>（例如 <code>b1,2</code>），并修正其内部的 <strong>PC-relative addressing</strong>。</li>
-<li>
-<p>同时，OCOLOS 会遍历每个线程的栈（使用 <strong>libunwind</strong>），找到返回地址，并将其重定向到 <code>b1,2</code> 中的对应位置，确保函数能正确返回。</p>
+<li>同时，OCOLOS 会遍历每个线程的栈（使用 <strong>libunwind</strong>），找到返回地址，并将其重定向到 <code>b1,2</code> 中的对应位置，确保函数能正确返回。</li>
+</ul>
 </li>
 <li>
 <p><strong>函数指针创建拦截</strong>:</p>
-</li>
+<ul>
 <li>为了避免程序在运行时创建指向 C1/C2 等中间版本代码的函数指针（这些指针在下一次代码替换时会失效），OCOLOS 强制规定：<strong>所有动态创建的函数指针必须指向原始的 C0 地址</strong>。</li>
 <li>它通过一个简单的 <strong>LLVM compiler pass</strong> 来实现，在每个函数指针创建点插入一个回调函数 <code>wrapFuncPtrCreation</code>。</li>
 <li>该回调函数维护一个从 Ci 到 C0 的地址映射，将任何对 Ci 函数的引用自动转换为对 C0 函数的引用。由于函数指针创建是一个相对低频的操作（例如 MySQL 中每毫秒仅约 45 次），此机制的运行时开销<strong>可以忽略不计</strong>。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/ff9082d69f504639c893031946832f7604f9fa6ebc45a95dcefb681e07f5171e.jpg" /></p>
 <p><em>Figure 4c: Before (left) and after (right) continuous optimization</em></p>
 <p><strong>输入输出关系及整体作用</strong></p>
 <ul>
-<li><strong>输入</strong>:</li>
+<li>
+<p><strong>输入</strong>:</p>
+<ul>
 <li>一个正在运行的、未经优化的目标进程。</li>
 <li>由 <strong>perf</strong> 收集的、针对该进程当前行为的 <strong>LBR profiling data</strong>。</li>
-<li>
-<p>原始的二进制可执行文件。</p>
+<li>原始的二进制可执行文件。</li>
+</ul>
 </li>
 <li>
 <p><strong>输出</strong>:</p>
-</li>
+<ul>
 <li>同一个进程，但其热代码路径已被替换为经过 <strong>BOLT</strong> 优化的 <strong>C1</strong> 代码。</li>
-<li>
-<p>进程继续运行，性能得到提升，且<strong>无需重启</strong>。</p>
+<li>进程继续运行，性能得到提升，且<strong>无需重启</strong>。</li>
+</ul>
 </li>
 <li>
 <p><strong>在整体中的作用</strong>:</p>
-</li>
+<ul>
 <li>该机制是 OCOLOS 实现 <strong>Online Profile-Guided Optimization (PGO)</strong> 的基石。它解决了传统离线 PGO 的两大痛点：<strong>profile staleness</strong>（剖析数据过时）和 <strong>binary mapping</strong>（剖析数据与新版本二进制难以映射）。</li>
 <li>通过安全地在运行时替换代码，OCOLOS 确保了剖析数据始终与当前执行的代码<strong>完美匹配</strong>，从而能够持续地为应用程序提供最优的代码布局，最大化 <strong>L1i</strong> 和 <strong>branch predictor</strong> 的效率。</li>
+</ul>
+</li>
 </ul>
 <h3 id="3-function-pointer-creation-interception">3. 函数指针创建拦截 (Function Pointer Creation Interception)<a class="headerlink" href="#3-function-pointer-creation-interception" title="Permanent link">&para;</a></h3>
 <p><strong>实现原理与核心目标</strong></p>
@@ -914,55 +939,67 @@
 <p><strong>BAM 的实现原理与算法流程</strong></p>
 <p>BAM 的实现完全基于 Linux 的 <strong>LD_PRELOAD</strong> 机制，使其对应用程序完全透明，无需任何代码或构建脚本修改。</p>
 <ul>
-<li><strong>部署方式</strong>：</li>
-<li>用户通过 <code>LD_PRELOAD=bam.so</code> 启动顶层命令（例如 <code>make</code>）。</li>
 <li>
-<p>BAM 库 (<code>bam.so</code>) 会被加载到该进程及其所有子进程中。</p>
+<p><strong>部署方式</strong>：</p>
+<ul>
+<li>用户通过 <code>LD_PRELOAD=bam.so</code> 启动顶层命令（例如 <code>make</code>）。</li>
+<li>BAM 库 (<code>bam.so</code>) 会被加载到该进程及其所有子进程中。</li>
+</ul>
 </li>
 <li>
 <p><strong>核心拦截与剖析阶段</strong>：</p>
-</li>
+<ul>
 <li>BAM <strong>透明拦截 (transparent interception)</strong> 对 libc 中 <code>exec*</code> 系列函数的调用。</li>
 <li>当检测到对<strong>目标二进制文件</strong>（通过配置文件指定，例如 <code>clang</code>）的 <code>exec</code> 调用时，BAM 会动态修改 <code>exec</code> 的参数。</li>
 <li>修改后的参数会<strong>自动启用硬件性能剖析</strong>（通过 <code>perf</code>），从而在目标二进制文件执行时收集 LBR (Last Branch Record) 剖析数据。</li>
-<li>
-<p>这个过程对早期的几次运行是透明的，它们会正常执行，但同时为后续优化收集数据。</p>
+<li>这个过程对早期的几次运行是透明的，它们会正常执行，但同时为后续优化收集数据。</li>
+</ul>
 </li>
 <li>
 <p><strong>优化二进制生成阶段</strong>：</p>
-</li>
+<ul>
 <li>BAM 在后台持续收集剖析数据。</li>
 <li>当收集到<strong>预设数量</strong>的剖析样本后（这是一个可配置的参数），BAM 会<strong>在后台启动一个独立进程</strong>来执行 BOLT 优化流程。</li>
-<li>
-<p>该流程与标准 BOLT 相同：使用 <code>perf2bolt</code> 处理 LBR 数据，并用 BOLT 生成一个新的、优化后的二进制文件（例如 <code>clang.bolt</code>）。</p>
+<li>该流程与标准 BOLT 相同：使用 <code>perf2bolt</code> 处理 LBR 数据，并用 BOLT 生成一个新的、优化后的二进制文件（例如 <code>clang.bolt</code>）。</li>
+</ul>
 </li>
 <li>
 <p><strong>无缝切换与加速阶段</strong>：</p>
-</li>
+<ul>
 <li>一旦优化后的二进制文件生成完毕，BAM 会<strong>动态重写后续的 <code>exec</code> 调用</strong>。</li>
 <li>所有后续对原始目标二进制文件（<code>clang</code>）的调用，都会被重定向到执行优化后的版本（<code>clang.bolt</code>）。</li>
 <li>从这一刻起，批处理工作负载的剩余部分就能享受到<strong>原生的、无任何运行时开销的性能提升</strong>。</li>
 </ul>
+</li>
+</ul>
 <p><strong>关键参数与配置</strong></p>
 <ul>
 <li><strong>目标二进制文件</strong>：通过一个外部<strong>配置文件</strong>指定需要优化的二进制文件路径。</li>
-<li><strong>剖析样本数量阈值</strong>：一个可配置的参数，决定了 BAM 需要观察多少次目标二进制的执行后才触发 BOLT 优化。这个参数是性能权衡的关键：</li>
+<li><strong>剖析样本数量阈值</strong>：一个可配置的参数，决定了 BAM 需要观察多少次目标二进制的执行后才触发 BOLT 优化。这个参数是性能权衡的关键：<ul>
 <li>阈值过低：剖析数据不足，生成的优化二进制效果不佳。</li>
 <li>阈值过高：等待剖析和优化的时间过长，错过了用优化版本加速更多任务的机会。</li>
 <li>论文实验表明，对于 Clang 构建，仅需剖析 <strong>5 次左右</strong>的编译器调用就能获得接近最佳的加速效果，之后收益递减。</li>
 </ul>
+</li>
+</ul>
 <p><strong>输入输出关系及在整体架构中的作用</strong></p>
 <ul>
-<li><strong>输入</strong>：</li>
+<li><strong>输入</strong>：<ul>
 <li>一个会反复执行同一二进制文件的<strong>批处理命令</strong>（如 <code>make -j</code>）。</li>
 <li>一个指定<strong>目标优化二进制</strong>的配置文件。</li>
-<li><strong>输出</strong>：</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
 <li>一个<strong>透明加速</strong>的批处理过程，用户感知不到任何变化。</li>
 <li>一个临时的、优化后的二进制文件（由 BAM 在后台管理）。</li>
-<li><strong>在 OCOLOS 整体架构中的作用</strong>：</li>
+</ul>
+</li>
+<li><strong>在 OCOLOS 整体架构中的作用</strong>：<ul>
 <li><strong>互补模式</strong>：BAM 是 OCOLOS 主模式（针对长时、单进程服务）的有力补充，将在线 PGO 的优势扩展到了<strong>短时、多进程</strong>的场景。</li>
 <li><strong>零运行时开销</strong>：与主模式不同，BAM <strong>没有“stop-the-world”暂停</strong>，因为它不修改运行中的进程，而是通过 <code>exec</code> 切换到一个全新的、已优化的进程。这使得它对尾延迟没有任何影响。</li>
 <li><strong>简化部署</strong>：BAM 的 <strong>LD_PRELOAD</strong> 设计使其部署极其简单，特别适合集成到 CI/CD (Continuous Integration / Continuous Delivery) 流程中，用于加速每日构建等任务。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/c885f2de83f5f9ff3155e8c04e124cc05db3c250099767a79d4941a89c6258fd.jpg" /></p>
 <p><em>Fig. 10: The running time of a Clang build with the original compiler, and compilers optimized by BOLT and BAM.</em></p>
@@ -987,15 +1024,17 @@
 <p><strong>结果数据分析</strong></p>
 <ul>
 <li><strong>核心性能提升</strong>: OCOLOS 在多个基准测试中实现了显著加速，最高可达 <strong>2.20×</strong> (Verilator)，在 MySQL read only 负载上达到 <strong>1.41×</strong>。</li>
-<li><strong>与离线 PGO 的对比</strong>: <ul>
+<li><strong>与离线 PGO 的对比</strong>:<ul>
 <li>将 OCOLOS 与离线 BOLT 的“oracle input”（即使用相同输入进行 profiling 和运行）结果对比，可以发现 OCOLOS 的性能非常接近上限。平均而言，OCOLOS 仅比 BOLT oracle 慢 <strong>4.6 个百分点</strong>。</li>
 <li>相比使用聚合了所有输入的“average-case”profile 的离线 BOLT，OCOLOS 平均快 <strong>8.9 个百分点</strong>，这凸显了其在线 profiling 带来的 profile 新鲜度优势。</li>
 </ul>
 </li>
-<li><strong>微架构层面的影响</strong>: <h2 id="-ocolos-l1i-mpki-l1-itlb-mpki-taken-branches">- OCOLOS 成功减少了前端瓶颈，具体表现为 <strong>L1i MPKI</strong> (每千条指令的 L1 指令缓存未命中数)、<strong>iTLB MPKI</strong> 和 <strong>taken branches</strong> (已执行分支) 的显著下降。<a class="headerlink" href="#-ocolos-l1i-mpki-l1-itlb-mpki-taken-branches" title="Permanent link">&para;</a></h2>
+<li><strong>微架构层面的影响</strong>:<ul>
+<li>OCOLOS 成功减少了前端瓶颈，具体表现为 <strong>L1i MPKI</strong> (每千条指令的 L1 指令缓存未命中数)、<strong>iTLB MPKI</strong> 和 <strong>taken branches</strong> (已执行分支) 的显著下降。</li>
+<li><img alt="" src="../images/03462190a504c6c3d45aa8242db29f6a42b3f3f31372f1d4bc22036c945330dc.jpg" /></li>
+</ul>
 </li>
 </ul>
-<p><img alt="" src="../images/03462190a504c6c3d45aa8242db29f6a42b3f3f31372f1d4bc22036c945330dc.jpg" /></p>
 <p><em>Fig. 8: Microarchitectural events (per 1,000 instructions) for MySQL inputs</em></p>
 <ul>
 <li><strong>异常情况</strong>: 在 MongoDB 的 <code>scan95 insert5</code> 负载下，包括 OCOLOS 在内的所有 PGO 方法都导致了 <strong>14% 的性能下降</strong>。通过 Intel TopDown 分析发现，该负载在优化后从 <strong>Front-End Bound</strong> 转变为 <strong>Back-End Bound</strong>，瓶颈转移到了内存子系统，表明 PGO 并非万能，其效果依赖于应用的实际瓶颈。</li>
@@ -1003,11 +1042,10 @@
 <li><strong>内存开销</strong>: OCOLOS 引入了适度的内存开销，主要用于存放新旧两份代码。对于 MongoDB，峰值内存增加约 <strong>208 MiB</strong>，其他应用则更少。</li>
 <li><strong>端到端恢复时间</strong>: 以 MySQL read only 为例，在完成代码替换后，OCOLOS 需要运行约 <strong>30 秒</strong> 才能弥补在优化过程中损失的性能，此后便开始获得净收益。</li>
 <li><strong>尾部延迟</strong>: 在代码替换期间，MySQL 的 95% 尾部延迟从 <strong>1.00ms</strong> 恶化到最差 <strong>1.55ms</strong>，但在优化后改善至 <strong>0.73ms</strong>。</li>
-<li></li>
+<li><img alt="" src="../images/af81c2d82dca7293e4efeadc4d273988929fb344fa71bcb0a383367954a0eb69.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/af81c2d82dca7293e4efeadc4d273988929fb344fa71bcb0a383367954a0eb69.jpg" /></p>
 <p><em>Fig. 7: Throughput of MySQL read only before, during, and after code replacement. 95% tail latency degrades from 1.00ms to at most 1.55ms during code replacement.</em></p>
 <p>下表总结了各基准测试的关键性能数据和开销：</p>
 <table>
@@ -1057,10 +1095,7 @@
 <p><em>TABLE II: Fixed costs of code replacement</em></p>
 <p><strong>消融实验与关键参数分析</strong></p>
 <ul>
-<li><strong>Profiling 时长的影响</strong>: 实验表明，即使只有 <strong>1 秒</strong> 的 profiling 数据，OCOLOS 也能获得大部分性能收益。少于 <strong>100 毫秒</strong> 时，profile 质量急剧下降，导致优化效果不佳。这证明了 OCOLOS 对短时、高质量 profile 的高效利用能力。<ul>
-<li></li>
-</ul>
-</li>
+<li><strong>Profiling 时长的影响</strong>: 实验表明，即使只有 <strong>1 秒</strong> 的 profiling 数据，OCOLOS 也能获得大部分性能收益。少于 <strong>100 毫秒</strong> 时，profile 质量急剧下降，导致优化效果不佳。这证明了 OCOLOS 对短时、高质量 profile 的高效利用能力。</li>
 </ul>
 <p><img alt="" src="../images/b49ebb7238738d2351b3273c0a1a85932e149895c8020cd41d995f619345a8ca.jpg" /></p>
 <p><em>Fig. 6: The impact of profile duration on speedup for MySQL read only</em></p>
@@ -1069,25 +1104,18 @@
 <li>过早切换（如只 profiling 1 次）能获得 <strong>1.09×</strong> 加速。</li>
 <li>最佳性能（<strong>1.14×</strong>）出现在 profiling 约 <strong>5 次</strong> 编译后。</li>
 <li>继续增加 profiling 次数会导致收益递减，因为等待 profiling 完成的机会成本超过了额外 profile 数据带来的边际效益。</li>
-<li></li>
+<li><img alt="" src="../images/c885f2de83f5f9ff3155e8c04e124cc05db3c250099767a79d4941a89c6258fd.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/c885f2de83f5f9ff3155e8c04e124cc05db3c250099767a79d4941a89c6258fd.jpg" /></p>
 <p><em>Fig. 10: The running time of a Clang build with the original compiler, and compilers optimized by BOLT and BAM.</em></p>
 <ul>
-<li><strong>Profile 质量敏感性验证</strong>: 通过使用不同输入的 profile 来优化 MySQL，实验量化了离线 PGO 的输入敏感性问题。当使用 <code>insert</code> 输入的 profile 来运行 <code>read only</code> 负载时，性能比使用匹配的 <code>read only</code> profile 慢 <strong>21%</strong>。而 OCOLOS 由于在线 profiling，始终能获得与当前负载匹配的最佳性能。<ul>
-<li></li>
-</ul>
-</li>
+<li><strong>Profile 质量敏感性验证</strong>: 通过使用不同输入的 profile 来优化 MySQL，实验量化了离线 PGO 的输入敏感性问题。当使用 <code>insert</code> 输入的 profile 来运行 <code>read only</code> 负载时，性能比使用匹配的 <code>read only</code> profile 慢 <strong>21%</strong>。而 OCOLOS 由于在线 profiling，始终能获得与当前负载匹配的最佳性能。</li>
 </ul>
 <p><img alt="" src="../images/f3873d03cba5039c8b69c1f9fc7202a1895de6f408abbef768d1267714c33548.jpg" /></p>
 <p><em>Fig. 3: Performance achieved when running MySQL with the Sysbench read only input, using BOLT to produce a binary from the given profiling input or, with the all bar, from profiles of all inputs combined.</em></p>
 <ul>
-<li><strong>工作负载适用性预测</strong>: 研究发现，简单的前端性能计数器（如 L1i MPKI）与最终加速比的相关性不强。但使用 <strong>Intel TopDown</strong> 方法中的 <strong>Front-End Latency</strong> 和 <strong>Retiring</strong> 百分比，可以通过简单的线性回归准确预测一个工作负载是否能从 OCOLOS 中受益。<ul>
-<li></li>
-</ul>
-</li>
+<li><strong>工作负载适用性预测</strong>: 研究发现，简单的前端性能计数器（如 L1i MPKI）与最终加速比的相关性不强。但使用 <strong>Intel TopDown</strong> 方法中的 <strong>Front-End Latency</strong> 和 <strong>Retiring</strong> 百分比，可以通过简单的线性回归准确预测一个工作负载是否能从 OCOLOS 中受益。</li>
 </ul>
 <p><img alt="" src="../images/8c5a2e1fd6f29e0b258245eab53f4bc990c70a1ec0c322c1b9947d6171cc006f.jpg" /></p>
 <p><em>Fig. 9: TopDown’s [109] Front-end Latency and Retire percentages allow us to accurately classify which workloads will benefit from OCOLOS and which won’t.</em></p>
