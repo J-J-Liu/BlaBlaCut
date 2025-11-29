@@ -1,0 +1,2116 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Integrating Prefetcher Selection with Dynamic Request Allocation Improves Prefetching Efficiency 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integrating Prefetcher Selection with Dynamic Request Allocation Improves Prefetching Efficiency 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fig-1-comparison-of-prefetcher-table-misses-in-the-same-composite-prefetchers-without-dynamic-demand-request-allocation-ddra-and-alecto-that-utilizes-ddra-with-efficient-demand-request-allocation-alecto-proves-to-significantly-reduce-conflicts-that-occur-within-the-prefetchers-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 1. Comparison of prefetcher table misses in the same composite prefetchers without dynamic demand request allocation (DDRA) and Alecto that utilizes DDRA. With efficient demand request allocation, Alecto proves to significantly reduce conflicts that occur within the prefetchers’ table.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-2-memory-access-patterns-of-459gemsfdtd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 2. Memory access patterns of 459.GemsFDTD.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-3-comparison-of-prefetcher-selection-algorithms-a-dol-selects-prefetchers-in-the-allocation-stage-it-sequentially-passes-the-demand-request-through-all-prefetchers-b-ipcp-selects-prefetchers-in-the-prefetch-stage-it-statically-prioritizes-the-prefetching-requests-from-different-prefetchers-c-rl-based-schemes-select-prefetchers-in-the-prefetch-stage-it-controls-the-outputs-of-prefetchers-and-applies-identical-rules-for-all-memory-accesses-d-alecto-selects-prefetchers-in-the-allocation-stage-it-identifies-suitable-prefetchers-for-each-memory-access-then-dynamically-allocates-demand-requests-to-identified-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 3. Comparison of prefetcher selection algorithms. (a) DOL selects prefetchers in the allocation stage. It sequentially passes the demand request through all prefetchers. (b) IPCP selects prefetchers in the prefetch stage. It statically prioritizes the prefetching requests from different prefetchers. (c) RL-based schemes select prefetchers in the prefetch stage. It controls the outputs of prefetchers and applies identical rules for all memory accesses. (d) Alecto selects prefetchers in the allocation stage. It identifies suitable prefetchers for each memory access, then dynamically allocates demand requests to identified prefetchers.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-4-the-overall-framework-of-alecto-it-consists-of-an-allocation-table-which-enables-fine-grained-prefetcher-identification-and-dynamic-request-allocation-it-also-includes-a-sample-table-and-sandbox-table-for-information-collection-additionally-the-sandbox-table-functions-as-a-prefetch-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 4. The overall framework of Alecto. It consists of an Allocation Table, which enables fine-grained prefetcher identification and dynamic request allocation. It also includes a Sample Table and Sandbox Table for information collection. Additionally, the Sandbox Table functions as a prefetch filter.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-5-the-state-machine-of-allocation-table-for-every-memory-access-instruction-each-prefetcher-has-three-states-un-identified-ui-indicates-the-suitability-of-this-prefetcher-is-unidentified-identified-and-aggressive-ia-means-the-prefetcher-is-efficient-and-its-prefetching-degree-should-be-promoted-identified-and-blocked-ib-applies-when-a-prefetcher-is-deemed-unsuitable-for-processing-the-memory-access-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-6-the-classification-of-memory-access-patterns-for-efficient-metadata-storage-in-temporal-prefetching-alecto-can-filter-demand-requests-that-are-1-non-temporal-2-simultaneously-handled-by-non-temporal-prefetchers-and-3-rare-recurrence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 6. The classification of memory access patterns for efficient metadata storage in temporal prefetching. Alecto can filter demand requests that are (1) non-temporal; (2) simultaneously handled by non-temporal prefetchers; and (3) rare recurrence.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-i-system-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE I SYSTEM CONFIGURATION.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-ii-prefetchers-being-selected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE II PREFETCHERS BEING SELECTED.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-7-the-comparison-of-configurations-between-a-bandit-b-triangel-and-c-alecto-on-temporal-prefetching-tp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 7. The comparison of configurations between (a) Bandit; (b) Triangel; and (c) Alecto on temporal prefetching (TP).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-8-ipc-speedup-compared-to-no-prefetching-on-spec06-benchmarks-memory-intensive-workloads-are-highlighted-within-dotted-blue-line-and-the-geomean-speedup-is-calculated-separately-all-prefetcher-selections-algorithms-schedule-the-same-composite-prefetcher-gs-37-cs-37-pmp-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 8. IPC speedup compared to no prefetching on SPEC06 benchmarks. Memory-intensive workloads are highlighted within dotted blue line, and the geomean speedup is calculated separately. All prefetcher selections algorithms schedule the same composite prefetcher: GS [37] + CS [37] + PMP [27].
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-9-ipc-speedup-compared-to-no-prefetching-on-spec17-benchmarks-memory-intensive-workloads-are-highlighted-within-dotted-blue-line-and-their-geomean-speedup-is-calculated-separately-all-prefetcher-selections-schemes-algorithms-the-same-composite-prefetcher-gs-37-cs-37-pmp-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 9. IPC speedup compared to no prefetching on SPEC17 benchmarks. Memory-intensive workloads are highlighted within dotted blue line, and their geomean speedup is calculated separately. All prefetcher selections schemes algorithms the same composite prefetcher: GS [37] + CS [37] + PMP [27].
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-10-the-key-performance-metrics-of-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 10. The key performance metrics of prefetchers.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-11-performance-speedup-when-using-prefetcher-selection-algorithms-schedule-another-composite-prefetcher-gs-37-berti-35-cplx-37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 11. Performance speedup when using prefetcher selection algorithms schedule another composite prefetcher: GS [37] + Berti [35] + CPLX [37].
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-effectiveness-comparison-with-non-composite-prefetchers-fig-12-performance-speedup-with-non-composite-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Effectiveness: Comparison with Non-composite Prefetchers Fig. 12. Performance speedup with non-composite prefetchers.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-13-the-performance-speedup-of-temporal-prefetching-with-different-demand-request-allocation-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 13. The performance speedup of temporal prefetching with different demand request allocation policies.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-14-geomean-ipc-speedup-with-varying-metadata-table-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 14. Geomean IPC speedup with varying metadata table size.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-15-geomean-ipc-speedup-with-varying-llc-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 15. Geomean IPC speedup with varying LLC size.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-16-geomean-ipc-speedup-with-varying-dram-bandwidth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 16. Geomean IPC speedup with varying DRAM bandwidth.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iii-storage-overhead-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE III STORAGE OVERHEAD ANALYSIS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-17-eight-core-performance-speedup-compared-to-no-prefetching-on-spec06-spec17-parsec-and-ligra-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 17. Eight-core performance speedup compared to no prefetching on SPEC06, SPEC17, PARSEC and Ligra benchmarks.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#i-efficiency-energy-overhead-fig-18-the-number-of-each-prefetchers-training-occurrences-in-alecto-compared-to-bandit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I. Efficiency: Energy Overhead Fig. 18. The number of each prefetcher’s training occurrences in Alecto compared to Bandit.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-19-on-memory-intensive-benchmarks-performance-speedup-for-bandit6-alecto-with-the-fixed-prefetching-degree-and-complete-alecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 19. On memory intensive benchmarks, performance speedup for Bandit6, Alecto with the fixed prefetching degree, and complete Alecto.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-20-on-memory-intensive-benchmarks-performance-speedup-for-ipcp-ipcpppf-aggressive-ipcpppf-conservative-and-alecto-they-schedule-the-same-composite-prefetcher-gscspmp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 20. On memory intensive benchmarks, performance speedup for IPCP, IPCP+PPF Aggressive, IPCP+PPF Conservative, and Alecto. They schedule the same composite prefetcher: GS+CS+PMP.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency">Integrating Prefetcher Selection with Dynamic Request Allocation Improves Prefetching Efficiency 图表详解<a class="headerlink" href="#integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency" title="Permanent link">&para;</a></h1>
+<h3 id="fig-1-comparison-of-prefetcher-table-misses-in-the-same-composite-prefetchers-without-dynamic-demand-request-allocation-ddra-and-alecto-that-utilizes-ddra-with-efficient-demand-request-allocation-alecto-proves-to-significantly-reduce-conflicts-that-occur-within-the-prefetchers-table">Fig. 1. Comparison of prefetcher table misses in the same composite prefetchers without dynamic demand request allocation (DDRA) and Alecto that utilizes DDRA. With efficient demand request allocation, Alecto proves to significantly reduce conflicts that occur within the prefetchers’ table.<a class="headerlink" href="#fig-1-comparison-of-prefetcher-table-misses-in-the-same-composite-prefetchers-without-dynamic-demand-request-allocation-ddra-and-alecto-that-utilizes-ddra-with-efficient-demand-request-allocation-alecto-proves-to-significantly-reduce-conflicts-that-occur-within-the-prefetchers-table" title="Permanent link">&para;</a></h3>
+<p><img alt="335ac37ae534e4aecf135365d3114a07518e3d61cebf21965a908cc05b284f02.jpg" src="../images/335ac37ae534e4aecf135365d3114a07518e3d61cebf21965a908cc05b284f02.jpg" /></p>
+<ul>
+<li>图片展示了在相同复合预取器（Composite Prefetchers）配置下，<strong>有无动态需求请求分配（DDRA）机制</strong>对预取器表缺失（Prefetcher Table Misses）的影响对比。</li>
+<li>横轴为两个基准测试集：<strong>SPEC CPU2006</strong> 和 <strong>SPEC CPU2017</strong>，纵轴单位为“千次”（Thousand），表示预取器表缺失的总量。</li>
+<li>蓝色柱状图代表<strong>未采用 DDRA 的传统方案（prior works）</strong>，橙色柱状图代表**采用 Alecto 框架（即启用 DDRA）**的方案。</li>
+<li>数据表明，在两个测试集上，Alecto 均显著降低预取器表缺失：<ul>
+<li><strong>SPEC CPU2006</strong>：传统方案约 350 千次缺失，Alecto 约 110 千次，降幅达 <strong>68.6%</strong>。</li>
+<li><strong>SPEC CPU2017</strong>：传统方案约 350 千次缺失，Alecto 约 100 千次，降幅达 <strong>71.4%</strong>。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>测试集</th>
+<th>传统方案（无 DDRA）</th>
+<th>Alecto（含 DDRA）</th>
+<th>缺失减少比例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC CPU2006</td>
+<td>~350,000</td>
+<td>~110,000</td>
+<td><strong>68.6%</strong></td>
+</tr>
+<tr>
+<td>SPEC CPU2017</td>
+<td>~350,000</td>
+<td>~100,000</td>
+<td><strong>71.4%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>核心结论：<strong>Alecto 通过 DDRA 机制，有效避免无关需求请求污染预取器表，从而大幅减少表冲突与缺失，提升资源利用率和预取效率</strong>。这一结果直接支持论文中关于“输入分配不准确导致表污染”的论点，并验证了 DDRA 的有效性。</li>
+</ul>
+<h3 id="fig-2-memory-access-patterns-of-459gemsfdtd">Fig. 2. Memory access patterns of 459.GemsFDTD.<a class="headerlink" href="#fig-2-memory-access-patterns-of-459gemsfdtd" title="Permanent link">&para;</a></h3>
+<p><img alt="6a1f4ed8df82b48d43a8508580b584bc12a9c97cbc6a64e51ed68f45fadce355.jpg" src="../images/6a1f4ed8df82b48d43a8508580b584bc12a9c97cbc6a64e51ed68f45fadce355.jpg" /></p>
+<ul>
+<li>图片展示了基准程序 <strong>459.GemsFDTD</strong> 的内存访问模式随执行时间的变化，横轴为 <strong>Execution Time</strong>，纵轴为 <strong>Delta Patterns</strong>（地址差值）。</li>
+<li>图中包含两种不同程序计数器（PC）的访问行为：<ul>
+<li><strong>PC=0x30b00</strong>：以蓝色点表示，其 Delta Patterns 在 25–30 区间波动，被标记为 <strong>Spatial Pattern</strong>。</li>
+<li><strong>PC=0x30aca</strong>：以红色点表示，其 Delta Patterns 始终为 0，被标记为 <strong>Stream Pattern</strong>。</li>
+</ul>
+</li>
+<li>该图旨在说明一个关键问题：<strong>同一程序中不同 PC 可能产生截然不同的内存访问模式</strong>，且这些模式在时间上可能交错出现。</li>
+<li>现有预取器选择算法（如 DOL、IPCP、RL-based）通常采用统一规则处理所有请求，无法区分不同 PC 的模式差异，导致：<ul>
+<li>对于 PC=0x30b00，应由 <strong>Spatial Prefetcher</strong> 处理，但可能被错误分配给 Stride 或 Stream Prefetcher。</li>
+<li>对于 PC=0x30aca，应由 <strong>Stream Prefetcher</strong> 处理，但可能被误判为噪声或交由其他不匹配的预取器。</li>
+</ul>
+</li>
+<li>此图是论文提出 <strong>Alecto</strong> 框架的核心动机之一，强调需要 <strong>细粒度（PC-grained）识别</strong> 合适预取器，而非粗粒度全局策略。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>PC 地址</th>
+<th>访问模式类型</th>
+<th>Delta Patterns 特征</th>
+<th>应匹配预取器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x30b00</td>
+<td>Spatial Pattern</td>
+<td>波动于 25–30 之间</td>
+<td>Spatial Prefetcher</td>
+</tr>
+<tr>
+<td>0x30aca</td>
+<td>Stream Pattern</td>
+<td>恒定为 0</td>
+<td>Stream Prefetcher</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观揭示了现有方案的局限性：<strong>静态优先级或全局学习机制无法适应动态变化的 PC 级别访问模式</strong>，从而造成预取器误配和性能损失。</li>
+</ul>
+<h3 id="fig-3-comparison-of-prefetcher-selection-algorithms-a-dol-selects-prefetchers-in-the-allocation-stage-it-sequentially-passes-the-demand-request-through-all-prefetchers-b-ipcp-selects-prefetchers-in-the-prefetch-stage-it-statically-prioritizes-the-prefetching-requests-from-different-prefetchers-c-rl-based-schemes-select-prefetchers-in-the-prefetch-stage-it-controls-the-outputs-of-prefetchers-and-applies-identical-rules-for-all-memory-accesses-d-alecto-selects-prefetchers-in-the-allocation-stage-it-identifies-suitable-prefetchers-for-each-memory-access-then-dynamically-allocates-demand-requests-to-identified-prefetchers">Fig. 3. Comparison of prefetcher selection algorithms. (a) DOL selects prefetchers in the allocation stage. It sequentially passes the demand request through all prefetchers. (b) IPCP selects prefetchers in the prefetch stage. It statically prioritizes the prefetching requests from different prefetchers. (c) RL-based schemes select prefetchers in the prefetch stage. It controls the outputs of prefetchers and applies identical rules for all memory accesses. (d) Alecto selects prefetchers in the allocation stage. It identifies suitable prefetchers for each memory access, then dynamically allocates demand requests to identified prefetchers.<a class="headerlink" href="#fig-3-comparison-of-prefetcher-selection-algorithms-a-dol-selects-prefetchers-in-the-allocation-stage-it-sequentially-passes-the-demand-request-through-all-prefetchers-b-ipcp-selects-prefetchers-in-the-prefetch-stage-it-statically-prioritizes-the-prefetching-requests-from-different-prefetchers-c-rl-based-schemes-select-prefetchers-in-the-prefetch-stage-it-controls-the-outputs-of-prefetchers-and-applies-identical-rules-for-all-memory-accesses-d-alecto-selects-prefetchers-in-the-allocation-stage-it-identifies-suitable-prefetchers-for-each-memory-access-then-dynamically-allocates-demand-requests-to-identified-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="beb0945a20d2d419bd43428e7b5255961db4e498ed83252ede6b9a2d1b456be6.jpg" src="../images/beb0945a20d2d419bd43428e7b5255961db4e498ed83252ede6b9a2d1b456be6.jpg" /></p>
+<ul>
+<li>图片展示了四种不同的预取器选择算法架构：DOL、IPCP、基于RL的方案和Alecto，旨在对比它们在需求请求分配和预取阶段的处理逻辑。</li>
+<li><strong>DOL (Division of Labor)</strong> 在分配阶段选择预取器，其核心机制是<strong>顺序传递</strong>需求请求。请求首先被发送到P1，若P1无法处理（标记为N），则依次传递给P2至Pn，直到某个预取器成功处理（标记为Y）并将其预取请求送入预取队列。该方法依赖静态优先级，缺乏对不同内存访问模式的动态适应能力。</li>
+<li><strong>IPCP (Instruction Pointer Classifier-based Prefetching)</strong> 在预取阶段进行选择。所有预取器（P1至Pn）同时接收需求请求并独立生成预取请求。随后，一个<strong>多路复用器 (MUX)</strong> 根据预设的静态优先级（如 P1 &gt; P2 &gt; ... &gt; Pn）从多个预取器的输出中选择一个请求进入预取队列。此方法不控制输入分配，导致所有预取器都可能被无关请求污染。</li>
+<li><strong>基于RL的方案 (Reinforcement Learning-based Schemes)</strong> 也在预取阶段进行选择。其核心是一个<strong>RL算法</strong>，它根据运行时指标（如已提交指令数）动态调整每个预取器的“开启/关闭”状态或“预取度”。然而，该方案对所有内存访问应用相同的规则，且<strong>不涉及需求请求的动态分配</strong>，因此无法防止无关请求训练错误的预取器表。</li>
+<li><strong>Alecto</strong> 同样在分配阶段进行选择，但其机制更为精细。它引入了一个<strong>预取器识别模块 (Prefetchers Identification)</strong>，该模块根据PC信息和历史性能数据，为每个内存访问指令动态识别出合适的预取器。然后，通过一个<strong>标识符 (Identifier)</strong> 控制一个多路复用器，仅将需求请求路由给那些被识别为“合适”的预取器（P1, ..., Pn）。这确保了只有相关的预取器才能接收到请求并进行训练，从而避免了资源浪费和冲突。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">算法</th>
+<th style="text-align: left;">选择阶段</th>
+<th style="text-align: left;">分配机制</th>
+<th style="text-align: left;">输出选择机制</th>
+<th style="text-align: left;">关键特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">DOL</td>
+<td style="text-align: left;">Allocation</td>
+<td style="text-align: left;">顺序传递 (Sequential Pass)</td>
+<td style="text-align: left;">无</td>
+<td style="text-align: left;">静态优先级，易产生表污染</td>
+</tr>
+<tr>
+<td style="text-align: left;">IPCP</td>
+<td style="text-align: left;">Prefetch</td>
+<td style="text-align: left;">并行接收 (Parallel Receive)</td>
+<td style="text-align: left;">静态优先级 MUX</td>
+<td style="text-align: left;">不控制输入，所有预取器均被训练</td>
+</tr>
+<tr>
+<td style="text-align: left;">RL-based</td>
+<td style="text-align: left;">Prefetch</td>
+<td style="text-align: left;">并行接收 (Parallel Receive)</td>
+<td style="text-align: left;">RL动态调节 ON/OFF 或 Degree</td>
+<td style="text-align: left;">动态输出控制，但无输入分配</td>
+</tr>
+<tr>
+<td style="text-align: left;">Alecto</td>
+<td style="text-align: left;">Allocation</td>
+<td style="text-align: left;">动态分配 (Dynamic Allocation)</td>
+<td style="text-align: left;">基于PC的细粒度识别</td>
+<td style="text-align: left;"><strong>精准分配，避免无关训练，减少冲突</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总结来看，Alecto的核心创新在于将预取器选择与<strong>动态需求请求分配 (DDRA)</strong> 深度集成，并在<strong>分配阶段</strong>完成决策。这与DOL的静态顺序传递、IPCP和RL方案在预取阶段的输出选择形成了鲜明对比。Alecto通过<strong>细粒度识别</strong>每个内存访问指令的合适预取器，实现了更高效、更精准的资源利用，从而显著提升了整体预取效率。</li>
+</ul>
+<h3 id="fig-4-the-overall-framework-of-alecto-it-consists-of-an-allocation-table-which-enables-fine-grained-prefetcher-identification-and-dynamic-request-allocation-it-also-includes-a-sample-table-and-sandbox-table-for-information-collection-additionally-the-sandbox-table-functions-as-a-prefetch-filter">Fig. 4. The overall framework of Alecto. It consists of an Allocation Table, which enables fine-grained prefetcher identification and dynamic request allocation. It also includes a Sample Table and Sandbox Table for information collection. Additionally, the Sandbox Table functions as a prefetch filter.<a class="headerlink" href="#fig-4-the-overall-framework-of-alecto-it-consists-of-an-allocation-table-which-enables-fine-grained-prefetcher-identification-and-dynamic-request-allocation-it-also-includes-a-sample-table-and-sandbox-table-for-information-collection-additionally-the-sandbox-table-functions-as-a-prefetch-filter" title="Permanent link">&para;</a></h3>
+<p><img alt="7708c92b0b1b5fff4d3d175e7e93e4e5b27df95c92f3a292012cbacda9a3765e.jpg" src="../images/7708c92b0b1b5fff4d3d175e7e93e4e5b27df95c92f3a292012cbacda9a3765e.jpg" /></p>
+<ul>
+<li>
+<p><strong>核心架构</strong>：图 4 展示了 Alecto 的整体框架，由三个关键硬件组件构成：<strong>Allocation Table</strong>、<strong>Sample Table</strong> 和 <strong>Sandbox Table</strong>。它们协同工作，实现细粒度的预取器识别与动态请求分配。</p>
+</li>
+<li>
+<p><strong>数据流路径</strong>：</p>
+<ul>
+<li>步骤①：需求请求（含 PC 和地址）同时送入 <strong>Allocation Table</strong> 和 <strong>Sandbox Table</strong>。</li>
+<li>步骤②：<strong>Allocation Table</strong> 根据 PC 查询状态，生成标识符（key），指导请求分配至合适的预取器（P1 至 Pn）。</li>
+<li>步骤③：被选中的预取器生成预取请求，反馈至 <strong>Sample Table</strong> 用于性能评估。</li>
+<li>步骤④：<strong>Sandbox Table</strong> 记录预取请求的地址和触发 PC，用于后续验证。</li>
+<li>步骤⑤：<strong>Sample Table</strong> 结合 <strong>Sandbox Table</strong> 的命中信息，计算每个预取器在特定 PC 下的准确率。</li>
+<li>步骤⑥：<strong>Sandbox Table</strong> 作为预取过滤器，拦截重复请求，未命中者进入下一级缓存。</li>
+</ul>
+</li>
+<li>
+<p><strong>表结构细节</strong>：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>表名</th>
+<th>索引方式</th>
+<th>主要字段</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Allocation Table</strong></td>
+<td>PC 地址</td>
+<td>Tag, P1’s State, P2’s State, ..., Pn’s State</td>
+<td>存储每个预取器对特定 PC 的状态（UI/IA/IB），决定请求分配与预取激进程度。</td>
+</tr>
+<tr>
+<td><strong>Sandbox Table</strong></td>
+<td>访问地址</td>
+<td>Tag, PC(P1), Valid(P1), ...</td>
+<td>记录最近发出的预取请求及其触发 PC；同时作为<strong>预取过滤器</strong>，避免冗余预取。</td>
+</tr>
+<tr>
+<td><strong>Sample Table</strong></td>
+<td>PC 地址</td>
+<td>IssuedByP1, ConfirmedP1, ..., Demand Counter, Dead Counter</td>
+<td>收集运行时指标，计算预取准确率；<strong>Demand Counter</strong> 触发状态更新；<strong>Dead Counter</strong> 防止死锁。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>状态机机制</strong>：<strong>Allocation Table</strong> 中每个预取器针对每个 PC 有三种状态：</p>
+<ul>
+<li><strong>Un-Identified (UI)</strong>：初始状态，保守分配请求并限制预取度。</li>
+<li><strong>Identified and Aggressive (IA)</strong>：高效状态，提升预取度以优化覆盖与及时性。</li>
+<li><strong>Identified and Blocked (IB)</strong>：低效状态，暂时阻断请求分配，避免资源浪费。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键设计亮点</strong>：</p>
+<ul>
+<li><strong>动态请求分配</strong>：仅将需求请求路由给经识别为“合适”的预取器，防止无关预取器被污染。</li>
+<li><strong>双重功能</strong>：<strong>Sandbox Table</strong> 不仅收集数据，还充当<strong>预取过滤器</strong>，无需额外存储开销。</li>
+<li><strong>细粒度控制</strong>：基于 PC 的状态管理，使每个内存访问指令都能获得定制化的预取策略。</li>
+<li><strong>轻量级实现</strong>：总存储开销小于 1KB，远低于 RL 基方案如 Bandit。</li>
+</ul>
+</li>
+</ul>
+<h3 id="fig-5-the-state-machine-of-allocation-table-for-every-memory-access-instruction-each-prefetcher-has-three-states-un-identified-ui-indicates-the-suitability-of-this-prefetcher-is-unidentified-identified-and-aggressive-ia-means-the-prefetcher-is-efficient-and-its-prefetching-degree-should-be-promoted-identified-and-blocked-ib-applies-when-a-prefetcher-is-deemed-unsuitable-for-processing-the-memory-access-instructions">Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.<a class="headerlink" href="#fig-5-the-state-machine-of-allocation-table-for-every-memory-access-instruction-each-prefetcher-has-three-states-un-identified-ui-indicates-the-suitability-of-this-prefetcher-is-unidentified-identified-and-aggressive-ia-means-the-prefetcher-is-efficient-and-its-prefetching-degree-should-be-promoted-identified-and-blocked-ib-applies-when-a-prefetcher-is-deemed-unsuitable-for-processing-the-memory-access-instructions" title="Permanent link">&para;</a></h3>
+<p><img alt="88a9443b674d9939923ca0cc16a6bc2295bf79b71b7653872f507a9b42af3865.jpg" src="../images/88a9443b674d9939923ca0cc16a6bc2295bf79b71b7653872f507a9b42af3865.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Allocation Table</strong> 的状态机，用于管理每个 prefetcher 针对特定内存访问指令（PC）的适用性状态。</li>
+<li>状态机包含三个核心状态：<strong>Un-Identified (UI)</strong>、<strong>Identified and Aggressive (IA_m)</strong> 和 <strong>Identified and Blocked (IB_n)</strong>，分别对应未识别、高效可激进、不适用需阻塞。</li>
+<li>状态转换由 <strong>ACC(i)</strong>（第 i 个 prefetcher 的预取准确率）、<strong>PB</strong>（Proficiency Boundary，熟练度边界）和 <strong>DB</strong>（Deficiency Boundary，缺陷边界）驱动。</li>
+<li>所有状态均以 UI 为初始状态，表示系统尚未评估该 prefetcher 对当前 PC 的适用性。</li>
+<li>当 ACC(i) ≥ PB 时，若无其他 IA 状态 prefetcher 或非 temporal prefetcher，则进入 IA_0；否则进入 IB_0。</li>
+<li>若 ACC(i) &lt; DB，直接进入 IB_-N，表示该 prefetcher 因表现极差被暂时屏蔽 N 个 epoch。</li>
+<li>IA_m 状态支持动态调整 aggressiveness：ACC(i) ≥ PB 且 m &lt; M 时升级至 IA_{m+1}；ACC(i) &lt; PB 且 m &gt; 0 时降级至 IA_{m-1}。</li>
+<li>IB_n 状态支持逐步解封：当 n &lt; 0 时，每 epoch 自动递增至 IB_{n+1}，直至 IB_0 后可能重新评估为 UI。</li>
+<li>状态机中“x=i”表示仅针对第 i 个 prefetcher，“No IA”指当前无任何 prefetcher 处于 IA 状态，“No event”表示无触发条件。</li>
+<li>该状态机设计确保了 <strong>细粒度适配</strong>：每个 PC 下各 prefetcher 独立评估，避免全局策略导致的误判。</li>
+<li>状态转换逻辑兼顾 <strong>性能与资源效率</strong>：高准确率者提升激进度，低准确率者暂停训练，减少无效表项更新与硬件冲突。</li>
+<li>表格总结关键状态及转换条件：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+<th>主要转换条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UI</strong></td>
+<td>未识别，保守处理</td>
+<td>ACC(i) ≥ PB → IA_0；ACC(i) &lt; DB → IB_-N</td>
+</tr>
+<tr>
+<td><strong>IA_m</strong></td>
+<td>高效，可激进预取</td>
+<td>ACC(i) ≥ PB &amp; m\&lt;M → IA_{m+1}；ACC(i)\<PB & m>0 → IA_{m-1}</td>
+</tr>
+<tr>
+<td><strong>IB_n</strong></td>
+<td>不适用，暂阻塞</td>
+<td>n\&lt;0 → IB_{n+1}；n=0 且无 IA → UI</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此机制是 Alecto 实现 <strong>动态需求请求分配</strong> 的核心，确保只有合适的 prefetcher 接收训练数据，提升整体预取效率。</li>
+</ul>
+<h3 id="fig-6-the-classification-of-memory-access-patterns-for-efficient-metadata-storage-in-temporal-prefetching-alecto-can-filter-demand-requests-that-are-1-non-temporal-2-simultaneously-handled-by-non-temporal-prefetchers-and-3-rare-recurrence">Fig. 6. The classification of memory access patterns for efficient metadata storage in temporal prefetching. Alecto can filter demand requests that are (1) non-temporal; (2) simultaneously handled by non-temporal prefetchers; and (3) rare recurrence.<a class="headerlink" href="#fig-6-the-classification-of-memory-access-patterns-for-efficient-metadata-storage-in-temporal-prefetching-alecto-can-filter-demand-requests-that-are-1-non-temporal-2-simultaneously-handled-by-non-temporal-prefetchers-and-3-rare-recurrence" title="Permanent link">&para;</a></h3>
+<p><img alt="6c433e8e425a6dae158322b68efd3fa6d0b64cbe56b712e000334ed0faff908e.jpg" src="../images/6c433e8e425a6dae158322b68efd3fa6d0b64cbe56b712e000334ed0faff908e.jpg" /></p>
+<ul>
+<li>图片展示了 Alecto 如何对内存访问模式进行分类，以实现 <strong>Temporal Prefetcher</strong> 的高效元数据存储管理。</li>
+<li>核心目标是过滤三类不适合由 Temporal Prefetcher 处理的请求：<strong>(1) 非时序型 (Non-temporal)</strong>、<strong>(2) 可被非时序预取器（如 Stream/Stride/Spatial）同时处理的</strong>、<strong>(3) 低频重现 (Rare Recurrence)</strong>。</li>
+<li>分类结构呈树状：<ul>
+<li>根节点为 <strong>All PC</strong>，即所有程序计数器（PC）触发的内存访问。</li>
+<li>第一层分为 <strong>Non-temporal PC</strong> 和 <strong>Temporal PC</strong>。<ul>
+<li><strong>Non-temporal PC</strong> 被标记为“Filtered by event ③”，表示这类请求会被 Alecto 过滤掉，不进入 Temporal Prefetcher 训练流程。</li>
+<li><strong>Temporal PC</strong> 进一步细分为两类：<ul>
+<li><strong>Stream, Stride, Spatial PC</strong>：这些属于可被非时序预取器有效处理的模式，被标记为“Filtered by event ① or higher level cache”，即通过事件①或更高层缓存拦截，避免冗余训练。</li>
+<li><strong>Remaining PC</strong>：剩余的真正需要 Temporal Prefetcher 处理的时序模式，再细分为：<ul>
+<li><strong>Rare Recurrence PC</strong>：低频重现的访问模式，同样被标记为“Filtered by event ③”，因其无法在元数据表中长期驻留，训练价值低。</li>
+<li><strong>Frequent Recurrence PC</strong>：高频重现的访问模式，用绿色高亮，表示这是 Temporal Prefetcher 应该专注处理的目标。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分类层级</th>
+<th>类别名称</th>
+<th>是否被过滤</th>
+<th>过滤依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一级</td>
+<td>Non-temporal PC</td>
+<td>是</td>
+<td>event ③</td>
+</tr>
+<tr>
+<td>一级</td>
+<td>Temporal PC</td>
+<td>否</td>
+<td>—</td>
+</tr>
+<tr>
+<td>二级</td>
+<td>Stream, Stride, Spatial PC</td>
+<td>是</td>
+<td>event ① 或 higher level cache</td>
+</tr>
+<tr>
+<td>二级</td>
+<td>Remaining PC</td>
+<td>否</td>
+<td>—</td>
+</tr>
+<tr>
+<td>三级</td>
+<td>Rare Recurrence PC</td>
+<td>是</td>
+<td>event ③</td>
+</tr>
+<tr>
+<td>三级</td>
+<td>Frequent Recurrence PC</td>
+<td>否</td>
+<td>目标处理对象</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此分类机制使 Alecto 能精准控制哪些需求请求进入 Temporal Prefetcher 的训练表，从而显著提升其元数据存储利用率。</li>
+<li>与传统方案（如 Triangel）相比，Alecto 不仅过滤非时序请求，还能识别并排除已被其他预取器覆盖的请求，避免资源浪费。</li>
+<li>该设计支持轻量级实现（\&lt;1KB 存储开销），且无需修改现有 Temporal Prefetcher 结构，具有良好的通用性和可部署性。</li>
+</ul>
+<h3 id="table-i-system-configuration">TABLE I SYSTEM CONFIGURATION.<a class="headerlink" href="#table-i-system-configuration" title="Permanent link">&para;</a></h3>
+<p><img alt="c1fbf03d53519029eddea8911841c9081cee523e7975fe57625aeb819c20e4d1.jpg" src="../images/c1fbf03d53519029eddea8911841c9081cee523e7975fe57625aeb819c20e4d1.jpg" /></p>
+<ul>
+<li><strong>核心配置</strong>：支持 1 至 8 个核心，配备 256 条目 ROB；指令流水线为 6 宽度取指、6 宽度解码、8 宽度发射、4 宽度提交；拥有 256 条目 IQ 与 72/56 条目 LQ/SQ。</li>
+<li><strong>TLB 配置</strong>：L1 iTLB/dTLB 为 64 条目、8 路组相联；共享 L2 TLB 为 2048 条目、16 路组相联。</li>
+<li><strong>私有 L1 数据缓存</strong>：容量 32 KB，8 路组相联，64 字节行大小，16 个 MSHR，采用 LRU 替换策略，往返延迟为 4 个周期。</li>
+<li><strong>私有 L2 缓存</strong>：容量 256 KB，8 路组相联，64 字节行大小，32 个 MSHR，采用 mostly_inclusive 策略，往返延迟为 15 个周期。</li>
+<li><strong>共享 L3 缓存</strong>：每核心 2 MB，16 路组相联，64 字节行大小，每 LLC Bank 64 个 MSHR，采用 CHAR [18] 替换策略与 mostly_exclusive 策略，往返延迟为 35 个周期。</li>
+<li><strong>主内存配置</strong>：<ul>
+<li>SC（单通道）：1 通道，每通道 1 Rank，共 8 个 Bank/Rank，运行频率为 2400 MT/s。</li>
+<li>MC（多通道）：通道数为 <strong>#Core / 2</strong>，每通道 2 Ranks，共 8 个 Bank/Rank，运行频率为 2400 MT/s。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>配置详情</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td>1-8 cores, 256-entry ROB; 6-width fetch/decode, 8-width issue, 4-width commit; 256-entry IQ, 72/56-entry LQ/SQ</td>
+</tr>
+<tr>
+<td>TLBs</td>
+<td>64-entry L1 iTLB/dTLB (8-way); 2048-entry shared L2 TLB (16-way)</td>
+</tr>
+<tr>
+<td>Private L1 I/D cache</td>
+<td>32 KB each, 8-way, 64B line, 16 MSHRs, LRU, 4 cycles latency</td>
+</tr>
+<tr>
+<td>Private L2 cache</td>
+<td>256 KB, 8-way, 64B line, 32 MSHRs, mostly_inclusive, LRU, 15 cycles latency</td>
+</tr>
+<tr>
+<td>Shared L3 cache</td>
+<td>2 MB per core, 16-way, 64B line, 64 MSHRs per LLC Bank, CHAR [18], mostly_exclusive, 35 cycles latency</td>
+</tr>
+<tr>
+<td>Main Memory</td>
+<td>SC: Single channel, 1 rank/channel, 8 banks/rank, 2400 MT/s<br>MC: #Core/2 channels, 2 ranks/channel, 8 banks/rank, 2400 MT/s</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有缓存均采用 <strong>64 字节行大小</strong>，确保数据对齐与传输效率。</li>
+<li>L3 缓存使用 <strong>CHAR 替换策略</strong>，优化多核场景下的缓存命中率。</li>
+<li>内存带宽配置支持 <strong>可扩展性</strong>，MC 模式下通道数随核心数动态调整，提升并行访问能力。</li>
+</ul>
+<h3 id="table-ii-prefetchers-being-selected">TABLE II PREFETCHERS BEING SELECTED.<a class="headerlink" href="#table-ii-prefetchers-being-selected" title="Permanent link">&para;</a></h3>
+<p><img alt="89cc1d074d3d044438c305e269070318d3eb5d8395fcc1cac9fb0f782b306728.jpg" src="../images/89cc1d074d3d044438c305e269070318d3eb5d8395fcc1cac9fb0f782b306728.jpg" /></p>
+<ul>
+<li>该图片为 <strong>Table II</strong>，标题为 “PREFETCHERS BEING SELECTED”，用于说明实验中所选用的三种核心 prefetcher 及其内部结构配置。</li>
+<li>表格包含两列：<strong>Component</strong> 和 <strong>Configuration</strong>，分别列出 prefetcher 类型及其硬件资源分配。</li>
+<li>所选 prefetcher 均基于现有文献实现，具体如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stream prefetcher (GS in [37])</td>
+<td>64-entry IP table<br>8-entry Region Stream Table (RST)</td>
+</tr>
+<tr>
+<td>Stride prefetcher (CS in [37])</td>
+<td>64-entry IP table</td>
+</tr>
+<tr>
+<td>Spatial prefetcher (PMP [27])</td>
+<td>16-entry Accumulation Table<br>64-entry Pattern History Table (PHT)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Stream prefetcher (GS)</strong> 采用双表结构：IP 表用于记录指令指针，RST 用于追踪区域流模式，体现其对连续访问模式的优化。</li>
+<li><strong>Stride prefetcher (CS)</strong> 仅使用 64-entry IP table，专注于识别固定步长访问模式，结构简洁但针对性强。</li>
+<li><strong>Spatial prefetcher (PMP)</strong> 配置了 Accumulation Table 和 PHT，前者用于累积相似访问模式，后者用于历史模式匹配，增强对复杂空间局部性的捕捉能力。</li>
+<li>所有 prefetcher 均在 L1 数据缓存内实现，并基于虚拟地址训练，确保与 Alecto 框架兼容。</li>
+<li>此配置在实验中作为统一基准，用于公平比较不同 prefetcher selection 算法（如 Alecto、Bandit、DOL、IPCP）的性能表现。</li>
+</ul>
+<h3 id="fig-7-the-comparison-of-configurations-between-a-bandit-b-triangel-and-c-alecto-on-temporal-prefetching-tp">Fig. 7. The comparison of configurations between (a) Bandit; (b) Triangel; and (c) Alecto on temporal prefetching (TP).<a class="headerlink" href="#fig-7-the-comparison-of-configurations-between-a-bandit-b-triangel-and-c-alecto-on-temporal-prefetching-tp" title="Permanent link">&para;</a></h3>
+<p><img alt="d9c4fd8441876a3aa9238120d87de8ddd164e0d8f7437111fb56ddde0256729a.jpg" src="../images/d9c4fd8441876a3aa9238120d87de8ddd164e0d8f7437111fb56ddde0256729a.jpg" /></p>
+<ul>
+<li>图片展示了三种不同配置下 <strong>Temporal Prefetching (TP)</strong> 的工作流程对比，分别为 <strong>(a) Bandit</strong>、<strong>(b) Triangel</strong> 和 <strong>(c) Alecto</strong>。</li>
+<li>三者均包含 <strong>L1 Cache</strong>、<strong>L1 prefetchers (pfts)</strong>、<strong>L2 Cache</strong> 和 <strong>Temporal Prefetcher (TP)</strong>，但数据流和控制逻辑存在显著差异。</li>
+<li>在 <strong>Bandit (a)</strong> 配置中，<strong>Bandit</strong> 模块通过蓝色虚线连接至 <strong>TP</strong>，表明其仅控制 TP 的预取度（prefetching degree），而不干预训练请求的来源。TP 接收来自 L1 cache 和 L1 pfts 的所有请求。</li>
+<li>在 <strong>Triangel (b)</strong> 配置中，<strong>Triangel</strong> 模块通过橙色虚线连接至 <strong>TP</strong>，表示其不仅能控制预取度，还能管理 TP 的训练请求。然而，它仍无法过滤由非时间性预取器（如 stream/stride/spatial）已覆盖的请求。</li>
+<li>在 <strong>Alecto (c)</strong> 配置中，<strong>Alecto</strong> 模块通过绿色虚线连接至 <strong>TP</strong>，显示其直接从 <strong>L1 Cache</strong> 接收需求请求，并智能分配给 TP，从而实现对训练请求的精细筛选。该设计避免了无效或冗余请求进入 TP 表。</li>
+<li>三者在训练请求来源上的关键区别如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>训练请求来源</th>
+<th>是否过滤非时间性请求</th>
+<th>是否过滤重复请求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bandit</td>
+<td>L1 Cache + L1 pfts</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>Triangel</td>
+<td>L1 Cache + L1 pfts</td>
+<td>部分（仅过滤非时间PC）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>Alecto</td>
+<td><strong>仅 L1 Cache</strong>（经动态分配）</td>
+<td><strong>是</strong></td>
+<td><strong>是</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Alecto</strong> 的设计优势在于：通过 <strong>Dynamic Demand Request Allocation (DDRA)</strong>，仅将真正适合 TP 处理的需求请求送入其训练表，极大提升元数据存储利用率，同时减少冲突与能耗。</li>
+<li>实验结果（见 Fig. 13, 14）表明，<strong>Alecto</strong> 在相同元数据表大小下性能优于 Bandit，在达到同等性能时所需元数据空间仅为 Bandit 的 25% 以下。</li>
+<li>此图直观体现了 <strong>Alecto</strong> 如何通过架构级优化解决现有方案在时间性预取中的两大缺陷：<strong>粗粒度选择</strong> 与 <strong>无效请求污染</strong>。</li>
+</ul>
+<h3 id="fig-8-ipc-speedup-compared-to-no-prefetching-on-spec06-benchmarks-memory-intensive-workloads-are-highlighted-within-dotted-blue-line-and-the-geomean-speedup-is-calculated-separately-all-prefetcher-selections-algorithms-schedule-the-same-composite-prefetcher-gs-37-cs-37-pmp-27">Fig. 8. IPC speedup compared to no prefetching on SPEC06 benchmarks. Memory-intensive workloads are highlighted within dotted blue line, and the geomean speedup is calculated separately. All prefetcher selections algorithms schedule the same composite prefetcher: GS [37] + CS [37] + PMP [27].<a class="headerlink" href="#fig-8-ipc-speedup-compared-to-no-prefetching-on-spec06-benchmarks-memory-intensive-workloads-are-highlighted-within-dotted-blue-line-and-the-geomean-speedup-is-calculated-separately-all-prefetcher-selections-algorithms-schedule-the-same-composite-prefetcher-gs-37-cs-37-pmp-27" title="Permanent link">&para;</a></h3>
+<p><img alt="bff6fce9c0430782cf1998de0166f5b150f2a91c550b9e3a7cbc010305af5224.jpg" src="../images/bff6fce9c0430782cf1998de0166f5b150f2a91c550b9e3a7cbc010305af5224.jpg" /></p>
+<ul>
+<li>图片展示了在 SPEC CPU2006 基准测试集上，不同 prefetcher selection 算法相对于无 prefetching 基线的 IPC speedup 表现。</li>
+<li>横轴为各 SPEC06 benchmark，纵轴为归一化后的 IPC 提升比例（Normalized Speedup over No Prefetching），基准线为 1.0。</li>
+<li>图例包含六种算法：<strong>IPCP</strong>、<strong>DOL</strong>、<strong>Bandit3</strong>、<strong>Bandit6</strong>、<strong>Alecto</strong>，以及一条红色虚线代表无 prefetching 的基线。</li>
+<li><strong>Memory-intensive workloads</strong> 被蓝色虚线框出，包括 <code>GemsFDTD</code>、<code>leslie3d</code>、<code>libquantum</code>、<code>mcf</code>、<code>milc</code>、<code>omnetpp</code>、<code>soplex</code>、<code>sphinx3</code>、<code>xalancbmk</code>、<code>zeusmp</code>。</li>
+<li>在所有 benchmark 中，<strong>Alecto</strong>（红色柱）在绝大多数情况下表现最优，尤其在内存密集型负载中优势显著。</li>
+<li>特别地，在 <code>GemsFDTD</code> 上，Alecto 达到 <strong>2.13</strong> 倍的 IPC 提升，远超其他算法。</li>
+<li>在 <code>mcf</code> 和 <code>omnetpp</code> 上，Alecto 略低于 Bandit6，作者在正文解释这是由于 Alecto 采取更保守策略，但可通过调整参数（如降低 DB 或固定 prefetching degree）追平性能。</li>
+<li>图表底部显示了两个几何平均值（Geomean）：<ul>
+<li><strong>Geomean-Mem</strong>：仅针对内存密集型负载计算，Alecto 明显领先。</li>
+<li><strong>Geomean-All</strong>：涵盖全部 SPEC06 benchmark，Alecto 同样保持最高。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>IPCP</th>
+<th>DOL</th>
+<th>Bandit3</th>
+<th>Bandit6</th>
+<th>Alecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>astar</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>bwaves</td>
+<td>~1.45</td>
+<td>~1.50</td>
+<td>~1.55</td>
+<td>~1.60</td>
+<td>~1.65</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>~1.10</td>
+<td>~1.15</td>
+<td>~1.20</td>
+<td>~1.25</td>
+<td>~1.30</td>
+</tr>
+<tr>
+<td>cactusADM</td>
+<td>~1.20</td>
+<td>~1.25</td>
+<td>~1.30</td>
+<td>~1.35</td>
+<td>~1.40</td>
+</tr>
+<tr>
+<td>gcc</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>GemsFDTD</td>
+<td>~1.70</td>
+<td>~1.75</td>
+<td>~1.80</td>
+<td>~1.90</td>
+<td><strong>2.13</strong></td>
+</tr>
+<tr>
+<td>gromacs</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>hmmer</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>ibm</td>
+<td>~1.40</td>
+<td>~1.45</td>
+<td>~1.50</td>
+<td>~1.55</td>
+<td>~1.60</td>
+</tr>
+<tr>
+<td>leslie3d</td>
+<td>~1.60</td>
+<td>~1.65</td>
+<td>~1.70</td>
+<td>~1.75</td>
+<td>~1.80</td>
+</tr>
+<tr>
+<td>libquantum</td>
+<td>~1.30</td>
+<td>~1.35</td>
+<td>~1.40</td>
+<td>~1.45</td>
+<td>~1.50</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~1.10</td>
+<td>~1.15</td>
+<td>~1.20</td>
+<td>~1.25</td>
+<td>~1.20</td>
+</tr>
+<tr>
+<td>milc</td>
+<td>~1.30</td>
+<td>~1.35</td>
+<td>~1.40</td>
+<td>~1.45</td>
+<td>~1.50</td>
+</tr>
+<tr>
+<td>omnetpp</td>
+<td>~1.10</td>
+<td>~1.15</td>
+<td>~1.20</td>
+<td>~1.25</td>
+<td>~1.20</td>
+</tr>
+<tr>
+<td>soplex</td>
+<td>~1.50</td>
+<td>~1.55</td>
+<td>~1.60</td>
+<td>~1.65</td>
+<td>~1.70</td>
+</tr>
+<tr>
+<td>sphinx3</td>
+<td>~1.40</td>
+<td>~1.45</td>
+<td>~1.50</td>
+<td>~1.55</td>
+<td>~1.60</td>
+</tr>
+<tr>
+<td>xalancbmk</td>
+<td>~1.20</td>
+<td>~1.25</td>
+<td>~1.30</td>
+<td>~1.35</td>
+<td>~1.40</td>
+</tr>
+<tr>
+<td>zeusmp</td>
+<td>~1.30</td>
+<td>~1.35</td>
+<td>~1.40</td>
+<td>~1.45</td>
+<td>~1.50</td>
+</tr>
+<tr>
+<td>calculix</td>
+<td>~1.10</td>
+<td>~1.15</td>
+<td>~1.20</td>
+<td>~1.25</td>
+<td>~1.30</td>
+</tr>
+<tr>
+<td>dealII</td>
+<td>~1.10</td>
+<td>~1.15</td>
+<td>~1.20</td>
+<td>~1.25</td>
+<td>~1.30</td>
+</tr>
+<tr>
+<td>gamess</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>gobmk</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>h264ref</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>namd</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>perlbench</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>povray</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>sjeng</td>
+<td>~1.05</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>tonto</td>
+<td>~1.30</td>
+<td>~1.35</td>
+<td>~1.40</td>
+<td>~1.45</td>
+<td>~1.50</td>
+</tr>
+<tr>
+<td>wrf</td>
+<td>~1.40</td>
+<td>~1.45</td>
+<td>~1.50</td>
+<td>~1.55</td>
+<td>~1.60</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体来看，<strong>Alecto</strong> 在单核场景下平均优于 Bandit6 <strong>2.76%</strong>，在内存密集型负载中优势扩大至 <strong>5.25%</strong>，验证了其动态需求请求分配机制的有效性。</li>
+</ul>
+<h3 id="fig-9-ipc-speedup-compared-to-no-prefetching-on-spec17-benchmarks-memory-intensive-workloads-are-highlighted-within-dotted-blue-line-and-their-geomean-speedup-is-calculated-separately-all-prefetcher-selections-schemes-algorithms-the-same-composite-prefetcher-gs-37-cs-37-pmp-27">Fig. 9. IPC speedup compared to no prefetching on SPEC17 benchmarks. Memory-intensive workloads are highlighted within dotted blue line, and their geomean speedup is calculated separately. All prefetcher selections schemes algorithms the same composite prefetcher: GS [37] + CS [37] + PMP [27].<a class="headerlink" href="#fig-9-ipc-speedup-compared-to-no-prefetching-on-spec17-benchmarks-memory-intensive-workloads-are-highlighted-within-dotted-blue-line-and-their-geomean-speedup-is-calculated-separately-all-prefetcher-selections-schemes-algorithms-the-same-composite-prefetcher-gs-37-cs-37-pmp-27" title="Permanent link">&para;</a></h3>
+<p><img alt="f6208721169eb7841492fc85ca6e91757476a9c20f2ecc9d4b682b2f53571e6e.jpg" src="../images/f6208721169eb7841492fc85ca6e91757476a9c20f2ecc9d4b682b2f53571e6e.jpg" /></p>
+<ul>
+<li>图表展示了在 SPEC CPU2017 基准测试中，五种不同 prefetcher 选择算法（IPCP、DOL、Bandit3、Bandit6、Alecto）相对于无预取基线的 IPC 加速比。</li>
+<li>所有算法调度相同的复合预取器组合：<strong>GS</strong> + <strong>CS</strong> + <strong>PMP</strong>。</li>
+<li>横轴列出各 SPEC17 工作负载，纵轴为归一化加速比（以无预取为基准 1.0），红色虚线标示基准线。</li>
+<li>图中用蓝色虚线框标注了<strong>内存密集型工作负载</strong>，并单独计算其几何平均加速比（Geomean-Mem）。</li>
+<li>最右侧柱状图显示所有工作负载的总体几何平均加速比（Geomean-All）。</li>
+<li>数据表明，<strong>Alecto 在绝大多数工作负载上表现最优</strong>，尤其在内存密集型应用中优势显著。</li>
+<li>各算法在 Geomean-All 上的表现如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>Geomean-All 加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IPCP</td>
+<td>1.92</td>
+</tr>
+<tr>
+<td>DOL</td>
+<td>1.91</td>
+</tr>
+<tr>
+<td>Bandit3</td>
+<td>1.83</td>
+</tr>
+<tr>
+<td>Bandit6</td>
+<td>2.00</td>
+</tr>
+<tr>
+<td><strong>Alecto</strong></td>
+<td><strong>2.65</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在内存密集型工作负载子集（Geomean-Mem）中，Alecto 的加速比同样领先，远超其他方案。</li>
+<li>Alecto 在多个工作负载如 <code>fotonik3d</code>、<code>lbm</code>、<code>roms</code>、<code>parest</code> 中取得最高加速比，部分甚至超过 1.7。</li>
+<li>少数工作负载如 <code>mcf</code> 和 <code>omnetpp</code> 中，Bandit6 表现略优于 Alecto，但差距较小，且可通过调整 Alecto 参数（如降低 DB 阈值或固定预取度）弥补。</li>
+<li>整体来看，Alecto 通过动态需求请求分配机制，在保持高覆盖与及时性的同时，显著提升预取准确率，从而实现更优性能。</li>
+</ul>
+<h3 id="fig-10-the-key-performance-metrics-of-prefetchers">Fig. 10. The key performance metrics of prefetchers.<a class="headerlink" href="#fig-10-the-key-performance-metrics-of-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="4f7fd8336cf72765a5ce8eef8f40975be3b5ecb5cc1c31f366029554bebd3a42.jpg" src="../images/4f7fd8336cf72765a5ce8eef8f40975be3b5ecb5cc1c31f366029554bebd3a42.jpg" /></p>
+<ul>
+<li>图片展示了五种不同 prefetcher 选择算法（IPCP、DOL、Bandit3、Bandit6、Alecto）在关键性能指标上的对比，这些指标包括 <strong>Covered, Timely</strong>（及时覆盖）、<strong>Covered, Untimely</strong>（非及时覆盖）、<strong>Uncovered</strong>（未覆盖）和 <strong>Overprediction</strong>（过度预测）。</li>
+<li>数据以堆叠柱状图形式呈现，每个柱子代表一种算法，其高度为各部分之和，反映整体表现。数值标注于对应颜色区域内部。</li>
+<li><strong>Alecto 在所有指标上均表现出最优平衡性</strong>，尤其在“Covered, Timely”部分占比最高（0.415），表明其能更有效地在正确时机预取数据。</li>
+<li>相比之下，Bandit6 虽然“Covered, Timely”值较高（0.401），但“Overprediction”比例最大（0.705），说明其激进策略导致大量冗余预取。</li>
+<li>IPCP 和 DOL 的“Covered, Timely”值分别为 0.291 和 0.286，显著低于 Alecto，且“Overprediction”也偏高，显示其缺乏精细控制。</li>
+<li>Bandit3 表现居中，“Covered, Timely”为 0.345，优于 IPCP 和 DOL，但不及 Alecto；“Overprediction”为 0.635，仍高于 Alecto 的 0.570。</li>
+<li>下表总结了各算法的关键性能指标：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>Covered, Timely</th>
+<th>Covered, Untimely</th>
+<th>Uncovered</th>
+<th>Overprediction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IPCP</td>
+<td>0.291</td>
+<td>0.651</td>
+<td>0.725</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DOL</td>
+<td>0.286</td>
+<td>0.655</td>
+<td>0.721</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Bandit3</td>
+<td>0.345</td>
+<td>0.602</td>
+<td>0.635</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Bandit6</td>
+<td>0.401</td>
+<td>0.567</td>
+<td>0.705</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Alecto</strong></td>
+<td><strong>0.415</strong></td>
+<td><strong>0.550</strong></td>
+<td><strong>0.570</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>综合来看，<strong>Alecto 不仅提升了及时覆盖能力，还有效抑制了过度预测，实现了精度、覆盖率与时效性的最佳权衡</strong>，验证了其动态需求请求分配机制的有效性。</li>
+</ul>
+<h3 id="fig-11-performance-speedup-when-using-prefetcher-selection-algorithms-schedule-another-composite-prefetcher-gs-37-berti-35-cplx-37">Fig. 11. Performance speedup when using prefetcher selection algorithms schedule another composite prefetcher: GS [37] + Berti [35] + CPLX [37].<a class="headerlink" href="#fig-11-performance-speedup-when-using-prefetcher-selection-algorithms-schedule-another-composite-prefetcher-gs-37-berti-35-cplx-37" title="Permanent link">&para;</a></h3>
+<p><img alt="4afa9b272c363342403e069e8c9ed361b17ffe4d07d59e2290119c89ec3b0116.jpg" src="../images/4afa9b272c363342403e069e8c9ed361b17ffe4d07d59e2290119c89ec3b0116.jpg" /></p>
+<ul>
+<li>图表展示了在使用另一组复合预取器（GS + Berti + CPLX）时，不同预取器选择算法的性能加速比。</li>
+<li><strong>Alecto</strong> 在所有测试场景中均表现出最优性能，其加速比显著高于其他算法。</li>
+<li>具体数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>SPEC CPU2006</th>
+<th>SPEC CPU2017</th>
+<th>Geomean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IPCP</td>
+<td>~1.12</td>
+<td>~1.06</td>
+<td>~1.10</td>
+</tr>
+<tr>
+<td>DOL</td>
+<td>~1.13</td>
+<td>~1.07</td>
+<td>~1.11</td>
+</tr>
+<tr>
+<td>Bandit3</td>
+<td>~1.18</td>
+<td>~1.09</td>
+<td>~1.14</td>
+</tr>
+<tr>
+<td>Bandit6</td>
+<td>~1.20</td>
+<td>~1.11</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td><strong>Alecto</strong></td>
+<td><strong>~1.23</strong></td>
+<td><strong>~1.14</strong></td>
+<td><strong>~1.18</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 <strong>Geomean</strong> 指标上，Alecto 相较于 Bandit6 提升约 2.04%，相较于 IPCP 和 DOL 分别提升 8.52% 和 8.68%。</li>
+<li>Alecto 的优势源于其动态需求请求分配机制，能更精准地匹配预取器与内存访问模式，从而减少冲突并提升整体效率。</li>
+<li>Berti 和 CPLX 作为空间预取器，在 Alecto 调度下表现优于 Bandit，说明 Alecto 对高侵略性预取器的管理更为有效。</li>
+</ul>
+<h3 id="c-effectiveness-comparison-with-non-composite-prefetchers-fig-12-performance-speedup-with-non-composite-prefetchers">C. Effectiveness: Comparison with Non-composite Prefetchers Fig. 12. Performance speedup with non-composite prefetchers.<a class="headerlink" href="#c-effectiveness-comparison-with-non-composite-prefetchers-fig-12-performance-speedup-with-non-composite-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="4106fd82c305001e3389c67a7dc99b19e9a225a6d4e8bd1c38562db042d5b287.jpg" src="../images/4106fd82c305001e3389c67a7dc99b19e9a225a6d4e8bd1c38562db042d5b287.jpg" /></p>
+<ul>
+<li>图表标题为“Fig. 12. Performance speedup with non-composite prefetchers”，属于论文第VI-C节“Effectiveness: Comparison with Non-composite Prefetchers”，用于评估Alecto在复合预取器（composite prefetchers）配置下相对于非复合预取器（non-composite prefetchers）的性能增益。</li>
+<li>图表横轴分为三组：<strong>SPEC CPU2006</strong>、<strong>SPEC CPU2017</strong> 和 <strong>Geomean</strong>，代表不同基准测试集和几何平均值。</li>
+<li>纵轴为“Normalized Speedup over No Prefetching”，即相对于无预取基线的归一化性能加速比，数值越高表示性能提升越显著。</li>
+<li>图例包含四种配置：<ul>
+<li><strong>PMP</strong>：单一空间预取器。</li>
+<li><strong>Berti</strong>：另一种先进的空间预取器。</li>
+<li><strong>Alecto (GS+CS+PMP)</strong>：Alecto调度的复合预取器组合，包含流式（GS）、步长（CS）和空间（PMP）预取器。</li>
+<li><strong>Alecto (GS+Berti+CPLX)</strong>：Alecto调度的另一组复合预取器，包含流式（GS）、Berti和CPLX预取器。</li>
+</ul>
+</li>
+<li>数据对比显示：<ul>
+<li>在<strong>SPEC CPU2006</strong>上，Alecto (GS+CS+PMP) 加速比约为1.20，Alecto (GS+Berti+CPLX) 约为1.23，均显著高于PMP（约1.14）和Berti（约1.12）。</li>
+<li>在<strong>SPEC CPU2017</strong>上，Alecto (GS+CS+PMP) 加速比约为1.15，Alecto (GS+Berti+CPLX) 约为1.16，同样优于PMP（约1.08）和Berti（约1.09）。</li>
+<li>在<strong>Geomean</strong>上，Alecto (GS+CS+PMP) 加速比约为1.20，Alecto (GS+Berti+CPLX) 约为1.22，而PMP和Berti分别约为1.11和1.10。</li>
+</ul>
+</li>
+<li>根据论文正文，Alecto (GS+CS+PMP) 相较于PMP提升<strong>9.10%</strong>，相较于Berti提升<strong>7.83%</strong>；Alecto (GS+Berti+CPLX) 相较于PMP提升<strong>9.53%</strong>，相较于Berti提升<strong>8.26%</strong>。</li>
+<li>结论：<strong>复合预取器在Alecto调度下性能显著优于单一非复合预取器</strong>，验证了Alecto在协调多类型预取器方面的有效性，并凸显了复合预取架构的研究价值。</li>
+</ul>
+<h3 id="fig-13-the-performance-speedup-of-temporal-prefetching-with-different-demand-request-allocation-policies">Fig. 13. The performance speedup of temporal prefetching with different demand request allocation policies.<a class="headerlink" href="#fig-13-the-performance-speedup-of-temporal-prefetching-with-different-demand-request-allocation-policies" title="Permanent link">&para;</a></h3>
+<p><img alt="46c6baff03cb5eedbb4223203e7d566f547265749ddc080c1c955d12815f83bf.jpg" src="../images/46c6baff03cb5eedbb4223203e7d566f547265749ddc080c1c955d12815f83bf.jpg" /></p>
+<ul>
+<li>图表展示了三种不同需求请求分配策略（Bandit、Triangle、Alecto）在**时间预取（temporal prefetching）**场景下的性能加速比（Normalized Speedup），基准为仅启用L1复合预取器时的IPC。</li>
+<li><strong>Alecto</strong>在绝大多数测试用例中表现最优，其性能显著优于Bandit和Triangle。例如，在<code>gcc_166</code>上，Alecto的加速比接近<strong>1.4</strong>，而Bandit约为1.15，Triangle约为1.2。</li>
+<li>在<code>mcf</code>和<code>sphinx3</code>等基准测试中，Alecto与Triangle性能接近，但依然略胜一筹；而在<code>astar_lakes</code>和<code>omnetpp</code>上，Alecto表现最突出，远超其他两种方案。</li>
+<li>从**Geomean（几何平均）**来看，Alecto整体性能提升最为稳定且最高，表明其动态需求请求分配机制能更有效地优化时间预取器的元数据存储利用率。</li>
+<li>下表总结了各策略在关键基准上的加速比：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Bandit</th>
+<th>Triangle</th>
+<th>Alecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>astar_lakes</td>
+<td>~1.0</td>
+<td>~1.05</td>
+<td>~1.02</td>
+</tr>
+<tr>
+<td>gcc_166</td>
+<td>~1.15</td>
+<td>~1.2</td>
+<td><strong>~1.4</strong></td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~1.15</td>
+<td>~1.3</td>
+<td>~1.32</td>
+</tr>
+<tr>
+<td>omnetpp</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td><strong>~1.25</strong></td>
+</tr>
+<tr>
+<td>sphinx3</td>
+<td>~1.1</td>
+<td>~1.15</td>
+<td>~1.17</td>
+</tr>
+<tr>
+<td>xalancbmk</td>
+<td>~1.05</td>
+<td>~1.15</td>
+<td>~1.18</td>
+</tr>
+<tr>
+<td><strong>Geomean</strong></td>
+<td>—</td>
+<td>—</td>
+<td><strong>最高</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Alecto的优势源于其<strong>动态需求请求分配</strong>机制，能精准过滤非时间性或可由非时间预取器处理的请求，从而减少元数据表污染并提升命中率。</li>
+<li>相较于Bandit仅调整预取度数，Alecto通过控制哪些请求进入时间预取器训练阶段，从根本上优化了资源利用效率。</li>
+<li>Triangle虽也支持请求分配，但未能过滤可由非时间预取器处理的请求，导致其效率低于Alecto。</li>
+</ul>
+<h3 id="fig-14-geomean-ipc-speedup-with-varying-metadata-table-size">Fig. 14. Geomean IPC speedup with varying metadata table size.<a class="headerlink" href="#fig-14-geomean-ipc-speedup-with-varying-metadata-table-size" title="Permanent link">&para;</a></h3>
+<p><img alt="0e0f944452e8d5b2ae0bd4ad72b0f06c7793b41381c465fb4c25259933cc49b4.jpg" src="../images/0e0f944452e8d5b2ae0bd4ad72b0f06c7793b41381c465fb4c25259933cc49b4.jpg" /></p>
+<ul>
+<li>图表展示了在不同 <strong>Temporal Prefetcher Metadata Table Size</strong> 下，<strong>Alecto</strong> 与 <strong>Bandit</strong> 两种方案的 <strong>Normalized Speedup</strong>（归一化性能加速比）对比。</li>
+<li>横轴为元数据表大小，从 <strong>128KB</strong> 到 <strong>1MB</strong>，纵轴为归一化 IPC 加速比，基准为 1.00。</li>
+<li><strong>Alecto</strong>（红色实线）在所有测试点均优于 <strong>Bandit</strong>（橙色虚线），且优势随表尺寸增大而扩大。</li>
+<li>在 <strong>128KB</strong> 时，Alecto 达到 <strong>1.0482</strong>，Bandit 为 <strong>1.00</strong>；在 <strong>1MB</strong> 时，Alecto 提升至 <strong>1.0839</strong>，Bandit 仅达 <strong>1.0603</strong>。</li>
+<li>数据表明，Alecto 的 <strong>动态需求请求分配机制</strong> 显著提升了元数据存储利用率，即使在小容量表下也能获得更高性能。</li>
+<li>表格总结关键数据点：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Metadata Table Size</th>
+<th>Alecto Speedup</th>
+<th>Bandit Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128KB</td>
+<td>1.0482</td>
+<td>1.0000</td>
+</tr>
+<tr>
+<td>256KB</td>
+<td>1.0644</td>
+<td>1.0000</td>
+</tr>
+<tr>
+<td>512KB</td>
+<td>1.0603</td>
+<td>1.0000</td>
+</tr>
+<tr>
+<td>1MB</td>
+<td>1.0839</td>
+<td>1.0603</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：Alecto 不仅性能更优，且对硬件资源（如元数据表）的需求更低——<strong>实现同等性能，Alecto 所需表空间不足 Bandit 的 256KB</strong>，凸显其高效性与可扩展性。</li>
+</ul>
+<h3 id="fig-15-geomean-ipc-speedup-with-varying-llc-size">Fig. 15. Geomean IPC speedup with varying LLC size.<a class="headerlink" href="#fig-15-geomean-ipc-speedup-with-varying-llc-size" title="Permanent link">&para;</a></h3>
+<p><img alt="94d2d1123568ea297d6536a71567a08e75a929f3e138f06610a264d9c1947b96.jpg" src="../images/94d2d1123568ea297d6536a71567a08e75a929f3e138f06610a264d9c1947b96.jpg" /></p>
+<ul>
+<li>图表展示了不同 prefetcher selection 算法在不同 LLC（Last-Level Cache）大小下的 <strong>geomean IPC speedup</strong>，基准为无 prefetching。</li>
+<li>横轴为 LLC Size (MB)，取值为 0.5、1、2、4；纵轴为 Normalized Speedup over No Prefetching。</li>
+<li>五种算法分别为：<strong>IPCP</strong>（蓝色虚线）、<strong>DOL</strong>（青色点划线）、<strong>Bandit3</strong>（绿色虚线）、<strong>Bandit6</strong>（橙色点线）、<strong>Alecto</strong>（红色实线）。</li>
+<li><strong>Alecto 在所有 LLC 大小下均保持最高性能</strong>，其 speedup 值从 1.20（0.5MB）逐步下降至 1.17（4MB），但始终领先其他算法。</li>
+<li>Bandit6 表现次优，随 LLC 增大性能衰减明显，从 1.18 降至 1.14。</li>
+<li>IPCP 和 DOL 性能最弱，且随 LLC 增大持续下降，尤其 IPCP 在 4MB 时跌至约 1.11。</li>
+<li>图中灰色阴影区域标示 Alecto 相较于 Bandit6 的性能优势区间，数值标注如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>LLC Size (MB)</th>
+<th>Alecto vs Bandit6 Advantage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5</td>
+<td>0.0299</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0.0296</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.0276</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.0310</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据表明，<strong>即使在大容量 LLC 场景下，Alecto 仍能维持显著性能优势</strong>，说明其动态需求分配机制有效缓解了缓存污染问题。</li>
+<li>随着 LLC 增大，所有算法的 prefetching 效益普遍降低，但 Alecto 的相对优势并未减弱，反而在 4MB 时略有扩大。</li>
+</ul>
+<h3 id="fig-16-geomean-ipc-speedup-with-varying-dram-bandwidth">Fig. 16. Geomean IPC speedup with varying DRAM bandwidth.<a class="headerlink" href="#fig-16-geomean-ipc-speedup-with-varying-dram-bandwidth" title="Permanent link">&para;</a></h3>
+<p><img alt="87909924094627563eeb823b5e0108206b6825233fa17c5d2582d7e13b77b9fd.jpg" src="../images/87909924094627563eeb823b5e0108206b6825233fa17c5d2582d7e13b77b9fd.jpg" /></p>
+<ul>
+<li>图片展示了在不同 DRAM 带宽配置下，五种 prefetcher selection 算法的 <strong>Geomean IPC speedup</strong> 相对于无预取基线的表现。</li>
+<li>横轴为两种 DRAM 带宽配置：<strong>DDR3-1600</strong> 和 <strong>DDR4-2400</strong>；纵轴为归一化后的 IPC 提升倍数（Normalized Speedup over No Prefetching）。</li>
+<li>五种算法分别用不同颜色柱状图表示：<ul>
+<li><strong>IPCP</strong>（深蓝色）</li>
+<li><strong>DOL</strong>（浅蓝色）</li>
+<li><strong>Bandit3</strong>（绿色）</li>
+<li><strong>Bandit6</strong>（橙色）</li>
+<li><strong>Alecto</strong>（红色）</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>DRAM Bandwidth</th>
+<th>IPCP</th>
+<th>DOL</th>
+<th>Bandit3</th>
+<th>Bandit6</th>
+<th>Alecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDR3-1600</td>
+<td>~1.12</td>
+<td>~1.12</td>
+<td>~1.15</td>
+<td>~1.16</td>
+<td><strong>~1.19</strong></td>
+</tr>
+<tr>
+<td>DDR4-2400</td>
+<td>~1.12</td>
+<td>~1.12</td>
+<td>~1.15</td>
+<td>~1.17</td>
+<td><strong>~1.19</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在两种带宽下，<strong>Alecto</strong> 均取得最高 IPC 提升，显著优于其他算法。</li>
+<li><strong>Bandit6</strong> 表现次优，优于 Bandit3、IPCP 和 DOL。</li>
+<li><strong>IPCP</strong> 与 <strong>DOL</strong> 性能接近且最低，表明静态优先级策略在不同带宽下均缺乏适应性。</li>
+<li>随着带宽从 DDR3-1600 升级至 DDR4-2400，所有算法性能均有小幅提升，但 <strong>Alecto 的领先优势保持稳定</strong>。</li>
+<li>论文指出，Alecto 能在更高带宽下更有效地平衡 <strong>prefetching accuracy 与 timeliness</strong>，而 Bandit6 的提升主要源于其更激进的预取策略。</li>
+</ul>
+<h3 id="table-iii-storage-overhead-analysis">TABLE III STORAGE OVERHEAD ANALYSIS.<a class="headerlink" href="#table-iii-storage-overhead-analysis" title="Permanent link">&para;</a></h3>
+<p><img alt="7e0d192fbb85f81d8046d219ebc99df887218a215972c4d74735894464b6f362.jpg" src="../images/7e0d192fbb85f81d8046d219ebc99df887218a215972c4d74735894464b6f362.jpg" /></p>
+<ul>
+<li><strong>Alecto</strong> 的存储开销分析基于其三大核心组件：Allocation Table、Sample Table 和 Sandbox Table（兼作 Prefetch Filter）。</li>
+<li>各组件的存储需求按条目数和每个条目的位宽详细分解，最终汇总为总存储开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>结构名称</th>
+<th>条目数</th>
+<th>组件构成</th>
+<th>存储需求 (bits)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Allocation Table</td>
+<td>64</td>
+<td>Valid (1 bit), Tag (9 bits), States (4 × P bits)</td>
+<td><strong>640 + 256 × P</strong></td>
+</tr>
+<tr>
+<td>Sample Table</td>
+<td>64</td>
+<td>Valid (1 bit), Tag (9 bits), Issued (8 × P bits), Confirmed (8 × P bits),<br>Deads (7 bits), Demands (8 bits)</td>
+<td><strong>1600 + 1024 × P</strong></td>
+</tr>
+<tr>
+<td>Sandbox Table</td>
+<td>512</td>
+<td>Tag (6 bits), Valid for Pi (P bits)</td>
+<td><strong>3072 + 512 × P</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>总体存储开销为 <strong>5312 + 1792 × P bits</strong>，其中 P 代表 prefetcher 数量。</p>
+</li>
+<li>
+<p>当 P = 3 时，总存储开销约为 <strong>1.30 KB</strong>。</p>
+</li>
+<li>
+<p>若排除 Sandbox Table（因其功能在系统中通常必需），则剩余开销为 <strong>2240 + 1280 × P bits</strong>。</p>
+</li>
+<li>
+<p>在 P = 3 时，该部分开销约为 <strong>760 B</strong>，凸显 Alecto 的轻量化设计。</p>
+</li>
+<li>
+<p><strong>关键结论</strong>：</p>
+<ul>
+<li>Alecto 的存储开销随 prefetcher 数量线性增长，具备良好可扩展性。</li>
+<li>相比 RL-based 方案（如 Bandit），Alecto 避免了指数级存储增长问题。</li>
+<li>Sandbox Table 的双重角色（记录与过滤）有效节省了额外硬件资源。</li>
+</ul>
+</li>
+</ul>
+<h3 id="fig-17-eight-core-performance-speedup-compared-to-no-prefetching-on-spec06-spec17-parsec-and-ligra-benchmarks">Fig. 17. Eight-core performance speedup compared to no prefetching on SPEC06, SPEC17, PARSEC and Ligra benchmarks.<a class="headerlink" href="#fig-17-eight-core-performance-speedup-compared-to-no-prefetching-on-spec06-spec17-parsec-and-ligra-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="770f0285c0ce7a32d759960d27012687bb9f953cb903c6142b9e61fea6bdee1f.jpg" src="../images/770f0285c0ce7a32d759960d27012687bb9f953cb903c6142b9e61fea6bdee1f.jpg" /></p>
+<ul>
+<li>图表展示了在八核系统下，不同 prefetcher selection 算法相对于无预取基线的性能加速比（Normalized Speedup over No Prefetching），涵盖 SPEC06、SPEC17、PARSEC、Ligra 四类工作负载及整体几何平均值（Geomean）。</li>
+<li><strong>Alecto</strong> 在所有工作负载类别中均取得最高加速比，显著优于其他算法，体现其在多核环境下的卓越调度能力。</li>
+<li>各算法在不同工作负载上的表现如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>IPCP</th>
+<th>DOL</th>
+<th>Bandit3</th>
+<th>Bandit6</th>
+<th>Alecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC06</td>
+<td>~1.08</td>
+<td>~1.07</td>
+<td>~1.12</td>
+<td>~1.15</td>
+<td><strong>~1.24</strong></td>
+</tr>
+<tr>
+<td>SPEC17</td>
+<td>~1.10</td>
+<td>~1.08</td>
+<td>~1.13</td>
+<td>~1.16</td>
+<td><strong>~1.22</strong></td>
+</tr>
+<tr>
+<td>PARSEC</td>
+<td>~1.05</td>
+<td>~1.04</td>
+<td>~1.09</td>
+<td>~1.11</td>
+<td><strong>~1.20</strong></td>
+</tr>
+<tr>
+<td>Ligra</td>
+<td>~1.03</td>
+<td>~1.02</td>
+<td>~1.04</td>
+<td>~1.05</td>
+<td><strong>~1.08</strong></td>
+</tr>
+<tr>
+<td>Geomean</td>
+<td>~1.08</td>
+<td>~1.07</td>
+<td>~1.11</td>
+<td>~1.13</td>
+<td><strong>~1.18</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Alecto 相较 Bandit6 的平均提升达 7.56%</strong>，在八核场景下优势进一步放大，印证论文所述“随着核心数增加，Bandit 的粗粒度选择机制导致跨核干扰，而 Alecto 的细粒度控制能有效平衡整体性能”。</li>
+<li>在内存密集型工作负载如 PARSEC 和 Ligra 中，Alecto 的领先幅度尤为明显，说明其动态需求分配机制对复杂访问模式更具适应性。</li>
+<li>所有算法在 Ligra 上的加速比均较低，反映图处理负载的不规则性对预取器构成挑战，但 Alecto 仍保持相对最优。</li>
+<li>图表颜色编码清晰：IPCP（深蓝）、DOL（浅蓝）、Bandit3（绿）、Bandit6（橙）、Alecto（红），便于快速对比各算法表现。</li>
+</ul>
+<h3 id="i-efficiency-energy-overhead-fig-18-the-number-of-each-prefetchers-training-occurrences-in-alecto-compared-to-bandit">I. Efficiency: Energy Overhead Fig. 18. The number of each prefetcher’s training occurrences in Alecto compared to Bandit.<a class="headerlink" href="#i-efficiency-energy-overhead-fig-18-the-number-of-each-prefetchers-training-occurrences-in-alecto-compared-to-bandit" title="Permanent link">&para;</a></h3>
+<p><img alt="711228ba1a37076bab2bce47c1cbf2cc0af8024858689d1ea02e98415d79fae6.jpg" src="../images/711228ba1a37076bab2bce47c1cbf2cc0af8024858689d1ea02e98415d79fae6.jpg" /></p>
+<ul>
+<li>图表对比了 <strong>Alecto</strong> 与 <strong>Bandit6</strong> 在三种主流 prefetcher（Stream、Stride、Spatial）上的训练发生次数，单位为千次（Thousand），并附带几何平均值（Geomean）。</li>
+<li><strong>Bandit6</strong> 的训练发生次数在所有三类 prefetcher 上均处于高位，约为 <strong>1300 千次</strong>，表明其对所有 prefetcher 均进行无差别训练，缺乏选择性。</li>
+<li><strong>Alecto</strong> 显著降低了训练发生次数：<ul>
+<li>Stream：约 <strong>500 千次</strong></li>
+<li>Stride：约 <strong>800 千次</strong></li>
+<li>Spatial：约 <strong>600 千次</strong></li>
+<li>Geomean：约 <strong>600 千次</strong></li>
+</ul>
+</li>
+<li>相较于 Bandit6，Alecto 平均减少训练发生次数达 <strong>48%</strong>，这直接转化为更低的动态功耗，因为 prefetcher 的主要能耗来自访问内部表结构（即训练过程）。</li>
+<li>数据表明 Alecto 通过 <strong>动态需求请求分配（DDRA）</strong>，仅将请求路由至“合适”的 prefetcher，避免了无效训练和资源浪费。</li>
+<li>此优化不仅提升能效，也间接缓解了 prefetcher 表冲突，提高整体系统性能。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher Type</th>
+<th>Bandit6 (Thousand)</th>
+<th>Alecto (Thousand)</th>
+<th>Reduction (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stream</td>
+<td>~1300</td>
+<td>~500</td>
+<td>~62%</td>
+</tr>
+<tr>
+<td>Stride</td>
+<td>~1300</td>
+<td>~800</td>
+<td>~38%</td>
+</tr>
+<tr>
+<td>Spatial</td>
+<td>~1300</td>
+<td>~600</td>
+<td>~54%</td>
+</tr>
+<tr>
+<td><strong>Geomean</strong></td>
+<td><strong>~1300</strong></td>
+<td><strong>~600</strong></td>
+<td><strong>~48%</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="fig-19-on-memory-intensive-benchmarks-performance-speedup-for-bandit6-alecto-with-the-fixed-prefetching-degree-and-complete-alecto">Fig. 19. On memory intensive benchmarks, performance speedup for Bandit6, Alecto with the fixed prefetching degree, and complete Alecto.<a class="headerlink" href="#fig-19-on-memory-intensive-benchmarks-performance-speedup-for-bandit6-alecto-with-the-fixed-prefetching-degree-and-complete-alecto" title="Permanent link">&para;</a></h3>
+<p><img alt="3e6b9bd27570967e707cf3e30284fffc01fd4eb6aea6aa2847eb19596fa74124.jpg" src="../images/3e6b9bd27570967e707cf3e30284fffc01fd4eb6aea6aa2847eb19596fa74124.jpg" /></p>
+<ul>
+<li>图表展示了在<strong>内存密集型基准测试</strong>上，三种不同配置的性能加速比（Normalized Speedup over No Prefetching）对比：<strong>Bandit6</strong>、<strong>Alecto_fix</strong>（固定预取度的 Alecto）、以及<strong>完整版 Alecto</strong>。</li>
+<li><strong>横轴</strong>列出了多个 SPEC CPU2006 和 SPEC CPU2017 的内存密集型工作负载，如 <code>GemsFDTD</code>、<code>mcf</code>、<code>omnetpp</code>、<code>xalancbmk</code> 等，末尾为所有工作负载的<strong>几何平均值（Geomean）</strong>。</li>
+<li><strong>纵轴</strong>表示相对于无预取基线的归一化 IPC 加速比，红色虚线标记 1.0 基准线。</li>
+<li><strong>数据趋势</strong>：<ul>
+<li>在绝大多数工作负载中，<strong>完整版 Alecto</strong> 表现最优，其加速比普遍高于 Bandit6 和 Alecto_fix。</li>
+<li><strong>Alecto_fix</strong> 性能介于 Bandit6 和完整版 Alecto 之间，表明即使不调整预取度，仅通过动态需求请求分配也能带来显著收益。</li>
+<li><strong>Bandit6</strong> 在部分工作负载（如 <code>mcf</code>、<code>omnetpp</code>）上表现较好，但在其他多数场景下被 Alecto 超越。</li>
+</ul>
+</li>
+<li><strong>关键结论</strong>：<ul>
+<li>动态需求请求分配是 Alecto 性能提升的主要驱动力，<strong>Alecto_fix 比 Bandit6 平均高出 4.34%</strong>。</li>
+<li>完整版 Alecto 通过结合动态分配与预取度自适应调节，进一步将性能提升至<strong>5.25%</strong>。</li>
+<li>在 <code>GemsFDTD</code>、<code>fotonik3d</code>、<code>libquantum</code> 等工作负载中，Alecto 的优势尤为明显，加速比可达 1.8–2.2。</li>
+</ul>
+</li>
+<li><strong>性能对比摘要表</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>Bandit6</th>
+<th>Alecto_fix</th>
+<th>Alecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GemsFDTD</td>
+<td>~1.5</td>
+<td>~1.7</td>
+<td><strong>~2.1</strong></td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~1.4</td>
+<td>~1.3</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>omnetpp</td>
+<td>~1.6</td>
+<td>~1.5</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>xalancbmk</td>
+<td>~1.3</td>
+<td>~1.5</td>
+<td><strong>~1.7</strong></td>
+</tr>
+<tr>
+<td>Geomean</td>
+<td>1.00</td>
+<td><strong>1.0434</strong></td>
+<td><strong>1.0525</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>视觉强调</strong>：绿色柱状图（Alecto）在大多数情况下高度最高，蓝色（Bandit6）次之，青色（Alecto_fix）居中，直观体现 Alecto 的综合优势。</li>
+</ul>
+<h3 id="fig-20-on-memory-intensive-benchmarks-performance-speedup-for-ipcp-ipcpppf-aggressive-ipcpppf-conservative-and-alecto-they-schedule-the-same-composite-prefetcher-gscspmp">Fig. 20. On memory intensive benchmarks, performance speedup for IPCP, IPCP+PPF Aggressive, IPCP+PPF Conservative, and Alecto. They schedule the same composite prefetcher: GS+CS+PMP.<a class="headerlink" href="#fig-20-on-memory-intensive-benchmarks-performance-speedup-for-ipcp-ipcpppf-aggressive-ipcpppf-conservative-and-alecto-they-schedule-the-same-composite-prefetcher-gscspmp" title="Permanent link">&para;</a></h3>
+<p><img alt="4e0d154774c60de7c21d008286c4bfc2189b55df82258e0ca6f7c193adf0d034.jpg" src="../images/4e0d154774c60de7c21d008286c4bfc2189b55df82258e0ca6f7c193adf0d034.jpg" /></p>
+<ul>
+<li>图表展示了在内存密集型基准测试中，四种不同配置的性能加速比（相对于无预取），包括 <strong>IPCP</strong>、<strong>IPCP+PPF_Agg</strong>、<strong>IPCP+PPF_Con</strong> 和 <strong>Alecto</strong>。所有配置均调度相同的复合预取器组合：GS + CS + PMP。</li>
+<li><strong>IPCP</strong> 作为基线方案，其性能加速比在多数基准测试中处于中等水平，部分情况下接近或略低于 1.0，表明其在某些场景下可能无法有效提升性能。</li>
+<li><strong>IPCP+PPF_Agg</strong> 采用激进的感知器预取过滤器（Perceptron-based Prefetch Filtering），虽然在部分基准测试中（如 GemsFDTD）显著提升了预取准确率（从 0.53 提升至 0.9），但同时也导致预取覆盖率大幅下降（从 0.67 降至 0.35），从而限制了整体性能增益。</li>
+<li><strong>IPCP+PPF_Con</strong> 采用保守的预取过滤策略，在保持较高覆盖率的同时牺牲了一定的准确性，其性能表现优于 IPCP+PPF_Agg，但仍不及 Alecto。</li>
+<li><strong>Alecto</strong> 在几乎所有内存密集型基准测试中均表现出最优性能，其几何平均加速比显著高于其他三种配置，证明其动态需求请求分配机制能更有效地平衡预取准确性与覆盖率。</li>
+<li>下表总结了各配置在关键基准测试中的性能表现：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>基准测试</th>
+<th>IPCP 加速比</th>
+<th>IPCP+PPF_Agg 加速比</th>
+<th>IPCP+PPF_Con 加速比</th>
+<th>Alecto 加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GemsFDTD</td>
+<td>~1.2</td>
+<td>~1.8</td>
+<td>~1.5</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~1.1</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>omnetpp</td>
+<td>~1.0</td>
+<td>~0.9</td>
+<td>~1.1</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>xalancbmk</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td>~1.5</td>
+<td>~1.7</td>
+</tr>
+<tr>
+<td>Geomean</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td><strong>~1.6</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Alecto 的优势</strong>在于其不仅能过滤冗余预取请求，还能通过动态分配需求请求优化每个预取器的训练过程，从而在不牺牲覆盖率的前提下提升准确性，最终实现更高的整体性能。</li>
+<li>实验结果表明，<strong>Alecto 相较于 IPCP+PPF_Agg 平均提升 18.38%</strong>，相较于 IPCP+PPF_Con 平均提升 14.98%，进一步验证了动态需求请求分配机制的有效性。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

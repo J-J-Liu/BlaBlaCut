@@ -534,7 +534,7 @@
 <h3 id="fig-1-amd-intel-per-core-l1i-capacity-over-time">Fig. 1: AMD &amp; Intel per-core L1i capacity over time<a class="headerlink" href="#fig-1-amd-intel-per-core-l1i-capacity-over-time" title="Permanent link">&para;</a></h3>
 <p><img alt="965838d13d3d8849ebd0c40809d6294eac701ab5662aecbf77ad1ed7926d374f.jpg" src="../images/965838d13d3d8849ebd0c40809d6294eac701ab5662aecbf77ad1ed7926d374f.jpg" /></p>
 <ul>
-<li>图表标题为“Fig. 1: AMD &amp; Intel per-core L1i capacity over time”，展示了从2006年至2022年间，<strong>AMD</strong>与<strong>Intel</strong>两家公司处理器每核心的<strong>L1 instruction cache (L1i)</strong>容量变化趋势。</li>
+<li>图表标题为“Fig. 1: AMD &amp; Intel per-core L1i capacity over time”，展示了从2006年至2022年间，<strong>AMD</strong>与<strong>Intel</strong>两家公司处理器每核心的**L1 instruction cache (L1i)**容量变化趋势。</li>
 <li><strong>Intel</strong>的L1i容量在图示时间范围内始终保持<strong>32 KiB</strong>不变，以蓝色实线方块标记，表明其设计策略倾向于维持稳定、低延迟的缓存结构。</li>
 <li><strong>AMD</strong>的L1i容量则呈现波动变化：起始于2006年的<strong>64 KiB</strong>（红色虚线三角形），随后在2010年降至<strong>32 KiB</strong>，并在2014年回升至<strong>48 KiB</strong>，2018年再次达到<strong>64 KiB</strong>，最终在2022年回落至<strong>32 KiB</strong>。</li>
 <li>数据点分布显示，<strong>Intel</strong>在所有年份均保持恒定容量，而<strong>AMD</strong>则根据架构演进多次调整L1i大小，反映其对性能与功耗平衡的不同取舍。</li>
@@ -583,16 +583,22 @@
 <p><img alt="bfb012e30cd1e350da07563a7804be22985e817d260340600a367a316173287b.jpg" src="../images/bfb012e30cd1e350da07563a7804be22985e817d260340600a367a316173287b.jpg" /></p>
 <ul>
 <li>图片展示了 <strong>Fig. 2: Example program which benefits from PGO</strong>，用于说明 <strong>Profile-Guided Optimization (PGO)</strong> 如何通过调整代码布局提升性能。</li>
-<li>左侧为源代码片段，包含两个 <code>if-else</code> 条件语句：</li>
+<li>左侧为源代码片段，包含两个 <code>if-else</code> 条件语句：<ul>
 <li>第一个 <code>if (cond1)</code> 分支：执行块 A、B（true）或 C（false）。</li>
 <li>第二个 <code>if (cond2)</code> 分支：执行块 D、E（true）或 F（false）。</li>
 <li>最后执行块 G。</li>
-<li>右侧对比了两种代码布局方式：</li>
+</ul>
+</li>
+<li>右侧对比了两种代码布局方式：<ul>
 <li><strong>Naive layout</strong>（朴素布局）：按源码顺序排列基本块 A→B→C→D→E→F→G。若 <code>cond1</code> 和 <code>cond2</code> 均为真，则需执行两次跳转（从 B 到 D，从 E 到 G），导致 <strong>taken branches</strong> 增加。</li>
 <li><strong>Optimal layout</strong>（优化布局）：根据 PGO 分析的热点路径重新排序为 A→B→D→E→G→C→F。若 <code>cond1</code> 和 <code>cond2</code> 均为真，则所有块连续执行，<strong>无 taken branches</strong>，最大化 L1i 和 iTLB 局部性。</li>
-<li>关键性能影响：</li>
+</ul>
+</li>
+<li>关键性能影响：<ul>
 <li><strong>Taken branches</strong> 会增加 Branch Target Buffer (BTB) 压力，而 BTB 仅存储 taken 分支信息。</li>
 <li>优化布局通过线性化常见路径，减少分支预测开销和指令缓存缺失。</li>
+</ul>
+</li>
 <li>该图直观体现了 PGO 的核心价值：<strong>将高频执行路径的代码块物理相邻放置</strong>，从而降低前端停顿，提升 IPC。</li>
 </ul>
 <table>
@@ -624,16 +630,20 @@
 <ul>
 <li>图片展示了在 MySQL 使用 Sysbench 的 <strong>read only</strong> 输入时，不同配置下的性能表现，单位为每秒事务数（transactions / second）。</li>
 <li>性能数据基于使用 <strong>BOLT</strong> 工具从不同“训练”输入生成的优化二进制文件，然后在统一的 <strong>read only</strong> 输入下进行测试。</li>
-<li>图中包含三种对比基准：</li>
+<li>图中包含三种对比基准：<ul>
 <li><strong>OCOLOS</strong>：在线优化系统，其性能用浅灰色条形表示。</li>
 <li><strong>original</strong>：未经过任何 PGO 优化的原始二进制，用虚线表示。</li>
 <li><strong>BOLT</strong>：离线优化工具，其性能用深蓝色条形表示。</li>
+</ul>
+</li>
 <li>横轴代表不同的“训练”输入，即用于生成 BOLT 优化二进制的配置；纵轴列出这些输入名称。</li>
-<li>关键观察点：</li>
+<li>关键观察点：<ul>
 <li>当 BOLT 使用与运行时输入完全一致的 <strong>read only</strong> 配置进行训练时，性能达到峰值，约为 <strong>5800 tps</strong>。</li>
 <li>当使用 <strong>insert</strong> 输入作为训练数据时，性能最差，约为 <strong>4600 tps</strong>，比最佳情况低约 <strong>21%</strong>。</li>
 <li>将所有输入的配置合并为 <strong>all</strong> 进行训练时，性能约为 <strong>5300 tps</strong>，比最佳情况低约 <strong>8%</strong>，显示出聚合配置存在“破坏性干扰”。</li>
 <li><strong>OCOLOS</strong> 的性能（约 <strong>5700 tps</strong>）几乎与 BOLT 最佳配置持平，证明其在线优化能始终匹配当前运行负载。</li>
+</ul>
+</li>
 <li>数据总结如下表：</li>
 </ul>
 <table>
@@ -737,18 +747,24 @@
 <ul>
 <li>图片 8e4009da7cb85456e504591a7cb55b364aebc5c3d4c6534f6c0e172f2fb96366.jpg 展示了 OCOLOS 系统在运行时进行代码替换前后的地址空间状态对比，左侧为初始状态（C0），右侧为替换后状态（C1）。</li>
 <li><strong>核心设计原则</strong>：OCOLOS 不直接覆盖原始代码，而是将优化后的代码 C1 注入到新地址空间，同时保留原始代码 C0。通过更新部分代码指针，引导执行流进入 C1，从而在保证正确性的同时实现性能提升。</li>
-<li>在初始状态（左图）中：</li>
+<li>在初始状态（左图）中：<ul>
 <li>函数 a0、b0、c0 构成原始代码段 C0。</li>
 <li>v-table 中存储指向 b0 的函数指针。</li>
 <li>栈中保存返回地址 c0，表示当前调用栈包含 c0。</li>
-<li>在替换后状态（右图）中：</li>
+</ul>
+</li>
+<li>在替换后状态（右图）中：<ul>
 <li>原始代码 C0 保持不变，确保未被更新的指针仍可安全执行。</li>
 <li>新代码 C1 包含优化版本 b1 和 c1，其中 b1 被标记为灰色，表示其为新注入的优化代码。</li>
 <li><strong>关键修改</strong>：v-table 中的函数指针从指向 b0 更新为指向 b1；c0 内部的 call 指令也从调用 b0 改为调用 b1。</li>
 <li>栈中的返回地址仍指向 c0，表明 OCOLOS 并未修改所有代码指针，仅更新了“常见路径”上的指针以最大化性能收益。</li>
-<li>此设计体现了 OCOLOS 的两大设计原则：</li>
+</ul>
+</li>
+<li>此设计体现了 OCOLOS 的两大设计原则：<ul>
 <li><strong>Design Principle #1</strong>: preserve addresses of C0 instructions — 保留原始指令地址，避免破坏不可追踪的代码指针。</li>
 <li><strong>Design Principle #2</strong>: run C1 code in the common case — 优先执行优化代码 C1，但允许偶尔回退至 C0 以保证兼容性和正确性。</li>
+</ul>
+</li>
 <li>下表总结了代码替换前后关键组件的变化：</li>
 </ul>
 <table>
@@ -807,10 +823,12 @@
 <ul>
 <li>图片展示了 OCOLOS 系统在<strong>连续优化</strong>（Continuous Optimization）场景下，代码版本从 Ci 到 Ci+1 的替换过程。左侧为“优化前”状态，右侧为“优化后”状态。</li>
 <li>核心目标是：在不破坏程序正确性的前提下，<strong>移除旧的、不再被引用的代码版本 Ci</strong>，以节省内存并维持前端性能。</li>
-<li>该图通过三个关键区域说明了代码指针的更新机制：</li>
+<li>该图通过三个关键区域说明了代码指针的更新机制：<ul>
 <li><strong>函数调用关系</strong>：函数 a0 调用 b0，b0 调用 c0。在优化后，a0 仍调用 b0，但 b0 的调用目标被更新为新的 b1,i+1（一个从 bi 复制而来的副本），而非更优化的 bi+1。</li>
 <li><strong>虚表（v-table）</strong>：虚表中的函数指针从指向 b1 更新为指向 b1,i+1，确保动态分派能正确跳转到新版本。</li>
 <li><strong>栈帧返回地址（stack）</strong>：当前正在执行的函数（如 b1）的返回地址，在优化后被更新为指向 b1,i+1 中对应的位置，保证函数返回时不会跳回已删除的旧代码。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -850,15 +868,21 @@
 <h3 id="fig-5-performance-of-ocolos-light-blue-bars-compared-to-bolt-using-an-oracle-profile-of-the-input-being-run-dark-blue-bars-clang-pgo-using-the-same-oracle-profile-purple-bars-and-bolt-using-an-average-case-profiling-input-aggregated-from-all-inputs-pink-bars-all-bars-are-normalized-to-original-non-pgo-binaries-white-bars">Fig. 5: Performance of OCOLOS (light blue bars) compared to BOLT using an oracle profile of the input being run (dark blue bars), Clang PGO using the same oracle profile (purple bars) and BOLT using an average-case profiling input aggregated from all inputs (pink bars). All bars are normalized to original non-PGO binaries (white bars).<a class="headerlink" href="#fig-5-performance-of-ocolos-light-blue-bars-compared-to-bolt-using-an-oracle-profile-of-the-input-being-run-dark-blue-bars-clang-pgo-using-the-same-oracle-profile-purple-bars-and-bolt-using-an-average-case-profiling-input-aggregated-from-all-inputs-pink-bars-all-bars-are-normalized-to-original-non-pgo-binaries-white-bars" title="Permanent link">&para;</a></h3>
 <p><img alt="733557cfd45975ce35d8ed22bfc93c255ed09d1706d6d1f19fa5423766bca9c4.jpg" src="../images/733557cfd45975ce35d8ed22bfc93c255ed09d1706d6d1f19fa5423766bca9c4.jpg" /></p>
 <ul>
-<li>图表展示了 <strong>OCOLOS</strong> 与多种 <strong>PGO</strong> 优化方案在不同工作负载下的性能对比，所有数据均以 <strong>original</strong>（未优化二进制）为基准进行归一化。</li>
-<li>性能指标为 <strong>normalized throughput</strong>，数值越高表示加速效果越显著。</li>
-<li>对比方案包括：</li>
+<li>
+<p>图表展示了 <strong>OCOLOS</strong> 与多种 <strong>PGO</strong> 优化方案在不同工作负载下的性能对比，所有数据均以 <strong>original</strong>（未优化二进制）为基准进行归一化。</p>
+</li>
+<li>
+<p>性能指标为 <strong>normalized throughput</strong>，数值越高表示加速效果越显著。</p>
+</li>
+<li>
+<p>对比方案包括：</p>
+<ul>
 <li><strong>OCOLOS</strong>（浅蓝色）：在线优化系统。</li>
 <li><strong>BOLT, oracle input</strong>（深蓝色）：使用当前输入的“完美”配置文件离线优化。</li>
 <li><strong>PGO, oracle input</strong>（紫色）：Clang 内置 PGO 使用相同“完美”配置文件。</li>
 <li><strong>BOLT, average-case input</strong>（粉色）：BOLT 使用聚合所有输入的平均配置文件。</li>
-<li>
-<p><strong>original</strong>（白色）：无任何 PGO 优化的原始二进制。</p>
+<li><strong>original</strong>（白色）：无任何 PGO 优化的原始二进制。</li>
+</ul>
 </li>
 <li>
 <p>主要观察结果如下：</p>
@@ -901,19 +925,29 @@
 </tbody>
 </table>
 <ul>
-<li><strong>OCOLOS</strong> 在多数场景下性能接近 <strong>BOLT oracle input</strong>，平均仅落后 <strong>4.6%</strong>，证明其在线优化机制的有效性。</li>
-<li><strong>BOLT average-case input</strong> 表现普遍较差，平均比 OCOLOS 慢 <strong>8.9%</strong>，说明聚合配置文件会引入干扰，降低优化效果。</li>
-<li><strong>Clang PGO</strong> 在多个测试中表现不如 BOLT，尤其在 MySQL 和 MongoDB 上，验证了论文中提到的 <strong>PC 到源码映射困难</strong> 导致的优化不足问题。</li>
-<li><strong>MongoDB scan95 insert5</strong> 是一个异常案例，所有 PGO 方案（包括 OCOLOS）性能均劣于 original，TopDown 分析显示其瓶颈从前端转移到后端内存访问，暗示优化可能引发新的性能问题。</li>
+<li>
+<p><strong>OCOLOS</strong> 在多数场景下性能接近 <strong>BOLT oracle input</strong>，平均仅落后 <strong>4.6%</strong>，证明其在线优化机制的有效性。</p>
+</li>
+<li>
+<p><strong>BOLT average-case input</strong> 表现普遍较差，平均比 OCOLOS 慢 <strong>8.9%</strong>，说明聚合配置文件会引入干扰，降低优化效果。</p>
+</li>
+<li>
+<p><strong>Clang PGO</strong> 在多个测试中表现不如 BOLT，尤其在 MySQL 和 MongoDB 上，验证了论文中提到的 <strong>PC 到源码映射困难</strong> 导致的优化不足问题。</p>
+</li>
+<li>
+<p><strong>MongoDB scan95 insert5</strong> 是一个异常案例，所有 PGO 方案（包括 OCOLOS）性能均劣于 original，TopDown 分析显示其瓶颈从前端转移到后端内存访问，暗示优化可能引发新的性能问题。</p>
+</li>
 <li>
 <p><strong>Verilator</strong> 工作负载受益最大，OCOLOS 达到 <strong>2.20×</strong> 加速，表明其对计算密集型、单线程应用的优化潜力巨大。</p>
 </li>
 <li>
 <p>关键结论：</p>
-</li>
+<ul>
 <li><strong>OCOLOS</strong> 成功实现了在线 PGO，避免了离线 PGO 的配置文件过时和映射失效问题。</li>
 <li>其性能接近离线最优方案，同时具备动态适应输入变化的能力。</li>
 <li>在特定场景（如 Verilator）下，甚至超越离线最优方案，展示出独特优势。</li>
+</ul>
+</li>
 </ul>
 <h3 id="table-i-benchmark-characterization-data">TABLE I: Benchmark characterization data<a class="headerlink" href="#table-i-benchmark-characterization-data" title="Permanent link">&para;</a></h3>
 <p><img alt="c14775827c6d8afb6fd58086c1d38fbcb3cd1e743bbab9eac43f28d45f2ef9e5.jpg" src="../images/c14775827c6d8afb6fd58086c1d38fbcb3cd1e743bbab9eac43f28d45f2ef9e5.jpg" /></p>
@@ -1156,10 +1190,12 @@
 <ul>
 <li><strong>图片内容</strong>：该图是论文中的 <strong>Table II</strong>，标题为 “Fixed costs of code replacement”，展示了 OCOLOS 系统在不同基准测试程序上执行代码替换时的固定开销时间（单位：秒）。</li>
 <li><strong>数据结构</strong>：表格包含三行四列，分别对应三个阶段的时间消耗和四个不同的基准测试程序（MySQL、Mongo、Mem$、Verilator）。</li>
-<li><strong>关键数据</strong>：</li>
+<li><strong>关键数据</strong>：<ul>
 <li><strong>perf2bolt time (sec)</strong>：将 Linux <code>perf</code> 工具收集的 LBR 样本转换为 BOLT 可用格式所需的时间。MySQL 最长（28.186 秒），Verilator 最短（4.181 秒）。</li>
 <li><strong>llvm-bolt time (sec)</strong>：BOLT 工具实际执行优化并生成新二进制文件所需的时间。Mongo 最长（17.882 秒），Mem$ 最短（0.1404 秒）。</li>
 <li><strong>replacement time (sec)</strong>：OCOLOS 在运行时暂停目标进程、注入新代码并更新指针所花费的时间。Mem$ 最短（0.020 秒），Mongo 最长（1.221 秒）。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1196,14 +1232,18 @@
 </tbody>
 </table>
 <ul>
-<li><strong>性能分析</strong>：</li>
+<li><strong>性能分析</strong>：<ul>
 <li><strong>整体耗时</strong>：对于 MySQL 和 Mongo 这类大型服务端应用，整个优化流程耗时较长（约 30–45 秒），主要瓶颈在于 <code>perf2bolt</code> 和 <code>llvm-bolt</code> 阶段。</li>
 <li><strong>替换效率</strong>：<strong>replacement time</strong> 相对较短，即使在复杂多线程应用如 MongoDB 中也仅需 <strong>1.221 秒</strong>，体现了 OCOLOS 在运行时代码替换机制上的高效性。</li>
 <li><strong>轻量级应用优势</strong>：对于 Memcached 和 Verilator 这类相对轻量或单线程的应用，整个流程耗时显著降低，尤其 Mem$ 的 <code>llvm-bolt time</code> 仅为 <strong>0.1404 秒</strong>，说明 OCOLOS 对小型程序同样适用且开销极低。</li>
-<li><strong>设计启示</strong>：</li>
+</ul>
+</li>
+<li><strong>设计启示</strong>：<ul>
 <li><strong>可扩展性</strong>：尽管 <code>llvm-bolt time</code> 在大型程序中较高，但该阶段可在后台并发执行，不影响主程序运行，符合 OCOLOS “<strong>fixed-costs only</strong>” 的设计理念。</li>
 <li><strong>暂停影响可控</strong>：<strong>replacement time</strong> 是唯一需要暂停程序的阶段，其短暂性（最长不足 1.3 秒）确保了对服务可用性的冲击最小化，尤其适合在线系统部署。</li>
 <li><strong>适用场景</strong>：对于频繁重启或短生命周期的程序，可结合 <strong>BAM 模式</strong>规避运行时暂停成本；对于长期运行的服务，OCOLOS 能通过周期性优化持续提升性能。</li>
+</ul>
+</li>
 </ul>
 <h3 id="fig-8-microarchitectural-events-per-1000-instructions-for-mysql-inputs">Fig. 8: Microarchitectural events (per 1,000 instructions) for MySQL inputs<a class="headerlink" href="#fig-8-microarchitectural-events-per-1000-instructions-for-mysql-inputs" title="Permanent link">&para;</a></h3>
 <p><img alt="03462190a504c6c3d45aa8242db29f6a42b3f3f31372f1d4bc22036c945330dc.jpg" src="../images/03462190a504c6c3d45aa8242db29f6a42b3f3f31372f1d4bc22036c945330dc.jpg" /></p>
@@ -1365,9 +1405,11 @@
 <ul>
 <li>图表展示了使用 Intel TopDown 方法分析的两个关键微架构指标：<strong>Front-End Latency %</strong>（横轴）和 <strong>Retire %</strong>（纵轴），用于预测 OCOLOS 是否能带来性能增益。</li>
 <li>数据点分为两类：红色“×”表示<strong>无性能增益</strong>，蓝色“○”表示<strong>有性能增益</strong>。两者被一条斜线清晰分隔，形成分类边界。</li>
-<li>分类边界大致从左上角（低 Front-End Latency、高 Retire）延伸至右下角（高 Front-End Latency、低 Retire）。该区域划分表明：</li>
+<li>分类边界大致从左上角（低 Front-End Latency、高 Retire）延伸至右下角（高 Front-End Latency、低 Retire）。该区域划分表明：<ul>
 <li>当工作负载的 Front-End Latency 较高（&gt; ~50%）且 Retire 较低（&lt; ~15%）时，OCOLOS 很可能带来显著性能提升。</li>
 <li>反之，当 Front-End Latency 较低或 Retire 较高时，OCOLOS 带来的收益有限甚至为负。</li>
+</ul>
+</li>
 <li>该图验证了 OCOLOS 的优化目标——缓解前端瓶颈。只有当前端延迟成为主要性能瓶颈时，通过代码布局优化减少指令缓存缺失和分支预测压力，才能有效提升 IPC。</li>
 <li>下表总结了图表中关键区域的含义：</li>
 </ul>
@@ -1384,12 +1426,12 @@
 <tr>
 <td>蓝色区域（右上）</td>
 <td>高（&gt;50%）</td>
-<td>低（&lt;15%）</td>
+<td>低（\&lt;15%）</td>
 <td><strong>有性能增益</strong></td>
 </tr>
 <tr>
 <td>粉色区域（左下）</td>
-<td>低（&lt;50%）</td>
+<td>低（\&lt;50%）</td>
 <td>高（&gt;15%）</td>
 <td><strong>无性能增益</strong></td>
 </tr>

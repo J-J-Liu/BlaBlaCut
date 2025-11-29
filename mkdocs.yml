@@ -48,6 +48,7 @@ extra_css:
 
 extra_javascript:
   - javascripts/switcher.js
+  - javascripts/smart_back.js
 
 # 4. 导航菜单结构 (可选，不写则自动根据文件夹生成)
 nav:

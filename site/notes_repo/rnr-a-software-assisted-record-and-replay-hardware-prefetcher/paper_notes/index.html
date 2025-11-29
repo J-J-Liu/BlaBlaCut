@@ -486,17 +486,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#-rnr-combined-pagerank-hyper-anf-spcg-l2-973-946-989" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        - RnR-Combined 方案将 PageRank, Hyper-Anf, spCG 的 L2 缺失率分别降低了 97.3%, 94.6%, 98.9%。
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -516,50 +505,78 @@
 
 <h1 id="rnr-a-software-assisted-record-and-replay-hardware-prefetcher">RnR: A Software-Assisted Record-and-Replay Hardware Prefetcher 论文解析<a class="headerlink" href="#rnr-a-software-assisted-record-and-replay-hardware-prefetcher" title="Permanent link">&para;</a></h1>
 <h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
-<p><strong>作者 (Authors)</strong>
-- Chao Zhang (Lehigh University)
-- Yuan Zeng (Lehigh University)
-- John Shalf (Lawrence Berkeley National Lab)
-- Xiaochen Guo (Lehigh University)</p>
-<p><strong>发表期刊/会议 (Journal/Conference)</strong>
-- 该论文未在提供的文本中明确指出其发表的期刊或会议名称。</p>
-<p><strong>发表年份 (Publication Year)</strong>
-- 该论文未在提供的文本中明确指出其发表年份。</p>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Chao Zhang (Lehigh University)</li>
+<li>Yuan Zeng (Lehigh University)</li>
+<li>John Shalf (Lawrence Berkeley National Lab)</li>
+<li>Xiaochen Guo (Lehigh University)</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>该论文未在提供的文本中明确指出其发表的期刊或会议名称。</li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li>该论文未在提供的文本中明确指出其发表年份。</li>
+</ul>
 <hr />
 <h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p><strong>目的</strong>
-- 解决具有<strong>不规则内存访问模式</strong>（irregular memory access patterns）的应用程序难以从传统硬件预取器中受益的问题。这类应用（如图算法、迭代求解器）通常具有高缓存缺失率和长内存延迟，导致处理器停顿。
-- 克服现有方案的局限性：
-  - <strong>软件预取器</strong>会引入额外的指令开销。
-  - <strong>硬件预取器</strong>难以高效、准确地预测长且复杂的不规则访问序列。
-- 针对一类关键场景：许多重要应用（如PageRank、稀疏矩阵-向量乘法 SpMV）的内存访问序列在<strong>多次迭代或程序阶段中会重复出现</strong>。</p>
-<p><strong>方法</strong>
-- 提出一种<strong>软件辅助的记录与回放</strong>（Record-and-Replay, RnR）硬件预取器。
-- 核心思想是利用<strong>程序员的先验知识</strong>，通过一个轻量级的编程接口，精确控制硬件预取器的行为。
-- 具体实现包含以下关键组件：
-  - <strong>轻量级编程接口</strong>：允许程序员在应用代码中指定：
-    - 哪些数据结构具有不规则的重复访问模式。
-    - 何时开始<strong>记录</strong>（Record）首次出现的缓存缺失序列。
-    - 何时开始<strong>回放</strong>（Replay）以进行预取。
-  - <strong>记录阶段</strong>（Record）：
-    - 在首次迭代中，仅记录针对目标数据结构的<strong>私有L2缓存缺失地址序列</strong>。
-    - 同时记录<strong>时间信息</strong>（timing information），即每个预取窗口内的总需求访问次数，用于后续控制回放节奏。
-  - <strong>回放阶段</strong>（Replay）：
-    - 在后续重复迭代中，硬件预取器根据记录的序列主动发出预取请求。
-    - 采用<strong>基于窗口的回放时机控制机制</strong>（Replay Timing Control），通过匹配程序执行进度（由需求访问计数驱动）来动态调整预取的激进程度，确保数据在需要时已在缓存中，避免过早预取被驱逐或过晚预取无法隐藏延迟。
-  - <strong>与其他预取器协同</strong>：RnR专注于不规则模式，而常规的流式或步长预取器可继续处理规则访问模式，二者互不干扰。</p>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决具有<strong>不规则内存访问模式</strong>（irregular memory access patterns）的应用程序难以从传统硬件预取器中受益的问题。这类应用（如图算法、迭代求解器）通常具有高缓存缺失率和长内存延迟，导致处理器停顿。</li>
+<li>克服现有方案的局限性：<ul>
+<li><strong>软件预取器</strong>会引入额外的指令开销。</li>
+<li><strong>硬件预取器</strong>难以高效、准确地预测长且复杂的不规则访问序列。</li>
+</ul>
+</li>
+<li>针对一类关键场景：许多重要应用（如PageRank、稀疏矩阵-向量乘法 SpMV）的内存访问序列在<strong>多次迭代或程序阶段中会重复出现</strong>。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出一种<strong>软件辅助的记录与回放</strong>（Record-and-Replay, RnR）硬件预取器。</li>
+<li>核心思想是利用<strong>程序员的先验知识</strong>，通过一个轻量级的编程接口，精确控制硬件预取器的行为。</li>
+<li>具体实现包含以下关键组件：<ul>
+<li><strong>轻量级编程接口</strong>：允许程序员在应用代码中指定：<ul>
+<li>哪些数据结构具有不规则的重复访问模式。</li>
+<li>何时开始<strong>记录</strong>（Record）首次出现的缓存缺失序列。</li>
+<li>何时开始<strong>回放</strong>（Replay）以进行预取。</li>
+</ul>
+</li>
+<li><strong>记录阶段</strong>（Record）：<ul>
+<li>在首次迭代中，仅记录针对目标数据结构的<strong>私有L2缓存缺失地址序列</strong>。</li>
+<li>同时记录<strong>时间信息</strong>（timing information），即每个预取窗口内的总需求访问次数，用于后续控制回放节奏。</li>
+</ul>
+</li>
+<li><strong>回放阶段</strong>（Replay）：<ul>
+<li>在后续重复迭代中，硬件预取器根据记录的序列主动发出预取请求。</li>
+<li>采用<strong>基于窗口的回放时机控制机制</strong>（Replay Timing Control），通过匹配程序执行进度（由需求访问计数驱动）来动态调整预取的激进程度，确保数据在需要时已在缓存中，避免过早预取被驱逐或过晚预取无法隐藏延迟。</li>
+</ul>
+</li>
+<li><strong>与其他预取器协同</strong>：RnR专注于不规则模式，而常规的流式或步长预取器可继续处理规则访问模式，二者互不干扰。</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/ae6b15c225201520ccfca5b6d8aef5986a3b391ab2cd6e437854e245311d47ca.jpg" /></p>
 <p><em>Fig. 2. Motivation and key idea of the RnR prefetcher.</em></p>
-<p><strong>结果</strong>
-- 在三个不规则工作负载（PageRank, Hyper-Anf, spCG）上评估，RnR预取器展现出卓越性能。
-- <strong>性能提升</strong>：
-  - 对图应用平均实现 <strong>2.16倍</strong> 加速。
-  - 对包含SpMV内核的迭代求解器（spCG）实现 <strong>2.91倍</strong> 加速。
-- <strong>预取效率</strong>：
-  - <strong>预取准确率</strong>（Prefetching Accuracy）超过 <strong>95%</strong>。
-  - <strong>缺失覆盖率</strong>（Miss Coverage）同样超过 <strong>95%</strong>。
-- <strong>与其他预取器对比</strong>：
-  - RnR在所有测试用例中均优于Next-line、Bingo、SteMS等通用预取器以及专为图设计的DROPLET预取器，尤其在随机连接图（如urand）上优势巨大。</p>
+<p><strong>结果</strong></p>
+<ul>
+<li>在三个不规则工作负载（PageRank, Hyper-Anf, spCG）上评估，RnR预取器展现出卓越性能。</li>
+<li><strong>性能提升</strong>：<ul>
+<li>对图应用平均实现 <strong>2.16倍</strong> 加速。</li>
+<li>对包含SpMV内核的迭代求解器（spCG）实现 <strong>2.91倍</strong> 加速。</li>
+</ul>
+</li>
+<li><strong>预取效率</strong>：<ul>
+<li><strong>预取准确率</strong>（Prefetching Accuracy）超过 <strong>95%</strong>。</li>
+<li><strong>缺失覆盖率</strong>（Miss Coverage）同样超过 <strong>95%</strong>。</li>
+</ul>
+</li>
+<li><strong>与其他预取器对比</strong>：<ul>
+<li>RnR在所有测试用例中均优于Next-line、Bingo、SteMS等通用预取器以及专为图设计的DROPLET预取器，尤其在随机连接图（如urand）上优势巨大。</li>
+</ul>
+</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -582,34 +599,46 @@
 <p><em>Fig. 6. Speedup over no prefetcher baseline.</em></p>
 <p><img alt="" src="../images/ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" /></p>
 <p><em>Fig. 9. Prefetcher accuracy.</em></p>
-<p><strong>结论</strong>
-- RnR预取器通过<strong>软件辅助</strong>的方式，成功解决了传统硬件预取器在处理<strong>长重复不规则内存访问模式</strong>时的准确性和时效性难题。
-- 其核心优势在于将<strong>程序员对应用语义的理解</strong>（如迭代边界、目标数据结构）与<strong>硬件的高效执行能力</strong>相结合，实现了接近完美的预取效果。
-- 该设计具有<strong>低硬件开销</strong>（每核小于1KB）、<strong>良好的可扩展性</strong>（适用于多核系统）以及<strong>易于集成</strong>（可与其他预取器共存）的特点，为提升不规则应用的性能提供了一种高效且实用的新范式。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li>RnR预取器通过<strong>软件辅助</strong>的方式，成功解决了传统硬件预取器在处理<strong>长重复不规则内存访问模式</strong>时的准确性和时效性难题。</li>
+<li>其核心优势在于将<strong>程序员对应用语义的理解</strong>（如迭代边界、目标数据结构）与<strong>硬件的高效执行能力</strong>相结合，实现了接近完美的预取效果。</li>
+<li>该设计具有<strong>低硬件开销</strong>（每核小于1KB）、<strong>良好的可扩展性</strong>（适用于多核系统）以及<strong>易于集成</strong>（可与其他预取器共存）的特点，为提升不规则应用的性能提供了一种高效且实用的新范式。</li>
+</ul>
 <hr />
 <h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
-<p><strong>研究背景</strong>
-- 现代处理器面临巨大的 <strong>processor-memory frequency gap</strong>，依赖缓存来缓解延迟。
-- 具有<strong>良好局部性</strong>（good locality）的应用能有效利用缓存层次结构，而许多重要应用（如图计算、稀疏矩阵运算、推荐系统）具有<strong>不规则内存访问模式</strong>（irregular memory access patterns），导致<strong>高缓存缺失率</strong>和<strong>长延迟</strong>，严重拖累性能。
-- <strong>硬件预取器</strong>（hardware prefetcher）难以高效、准确地预测长且复杂的不规则访问序列；而<strong>软件预取器</strong>（software prefetcher）会引入额外的指令开销，并且难以精确把握预取时机。</p>
-<p><strong>研究动机</strong>
-- 许多重要的不规则应用（如<strong>迭代求解器</strong>、<strong>图算法</strong>、<strong>稀疏矩阵-向量乘法 SpMV</strong>）在多次迭代或程序阶段中，其内存访问序列是<strong>重复出现</strong>的。
-- 传统的硬件预取器（如基于<strong>全局历史缓冲区 GHB</strong> 的时序预取器或基于<strong>OS页面</strong>的空间预取器）无法有效区分和处理这种混合了规则与不规则访问的长重复模式，导致<strong>预取准确率</strong>（prefetching accuracy）和<strong>缺失覆盖率</strong>（miss coverage）低下。
-- 程序员对应用程序的重复模式（何时开始/结束、涉及哪些数据结构）拥有<strong>先验知识</strong>，如果能将这部分知识传递给硬件，就能实现近乎完美的预取。
-- 现有预取器常因缺乏<strong>时序信息</strong>而发出过早或过晚的预取请求，影响效果。</p>
+<p><strong>研究背景</strong></p>
+<ul>
+<li>现代处理器面临巨大的 <strong>processor-memory frequency gap</strong>，依赖缓存来缓解延迟。</li>
+<li>具有<strong>良好局部性</strong>（good locality）的应用能有效利用缓存层次结构，而许多重要应用（如图计算、稀疏矩阵运算、推荐系统）具有<strong>不规则内存访问模式</strong>（irregular memory access patterns），导致<strong>高缓存缺失率</strong>和<strong>长延迟</strong>，严重拖累性能。</li>
+<li><strong>硬件预取器</strong>（hardware prefetcher）难以高效、准确地预测长且复杂的不规则访问序列；而<strong>软件预取器</strong>（software prefetcher）会引入额外的指令开销，并且难以精确把握预取时机。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li>许多重要的不规则应用（如<strong>迭代求解器</strong>、<strong>图算法</strong>、<strong>稀疏矩阵-向量乘法 SpMV</strong>）在多次迭代或程序阶段中，其内存访问序列是<strong>重复出现</strong>的。</li>
+<li>传统的硬件预取器（如基于<strong>全局历史缓冲区 GHB</strong> 的时序预取器或基于<strong>OS页面</strong>的空间预取器）无法有效区分和处理这种混合了规则与不规则访问的长重复模式，导致<strong>预取准确率</strong>（prefetching accuracy）和<strong>缺失覆盖率</strong>（miss coverage）低下。</li>
+<li>程序员对应用程序的重复模式（何时开始/结束、涉及哪些数据结构）拥有<strong>先验知识</strong>，如果能将这部分知识传递给硬件，就能实现近乎完美的预取。</li>
+<li>现有预取器常因缺乏<strong>时序信息</strong>而发出过早或过晚的预取请求，影响效果。</li>
+</ul>
 <p><img alt="" src="../images/ae6b15c225201520ccfca5b6d8aef5986a3b391ab2cd6e437854e245311d47ca.jpg" /></p>
 <p><em>Fig. 2. Motivation and key idea of the RnR prefetcher.</em></p>
-<p><strong>核心贡献</strong>
-- 提出了一种<strong>软硬件协同</strong>的 <strong>Record-and-Replay </strong>(RnR) 硬件预取器，专门针对具有<strong>长重复不规则内存访问模式</strong>的应用。
-- 设计了一个<strong>轻量级编程接口</strong>，允许程序员在代码中明确指定：
-  - 哪些<strong>数据结构</strong>具有不规则访问模式。
-  - 在哪个<strong>时间点</strong>开始记录（Record）首次出现的缓存缺失序列。
-  - 在哪个<strong>时间点</strong>开始回放（Replay）以进行预取。
-- 引入了一种新的<strong>回放时序控制机制</strong>（Replay Timing Control）：
-  - 在记录阶段，不仅记录缺失地址序列，还记录每个<strong>预取窗口</strong>（prefetch window）内的<strong>缺失比率</strong>（miss ratio）作为元数据。
-  - 在回放阶段，根据记录的缺失比率动态调整预取的<strong>激进程度</strong>（aggressiveness）和<strong>频率</strong>，确保预取数据能及时到达且不会因过早预取而被驱逐。
-- RnR预取器能与现有的硬件预取器共存，通过过滤掉程序员指定的区域，让传统预取器专注于处理规则模式，从而实现优势互补。
-- 实验评估表明，对于所测试的工作负载，RnR预取器平均可实现 <strong>2.16倍</strong>（图应用）和 <strong>2.91倍</strong>（迭代求解器）的加速比，并能达到<strong>超过95%的预取准确率和缺失覆盖率</strong>。</p>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了一种<strong>软硬件协同</strong>的 <strong>Record-and-Replay </strong>(RnR) 硬件预取器，专门针对具有<strong>长重复不规则内存访问模式</strong>的应用。</li>
+<li>设计了一个<strong>轻量级编程接口</strong>，允许程序员在代码中明确指定：<ul>
+<li>哪些<strong>数据结构</strong>具有不规则访问模式。</li>
+<li>在哪个<strong>时间点</strong>开始记录（Record）首次出现的缓存缺失序列。</li>
+<li>在哪个<strong>时间点</strong>开始回放（Replay）以进行预取。</li>
+</ul>
+</li>
+<li>引入了一种新的<strong>回放时序控制机制</strong>（Replay Timing Control）：<ul>
+<li>在记录阶段，不仅记录缺失地址序列，还记录每个<strong>预取窗口</strong>（prefetch window）内的<strong>缺失比率</strong>（miss ratio）作为元数据。</li>
+<li>在回放阶段，根据记录的缺失比率动态调整预取的<strong>激进程度</strong>（aggressiveness）和<strong>频率</strong>，确保预取数据能及时到达且不会因过早预取而被驱逐。</li>
+</ul>
+</li>
+<li>RnR预取器能与现有的硬件预取器共存，通过过滤掉程序员指定的区域，让传统预取器专注于处理规则模式，从而实现优势互补。</li>
+<li>实验评估表明，对于所测试的工作负载，RnR预取器平均可实现 <strong>2.16倍</strong>（图应用）和 <strong>2.91倍</strong>（迭代求解器）的加速比，并能达到<strong>超过95%的预取准确率和缺失覆盖率</strong>。</li>
+</ul>
 <hr />
 <h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
@@ -674,7 +703,7 @@
 <p><em>Fig. 5. Prefetching timing control example with window size = 3.</em></p>
 <p><strong>可扩展性与开销</strong></p>
 <ul>
-<li><strong>多核扩展</strong>: 所有硬件状态（寄存器、缓冲区）均为 <strong>per-core</strong> 设计，因此硬件开销随核心数线性增长，但总量很小（&lt;1KB/core）。</li>
+<li><strong>多核扩展</strong>: 所有硬件状态（寄存器、缓冲区）均为 <strong>per-core</strong> 设计，因此硬件开销随核心数线性增长，但总量很小（\&lt;1KB/core）。</li>
 <li><strong>存储开销</strong>: 元数据（主要是序列表）存储在主存中，其大小与目标数据结构的 L2 未命中次数成正比。对于评估的应用，平均存储开销约为输入数据集大小的 <strong>12.1%</strong>。</li>
 </ul>
 <p><img alt="" src="../images/cf9ff15bc2bdfb729a1cff3e7ae81c03bae84130ed203ad534b616154abdfd5a.jpg" /></p>
@@ -817,18 +846,24 @@
 <ul>
 <li>在 <strong>Replay (回放)</strong> 阶段，RnR 预取器会重置其内部计数器，并再次使用 <strong>Cur Struct Read counter</strong> 来跟踪当前迭代中对目标数据结构的访问进度。</li>
 <li>预取器会从内存中 <strong>预取 (prefetch)</strong> 之前记录好的 <strong>Sequence Table</strong> 和 <strong>Window Division Table</strong> 到内部缓冲区。</li>
-<li>预取器的核心逻辑是：将当前的 <strong>Cur Struct Read</strong> 值与 <strong>Window Division Table</strong> 中记录的值进行比较。</li>
+<li>预取器的核心逻辑是：将当前的 <strong>Cur Struct Read</strong> 值与 <strong>Window Division Table</strong> 中记录的值进行比较。<ul>
 <li>当 <code>Cur Struct Read</code> 达到第一个窗口的记录值时，意味着程序执行进度已与记录阶段的第一个窗口末尾对齐。</li>
 <li>此时，预取器会开始为 <strong>下一个窗口</strong> 的未命中地址发出预取请求。</li>
-<li>为了进一步优化带宽利用并减少与需求访问的冲突，预取器不仅控制何时开始预取下一个窗口，还控制 <strong>窗口内的预取频率</strong>。</li>
+</ul>
+</li>
+<li>为了进一步优化带宽利用并减少与需求访问的冲突，预取器不仅控制何时开始预取下一个窗口，还控制 <strong>窗口内的预取频率</strong>。<ul>
 <li>预取频率由公式 <code>NPace = StructAccessesInCurrentWindow / MissesInCurrentWindow</code> 决定。</li>
 <li>这意味着预取器会 <strong>均匀地</strong> 在当前窗口的需求访问之间插入预取请求，而不是一次性发出所有请求。</li>
 </ul>
+</li>
+</ul>
 <p><strong>参数设置与设计考量</strong></p>
 <ul>
-<li><strong>窗口大小 (Window Size)</strong> 是一个关键的设计参数，它定义了时序控制的粒度。</li>
+<li><strong>窗口大小 (Window Size)</strong> 是一个关键的设计参数，它定义了时序控制的粒度。<ul>
 <li>窗口太小会导致 <strong>Window Division Table</strong> 过大，增加存储开销，并可能因过于频繁的调整而引入不必要的复杂性。</li>
 <li>窗口太大则会降低时序控制的精度，无法有效应对程序局部性变化。</li>
+</ul>
+</li>
 <li>论文实验表明，对于私有 L2 缓存作为预取目标的场景，<strong>窗口大小在 64 到 2048 个缓存行之间</strong> 能取得较好的性能和存储开销平衡。</li>
 <li>默认窗口大小被设置为 <strong>L2 缓存大小的一半</strong>，以支持 <strong>double buffering (双缓冲)</strong> 策略，确保在处理当前窗口数据的同时，可以提前将下一个窗口的数据预取到缓存中。</li>
 </ul>
@@ -836,16 +871,22 @@
 <p><em>Fig. 14. Average speedup and storage for different window sizes.</em></p>
 <p><strong>输入、输出及在整体架构中的作用</strong></p>
 <ul>
-<li><strong>输入</strong>:</li>
+<li><strong>输入</strong>:<ul>
 <li><strong>Record 阶段</strong>: 对目标数据结构的 <strong>L2 未命中地址流</strong> 和 <strong>总需求访问流</strong>。</li>
 <li><strong>Replay 阶段</strong>: 当前迭代中对目标数据结构的 <strong>实时需求访问流</strong>。</li>
-<li><strong>输出</strong>:</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
 <li><strong>Record 阶段</strong>: 存储在内存中的 <strong>Sequence Table</strong> (未命中地址序列) 和 <strong>Window Division Table</strong> (每个窗口对应的总需求访问数)。</li>
 <li><strong>Replay 阶段</strong>: <strong>精准调度的预取请求流</strong>，其速度和节奏与程序的实际执行进度动态匹配。</li>
-<li><strong>在整体架构中的作用</strong>:</li>
+</ul>
+</li>
+<li><strong>在整体架构中的作用</strong>:<ul>
 <li><strong>解耦地址生成与处理器</strong>: 预取地址直接从记录的序列中回放，无需复杂的在线预测或地址计算，降低了硬件复杂度。</li>
 <li><strong>确保预取及时性 (Timeliness)</strong>: 通过匹配程序执行进度，极大减少了 <strong>过早预取</strong>（导致数据在使用前被驱逐）和 <strong>过晚预取</strong>（无法隐藏延迟）的情况。</li>
 <li><strong>提升预取效率</strong>: 均匀分布的预取请求减少了对内存子系统的瞬时压力，避免了与需求访问的激烈竞争，从而提高了整体内存带宽利用率。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/e29567a1f867a3ec9446532f77e60d81817bce404c33cc4aa71c595e7447696f.jpg" /></p>
 <p><em>Fig. 11. Prefetch timeliness breakdown (Left bar: no control, middle bar: window control, right bar: window+pace control).</em></p>
@@ -951,16 +992,20 @@
 <p>记录过程由软件通过编程接口触发，并由硬件协同完成。其核心流程如下：</p>
 <ul>
 <li>当软件调用 <code>RnR.PrefetchState.start()</code> 后，硬件状态机进入 <strong>‘Record’</strong> 状态。</li>
-<li>对于每一个<strong>需求访问 (demand access)</strong>：</li>
+<li>对于每一个<strong>需求访问 (demand access)</strong>：<ul>
 <li>首先检查其虚拟地址是否落在由 <code>RnR.AddrBase.set()</code> 定义的<strong>目标数据结构地址范围内</strong>。</li>
 <li>如果在范围内，则递增 <strong>Cur Struct Read counter</strong>，此计数器用于后续的预取节奏控制。</li>
 <li>访问按常规流程经过TLB和缓存层次。</li>
 <li>如果该访问<strong>在私有L2缓存中未命中</strong>，并且属于目标地址范围，则触发记录动作。</li>
-<li><strong>元数据写入</strong>：</li>
+</ul>
+</li>
+<li><strong>元数据写入</strong>：<ul>
 <li>将该L2未命中的物理地址追加到<strong>Sequence Table (序列表)</strong> 的缓冲区中。</li>
 <li><strong>Window Division Table (窗口划分表)</strong> 的更新：每记录满一个<strong>窗口大小 (Window Size)</strong> 的未命中（例如，默认为L2缓存大小的一半），就将当前的 <strong>Cur Struct Read counter</strong> 值写入窗口划分表。这个值代表了在记录该窗口内所有未命中时，程序对目标数据结构的总访问次数，从而隐含了该窗口的<strong>未命中率</strong>信息。</li>
 <li>为了最小化写流量，元数据写回以<strong>64B缓存行粒度</strong>进行批处理。</li>
 <li>为加速虚拟地址到物理地址的转换，硬件维护了一个<strong>4MB大页的物理页地址缓冲区</strong>，避免了对每个元数据写入都进行TLB查找。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/85d84063190d7be3daa1437988d6b87d851994782af7b938e8ac1e622c1f8bd2.jpg" /></p>
 <p><em>Fig. 4. RnR system architecture.</em></p>
@@ -968,9 +1013,11 @@
 <ul>
 <li><strong>记录位置</strong>：<strong>私有L2缓存</strong>。这是权衡了局部性过滤效果和实现复杂度后的最佳选择。</li>
 <li><strong>目标地址范围</strong>：由程序员通过 <code>RnR.AddrBase.set(base_addr, size)</code> 显式指定，确保只记录相关数据结构的访问。</li>
-<li><strong>窗口大小 (Window Size)</strong>：这是一个核心参数，定义了节奏控制的粒度。</li>
+<li><strong>窗口大小 (Window Size)</strong>：这是一个核心参数，定义了节奏控制的粒度。<ul>
 <li>默认值设为<strong>L2缓存大小的一半</strong>，以支持双缓冲策略。</li>
 <li>实验表明，窗口大小在 <strong>64到2048个缓存行</strong>之间能取得较好的性能与存储开销平衡。过小的窗口会增加元数据开销并降低有效性。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -982,7 +1029,7 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>过小 (&lt;64 CL)</strong></td>
+<td style="text-align: left;"><strong>过小 (\&lt;64 CL)</strong></td>
 <td style="text-align: left;">显著降低预取有效性</td>
 <td style="text-align: left;">显著增加（窗口划分表变大）</td>
 </tr>
@@ -1000,16 +1047,22 @@
 </table>
 <p><strong>输入输出关系及在整体架构中的作用</strong></p>
 <ul>
-<li><strong>输入</strong>：</li>
+<li><strong>输入</strong>：<ul>
 <li>软件指令：定义目标地址范围、启动/停止记录。</li>
 <li>硬件信号：来自处理器核心的L2缓存未命中请求及其地址。</li>
-<li><strong>输出</strong>：</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
 <li><strong>Sequence Table</strong>：一个精确的、按时间顺序排列的目标数据结构L2未命中物理地址序列。</li>
 <li><strong>Window Division Table</strong>：一个记录了每个预取窗口对应程序执行进度（总结构访问次数）的表，用于推导未命中率。</li>
-<li><strong>在整体架构中的作用</strong>：</li>
+</ul>
+</li>
+<li><strong>在整体架构中的作用</strong>：<ul>
 <li>这两个表共同构成了<strong>Record-and-Replay</strong>机制的“录音带”。</li>
 <li><strong>Sequence Table</strong> 提供了“<strong>预取什么</strong>”的精确答案，保证了接近100%的<strong>预取准确率</strong>。</li>
 <li><strong>Window Division Table</strong> 提供了“<strong>何时以及以多快速度预取</strong>”的指导，通过匹配程序执行进度来实现<strong>及时预取 (timely prefetching)</strong>，解决了传统预取器因时机不当而导致数据被驱逐或延迟的问题。这一机制的有效性在图10和图11中得到了验证。</li>
+</ul>
+</li>
 </ul>
 <h3 id="5">5. 与现有预取器的集成设计<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>RnR与现有预取器的集成设计</strong></p>
@@ -1019,10 +1072,12 @@
 </ul>
 <p><strong>集成原理与算法流程</strong></p>
 <ul>
-<li><strong>职责划分</strong>:</li>
+<li><strong>职责划分</strong>:<ul>
 <li><strong>RnR预取器</strong>: 专门负责处理由程序员通过软件接口标记的、具有<strong>重复不规则访问模式</strong>的目标数据结构（例如PageRank中的<code>pcurr</code>/<code>pnext</code>数组或SpMV中的稠密向量）。</li>
 <li><strong>传统硬件预取器 (如Next-line, BINGO)</strong>: 继续处理所有<strong>未被RnR标记的地址范围</strong>内的内存访问。这包括常规的<strong>流式 (streaming)</strong> 或<strong>步长 (stride)</strong> 访问模式，例如SpMV中按顺序访问的稀疏矩阵CSR格式的行指针和列索引数组。</li>
-<li><strong>过滤机制实现</strong>:</li>
+</ul>
+</li>
+<li><strong>过滤机制实现</strong>:<ul>
 <li>在处理器流水线中，当发生L2 Cache Miss时，该请求会首先经过RnR模块的检查。</li>
 <li>RnR模块内部维护一个由软件配置的<strong>边界检查地址寄存器 (boundary checking address registers)</strong> 列表，其中包含了所有目标数据结构的虚拟地址范围。</li>
 <li>硬件会检查当前Miss请求的地址是否落在任何一个已启用的边界范围内。<ul>
@@ -1030,23 +1085,33 @@
 <li>如果<strong>不在范围内</strong>，该请求将被忽略，可以被其他传统的硬件预取器（如L2 Stream Prefetcher）正常观察和训练。</li>
 </ul>
 </li>
-<li><strong>协同优势</strong>:</li>
+</ul>
+</li>
+<li><strong>协同优势</strong>:<ul>
 <li>这种设计避免了传统预取器因尝试预测复杂的不规则模式而产生的<strong>低准确率</strong>和<strong>高带宽浪费</strong>问题。</li>
 <li>同时，也避免了RnR去处理简单、高效的流式模式，因为专用的流式预取器（如Next-line）在这些场景下效率更高、开销更小。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/85d84063190d7be3daa1437988d6b87d851994782af7b938e8ac1e622c1f8bd2.jpg" /></p>
 <p><em>Fig. 4. RnR system architecture.</em></p>
 <p><strong>参数设置与输入输出关系</strong></p>
 <ul>
-<li><strong>输入</strong>:</li>
+<li><strong>输入</strong>:<ul>
 <li><strong>软件输入</strong>: 程序员通过API（如<code>RnR.AddrBase.set(base_addr, size)</code>和<code>RnR.AddrBase.enable()</code>）向硬件提供目标数据结构的<strong>基地址 (base address)</strong> 和<strong>大小 (size)</strong>。这些信息被写入RnR的边界寄存器，定义了过滤的地址范围。</li>
 <li><strong>硬件输入</strong>: 来自L2 Cache的<strong>Miss请求地址</strong>。</li>
-<li><strong>输出</strong>:</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
 <li><strong>对RnR内部</strong>: 地址匹配结果决定了是否启动记录或重放逻辑。</li>
 <li><strong>对其他预取器</strong>: 通过过滤机制，为其他预取器提供了一个“干净”的、不含复杂不规则模式的访问流，使其能更专注、高效地工作。</li>
-<li><strong>在整体系统中的作用</strong>:</li>
+</ul>
+</li>
+<li><strong>在整体系统中的作用</strong>:<ul>
 <li>该集成设计使得RnR能够无缝嵌入到现代处理器复杂的预取器生态系统中。</li>
 <li>它充当了一个<strong>智能分流器 (smart traffic director)</strong> 的角色，将内存访问流精准地导向最合适的预取引擎，从而在整体上实现了<strong>更高的预取准确率</strong>、<strong>更低的无效带宽消耗</strong>以及<strong>更优的系统性能</strong>。</li>
+</ul>
+</li>
 </ul>
 <hr />
 <h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
@@ -1076,47 +1141,45 @@
 <li>RnR 在所有测试负载上均取得最佳性能。</li>
 <li>对 <strong>PageRank</strong>, <strong>Hyper-Anf</strong>, <strong>spCG</strong> 分别实现了 <strong>2.11×</strong>, <strong>2.23×</strong>, <strong>2.90×</strong> 的平均加速比。</li>
 <li>在随机图 <strong>urand</strong> 上优势尤为明显，因为其极差的局部性使传统硬件预取器失效。</li>
-<li></li>
+<li><img alt="" src="../images/306e0cce2fbf83e249036af0d08066d768556de8201dfe528d2f51eba9b85833.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/306e0cce2fbf83e249036af0d08066d768556de8201dfe528d2f51eba9b85833.jpg" /></p>
 <p><em>Fig. 6. Speedup over no prefetcher baseline.</em></p>
 <ul>
-<li><strong>缓存缺失率 (L2 MPKI)</strong>:<h2 id="-rnr-combined-pagerank-hyper-anf-spcg-l2-973-946-989">- <strong>RnR-Combined</strong> 方案将 PageRank, Hyper-Anf, spCG 的 L2 缺失率分别降低了 <strong>97.3%</strong>, <strong>94.6%</strong>, <strong>98.9%</strong>。<a class="headerlink" href="#-rnr-combined-pagerank-hyper-anf-spcg-l2-973-946-989" title="Permanent link">&para;</a></h2>
+<li><strong>缓存缺失率 (L2 MPKI)</strong>:<ul>
+<li><strong>RnR-Combined</strong> 方案将 PageRank, Hyper-Anf, spCG 的 L2 缺失率分别降低了 <strong>97.3%</strong>, <strong>94.6%</strong>, <strong>98.9%</strong>。</li>
+<li><img alt="" src="../images/72cd74b9fec8e7dcbf8e0ded18a4a0e9c5362b626311e750d16d3e2b2cf62eb0.jpg" /></li>
+</ul>
 </li>
 </ul>
-<p><img alt="" src="../images/72cd74b9fec8e7dcbf8e0ded18a4a0e9c5362b626311e750d16d3e2b2cf62eb0.jpg" /></p>
 <p><em>Fig. 7. L2 MPKI.</em></p>
 <ul>
 <li><strong>预取覆盖率 (Miss Coverage)</strong>:<ul>
 <li>覆盖率衡量预取器能消除多少基线缺失。RnR 平均达到 <strong>91.4%</strong> (PageRank), <strong>84.5%</strong> (Hyper-Anf), <strong>88.7%</strong> (spCG)。</li>
 <li>远高于其他通用预取器（如 SteMS, Bingo），因为 RnR 能精确捕获整个重复序列，而非依赖共享模式。</li>
-<li></li>
+<li><img alt="" src="../images/2e6d32d4f3ab6f4173f4bb93e08252eb91f8d60d261353a5fc974f184657d50b.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/2e6d32d4f3ab6f4173f4bb93e08252eb91f8d60d261353a5fc974f184657d50b.jpg" /></p>
 <p><em>Fig. 8. Miss coverage.</em></p>
 <ul>
 <li><strong>预取准确率 (Prefetching Accuracy)</strong>:<ul>
 <li>准确率衡量发出的预取请求中有多少是有用的。RnR 平均准确率达到 <strong>97.18%</strong>。</li>
 <li>高准确率源于其“记录-回放”机制，避免了模式匹配错误。</li>
-<li></li>
+<li><img alt="" src="../images/ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" /></p>
 <p><em>Fig. 9. Prefetcher accuracy.</em></p>
 <ul>
 <li><strong>额外片外流量 (Additional Off-chip Traffic)</strong>:<ul>
 <li>RnR 的额外流量主要来自<strong>元数据</strong>访问，而非无效预取。</li>
 <li>其总流量开销（<strong>12.0%</strong>）与领域专用预取器 DROPLET（<strong>12.2%</strong>）相当，但远低于通用预取器（如 Bingo <strong>67.1%</strong>）。</li>
-<li></li>
+<li><img alt="" src="../images/34ddc8df05a02e0b0cace157d394113256b519d520f892e9c415ab307db106fd.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/34ddc8df05a02e0b0cace157d394113256b519d520f892e9c415ab307db106fd.jpg" /></p>
 <p><em>Fig. 12. Additional off-chip traffic.</em></p>
 <hr />
 <p><strong>消融实验 (Ablation Study)</strong></p>
@@ -1126,13 +1189,12 @@
 <li><strong>无控制</strong> 的方案因预取过早（数据被驱逐）或过晚而几乎无性能收益。</li>
 <li><strong>窗口控制</strong> 通过匹配程序进度来调整预取激进程度，带来了显著的 <strong>2.31×</strong> 加速。</li>
 <li><strong>窗口+步调控制</strong> 在窗口内均匀分布预取请求，进一步微调了性能，但在大多数负载上提升有限，仅在 <strong>urand</strong> 图上略微减少了早期预取。</li>
-<li></li>
+<li><img alt="" src="../images/6dceb3629c0b54f1b7d5ce5b5e11a8ab3691bb715929b3e98101afd5919eed38.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/6dceb3629c0b54f1b7d5ce5b5e11a8ab3691bb715929b3e98101afd5919eed38.jpg" /></p>
 <p><em>Fig. 10. Effectiveness of replay timing control.</em></p>
-<div class="highlight"><pre><span></span><code>-
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 
 </code></pre></div>
 <p><img alt="" src="../images/e29567a1f867a3ec9446532f77e60d81817bce404c33cc4aa71c595e7447696f.jpg" /></p>
 <p><em>Fig. 11. Prefetch timeliness breakdown (Left bar: no control, middle bar: window control, right bar: window+pace control).</em></p>
@@ -1140,12 +1202,11 @@
 <li><strong>窗口大小 (Window Size) 的影响</strong>:<ul>
 <li>窗口大小决定了调整预取速度的粒度。</li>
 <li>实验发现，在 <strong>64 到 2048 个 cache line</strong> 的范围内，性能和存储开销都相对稳定。</li>
-<li>窗口过小（&lt;64）会显著降低预取效果并增加元数据（窗口划分表）的存储开销。</li>
-<li></li>
+<li>窗口过小（\&lt;64）会显著降低预取效果并增加元数据（窗口划分表）的存储开销。</li>
+<li><img alt="" src="../images/26e3718f3bb594e6c5507fb555816d06f815433c4b3c4b3836d8d614afd22098.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/26e3718f3bb594e6c5507fb555816d06f815433c4b3c4b3836d8d614afd22098.jpg" /></p>
 <p><em>Fig. 14. Average speedup and storage for different window sizes.</em></p>
 <ul>
 <li><strong>记录迭代开销 (Record Iteration Overhead)</strong>:<ul>

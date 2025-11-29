@@ -92,17 +92,13 @@ ______________________________________________________________________
 
 *Figure 1. The sssp benchmark from CRONO [2] has very different optimal prefetch distances (shaded regions) with different inputs.*
 
-```
 - 在 `pr` 基准测试中，同一个输入在 **Intel Cascade Lake** 和 **Intel Haswell** 上的表现可能完全相反（一个加速，一个减速）。
-```
 
 ![](images/03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg)
 
 *Figure 2. The pr benchmark from CRONO [2] sees a speedup or a slowdown with prefetching, depending on the microarchitecture.*
 
-```
 - 在 `bfs` 基准测试中，预取甚至会导致高达 **50-70%** 的严重性能下降。
-```
 
 ![](images/e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg)
 
@@ -121,10 +117,9 @@ ______________________________________________________________________
 
 *Figure 4. RPG2 proceeds through four phases when optimizing a target process.*
 
-```
 - **Phase 3: Runtime Code Insertion**：利用 **ptrace** 和自定义库 **libpg2**，将包含预取内核的新函数版本注入到目标进程的地址空间中，并通过创新的 **On-Stack Replacement (OSR)** 技术，将正在执行的旧函数调用无缝切换到新版本，这是首个支持 C/C++ 等非托管语言的 OSR 实现。
+
 - **Phase 4: Monitoring And Tuning**：通过一个**有界搜索算法**在线调整预取距离，并持续监控 **IPC (Instructions Per Cycle)** 性能指标。如果任何预取距离都无法带来性能提升，RPG2 会**自动回滚 (roll back)** 到原始代码，从而避免性能损失。
-```
 
 - RPG2 的关键优势在于其**鲁棒性 (robustness)**：它不仅能提供高达 **2.15×** 的加速比（与最佳静态编译器相当），还能在预取有害时安全地恢复原始性能，这是静态方法无法做到的。
 

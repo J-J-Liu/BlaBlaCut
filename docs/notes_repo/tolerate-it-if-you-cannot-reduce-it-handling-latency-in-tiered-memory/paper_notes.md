@@ -137,25 +137,23 @@ ______________________________________________________________________
 
 *Table 1: An example of a prefetchability table.*
 
-```
-  - **Hardware Monitoring**: 通过硬件性能计数器采样，监控三类关键指标：
+- **Hardware Monitoring**: 通过硬件性能计数器采样，监控三类关键指标：
     - 预取器相关计数器（如 **L2_RQSTS.ALL_HWPF**, **L2_LINES_OUT.USELESS_HWPF**）。
     - 各内存层级的 **bandwidth** 和 **latency**。
     - 各层级的 **congestion indicators**（拥塞指标）。
 - **Policy Enforcement (策略执行)**
-  - 基于监控到的指标，通过三种核心机制来执行 **Reduce**（减少延迟）和 **Tolerate**（容忍延迟）两类策略：
-    - **Page Migration**: 在 **DRAM** 和 **CXL** 等内存层级之间迁移页面，以提升数据局部性。
-    - **Hardware Adaptation**: 通过 **MSR registers** 动态地为特定核心 **enable/disable** 硬件预取器（如 stream, stride），以避免在 **CXL** 上因带宽争用导致的性能下降。
-    - **Software Adaptation**: 动态调整软件预取行为，包括：
-      - 修改 **prefetch distance**（预取距离）以适应不同内存层级的延迟特性（例如，**DRAM** 最优距离为 **4**，而 **CXL** 为 **7**）。
-```
+    - 基于监控到的指标，通过三种核心机制来执行 **Reduce**（减少延迟）和 **Tolerate**（容忍延迟）两类策略：
+        - **Page Migration**: 在 **DRAM** 和 **CXL** 等内存层级之间迁移页面，以提升数据局部性。
+        - **Hardware Adaptation**: 通过 **MSR registers** 动态地为特定核心 **enable/disable** 硬件预取器（如 stream, stride），以避免在 **CXL** 上因带宽争用导致的性能下降。
+        - **Software Adaptation**: 动态调整软件预取行为，包括：
+            - 修改 **prefetch distance**（预取距离）以适应不同内存层级的延迟特性（例如，**DRAM** 最优距离为 **4**，而 **CXL** 为 **7**）。
 
 ![](images/ae1bb199e2a6c62bf74c0e61f6f7a3b45062625cd7e1f5a9eb6485944eef2587.jpg)
 
 *Figure 4: DRAM and CXL have different optimal prefetch distances. For example, in the scan microbenchmark, DRAM performs best with a prefetch distance of 4, while CXL requires a longer distance of 7 due to its higher latency.*
 
 ```
-      - 利用 **JIT compilers** 在运行时动态插入新的预取指令。
+  - 利用 **JIT compilers** 在运行时动态插入新的预取指令。
 ```
 
 **核心设计原则**

@@ -3,6 +3,10 @@
     "description": "MICRO 2025 论文",
     "papers": [
         "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
-        "titan-i-an-open-source-high-performance-risc-v-vector-core"
+        "titan-i-an-open-source-high-performance-risc-v-vector-core",
+        "drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems",
+        "learning-to-walk-architecting-learned-virtual-memory-translation",
+        "shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads",
+        "atr-out-of-order-register-release-exploiting-atomic-regions"
     ]
 }

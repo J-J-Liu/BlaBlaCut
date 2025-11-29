@@ -459,9 +459,7 @@ Limoncello 的 Soft Limoncello 组件通过一套严谨的数据驱动流程，�
 
 *Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.*
 
-```
-- 
-```
+-
 
 ![](images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg)
 
@@ -484,23 +482,20 @@ Limoncello 的 Soft Limoncello 组件通过一套严谨的数据驱动流程，�
 *Figure 14. memcpy argument size distribution. The chart shows the probability density function (PDF) of the number of times each copy size appears in the profiling data. Most copy sizes are small.*
 
 - **微基准测试驱动的参数搜索**：
+
     - 基于上述洞察，团队构建了专门的微基准测试（如 LLVM libc 微基准套件），用于系统性地搜索最优参数组合。
     - 测试策略采用**控制变量法**：
         - 固定**预取度**（例如 256 字节），扫描不同的**预取距离**，找到使性能最佳的距离值。
         - 固定**预取距离**（例如 512 字节），扫描不同的**预取度**，找到使性能最佳的度值。
     - ![](images/3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg)
 
-```
-- 
-```
+-
 
 ![](images/dea517edd792c10c583301b3163656b05a2b31b4a095e4049b7577013eab80ec.jpg)
 
 *(b) Microbenchmark exercising different prefetch degrees. Prefetching is fixed at a distance of 512 bytes.*
 
-```
 - 最终的性能验证在更接近真实负载的**负载测试 (load tests)** 中完成，确保微基准中的收益能在生产环境中复现。
-```
 
 **输入输出关系及整体作用**
 
@@ -595,9 +590,7 @@ ______________________________________________________________________
 
 *Figure 12. Aggregated change in CPU cycles (%) from Hard Limoncello. Data center tax functions (green) increased in CPU cycles under Hard Limoncello. In contrast, overall nondata center tax functions (blue) decreased in cycles.*
 
-```
 - **带宽影响**: 消融实验数据（见表1）显示，禁用硬件预取器可将整个集群的平均内存带宽降低 **11.2%–15.7%**，对峰值和 P99 尾部带宽也有显著影响。
-```
 
 ![](images/3ded760aa91cf2009e7fd09df2699c7def831a9007b35a6b91944e30c0fcff59.jpg)
 

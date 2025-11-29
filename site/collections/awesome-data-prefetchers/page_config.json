@@ -9,6 +9,8 @@
         "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
         "rnr-a-software-assisted-record-and-replay-hardware-prefetcher",
         "rpg2-robust-profile-guided-runtime-prefetch-generation",
-        "integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency"
+        "integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency",
+        "tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory",
+        "apt-get-profile-guided-timely-software-prefetching"
     ]
 }

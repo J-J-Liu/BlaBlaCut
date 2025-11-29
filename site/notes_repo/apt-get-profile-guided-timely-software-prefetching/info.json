@@ -1,0 +1,21 @@
+{
+  "index": "apt-get-profile-guided-timely-software-prefetching",
+  "paper_title": "APT-GET: Profile-Guided Timely Software Prefetching",
+  "metadata": {
+    "authors": [
+      "Saba Jamilan",
+      "Tanvir Ahmed Khan",
+      "Grant Ayers",
+      "et al."
+    ],
+    "affiliations": [
+      "University of California, Santa Cruz",
+      "University of Michigan",
+      "Google"
+    ],
+    "venue": "EuroSys",
+    "year": 2022,
+    "doi": "10.1145/3492321.3519583"
+  },
+  "description": "论文提出APT-GET，一种基于硬件性能计数器（如Intel LBR）的动态profile-guided软件预取技术，通过分析程序执行时间分布自动确定最优预取距离和注入位置，解决传统静态编译预取无法保证时效性的问题。在10个真实应用上平均加速1.30倍，相比现有软件预取方法提升25%。"
+}

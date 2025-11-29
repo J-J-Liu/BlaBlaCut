@@ -42,9 +42,7 @@ RICH 的核心创新在于，它没有在“小而精”和“大而全”之间
 
 *Figure 4: Achieving high accuracy in large spatial regions and high coverage in small spatial regions by using different numbers of trigger offsets Figure 5: Placing 16 KB PHT off-chip keeps most prefetch opportunities, even with additional memory access latency*
 
-```
 这张图清晰地表明，即使加上50ns的额外延迟，将16KB PHT放在片外也只会损失不到15%的预取机会，证明了该设计的可行性。
-```
 
 最终，RICH 通过这种“**小区域广撒网，大区域精耕细作，并用分层存储降低成本**”的策略，在几乎不增加片上面积（on-chip area）的前提下，显著提升了 **coverage** 和 **timeliness**，从而在高延迟内存系统中获得了远超现有技术的性能优势。
 

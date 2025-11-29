@@ -434,11 +434,13 @@
 <h1 id="ocolos-online-code-layout-optimizations">OCOLOS: Online COde Layout OptimizationS 通俗讲解<a class="headerlink" href="#ocolos-online-code-layout-optimizations" title="Permanent link">&para;</a></h1>
 <h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
-<p>传统 Profile-Guided Optimization <strong>(PGO)</strong> 是个好东西，但它有个致命的“时间差”问题。想象一下：
-- 你花了一周时间，在旧版本的 MySQL 上跑了一个典型的负载，收集了<strong>profile</strong>。
-- 然后你用这个 profile 去优化新版本的 MySQL。
-- 但在这期间，代码已经变了！新功能、新补丁让旧 profile 的很多信息变得<strong>无法映射</strong>甚至<strong>完全错误</strong>。
-- 结果就是，你精心优化的二进制文件，可能因为用了过时的 profile，性能反而不如不优化，或者错失了大量优化机会。</p>
+<p>传统 Profile-Guided Optimization <strong>(PGO)</strong> 是个好东西，但它有个致命的“时间差”问题。想象一下：</p>
+<ul>
+<li>你花了一周时间，在旧版本的 MySQL 上跑了一个典型的负载，收集了<strong>profile</strong>。</li>
+<li>然后你用这个 profile 去优化新版本的 MySQL。</li>
+<li>但在这期间，代码已经变了！新功能、新补丁让旧 profile 的很多信息变得<strong>无法映射</strong>甚至<strong>完全错误</strong>。</li>
+<li>结果就是，你精心优化的二进制文件，可能因为用了过时的 profile，性能反而不如不优化，或者错失了大量优化机会。</li>
+</ul>
 <p>这就像拿着去年的地图去开今年的车——路都修好了，你的地图还显示是泥巴路，导航自然不准。尤其是在<strong>数据中⼼</strong>这种代码<strong>高频迭代</strong>的环境里，这个问题尤为突出。更别提 PGO 还需要<strong>重新编译/链接</strong>整个应用，对于大型服务来说，部署成本极高。</p>
 <p><strong>通俗比方 (The Analogy)</strong></p>
 <p>OCOLOS 的思路，就像是给一辆正在高速行驶的汽车<strong>换引擎</strong>，而不是把车开回车库大修。</p>
@@ -451,10 +453,12 @@
 <ul>
 <li><strong>保留旧代码 (C0)</strong>：OCOLOS <strong>永远不会</strong>覆盖或删除原始的代码段（C0）。这保证了任何指向 C0 的指针（无论是栈上的返回地址、vtable 里的函数指针，还是程序员自己存的函数指针）都依然有效，程序不会崩溃。</li>
 <li><strong>注入新代码 (C1)</strong>：它将 BOLT 优化后的新代码（C1）加载到进程地址空间的一个<strong>新位置</strong>。</li>
-<li><strong>智能重定向</strong>：OCOLOS 只修改那些<strong>可控且值得改</strong>的入口点，将执行流引导至更快的 C1 代码。具体来说：</li>
+<li><strong>智能重定向</strong>：OCOLOS 只修改那些<strong>可控且值得改</strong>的入口点，将执行流引导至更快的 C1 代码。具体来说：<ul>
 <li>它会修改 C0 中的<strong>直接调用指令</strong>，让它们跳转到 C1 中对应的函数。</li>
 <li>它会更新 <strong>vtable</strong> 中的函数指针，指向 C1。</li>
 <li>对于<strong>连续优化</strong>（从 C1 到 C2），它甚至能处理栈上正在执行的函数，通过复制一份兼容的代码来安全地更新返回地址。</li>
+</ul>
+</li>
 <li><strong>规避不可控指针</strong>：对于那些散落在堆、栈、寄存器里，无法追踪的函数指针，OCOLOS 采用了一个聪明的编译期插桩：强制所有新创建的函数指针都指向<strong>原始的 C0 地址</strong>。这样，即使这些指针被到处传递，当它们被调用时，也会先进入 C0，而 C0 里的直接调用已经被重定向到 C1 了，最终还是会执行到优化后的代码。</li>
 </ul>
 <p><img alt="" src="../images/fd52d3171b6ecafee1002694cdfe8161b17e9b7b5f07d80fe78de9fddce59a7c.jpg" /></p>
@@ -467,9 +471,11 @@
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Profile-Guided Optimization (PGO)</strong> 是个“马后炮”。它需要先跑一遍程序收集 <strong>profile</strong>（剖析数据），然后用这些数据去重新编译或重写二进制文件，最后再用这个新二进制文件去跑真正的任务。</li>
-<li>这套流程在现代软件开发中会遇到两个致命问题：</li>
+<li>这套流程在现代软件开发中会遇到两个致命问题：<ul>
 <li><strong>输入漂移 (Input Drift)</strong>：你 profiling 的时候用的是 A 场景的数据，但上线后跑的是 B 场景。用 A 的数据去优化 B 的代码，轻则没效果，重则性能更差。</li>
 <li><strong>代码漂移 (Code Drift)</strong>：大型项目（比如 MySQL）可能每小时都在更新。昨天 profiling 的数据，今天代码一变，就完全对不上号了，只能丢弃，导致宝贵的优化机会白白浪费。</li>
+</ul>
+</li>
 </ul>
 <p><strong>通俗比方</strong></p>
 <ul>
@@ -479,7 +485,7 @@
 <p><strong>关键一招</strong></p>
 <ul>
 <li>OCOLOS 的核心洞察是：与其费劲地把旧 profile “映射”到新代码上，不如直接在<strong>正在跑的进程里</strong>做优化。它的巧妙之处在于如何安全地“换引擎”而不让车熄火。</li>
-<li>具体来说，它没有采用“原地修改”的危险操作，而是遵循了一个稳健的设计原则：<strong>保留原始代码 C0 的地址不变</strong>。</li>
+<li>具体来说，它没有采用“原地修改”的危险操作，而是遵循了一个稳健的设计原则：<strong>保留原始代码 C0 的地址不变</strong>。<ul>
 <li>它先把优化后的新代码 <strong>C1</strong> 注入到进程的地址空间里。</li>
 <li>然后，它只去精准地修改那些<strong>最容易追踪和更新的代码指针</strong>，比如：<ul>
 <li><strong>v-table</strong> 里的虚函数指针</li>
@@ -487,9 +493,13 @@
 </ul>
 </li>
 <li>对于那些难以追踪的指针（比如被 cast 成整数、存到堆栈深处的函数指针），它选择不去碰它们。因为一旦执行流进入 C0，很快就会遇到一个被修补过的直接调用或虚函数调用，从而被“引流”回高性能的 C1 代码。</li>
-<li>为了支持<strong>持续优化</strong>（比如应对程序的不同运行阶段），OCOLOS 还引入了一个精巧的机制来处理 <strong>return address</strong> 和 <strong>function pointer</strong>：</li>
+</ul>
+</li>
+<li>为了支持<strong>持续优化</strong>（比如应对程序的不同运行阶段），OCOLOS 还引入了一个精巧的机制来处理 <strong>return address</strong> 和 <strong>function pointer</strong>：<ul>
 <li>对于栈上的 <strong>return address</strong>，如果它指向即将被替换的旧代码 Ci，OCOLOS 会将对应的函数在新代码区域 Ci+1 中做一个<strong>精确副本 (bi,i+1)</strong>，并修正 return address 指向这个副本，保证函数能正确返回。</li>
 <li>对于 <strong>function pointer</strong>，它通过一个轻量级的 <strong>LLVM compiler pass</strong>，在编译时就插入一个钩子 (<code>wrapFuncPtrCreation</code>)。这个钩子确保所有新创建的函数指针都指向<strong>原始代码 C0 的地址</strong>，而不是任何优化版本 Ci 的地址。这样一来，在后续的代码替换中，就完全不用操心这些指针的兼容性问题了，因为它们永远指向一个稳定的锚点。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/fd52d3171b6ecafee1002694cdfe8161b17e9b7b5f07d80fe78de9fddce59a7c.jpg" /></p>
 <p><em>Figure 4a: Main steps OCOLOS takes to optimize a target process</em></p>
@@ -587,30 +597,46 @@
 </ul>
 <p><img alt="" src="../images/ff9082d69f504639c893031946832f7604f9fa6ebc45a95dcefb681e07f5171e.jpg" /></p>
 <p><em>Figure 4c: Before (left) and after (right) continuous optimization</em></p>
-<p>这个设计的精妙之处在于：
-- <strong>成本极低</strong>：拦截只发生在函数指针<strong>创建</strong>的瞬间，之后指针可以像普通数据一样自由传递，没有任何额外开销。论文提到 MySQL 每毫秒才创建约 45 个函数指针，开销完全可以忽略。
-- <strong>一劳永逸</strong>：由于所有函数指针最终都指向不会被回收的 C0，因此后续无论进行多少次代码替换和垃圾回收，这些指针都始终有效。
-- <strong>保持兼容性</strong>：C0 中的函数虽然未被优化，但它只是一个“跳板”，内部会立刻跳转到当前最新的优化版本 Ci+1 去执行，保证了性能。</p>
+<p>这个设计的精妙之处在于：</p>
+<ul>
+<li><strong>成本极低</strong>：拦截只发生在函数指针<strong>创建</strong>的瞬间，之后指针可以像普通数据一样自由传递，没有任何额外开销。论文提到 MySQL 每毫秒才创建约 45 个函数指针，开销完全可以忽略。</li>
+<li><strong>一劳永逸</strong>：由于所有函数指针最终都指向不会被回收的 C0，因此后续无论进行多少次代码替换和垃圾回收，这些指针都始终有效。</li>
+<li><strong>保持兼容性</strong>：C0 中的函数虽然未被优化，但它只是一个“跳板”，内部会立刻跳转到当前最新的优化版本 Ci+1 去执行，保证了性能。</li>
+</ul>
 <h3 id="4-batch-accelerator-mode-bam-eli5">4. 批处理加速模式 (Batch Accelerator Mode, BAM) (ELI5)<a class="headerlink" href="#4-batch-accelerator-mode-bam-eli5" title="Permanent link">&para;</a></h3>
-<p><strong>痛点直击</strong>
-- 传统的 <strong>Profile-Guided Optimization (PGO)</strong> 工具（如 BOLT）是 <strong>离线 (offline)</strong> 的。它们需要先完整地跑一遍程序来收集 profile，然后用这个 profile 去优化二进制文件，最后再用这个优化后的二进制文件去运行真正的任务。
-- 这个流程对于 <strong>长时运行的服务</strong>（如 MySQL）是可行的，但对于 <strong>短时进程组成的批处理任务</strong>（比如一个包含成千上万个 <code>gcc</code> 调用的软件构建过程）就完全行不通了。因为：
-    - <strong>单次运行时间太短</strong>：每个 <code>gcc</code> 进程可能只活几秒钟，根本来不及在它自己身上完成“剖析 -&gt; 优化 -&gt; 替换”这一整套昂贵的操作。等你优化好了，这个进程早就结束了。
-    - <strong>无法受益于自身优化</strong>：即使你为某个 <code>gcc</code> 调用生成了优化版本，它自己也用不上了，只能寄希望于后面的调用能用上。但离线 PGO 需要人为管理 profile 和优化后的二进制文件，这在复杂的构建系统中几乎是不可能的任务。</p>
-<p><strong>通俗比方</strong>
-- 想象你要做一锅 <strong>100 个饺子</strong>。传统离线 PGO 就像是：你先拿一个饺子下锅煮，尝一口发现皮有点厚、馅有点少，于是你记下笔记。然后你把锅洗了，根据笔记重新和面、调馅，再包一个新的饺子。这个新饺子确实更好吃了，但你之前煮的那个已经浪费了。
-- <strong>BAM</strong> 的做法则聪明得多：它就像一个 <strong>智能的厨房助手</strong>。他看到你开始包饺子（启动构建），就默默地观察你前几个饺子的做法（剖析早期的 <code>gcc</code> 调用）。在他观察的同时，你还在继续包着普通的饺子。等他看明白了（profile 收集够了），他就立刻在旁边 <strong>快速准备好一批改良版的饺子皮和馅料</strong>（生成 BOLT 优化后的二进制文件）。从下一个饺子开始，你就自动用上了这些更好的材料，后面所有的饺子都变得更好吃，而整个过程对你（构建脚本）来说是完全透明的，你甚至不知道助手的存在。</p>
-<p><strong>关键一招</strong>
-- BAM 的核心洞察是：在一个批处理任务中，<strong>同一个二进制文件会被反复执行多次</strong>。因此，不需要对每个进程都做在线优化，而是可以 <strong>“前人栽树，后人乘凉”</strong>。
-- 为了实现这一点，作者巧妙地利用了 Linux 的 <strong>LD_PRELOAD</strong> 机制，并做了一个关键的逻辑扭转：
-    - <strong>拦截点扭转</strong>：作者没有尝试去替换一个正在运行的短进程的代码（这几乎不可能），而是将优化的切入点放在了 <strong>进程创建之前</strong>。BAM 通过 LD_PRELOAD 注入一个共享库，这个库会 <strong>透明地拦截所有 <code>exec*</code> 系统调用</strong>。
-    - <strong>动态重定向</strong>：当 BAM 发现 <code>exec</code> 调用的目标是它要优化的那个二进制文件（比如 <code>clang</code>）时，它会分两步走：
-        1.  <strong>前期</strong>：让 <code>exec</code> 正常执行，但同时 <strong>悄悄开启硬件性能剖析</strong>（通过 <code>perf</code>），收集这个运行实例的 profile。
-        2.  <strong>后期</strong>：一旦后台的 BOLT 工具利用收集到的 profile 生成了优化版的二进制文件，BAM 就会 <strong>动态修改后续的 <code>exec</code> 调用</strong>，让它直接去执行那个 <strong>优化后的二进制文件</strong>，而不是原始的。
-- 这个设计极其精妙，因为它：
-    - <strong>完全透明</strong>：构建系统（如 <code>make</code>）对此毫无感知，不需要任何代码或脚本修改。
-    - <strong>零切换开销</strong>：从原始二进制切换到优化二进制，只是 <code>exec</code> 了一个不同的文件，没有运行时的“停顿世界”（stop-the-world）阶段。
-    - <strong>自动适应</strong>：它剖析的就是当前构建任务的真实 workload，生成的优化是高度相关的，避免了离线 PGO 中 profile 过时或不匹配的问题。</p>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的 <strong>Profile-Guided Optimization (PGO)</strong> 工具（如 BOLT）是 <strong>离线 (offline)</strong> 的。它们需要先完整地跑一遍程序来收集 profile，然后用这个 profile 去优化二进制文件，最后再用这个优化后的二进制文件去运行真正的任务。</li>
+<li>这个流程对于 <strong>长时运行的服务</strong>（如 MySQL）是可行的，但对于 <strong>短时进程组成的批处理任务</strong>（比如一个包含成千上万个 <code>gcc</code> 调用的软件构建过程）就完全行不通了。因为：<ul>
+<li><strong>单次运行时间太短</strong>：每个 <code>gcc</code> 进程可能只活几秒钟，根本来不及在它自己身上完成“剖析 -&gt; 优化 -&gt; 替换”这一整套昂贵的操作。等你优化好了，这个进程早就结束了。</li>
+<li><strong>无法受益于自身优化</strong>：即使你为某个 <code>gcc</code> 调用生成了优化版本，它自己也用不上了，只能寄希望于后面的调用能用上。但离线 PGO 需要人为管理 profile 和优化后的二进制文件，这在复杂的构建系统中几乎是不可能的任务。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你要做一锅 <strong>100 个饺子</strong>。传统离线 PGO 就像是：你先拿一个饺子下锅煮，尝一口发现皮有点厚、馅有点少，于是你记下笔记。然后你把锅洗了，根据笔记重新和面、调馅，再包一个新的饺子。这个新饺子确实更好吃了，但你之前煮的那个已经浪费了。</li>
+<li><strong>BAM</strong> 的做法则聪明得多：它就像一个 <strong>智能的厨房助手</strong>。他看到你开始包饺子（启动构建），就默默地观察你前几个饺子的做法（剖析早期的 <code>gcc</code> 调用）。在他观察的同时，你还在继续包着普通的饺子。等他看明白了（profile 收集够了），他就立刻在旁边 <strong>快速准备好一批改良版的饺子皮和馅料</strong>（生成 BOLT 优化后的二进制文件）。从下一个饺子开始，你就自动用上了这些更好的材料，后面所有的饺子都变得更好吃，而整个过程对你（构建脚本）来说是完全透明的，你甚至不知道助手的存在。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>BAM 的核心洞察是：在一个批处理任务中，<strong>同一个二进制文件会被反复执行多次</strong>。因此，不需要对每个进程都做在线优化，而是可以 <strong>“前人栽树，后人乘凉”</strong>。</li>
+<li>为了实现这一点，作者巧妙地利用了 Linux 的 <strong>LD_PRELOAD</strong> 机制，并做了一个关键的逻辑扭转：<ul>
+<li><strong>拦截点扭转</strong>：作者没有尝试去替换一个正在运行的短进程的代码（这几乎不可能），而是将优化的切入点放在了 <strong>进程创建之前</strong>。BAM 通过 LD_PRELOAD 注入一个共享库，这个库会 <strong>透明地拦截所有 <code>exec*</code> 系统调用</strong>。</li>
+<li><strong>动态重定向</strong>：当 BAM 发现 <code>exec</code> 调用的目标是它要优化的那个二进制文件（比如 <code>clang</code>）时，它会分两步走：<ol>
+<li><strong>前期</strong>：让 <code>exec</code> 正常执行，但同时 <strong>悄悄开启硬件性能剖析</strong>（通过 <code>perf</code>），收集这个运行实例的 profile。</li>
+<li><strong>后期</strong>：一旦后台的 BOLT 工具利用收集到的 profile 生成了优化版的二进制文件，BAM 就会 <strong>动态修改后续的 <code>exec</code> 调用</strong>，让它直接去执行那个 <strong>优化后的二进制文件</strong>，而不是原始的。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>这个设计极其精妙，因为它：<ul>
+<li><strong>完全透明</strong>：构建系统（如 <code>make</code>）对此毫无感知，不需要任何代码或脚本修改。</li>
+<li><strong>零切换开销</strong>：从原始二进制切换到优化二进制，只是 <code>exec</code> 了一个不同的文件，没有运行时的“停顿世界”（stop-the-world）阶段。</li>
+<li><strong>自动适应</strong>：它剖析的就是当前构建任务的真实 workload，生成的优化是高度相关的，避免了离线 PGO 中 profile 过时或不匹配的问题。</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/c885f2de83f5f9ff3155e8c04e124cc05db3c250099767a79d4941a89c6258fd.jpg" /></p>
 <p><em>Fig. 10: The running time of a Clang build with the original compiler, and compilers optimized by BOLT and BAM.</em></p>
 <p>如图所示，在 Clang 构建实验中，BAM 仅需剖析 <strong>少量</strong>（约5个）早期的编译器调用，就能生成一个足够好的优化版本，从而将整个构建时间加速 <strong>1.14倍</strong>。这证明了其“观察少数，惠及多数”的策略非常高效。</p>

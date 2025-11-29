@@ -396,9 +396,7 @@ ______________________________________________________________________
 
 *Figure 4. Distribution of a loop’s execution time containing a delinquent load [39] in terms of CPU cycles measured using LBR samples*
 
-```
 - 该分布图通常呈现多个峰值，每个峰值对应于劣迹加载从内存层次结构不同层级（如 L1, L2, LLC, DRAM）服务时的循环延迟。
-```
 
 - **步骤五：自动计算最优预取距离**
 

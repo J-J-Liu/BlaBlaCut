@@ -138,21 +138,17 @@ ______________________________________________________________________
 
 *Figure 5: Structural overview of our Time-Proportional Instruction Profiler (TIP). TIP is triggered by the PMU,collects a sample,and finally exposes the sample to software.*
 
-```
-- 
-```
+-
 
 ![](images/1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg)
 
 *Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.*
 
-```
 - TIP 的采样逻辑严格遵循 Oracle 的四种状态分类：
     - 在 **Computing** 状态下，采样所有在该周期提交的指令。
     - 在 **Stalled** 状态下，采样 ROB 队首的指令。
     - 在 **Flushed/Drained** 状态下（ROB 为空），从 OIR 中采样相应的“罪魁祸首”指令。
 - 软件层面（如 Linux `perf`）通过读取 TIP 暴露的 **Control and Status Registers (CSRs)** 来收集样本。后处理程序会根据样本中的指令数量（n）将采样间隔的周期数平均分配（1/n）给每个被采样的指令地址，从而构建出最终的性能剖析文件。
-```
 
 ______________________________________________________________________
 

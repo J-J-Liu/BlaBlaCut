@@ -465,17 +465,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#-data-center-tax-memcpymemmovecycles-mpki-prefetch-friendly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        - 分析发现，数据中⼼税 (data center tax) 函数（如压缩、哈希、数据传输、memcpy/memmove）在硬件预取器关闭后表现出显著的性能回归（cycles 增加，MPKI 上升），被识别为预取友好 (prefetch-friendly) 的关键优化目标。
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#4_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -505,52 +494,67 @@
 
 <h1 id="limoncello-prefetchers-for-scale">Limoncello: Prefetchers for Scale 论文解析<a class="headerlink" href="#limoncello-prefetchers-for-scale" title="Permanent link">&para;</a></h1>
 <h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
-<p><strong>作者 (Authors)</strong>
-- Akanksha Jain
-- Hannah Lin
-- Carlos Villavieja
-- Baris Kasikci
-- Chris Kennelly
-- Milad Hashemi
-- Parthasarathy Ranganathan</p>
-<p><strong>发表期刊/会议 (Journal/Conference)</strong>
-- 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 3 (ASPLOS ’24)</p>
-<p><strong>发表年份 (Publication Year)</strong>
-- 2024</p>
+<p><strong>作者 (Authors)</strong></p>
+<ul>
+<li>Akanksha Jain</li>
+<li>Hannah Lin</li>
+<li>Carlos Villavieja</li>
+<li>Baris Kasikci</li>
+<li>Chris Kennelly</li>
+<li>Milad Hashemi</li>
+<li>Parthasarathy Ranganathan</li>
+</ul>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong></p>
+<ul>
+<li>29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 3 (ASPLOS ’24)</li>
+</ul>
+<p><strong>发表年份 (Publication Year)</strong></p>
+<ul>
+<li>2024</li>
+</ul>
 <hr />
 <h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p><strong>目的</strong>
-- 解决在<strong>高利用率、资源受限</strong>的大型数据中心环境中，传统<strong>硬件预取器 (hardware prefetchers)</strong> 因过度消耗<strong>内存带宽 (memory bandwidth)</strong> 而导致<strong>内存延迟 (memory latency)</strong> 增加、系统性能下降的问题。
-- 提出一种无需硬件修改的软件方案，在高带宽压力下通过动态切换预取策略，实现<strong>内存延迟</strong>与<strong>缓存未命中率 (cache miss rate)</strong> 之间的更优权衡。</p>
-<p><strong>方法</strong>
-- Limoncello 系统包含两个核心组件：<strong>Hard Limoncello</strong> 和 <strong>Soft Limoncello</strong>。
-- <strong>Hard Limoncello (硬件预取器动态调控)</strong>:
-  - 基于<strong>socket级内存带宽遥测数据</strong>，设计了一个带有<strong>滞后性 (hysteresis)</strong> 的状态机控制器。
-  - 当内存带宽利用率超过<strong>80%</strong> 的饱和阈值时，通过写入<strong>MSR (Model-Specific Registers)</strong> <strong>禁用硬件预取器</strong>；当利用率降至<strong>60%</strong> 以下时，重新启用。
-  - </p>
-<p><img alt="" src="../images/cf1f24671503c7109fc2f88e2d9996a177401528f4f9a43d4774e177d1db50f9.jpg" /></p>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决在<strong>高利用率、资源受限</strong>的大型数据中心环境中，传统<strong>硬件预取器 (hardware prefetchers)</strong> 因过度消耗<strong>内存带宽 (memory bandwidth)</strong> 而导致<strong>内存延迟 (memory latency)</strong> 增加、系统性能下降的问题。</li>
+<li>提出一种无需硬件修改的软件方案，在高带宽压力下通过动态切换预取策略，实现<strong>内存延迟</strong>与<strong>缓存未命中率 (cache miss rate)</strong> 之间的更优权衡。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>Limoncello 系统包含两个核心组件：<strong>Hard Limoncello</strong> 和 <strong>Soft Limoncello</strong>。</li>
+<li><strong>Hard Limoncello (硬件预取器动态调控)</strong>:<ul>
+<li>基于<strong>socket级内存带宽遥测数据</strong>，设计了一个带有<strong>滞后性 (hysteresis)</strong> 的状态机控制器。</li>
+<li>当内存带宽利用率超过<strong>80%</strong> 的饱和阈值时，通过写入<strong>MSR (Model-Specific Registers)</strong> <strong>禁用硬件预取器</strong>；当利用率降至<strong>60%</strong> 以下时，重新启用。</li>
+<li><img alt="" src="../images/cf1f24671503c7109fc2f88e2d9996a177401528f4f9a43d4774e177d1db50f9.jpg" /></li>
+</ul>
+</li>
+</ul>
 <p><em>Figure 8. State diagram of Hard Limoncello controller for modulating hardware prefetchers. Green (lighter) indicates hardware prefetchers are off, blue (darker) that they are on.</em></p>
 <ul>
-<li><strong>Soft Limoncello (精准软件预取)</strong>:</li>
+<li><strong>Soft Limoncello (精准软件预取)</strong>:<ul>
 <li>利用大规模<strong>硬件消融研究 (hardware ablation study)</strong>，在禁用硬件预取器的机器上进行<strong>全舰队性能分析 (fleetwide profiling)</strong>，识别出对硬件预取最敏感的函数。</li>
 <li>发现<strong>数据中心税 (data center tax)</strong> 函数（如压缩、哈希、数据传输、memcpy）是主要的性能回退来源，也是理想的软件预取目标。</li>
-<li></li>
+<li><img alt="" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></p>
+</li>
+</ul>
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
 <ul>
 <li>针对这些函数，通过微基准测试和负载测试，精细调优<strong>预取地址 (prefetch address)</strong>、<strong>预取距离 (prefetch distance)</strong> 和<strong>预取度 (prefetch degree)</strong> 等参数。</li>
-<li></li>
+<li><img alt="" src="../images/c973887d9e6d0cb8b5a3f95865fb46293b12d847cfec3903017767932b834c95.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/c973887d9e6d0cb8b5a3f95865fb46293b12d847cfec3903017767932b834c95.jpg" /></p>
 <p><em>Figure 15. Soft Limoncello memcpy microbenchmarking.</em></p>
-<p><strong>结果</strong>
-- 在 Google 生产舰队的大规模部署评估中，Limoncello 取得了显著成效：
-  - <strong>应用吞吐量 (application throughput)</strong> 在高 CPU 利用率（70%-80%）下<strong>提升了 10%</strong>。
-  - <strong>内存延迟</strong>显著降低，其中 L3 延迟的<strong>中位数减少了 13%</strong>，P99 延迟<strong>减少了 10%</strong>。
-  - <strong>Socket 内存带宽</strong>平均<strong>减少了 15%</strong>，饱和的 socket 数量<strong>减少了近 8%</strong>。
-  - 成功将服务器的<strong>CPU 利用率瓶颈</strong>从原来的 40-50% 提升至目标的 <strong>70-80%</strong> 区间。
-- 关键性能指标对比如下表所示：</p>
+<p><strong>结果</strong></p>
+<ul>
+<li>在 Google 生产舰队的大规模部署评估中，Limoncello 取得了显著成效：<ul>
+<li><strong>应用吞吐量 (application throughput)</strong> 在高 CPU 利用率（70%-80%）下<strong>提升了 10%</strong>。</li>
+<li><strong>内存延迟</strong>显著降低，其中 L3 延迟的<strong>中位数减少了 13%</strong>，P99 延迟<strong>减少了 10%</strong>。</li>
+<li><strong>Socket 内存带宽</strong>平均<strong>减少了 15%</strong>，饱和的 socket 数量<strong>减少了近 8%</strong>。</li>
+<li>成功将服务器的<strong>CPU 利用率瓶颈</strong>从原来的 40-50% 提升至目标的 <strong>70-80%</strong> 区间。</li>
+</ul>
+</li>
+<li>关键性能指标对比如下表所示：</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -582,29 +586,27 @@
 </tbody>
 </table>
 <ul>
-<li></li>
+<li><img alt="" src="../images/db405ad117eaf9d11098b26c5ca0ddf9ebd804ed9ab7149bbef4242cc6b884ff.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/db405ad117eaf9d11098b26c5ca0ddf9ebd804ed9ab7149bbef4242cc6b884ff.jpg" /></p>
 <p><em>Figure 16. Limoncello application throughput gain. Application throughput increases by 6-13% increase, dependent on the CPU utilization level of the machines.</em></p>
 <ul>
-<li></li>
+<li><img alt="" src="../images/3c91155487617f08edd483be7d4f2988b11f9779218c551261842d1d7a821be7.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/3c91155487617f08edd483be7d4f2988b11f9779218c551261842d1d7a821be7.jpg" /></p>
 <p><em>Figure 17. Limoncello memory latency reduction. Memory latency reduces by 13% in the median and 10% in the P99.</em></p>
 <ul>
-<li></li>
+<li><img alt="" src="../images/a317eaaeb97264073e48804709ed99eb80087ec36a131cbb7bd8b5b529c9c4e6.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/a317eaaeb97264073e48804709ed99eb80087ec36a131cbb7bd8b5b529c9c4e6.jpg" /></p>
 <p><em>Figure 18. Limoncello socket bandwidth usage reduction. Average socket bandwidth reduces by 15%.</em></p>
 <ul>
-<li></li>
+<li><img alt="" src="../images/8af0f9425ed82c6f02ff37be5554cb0bb55e78ec0ed8fef214d9ecb44f526ce4.jpg" /></li>
 </ul>
-<p><img alt="" src="../images/8af0f9425ed82c6f02ff37be5554cb0bb55e78ec0ed8fef214d9ecb44f526ce4.jpg" /></p>
 <p><em>Figure 19. Increase in CPU utilization due to Limoncello. Before Limoncello, memory bandwidth saturation was reached in the 40-50% CPU utilization band (Figure 4), but with Limoncello memory bandwidth saturation is not met until the 70-80% band. Sizes of the markers are in proportion to the fraction of platform servers in the CPU usage bucket.</em></p>
-<p><strong>结论</strong>
-- 在大规模、高利用率的数据中心场景下，传统的硬件预取器设计哲学（优先考虑覆盖率而非带宽效率）已不再适用，甚至会成为性能瓶颈。
-- <strong>硬件与软件协同的预取策略</strong>（即 Limoncello）能够有效解决这一问题。通过在高带宽压力下<strong>禁用低效的硬件预取</strong>，并辅以<strong>针对关键“数据中心税”函数的精准软件预取</strong>，可以在不牺牲缓存命中率的前提下，大幅降低内存延迟并提升系统整体吞吐量。
-- 该工作证明了<strong>垂直整合 (vertical integration)</strong> 和<strong>软件定义的硬件调控</strong>在现代数据中心优化中的巨大潜力，并为未来的<strong>硬件-软件接口 (Hardware-Software Interfaces)</strong> 设计指明了新方向。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li>在大规模、高利用率的数据中心场景下，传统的硬件预取器设计哲学（优先考虑覆盖率而非带宽效率）已不再适用，甚至会成为性能瓶颈。</li>
+<li><strong>硬件与软件协同的预取策略</strong>（即 Limoncello）能够有效解决这一问题。通过在高带宽压力下<strong>禁用低效的硬件预取</strong>，并辅以<strong>针对关键“数据中心税”函数的精准软件预取</strong>，可以在不牺牲缓存命中率的前提下，大幅降低内存延迟并提升系统整体吞吐量。</li>
+<li>该工作证明了<strong>垂直整合 (vertical integration)</strong> 和<strong>软件定义的硬件调控</strong>在现代数据中心优化中的巨大潜力，并为未来的<strong>硬件-软件接口 (Hardware-Software Interfaces)</strong> 设计指明了新方向。</li>
+</ul>
 <hr />
 <h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <p><strong>研究背景</strong></p>
@@ -634,13 +636,17 @@
 <p><strong>核心贡献</strong></p>
 <ul>
 <li>提出并实现了 <strong>Limoncello</strong>，一个纯软件的、可大规模部署的动态预取控制系统，无需任何硬件修改。</li>
-<li><strong>Limoncello 由两部分组成</strong>：</li>
+<li><strong>Limoncello 由两部分组成</strong>：<ul>
 <li><strong>Hard Limoncello</strong>: 基于实时 <strong>socket级内存带宽遥测</strong> 数据，动态地 <strong>启用或禁用硬件预取器</strong>。当带宽利用率超过阈值（如80%）时禁用以降低延迟，低于另一阈值（如60%）时重新启用以提高命中率，并引入 <strong>滞后机制 (hysteresis)</strong> 避免频繁切换。</li>
 <li><strong>Soft Limoncello</strong>: 通过大规模 <strong>硬件消融研究 (hardware ablation study)</strong>，精准识别出对硬件预取最敏感的“<strong>数据中心税 (data center tax)</strong>”函数（如压缩、哈希、数据传输、memcpy），并在这些函数中 <strong>手动插入精细调优的软件预取指令</strong>，以弥补禁用硬件预取后的性能损失。</li>
-<li>在Google生产集群的大规模部署评估表明，Limoncello取得了显著成效：</li>
+</ul>
+</li>
+<li>在Google生产集群的大规模部署评估表明，Limoncello取得了显著成效：<ul>
 <li><strong>应用吞吐量提升10%</strong>。</li>
 <li><strong>内存延迟降低15%</strong>（中位数降低13%，P99降低10%）。</li>
 <li><strong>Socket内存带宽平均减少15%</strong>，使服务器能在更高CPU利用率（70-80%）下稳定运行。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/e9f5394bb5b61d01afb6b7ae92ed7e48567a653627a765be2ee61e9b519a0b2a.jpg" /></p>
 <p><em>Figure 5. Memory bandwidth usage on SPEC with and without hardware prefetching over 3 generations of a server platform. We see a 30-40% increase in memory bandwidth usage when hardware prefetching is enabled.</em></p>
@@ -663,11 +669,13 @@
 <p>该组件负责根据实时内存带宽压力，动态开关整个 CPU socket 的硬件预取器。</p>
 <ul>
 <li><strong>触发条件</strong>：基于每秒采集的 <strong>socket-level 内存带宽遥测</strong>数据。</li>
-<li><strong>控制逻辑</strong>：采用带有<strong>滞后</strong>（hysteresis）的双阈值状态机，避免因带宽波动导致频繁切换。</li>
+<li><strong>控制逻辑</strong>：采用带有<strong>滞后</strong>（hysteresis）的双阈值状态机，避免因带宽波动导致频繁切换。<ul>
 <li>当内存带宽持续超过<strong>上限阈值</strong>（例如 <strong>80%</strong> 的平台饱和带宽）时，<strong>禁用</strong>硬件预取器。</li>
 <li>当内存带宽持续低于<strong>下限阈值</strong>（例如 <strong>60%</strong> 的平台饱和带宽）时，<strong>重新启用</strong>硬件预取器。</li>
-<li><strong>执行方式</strong>：通过向 CPU 的 <strong>Model-Specific Registers </strong>(MSRs) 写入特定值来实现硬件预取器的开关。</li>
-<li><strong>设计动机</strong>：如 </li>
+</ul>
+</li>
+<li><strong>执行方式</strong>：通过向 CPU 的 **Model-Specific Registers **(MSRs) 写入特定值来实现硬件预取器的开关。</li>
+<li><strong>设计动机</strong>：如</li>
 </ul>
 <p><img alt="" src="../images/70c1e6e5d0f7a04b2ae909bf4643da3883694f8e6a4db837be8d58b4003dc590.jpg" /></p>
 <p><em>Figure 1. Average load-to-use latency per DRAM request reduces by 15% when hardware prefetchers are disabled. Data is gathered using the Intel MLC tool [10].</em></p>
@@ -677,35 +685,41 @@
 <p><strong>Soft Limoncello: 精准软件预取注入</strong></p>
 <p>该组件旨在弥补 Hard Limoncello 关闭硬件预取器后，对特定关键函数造成的缓存缺失惩罚。</p>
 <ul>
-<li><strong>目标识别</strong>：通过大规模的<strong>硬件消融实验</strong>（ablation study），对比开启/关闭硬件预取器时的函数级性能剖析数据，识别出对硬件预取最敏感的“<strong>data center tax functions</strong>”。</li>
+<li><strong>目标识别</strong>：通过大规模的<strong>硬件消融实验</strong>（ablation study），对比开启/关闭硬件预取器时的函数级性能剖析数据，识别出对硬件预取最敏感的“<strong>data center tax functions</strong>”。<ul>
 <li>这些函数包括：<strong>Compression</strong>（压缩）、<strong>Data transmission</strong>（数据传输）、<strong>Hashing</strong>（哈希）和 <strong>Data movement</strong>（如 <code>memcpy</code>）。</li>
-<li>如 </li>
+<li>如</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/f87ee1cc04803c903cca92fc251322ae427ec7ee7c745e093fdeff2dc08e636e.jpg" /></p>
 <p><em>Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.</em></p>
-<p>和 </p>
+<p>和</p>
 <p><img alt="" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></p>
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
-<p>所示，这些函数在硬件预取关闭后表现出显著的 <strong>CPU cycles</strong> 和 <strong>LLC MPKI</strong> 增加。
-- <strong>预取策略</strong>：针对已识别的目标函数，手动插入软件预取指令，并精细调优三个关键参数：
-  - <strong>Prefetch address</strong>（预取地址）：选择最能受益的内存访问点。
-  - <strong>Prefetch distance</strong>（预取距离）：决定提前多少字节发起预取。
-  - <strong>Prefetch degree</strong>（预取度）：决定一次预取多少连续数据。
-- <strong>调优方法</strong>：结合<strong>舰队级剖析数据</strong>（如 <code>memcpy</code> 的参数大小分布，见 <img alt="" src="images/52698e5aa656d107042a7cab73e846293b12d847cfec3903017767932b834c95.jpg" />）和<strong>微基准测试</strong>（microbenchmarks），迭代寻找最优参数组合。</p>
+<p>所示，这些函数在硬件预取关闭后表现出显著的 <strong>CPU cycles</strong> 和 <strong>LLC MPKI</strong> 增加。</p>
+<ul>
+<li><strong>预取策略</strong>：针对已识别的目标函数，手动插入软件预取指令，并精细调优三个关键参数：<ul>
+<li><strong>Prefetch address</strong>（预取地址）：选择最能受益的内存访问点。</li>
+<li><strong>Prefetch distance</strong>（预取距离）：决定提前多少字节发起预取。</li>
+<li><strong>Prefetch degree</strong>（预取度）：决定一次预取多少连续数据。</li>
+</ul>
+</li>
+<li><strong>调优方法</strong>：结合<strong>舰队级剖析数据</strong>（如 <code>memcpy</code> 的参数大小分布，见 <img alt="" src="images/52698e5aa656d107042a7cab73e846293b12d847cfec3903017767932b834c95.jpg" />）和<strong>微基准测试</strong>（microbenchmarks），迭代寻找最优参数组合。</li>
+</ul>
 <p><strong>协同工作流程</strong></p>
 <p>Limoncello 的两个组件协同工作，形成一个闭环的动态优化系统。</p>
 <ol>
 <li><strong>监控阶段</strong>：系统持续监控每个 socket 的内存带宽利用率。</li>
 <li><strong>决策与执行</strong>（Hard Limoncello） 根据预设阈值，动态开关硬件预取器。在低负载时利用硬件预取，在高负载时关闭以节省带宽、降低延迟。</li>
 <li><strong>补偿与优化</strong>（Soft Limoncello） 在硬件预取器被关闭的高负载场景下，由预先植入的软件预取指令为关键的“data center tax functions”提供精准的数据预取，防止其性能严重退化。</li>
-<li><strong>效果</strong>：如 </li>
+<li><strong>效果</strong>：如</li>
 </ol>
 <p><img alt="" src="../images/db405ad117eaf9d11098b26c5ca0ddf9ebd804ed9ab7149bbef4242cc6b884ff.jpg" /></p>
 <p><em>Figure 16. Limoncello application throughput gain. Application throughput increases by 6-13% increase, dependent on the CPU utilization level of the machines.</em></p>
 <p>、</p>
 <p><img alt="" src="../images/3c91155487617f08edd483be7d4f2988b11f9779218c551261842d1d7a821be7.jpg" /></p>
 <p><em>Figure 17. Limoncello memory latency reduction. Memory latency reduces by 13% in the median and 10% in the P99.</em></p>
-<p>和 </p>
+<p>和</p>
 <p><img alt="" src="../images/a317eaaeb97264073e48804709ed99eb80087ec36a131cbb7bd8b5b529c9c4e6.jpg" /></p>
 <p><em>Figure 18. Limoncello socket bandwidth usage reduction. Average socket bandwidth reduces by 15%.</em></p>
 <p>所示，该架构最终实现了 <strong>10%</strong> 的应用吞吐量提升、<strong>15%</strong> 的内存延迟降低和 <strong>15%</strong> 的 socket 带宽消耗减少。</p>
@@ -767,15 +781,19 @@
 <ul>
 <li>Soft Limoncello 的核心目标是在 <strong>Hard Limoncello</strong> 关闭硬件预取器后，通过精准的软件预取（software prefetching）来补偿特定关键函数因缓存未命中率（MPKI）上升而导致的性能损失。</li>
 <li>其实现不依赖于传统的、基于代表性基准测试（representative benchmarks）的 profile-guided optimization (PGO)，因为这在 Google 大规模、高多样性的生产环境中难以奏效。</li>
-<li>取而代之的是一种创新的、基于 <strong>fleetwide hardware ablation study</strong>（全舰队硬件消融研究）的方法：</li>
+<li>取而代之的是一种创新的、基于 <strong>fleetwide hardware ablation study</strong>（全舰队硬件消融研究）的方法：<ul>
 <li>在大规模实验集群上关闭硬件预取器。</li>
 <li>利用 Google 内部的 <strong>global profiling tool</strong> 持续采集程序计数器（PC）、CPU 使用率和 LLC（Last Level Cache）未命中数据。</li>
 <li>通过对比开启/关闭硬件预取器时各函数的性能差异（特别是 CPU cycles 和 LLC MPKI），识别出对硬件预取高度依赖的“<strong>prefetch-friendly</strong>”函数。</li>
-<li>分析发现，性能回退最严重的函数主要集中在所谓的“<strong>data center tax</strong>”（数据中心税）操作上，这些函数包括：</li>
+</ul>
+</li>
+<li>分析发现，性能回退最严重的函数主要集中在所谓的“<strong>data center tax</strong>”（数据中心税）操作上，这些函数包括：<ul>
 <li><strong>Compression/Decompression</strong>：处理连续内存块，访问模式可预测。</li>
 <li><strong>Data transmission</strong>（如 RPC 序列化/反序列化）：涉及可预测的内存读写。</li>
 <li><strong>Hashing</strong>：对数据块进行预定义序列的操作。</li>
 <li><strong>Data movement</strong>（如 <code>memcpy</code>, <code>memmove</code>）：对连续内存区域进行操作。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/f87ee1cc04803c903cca92fc251322ae427ec7ee7c745e093fdeff2dc08e636e.jpg" /></p>
 <p><em>Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.</em></p>
@@ -785,14 +803,18 @@
 <p><em>Figure 12. Aggregated change in CPU cycles (%) from Hard Limoncello. Data center tax functions (green) increased in CPU cycles under Hard Limoncello. In contrast, overall nondata center tax functions (blue) decreased in cycles.</em></p>
 <p><strong>软件预取器的设计空间与参数调优</strong></p>
 <ul>
-<li>软件预取的有效性高度依赖于三个关键设计参数的精细调整：</li>
-<li><strong>Prefetch address </strong>(预取地址)：必须精确指向即将被使用的数据。错误的地址会导致浪费带宽。目标地址通常来自函数的调用参数（如 <code>memcpy</code> 的源指针）。</li>
-<li><strong>Prefetch distance </strong>(预取距离)：指在实际使用前多少指令或字节发出预取请求。距离太近会导致预取不及时（untimely），太远则可能导致数据在缓存中被替换（stale）。</li>
-<li><strong>Prefetch degree </strong>(预取度)：指一次预取操作获取的数据量（例如，多少个 cache line）。度太小收益低，太大则可能引入不必要的数据，浪费带宽。</li>
-<li>为了确定这些参数，Limoncello 团队采用了以下流程：</li>
+<li>软件预取的有效性高度依赖于三个关键设计参数的精细调整：<ul>
+<li>**Prefetch address **(预取地址)：必须精确指向即将被使用的数据。错误的地址会导致浪费带宽。目标地址通常来自函数的调用参数（如 <code>memcpy</code> 的源指针）。</li>
+<li>**Prefetch distance **(预取距离)：指在实际使用前多少指令或字节发出预取请求。距离太近会导致预取不及时（untimely），太远则可能导致数据在缓存中被替换（stale）。</li>
+<li>**Prefetch degree **(预取度)：指一次预取操作获取的数据量（例如，多少个 cache line）。度太小收益低，太大则可能引入不必要的数据，浪费带宽。</li>
+</ul>
+</li>
+<li>为了确定这些参数，Limoncello 团队采用了以下流程：<ul>
 <li>利用 fleetwide profiling 工具收集目标函数（如 <code>memcpy</code>）的<strong>调用参数大小分布</strong>，以识别值得优化的“长尾”大尺寸操作。</li>
 <li>针对这些大尺寸操作，在<strong>微基准测试</strong>（microbenchmarks，如 LLVM libc 套件）和<strong>负载测试</strong>（load tests）上进行广泛的参数扫描（sweeping）。</li>
 <li>迭代测试不同的地址、距离和度的组合，选择能带来<strong>正向性能提升</strong>的配置。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/52698e5aa656d107042a7cab73e8461e2944e881c20fd0aac6fba9c36f9ca0de.jpg" /></p>
 <p><em>Figure 14. memcpy argument size distribution. The chart shows the probability density function (PDF) of the number of times each copy size appears in the profiling data. Most copy sizes are small.</em></p>
@@ -812,16 +834,22 @@
 <p><em>Figure 15. Soft Limoncello memcpy microbenchmarking.</em></p>
 <p><strong>输入输出关系及在整体系统中的作用</strong></p>
 <ul>
-<li><strong>输入</strong>：</li>
+<li><strong>输入</strong>：<ul>
 <li>来自 Hard Limoncello 的信号：硬件预取器已被关闭。</li>
 <li>Fleetwide profiling 数据：用于识别目标函数及其调用特征（如参数大小）。</li>
 <li>微基准和负载测试结果：用于确定最优的预取参数。</li>
-<li><strong>输出</strong>：</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
 <li>在特定库函数（如 glibc 中的 <code>memcpy</code>）的源代码中<strong>静态插入</strong>经过调优的软件预取指令（如 x86 的 <code>prefetcht0</code>）。</li>
-<li><strong>在整体系统中的作用</strong>：</li>
+</ul>
+</li>
+<li><strong>在整体系统中的作用</strong>：<ul>
 <li><strong>维持低缓存未命中率</strong>：在硬件预取器关闭的高带宽压力场景下，通过精准的软件预取，有效控制了关键“数据中心税”函数的 LLC MPKI，防止了性能大幅回退。</li>
 <li><strong>实现硬件-软件协同</strong>：Hard Limoncello 负责宏观层面的带宽管理（关掉全局但低效的硬件预取），Soft Limoncello 负责微观层面的性能保障（为最关键的少数函数提供高效、精准的软件预取）。</li>
 <li><strong>最终效果</strong>：评估数据显示，Soft Limoncello 成功消除了 Hard Limoncello 单独部署时观察到的工作负载性能回退，并将目标函数的 CPU cycles 显著降低。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" /></p>
 <p><em>Figure 20. Software prefetcher impact in Limoncello. The y-axis shows the portion of fleetwide cycles spent in the respective function categories. The center bar (green) shows Hard Limoncello deployed without any software prefetchers. Adding software prefetchers into Limoncello lowered CPU cycles spent in targeted functions by 2% (yellow).</em></p>
@@ -829,29 +857,33 @@
 <p><strong>核心方法论：基于大规模硬件消融研究的目标识别</strong></p>
 <p>Limoncello 项目的核心创新之一在于其识别软件预取目标的方法。该方法摒弃了传统依赖代表性基准测试（benchmark）的 Profile-Guided Optimization (PGO) 范式，转而采用一种在超大规模生产环境中可行的、数据驱动的硬件消融研究（hardware ablation study）。</p>
 <ul>
-<li><strong>消融实验设计</strong>：</li>
+<li>
+<p><strong>消融实验设计</strong>：</p>
+<ul>
 <li>在 Google 数据中心舰队中，选取<strong>数十万台</strong>具有代表性的机器（覆盖不同地理区域和多样化工作负载）。</li>
 <li>将这些机器分为<strong>实验组</strong>和<strong>对照组</strong>。</li>
 <li><strong>实验组</strong>：在特定条件下（由 Hard Limoncello 控制）<strong>禁用所有硬件预取器</strong>。</li>
 <li><strong>对照组</strong>：保持硬件预取器始终开启，且不添加任何软件预取。</li>
-<li>
-<p>实验持续进行<strong>数周</strong>，以捕获全天候及跨周的工作负载变化。</p>
+<li>实验持续进行<strong>数周</strong>，以捕获全天候及跨周的工作负载变化。</li>
+</ul>
 </li>
 <li>
 <p><strong>数据采集与分析</strong>：</p>
-</li>
+<ul>
 <li>利用 Google 内部的<strong>全局性能分析工具</strong>（global profiling tool），该工具能够持续、低开销地采样整个舰队中应用程序的性能计数器。</li>
 <li>采集的关键指标包括：<strong>程序计数器</strong>（program counter）、<strong>CPU 周期消耗</strong>、<strong>最后一级缓存</strong>（LLC）。</li>
-<li>
-<p>通过对比实验组（无硬件预取）和对照组（有硬件预取）的函数级性能数据，精确量化每个函数在失去硬件预取支持后的性能退化程度。</p>
+<li>通过对比实验组（无硬件预取）和对照组（有硬件预取）的函数级性能数据，精确量化每个函数在失去硬件预取支持后的性能退化程度。</li>
+</ul>
 </li>
 <li>
 <p><strong>目标函数筛选标准</strong>：</p>
-</li>
+<ul>
 <li><strong>性能显著退化</strong>：函数在实验组中表现出<strong>CPU 周期显著增加</strong>（即性能下降）。</li>
 <li><strong>缓存缺失率激增</strong>：上述性能退化主要由 <strong>LLC MPKI</strong>（Misses Per Kilo Instructions）大幅上升引起，表明该函数高度依赖预取来隐藏内存延迟。</li>
 <li><strong>高调用热度</strong>：该函数必须是“hot function”，即在整个舰队中消耗大量 CPU 周期，优化它能带来全局性收益。</li>
 <li>分析结果揭示，满足以上条件的函数绝大多数属于所谓的“<strong>data center tax functions</strong>”（数据中心税函数）。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></p>
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
@@ -860,46 +892,54 @@
 <p><strong>识别出的关键目标：数据中心税函数</strong></p>
 <p>通过上述消融研究，论文明确指出了四类最适合作为软件预取目标的函数：</p>
 <ul>
-<li><strong>Compression/Decompression </strong>(压缩/解压缩)：处理连续数据块，内存访问模式高度可预测。</li>
-<li><strong>Data transmission </strong>(数据传输)：如 RPC 的序列化/反序列化，涉及对连续内存地址的读写。</li>
-<li><strong>Hashing </strong>(哈希)：算法通常按预定顺序处理数据块，产生规则的内存访问流。</li>
-<li><strong>Data movement </strong>(数据移动)：如 <code>memcpy</code> 和 <code>memmove</code>，直接操作大段连续内存。</li>
+<li>**Compression/Decompression **(压缩/解压缩)：处理连续数据块，内存访问模式高度可预测。</li>
+<li>**Data transmission **(数据传输)：如 RPC 的序列化/反序列化，涉及对连续内存地址的读写。</li>
+<li>**Hashing **(哈希)：算法通常按预定顺序处理数据块，产生规则的内存访问流。</li>
+<li>**Data movement **(数据移动)：如 <code>memcpy</code> 和 <code>memmove</code>，直接操作大段连续内存。</li>
 </ul>
-<p>这些函数之所以成为理想目标，原因如下：
-- 它们被封装在<strong>标准库函数</strong>中，便于集中优化。
-- 它们占据了数据中心 <strong>30-40%</strong> 的 CPU 周期，优化回报极高。
-- 函数签名（如 <code>memcpy(void* dest, const void* src, size_t n)</code>）<strong>直接暴露了将要访问的数据地址和总量</strong>，使得软件预取可以做到极其精准，避免了硬件预取器所需的“warm-up”学习期和潜在的过度预取问题。</p>
+<p>这些函数之所以成为理想目标，原因如下：</p>
+<ul>
+<li>它们被封装在<strong>标准库函数</strong>中，便于集中优化。</li>
+<li>它们占据了数据中心 <strong>30-40%</strong> 的 CPU 周期，优化回报极高。</li>
+<li>函数签名（如 <code>memcpy(void* dest, const void* src, size_t n)</code>）<strong>直接暴露了将要访问的数据地址和总量</strong>，使得软件预取可以做到极其精准，避免了硬件预取器所需的“warm-up”学习期和潜在的过度预取问题。</li>
+</ul>
 <p><strong>输入输出关系及在整体架构中的作用</strong></p>
 <ul>
-<li><strong>输入</strong>：</li>
-<li><strong>原始输入</strong>：来自消融实验的海量、函数级性能剖析数据（CPU cycles, LLC MPKI）。</li>
 <li>
-<p><strong>处理逻辑</strong>：通过对比分析，筛选出因禁用硬件预取而性能显著退化的热点函数。</p>
+<p><strong>输入</strong>：</p>
+<ul>
+<li><strong>原始输入</strong>：来自消融实验的海量、函数级性能剖析数据（CPU cycles, LLC MPKI）。</li>
+<li><strong>处理逻辑</strong>：通过对比分析，筛选出因禁用硬件预取而性能显著退化的热点函数。</li>
+</ul>
 </li>
 <li>
 <p><strong>输出</strong>：</p>
-</li>
+<ul>
 <li><strong>明确的优化目标列表</strong>：即上述四类“数据中心税函数”。</li>
-<li>
-<p><strong>精细化的预取参数指导</strong>：对于每个目标函数（如 <code>memcpy</code>），剖析数据还提供了调用参数（如拷贝大小）的分布信息，这直接指导了后续 Soft Limoncello 设计中的<strong>预取距离</strong>（prefetch distance）和<strong>预取度</strong>（prefetch degree）的选择。</p>
+<li><strong>精细化的预取参数指导</strong>：对于每个目标函数（如 <code>memcpy</code>），剖析数据还提供了调用参数（如拷贝大小）的分布信息，这直接指导了后续 Soft Limoncello 设计中的<strong>预取距离</strong>（prefetch distance）和<strong>预取度</strong>（prefetch degree）的选择。</li>
+</ul>
 </li>
 <li>
 <p><strong>在 Limoncello 整体架构中的作用</strong>：</p>
-</li>
+<ul>
 <li>该方法是 <strong>Soft Limoncello 组件的基石</strong>。它解决了“在哪里插入软件预取”这一最关键也最困难的问题。</li>
 <li>通过精准定位少数几个高影响力、高收益的函数，使得软件预取的部署变得<strong>可扩展</strong>（scalable）和<strong>高效</strong>，避免了盲目地在整个代码库中插入预取指令所带来的维护复杂性和潜在性能损失。</li>
 <li>它实现了 <strong>Hard Limoncello 和 Soft Limoncello 的完美协同</strong>：Hard Limoncello 在高带宽压力下关闭硬件预取以降低系统延迟，而 Soft Limoncello 则通过针对性地补偿关键函数的缓存缺失，确保了整体应用吞吐量的净提升。</li>
+</ul>
+</li>
 </ul>
 <h3 id="4">4. 软件预取参数调优（地址、距离、度）<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>软件预取参数调优的核心方法论</strong></p>
 <p>Limoncello 的 Soft Limoncello 组件通过一套严谨的数据驱动流程，为 <code>memcpy</code> 等数据密集型函数确定最优的软件预取参数。该流程结合了<strong>舰队范围的性能分析 (fleetwide profiling)</strong> 与<strong>针对性的微基准测试 (microbenchmarking)</strong>，以解决在大规模、多样化生产环境中进行预取优化的挑战。</p>
 <ul>
-<li><strong>目标函数筛选</strong>：首先，通过在数万机器上进行<strong>硬件消融实验 (hardware ablation study)</strong>，即全局关闭硬件预取器，利用全局性能分析工具监控各函数的 <strong>CPU cycles</strong> 和 <strong>LLC MPKI (Last-Level Cache Misses Per Kilo Instructions)</strong> 变化。<h2 id="-data-center-tax-memcpymemmovecycles-mpki-prefetch-friendly">- 分析发现，<strong>数据中⼼税 (data center tax)</strong> 函数（如压缩、哈希、数据传输、<code>memcpy</code>/<code>memmove</code>）在硬件预取器关闭后表现出显著的性能回归（cycles 增加，MPKI 上升），被识别为<strong>预取友好 (prefetch-friendly)</strong> 的关键优化目标。<a class="headerlink" href="#-data-center-tax-memcpymemmovecycles-mpki-prefetch-friendly" title="Permanent link">&para;</a></h2>
+<li><strong>目标函数筛选</strong>：首先，通过在数万机器上进行<strong>硬件消融实验 (hardware ablation study)</strong>，即全局关闭硬件预取器，利用全局性能分析工具监控各函数的 <strong>CPU cycles</strong> 和 <strong>LLC MPKI (Last-Level Cache Misses Per Kilo Instructions)</strong> 变化。<ul>
+<li>分析发现，<strong>数据中⼼税 (data center tax)</strong> 函数（如压缩、哈希、数据传输、<code>memcpy</code>/<code>memmove</code>）在硬件预取器关闭后表现出显著的性能回归（cycles 增加，MPKI 上升），被识别为<strong>预取友好 (prefetch-friendly)</strong> 的关键优化目标。</li>
+<li><img alt="" src="../images/f87ee1cc04803c903cca92fc251322ae427ec7ee7c745e093fdeff2dc08e636e.jpg" /></li>
+</ul>
 </li>
 </ul>
-<p><img alt="" src="../images/f87ee1cc04803c903cca92fc251322ae427ec7ee7c745e093fdeff2dc08e636e.jpg" /></p>
 <p><em>Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.</em></p>
-<div class="highlight"><pre><span></span><code>-
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 
 </code></pre></div>
 <p><img alt="" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></p>
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
@@ -917,11 +957,10 @@
 <li><strong>利用调用参数分布指导优化</strong>：<ul>
 <li>对于 <code>memcpy</code> 这类函数，其性能对拷贝数据的大小高度敏感。舰队范围的性能分析工具收集了这些函数的<strong>调用参数大小分布</strong>。</li>
 <li>分析显示，虽然大多数 <code>memcpy</code> 调用处理的是小数据块，但导致性能回归的工作负载往往涉及<strong>更大的拷贝尺寸</strong>（平均大 26%）。由于硬件预取器需要“热身”时间，对大数据块更有效，因此软件预取也应重点优化大数据场景。</li>
-<li></li>
+<li><img alt="" src="../images/52698e5aa656d107042a7cab73e8461e2944e881c20fd0aac6fba9c36f9ca0de.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/52698e5aa656d107042a7cab73e8461e2944e881c20fd0aac6fba9c36f9ca0de.jpg" /></p>
 <p><em>Figure 14. memcpy argument size distribution. The chart shows the probability density function (PDF) of the number of times each copy size appears in the profiling data. Most copy sizes are small.</em></p>
 <ul>
 <li><strong>微基准测试驱动的参数搜索</strong>：<ul>
@@ -931,16 +970,15 @@
 <li>固定<strong>预取距离</strong>（例如 512 字节），扫描不同的<strong>预取度</strong>，找到使性能最佳的度值。</li>
 </ul>
 </li>
-<li></li>
+<li><img alt="" src="../images/3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/3744e9f229003c206e8a23a5b974ee87bf8ee0f14a1863180ef3fc9a62019e8c.jpg" /></p>
-<div class="highlight"><pre><span></span><code>-
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>- 
 </code></pre></div>
 <p><img alt="" src="../images/dea517edd792c10c583301b3163656b05a2b31b4a095e4049b7577013eab80ec.jpg" /></p>
 <p><em>(b) Microbenchmark exercising different prefetch degrees. Prefetching is fixed at a distance of 512 bytes.</em></p>
-<div class="highlight"><pre><span></span><code>- 最终的性能验证在更接近真实负载的**负载测试 (load tests)** 中完成，确保微基准中的收益能在生产环境中复现。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>- 最终的性能验证在更接近真实负载的**负载测试 (load tests)** 中完成，确保微基准中的收益能在生产环境中复现。
 </code></pre></div>
 <p><strong>输入输出关系及整体作用</strong></p>
 <ul>
@@ -964,11 +1002,10 @@
 <ul>
 <li><strong>弥补硬件预取的空白</strong>：当 Hard Limoncello 在高带宽利用率下关闭硬件预取器以降低内存延迟时，Soft Limoncello 通过精准的软件预取，<strong>维持了关键函数的低缓存未命中率 (MPKI)</strong>，防止了性能回退。</li>
 <li><strong>实现协同增效</strong>：这种软硬协同的策略，使得系统在高负载下既能享受<strong>更低的内存延迟</strong>（来自关闭硬件预取），又能保持<strong>较高的缓存效率</strong>（来自精准的软件预取），最终实现了 <strong>10% 的应用吞吐量提升</strong>。</li>
-<li></li>
+<li><img alt="" src="../images/93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" /></li>
 </ul>
 </li>
 </ul>
-<p><img alt="" src="../images/93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" /></p>
 <p><em>Figure 20. Software prefetcher impact in Limoncello. The y-axis shows the portion of fleetwide cycles spent in the respective function categories. The center bar (green) shows Hard Limoncello deployed without any software prefetchers. Adding software prefetchers into Limoncello lowered CPU cycles spent in targeted functions by 2% (yellow).</em></p>
 <hr />
 <h2 id="4_1">4. 实验方法与实验结果<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h2>
@@ -1042,7 +1079,7 @@
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
 <p><img alt="" src="../images/d65b4e6c70306f8f96ede45bba9a365910221ff2137f82a038eece0f41d5cce7.jpg" /></p>
 <p><em>Figure 12. Aggregated change in CPU cycles (%) from Hard Limoncello. Data center tax functions (green) increased in CPU cycles under Hard Limoncello. In contrast, overall nondata center tax functions (blue) decreased in cycles.</em></p>
-<div class="highlight"><pre><span></span><code>- **带宽影响**: 消融实验数据（见表1）显示，禁用硬件预取器可将整个集群的平均内存带宽降低 **11.2%–15.7%**，对峰值和 P99 尾部带宽也有显著影响。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>- **带宽影响**: 消融实验数据（见表1）显示，禁用硬件预取器可将整个集群的平均内存带宽降低 **11.2%–15.7%**，对峰值和 P99 尾部带宽也有显著影响。
 </code></pre></div>
 <p><img alt="" src="../images/3ded760aa91cf2009e7fd09df2699c7def831a9007b35a6b91944e30c0fcff59.jpg" /></p>
 <p><em>Table 1. Disabling hardware prefetchers reduces both average and tail memory bandwidth.</em></p>

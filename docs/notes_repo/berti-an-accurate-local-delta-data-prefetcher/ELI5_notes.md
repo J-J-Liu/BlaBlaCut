@@ -26,7 +26,7 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 
 - **学习机制扭转**：最关键的一招是，它在每次 L1D 填充（fill）时，利用精确测量的 **fetch latency**（获取延迟），反向推算出“为了这次填充是及时的，预取请求应该在哪个历史时间点发出”。然后，它计算从那个“理想的触发点”到当前地址的差值，这就是一个 **timely local delta**。这个过程巧妙地将“及时性”这个模糊概念，转化为了一个可精确计算和学习的具体数值。
 
-  ![](images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg) *Figure 4. Learning timely deltas.*
+    ![](images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg) *Figure 4. Learning timely deltas.*
 
 - **决策机制扭转**：Berti 并不会对所有学到的 delta 都进行预取。它只为那些 **coverage**（覆盖率，即该 delta 在历史中成功触发及时预取的频率）超过特定阈值的 delta 才发出预取请求。这种“非高置信度不行动”的策略，是其实现 **~90% accuracy**（准确率）的根本原因，直接解决了传统预取器产生大量无用流量、浪费带宽和能耗的顽疾。
 
@@ -52,22 +52,22 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 
 - 作者没有抛弃 delta 的核心思想，而是做了一个关键扭转：**将 delta 的计算范围从“全局所有访问”缩小到“同一个 IP 的历史访问”**。
 - 更妙的是，Berti 不是简单地记录所有 local delta，而是引入了 **timeliness** 和 **coverage** 两个维度来筛选：
-  - **Timeliness**: 通过精确测量 **L1D miss latency**，反推出为了不错过下一次访问，必须在什么时候发出 prefetch 请求。只有那些能“赶得上”的历史访问，才会被用来计算 delta。
-  - **Coverage**: 统计每个 timely local delta 在历史中出现的频率。只有那些 **coverage 超过阈值**（如 65%）的 delta，才会被用来生成 prefetch 请求。
+    - **Timeliness**: 通过精确测量 **L1D miss latency**，反推出为了不错过下一次访问，必须在什么时候发出 prefetch 请求。只有那些能“赶得上”的历史访问，才会被用来计算 delta。
+    - **Coverage**: 统计每个 timely local delta 在历史中出现的频率。只有那些 **coverage 超过阈值**（如 65%）的 delta，才会被用来生成 prefetch 请求。
 - 这个逻辑转换体现在硬件设计上，就是增加了两个核心结构：
-  - **History Table**: 按 IP 索引，记录该 IP 最近的访问地址和时间戳。
-  - **Table of Deltas**: 为每个 IP 维护一个 delta 列表，并动态更新其 coverage 和 prefetch 等级（L1D/L2/No）。
+    - **History Table**: 按 IP 索引，记录该 IP 最近的访问地址和时间戳。
+    - **Table of Deltas**: 为每个 IP 维护一个 delta 列表，并动态更新其 coverage 和 prefetch 等级（L1D/L2/No）。
 
 ![](images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg) *Figure 4. Learning timely deltas.*
 
 这种设计让 Berti 实现了惊人的效果：**87.2% 的 prefetch accuracy**，远超 IPCP (50.6%) 和 MLOP (62.4%)，同时将内存层次的动态能耗降低了 **33.6%**。
 
 | Prefetcher | Avg. Accuracy (SPEC+GAP) | L1D Speedup vs. IP-Stride |
-| :--- | :---: | :---: |
-| IP-Stride | - | Baseline |
-| MLOP | 62.4% | +5.0% |
-| IPCP | 50.6% | +5.0% |
-| **Berti** | **87.2%** | **+8.5%** |
+| :--------- | :----------------------: | :-----------------------: |
+| IP-Stride  |            -             |         Baseline          |
+| MLOP       |          62.4%           |           +5.0%           |
+| IPCP       |          50.6%           |           +5.0%           |
+| **Berti**  |        **87.2%**         |         **+8.5%**         |
 
 ### 2. Timely Delta Detection (ELI5)
 
@@ -86,9 +86,9 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 **关键一招**
 
 - 作者并没有像以前那样，盲目地收集所有历史 deltas。他做了一个非常巧妙的**因果倒推**：
-  - **第一步：精确计时**。利用 **MSHR** (Miss Status Holding Register) 和 **PQ** (Prefetch Queue) 中的 **timestamp** 字段，精确测量出每一次 **L1D fill**（无论是 demand 还是 prefetch 触发的）所花费的真实延迟（fetch latency）。
-  - **第二步：反向查找**。当一次 **demand miss** 被处理完（fill 到 L1D）后，Berti 知道了这次访问花了多少个周期（latency）。于是，它立刻去查询由**同一个 IP** 产生的历史访问记录（History Table），找出那些**发生时间足够早**的访问——早到什么程度呢？早到“**如果当时就用（当前地址 - 历史地址）这个 delta 发起预取，数据刚好能在我需要它之前到达 L1D**”。
-  - **第三步：只学有用的**。通过这种方式，Berti 学到的每一个 delta 都自带了 **timeliness** 属性。它只会去统计和使用这些“**经过验证是及时的**” deltas 的 **coverage**（覆盖率）。这从根本上保证了，当它用某个高 coverage 的 delta 发起预取时，这个请求**几乎总是 timely and useful** 的。
+    - **第一步：精确计时**。利用 **MSHR** (Miss Status Holding Register) 和 **PQ** (Prefetch Queue) 中的 **timestamp** 字段，精确测量出每一次 **L1D fill**（无论是 demand 还是 prefetch 触发的）所花费的真实延迟（fetch latency）。
+    - **第二步：反向查找**。当一次 **demand miss** 被处理完（fill 到 L1D）后，Berti 知道了这次访问花了多少个周期（latency）。于是，它立刻去查询由**同一个 IP** 产生的历史访问记录（History Table），找出那些**发生时间足够早**的访问——早到什么程度呢？早到“**如果当时就用（当前地址 - 历史地址）这个 delta 发起预取，数据刚好能在我需要它之前到达 L1D**”。
+    - **第三步：只学有用的**。通过这种方式，Berti 学到的每一个 delta 都自带了 **timeliness** 属性。它只会去统计和使用这些“**经过验证是及时的**” deltas 的 **coverage**（覆盖率）。这从根本上保证了，当它用某个高 coverage 的 delta 发起预取时，这个请求**几乎总是 timely and useful** 的。
 
 ![](images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg) *Figure 4. Learning timely deltas.*
 
@@ -111,47 +111,47 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 
 - Berti 的核心创新在于，它没有直接用“哪个 delta 最近出现过”来决定是否预取，而是引入了一个 **基于覆盖率的置信度过滤机制**。
 - 具体来说，它在原来的预取流程中，巧妙地插入了两个关键步骤：
-  - **第一步：精确计算 Coverage**。对于每个 IP 学习到的每一个 timely delta，Berti 都会统计它在该 IP 的历史访问中“成功覆盖”了多少次未来的访问。Coverage = (该 delta 成功预测的次数) / (总的学习周期数)。这本质上是在衡量这个 delta 的**稳定性和普适性**。
-  - **第二步：设置 Confidence Watermarks**。Berti 并不会对所有学到的 delta 都发出预取请求。它设定了严格的阈值（例如 **>65%** 为高置信度）。只有当一个 delta 的 coverage 超过这个高水位线时，Berti 才认为它足够可靠，值得用来生成预取请求。低于此阈值的 delta 会被直接过滤掉。
+    - **第一步：精确计算 Coverage**。对于每个 IP 学习到的每一个 timely delta，Berti 都会统计它在该 IP 的历史访问中“成功覆盖”了多少次未来的访问。Coverage = (该 delta 成功预测的次数) / (总的学习周期数)。这本质上是在衡量这个 delta 的**稳定性和普适性**。
+    - **第二步：设置 Confidence Watermarks**。Berti 并不会对所有学到的 delta 都发出预取请求。它设定了严格的阈值（例如 **>65%** 为高置信度）。只有当一个 delta 的 coverage 超过这个高水位线时，Berti 才认为它足够可靠，值得用来生成预取请求。低于此阈值的 delta 会被直接过滤掉。
 - 这个逻辑转换将预取决策从“**我看到了什么**”（reactive）转变为“**我对什么有十足把握**”（proactive & selective）。正如 Figure 10 所示，这一招让 Berti 的 **prefetch accuracy** 飙升至近 **90%**，远超 IPCP (50.6%) 和 MLOP (62.4%)，从而在提升性能的同时，显著降低了内存层次的动态能耗（Figure 15）。
 
 ![](images/cbd4fe566452727c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg) *Figure 10. Prefetch accuracy at the L1D. Percentages of useful requests are broken down into timely (gray) and late (black) prefetch requests.*
 
-| Prefetcher | Avg. Accuracy (SPEC+GAP) | L1D Prefetches Filled in L1D |
-| :--- | :---: | :---: |
-| **Berti** | **87.2%** | High-confidence deltas only |
-| MLOP | 62.4% | Best global delta, less filtering |
-| IPCP | 50.6% | Composite, but GS class adds noise |
+| Prefetcher | Avg. Accuracy (SPEC+GAP) |    L1D Prefetches Filled in L1D    |
+| :--------- | :----------------------: | :--------------------------------: |
+| **Berti**  |        **87.2%**         |    High-confidence deltas only     |
+| MLOP       |          62.4%           | Best global delta, less filtering  |
+| IPCP       |          50.6%           | Composite, but GS class adds noise |
 
 ### 4. Multi-Level Prefetch Orchestration (ELI5)
 
 **痛点直击**
 
 - 传统的硬件预取器（prefetcher）往往是个“愣头青”：一旦它觉得某个模式靠谱，就会一股脑地把数据往最顶层的 **L1D cache** 里塞。这在理想情况下很好，但在现实世界中会引发两个严重问题：
-  - **资源争抢 (Resource Contention)**：L1D 的 **MSHR (Miss Status Holding Registers)** 和 **Prefetch Queue (PQ)** 资源极其有限。如果一个信心不足的预取请求占用了这些宝贵资源，可能会挤掉真正紧急的、由核心指令发出的需求请求（demand request），反而拖慢了整体速度。
-  - **无谓开销 (Wasted Effort)**：如果预取的数据最终没被用上（低准确率），那么把它从内存一路搬到 L1D 所消耗的 **带宽** 和 **能量** 就完全浪费了。更糟糕的是，它还可能污染 L1D，把有用的数据挤出去。
+    - **资源争抢 (Resource Contention)**：L1D 的 **MSHR (Miss Status Holding Registers)** 和 **Prefetch Queue (PQ)** 资源极其有限。如果一个信心不足的预取请求占用了这些宝贵资源，可能会挤掉真正紧急的、由核心指令发出的需求请求（demand request），反而拖慢了整体速度。
+    - **无谓开销 (Wasted Effort)**：如果预取的数据最终没被用上（低准确率），那么把它从内存一路搬到 L1D 所消耗的 **带宽** 和 **能量** 就完全浪费了。更糟糕的是，它还可能污染 L1D，把有用的数据挤出去。
 
 **通俗比方**
 
 - 想象你是一个高效的仓库经理（Berti），负责给前线工人（CPU Core）提前备货（数据）。
 - 你的手下有不同的运输车队：
-  - **L1D 车队**：速度最快，但车少（MSHR/PQ 有限），而且只能停在离工人最近的“黄金停车位”（L1D）。
-  - **L2 车队**：速度稍慢，但车位多一些。
-  - **LLC 车队**：速度最慢，但仓库巨大。
+    - **L1D 车队**：速度最快，但车少（MSHR/PQ 有限），而且只能停在离工人最近的“黄金停车位”（L1D）。
+    - **L2 车队**：速度稍慢，但车位多一些。
+    - **LLC 车队**：速度最慢，但仓库巨大。
 - 以前的经理（如 IPCP, MLOP）的做法是：只要听说某件货可能有用，就立刻派最快的 L1D 车队去拉，不管这消息有多可靠，也不管停车场有没有空位。
 - 你的新策略是：先评估这个消息的**可信度**（coverage）。如果可信度极高（比如90%），并且“黄金停车位”还有空（MSHR occupancy 低），那就派最快的 L1D 车队直达。如果可信度中等（比如50%），那就只送到 L2 仓库，这样既做了准备，又不占用最紧张的资源。如果可信度很低，干脆就不送，省下油钱（energy）和路权（bandwidth）。
 
 **关键一招**
 
 - Berti 的精妙之处在于，它没有采用“全有或全无”的粗暴策略，而是在预取决策流程中引入了一个**动态分级调度机制**。这个机制的核心是两个输入和一套**watermark**（水位线）规则：
-  - **输入1: Delta Coverage**：衡量某个 delta 模式在过去成功预测需求的频率，代表其**准确性**。
-  - **输入2: L1D MSHR Occupancy**：反映当前 L1D 处理单元的繁忙程度，代表**资源压力**。
+    - **输入1: Delta Coverage**：衡量某个 delta 模式在过去成功预测需求的频率，代表其**准确性**。
+    - **输入2: L1D MSHR Occupancy**：反映当前 L1D 处理单元的繁忙程度，代表**资源压力**。
 - 基于这两个输入，Berti 动态决定预取请求的“投递地址”：
-  - 如果 `Coverage > High-Watermark (65%)` **且** `MSHR Occupancy < Occupancy-Watermark (70%)`，则预取到 **L1D**。
-  - 否则，如果 `Coverage > Medium-Watermark (35%)`，则预取到 **L2**。
-  - 否则，不进行预取。
+    - 如果 `Coverage > High-Watermark (65%)` **且** `MSHR Occupancy < Occupancy-Watermark (70%)`，则预取到 **L1D**。
+    - 否则，如果 `Coverage > Medium-Watermark (35%)`，则预取到 **L2**。
+    - 否则，不进行预取。
 - 这个逻辑转换看似简单，但它巧妙地将**预取的准确性**和**系统当前的资源状态**耦合在一起，实现了在**timeliness**（及时性）、**accuracy**（准确性）和**resource efficiency**（资源效率）三者之间取得最佳平衡。论文中的 Figure 5 清晰地展示了这一决策流程是如何嵌入到硬件设计中的。
-  ![](images/4687673a72ee43cb3b2eafce7f9b78d9575373cf70b658c43ba276687ce6368a.jpg) *Figure 5. Berti design overview. Hardware extensions are shown in gray.*
+    ![](images/4687673a72ee43cb3b2eafce7f9b78d9575373cf70b658c43ba276687ce6368a.jpg) *Figure 5. Berti design overview. Hardware extensions are shown in gray.*
 
 这种策略直接带来了两大好处：
 
@@ -172,8 +172,8 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 - 想象你是一个图书管理员（Prefetcher），你的任务是根据读者（IP）最近借过的书（addresses），预测他下一步会借什么书，并提前把书放到前台（L1D）。
 - 以前的做法可能是给每个读者建一个复杂的兴趣模型（比如 IPCP 的分类器），或者记录整个图书馆的借阅流（global delta）。
 - Berti 的做法更接地气：它只给每个读者维护两张**便签纸**。
-  - 第一张便签（**History Table**）就贴在读者档案上，简单记下他最近几次借了哪几本书以及借书的时间戳。
-  - 第二张便签（**Table of Deltas**）是他的“成功经验本”，只记录那些被证明能准确预测他下次借书行为的“书距”（delta），并且给每个“书距”打个分（coverage counter）。
+    - 第一张便签（**History Table**）就贴在读者档案上，简单记下他最近几次借了哪几本书以及借书的时间戳。
+    - 第二张便签（**Table of Deltas**）是他的“成功经验本”，只记录那些被证明能准确预测他下次借书行为的“书距”（delta），并且给每个“书距”打个分（coverage counter）。
 - 整个过程没有任何复杂的推理，就是纯粹的经验主义：看到读者来借书，就翻翻他的“成功经验本”，如果某个“书距”得分够高，就按这个距离去书架上把下一本可能要借的书拿过来。
 
 **关键一招 (The "How")**
@@ -182,21 +182,21 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 
 - **第一步：用最朴素的方式记录历史**
 
-  - **History Table** 被设计成一个 **8-set, 16-way** 的缓存，直接用 **IP** 作为索引。
-  - 每个条目只存三样东西：**IP tag**、**地址**（VA）、**时间戳**。这是一个纯粹的“日志”结构，写入和查找都非常快，且完全在关键路径之外。
+    - **History Table** 被设计成一个 **8-set, 16-way** 的缓存，直接用 **IP** 作为索引。
+    - 每个条目只存三样东西：**IP tag**、**地址**（VA）、**时间戳**。这是一个纯粹的“日志”结构，写入和查找都非常快，且完全在关键路径之外。
 
 - **第二步：用计数器代替复杂模型来做决策**
 
-  - **Table of Deltas** 是一个 **16-entry fully-associative** 表，同样用 **IP**（哈希后）作为 tag。
-  - 它的核心是一个 **4-bit counter** 和一个包含 **16 个 delta** 的数组。每个 delta 条目有自己的 **4-bit coverage counter**。
-  - **最关键的简化在于**：覆盖度（coverage）的计算不是通过复杂的在线学习，而是通过一个**周期性的相位重置**（phase reset）机制。每当主 counter 溢出（达到16次搜索），就根据每个 delta 的 coverage counter 值（比如 >10 就是 65%+）来决定其状态（`L1D_pref`, `L2_pref`, `No_pref`），然后清零所有计数器，开始新一轮的学习。
-  - 这个“**计数-阈值-重置**”的循环，用最廉价的硬件（几个加法器和比较器）就实现了对 delta “信心”的动态评估，完全避开了 perceptron 或复杂的 confidence calculation。
+    - **Table of Deltas** 是一个 **16-entry fully-associative** 表，同样用 **IP**（哈希后）作为 tag。
+    - 它的核心是一个 **4-bit counter** 和一个包含 **16 个 delta** 的数组。每个 delta 条目有自己的 **4-bit coverage counter**。
+    - **最关键的简化在于**：覆盖度（coverage）的计算不是通过复杂的在线学习，而是通过一个**周期性的相位重置**（phase reset）机制。每当主 counter 溢出（达到16次搜索），就根据每个 delta 的 coverage counter 值（比如 >10 就是 65%+）来决定其状态（`L1D_pref`, `L2_pref`, `No_pref`），然后清零所有计数器，开始新一轮的学习。
+    - 这个“**计数-阈值-重置**”的循环，用最廉价的硬件（几个加法器和比较器）就实现了对 delta “信心”的动态评估，完全避开了 perceptron 或复杂的 confidence calculation。
 
 - **第三步：硬件开销的极致控制**
 
-  - 所有操作都基于简单的整数加法（计算 delta）、比较（检查阈值）和计数。
-  - 没有乘法器、没有复杂的 ALU、没有庞大的 CAM。
-  - 正如论文中的 **Table I** 所示，整个设计的存储开销被精确地控制在 **2.55 KB**。
+    - 所有操作都基于简单的整数加法（计算 delta）、比较（检查阈值）和计数。
+    - 没有乘法器、没有复杂的 ALU、没有庞大的 CAM。
+    - 正如论文中的 **Table I** 所示，整个设计的存储开销被精确地控制在 **2.55 KB**。
 
 ![](images/92c023f5b766e980c7be588e6c1f07838123c1cbad5b89621d965b1c52a79a49.jpg) *Table I STORAGE OVERHEAD OF BERTI.*
 

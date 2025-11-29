@@ -1,0 +1,670 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Drishti: Do Not Forget Slicing While Designing Last-Level Cache Replacement Policies for Many-Core Systems 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Drishti: Do Not Forget Slicing While Designing Last-Level Cache Replacement Policies for Many-Core Systems 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-per-core-yet-global-reuse-predictor-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Per-Core Yet Global Reuse Predictor (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-local-per-slice-sampled-cache-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Local Per-Slice Sampled Cache (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-dynamic-sampled-cache-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Dynamic Sampled Cache (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dedicated-low-latency-interconnect-nocstar-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dedicated Low-Latency Interconnect (NOCSTAR) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems">Drishti: Do Not Forget Slicing While Designing Last-Level Cache Replacement Policies for Many-Core Systems 通俗讲解<a class="headerlink" href="#drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<p>现代高性能CPU的Last-Level Cache (LLC) 早已不是一块“整”的存储，而是被切分成多个物理上分离的 <strong>slices</strong>（切片），每个核心访问不同切片的延迟还不一样（NUCA）。当前最顶尖的LLC替换策略，比如 <strong>Hawkeye</strong> 和 <strong>Mockingjay</strong>，它们的设计和评估都基于一个过时的假设：LLC是<strong>单体</strong>（monolithic）的。当这些策略被直接搬到真实的多核切片LLC上时，会遇到两个致命的“水土不服”问题：</p>
+<ul>
+<li><strong>“管中窥豹”的预测器</strong>：在单体LLC里，一个全局的reuse predictor能看到所有相关的内存访问。但在切片LLC里，每个切片都有自己的局部预测器。同一个程序计数器（PC）触发的内存请求会被哈希分散到不同切片，导致每个切片的预测器只能看到一部分、不完整的访问历史。这种<strong>myopic</strong>（目光短浅）的训练数据让预测器学不到全局的重用模式，决策自然就变差了。</li>
+<li><strong>“闲忙不均”的采样缓存</strong>：这些策略依赖一个叫 <strong>sampled cache</strong> 的小结构，它只监控LLC中随机挑选的少数几个sets的行为，并以此来指导整个LLC的替换决策。但在切片LLC中，由于工作负载的访问模式不均匀，有些被选中的sets可能几乎收不到任何LLC miss（即没什么可学的），而另一些sets则非常繁忙。这导致采样缓存的效率低下，宝贵的决策信息被浪费了。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<p>想象一下管理一个大型连锁超市（LLC）。</p>
+<ul>
+<li><strong>旧方法的问题</strong>：以前总部（单体LLC）有一个全能的商品经理（全局预测器），他能看到所有分店（sets）的销售数据，知道哪些商品畅销（cache-friendly），哪些滞销（cache-averse）。但现在公司扩张了，变成了几十家独立运营的分店（切片LLC），每家店都有自己的小经理（局部预测器）。问题是，顾客（内存请求）是根据住址（地址哈希）被随机分配到不同分店的。结果，卖牛奶的畅销品信息被分散在A、B、C三家店里，每家店的小经理都只看到自己店里零星的几笔牛奶交易，误以为牛奶不好卖，于是决定下架。这就是“管中窥豹”。</li>
+<li><strong>Drishti的解决方案</strong>：Drishti的做法很聪明。它没有强行把所有销售数据都汇总到一个超级总部（那样通信开销太大），而是给<strong>每个采购员</strong>（core）。这个采购员虽然驻扎在某一家分店（靠近某个slice），但他负责跟踪自己经手的所有商品（该core发出的所有请求）在全国各家分店的销售情况。同时，Drishti还改变了采样规则：它不再随机抽查分店，而是专门去那些<strong>人流量最大、交易最频繁</strong>（高MPKA）的分店收集数据，确保拿到的都是最有价值的信息。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<p>Drishti并没有发明一种全新的替换算法，而是对现有顶级策略（如Hawkeye, Mockingjay）与切片LLC的交互方式做了两处精妙的“外科手术式”改造：</p>
+<ul>
+<li>
+<p><strong>改造预测器架构</strong>：作者将原来的“<strong>每切片一个局部预测器</strong>”模式，扭转为“<strong>每核心一个全局预测器</strong>”。具体来说：</p>
+<ul>
+<li>每个核心拥有一个专属的reuse predictor。</li>
+<li>这个预测器虽然是物理上靠近某个LLC slice放置的，但它能接收来自<strong>所有LLC slices</strong>的训练信号。因为一个core发出的请求会散落到各个slice，所以每个slice在处理完属于该core的请求后，会通过一个专用的低延迟互连（<strong>NOCSTAR</strong>）将训练信息（如重用距离）发送给对应core的预测器。</li>
+<li>这样，预测器就能获得关于该core行为的完整、全局视图，彻底解决了myopic问题。</li>
+</ul>
+</li>
+<li>
+<p><strong>改造采样缓存机制</strong>：作者抛弃了“<strong>随机选择采样sets</strong>”的传统做法，引入了“<strong>动态采样缓存</strong>”（Dynamic Sampled Cache）：</p>
+<ul>
+<li>在每个LLC slice内部，Drishti会用一组<strong>饱和计数器</strong>来监控每个set的miss频率（即MPKA）。</li>
+<li>它会周期性地挑选出那些<strong>miss最多</strong>（高容量需求）的sets作为新的采样对象。</li>
+<li>这确保了sampled cache总是聚焦在最活跃、信息量最大的区域，极大提升了训练数据的质量和预测器的准确性。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/d1fb66abe495352f9851f1eec950332b277dc1a0372947b9d3718aa0ce6e1c72.jpg" /></p>
+<p><em>Figure 9: Drishti's enhancement: Tracking reuse behavior and training the per-core and yet global reuse predictor with local (per-slice) sampled caches.</em></p>
+<p>最终效果非常显著：在32核系统上，Drishti将Mockingjay的性能提升从6.7%一举推高到<strong>13.2%</strong>，并且还节省了硬件存储开销。这证明了在设计缓存策略时，充分考虑底层硬件的物理布局（如切片）是多么重要。</p>
+<h3 id="1-per-core-yet-global-reuse-predictor-eli5">1. Per-Core Yet Global Reuse Predictor (ELI5)<a class="headerlink" href="#1-per-core-yet-global-reuse-predictor-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>在现代 <strong>many-core</strong> 处理器中，<strong>Last-Level Cache (LLC)</strong> 通常被切分成多个物理上分离的 <strong>slice</strong>，并通过 <strong>interconnect</strong> 连接。一个核心发出的内存请求，会根据其地址哈希到某个特定的 slice 上。</li>
+<li>现有的先进替换策略（如 <strong>Hawkeye</strong>, <strong>Mockingjay</strong>）依赖于 <strong>reuse predictor</strong> 来判断一个缓存行未来是否会被重用。在 sliced LLC 架构下，如果每个 slice 都维护自己独立的预测器（即 <strong>per-slice local predictor</strong>），就会产生一个致命问题：<strong>myopic behavior (短视行为)</strong>。</li>
+<li>具体来说，同一个程序计数器 (<strong>PC</strong>) 发出的不同内存请求，会因为地址不同而被散列到<strong>不同的 LLC slice</strong> 上。结果就是，没有任何一个 slice 的本地预测器能看到这个 PC 的<strong>完整访问历史</strong>。每个预测器只看到了“管中窥豹”的一部分数据，导致其训练出的模型严重失真，做出的预测自然也就差强人意。核心越多，地址散列越分散，这个问题就越严重。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你是一个侦探（<strong>reuse predictor</strong>），任务是根据一个人（<strong>PC</strong>）过去的消费记录（<strong>memory accesses</strong>）来预测他未来的消费习惯（<strong>reuse behavior</strong>）。</li>
+<li>在旧方案里，你的团队被分成了很多个小组（<strong>per-slice predictors</strong>），每个小组只负责监视这个人去某一家特定商店（<strong>LLC slice</strong>）的消费记录。</li>
+<li>结果，A组看到他在书店买了书，B组看到他在超市买了菜，C组看到他在加油站加了油……但没有任何一个小组知道这些消费其实是同一个人干的！他们各自基于片面的信息，得出了完全错误的结论，比如A组认为他是个书呆子，从不花钱吃饭。</li>
+<li><strong>Drishti</strong> 的做法是，给每个人（<strong>PC</strong>）指定一个专属的、全局视角的侦探（<strong>per-core global predictor</strong>）。无论这个人去哪家商店消费，所有商店的监控录像（<strong>access information</strong>）都会实时汇总给这个专属侦探。这样，侦探就能掌握他的完整画像，做出精准预测。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者并没有采用一个笨重的、所有核心共享的<strong>centralized global predictor</strong>（这会造成严重的 interconnect 带宽瓶颈），而是设计了一个精巧的折中方案：<strong>Per-Core Yet Global Reuse Predictor</strong>。</li>
+<li><strong>具体操作</strong>：<ul>
+<li>为系统中的<strong>每一个核心 (core)</strong> 分配一个独立的 reuse predictor。</li>
+<li>这个 predictor 虽然“属于”某个核心，但它在逻辑上是“全局”的——<strong>所有 LLC slices</strong> 都可以访问它。</li>
+<li>当任何一个 slice 处理来自核心 X 的内存请求时，它会使用 <code>(PC, Core_X_ID)</code> 作为索引，去更新或查询<strong>核心 X 专属的那个 predictor</strong>。</li>
+</ul>
+</li>
+<li>这个设计的精妙之处在于：<ul>
+<li><strong>解决了短视问题</strong>：核心 X 的所有内存访问，无论散落到哪个 slice，最终都会汇总到它自己的 predictor 那里，从而获得了完整的全局视图。</li>
+<li><strong>控制了通信开销</strong>：相比于一个所有核心争抢的中心化预测器，这种 per-core 的设计将通信流量分散了。每个 slice 只需要和与之相关的那几个核心的 predictor 通信，大大降低了对 interconnect 的压力。</li>
+<li><strong>配合专用互连</strong>：为了进一步降低 slice 访问 remote predictor 的延迟，论文还引入了名为 <strong>NOCSTAR</strong> 的低延迟专用互连，将通信延迟从平均20周期骤降到3周期，使得这个全局预测器的设计在性能上变得可行。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/d1fb66abe495352f9851f1eec950332b277dc1a0372947b9d3718aa0ce6e1c72.jpg" /></p>
+<p><em>Figure 9: Drishti's enhancement: Tracking reuse behavior and training the per-core and yet global reuse predictor with local (per-slice) sampled caches.</em></p>
+<h3 id="2-local-per-slice-sampled-cache-eli5">2. Local Per-Slice Sampled Cache (ELI5)<a class="headerlink" href="#2-local-per-slice-sampled-cache-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>在现代 <strong>many-core</strong> 处理器中，<strong>Last-Level Cache (LLC)</strong> 通常被物理切分成多个 <strong>slice</strong>，每个 slice 靠近一部分核心，并通过 <strong>interconnect</strong> 连接。这种设计带来了 <strong>Non-Uniform Cache Access (NUCA)</strong> 的特性。</li>
+<li>传统的高性能 <strong>LLC replacement policy</strong>（如 Hawkeye, Mockingjay）依赖一个 <strong>sampled cache</strong> 来监控一小部分缓存集合的访问行为，并用它来训练一个 <strong>reuse predictor</strong>（通常基于 <strong>PC</strong>）。</li>
+<li>当这些策略直接应用到 <strong>sliced LLC</strong> 上时，一个朴素的做法是为每个 slice 都配一套独立的 sampled cache 和 predictor。这导致了严重的 <strong>myopic behavior（短视行为）</strong>：<ul>
+<li>同一个程序计数器 <strong>PC</strong> 触发的内存访问，会因为地址哈希而散落到不同的 slice 上。</li>
+<li>每个 slice 的 predictor 只能看到自己“一亩三分地”里的访问，无法得知这个 PC 在全局范围内的真实重用模式。</li>
+<li>结果就是，预测器学到的信息是片面且有噪声的，做出的替换决策自然就 <strong>suboptimal</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你是一个城市（整个 LLC）的交通调度员，需要根据历史数据预测哪些路口（cache lines）未来会拥堵（被重用），从而提前调配资源。</li>
+<li>旧方法在 sliced LLC 上，相当于给城市的每个区（slice）都派了一个调度员，但他们只能看到自己区内的摄像头（sampled cache）。</li>
+<li>现在，一条主干道（由同一个 PC 发起的访问流）贯穿了东、西、南、北四个区。东区的调度员只看到车流进来，西区的只看到车流出去，他们都无法判断这是一条繁忙的主干道，可能会错误地认为自己区内的这段路不重要。</li>
+<li><strong>Drishti 的做法是</strong>：保留每个区自己的摄像头（<strong>local per-slice sampled cache</strong>），因为它们离得近、看得清、成本低。但是，所有摄像头的数据都汇总给一个对全市交通有完整视野的总调度员（<strong>per-core global predictor</strong>）来分析。这样，总调度员就能拼凑出完整的主干道图景，做出更明智的决策。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者并没有抛弃本地采样的高效性，而是巧妙地 <strong>解耦了“数据采集”和“决策制定”</strong> 这两个环节。</li>
+<li><strong>数据采集</strong>（tracking reuse behavior）依然在本地进行：每个 slice 维护自己的 <strong>sampled cache</strong>，监控其内部采样集合的命中/失效情况。这避免了将所有原始访问数据都发送到中心节点造成的巨大带宽开销。</li>
+<li><strong>决策制定</strong>（training the predictor）则提升到全局视角：当本地 sampled cache 捕获到一次有意义的访问（比如一次失效）时，它会将这次事件的关键信息（PC、核心ID、重用距离等）通过一个专用的、<strong>低延迟互连</strong>（NOCSTAR）发送给对应核心的 <strong>全局预测器</strong>。</li>
+<li>这个 <strong>per-core global predictor</strong> 虽然物理上可能分布在各个 slice 附近，但逻辑上是“全局”的——它接收来自 <em>所有</em> slice 关于 <em>该核心</em> 发起的访问的信息。因此，它能基于完整的访问历史来训练，彻底解决了 <strong>myopic behavior</strong> 的问题。</li>
+<li><img alt="" src="../images/d1fb66abe495352f9851f1eec950332b277dc1a0372947b9d3718aa0ce6e1c72.jpg" /></li>
+</ul>
+<p><em>Figure 9: Drishti's enhancement: Tracking reuse behavior and training the per-core and yet global reuse predictor with local (per-slice) sampled caches.</em></p>
+<ul>
+<li>这种设计在 <strong>性能</strong> 和 <strong>开销</strong> 之间取得了精妙的平衡：既获得了全局预测的准确性，又避免了集中式方案的带宽瓶颈。论文数据显示，相比集中式预测器动辄 <strong>65+ 次/kilo-instruction</strong> 的访问，这种 per-core 全局预测器的平均访问量仅为 <strong>2.46 次/kilo-instruction</strong>，并且配合 NOCSTAR 互连将通信延迟从约20周期降至3周期，使得性能增益得以兑现。</li>
+</ul>
+<h3 id="3-dynamic-sampled-cache-eli5">3. Dynamic Sampled Cache (ELI5)<a class="headerlink" href="#3-dynamic-sampled-cache-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的 <strong>sampled cache</strong>（采样缓存）机制，比如在 Hawkeye 和 Mockingjay 中，会<strong>随机</strong>挑选一些 LLC sets（缓存组）来监控访问行为，以此训练全局的 reuse predictor（重用预测器）。</li>
+<li>这个做法在一个<strong>单体LLC</strong>（monolithic LLC）里问题不大，因为所有访问都集中在一起。但在现代<strong>多核处理器</strong>的<strong>切片式LLC</strong>（sliced LLC）架构下，问题就暴露了。</li>
+<li>由于地址哈希和工作负载特性，不同 LLC slice（切片）里的 sets 访问热度极不均衡。有些 sets 承载了大量 misses（失效），是真正的“热点”；而另一些 sets 则非常“冷清”，几乎没什么访问。</li>
+<li>如果你的 sampled cache 恰好随机选中了这些“冷清”的 sets，那么你用来训练预测器的数据就<strong>严重失真且充满噪声</strong>。这就像让一个侦探只在犯罪率最低的街区巡逻，然后让他去预测整个城市的犯罪趋势，结果必然是<strong>无效甚至有害的</strong>。</li>
+<li>论文中的 Figure 5</li>
+</ul>
+<p><img alt="" src="../images/dafe876c740783f360803ce2027231754468b90417c9aafbfb613a15a50b7d32.jpg" /></p>
+<p><em>Figure 5: Miss per kilo accesses (MPKA) per LLC set with three different 16-core homogeneous workloads.</em></p>
+<p>清晰地展示了这种 <strong>MPKA</strong>（每千次访问的失效次数） 的巨大差异，而 Table 1</p>
+<p><img alt="" src="../images/a414717151ed11725279a36c126d05e1e6488e3fe8c84436b02d3fb137d31f89.jpg" /></p>
+<p>则用实验证明：用高 MPKA sets 做采样，性能提升高达 <strong>16%</strong>；而用低 MPKA sets，效果则大打折扣。</p>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你是一家大型连锁超市（LLC）的区域经理，手下有几十家分店（slices）。你想优化全国的商品库存策略（replacement policy），所以你决定派“神秘顾客”（sampled cache）去一些门店蹲点，观察哪些商品卖得快、哪些积压。</li>
+<li>旧方法是<strong>闭着眼睛随机</strong>选几家店派人。结果很可能派到了偏远郊区客流稀少的店，或者刚开业还没什么顾客的新店。你根据这些“冷清”门店的数据做出的全国库存决策，肯定是灾难性的。</li>
+<li><strong>Dynamic Sampled Cache</strong> 的思路就聪明多了：它先让每个区域经理（per-slice logic）统计自己辖区内所有门店过去一段时间的<strong>客流量和销售额</strong>（通过监控 hits/misses 来计算 MPKA）。然后，它<strong>动态地</strong>只选择那些客流量最大、销售最火爆的门店（high-MPKA sets）作为“神秘顾客”的蹲点目标。</li>
+<li>这样，你收集到的数据才是真正反映市场“脉搏”的高质量信号，据此做出的决策自然更精准、更有效。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者没有改变 sampled cache 的基本功能，而是彻底改变了<strong>如何选择</strong>被采样的 sets。</li>
+<li>具体来说，在每个 LLC slice 内部：<ul>
+<li>引入了一套轻量级的监控机制：为每个 set 配备一个 <strong>k-bit saturating counter</strong>（饱和计数器）。</li>
+<li>这个计数器的逻辑很简单：每次发生 <strong>LLC miss</strong> 就加一，每次发生 <strong>LLC hit</strong> 就减一。这样，计数器的值就能大致反映出该 set 的 <strong>capacity pressure</strong>（容量压力），也就是它的 <strong>MPKA</strong> 趋势。</li>
+<li>系统以固定的间隔（论文中是每 32K 次 load accesses）进行一次“快照”。在这个时间窗口结束后，slice 会从自己的所有 sets 中，<strong>动态挑选出 N 个计数器值最高的 sets</strong>，将它们指定为下一个周期的 sampled sets。</li>
+<li>为了应对程序运行时的 <strong>phase change</strong>（相变），这个选择过程是周期性重复的（每 128K 次访问重置一次），确保采样目标能跟上工作负载的变化。</li>
+</ul>
+</li>
+<li>这一招的精妙之处在于，它用极小的硬件开销（每个 set 一个很小的计数器），就将采样过程从<strong>盲目的随机赌博</strong>转变为<strong>基于真实热度的精准狙击</strong>，从而极大地提升了训练数据的质量和最终 replacement policy 的有效性。更妙的是，因为采样更高效了，所需的 sampled sets 数量反而可以<strong>减少</strong>（如 Table 3</li>
+</ul>
+<p><img alt="" src="../images/0abaf749c497c949f9ccecde5dffa544e3027b0ee188b124e372b5fc8f6f67da.jpg" /></p>
+<p><em>Table 3: Per-core hardware budget with and without Drishti for a 16-way 2MB LLC slice.</em></p>
+<p>所示），还节省了存储空间。</p>
+<h3 id="4-dedicated-low-latency-interconnect-nocstar-eli5">4. Dedicated Low-Latency Interconnect (NOCSTAR) (ELI5)<a class="headerlink" href="#4-dedicated-low-latency-interconnect-nocstar-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>现代高性能LLC替换策略（如Hawkeye, Mockingjay）依赖一个“Reuse Predictor”来判断哪些数据值得留在缓存里。在<strong>sliced LLC</strong>（切片式末级缓存）架构下，如果每个切片都用自己的本地预测器，就会产生“<strong>myopic behavior</strong>”（短视行为）：因为同一个程序计数器（PC）产生的内存请求会被散列到不同切片，导致每个本地预测器只能看到全局访问模式的一小部分，从而做出错误判断。</li>
+<li>一个直观的解决方案是搞一个<strong>centralized global predictor</strong>（中心化全局预测器），让所有切片共享。但这会带来灾难性的后果：<ul>
+<li><strong>带宽瓶颈</strong>：每次缓存填充（fill）或采样缓存（sampled cache）更新时，都需要访问这个全局预测器。在32核甚至更多核的系统上，这会产生海量的互连网络流量。</li>
+<li><strong>延迟飙升</strong>：通过常规的Mesh等片上网络（NoC）访问远端的全局预测器，延迟可能高达<strong>20个周期</strong>。论文图11a明确指出，这种高延迟会完全抵消甚至逆转性能收益，在32核系统上反而比基线慢<strong>9%</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象一个大型图书馆（LLC），被分成了几十个独立的阅览室（slices）。每个阅览室都有自己的图书管理员（本地预测器），但他们只负责自己房间里的书。当读者（CPU核心）想借一本热门书时，这本书可能被分散放在不同的阅览室。每个管理员只知道“自己房间里这本书被借过几次”，却不知道“全图书馆这本书有多抢手”，结果可能把真正热门的书给清理掉了。</li>
+<li>为了解决这个问题，有人提议设立一个<strong>总馆长办公室</strong>（中心化全局预测器），所有管理员都要向他汇报和请示。但问题来了：几十个管理员同时挤在总馆长门口排队汇报，走廊（互连网络）瞬间堵死，等总馆长处理完一个请求，读者早就走了。效率反而更低。</li>
+<li>Drishti的做法是：不设一个总馆长，而是给<strong>每位常来的读者（CPU核心）配一个专属顾问</strong>（per-core global predictor）。这个顾问就坐在离读者最近的阅览室里。更重要的是，图书馆专门修了一条<strong>VIP快速通道</strong>（NOCSTAR），让任何一个阅览室的管理员都能在<strong>3个周期内</strong>（几乎瞬时）把信息传给这位专属顾问。这样，顾问就能基于全馆（所有切片）的信息给出建议，又不会造成大拥堵。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者的核心洞察是：<strong>不需要一个物理上集中的预测器，只需要逻辑上的全局视野，并用极低的通信开销来维持它</strong>。</li>
+<li>具体实现上，他们做了两个关键设计：<ul>
+<li><strong>Per-Core Global Predictor</strong>: 为每个CPU核心分配一个专用的预测器。这个预测器虽然物理上可能分布在各个LLC切片附近，但它负责跟踪该核心发出的所有内存请求（这些请求会散落到各个切片），因此它拥有了<strong>全局视角</strong>。</li>
+<li><strong>Dedicated Low-Latency Interconnect (NOCSTAR)</strong>: 这是最精妙的一招。他们没有使用主计算用的通用NoC，而是引入了一个<strong>side-band</strong>（旁路式）、<strong>latchless circuit-switched</strong>（无锁存器的电路交换）的专用互连网络。<ul>
+<li>这个网络像一张蜘蛛网，直接将所有LLC切片和所有预测器连接起来。</li>
+<li>它牺牲了通用性和高带宽（因为预测器更新并不频繁），换来了<strong>超低延迟</strong>（仅<strong>3 cycles</strong>）和<strong>极低功耗</strong>（平均每次通信仅<strong>50pJ</strong>）。</li>
+<li>如图</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/70c486d52e124569e24857169dd1a3d7d26dbe698f4633315f2dbe79781b491a.jpg" /></p>
+<p><em>Figure 11: (a) Slowdown in Mockingjay with Drishti without a low-latency interconnect between slices and the predictors. (b)Interconnect latency sensitivity on a 32-core system across 35 homogeneous and 35 heterogeneous mixes.</em></p>
+<p>所示，正是这个3周期的延迟，使得性能增益得以兑现；如果用20周期的常规网络，性能反而会下降。</p>
+<ul>
+<li>通过这一招，作者成功地在<strong>避免带宽瓶颈</strong>和<strong>消除高延迟惩罚</strong>之间找到了完美的平衡点，让全局预测器的想法在多核切片LLC上真正变得可行。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

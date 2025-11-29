@@ -668,17 +668,21 @@
 <ul>
 <li>图片展示了 Triangel 硬件时间预取器在处理元数据访问模式时的决策机制，分为上下两个部分：上部为 PatternConf 动态变化曲线，下部为元数据重用距离随执行时间的分布图。</li>
 <li>上部图表中，<strong>PatternConf</strong> 是一个 4 位计数器，用于评估未来内存访问是否具备时间模式。其值随有用（蓝色点）和无用（红色点）元数据访问动态调整：有用访问增加计数，无用访问减少计数。当 PatternConf 低于阈值（threshold），Triangel 会禁用元数据插入与预取。</li>
-<li>下部图表中，横轴为 <strong>Execution Time</strong>，纵轴为 <strong>Metadata Reuse Distance</strong>。图中包含四种标记：</li>
+<li>下部图表中，横轴为 <strong>Execution Time</strong>，纵轴为 <strong>Metadata Reuse Distance</strong>。图中包含四种标记：<ul>
 <li>蓝色圆点：导致有用预取的元数据访问。</li>
 <li>红色圆点：导致无用预取的元数据访问。</li>
 <li>蓝色星号：首次访问且具有时间模式的元数据，应被插入元数据表。</li>
 <li>红色星号：首次访问但无时间模式的元数据，不应被插入。</li>
+</ul>
+</li>
 <li>在高亮区域（橙色框），多个红色点密集出现，导致 PatternConf 快速下降至 0，触发“not insert metadata + not prefetch”状态。此时，即使后续出现蓝色星号（应插入的首次访问），也会被错误拒绝，造成<strong>误过滤</strong>。</li>
 <li>该图揭示了 Triangel 的核心缺陷：<strong>依赖短期数据更新 PatternConf</strong>，无法适应元数据访问模式的高度动态性与重用距离的大范围波动，从而牺牲了潜在的有效预取机会。</li>
-<li>关键观察：</li>
+<li>关键观察：<ul>
 <li>元数据访问模式高度交错，蓝红点频繁交替。</li>
 <li>重用距离跨度极大，从接近 0 到超过 300,000。</li>
 <li>Triangel 的静态阈值机制在动态负载下表现僵化，易因短期噪声导致长期性能损失。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -724,12 +728,16 @@
 <ul>
 <li>图片展示了 <strong>Prophet</strong> 与传统 <strong>profile-guided solutions</strong> 在处理不同程序输入时的对比流程，核心在于 <strong>轻量级计数器分析</strong> 与 <strong>多输入自适应能力</strong>。</li>
 <li>左侧为通用流程：程序接收输入 <code>x</code> 后生成二进制文件，进入 <strong>Profile</strong> 阶段，可选择使用 <strong>Trace</strong>（GB 级）或 <strong>Counter</strong>（B 级）进行分析，最终通过 <strong>Analyze &amp; Inject hint</strong> 生成优化二进制。</li>
-<li>右侧对比分为两部分：</li>
+<li>右侧对比分为两部分：<ul>
 <li><strong>Prior works</strong>（红色区域）：当输入从 <code>x</code> 变为 <code>y</code> 时，需重新执行完整 <strong>Re-Profile (Trace y)</strong> 流程，导致性能次优（Sub-optimal Performance），且无法复用历史数据。</li>
 <li><strong>Prophet</strong>（绿色区域）：采用 <strong>Learn (Counter x+y)</strong> 机制，直接合并新旧计数器数据，无需重新追踪，生成的 <strong>New Binary (x+y)</strong> 能实现最优性能（Optimal Performance）。</li>
-<li>关键优势体现在：</li>
+</ul>
+</li>
+<li>关键优势体现在：<ul>
 <li><strong>轻量级</strong>：仅依赖 <strong>Counter</strong>（字节级），避免 <strong>Trace</strong>（GB级）带来的存储与性能开销。</li>
 <li><strong>自适应</strong>：支持 <strong>多输入数据融合</strong>，使单一优化二进制能适配不同输入场景。</li>
+</ul>
+</li>
 <li>对比总结表：</li>
 </ul>
 <table>
@@ -817,10 +825,12 @@
 <li><strong>Prophet Resizing</strong> 由 <strong>CSR</strong> 控制，在程序启动时配置元数据表大小。同样，启用 Prophet 时会禁用 <strong>Runtime Resizing</strong>，并通过 “Prophet &gt; Runtime” 决策框切换。</li>
 <li>所有 <strong>Prophet</strong> 组件（绿色方框）均基于离线分析生成的提示信息，而 <strong>Runtime</strong> 组件（红色方框）代表传统硬件预取器的原生策略。</li>
 <li>系统支持灵活切换：在频繁执行的工作负载上使用 Prophet 以获得高性能；在不常执行的工作负载上回退到 Runtime 方案，保持兼容性。</li>
-<li>关键路径包括：</li>
+<li>关键路径包括：<ul>
 <li>插入路径：Demand Request → Hint → Prophet Insertion Policy → Metadata Table</li>
 <li>替换路径：Demand Request → Hint → Prophet Replacement Policy → Prophet Replacement State → Victim Candidates → Runtime Replacement Policy → Metadata Table</li>
 <li>调整路径：CSR → Prophet Resizing → Resize → Metadata Table</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -980,9 +990,11 @@
 <li>图片展示的是一个数学函数表达式，用于定义 <strong>Prophet Insertion Policy</strong> 的决策逻辑。</li>
 <li>该函数名为 <code>I(acc)</code>，其输入参数为 <code>acc</code>，代表某个程序计数器（PC）在时间预取器下的 <strong>prefetching accuracy</strong>。</li>
 <li>函数输出为一个二值结果：1 或 0，分别对应“允许插入元数据”和“禁止插入元数据”。</li>
-<li>判断条件基于一个预设的阈值 <strong>EL_ACC</strong>：</li>
+<li>判断条件基于一个预设的阈值 <strong>EL_ACC</strong>：<ul>
 <li>当 <code>acc ≥ EL_ACC</code> 时，输出为 1，表示该 PC 对应的内存访问指令具有足够高的预取准确率，其元数据应被记录到元数据表中。</li>
 <li>当 <code>acc &lt; EL_ACC</code> 时，输出为 0，表示该 PC 的预取准确率过低，其元数据被视为无效或无用，不应被插入以节省宝贵的片上存储空间。</li>
+</ul>
+</li>
 <li>此公式是 Prophet 框架的核心组件之一，它通过离线分析阶段获得的精确性能指标（而非硬件实时估算），实现了比 Triangel 等现有方案更精准的元数据过滤。</li>
 <li>其设计哲学是 <strong>保守过滤</strong>：仅当有明确证据表明某条指令几乎不产生有用预取时才将其过滤掉，从而避免了因过度过滤而丢失潜在有用模式的问题。</li>
 </ul>
@@ -1077,10 +1089,12 @@
 <p><img alt="337bc9a6391c1d0ca184a19b58f39dfb7754777d64613024963860b134c475f8.jpg" src="../images/337bc9a6391c1d0ca184a19b58f39dfb7754777d64613024963860b134c475f8.jpg" /></p>
 <ul>
 <li>该图片展示了一个用于计算 <strong>Allocated Ways</strong> 的数学公式，其核心目的是在 <strong>LLC (Last-Level Cache)</strong> 中为 <strong>metadata table</strong> 分配空间。</li>
-<li>公式结构清晰，包含三个关键变量：</li>
+<li>公式结构清晰，包含三个关键变量：<ul>
 <li><strong>Target Size</strong>: 指的是在程序执行结束时，通过性能监控单元（PMU）计数器测量得到的、程序实际需要的元数据表最大条目数。这个值是动态获取的，反映了程序对元数据存储的真实需求。</li>
 <li><strong>Number of sets in LLC</strong>: 指的是整个 LLC 的总路数（sets），这是一个固定的硬件参数。</li>
 <li><strong>ceil()</strong>: 这是一个向上取整函数，确保分配的路数（Ways）是一个整数值，避免出现部分路数的情况。</li>
+</ul>
+</li>
 <li>该公式的功能是将一个抽象的“目标大小”转换为具体的硬件资源分配方案。它通过将目标大小除以 LLC 的总路数，然后向上取整，来确定需要从 LLC 中划出多少路（Ways）给 metadata table 使用。</li>
 <li>这种设计体现了 Prophet 框架的 <strong>轻量级</strong> 和 <strong>兼容性</strong> 特点。它不依赖复杂的运行时算法（如 Triangel 的 Set Dueller），而是基于离线分析得出的静态配置，在程序启动时一次性完成资源配置，从而避免了运行时开销。</li>
 <li>在实际应用中，这个公式是 Prophet <strong>Resizing</strong> 策略的核心。它确保了 metadata table 的大小既能满足程序的需求，又不会过度占用宝贵的 LLC 资源，从而在 <strong>prefetching coverage</strong> 和 <strong>LLC hit rate</strong> 之间取得平衡。</li>
@@ -1110,10 +1124,12 @@
 <ul>
 <li>图片内容为一个数学公式，表达式为 <strong>Merged = max(o, n)</strong>。</li>
 <li>该公式用于 <strong>Prophet</strong> 框架的 <strong>Step 3: Learning</strong> 阶段，具体应用于合并不同程序输入下收集到的“已分配元数据条目数”这一应用级指标。</li>
-<li>公式中变量含义：</li>
+<li>公式中变量含义：<ul>
 <li><strong>o</strong>：代表在先前输入（如输入 X）下记录的已分配元数据条目数。</li>
 <li><strong>n</strong>：代表在新输入（如输入 Y）下记录的已分配元数据条目数。</li>
 <li><strong>Merged</strong>：代表合并后用于指导后续优化的最终值。</li>
+</ul>
+</li>
 <li>采用 <strong>max</strong> 函数的策略是保守的，旨在确保为元数据表分配足够的空间，以满足所有已观察到的程序输入的需求，避免因空间不足导致性能下降。</li>
 <li>此方法与 PC 级别的合并策略（使用加权平均公式）不同，体现了 Prophet 对不同粒度数据采取差异化处理的设计思想。</li>
 </ul>
@@ -1123,12 +1139,14 @@
 <li>图表标题为 <strong>Figure 8: The percentage of Markov target number (T) in temporal prefetching</strong>，展示的是在时间预取（temporal prefetching）场景中，不同数量的 Markov 目标（T）所占的比例。</li>
 <li>横轴列出多个 SPEC CPU 基准测试程序：<strong>astar_biglakes, gcc_166, mcf, omnetpp, soplex_pds-50, sphinx3, xalancbmk</strong>，并包含一个 <strong>Geomean</strong>（几何平均值）用于汇总整体趋势。</li>
 <li>纵轴表示 <strong>Markov Targets Percentage</strong>，即具有特定数量 Markov 目标的内存地址所占百分比，范围从 0.0 到 1.0。</li>
-<li>图例显示五种颜色分别对应 T=1 至 T=5，即每个内存地址关联的 Markov 目标数量：</li>
+<li>图例显示五种颜色分别对应 T=1 至 T=5，即每个内存地址关联的 Markov 目标数量：<ul>
 <li><strong>T=1</strong>: 蓝色</li>
 <li><strong>T=2</strong>: 青色</li>
 <li><strong>T=3</strong>: 绿色</li>
 <li><strong>T=4</strong>: 橙色</li>
 <li><strong>T=5</strong>: 红色</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1209,12 +1227,14 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
 <li>大多数工作负载中，<strong>T=1</strong> 占主导地位，例如 <strong>gcc_166</strong> 和 <strong>sphinx3</strong> 中占比超过 70%，表明多数内存地址仅有一个可预测的后续访问目标。</li>
 <li><strong>T=2</strong> 和 <strong>T=3</strong> 也占据显著比例，合计在多数程序中接近 30%-40%，说明存在相当一部分内存地址具有多路径访问模式。</li>
 <li><strong>T=4</strong> 和 <strong>T=5</strong> 占比极低，通常小于 10%，表明高度复杂的多目标访问模式较少见。</li>
-<li>
-<p><strong>Geomean</strong> 显示整体趋势：约 <strong>55%</strong> 的内存地址仅有 1 个 Markov 目标，<strong>20%</strong> 有 2 个，<strong>15%</strong> 有 3 个，其余为更高阶目标。</p>
+<li><strong>Geomean</strong> 显示整体趋势：约 <strong>55%</strong> 的内存地址仅有 1 个 Markov 目标，<strong>20%</strong> 有 2 个，<strong>15%</strong> 有 3 个，其余为更高阶目标。</li>
+</ul>
 </li>
 <li>
 <p>该图支持论文中提出的 <strong>Multi-path Victim Buffer</strong> 设计动机：由于大量内存地址具有多个 Markov 目标（尤其是 T=2 和 T=3），传统单目标存储机制会导致预取不准确或丢失潜在有用目标。Prophet 引入 Multi-path Victim Buffer 来缓存被驱逐的多目标，从而提升复杂模式下的预取覆盖率和准确性。</p>
@@ -1229,12 +1249,16 @@
 <li>图片展示了 <strong>Multi-path Victim Buffer</strong> 的一个具体条目结构，用于处理单个内存地址对应多个潜在 Markov 目标的情况。</li>
 <li>该结构包含三个核心字段：<strong>Lookup Tag</strong>、<strong>Target</strong> 和 <strong>Counter</strong>，共同记录一个历史访问序列及其被访问的频次。</li>
 <li><strong>Lookup Tag</strong> 字段存储的是上一次访问的地址（LastAddr），在此例中为 <strong>B</strong>。这是查找该条目的键值。</li>
-<li><strong>Target</strong> 字段存储当前访问地址（CurAddr）所指向的下一个可能目标地址。图中显示了两个目标：</li>
+<li><strong>Target</strong> 字段存储当前访问地址（CurAddr）所指向的下一个可能目标地址。图中显示了两个目标：<ul>
 <li>第一个目标是 <strong>C</strong>，表示在访问 B 之后，曾有一次访问 C 的历史。</li>
 <li>第二个目标是 <strong>NULL→D</strong>，表示在访问 B 之后，曾有一次访问 D 的历史，且该路径是从“空”状态开始的。</li>
-<li><strong>Counter</strong> 字段记录每个目标路径被访问的次数。图中显示：</li>
+</ul>
+</li>
+<li><strong>Counter</strong> 字段记录每个目标路径被访问的次数。图中显示：<ul>
 <li>路径 B→C 被访问了 <strong>2</strong> 次。</li>
 <li>路径 B→D 被访问了 <strong>1</strong> 次。</li>
+</ul>
+</li>
 <li>该设计允许 Prophet 在元数据表中仅存储一个主要目标，而将其他次要但有效的目标存入 <strong>Multi-path Victim Buffer</strong>，从而在不显著增加主元数据表开销的前提下，提升预取的覆盖率和准确性。</li>
 <li>表格化展示如下：</li>
 </ul>
@@ -1312,10 +1336,12 @@
 <li>图片展示了 Prophet、Triangel 和 RPG² 三种预取方案在多个 SPEC CPU 工作负载上的 <strong>IPC Speedup</strong> 性能对比，基准为无预取器的系统。</li>
 <li>横轴为不同工作负载，包括 astar_biglakes、gcc_166、mcf、omnetpp、soplex_pds-50、sphinx3、xalancbmk，以及所有工作负载的 <strong>Geomean</strong>（几何平均值）。</li>
 <li>纵轴为性能加速比，<strong>1.0 表示无性能提升</strong>，高于 1.0 表示有加速，低于 1.0 表示性能退化。</li>
-<li>三组柱状图分别代表：</li>
+<li>三组柱状图分别代表：<ul>
 <li><strong>RPG²</strong>（红色）：基于软件间接访问的预取方案。</li>
 <li><strong>Triangel</strong>（橙色）：当前最先进的硬件时间预取器。</li>
 <li><strong>Prophet</strong>（绿色）：本文提出的软硬件协同框架。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1378,12 +1404,14 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li><strong>关键观察</strong>：<ul>
 <li>RPG² 在几乎所有工作负载上均接近或略低于基准（1.0），仅带来 <strong>0.1% 的平均性能增益</strong>，表明其对复杂非规则访问模式无效。</li>
 <li>Triangel 在多数工作负载上表现良好，尤其在 gcc_166 和 mcf 上显著优于 RPG²，但受限于元数据管理策略，性能仍有提升空间。</li>
 <li><strong>Prophet 在所有工作负载上均优于 Triangel 和 RPG²</strong>，尤其在 mcf 上达到 <strong>1.68 倍加速</strong>，Geomean 达到 <strong>1.35</strong>，相比 Triangel 提升 <strong>14.23%</strong>。</li>
 <li>在部分敏感工作负载如 astar_biglakes 中，Prophet 仍保持正向加速，而 RPG² 和 Triangel 接近或略低于基准，体现其鲁棒性。</li>
 <li>Prophet 的优势源于其 <strong>Profile-Guided 元数据管理机制</strong>，能更精准地控制插入、替换与重分配，从而在不增加过多存储开销的前提下提升预取覆盖率和准确性。</li>
+</ul>
+</li>
 </ul>
 <h3 id="figure-11-dram-traffic-compared-to-rpg2-and-triangel">Figure 11: DRAM traffic compared to RPG2 and Triangel.<a class="headerlink" href="#figure-11-dram-traffic-compared-to-rpg2-and-triangel" title="Permanent link">&para;</a></h3>
 <p><img alt="deb3b0148e17069f7858e493333422789f93be9a924b11bcc7842ec4e07f7c59.jpg" src="../images/deb3b0148e17069f7858e493333422789f93be9a924b11bcc7842ec4e07f7c59.jpg" /></p>
@@ -1391,10 +1419,12 @@
 <li>图表标题为 <strong>Figure 11: DRAM traffic compared to RPG2 and Triangel</strong>，展示的是不同 prefetching 方案对 <strong>Normalized DRAM Traffic</strong> 的影响。</li>
 <li>横轴列出多个 SPEC CPU 工作负载：<strong>astar_biglakes, gcc_166, mcf, omnetpp, soplex_pds-50, sphinx3, xalancbmk</strong>，并附带一个 <strong>Geomean</strong>（几何平均值）用于整体性能评估。</li>
 <li>纵轴表示归一化后的 DRAM 流量，基准线为 <strong>1.0</strong>，代表无 temporal prefetcher 的基线流量。</li>
-<li>图例包含三种方案：</li>
+<li>图例包含三种方案：<ul>
 <li><strong>RPG2</strong>（红色柱状图）</li>
 <li><strong>Triangel</strong>（橙色柱状图）</li>
 <li><strong>Prophet</strong>（绿色柱状图）</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1471,17 +1501,17 @@
 <li>图片包含两个子图，(a) 展示 <strong>Prefetching Coverage</strong>，(b) 展示 <strong>Prefetching Accuracy</strong>，用于对比 <strong>RPG2</strong>、<strong>Triangel</strong> 和 <strong>Prophet</strong> 三种方案在多个 SPEC CPU 工作负载下的表现。</li>
 <li>所有数据以柱状图形式呈现，横轴为工作负载名称（如 <code>astar_biglakes</code>, <code>gcc_166</code>, <code>mcf</code> 等），纵轴为归一化指标值（0.0 到 1.0）。</li>
 <li>最右侧的 “Geomean” 表示所有工作负载的几何平均值，用于综合评估整体性能。
-(a) Prefetching Coverage 分析</li>
+    (a) Prefetching Coverage 分析</li>
 <li><strong>Prophet</strong> 在多数工作负载中覆盖度显著优于 <strong>Triangel</strong> 和 <strong>RPG2</strong>，尤其在 <code>gcc_166</code>、<code>sphinx3</code>、<code>xalancbmk</code> 中接近或超过 0.6。</li>
 <li><strong>Triangel</strong> 覆盖度次之，在 <code>gcc_166</code> 和 <code>sphinx3</code> 中表现较好，但在 <code>mcf</code>、<code>omnetpp</code> 中明显低于 Prophet。</li>
 <li><strong>RPG2</strong> 覆盖度普遍最低，仅在 <code>astar_biglakes</code> 和 <code>sphinx3</code> 中略有提升，其余均接近 0.0。</li>
 <li><strong>Geomean</strong> 显示：Prophet &gt; Triangel &gt; RPG2，表明 Prophet 在全局覆盖能力上具有压倒性优势。
-(b) Prefetching Accuracy 分析</li>
+    (b) Prefetching Accuracy 分析</li>
 <li><strong>RPG2</strong> 在部分工作负载（如 <code>astar_biglakes</code>, <code>sphinx3</code>, <code>xalancbmk</code>）中准确率极高（接近 1.0），但这是其设计目标——针对可预测的 stride 模式。</li>
 <li><strong>Triangel</strong> 准确率稳定，多数在 0.7–0.9 区间，与 Prophet 相当。</li>
 <li><strong>Prophet</strong> 准确率与 Triangel 基本持平，甚至在 <code>mcf</code>、<code>omnetpp</code>、<code>soplex_pds-50</code> 中略优，说明其高覆盖并未牺牲准确性。</li>
 <li><strong>Geomean</strong> 显示：三者准确率差异较小，Prophet 与 Triangel 接近，RPG2 略高但受限于适用场景。
-综合对比表</li>
+    综合对比表</li>
 </ul>
 <table>
 <thead>
@@ -1513,13 +1543,15 @@
 <li>图表标题为 <strong>Figure 13: Prophet learns counters from gcc’s inputs</strong>，展示 Prophet 在不同 gcc 输入下通过迭代学习提升性能的过程。</li>
 <li>横轴列出多个 gcc 子基准测试：<strong>gcc_166, gcc_200, gcc_cpdecl, gcc_expr, gcc_expr2, gcc_g23, gcc_s04, gcc_scilab, gcc_typeck</strong>，并标注 <strong>Geomean</strong> 表示几何平均值。</li>
 <li>纵轴为 <strong>Performance Speedup</strong>，以 1.0 为基线（红色虚线），表示无优化时的性能。</li>
-<li>图例包含六种配置：</li>
+<li>图例包含六种配置：<ul>
 <li><strong>Disable</strong>：未启用 Prophet，仅使用 Triage + Triangel 元数据管理。</li>
 <li><strong>+166</strong>：仅从 gcc_166 输入学习。</li>
 <li><strong>+expr</strong>：在 +166 基础上加入 gcc_expr 输入。</li>
 <li><strong>+typeck</strong>：再加入 gcc_typeck 输入。</li>
 <li><strong>+expr2</strong>：再加入 gcc_expr2 输入。</li>
 <li><strong>Direct</strong>：针对每个输入单独直接学习，代表“理想”性能。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1556,10 +1588,12 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li><strong>关键观察</strong>：<ul>
 <li>Prophet 的性能随学习输入数量增加而逐步逼近 <strong>Direct</strong> 配置，说明其具备<strong>自适应能力</strong>。</li>
 <li>即使未直接学习某些输入（如 gcc_200），通过学习相似模式（如 gcc_expr）也能间接提升性能，体现<strong>泛化能力</strong>。</li>
 <li><strong>Geomean</strong> 显示，随着学习轮次增加，整体性能持续上升，最终接近 Direct 配置，验证了 Prophet 的<strong>渐进式优化机制</strong>有效。</li>
+</ul>
+</li>
 <li><strong>结论</strong>：Prophet 能通过少量输入学习实现跨输入性能优化，无需为每个输入单独训练，显著降低部署成本。</li>
 </ul>
 <h3 id="figure-14-prophets-learning-feature-can-be-generalized-to-other-workloads-such-as-astar-and-soplex">Figure 14: Prophet’s learning feature can be generalized to other workloads, such as astar and soplex.<a class="headerlink" href="#figure-14-prophets-learning-feature-can-be-generalized-to-other-workloads-such-as-astar-and-soplex" title="Permanent link">&para;</a></h3>
@@ -1568,11 +1602,13 @@
 <li>图片展示了 Prophet 的学习特性在 <strong>astar</strong> 和 <strong>soplex</strong> 两个工作负载上的泛化能力，验证其适应不同程序输入的有效性。</li>
 <li>左侧图表针对 <strong>astar</strong> 工作负载，包含两个子集：<strong>astar_biglakes</strong> 和 <strong>astar_rivers</strong>。右侧图表针对 <strong>soplex</strong> 工作负载，包含两个子集：<strong>soplex_pds</strong> 和 <strong>soplex_ref</strong>。</li>
 <li>所有柱状图均以 <strong>Disable</strong>（未启用 Prophet）为基准，性能提升值相对于该基准计算。</li>
-<li>每个子图中包含四种配置：</li>
+<li>每个子图中包含四种配置：<ul>
 <li><strong>Disable</strong>：不启用 Prophet，作为基线。</li>
 <li><strong>+lake / +pds</strong>：首次学习特定输入后的性能表现。</li>
 <li><strong>+river / +ref</strong>：进一步学习其他输入后的性能表现。</li>
 <li><strong>Direct</strong>：直接针对当前输入进行优化的“理想”性能。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1677,10 +1713,12 @@
 <li>图表标题为 <strong>Figure 15: IPC speedup on graph workloads</strong>，展示的是在图计算工作负载（graph workloads）上，三种不同预取方案的性能加速比（Performance Speedup）。</li>
 <li>横轴列出了多个 CRONO 基准测试用例，包括 <code>bc_40000_10</code>、<code>bc_56384_8</code>、<code>bfs_100000_16</code>、<code>bfs_80000_8</code>、<code>bfs_90000_10</code>、<code>dfs_800000_800</code>、<code>dfs_900000_400</code>、<code>pagerank_100000_100</code>、<code>sssp_100000_5</code>，以及一个综合指标 <strong>Geomean</strong>。</li>
 <li>纵轴表示性能加速比，基准线为 1.0（即无预取器时的性能），高于 1.0 表示性能提升。</li>
-<li>图例中包含三种预取方案：</li>
+<li>图例中包含三种预取方案：<ul>
 <li><strong>RPG²</strong>：红色柱状图，代表当前最先进的软件间接访问预取方案。</li>
 <li><strong>Triangle</strong>：橙色柱状图，代表当前最先进的硬件时间预取器。</li>
 <li><strong>Prophet</strong>：绿色柱状图，本文提出的软硬件协同框架。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1755,60 +1793,95 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
 <li>在大多数图计算工作负载中，<strong>Prophet</strong> 的性能加速比均优于 <strong>RPG²</strong> 和 <strong>Triangle</strong>。</li>
 <li>在 <code>bfs_90000_10</code> 上，<strong>Prophet</strong> 达到最高加速比 <strong>~1.55</strong>，显著领先于其他两种方案。</li>
 <li>综合几何平均值（Geomean）显示，<strong>Prophet</strong> 相较于基线提升了 <strong>14.85%</strong>，而 <strong>RPG²</strong> 为 <strong>9.11%</strong>，<strong>Triangle</strong> 为 <strong>8.41%</strong>。</li>
-<li>
-<p>尽管 CRONO 工作负载更倾向于具有步长模式的预取内核（适合 RPG²），<strong>Prophet</strong> 仍能通过处理更复杂的时间模式实现超越。</p>
+<li>尽管 CRONO 工作负载更倾向于具有步长模式的预取内核（适合 RPG²），<strong>Prophet</strong> 仍能通过处理更复杂的时间模式实现超越。</li>
+</ul>
 </li>
 <li>
 <p><strong>结论</strong>：</p>
-</li>
+<ul>
 <li><strong>Prophet</strong> 在图计算工作负载上展现出卓越的性能优势，即使在 RPG² 本应表现良好的场景下，也能通过其灵活的元数据管理机制获得更高收益。</li>
 <li>这验证了 <strong>Prophet</strong> 不仅适用于 SPEC CPU 类型的工作负载，也具备良好的通用性和扩展性，可有效应对多样化的内存访问模式。</li>
+</ul>
+</li>
 </ul>
 <h3 id="figure-16-sensitivity-study">Figure 16: Sensitivity study.<a class="headerlink" href="#figure-16-sensitivity-study" title="Permanent link">&para;</a></h3>
 <p><img alt="614bba26570a1019f0a4d9f16f8e4c176817c5e30a6573597b0acebd3ac94c2f.jpg" src="../images/614bba26570a1019f0a4d9f16f8e4c176817c5e30a6573597b0acebd3ac94c2f.jpg" /></p>
 <ul>
 <li>图 16 是一项敏感性研究，旨在评估 Prophet 框架中三个关键参数对性能的影响：<strong>EL_ACC</strong>（插入策略阈值）、<strong>n</strong>（替换策略优先级位数）和 <strong>Multi-path Victim Buffer</strong> 中的候选数量。</li>
 <li>该图由三个子图组成，每个子图展示不同参数配置下的性能加速比（Performance Speedup），基准为 1.0（红色虚线），并包含各工作负载的几何平均值（Geomean）。
-(a) EL_ACC 参数敏感性分析</li>
+    (a) EL_ACC 参数敏感性分析</li>
 <li>此部分研究 <strong>Prophet Insertion Policy</strong> 中的 <code>EL_ACC</code> 阈值对性能的影响，测试了三个值：0.05、0.15 和 0.25。</li>
-<li>数据表明，<strong>过低或过高</strong> 的 <code>EL_ACC</code> 值均会损害性能：</li>
+<li>数据表明，<strong>过低或过高</strong> 的 <code>EL_ACC</code> 值均会损害性能：<ul>
 <li><code>EL_ACC=0.05</code>：过滤过于激进，可能误删有用元数据。</li>
 <li><code>EL_ACC=0.25</code>：过滤过于宽松，导致元数据表充斥无效条目。</li>
 <li><code>EL_ACC=0.15</code> 在多数工作负载中表现最佳，尤其在 <code>mcf</code> 和 <code>omnetpp</code> 上提升显著。</li>
+</ul>
+</li>
 <li>几何平均性能加速比：
-  | EL_ACC 值 | Geomean Speedup |
-  |-----------|------------------|
-  | 0.05      | ~1.25            |
-  | 0.15      | <strong>~1.38</strong>        |
-  | 0.25      | ~1.28            |
-(b) n 参数敏感性分析</li>
+    | EL_ACC 值 | Geomean Speedup |
+    | --------- | --------------- |
+    | 0.05      | ~1.25           |
+    | 0.15      | <strong>~1.38</strong>       |
+    | 0.25      | ~1.28           |</li>
+</ul>
+<p>(b) n 参数敏感性分析</p>
+<ul>
 <li>此部分研究 <strong>Prophet Replacement Policy</strong> 中用于表示优先级的位数 <code>n</code>，测试了 1、2、3 位。</li>
-<li>结果显示，增加 <code>n</code> 可带来更细粒度的管理，从而提升性能，但收益递减：</li>
+<li>结果显示，增加 <code>n</code> 可带来更细粒度的管理，从而提升性能，但收益递减：<ul>
 <li><code>n=1</code>：仅能区分高低优先级，性能提升有限。</li>
 <li><code>n=2</code>：提供四档优先级，性能显著优于 <code>n=1</code>，是<strong>推荐配置</strong>。</li>
 <li><code>n=3</code>：虽进一步细分，但存储开销增加，性能增益不明显。</li>
+</ul>
+</li>
 <li>几何平均性能加速比：
-  | n 值 | Geomean Speedup |
-  |------|------------------|
-  | 1    | ~1.30            |
-  | 2    | <strong>~1.40</strong>        |
-  | 3    | ~1.42            |
-(c) Multi-path Victim Buffer 候选数量敏感性分析</li>
-<li>此部分研究 <strong>Multi-path Victim Buffer</strong> 中每个元数据条目可存储的 Markov 目标候选数量（Candidate=1, 2, 4）。</li>
-<li>结果显示，<strong>Candidate=1</strong> 在性能与存储开销间取得最佳平衡：</li>
+    | n 值 | Geomean Speedup |
+    | ---- | --------------- |
+    | 1    | ~1.30           |
+    | 2    | <strong>~1.40</strong>       |
+    | 3    | ~1.42           |</li>
+</ul>
+<p>(c) Multi-path Victim Buffer 候选数量敏感性分析</p>
+<ul>
+<li>
+<p>此部分研究 <strong>Multi-path Victim Buffer</strong> 中每个元数据条目可存储的 Markov 目标候选数量（Candidate=1, 2, 4）。</p>
+</li>
+<li>
+<p>结果显示，<strong>Candidate=1</strong> 在性能与存储开销间取得最佳平衡：</p>
+<ul>
 <li>Candidate=1：性能稳定，存储开销最小。</li>
 <li>Candidate=2/4：虽然覆盖更多模式，但在 <code>astar</code> 等对缓存污染敏感的工作负载上反而导致性能下降。</li>
+</ul>
+</li>
 <li>
-<p>几何平均性能加速比：
-  | Candidate 数量 | Geomean Speedup |
-  |----------------|------------------|
-  | 1              | <strong>~1.35</strong>        |
-  | 2              | ~1.33            |
-  | 4              | ~1.32            |</p>
+<p>几何平均性能加速比：</p>
+<table>
+<thead>
+<tr>
+<th>Candidate 数量</th>
+<th>Geomean Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>~1.35</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>~1.33</td>
+</tr>
+<tr>
+<td>4</td>
+<td>~1.32</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li>
 <p>总体结论：Prophet 的参数设计需权衡性能增益与资源开销。<strong>EL_ACC=0.15、n=2、Candidate=1</strong> 是综合最优配置，兼顾高效性与实用性。</p>
@@ -1821,10 +1894,12 @@
 <li>性能基准线为 <strong>1.0</strong>（红色虚线），代表无 temporal prefetcher 的基线性能。</li>
 <li>横轴列出多个 SPEC CPU 工作负载：<strong>astar_biglakes, gcc_166, mcf, omnetpp, soplex_pds-50, sphinx3, xalancbmk</strong>，以及整体几何平均值 <strong>Geomean</strong>。</li>
 <li>纵轴为性能加速比，范围从 1.0 到 1.8。</li>
-<li>三组柱状图分别代表：</li>
+<li>三组柱状图分别代表：<ul>
 <li><strong>RPG²</strong>（红色）：软件间接访问预取方案。</li>
 <li><strong>Triangel</strong>（橙色）：当前最先进的硬件时序预取器。</li>
 <li><strong>Prophet</strong>（绿色）：本文提出的软硬件协同框架。</li>
+</ul>
+</li>
 <li>在所有工作负载中，<strong>Prophet 均优于 RPG² 和 Triangel</strong>，尤其在 <strong>mcf</strong> 和 <strong>gcc_166</strong> 上表现突出。</li>
 <li><strong>Geomean</strong> 显示 Prophet 达到约 <strong>1.30</strong> 加速比，Triangel 约 <strong>1.18</strong>，RPG² 仅约 <strong>1.00</strong>，表明 Prophet 在综合性能上显著领先。</li>
 <li>数据表明，即使在更复杂的 L1 预取器配置下（如替换为 IPCP），<strong>Prophet 仍保持稳定且显著的性能优势</strong>，验证其设计的鲁棒性。</li>
@@ -1972,12 +2047,14 @@
 <li>图片为 Figure 19，标题为 “Prophet Features Breakdown”，展示 Prophet 各功能模块对性能和 DRAM 流量的影响。</li>
 <li>图表分为两部分：(a) Performance Speedup 和 (b) Normalized DRAM Traffic，横轴为 SPEC CPU 工作负载，纵轴分别为归一化性能加速比和归一化 DRAM 流量。</li>
 <li>基线为 <strong>Triage4 + Triangel Meta</strong>，即在 Triage 的基础上使用 Triangel 的元数据格式，作为所有功能叠加的起点。</li>
-<li>各功能模块以不同颜色柱状图表示：</li>
+<li>各功能模块以不同颜色柱状图表示：<ul>
 <li><strong>+Repla</strong>：Prophet Replacement Policy</li>
 <li><strong>+Insert</strong>：Prophet Insertion Policy</li>
 <li><strong>+MVB</strong>：Multi-path Victim Buffer</li>
 <li><strong>+Resize</strong>：Prophet Resizing
-性能加速比（Performance Speedup）分析：</li>
+    性能加速比（Performance Speedup）分析：</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -2062,7 +2139,7 @@
 <li><strong>Multi-path Victim Buffer（+MVB）</strong> 对多个工作负载（如 soplex_pds-50、omnetpp）贡献最大，尤其在 soplex 上提升达 <strong>13.46%</strong>。</li>
 <li><strong>Prophet Insertion Policy（+Insert）</strong> 在 mcf 上表现突出，带来 <strong>16.72%</strong> 的性能增益。</li>
 <li><strong>Prophet Replacement Policy（+Repla）</strong> 在 mcf 和 omnetpp 上分别提升 <strong>14.53%</strong> 和 <strong>9.89%</strong>，显示其在大工作集和缓存污染敏感场景中的有效性。
-归一化 DRAM 流量（Normalized DRAM Traffic）分析：</li>
+    归一化 DRAM 流量（Normalized DRAM Traffic）分析：</li>
 </ul>
 <table>
 <thead>
@@ -2143,18 +2220,28 @@
 </tbody>
 </table>
 <ul>
-<li><strong>Geomean DRAM 流量</strong>：基线为 1.2，<strong>Prophet Insertion Policy（+Insert）</strong> 将其降至 <strong>1.1</strong>，表明该策略有效减少无效预取，降低内存流量。</li>
-<li><strong>Multi-path Victim Buffer（+MVB）</strong> 虽增加少量流量（+1.95%），但因其提升性能显著，整体仍具性价比。</li>
+<li>
+<p><strong>Geomean DRAM 流量</strong>：基线为 1.2，<strong>Prophet Insertion Policy（+Insert）</strong> 将其降至 <strong>1.1</strong>，表明该策略有效减少无效预取，降低内存流量。</p>
+</li>
+<li>
+<p><strong>Multi-path Victim Buffer（+MVB）</strong> 虽增加少量流量（+1.95%），但因其提升性能显著，整体仍具性价比。</p>
+</li>
 <li>
 <p>多数工作负载中，<strong>+Insert</strong> 是唯一显著降低 DRAM 流量的功能，体现其保守过滤策略的有效性。
-关键结论：</p>
+    关键结论：</p>
 </li>
 <li>
 <p><strong>Prophet Replacement Policy</strong> 和 <strong>Multi-path Victim Buffer</strong> 是性能提升的主要驱动力，尤其在复杂访问模式下。</p>
 </li>
-<li><strong>Prophet Insertion Policy</strong> 在保持高覆盖率的同时，有效控制内存流量，避免过度预取。</li>
-<li><strong>Prophet Resizing</strong> 对小元数据需求应用（如 sphinx3）最有效，带来约 <strong>1.5%</strong> 的性能增益。</li>
-<li>所有功能可模块化启用/禁用，允许根据工作负载特性灵活配置，实现性能与资源消耗的平衡。</li>
+<li>
+<p><strong>Prophet Insertion Policy</strong> 在保持高覆盖率的同时，有效控制内存流量，避免过度预取。</p>
+</li>
+<li>
+<p><strong>Prophet Resizing</strong> 对小元数据需求应用（如 sphinx3）最有效，带来约 <strong>1.5%</strong> 的性能增益。</p>
+</li>
+<li>
+<p>所有功能可模块化启用/禁用，允许根据工作负载特性灵活配置，实现性能与资源消耗的平衡。</p>
+</li>
 </ul>
 
 

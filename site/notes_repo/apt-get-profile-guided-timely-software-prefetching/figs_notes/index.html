@@ -1,0 +1,1854 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/apt-get-profile-guided-timely-software-prefetching/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>APT-GET: Profile-Guided Timely Software Prefetching 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#apt-get-profile-guided-timely-software-prefetching" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              APT-GET: Profile-Guided Timely Software Prefetching 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-performance-impact-of-prefetching-various-distances-for-indirect-memory-accesses-with-256-inner-loop-iterations-and-varying-work-function-complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1. Performance impact of prefetching various distances for indirect memory accesses with 256 inner loop iterations and varying work function complexity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-prefetch-accuracy-and-timeliness-depending-on-the-prefetch-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1. Prefetch accuracy and timeliness depending on the prefetch-distance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-performance-impact-of-prefetch-distance-for-indirect-memory-access-kernel-with-low-work-function-complexity-and-varying-inner-loop-trip-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. Performance impact of prefetch-distance for indirect memory access kernel with low work function complexity and varying inner loop trip count
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-schematic-view-of-the-intel-cpus-last-branch-record-lbr-highlighting-the-outer-loop-branches-in-blue-the-inner-loop-branches-in-orange-and-the-cycle-times-of-each-branch-in-green" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. Schematic view of the Intel CPU’s Last Branch Record (LBR) highlighting the outer loop branches in blue, the inner loop branches in orange and the cycle times of each branch in green
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-distribution-of-a-loops-execution-time-containing-a-delinquent-load-39-in-terms-of-cpu-cycles-measured-using-lbr-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. Distribution of a loop’s execution time containing a delinquent load [39] in terms of CPU cycles measured using LBR samples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#listing-3-the-simplified-llvms-ir-level-representation-of-the-microbenchmark-1-before-injecting-the-prefetch-slice-listing-4-the-simplified-llvms-ir-level-representation-of-the-microbenchmark-1-after-injecting-the-prefetch-slice-inside-the-inner-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Listing 3. The simplified LLVM’s IR-level representation of the microbenchmark 1 before injecting the prefetch slice Listing 4. The simplified LLVM’s IR-level representation of the microbenchmark 1 after injecting the prefetch slice inside the inner loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-the-machine-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2. The Machine Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-the-list-of-real-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3. The list of real-applications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-graph-data-sets-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4. Graph data-sets properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-the-percentage-of-l3dram-stalls-is-obtained-for-each-applications-non-prefetching-baseline-on-average-the-performance-of-selected-applications-is-4937-bounded-by-the-memory-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. The percentage of L3/DRAM stalls is obtained for each application’s non-prefetching baseline. On average, the performance of selected applications is 49.37% bounded by the memory system.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-execution-time-speedup-provided-by-apt-get-over-the-non-prefetching-baseline-apt-get-achieves-130-average-speedup-on-average-compared-to-the-104-speedup-provided-by-the-state-of-the-art-ainsworth-jones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. Execution time speedup provided by APT-GET over the non-prefetching baseline: APT-GET achieves 1.30× average speedup on average, compared to the 1.04× speedup provided by the state of the art (Ainsworth &amp; Jones).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-apt-get-s-llc-mpki-misses-per-1000-instructions-reduction-over-the-non-prefetching-baseline-lower-is-better-on-average-apt-get-provides-135-greater-mpki-reduction-than-the-state-of-the-art-ainsworth-jones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. APT-GET ’s LLC MPKI, misses per 1000-instructions, reduction over the non-prefetching baseline (lower is better): on average, APT-GET provides 1.35× greater MPKI reduction than the state of the art (Ainsworth &amp; Jones).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-speedup-of-prefetch-distance-from-lbr-sampling-technique-and-optimal-prefetch-distance-over-non-prefetching-baseline-lbr-sampling-technique-achieves-130-overall-speedup-in-average-compared-to-132-speedup-of-optimal-prefetchdistance-over-non-prefetching-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8. Speedup of prefetch-distance from LBR sampling technique and optimal prefetch-distance over non-prefetching baseline: LBR sampling technique achieves 1.30× overall speedup in average, compared to 1.32× speedup of optimal prefetchdistance, over non-prefetching baseline.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-speedup-for-different-static-offset-values-and-lbr-over-non-prefetching-baseline-prefetch-distance-of-4-16-64-and-lbr-sampling-technique-achieve-116-126-128-and-130-speedup-in-average-over-non-prefetching-baseline-respectively" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9. Speedup for different static offset values and LBR over non-prefetching baseline: prefetch-distance of 4, 16, 64, and LBR sampling technique achieve 1.16×, 1.26×, 1.28×, and 1.30× speedup in average over non-prefetching baseline, respectively.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-speedup-of-injecting-prefetches-inside-the-outer-or-inner-loops-over-non-prefetching-baseline-for-most-of-the-applications-injecting-prefeches-inside-the-outer-loop-achieves-120-overall-speedup-in-average-while-injecting-prefetches-inside-the-inner-loop-improves-speedup-for-dfs-up-to-111-over-non-prefethcing-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-the-overhead-of-injected-prefetching-instructions-over-non-prefetching-baseline-apt-get-increases-the-total-number-of-instructions-114-in-average-compared-to-119-in-average-of-ainsworth-jones-over-non-prefetching-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11. The overhead of injected prefetching instructions over non-prefetching baseline: APT-GET increases the total number of instructions 1.14× in average, compared to 1.19× in average of Ainsworth &amp; Jones, over non-prefetching baseline.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-execution-time-speedup-provided-by-apt-get-over-the-non-prefetching-baseline-for-different-inputs-as-traintest-data-apt-get-achieves-136-average-speedup-on-average-for-test-data-sets-compared-to-the-139-average-speedup-obtained-for-train-data-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12. Execution time speedup provided by APT-GET over the non-prefetching baseline for different inputs as train/test data: APT-GET achieves 1.36× average speedup on average for test data sets compared to the 1.39× average speedup obtained for train data sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="apt-get-profile-guided-timely-software-prefetching">APT-GET: Profile-Guided Timely Software Prefetching 图表详解<a class="headerlink" href="#apt-get-profile-guided-timely-software-prefetching" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-performance-impact-of-prefetching-various-distances-for-indirect-memory-accesses-with-256-inner-loop-iterations-and-varying-work-function-complexity">Figure 1. Performance impact of prefetching various distances for indirect memory accesses with 256 inner loop iterations and varying work function complexity<a class="headerlink" href="#figure-1-performance-impact-of-prefetching-various-distances-for-indirect-memory-accesses-with-256-inner-loop-iterations-and-varying-work-function-complexity" title="Permanent link">&para;</a></h3>
+<p><img alt="5d12b6591110701207a8bfa4b123a6d93fcda5c7285270a8cc3633470a7e3224.jpg" src="../images/5d12b6591110701207a8bfa4b123a6d93fcda5c7285270a8cc3633470a7e3224.jpg" /></p>
+<ul>
+<li>图表展示了在<strong>256次内层循环迭代</strong>条件下，不同<strong>工作函数复杂度</strong>（low, med, high）对<strong>预取距离</strong>（Prefetch Distance）性能影响的对比。</li>
+<li><strong>纵轴</strong>为“Speedup over No Prefetching (%)”，表示相对于无预取基线的加速百分比；<strong>横轴</strong>为“Prefetch Distance”，范围从1到256。</li>
+<li>三条曲线分别对应三种复杂度：<ul>
+<li><strong>COMPLEXITY=high</strong>（红色）：峰值加速约<strong>60%</strong>，出现在预取距离为<strong>4</strong>附近，随后迅速下降。</li>
+<li><strong>COMPLEXITY=med</strong>（灰色）：峰值加速超过<strong>200%</strong>，出现在预取距离为<strong>16</strong>附近，是三者中性能提升最显著的。</li>
+<li><strong>COMPLEXITY=low</strong>（青色）：峰值加速约<strong>170%</strong>，出现在预取距离为<strong>32</strong>附近，表现介于高复杂度与中复杂度之间。</li>
+</ul>
+</li>
+<li>关键观察：<ul>
+<li><strong>最优预取距离随工作函数复杂度变化而显著不同</strong>：低复杂度需更远距离（32），中复杂度适中（16），高复杂度则需极近距离（4）。</li>
+<li>预取距离过小或过大均会导致性能退化，甚至低于无预取基线（如距离256时所有曲线归零）。</li>
+<li>中等复杂度下性能增益最大，表明存在一个“甜蜜点”——即预取时机与计算负载匹配最佳时，可实现最高效率。</li>
+</ul>
+</li>
+<li>数据总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Complexity Level</th>
+<th>Optimal Prefetch Distance</th>
+<th>Max Speedup (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High</td>
+<td>4</td>
+<td>~60</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>16</td>
+<td>&gt;200</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>32</td>
+<td>~170</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图有力支持了论文核心论点：<strong>静态预取机制无法适应动态变化的工作负载</strong>，必须依赖运行时信息（如执行时间）来确定最优预取距离，以实现真正的“及时预取”。</li>
+</ul>
+<h3 id="table-1-prefetch-accuracy-and-timeliness-depending-on-the-prefetch-distance">Table 1. Prefetch accuracy and timeliness depending on the prefetch-distance<a class="headerlink" href="#table-1-prefetch-accuracy-and-timeliness-depending-on-the-prefetch-distance" title="Permanent link">&para;</a></h3>
+<p><img alt="04b440ce8b7348592fdb180c4c98bea9919e43e09a57a5605b842116a29cd467.jpg" src="../images/04b440ce8b7348592fdb180c4c98bea9919e43e09a57a5605b842116a29cd467.jpg" /></p>
+<ul>
+<li>该表格（Table 1）展示了在不同 <strong>prefetch-distance</strong> 设置下，软件预取对性能指标的影响，具体包括 <strong>IPC</strong>、<strong>Prefetch Accuracy</strong> 和 <strong>Late Prefetch</strong> 比率。</li>
+<li>表格数据基于微基准测试，配置为低复杂度工作函数和 INNER=256 的循环次数，用于评估预取的准确性和及时性。</li>
+<li>数据表明，预取距离的选择对性能有显著影响，过小或过大的距离均会导致性能下降。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetch</th>
+<th>IPC</th>
+<th>Prefetch Accuracy</th>
+<th>Late Prefetch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>None</td>
+<td>0.33</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>Dist-1</td>
+<td>0.42</td>
+<td>72%</td>
+<td>95%</td>
+</tr>
+<tr>
+<td>Dist-64</td>
+<td>0.73</td>
+<td>70%</td>
+<td>1%</td>
+</tr>
+<tr>
+<td>Dist-1024</td>
+<td>0.29</td>
+<td>3%</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>无预取（None）</strong>：作为基线，IPC 最低（0.33），无预取命中，也无延迟预取事件。</li>
+<li><strong>Dist-1</strong>：IPC 提升至 0.42，预取准确率达 72%，但 <strong>95% 的预取是延迟的</strong>，说明预取太晚，未能有效隐藏内存延迟。</li>
+<li><strong>Dist-64</strong>：IPC 达到最高值 <strong>0.73</strong>，预取准确率保持在 70%，且 <strong>仅 1% 的预取是延迟的</strong>，表明此距离下预取既准确又及时。</li>
+<li><strong>Dist-1024</strong>：IPC 急剧下降至 0.29，预取准确率仅为 3%，说明预取地址已超出循环范围，导致大量无效预取，甚至可能因缓存污染而降低性能。</li>
+<li>结论：<strong>最优预取距离需根据程序执行时间动态调整</strong>，静态固定距离（如 Dist-1 或 Dist-1024）无法保证性能，而 Dist-64 在此场景下表现最佳，体现了 APT-GET 所强调的“timeliness”重要性。</li>
+</ul>
+<h3 id="figure-2-performance-impact-of-prefetch-distance-for-indirect-memory-access-kernel-with-low-work-function-complexity-and-varying-inner-loop-trip-count">Figure 2. Performance impact of prefetch-distance for indirect memory access kernel with low work function complexity and varying inner loop trip count<a class="headerlink" href="#figure-2-performance-impact-of-prefetch-distance-for-indirect-memory-access-kernel-with-low-work-function-complexity-and-varying-inner-loop-trip-count" title="Permanent link">&para;</a></h3>
+<p><img alt="fae1be1db6294333c2c5daadea36581e3bbad6e49cf18b936f4ff245cac3b7e8.jpg" src="../images/fae1be1db6294333c2c5daadea36581e3bbad6e49cf18b936f4ff245cac3b7e8.jpg" /></p>
+<ul>
+<li>图表展示了在<strong>低复杂度工作函数</strong>和**不同内层循环迭代次数（INNER）**条件下，**预取距离（Prefetch Distance）**对性能提升的影响。</li>
+<li>性能提升以“<strong>Speedup over No Prefetching (%)</strong>”衡量，即相对于无预取基线的加速百分比。</li>
+<li>三条曲线分别对应三种内层循环迭代次数：<strong>INNER=4</strong>（红色）、<strong>INNER=16</strong>（灰色）、<strong>INNER=64</strong>（青色）。</li>
+<li><strong>INNER=4</strong>时，所有预取距离均未带来显著性能增益，甚至部分距离导致轻微性能下降，表明小循环下预取无效或有害。</li>
+<li><strong>INNER=16</strong>时，性能在预取距离为8至16之间达到峰值（约40%），之后迅速衰减，64以上基本无收益。</li>
+<li><strong>INNER=64</strong>时，性能在预取距离为16时达到最高点（超过80%），随后缓慢下降，在64附近仍保持较高收益，128后急剧归零。</li>
+<li>关键观察：<strong>最优预取距离随内层循环迭代次数增加而增大</strong>，且小循环（如INNER=4）不适合预取。</li>
+<li>数据趋势表明，静态预取距离无法适应不同循环规模，动态调整是必要手段。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>INNER值</th>
+<th>最优预取距离</th>
+<th>最高加速比</th>
+<th>预取有效范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>无</td>
+<td>\&lt;5%</td>
+<td>无明显收益</td>
+</tr>
+<tr>
+<td>16</td>
+<td>8–16</td>
+<td>~40%</td>
+<td>1–32</td>
+</tr>
+<tr>
+<td>64</td>
+<td>16</td>
+<td>&gt;80%</td>
+<td>1–64</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>预取注入位置与距离需根据循环特性动态调整</strong>，静态方法在多变场景下表现不佳。</li>
+</ul>
+<h3 id="figure-3-schematic-view-of-the-intel-cpus-last-branch-record-lbr-highlighting-the-outer-loop-branches-in-blue-the-inner-loop-branches-in-orange-and-the-cycle-times-of-each-branch-in-green">Figure 3. Schematic view of the Intel CPU’s Last Branch Record (LBR) highlighting the outer loop branches in blue, the inner loop branches in orange and the cycle times of each branch in green<a class="headerlink" href="#figure-3-schematic-view-of-the-intel-cpus-last-branch-record-lbr-highlighting-the-outer-loop-branches-in-blue-the-inner-loop-branches-in-orange-and-the-cycle-times-of-each-branch-in-green" title="Permanent link">&para;</a></h3>
+<p><img alt="fcbd28c0826cb2873e16705bc1691ace6427e0828466e49442265cf51545831c.jpg" src="../images/fcbd28c0826cb2873e16705bc1691ace6427e0828466e49442265cf51545831c.jpg" /></p>
+<ul>
+<li>图片展示了 Intel CPU 的 <strong>Last Branch Record (LBR)</strong> 机制的示意图，用于记录程序执行过程中最近发生的分支指令信息。</li>
+<li>LBR 记录了三个关键字段：<strong>Program Counter (PC)</strong>、<strong>Target</strong> 和 <strong>Time</strong>，分别对应分支指令的地址、目标地址和执行时的 CPU 周期数。</li>
+<li>图中用颜色区分不同类型的分支：<ul>
+<li><strong>蓝色</strong>代表外层循环（Outer Loop）的分支，标记为 <strong>OE</strong>（Outer Exit）和 <strong>OS</strong>（Outer Start）。</li>
+<li><strong>橙色</strong>代表内层循环（Inner Loop）的分支，标记为 <strong>IE</strong>（Inner Exit）和 <strong>IS</strong>（Inner Start）。</li>
+<li><strong>绿色</strong>表示每个分支执行时对应的 CPU 周期时间戳。</li>
+</ul>
+</li>
+<li>下表总结了图中记录的 LBR 条目：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>PC</th>
+<th>Target</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OE</td>
+<td>OS</td>
+<td>4</td>
+</tr>
+<tr>
+<td>IE</td>
+<td>IS</td>
+<td>9</td>
+</tr>
+<tr>
+<td>IE</td>
+<td>IS</td>
+<td>11</td>
+</tr>
+<tr>
+<td>OE</td>
+<td>OS</td>
+<td>13</td>
+</tr>
+<tr>
+<td>IE</td>
+<td>IS</td>
+<td>19</td>
+</tr>
+<tr>
+<td>IE</td>
+<td>IS</td>
+<td>21</td>
+</tr>
+<tr>
+<td>IE</td>
+<td>IS</td>
+<td>24</td>
+</tr>
+<tr>
+<td>OE</td>
+<td>OS</td>
+<td>26</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>通过分析连续两个 <strong>OE</strong> 分支的时间差（如从时间 4 到 13），可以计算出一个完整外层循环迭代的执行时间（9 个周期）。</li>
+<li>同样，通过统计两个 <strong>OE</strong> 之间出现的 <strong>IE</strong> 分支数量（例如在时间 4 和 13 之间有 2 个 IE），可推断内层循环的迭代次数（2 次）。</li>
+<li>此机制允许 APT-GET 在运行时动态收集循环行为数据，从而精确计算 <strong>prefetch-distance</strong> 和选择最优的 <strong>prefetch injection site</strong>，实现及时预取。</li>
+</ul>
+<h3 id="figure-4-distribution-of-a-loops-execution-time-containing-a-delinquent-load-39-in-terms-of-cpu-cycles-measured-using-lbr-samples">Figure 4. Distribution of a loop’s execution time containing a delinquent load [39] in terms of CPU cycles measured using LBR samples<a class="headerlink" href="#figure-4-distribution-of-a-loops-execution-time-containing-a-delinquent-load-39-in-terms-of-cpu-cycles-measured-using-lbr-samples" title="Permanent link">&para;</a></h3>
+<p><img alt="aa7cb0a4b4a8e3f8fa632b180321133ecc304f3aab85689f9a5eb0a8edb8adfa.jpg" src="../images/aa7cb0a4b4a8e3f8fa632b180321133ecc304f3aab85689f9a5eb0a8edb8adfa.jpg" /></p>
+<ul>
+<li>图表展示了包含“delinquent load”的循环执行时间分布，单位为 CPU 周期，数据来源于 LBR 样本。</li>
+<li>横轴为 <strong>Cycles</strong>（周期），范围从 0 到 1000；纵轴为 <strong>Number of Occurrences</strong>（发生次数），最高达 2000。</li>
+<li>数据点以红色圆点表示，整体呈现多峰分布，表明循环执行时间受内存层级影响显著。</li>
+<li>图中用蓝色虚线标注了两个关键峰值位置：<ul>
+<li><strong>80 cycles</strong>：对应“Loop execution time while hit in L1d”，即 L1 数据缓存命中时的循环执行时间。</li>
+<li><strong>650 cycles</strong>：对应“Loop execution time while miss in LLC”，即 Last Level Cache 未命中时的循环执行时间。</li>
+</ul>
+</li>
+<li>图例显示数据来自 <strong>micro-kernel</strong>，用于验证 APT-GET 的分析模型。</li>
+<li>根据论文正文，该分布用于推导 IC_latency = 80 cycles 和 MC_latency = 650 - 80 = 570 cycles，进而计算最优 prefetch-distance ≈ 7。</li>
+<li>此图是 APT-GET 核心分析方法的可视化支撑，证明其通过动态采样识别内存延迟分布的有效性。</li>
+</ul>
+<h3 id="listing-3-the-simplified-llvms-ir-level-representation-of-the-microbenchmark-1-before-injecting-the-prefetch-slice-listing-4-the-simplified-llvms-ir-level-representation-of-the-microbenchmark-1-after-injecting-the-prefetch-slice-inside-the-inner-loop">Listing 3. The simplified LLVM’s IR-level representation of the microbenchmark 1 before injecting the prefetch slice Listing 4. The simplified LLVM’s IR-level representation of the microbenchmark 1 after injecting the prefetch slice inside the inner loop<a class="headerlink" href="#listing-3-the-simplified-llvms-ir-level-representation-of-the-microbenchmark-1-before-injecting-the-prefetch-slice-listing-4-the-simplified-llvms-ir-level-representation-of-the-microbenchmark-1-after-injecting-the-prefetch-slice-inside-the-inner-loop" title="Permanent link">&para;</a></h3>
+<p><img alt="04ee1658f4e9f2f14fd31839754162f14314cea737c0da31a8069af99f0c2a29.jpg" src="../images/04ee1658f4e9f2f14fd31839754162f14314cea737c0da31a8069af99f0c2a29.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>LLVM IR</strong> 代码片段，对应论文中 <strong>Listing 3</strong> 和 <strong>Listing 4</strong> 的内容，用于说明 APT-GET 在注入 prefetch slice 前后的代码结构变化。</li>
+<li>该代码片段源于一个包含 <strong>嵌套循环</strong> 和 <strong>间接内存访问模式</strong> 的微基准测试（microbenchmark），其核心是通过 <code>T[BO[e]+BI[i]]</code> 这种形式的索引访问数组 <code>T</code>。</li>
+<li>代码中可见两个主要的循环体：<strong><code>for.body1</code></strong>（外层循环）和 <strong><code>for.body2</code></strong>（内层循环），其中 <code>for.body2</code> 是实际执行数据加载的地方。</li>
+<li>在 <code>for.body2</code> 中，第 7 行 <code>%2 = load i32, i32* %1</code> 是关键的 <strong>load 指令</strong>，它从由 <code>%1</code> 计算出的地址加载数据，这个地址依赖于外层循环变量 <code>%iv1</code> 和内层循环变量 <code>%iv2</code>。</li>
+<li>第 8 行 <code>%3 = getelementptr ... %2</code> 表明加载的数据 <code>%2</code> 被用作下一个指针计算的基地址，体现了 <strong>间接访问链</strong> 的特性。</li>
+<li>第 13 行 <code>%8 = load i32, i32* %7</code> 是最终的数据加载指令，其地址 <code>%7</code> 是经过多步计算得到的，这正是 APT-GET 需要分析并生成 prefetch slice 的目标。</li>
+<li>代码中的 <code>%iv1</code> 和 <code>%iv2</code> 分别代表外层和内层循环的 <strong>phi 节点</strong>（PHINode），它们在每次迭代开始时根据控制流合并不同的值。</li>
+<li>该 IR 片段清晰地展示了 <strong>load-slice</strong> 的构成：从最终的 load 指令 <code>%8</code> 开始，向后追溯所有参与地址计算的指令，直到找到循环的 induction variable（如 <code>%iv2</code>）。</li>
+<li>APT-GET 的工作原理是复制这个 load-slice，并将其转换为 prefetch 指令，同时将计算地址的 induction variable 加上一个 <strong>prefetch-distance</strong>，从而提前加载未来的数据。</li>
+<li>图片中的代码是“简化”的，省略了部分指令（用 <code>[...]</code> 表示），但保留了足以说明问题的关键部分，特别是与 <strong>间接内存访问</strong> 和 <strong>循环结构</strong> 相关的部分。</li>
+<li>此图是理解 APT-GET 如何在 LLVM IR 层面操作的基础，它展示了编译器如何识别复杂的内存访问模式，并为后续的 profile-guided 优化提供依据。</li>
+</ul>
+<h3 id="table-2-the-machine-configuration">Table 2. The Machine Configuration<a class="headerlink" href="#table-2-the-machine-configuration" title="Permanent link">&para;</a></h3>
+<p><img alt="6630b74803a560b3a63d466e126a1481527f11f9aa242227337f91252055cb41.jpg" src="../images/6630b74803a560b3a63d466e126a1481527f11f9aa242227337f91252055cb41.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 2</strong>，标题为 “The Machine Configuration”，用于说明实验所用硬件平台的具体参数。</li>
+<li>表格包含两列：<strong>Component</strong> 和 <strong>Parameters</strong>，清晰列出处理器、缓存层级与主内存的关键配置。</li>
+<li>核心处理器为 <strong>Intel(R) Xeon(R) Gold 5218 CPU</strong>，基础频率 <strong>2.30GHz</strong>，睿频可达 <strong>3.9GHz</strong>。</li>
+<li>缓存结构如下：<ul>
+<li><strong>L1 I/D Cache</strong>：每核心 <strong>64KiB</strong>。</li>
+<li><strong>L2 Cache</strong>：每核心 <strong>1MiB</strong>。</li>
+<li><strong>LLC (Last Level Cache)</strong>：共享容量为 <strong>22MiB</strong>。</li>
+</ul>
+</li>
+<li>主内存采用 <strong>DIMM DDR4</strong>，总容量 <strong>32GiB</strong>，共 <strong>6个通道</strong>，运行频率为 <strong>2666MHz</strong>。</li>
+<li>此配置代表典型的服务器级计算平台，适用于评估内存密集型应用的性能优化效果。</li>
+</ul>
+<h3 id="table-3-the-list-of-real-applications">Table 3. The list of real-applications<a class="headerlink" href="#table-3-the-list-of-real-applications" title="Permanent link">&para;</a></h3>
+<p><img alt="b566bd68085cb978c4ee8687dec9b6f3969f88c6a7aa53a3d77fa5edc8691033.jpg" src="../images/b566bd68085cb978c4ee8687dec9b6f3969f88c6a7aa53a3d77fa5edc8691033.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 3</strong>，标题为 “The list of real-applications”，用于列出评估 APT-GET 所使用的 <strong>10 个真实世界应用程序</strong>。</li>
+<li>表格包含两列：<strong>App</strong>（应用程序缩写）和 <strong>Description</strong>（功能描述），清晰对应每个应用的用途。</li>
+<li>所有应用均属于 <strong>内存延迟敏感型</strong>，且具有 <strong>间接内存访问模式</strong>，是硬件预取器难以处理的典型场景。</li>
+<li>应用涵盖多个领域，包括图算法、排序、稀疏矩阵计算、数据库操作及性能基准测试。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>App</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS</td>
+<td>Searches a target vertex given a start node in a graph</td>
+</tr>
+<tr>
+<td>DFS</td>
+<td>Searches a target vertex by performing a depth-first traversal given a start node</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>Computes ranking of web-pages</td>
+</tr>
+<tr>
+<td>BC</td>
+<td>A measure of centrality computed by finding all the shortest paths between all vertices</td>
+</tr>
+<tr>
+<td>SSSP</td>
+<td>Computes the shortest path to all vertices given a source vertex</td>
+</tr>
+<tr>
+<td>IS</td>
+<td>Bucket sorting of random integers</td>
+</tr>
+<tr>
+<td>CG</td>
+<td>sparse matrix multiplications</td>
+</tr>
+<tr>
+<td>RandAcc</td>
+<td>Measuring memory system performance</td>
+</tr>
+<tr>
+<td>HJ2/HJ8</td>
+<td>Represents a database application</td>
+</tr>
+<tr>
+<td>Graph500</td>
+<td>Breadth-first search on an undirected graph</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>BFS、DFS、SSSP、BC、PR、Graph500</strong> 均来自 <strong>CRONO</strong> 或 <strong>Graph500</strong> 基准套件，专注于图遍历与分析。</li>
+<li><strong>IS</strong> 和 <strong>CG</strong> 来自 <strong>NAS Parallel Benchmarks</strong>，分别代表整数排序与共轭梯度法。</li>
+<li><strong>RandAcc</strong> 来自 <strong>HPC Challenge Benchmark Suite</strong>，用于测量内存系统的 GUPS 性能。</li>
+<li><strong>HJ2/HJ8</strong> 是哈希连接基准，模拟数据库查询场景，其中 HJ8 使用 8 元素桶，HJ2 使用 2 元素桶。</li>
+<li>此表为后续性能评估（如 Figure 6 和 Figure 7）提供上下文，明确 APT-GET 的适用范围和优化目标。</li>
+</ul>
+<h3 id="table-4-graph-data-sets-properties">Table 4. Graph data-sets properties<a class="headerlink" href="#table-4-graph-data-sets-properties" title="Permanent link">&para;</a></h3>
+<p><img alt="fe2c5a10f3b191ca1f63c6c4cc3901eadd3e61745ca320d1ea8f3158e9c7eef9.jpg" src="../images/fe2c5a10f3b191ca1f63c6c4cc3901eadd3e61745ca320d1ea8f3158e9c7eef9.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 4</strong>，标题为“Graph data-sets properties”，用于列出评估 APT-GET 所使用的图数据集的基本属性。</li>
+<li>表格包含三列：<strong>Data-set Name</strong>、<strong>#Vertices</strong> 和 <strong>#Edges</strong>，分别表示数据集名称、顶点数量和边数量。</li>
+<li>数据集共8个，均来自真实世界或合成图结构，用于测试内存密集型应用（如 BFS、DFS 等）的性能表现。</li>
+<li>各数据集具体信息如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Data-set Name</th>
+<th>#Vertices</th>
+<th>#Edges</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>web-Google (WG)</td>
+<td>875,713</td>
+<td>5,105,039</td>
+</tr>
+<tr>
+<td>p2p-Gnutella31 (P2P)</td>
+<td>62,586</td>
+<td>147,892</td>
+</tr>
+<tr>
+<td>roadNet-CA (CA)</td>
+<td>1,965,206</td>
+<td>2,766,607</td>
+</tr>
+<tr>
+<td>roadNet-PA (PA)</td>
+<td>1,088,092</td>
+<td>1,541,898</td>
+</tr>
+<tr>
+<td>loc-Brightkite (LBE)</td>
+<td>58,228</td>
+<td>214,078</td>
+</tr>
+<tr>
+<td>web-BerkStan (WB)</td>
+<td>685,230</td>
+<td>7,600,595</td>
+</tr>
+<tr>
+<td>web-NotreDame (WN)</td>
+<td>325,729</td>
+<td>1,497,134</td>
+</tr>
+<tr>
+<td>web-Stanford (WS)</td>
+<td>281,903</td>
+<td>2,312,497</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>web-BerkStan (WB)</strong> 拥有最多的边数（7,600,595），表明其图结构高度稠密，适合评估高 MPKI（Misses Per Kilo Instructions）场景下的 prefetch 效果。</li>
+<li><strong>roadNet-CA (CA)</strong> 拥有最多顶点（1,965,206），代表大规模地理网络图，常用于测试嵌套循环与间接访问模式。</li>
+<li>数据集命名采用缩写形式，如 <strong>WG</strong>、<strong>P2P</strong>、<strong>CA</strong> 等，便于在实验结果中快速引用。</li>
+<li>这些数据集被用于验证 APT-GET 在不同图规模和连接密度下的通用性与有效性，尤其关注其对 <strong>LLC miss</strong> 的缓解能力。</li>
+</ul>
+<h3 id="figure-5-the-percentage-of-l3dram-stalls-is-obtained-for-each-applications-non-prefetching-baseline-on-average-the-performance-of-selected-applications-is-4937-bounded-by-the-memory-system">Figure 5. The percentage of L3/DRAM stalls is obtained for each application’s non-prefetching baseline. On average, the performance of selected applications is 49.37% bounded by the memory system.<a class="headerlink" href="#figure-5-the-percentage-of-l3dram-stalls-is-obtained-for-each-applications-non-prefetching-baseline-on-average-the-performance-of-selected-applications-is-4937-bounded-by-the-memory-system" title="Permanent link">&para;</a></h3>
+<p><img alt="941384bb113bbcdd22f4571601a8d1000124d2a65edb43eff50e3971ce5996d8.jpg" src="../images/941384bb113bbcdd22f4571601a8d1000124d2a65edb43eff50e3971ce5996d8.jpg" /></p>
+<ul>
+<li>图表标题为 Figure 5，展示的是各应用在<strong>无预取基线</strong>（non-prefetching baseline）下的 <strong>L3/DRAM stall 百分比</strong>，用于衡量内存系统对性能的限制程度。</li>
+<li>纵轴为 “Backend_Memory_Bound”，单位为百分比，范围从 0 到 90；横轴列出 10 个真实世界应用及其不同配置，共 20 个条目，最后一个是“Average”平均值。</li>
+<li>图例中，<strong>黄色部分代表 L3_Bound</strong>，即因 L3 缓存未命中导致的后端停顿；<strong>红色部分代表 DRAM_Bound</strong>，即因主存访问延迟导致的后端停顿。</li>
+<li>多数应用的内存瓶颈主要来自 <strong>DRAM_Bound</strong>，红色部分占比显著高于黄色部分，表明这些应用频繁触发主存访问，是典型的<strong>内存延迟受限型应用</strong>。</li>
+<li>具体数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用配置</th>
+<th>L3_Bound (%)</th>
+<th>DRAM_Bound (%)</th>
+<th>总内存受限 (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS-N80K-D8</td>
+<td>~15</td>
+<td>~25</td>
+<td>~40</td>
+</tr>
+<tr>
+<td>BFS-P2P</td>
+<td>~10</td>
+<td>~10</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>BFS-LBE</td>
+<td>~15</td>
+<td>~10</td>
+<td>~25</td>
+</tr>
+<tr>
+<td>DFS-N800K-D800</td>
+<td>~20</td>
+<td>~25</td>
+<td>~45</td>
+</tr>
+<tr>
+<td>DFS-N900K-D400</td>
+<td>~20</td>
+<td>~30</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>PR-WG</td>
+<td>~20</td>
+<td>~45</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>PR-CA</td>
+<td>~15</td>
+<td>~55</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>PR-WB</td>
+<td>~10</td>
+<td>~55</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>PR-N100K-D100</td>
+<td>~5</td>
+<td>~60</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>BC-N50K-D8</td>
+<td>~5</td>
+<td>~10</td>
+<td>~15</td>
+</tr>
+<tr>
+<td>BC-N100K-D1K</td>
+<td>~5</td>
+<td>~5</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>HJ8-NPO_st</td>
+<td>~10</td>
+<td>~70</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>HJ2-NPO_st</td>
+<td>~10</td>
+<td>~70</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>IS-NPO</td>
+<td>~10</td>
+<td>~35</td>
+<td>~45</td>
+</tr>
+<tr>
+<td>IS-ClassC</td>
+<td>~15</td>
+<td>~30</td>
+<td>~45</td>
+</tr>
+<tr>
+<td>IS-ClassB</td>
+<td>~15</td>
+<td>~15</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>CG</td>
+<td>~15</td>
+<td>~55</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>RandAcc</td>
+<td>~10</td>
+<td>~80</td>
+<td>~90</td>
+</tr>
+<tr>
+<td>Graph500</td>
+<td>~10</td>
+<td>~60</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>SSSP-N100K-D5</td>
+<td>~5</td>
+<td>~20</td>
+<td>~25</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td><strong>~10</strong></td>
+<td><strong>~39.37</strong></td>
+<td><strong>~49.37</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>RandAcc</strong> 表现最极端，接近 90% 的后端停顿由 DRAM 引起，是高度内存密集型负载。</li>
+<li><strong>BC-N100K-D1K</strong> 和 <strong>SSSP-N100K-D5</strong> 内存受限比例最低，分别约 10% 和 25%，但仍不可忽略。</li>
+<li>平均来看，所选应用有 <strong>49.37% 的性能受内存系统限制</strong>，其中约 39.37% 来自 DRAM 访问延迟，印证了论文中“现代应用因内存延迟损失大量周期”的论断。</li>
+<li>此图支撑了 APT-GET 的研究动机：针对这类内存受限应用，通过<strong>及时、精准的软件预取</strong>可有效隐藏 DRAM 延迟，提升性能。</li>
+</ul>
+<h3 id="figure-6-execution-time-speedup-provided-by-apt-get-over-the-non-prefetching-baseline-apt-get-achieves-130-average-speedup-on-average-compared-to-the-104-speedup-provided-by-the-state-of-the-art-ainsworth-jones">Figure 6. Execution time speedup provided by APT-GET over the non-prefetching baseline: APT-GET achieves 1.30× average speedup on average, compared to the 1.04× speedup provided by the state of the art (Ainsworth &amp; Jones).<a class="headerlink" href="#figure-6-execution-time-speedup-provided-by-apt-get-over-the-non-prefetching-baseline-apt-get-achieves-130-average-speedup-on-average-compared-to-the-104-speedup-provided-by-the-state-of-the-art-ainsworth-jones" title="Permanent link">&para;</a></h3>
+<p><img alt="0844beaacc88f3137e7802c9c98e5d10be26a0c31589645da5b8ff459909628f.jpg" src="../images/0844beaacc88f3137e7802c9c98e5d10be26a0c31589645da5b8ff459909628f.jpg" /></p>
+<ul>
+<li>图表展示了 APT-GET、Ainsworth &amp; Jones 与无预取基线（Baseline）在多个真实应用上的执行时间加速比（Speedup），横轴为不同工作负载，纵轴为加速倍数。</li>
+<li><strong>APT-GET 在绝大多数测试用例中显著优于 Ainsworth &amp; Jones</strong>，尤其在 BFS-N80K-D8、HJ8-NPO、HJ2-NPO 等场景下加速比超过 1.9×，最高达 <strong>1.98×</strong>。</li>
+<li>Ainsworth &amp; Jones 作为静态预取方案，在部分应用如 BC-N100K-D1K 上甚至出现性能退化（加速比 \&lt;1.0），说明其固定预取距离和注入点策略不具普适性。</li>
+<li>平均加速比方面，APT-GET 达到 <strong>1.30×</strong>，而 Ainsworth &amp; Jones 仅为 <strong>1.04×</strong>，表明动态剖面引导的预取机制能更精准匹配运行时行为。</li>
+<li>基线（Baseline）被设定为 1.0，所有柱状图高度相对于此基准衡量性能提升。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>Baseline (x)</th>
+<th>Ainsworth &amp; Jones (x)</th>
+<th>APT-GET (x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS-N80K-D8</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td><strong>1.98</strong></td>
+</tr>
+<tr>
+<td>BFS-P2P</td>
+<td>1.0</td>
+<td>~1.05</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>BFS-LBE</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>DFS-N800K-D800</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>DFS-N900K-D400</td>
+<td>1.0</td>
+<td>~0.9</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>PR-WG</td>
+<td>1.0</td>
+<td>~0.95</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>PR-CA</td>
+<td>1.0</td>
+<td>~0.95</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>PR-WB</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>PR-N100K-D100</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.2</td>
+</tr>
+<tr>
+<td>BC-N50K-D8</td>
+<td>1.0</td>
+<td>~0.95</td>
+<td>~1.2</td>
+</tr>
+<tr>
+<td>BC-N100K-D1K</td>
+<td>1.0</td>
+<td><strong>~0.8</strong></td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>HJ8-NPO_st</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>HJ8-NPO</td>
+<td>1.0</td>
+<td>~1.2</td>
+<td><strong>1.98</strong></td>
+</tr>
+<tr>
+<td>HJ2-NPO_st</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>HJ2-NPO</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td><strong>1.98</strong></td>
+</tr>
+<tr>
+<td>IS-ClassC</td>
+<td>1.0</td>
+<td>~1.4</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>IS-ClassB</td>
+<td>1.0</td>
+<td>~1.4</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>CG</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>RandAcc</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>Graph500</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>SSSP-N100K-D5</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>1.0</td>
+<td><strong>1.04</strong></td>
+<td><strong>1.30</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>特别值得注意的是，在 CG 应用上，APT-GET 和 Ainsworth &amp; Jones 均未带来明显加速，说明该应用可能对预取不敏感或存在其他瓶颈。</li>
+<li>图表右下角“Average”柱明确标示了整体平均加速比，直观体现 APT-GET 的全局优势。</li>
+</ul>
+<h3 id="figure-7-apt-get-s-llc-mpki-misses-per-1000-instructions-reduction-over-the-non-prefetching-baseline-lower-is-better-on-average-apt-get-provides-135-greater-mpki-reduction-than-the-state-of-the-art-ainsworth-jones">Figure 7. APT-GET ’s LLC MPKI, misses per 1000-instructions, reduction over the non-prefetching baseline (lower is better): on average, APT-GET provides 1.35× greater MPKI reduction than the state of the art (Ainsworth &amp; Jones).<a class="headerlink" href="#figure-7-apt-get-s-llc-mpki-misses-per-1000-instructions-reduction-over-the-non-prefetching-baseline-lower-is-better-on-average-apt-get-provides-135-greater-mpki-reduction-than-the-state-of-the-art-ainsworth-jones" title="Permanent link">&para;</a></h3>
+<p><img alt="696ecf9672232d85c990bd80e37acf574476f5df443a4bfb3af30cdd8162a7b3.jpg" src="../images/696ecf9672232d85c990bd80e37acf574476f5df443a4bfb3af30cdd8162a7b3.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 7</strong>，展示的是 <strong>APT-GET</strong> 在 <strong>LLC MPKI（Last Level Cache Misses Per Kilo Instructions）</strong> 方面相对于 <strong>non-prefetching baseline</strong> 的性能提升，数值越低越好。</li>
+<li>图中包含三组数据：<strong>Baseline</strong>（虚线基准）、<strong>Ainsworth &amp; Jones</strong>（红色柱状图）、<strong>APT-GET</strong>（蓝色柱状图），用于对比不同软件预取机制的效果。</li>
+<li>横轴列出多个真实应用与测试用例，包括 <strong>BFS-N80K-D8、DFS-N800K-D800、PR-WG、BC-N50K-D8、HJ8-NPO_st、IS-ClassC、CG、RandAcc、Graph500、SSSP-N110K-D5</strong> 等，覆盖图算法、排序、稀疏矩阵计算、哈希连接等多种内存密集型负载。</li>
+<li>纵轴表示 <strong>MPKI (x)</strong>，即每千条指令的缓存未命中次数，以 <strong>Baseline = 1.0</strong> 为参考基准，低于1.0表示性能提升。</li>
+<li><strong>APT-GET</strong> 在绝大多数测试用例中显著优于 <strong>Ainsworth &amp; Jones</strong>，尤其在 <strong>BFS-P2P、DFS-N900K-D400、PR-CA、PR-WB、BC-N100K-D1K、HJ2-NPO、Graph500、SSSP-N110K-D5</strong> 等场景下表现突出。</li>
+<li><strong>Ainsworth &amp; Jones</strong> 在部分测试中甚至劣于 Baseline（如 <strong>BC-N50K-D8、CG、IS-ClassB</strong>），表明其静态预取策略可能引入无效或过早的预取，导致性能退化。</li>
+<li><strong>平均值（Average）</strong> 显示，<strong>APT-GET</strong> 相比 Baseline 平均降低 <strong>MPKI 65.4%</strong>，而 <strong>Ainsworth &amp; Jones</strong> 仅降低 <strong>48.3%</strong>，说明 APT-GET 在减少缓存未命中方面更有效。</li>
+<li>图表下方注释强调：<strong>APT-GET 提供的 MPKI 减少效果比当前最佳技术（Ainsworth &amp; Jones）高出 1.35 倍</strong>，凸显其在优化内存访问效率上的优势。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用/测试用例</th>
+<th>Baseline (x)</th>
+<th>Ainsworth &amp; Jones (x)</th>
+<th>APT-GET (x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS-N80K-D8</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~0.1</td>
+</tr>
+<tr>
+<td>BFS-P2P</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~0.6</td>
+</tr>
+<tr>
+<td>DFS-N800K-D800</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~0.8</td>
+</tr>
+<tr>
+<td>PR-WG</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~0.6</td>
+</tr>
+<tr>
+<td>BC-N50K-D8</td>
+<td>1.0</td>
+<td>~0.3</td>
+<td>~0.4</td>
+</tr>
+<tr>
+<td>HJ8-NPO_st</td>
+<td>1.0</td>
+<td>~0.9</td>
+<td>~0.8</td>
+</tr>
+<tr>
+<td>IS-ClassC</td>
+<td>1.0</td>
+<td>~0.0</td>
+<td>~0.0</td>
+</tr>
+<tr>
+<td>CG</td>
+<td>1.0</td>
+<td>~0.3</td>
+<td>~0.2</td>
+</tr>
+<tr>
+<td>RandAcc</td>
+<td>1.0</td>
+<td>~0.3</td>
+<td>~0.2</td>
+</tr>
+<tr>
+<td>Graph500</td>
+<td>1.0</td>
+<td>~0.7</td>
+<td>~0.4</td>
+</tr>
+<tr>
+<td>SSSP-N110K-D5</td>
+<td>1.0</td>
+<td>~1.0</td>
+<td>~0.4</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>1.0</td>
+<td>~0.52</td>
+<td><strong>~0.35</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>APT-GET 通过动态分析执行时间与循环行为，精准控制预取距离与注入点，从而在减少 LLC 缓存未命中方面远超静态方法，实现更优的内存性能优化。</strong></li>
+</ul>
+<h3 id="figure-8-speedup-of-prefetch-distance-from-lbr-sampling-technique-and-optimal-prefetch-distance-over-non-prefetching-baseline-lbr-sampling-technique-achieves-130-overall-speedup-in-average-compared-to-132-speedup-of-optimal-prefetchdistance-over-non-prefetching-baseline">Figure 8. Speedup of prefetch-distance from LBR sampling technique and optimal prefetch-distance over non-prefetching baseline: LBR sampling technique achieves 1.30× overall speedup in average, compared to 1.32× speedup of optimal prefetchdistance, over non-prefetching baseline.<a class="headerlink" href="#figure-8-speedup-of-prefetch-distance-from-lbr-sampling-technique-and-optimal-prefetch-distance-over-non-prefetching-baseline-lbr-sampling-technique-achieves-130-overall-speedup-in-average-compared-to-132-speedup-of-optimal-prefetchdistance-over-non-prefetching-baseline" title="Permanent link">&para;</a></h3>
+<p><img alt="92ab55ddaa48a6e502efda4cbb8d507b4f646d468e5a35766d018a56f4209b77.jpg" src="../images/92ab55ddaa48a6e502efda4cbb8d507b4f646d468e5a35766d018a56f4209b77.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 8</strong>，展示的是 <strong>LBR采样技术推导的预取距离</strong> 与 <strong>最优预取距离</strong> 相对于 <strong>无预取基线（Baseline）</strong> 的性能加速比。</li>
+<li>图中包含三组柱状图：<strong>Baseline</strong>（虚线基准）、<strong>D-Optimal</strong>（红色，代表理论最优预取距离）、<strong>D-LBR</strong>（蓝色，代表APT-GET通过LBR采样得出的预取距离）。</li>
+<li>横轴列出多个真实应用及测试用例，包括 <strong>BFS-N80K-D8</strong>、<strong>DFS-N800K-D800</strong>、<strong>PR-WG</strong>、<strong>HJ8-NPO</strong>、<strong>CG</strong>、<strong>RandAcc</strong> 等，覆盖图算法、排序、哈希连接、稀疏矩阵计算等场景。</li>
+<li>纵轴为 <strong>Speedup (x)</strong>，表示相对于基线的执行时间加速倍数，范围从0.4到2.0。</li>
+<li><strong>D-LBR</strong>（蓝色柱）在绝大多数测试用例中表现接近或略低于 <strong>D-Optimal</strong>（红色柱），说明APT-GET的LBR采样方法能有效逼近理论最优值。</li>
+<li>在部分应用如 <strong>BFS-N80K-D8</strong> 和 <strong>HJ8-NPO</strong> 中，<strong>D-LBR</strong> 甚至略优于 <strong>D-Optimal</strong>，表明动态分析在实际运行时可能捕捉到静态最优无法覆盖的细微行为。</li>
+<li><strong>CG</strong> 应用中，所有预取方案均未带来显著加速，甚至略有下降，说明该应用对预取不敏感或存在其他瓶颈。</li>
+<li>最右侧“Average”列显示整体平均加速比：<strong>D-LBR 达到 1.30×</strong>，而 <strong>D-Optimal 为 1.32×</strong>，两者差距极小，证明APT-GET的自动化方法具有高度有效性。</li>
+<li>图表下方说明强调：<strong>LBR采样技术实现1.30×平均加速，仅比最优预取距离的1.32×低2%</strong>，验证了其工程实用价值。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用/测试用例</th>
+<th>D-Optimal 加速比</th>
+<th>D-LBR 加速比</th>
+<th>是否接近最优</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS-N80K-D8</td>
+<td>~2.0</td>
+<td>~1.95</td>
+<td>是</td>
+</tr>
+<tr>
+<td>DFS-N800K-D800</td>
+<td>~1.2</td>
+<td>~1.15</td>
+<td>是</td>
+</tr>
+<tr>
+<td>PR-WG</td>
+<td>~1.5</td>
+<td>~1.45</td>
+<td>是</td>
+</tr>
+<tr>
+<td>HJ8-NPO</td>
+<td>~1.9</td>
+<td>~1.95</td>
+<td>超越</td>
+</tr>
+<tr>
+<td>CG</td>
+<td>~1.0</td>
+<td>~0.95</td>
+<td>否</td>
+</tr>
+<tr>
+<td>RandAcc</td>
+<td>~1.5</td>
+<td>~1.45</td>
+<td>是</td>
+</tr>
+<tr>
+<td>Average</td>
+<td><strong>1.32×</strong></td>
+<td><strong>1.30×</strong></td>
+<td><strong>是</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：APT-GET通过LBR采样自动确定预取距离，在无需人工调参的前提下，实现了<strong>接近理论最优的性能收益</strong>，且<strong>平均加速达1.30×</strong>，验证了其在真实应用中的高效性与实用性。</li>
+</ul>
+<h3 id="figure-9-speedup-for-different-static-offset-values-and-lbr-over-non-prefetching-baseline-prefetch-distance-of-4-16-64-and-lbr-sampling-technique-achieve-116-126-128-and-130-speedup-in-average-over-non-prefetching-baseline-respectively">Figure 9. Speedup for different static offset values and LBR over non-prefetching baseline: prefetch-distance of 4, 16, 64, and LBR sampling technique achieve 1.16×, 1.26×, 1.28×, and 1.30× speedup in average over non-prefetching baseline, respectively.<a class="headerlink" href="#figure-9-speedup-for-different-static-offset-values-and-lbr-over-non-prefetching-baseline-prefetch-distance-of-4-16-64-and-lbr-sampling-technique-achieve-116-126-128-and-130-speedup-in-average-over-non-prefetching-baseline-respectively" title="Permanent link">&para;</a></h3>
+<p><img alt="0015dcc6d01f2c06becaefa02034ef9c293ce33fba8c4229cfa29a2e46b8cefc.jpg" src="../images/0015dcc6d01f2c06becaefa02034ef9c293ce33fba8c4229cfa29a2e46b8cefc.jpg" /></p>
+<ul>
+<li>图表标题为 Figure 9，展示不同 prefetch-distance 配置下的性能加速比（Speedup），基准为无 prefetching 的 baseline。</li>
+<li>横轴列出 20 个测试应用/配置，包括 BFS、DFS、PR、BC、HJ8、HJ2、IS、CG、RandAcc、Graph500、SSSP 等，部分带有参数如 N80K-D8、ClassB 等。</li>
+<li>纵轴为 Speedup (x)，范围从 0.6 到 2.0，虚线标记 1.0x 基准线。</li>
+<li>图例包含四种配置：<ul>
+<li><strong>Baseline</strong>：无 prefetching，作为对比基准。</li>
+<li><strong>D=4</strong>：静态 prefetch-distance 为 4。</li>
+<li><strong>D=16</strong>：静态 prefetch-distance 为 16。</li>
+<li><strong>D=64</strong>：静态 prefetch-distance 为 64。</li>
+<li><strong>D-LBR</strong>：使用 APT-GET 的 LBR 采样技术动态确定的 prefetch-distance。</li>
+</ul>
+</li>
+<li>数据显示，<strong>D-LBR 在绝大多数应用中表现最优</strong>，尤其在 BFS-N80K-D8、HJ8-NPO、HJ2-NPO 等应用上达到接近 2.0x 加速。</li>
+<li>平均加速比数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>平均 Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D=4</td>
+<td>1.16×</td>
+</tr>
+<tr>
+<td>D=16</td>
+<td>1.26×</td>
+</tr>
+<tr>
+<td>D=64</td>
+<td>1.28×</td>
+</tr>
+<tr>
+<td>D-LBR</td>
+<td><strong>1.30×</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>多数应用中，<strong>D-LBR 明显优于所有静态距离配置</strong>，证明动态 profile-guided 方法能更精准匹配实际执行时间需求。</li>
+<li>少数应用如 CG、Graph500，各配置加速比接近 1.0x，说明这些应用对 prefetch 不敏感或已接近性能瓶颈。</li>
+<li>该图验证了论文核心观点：<strong>静态 prefetch-distance 无法泛化，而 APT-GET 的 LBR 动态分析可实现近似最优 timeliness，带来更高平均性能增益</strong>。</li>
+</ul>
+<h3 id="figure-10-speedup-of-injecting-prefetches-inside-the-outer-or-inner-loops-over-non-prefetching-baseline-for-most-of-the-applications-injecting-prefeches-inside-the-outer-loop-achieves-120-overall-speedup-in-average-while-injecting-prefetches-inside-the-inner-loop-improves-speedup-for-dfs-up-to-111-over-non-prefethcing-baseline">Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.<a class="headerlink" href="#figure-10-speedup-of-injecting-prefetches-inside-the-outer-or-inner-loops-over-non-prefetching-baseline-for-most-of-the-applications-injecting-prefeches-inside-the-outer-loop-achieves-120-overall-speedup-in-average-while-injecting-prefetches-inside-the-inner-loop-improves-speedup-for-dfs-up-to-111-over-non-prefethcing-baseline" title="Permanent link">&para;</a></h3>
+<p><img alt="95616f7d281dd9c3f57d85acc5a821fc05dc64b0d6d12103f821a3cb567394c0.jpg" src="../images/95616f7d281dd9c3f57d85acc5a821fc05dc64b0d6d12103f821a3cb567394c0.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 10</strong>，展示的是在不同应用中，将预取指令注入 <strong>外层循环（OUTER）</strong> 或 <strong>内层循环（INNER）</strong> 相对于无预取基线（Baseline）的加速比（Speedup）。</li>
+<li>横轴列出多个测试应用及其参数配置，如 <strong>BFS-N80K-D8</strong>、<strong>DFS-N800K-D800</strong> 等，涵盖图算法（BFS, DFS, PR, BC, SSSP）及不同数据集规模。</li>
+<li>纵轴为加速比（x），范围从 0.4 到 2.0，虚线表示 <strong>Baseline = 1.0</strong>，高于该线代表性能提升，低于则为性能退化。</li>
+<li>图例说明：<ul>
+<li><strong>红色柱状图（INNER）</strong>：预取注入内层循环。</li>
+<li><strong>蓝色柱状图（OUTER）</strong>：预取注入外层循环。</li>
+<li><strong>虚线（Baseline）</strong>：无预取基准。</li>
+</ul>
+</li>
+<li>多数应用中，<strong>OUTER 注入方式表现更优</strong>，例如：<ul>
+<li><strong>BFS-N80K-D8</strong> 达到约 <strong>1.98×</strong> 加速。</li>
+<li><strong>PR-WG、PR-CA、PR-WB、PR-N100K-D100、BC-N50K-D8、SSSP-N1100K-D5</strong> 均显著优于 INNER。</li>
+</ul>
+</li>
+<li>少数例外：<ul>
+<li><strong>DFS-P2P、DFS-N800K-D800、DFS-N900K-D400</strong> 中，INNER 与 OUTER 表现接近或略优。</li>
+<li><strong>BC-N100K-D1K</strong> 中，INNER 性能严重退化（&lt; 0.6×），而 OUTER 仍保持 &gt;1.0×。</li>
+</ul>
+</li>
+<li>平均加速比（Average）显示：<ul>
+<li><strong>OUTER 注入平均达 1.20×</strong>。</li>
+<li><strong>INNER 注入仅对 DFS 类型有效（最高 1.11×）</strong>，其余多数场景下劣于 OUTER。</li>
+</ul>
+</li>
+<li>结论：APT-GET 的 <strong>动态选择预取注入点机制</strong>（基于 LBR 分析）能显著提升性能，尤其在嵌套循环结构中，<strong>外层注入更常带来收益</strong>，避免因内层迭代次数少导致预取无效或过早失效。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用配置</th>
+<th>INNER 加速比</th>
+<th>OUTER 加速比</th>
+<th>是否优于 Baseline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS-N80K-D8</td>
+<td>~0.7</td>
+<td><strong>~1.98</strong></td>
+<td>是</td>
+</tr>
+<tr>
+<td>BFS-P2P</td>
+<td>~0.95</td>
+<td>~1.1</td>
+<td>是</td>
+</tr>
+<tr>
+<td>BFS-LBE</td>
+<td>~0.85</td>
+<td>~1.1</td>
+<td>是</td>
+</tr>
+<tr>
+<td>DFS-N800K-D800</td>
+<td>~1.1</td>
+<td>~1.0</td>
+<td>是</td>
+</tr>
+<tr>
+<td>DFS-N900K-D400</td>
+<td>~1.1</td>
+<td>~1.0</td>
+<td>是</td>
+</tr>
+<tr>
+<td>PR-WG</td>
+<td>~0.7</td>
+<td><strong>~1.4</strong></td>
+<td>是</td>
+</tr>
+<tr>
+<td>PR-CA</td>
+<td>~0.7</td>
+<td><strong>~1.4</strong></td>
+<td>是</td>
+</tr>
+<tr>
+<td>PR-WB</td>
+<td>~0.7</td>
+<td><strong>~1.35</strong></td>
+<td>是</td>
+</tr>
+<tr>
+<td>PR-N100K-D100</td>
+<td>~0.85</td>
+<td><strong>~1.2</strong></td>
+<td>是</td>
+</tr>
+<tr>
+<td>BC-N50K-D8</td>
+<td>~0.9</td>
+<td><strong>~1.2</strong></td>
+<td>是</td>
+</tr>
+<tr>
+<td>BC-N100K-D1K</td>
+<td><strong>~0.5</strong></td>
+<td>~1.1</td>
+<td>是（仅 OUTER）</td>
+</tr>
+<tr>
+<td>SSSP-N1100K-D5</td>
+<td>~0.85</td>
+<td><strong>~1.15</strong></td>
+<td>是</td>
+</tr>
+<tr>
+<td>Average</td>
+<td>—</td>
+<td><strong>1.20×</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键洞察：<strong>静态注入策略（如仅限内层）无法适应多样化的循环结构和数据访问模式</strong>，而 APT-GET 的动态分析可精准选择最优注入点，实现 <strong>1.20× 平均加速</strong>。</li>
+</ul>
+<h3 id="figure-11-the-overhead-of-injected-prefetching-instructions-over-non-prefetching-baseline-apt-get-increases-the-total-number-of-instructions-114-in-average-compared-to-119-in-average-of-ainsworth-jones-over-non-prefetching-baseline">Figure 11. The overhead of injected prefetching instructions over non-prefetching baseline: APT-GET increases the total number of instructions 1.14× in average, compared to 1.19× in average of Ainsworth &amp; Jones, over non-prefetching baseline.<a class="headerlink" href="#figure-11-the-overhead-of-injected-prefetching-instructions-over-non-prefetching-baseline-apt-get-increases-the-total-number-of-instructions-114-in-average-compared-to-119-in-average-of-ainsworth-jones-over-non-prefetching-baseline" title="Permanent link">&para;</a></h3>
+<p><img alt="44a047c3c9b51d8c31081210f04f9b80d31cf32d44122dd445b01221ce5d55c1.jpg" src="../images/44a047c3c9b51d8c31081210f04f9b80d31cf32d44122dd445b01221ce5d55c1.jpg" /></p>
+<ul>
+<li>图表标题为 Figure 11，主题是 <strong>注入预取指令带来的指令开销</strong>，对比对象为无预取基线（Baseline）、Ainsworth &amp; Jones 方法和 APT-GET 方法。</li>
+<li>纵轴表示 <strong>指令数量倍数（#Instructions (x)）</strong>，以基线为 1.0，数值越高代表指令开销越大。</li>
+<li>横轴列出多个基准测试程序，包括 BFS、DFS、PR、BC、HJ8、HJ2、IS、CG、RandAcc、Graph500、SSSP 等，以及最后的 <strong>Average</strong>（平均值）。</li>
+<li>基线（Baseline）用黑色虚线表示，所有柱状图均与之比较。</li>
+<li><strong>APT-GET</strong>（蓝色柱）在多数测试中指令开销低于 <strong>Ainsworth &amp; Jones</strong>（红色柱），表明其更高效。</li>
+<li>在部分程序如 CG、RandAcc、IS-ClassB 中，Ainsworth &amp; Jones 的指令开销显著高于 APT-GET，甚至超过 2.0x。</li>
+<li>平均来看，APT-GET 使指令总数增加 <strong>1.14×</strong>，而 Ainsworth &amp; Jones 增加 <strong>1.19×</strong>，说明 APT-GET 在控制指令开销方面更优。</li>
+<li>尽管注入预取指令会增加指令数，但 APT-GET 通过优化预取距离和注入点，在性能提升的同时保持较低的指令开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>测试程序</th>
+<th>APT-GET 指令倍数</th>
+<th>Ainsworth &amp; Jones 指令倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS-N80K-D8</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>BFS-P2P</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>BFS-LBE</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>DFS-N800K-D800</td>
+<td>~1.1</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>DFS-N900K-D400</td>
+<td>~1.1</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>PR-WG</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>PR-CA</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>PR-WB</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>PR-N100K-D100</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>BC-N50K-D8</td>
+<td>~1.0</td>
+<td>~1.6</td>
+</tr>
+<tr>
+<td>BC-N100K-D1K</td>
+<td>~1.0</td>
+<td>~1.6</td>
+</tr>
+<tr>
+<td>HJ8-NPO_st</td>
+<td>~1.0</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>HJ8-NPO</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>HJ2-NPO_st</td>
+<td>~1.0</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>HJ2-NPO</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>IS-ClassC</td>
+<td>~1.7</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>IS-ClassB</td>
+<td>~1.8</td>
+<td>~2.2</td>
+</tr>
+<tr>
+<td>CG</td>
+<td>~1.0</td>
+<td>~2.2</td>
+</tr>
+<tr>
+<td>RandAcc</td>
+<td>~1.0</td>
+<td>~2.3</td>
+</tr>
+<tr>
+<td>Graph500</td>
+<td>~1.1</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>SSSP-N100K-D5</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>Average</td>
+<td><strong>1.14×</strong></td>
+<td><strong>1.19×</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体趋势显示，APT-GET 在大多数情况下能有效控制指令开销，尤其在复杂或高负载场景下优势明显。</li>
+</ul>
+<h3 id="figure-12-execution-time-speedup-provided-by-apt-get-over-the-non-prefetching-baseline-for-different-inputs-as-traintest-data-apt-get-achieves-136-average-speedup-on-average-for-test-data-sets-compared-to-the-139-average-speedup-obtained-for-train-data-sets">Figure 12. Execution time speedup provided by APT-GET over the non-prefetching baseline for different inputs as train/test data: APT-GET achieves 1.36× average speedup on average for test data sets compared to the 1.39× average speedup obtained for train data sets<a class="headerlink" href="#figure-12-execution-time-speedup-provided-by-apt-get-over-the-non-prefetching-baseline-for-different-inputs-as-traintest-data-apt-get-achieves-136-average-speedup-on-average-for-test-data-sets-compared-to-the-139-average-speedup-obtained-for-train-data-sets" title="Permanent link">&para;</a></h3>
+<p><img alt="d40bcd2dd5ed6f90e8476ab79bd23e73d2d1988b49f71c48a6dd60c3e693013b.jpg" src="../images/d40bcd2dd5ed6f90e8476ab79bd23e73d2d1988b49f71c48a6dd60c3e693013b.jpg" /></p>
+<ul>
+<li>图片为 <strong>Figure 12</strong>，展示 APT-GET 在不同输入数据（训练集与测试集）下相对于无预取基线的执行时间加速比。</li>
+<li>横轴按应用分类，包括 BFS、DFS、PR、BC、HJ8、HJ2、IS、CG、Rand、G500、SSSP 等，每个应用下有多个具体配置（如 N80K-D8、N100K-D16 等），最后一列为所有应用的平均值（AVG）。</li>
+<li>纵轴为 <strong>Speedup (x)</strong>，范围从 0.4 到 2.0，虚线表示 <strong>1.0x 基线</strong>。</li>
+<li>图例包含三类柱状图：<ul>
+<li><strong>Baseline</strong>：蓝色虚线，代表无预取基线。</li>
+<li><strong>TRAIN-DATA</strong>：红色实柱，代表在训练数据上优化后在相同数据上评估的结果。</li>
+<li><strong>TEST-DATA</strong>：深蓝色实柱，代表在训练数据上优化后在不同测试数据上评估的结果。</li>
+</ul>
+</li>
+<li>数据表明，APT-GET 在绝大多数配置下均实现正向加速，部分应用如 BFS、HJ8、HJ2 加速比高达 <strong>1.98x</strong>。</li>
+<li>平均加速比方面，<strong>TRAIN-DATA</strong> 达到 <strong>1.39x</strong>，<strong>TEST-DATA</strong> 达到 <strong>1.36x</strong>，两者差异极小，说明 APT-GET 具备良好的跨输入泛化能力。</li>
+<li>少数配置如 P2P-31、P2P-30、Size200K-Iter10K 等加速比低于 1.0x，表明在特定输入或参数组合下可能出现性能退化。</li>
+<li>表格化总结关键数据：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用/配置</th>
+<th>TRAIN-DATA (x)</th>
+<th>TEST-DATA (x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS (N80K-D8)</td>
+<td>~2.0</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>HJ8 (NPO_st-128M)</td>
+<td>~1.98</td>
+<td>~1.98</td>
+</tr>
+<tr>
+<td>HJ2 (NPO_st-128M)</td>
+<td>~1.98</td>
+<td>~1.98</td>
+</tr>
+<tr>
+<td>AVG</td>
+<td><strong>1.39</strong></td>
+<td><strong>1.36</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：APT-GET 的性能收益在不同输入间保持稳定，验证其作为通用编译器优化技术的实用性。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

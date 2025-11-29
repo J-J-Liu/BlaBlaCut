@@ -1,0 +1,728 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Integrating Prefetcher Selection with Dynamic Request Allocation Improves Prefetching Efficiency 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integrating Prefetcher Selection with Dynamic Request Allocation Improves Prefetching Efficiency 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-dynamic-demand-request-allocation-ddra-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-fine-grained-prefetcher-identification-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 细粒度预取器识别 (Fine-grained Prefetcher Identification) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-aggressiveness-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 三态状态机与自适应 aggressiveness (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-sample-table-sandbox-table-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 运行时指标收集机制 (Sample Table &amp; Sandbox Table) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-integrated-prefetch-filtering-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 集成式预取请求过滤 (Integrated Prefetch Filtering) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency">Integrating Prefetcher Selection with Dynamic Request Allocation Improves Prefetching Efficiency 通俗讲解<a class="headerlink" href="#integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<p>传统硬件预取（Hardware Prefetching）的困境在于“大锅饭”式的管理。现代处理器通常会集成多个专用的预取器（Prefetcher），比如 <strong>Stream Prefetcher</strong> 处理连续访问，<strong>Stride Prefetcher</strong> 处理固定步长，<strong>Temporal Prefetcher</strong> 处理时间局部性。理想很丰满，但现实很骨感：</p>
+<ul>
+<li><strong>训练数据污染</strong>：所有预取器都用同一份来自CPU的 <strong>demand request</strong>（需求请求）来“学习”。一个本该由 <strong>Spatial Prefetcher</strong> 处理的复杂空间模式，也会被错误地喂给 <strong>Stride Prefetcher</strong>。这不仅浪费了 <strong>Stride Prefetcher</strong> 宝贵的 <strong>prefetcher table</strong> 条目（存储元数据的地方），还可能让它学出错误的规律。</li>
+<li><strong>资源内耗冲突</strong>：这些被错误训练出来的预取器，会生成大量无效或重复的预取请求，争抢 <strong>prefetch queue</strong>、<strong>cache space</strong> 和 <strong>DRAM bandwidth</strong>。结果就是，大家互相拖后腿，整体性能不升反降。</li>
+<li><strong>粗粒度调度</strong>：之前的调度方案（如DOL, IPCP, Bandit）要么是 <strong>静态优先级</strong>（永远让A先上），要么是在 <strong>输出端</strong> 做文章（等所有预取器都算完了，再选一个最好的）。它们都没能从源头——也就是 <strong>输入的demand request</strong> ——进行精准分配。</li>
+</ul>
+<p>简单说，以前的做法就像让一群各有所长的专家（预取器）围在一张桌子旁，不管问题是什么，都把所有原始数据扔给他们看。结果专家们要么被无关信息干扰，要么互相抢着回答同一个问题，效率极低。</p>
+<p><img alt="" src="../images/335ac37ae534e4aecf135365d3114a07518e3d61cebf21965a908cc05b284f02.jpg" /></p>
+<p><em>Fig. 1. Comparison of prefetcher table misses in the same composite prefetchers without dynamic demand request allocation (DDRA) and Alecto that utilizes DDRA. With efficient demand request allocation, Alecto proves to significantly reduce conflicts that occur within the prefetchers’ table.</em></p>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<p>想象一个高效的客服中心。客户（demand request）打电话进来，描述他们的问题。</p>
+<ul>
+<li><strong>旧方法（如IPCP/Bandit）</strong>：所有客服专员（预取器）都能听到客户的全部描述。然后，每个专员都根据自己的理解给出解决方案。最后，由一个主管（调度器）从一堆方案里挑一个他认为最好的。这不仅浪费了其他专员的时间，而且如果专员A擅长处理账单问题，却总被要求听技术故障的描述，他的知识库（table）很快就会被垃圾信息填满。</li>
+<li><strong>Alecto的新方法</strong>：在客户电话接入的瞬间，就有一个智能分诊员（<strong>Allocation Table</strong>）根据客户的来电号码（<strong>PC, Program Counter</strong>）快速判断问题类型。然后，他只把电话转接给<strong>最合适的一到两位专员</strong>。其他专员根本听不到这个电话，他们的精力和知识库得以专注在自己擅长的领域。同时，分诊员还会根据专员过去解决同类问题的成功率（<strong>accuracy</strong>），动态调整给他们分配的客户量（<strong>prefetching degree</strong>）。</li>
+</ul>
+<p>这个分诊机制，就是论文提出的 <strong>Dynamic Demand Request Allocation (DDRA)</strong> —— 动态需求请求分配。</p>
+<p><strong>关键一招 (The "How")</strong></p>
+<p>Alecto 的核心创新在于，它把 <strong>预取器选择</strong> 这个动作，从传统的“输出端过滤”<strong>扭转</strong>到了“<strong>输入端分配</strong>”。具体来说，作者在标准的预取流程中，巧妙地插入了一个基于 <strong>PC</strong> 的实时决策中心。</p>
+<ul>
+<li>作者并没有试图去改造每个预取器本身，而是在所有预取器的上游，增加了一个轻量级的 <strong>Allocation Table</strong>。</li>
+<li>这个表以 <strong>PC</strong> 为索引，为每个内存访问指令记录其关联的各个预取器的 <strong>状态</strong>（State Machine）：<ul>
+<li><strong>Un-Identified (UI)</strong>: 初始状态，还不知道谁行。</li>
+<li><strong>Identified and Aggressive (IA)</strong>: 这个预取器被证明对这个PC很有效，可以多给点活干。</li>
+<li><strong>Identified and Blocked (IB)</strong>: 这个预取器对这个PC完全没用，暂时别让它接触相关数据。</li>
+</ul>
+</li>
+<li>当一个新的 demand request 到达时，Alecto 先查 <strong>Allocation Table</strong>。它只会生成一个 <strong>identifier</strong>，将这个请求<strong>动态路由</strong>给处于 <strong>UI</strong> 或 <strong>IA</strong> 状态的预取器。处于 <strong>IB</strong> 状态的预取器对此请求完全“不可见”，从根本上杜绝了训练污染。</li>
+<li>这个状态机的转换依据，来自于一个精巧的反馈回路：通过 <strong>Sandbox Table</strong> 和 <strong>Sample Table</strong> 收集每个预取器针对每个PC的 <strong>实际命中率（accuracy）</strong>，并以此作为奖惩信号，不断优化分配策略。</li>
+</ul>
+<p>通过这一招，Alecto 同时解决了两大痛点：既保证了每个预取器能得到最干净、最相关的训练数据，又大幅减少了因无效预取导致的硬件资源冲突。最终实现了 <strong>更高性能</strong>（IPC提升）、<strong>更低能耗</strong>（减少48%的table访问）和 <strong>极小的存储开销</strong>（\&lt;1KB）。</p>
+<h3 id="1-dynamic-demand-request-allocation-ddra-eli5">1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA) (ELI5)<a class="headerlink" href="#1-dynamic-demand-request-allocation-ddra-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前的硬件预取系统就像一个大杂烩，所有类型的 <strong>Prefetcher</strong>（比如 Stream、Stride、Spatial）都盯着同一锅“需求请求”（Demand Requests）来学习。</li>
+<li>这导致两个非常难受的问题：<ul>
+<li><strong>训练污染</strong>：一个本该处理规则步长（Stride）模式的预取器，却被一堆不规则的空间访问模式“喂”了数据，结果它自己的 <strong>prefetcher table</strong> 里塞满了无用信息，把真正有用的条目给挤出去了。这直接导致 <strong>prefetcher table miss rate</strong> 飙升，如</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/335ac37ae534e4aecf135365d3114a07518e3d61cebf21965a908cc05b284f02.jpg" /></p>
+<p><em>Fig. 1. Comparison of prefetcher table misses in the same composite prefetchers without dynamic demand request allocation (DDRA) and Alecto that utilizes DDRA. With efficient demand request allocation, Alecto proves to significantly reduce conflicts that occur within the prefetchers’ table.</em></p>
+<p>所示。</p>
+<ul>
+<li><strong>顾此失彼</strong>：现有的协调方案，要么像 <strong>DOL</strong> 那样用<strong>静态优先级</strong>硬性规定谁先谁后（见</li>
+</ul>
+<p><img alt="" src="../images/beb0945a20d2d419bd43428e7b5255961db4e498ed83252ede6b9a2d1b456be6.jpg" /></p>
+<p><em>Fig. 3. Comparison of prefetcher selection algorithms. (a) DOL selects prefetchers in the allocation stage. It sequentially passes the demand request through all prefetchers. (b) IPCP selects prefetchers in the prefetch stage. It statically prioritizes the prefetching requests from different prefetchers. (c) RL-based schemes select prefetchers in the prefetch stage. It controls the outputs of prefetchers and applies identical rules for all memory accesses. (d) Alecto selects prefetchers in the allocation stage. It identifies suitable prefetchers for each memory access, then dynamically allocates demand requests to identified prefetchers.</em></p>
+<p>(a)），要么像 <strong>Bandit</strong> 那样只在最后关头控制输出（见</p>
+<p><img alt="" src="../images/beb0945a20d2d419bd43428e7b5255961db4e498ed83252ede6b9a2d1b456be6.jpg" /></p>
+<p><em>Fig. 3. Comparison of prefetcher selection algorithms. (a) DOL selects prefetchers in the allocation stage. It sequentially passes the demand request through all prefetchers. (b) IPCP selects prefetchers in the prefetch stage. It statically prioritizes the prefetching requests from different prefetchers. (c) RL-based schemes select prefetchers in the prefetch stage. It controls the outputs of prefetchers and applies identical rules for all memory accesses. (d) Alecto selects prefetchers in the allocation stage. It identifies suitable prefetchers for each memory access, then dynamically allocates demand requests to identified prefetchers.</em></p>
+<p>(c)）。它们都没能解决“<strong>错误的输入导致错误的内部状态</strong>”这个根本问题。</p>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象一个由三位专家（Stream、Stride、Spatial Prefetcher）组成的顾问团，他们的任务是预测老板（CPU）下一步要问什么问题。</li>
+<li>旧方法是，老板每次提问（Demand Request），秘书就把这个问题同时发给三位专家，并且要求他们都必须记在自己的笔记本（prefetcher table）上，然后各自给出预测。</li>
+<li>结果就是，擅长回答“连续数字”的专家，笔记本里记满了“地图坐标”；擅长回答“地图坐标”的专家，笔记本里又全是“斐波那契数列”。大家的笔记本都乱成一锅粥，效率极低。</li>
+<li><strong>DDRA 的做法完全不同</strong>：它在秘书和专家之间加了一个<strong>智能分诊员（Alecto）</strong>。这个分诊员会先看一眼老板的问题，然后精准地判断：“这个问题应该交给空间专家处理”，于是就只把这个问题发给空间专家，其他两位专家的笔记本完全不受干扰。这样，每位专家都能在自己最擅长的领域里，用最干净的数据进行训练。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有去重新发明每个预取器，而是巧妙地在<strong>训练数据流入预取器之前</strong>，插入了一个动态的“<strong>分配关卡</strong>”。</li>
+<li>这个关卡的核心是一个 <strong>Allocation Table</strong>（见</li>
+</ul>
+<p><img alt="" src="../images/7708c92b0b1b5fff4d3d175e7e93e4e5b27df95c92f3a292012cbacda9a3765e.jpg" /></p>
+<p><em>Fig. 4. The overall framework of Alecto. It consists of an Allocation Table, which enables fine-grained prefetcher identification and dynamic request allocation. It also includes a Sample Table and Sandbox Table for information collection. Additionally, the Sandbox Table functions as a prefetch filter.</em></p>
+<p>），它以程序计数器（<strong>PC</strong>）为索引，为每个内存访问指令记录其关联的各个预取器的“状态”。</p>
+<ul>
+<li>这个“状态”机（见</li>
+</ul>
+<p><img alt="" src="../images/88a9443b674d9939923ca0cc16a6bc2295bf79b71b7653872f507a9b42af3865.jpg" /></p>
+<p><em>Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.</em></p>
+<p>）只有三个核心状态：</p>
+<ul>
+<li><strong>Un-Identified (UI)</strong>: 还不知道谁行，先让大家都试试，但限制力度。</li>
+<li><strong>Identified and Aggressive (IA)</strong>: 这个预取器被证明很准，不仅把活全给它，还让它更激进地预取。</li>
+<li><strong>Identified and Blocked (IB)</strong>: 这个预取器被证明不行，直接切断它的数据源，让它“冷静”一段时间。</li>
+<li>通过 <strong>Sample Table</strong> 和 <strong>Sandbox Table</strong> 在运行时不断收集每个预取器在每个 PC 上的<strong>准确率</strong>反馈，这个 Allocation Table 能够动态地更新状态，从而实现对每个需求请求的<strong>精准路由</strong>。这从根本上解决了训练污染和资源冲突的问题。</li>
+</ul>
+<h3 id="2-fine-grained-prefetcher-identification-eli5">2. 细粒度预取器识别 (Fine-grained Prefetcher Identification) (ELI5)<a class="headerlink" href="#2-fine-grained-prefetcher-identification-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的预取器选择策略（如 DOL, IPCP, Bandit）都是“一刀切”的。它们要么给所有内存访问指令（PC）用同一个静态优先级，要么只在全局层面动态调整预取器的开关或激进度。</li>
+<li>这导致了一个非常难受的局面：一个 <strong>PC</strong> 可能产生的是 <strong>stream pattern</strong>，而另一个 <strong>PC</strong> 产生的是 <strong>spatial pattern</strong>，但选择器却用同一套规则去处理它们。结果就是，适合处理 stream 的预取器被错误地用来处理 spatial 访问，不仅自己学不会（<strong>浪费了宝贵的预取器表项</strong>），还可能发出错误的预取请求，污染缓存。</li>
+<li>更糟糕的是，即使某个预取器对某个 PC 完全不适用，现有的方案也无法阻止这个 PC 的需求请求（demand request）去“污染”该预取器的内部状态表，导致有用的表项被替换掉，这就是论文中提到的 <strong>prefetcher table conflict</strong>。</li>
+</ul>
+<p><img alt="" src="../images/335ac37ae534e4aecf135365d3114a07518e3d61cebf21965a908cc05b284f02.jpg" /></p>
+<p><em>Fig. 1. Comparison of prefetcher table misses in the same composite prefetchers without dynamic demand request allocation (DDRA) and Alecto that utilizes DDRA. With efficient demand request allocation, Alecto proves to significantly reduce conflicts that occur within the prefetchers’ table.</em></p>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个工厂的调度经理，手下有三位专家：<strong>张师傅</strong>（擅长处理流水线任务）、<strong>李博士</strong>（擅长处理步长规律任务）和<strong>王工</strong>（擅长处理空间局部性任务）。</li>
+<li>以前的做法是：<ul>
+<li><strong>DOL</strong>：来了一个新任务，先给张师傅看，他搞不定再给李博士，最后才轮到王工。但如果这个任务其实最适合王工，那前面两位专家已经白忙活了，还占用了他们的工作台。</li>
+<li><strong>IPCP/Bandit</strong>：任务同时发给三个人，让他们各自出方案，最后你按固定优先级（张&gt;李&gt;王）或者根据工厂总产量（IPC）来决定采纳谁的方案。但问题是，每个专家的工作台上都堆满了所有任务的草稿，真正属于他们专长的任务反而没地方放了。</li>
+</ul>
+</li>
+<li><strong>Alecto 的做法</strong>就像是给每位专家配了一个智能助理。这个助理认识工厂里的每一个任务单（对应每个 <strong>PC</strong>），并且记录了历史数据：对于任务单 #123，张师傅的成功率是90%，李博士是10%。那么下次任务单 #123 再来时，助理会直接把它交给张师傅，并且告诉李博士和王工：“这个活你们别碰，专心干自己的”。这就实现了 <strong>为每个任务单（PC）定制专属的专家分配方案</strong>。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有去修改预取器本身，而是在需求请求（demand request）到达预取器之前，巧妙地插入了一个 <strong>Allocation Table（分配表）</strong>。</li>
+<li>这个分配表的核心创新在于其索引和内容：<ul>
+<li><strong>索引</strong>：以 <strong>PC（程序计数器）</strong> 为键。这意味着它为程序中的<strong>每一个内存访问指令</strong>都维护了一套独立的决策逻辑。</li>
+<li><strong>内容</strong>：为该 PC 记录<strong>每一个预取器</strong>的当前 <strong>状态（State）</strong>，即 <strong>UI (Un-Identified)</strong>、<strong>IA (Identified and Aggressive)</strong> 或 <strong>IB (Identified and Blocked)</strong>。</li>
+</ul>
+</li>
+<li>这个状态机是如何工作的？<ul>
+<li>当一个新的 PC 出现时，所有预取器初始状态都是 <strong>UI</strong>，意味着“还不知道谁行谁不行”，所以大家都可以试试，但要保守（低激进度）。</li>
+<li>系统通过 <strong>Sample Table</strong> 和 <strong>Sandbox Table</strong> 收集该 PC 下各个预取器的历史 <strong>准确率（accuracy）</strong>。</li>
+<li>如果某个预取器的准确率超过了 <strong>Proficiency Boundary (PB)</strong>，它的状态就升级为 <strong>IA</strong>，以后这个 PC 的请求就主要交给它，并且可以更激进地预取。</li>
+<li>如果准确率低于 <strong>Deficiency Boundary (DB)</strong>，状态就降为 <strong>IB</strong>，系统会暂时“屏蔽”这个预取器，不让它再看到这个 PC 的请求，从而保护其内部表项不被污染。</li>
+</ul>
+</li>
+<li>通过这种 <strong>Per-PC、Per-Prefetcher</strong> 的精细化管理，Alecto 在源头上就完成了最合适的匹配，从根本上解决了资源冲突和训练污染的问题。</li>
+</ul>
+<p><img alt="" src="../images/88a9443b674d9939923ca0cc16a6bc2295bf79b71b7653872f507a9b42af3865.jpg" /></p>
+<p><em>Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.</em></p>
+<p><img alt="" src="../images/88a9443b674d9939923ca0cc16a6bc2295bf79b71b7653872f507a9b42af3865.jpg" /></p>
+<p><em>Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.</em></p>
+<h3 id="3-aggressiveness-eli5">3. 三态状态机与自适应 aggressiveness (ELI5)<a class="headerlink" href="#3-aggressiveness-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的预取器协同方案（比如 Bandit、IPCP）就像一个“一刀切”的经理。它要么给所有预取器开绿灯，让它们都去处理同一个内存访问请求（PC），要么用一个全局的开关来控制整体激进程度。</li>
+<li>这种做法在混合工作负载下非常难受：<ul>
+<li><strong>资源浪费</strong>：一个只擅长处理<strong>stream</strong>模式的预取器，被迫去学习一个<strong>spatial</strong>模式的 PC，不仅学不会，还会污染自己的内部表项（prefetcher table），把有用的条目挤出去。</li>
+<li><strong>顾此失彼</strong>：为了追求高覆盖率而让所有预取器都激进工作，会产生大量<strong>无效预取</strong>（over-prefetching），浪费带宽和缓存空间；反之，如果整体保守，又会错过很多可以提前加载的机会，导致<strong>覆盖率不足</strong>。</li>
+<li><strong>缺乏个性化</strong>：每个 PC 的访问模式是独特的，但旧方法对所有 PC 使用同一套规则，无法做到“因材施教”。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你是一个学校的校长（Alecto），手下有几位各有所长的老师（预取器）：一位是数学专家（Stream Prefetcher），一位是语文大师（Stride Prefetcher），还有一位是艺术天才（Spatial/Temporal Prefetcher）。</li>
+<li>以前的做法（如 IPCP）是，无论来一个什么样的学生（PC），都把他同时交给三位老师去教。结果是，数学老师在学生的作文本上乱画公式，语文老师在画板上写古诗，不仅没教会学生，还把自己的教案搞得一团糟。</li>
+<li>Alecto 的做法完全不同。它为<strong>每一位学生-老师组合</strong>建立了一个<strong>个人成长档案</strong>（Allocation Table）。这个档案只有三个状态：<ul>
+<li><strong>未识别 (UI)</strong>: “还不知道这位老师能不能教好这个学生，先让他试试看，但别太用力。”</li>
+<li><strong>已识别且激进 (IA)</strong>: “实验证明这位老师教这个学生效果很好！给他更多课时（更高的 aggressiveness），让他多布置点作业（预取更多行）。”</li>
+<li><strong>已识别且阻塞 (IB)</strong>: “这位老师完全不适合这个学生，让他休息一段时间，别来添乱了。”</li>
+</ul>
+</li>
+<li>校长会根据每次考试成绩（<strong>准确率</strong>）来动态更新这个档案。考得好（&gt; <strong>PB</strong>），就升到 IA 并增加课时；考得太差（&lt; <strong>DB</strong>），就打入 IB 冷宫一阵子。</li>
+</ul>
+<p><img alt="" src="../images/88a9443b674d9939923ca0cc16a6bc2295bf79b71b7653872f507a9b42af3865.jpg" /></p>
+<p><em>Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.</em></p>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者并没有设计一个复杂的中央控制器，而是巧妙地将<strong>预取器选择</strong>和<strong>需求请求分配</strong>这两个问题，融合到一个基于 PC 索引的<strong>三态状态机</strong>中。</li>
+<li>具体来说，他们在原有的预取流程里插入了一个核心逻辑单元——<strong>Allocation Table</strong>。这个表的每一项对应一个 PC，并为每个预取器维护一个状态（UI/IA/IB）。</li>
+<li><strong>最关键的扭转在于</strong>：状态的转换和 aggressiveness 的调整，完全由该 PC 上各个预取器的<strong>历史准确率</strong>驱动，并通过两个阈值 <strong>Proficiency Boundary (PB)</strong> 和 <strong>Deficiency Boundary (DB)</strong> 来实现自适应。<ul>
+<li>当一个预取器在一个新 PC 上表现尚可（准确率 &gt; PB），它就被提升到 <strong>IA</strong> 状态，并获得一个基础的 aggressiveness (<code>c</code>)。随着它持续表现优异，其 IA 状态的子状态 (<code>m</code>) 会递增，aggressiveness 也随之线性增长 (<code>c + m + 1</code>)，从而在保证准确率的同时，逐步提升<strong>覆盖度</strong>和<strong>及时性</strong>。</li>
+<li>如果一个预取器表现极差（准确率 &lt; DB），它会被直接打入 <strong>IB</strong> 状态，并被禁止接收该 PC 的任何训练请求长达 N 个周期，彻底避免了资源浪费。</li>
+<li>对于处于 <strong>UI</strong> 状态的预取器，则给予一个保守的、最低限度的训练机会，用于探索其潜力。</li>
+</ul>
+</li>
+<li>这个设计的精妙之处在于，它用极其简单的状态机逻辑（只有三种状态和几个阈值），就实现了对每个 PC-预取器对的精细化、动态化管理，从根本上解决了资源冲突和训练污染的问题。</li>
+</ul>
+<h3 id="4-sample-table-sandbox-table-eli5">4. 运行时指标收集机制 (Sample Table &amp; Sandbox Table) (ELI5)<a class="headerlink" href="#4-sample-table-sandbox-table-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的 <strong>prefetcher selection</strong> 机制（比如 Bandit）最大的问题在于，它们是“黑盒式”决策。它们能看到最终结果（比如 IPC 奖励），但看不到每个 prefetcher 在处理<strong>每一个具体的内存访问指令 (PC)</strong> 时，到底表现如何。</li>
+<li>这导致了一个致命缺陷：无法进行 <strong>fine-grained</strong> 的反馈。一个 prefetcher 可能对 PC A 预测得极准，但对 PC B 却在疯狂制造垃圾请求。如果只看全局奖励，这个 prefetcher 可能会被整体关闭或调低，从而错失了它在 PC A 上的巨大价值。</li>
+<li>更糟糕的是，没有精确的 per-PC、per-prefetcher 的性能数据，就无法知道一个 demand request 到底该给谁训练。这直接导致了论文中提到的两个核心问题：<strong>prefetcher table 被污染</strong> 和 <strong>selection criteria 过于 coarse-grained</strong>。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你是一个教练，手下有三个专项运动员：短跑（Stream）、跳远（Stride）和体操（Spatial）。你的目标是为每一场具体比赛（对应一个 PC）派出最合适的选手。</li>
+<li>以前的做法（如 Bandit）就像是只看整个团队的总积分榜来决定下个月给谁发奖金。如果总分高，就认为大家都干得好；总分低，就一起扣钱。但你根本不知道是谁在哪个项目上拖了后腿，或者谁在哪个项目上其实有巨大潜力。</li>
+<li>Alecto 的 <strong>Sample Table &amp; Sandbox Table</strong> 机制，相当于给每个运动员配了一个<strong>智能手环</strong>。这个手环能精确记录：<ul>
+<li><strong>Sandbox Table</strong> 就像比赛现场的<strong>高清录像机</strong>，记下每个运动员（prefetcher）在每次尝试（发出 prefetch request）时的具体动作（地址）和对应的项目（PC）。</li>
+<li><strong>Sample Table</strong> 就像赛后<strong>数据分析员</strong>，他拿着录像（Sandbox Table）和比赛结果（demand request）进行比对。每当一个正式选手（demand request）出场，他就去录像里查：“嘿，之前是不是有我们队的运动员预测过这个位置？如果有，是哪个项目的运动员预测的？”</li>
+</ul>
+</li>
+<li>通过这种一对一的精准回溯，教练（Allocation Table）就能为每个比赛项目（PC）建立一份详细的选手能力档案，知道谁是专家，谁是门外汉。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<p>作者并没有依赖模糊的全局性能指标，而是巧妙地在系统中插入了一个 <strong>“请求-验证”闭环</strong>，其核心逻辑转换在于：</p>
+<ul>
+<li><strong>将“预取命中”的归属权精确到源头</strong>。当一个 demand request 到达时，系统不再简单地认为“缓存命中了就好”，而是要追问：“这个命中的数据块，究竟是哪个 prefetcher、为了响应哪个 PC 的历史访问而提前拿进来的？”</li>
+<li><strong>Sandbox Table 是实现这一转换的关键</strong>。它作为一个临时的、带 <strong>PC 标签</strong> 的 prefetch 请求日志（</li>
+</ul>
+<p><img alt="" src="../images/7708c92b0b1b5fff4d3d175e7e93e4e5b27df95c92f3a292012cbacda9a3765e.jpg" /></p>
+<p><em>Fig. 4. The overall framework of Alecto. It consists of an Allocation Table, which enables fine-grained prefetcher identification and dynamic request allocation. It also includes a Sample Table and Sandbox Table for information collection. Additionally, the Sandbox Table functions as a prefetch filter.</em></p>
+<p>），记录了近期所有 prefetcher 发出的请求及其触发的 PC。</p>
+<ul>
+<li>当 demand request 到达并发生缓存命中时，系统会查询 Sandbox Table：<ul>
+<li>如果地址匹配（tag hit），就进一步检查 demand request 的 PC 是否与日志中记录的 PC 一致。</li>
+<li>如果两者都匹配，就确认这是一次 <strong>“有用的预取”</strong>，并在 <strong>Sample Table</strong> 中对应 PC 和对应 prefetcher 的 <strong>“Confirmed” 计数器</strong> 上加一。</li>
+<li>同时，每次 prefetcher 发出请求时，其 <strong>“Issued” 计数器</strong> 也会增加。</li>
+</ul>
+</li>
+<li>通过这两个计数器，系统可以随时计算出针对<strong>每一个 PC</strong>，<strong>每一个 prefetcher</strong> 的 <strong>准确率 (Accuracy = Confirmed / Issued)</strong>。</li>
+<li>正是这个 <strong>per-PC, per-prefetcher 的准确率</strong>，成为了驱动 Allocation Table 状态机（UI/IA/IB）进行精细决策的唯一依据，从而实现了动态且精准的 demand request allocation。</li>
+</ul>
+<h3 id="5-integrated-prefetch-filtering-eli5">5. 集成式预取请求过滤 (Integrated Prefetch Filtering) (ELI5)<a class="headerlink" href="#5-integrated-prefetch-filtering-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的复合预取器（hybrid prefetcher）架构里，多个预取器（比如 stream、stride、spatial）会并行工作。这看似能覆盖更多内存访问模式，但带来一个“甜蜜的烦恼”：<strong>同一个数据块，可能被好几个预取器同时预测到，并发出重复的预取请求</strong>。</li>
+<li>这些重复请求不仅浪费了宝贵的 <strong>DRAM 带宽</strong> 和 <strong>prefetch queue</strong> 空间，还会挤占真正有用的预取请求，导致整体 <strong>prefetching accuracy</strong> 下降。更糟的是，它们还会污染 cache，把有用的数据挤出去。</li>
+<li>之前的解决方案，比如 Bandit，主要在“输出端”做文章，通过 RL 动态开关预取器或调整其 aggressiveness（激进程度），但这是“事后诸葛亮”。它无法阻止这些预取器在内部已经产生了冗余请求，白白消耗了硬件资源。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象一个大型图书馆（CPU Cache），有几位图书管理员（prefetchers），各自负责不同区域的书籍（内存访问模式）。当读者（CPU core）需要一本书时，所有管理员都会根据自己的经验去仓库（DRAM）找书。</li>
+<li>结果，同一本畅销书（hot data block）可能被三位管理员同时找到，并各自抱了一本回来。图书馆门口的收发室（prefetch queue）瞬间堆满了三本一模一样的书，而其他真正需要的冷门书却因为通道被堵而迟迟送不进来。</li>
+<li>Alecto 的做法是，在收发室后面加了一个智能分拣台（<strong>Sandbox Table as Prefetch Filter</strong>）。所有管理员抱回来的书都先放到这里，分拣员快速扫一眼，如果发现是重复的，就只留下一本，其余的直接退回仓库，绝不让它们进入图书馆内部造成混乱。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有引入一个全新的、独立的过滤模块，而是<strong>巧妙地复用并扩展了已有的 Sandbox Table 的功能</strong>。这个表原本是用来收集运行时反馈（runtime metrics）以评估预取器准确率的。</li>
+<li>具体来说，<strong>Sandbox Table 会记录最近所有已发出的预取请求的地址</strong>。当任何一个预取器产生一个新的预取请求时，Alecto 会先用这个请求的地址去查询 Sandbox Table。</li>
+<li><strong>如果发生 tag hit（命中）</strong>，说明这个请求已经被其他预取器发出过了，当前这个就是<strong>duplicate prefetch request</strong>，直接丢弃。</li>
+<li><strong>如果没有命中</strong>，这个请求才是“新鲜”的，才会被允许进入 prefetch queue 并最终执行。</li>
+<li>这个设计的精妙之处在于，它实现了 <strong>零额外存储开销</strong> 的过滤，因为 Sandbox Table 本来就需要存在。如论文图4所示，这个过滤步骤被无缝集成到了 Alecto 的主流程中（step ⑥）。</li>
+</ul>
+<p><img alt="" src="../images/7708c92b0b1b5fff4d3d175e7e93e4e5b27df95c92f3a292012cbacda9a3765e.jpg" /></p>
+<p><em>Fig. 4. The overall framework of Alecto. It consists of an Allocation Table, which enables fine-grained prefetcher identification and dynamic request allocation. It also includes a Sample Table and Sandbox Table for information collection. Additionally, the Sandbox Table functions as a prefetch filter.</em></p>
+<p>这种集成式的设计，确保了即使多个预取器都被激活（例如都处于 IA 状态），系统也能在最后关头消除冗余，从而在提升 <strong>coverage</strong> 的同时，依然能维持很高的 <strong>accuracy</strong>，完美解决了复合预取器架构的根本矛盾。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

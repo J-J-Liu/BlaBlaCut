@@ -135,7 +135,7 @@
 | ---------- | -------- | ------- | ------- |
 | Speedup(%) | **16.4** | **8.3** | **9.5** |
 
-- **Case I**：选择MPKA（Miss per Kilo Access）最高的32个LLC集合作为采样集，获得了\*\*16.4%\*\*的最高性能提升。
+- **Case I**：选择MPKA（Miss per Kilo Access）最高的32个LLC集合作为采样集，获得了**16.4%**的最高性能提升。
 - **Case II**：选择MPKA最低的32个LLC集合作为采样集，性能提升仅为**8.3%**，是三种情况中最差的。
 - **Case III**：混合选择，一半（16个）为高MPKA集合，另一半（16个）为低MPKA集合，性能提升为**9.5%**，介于前两者之间。
 - 该结果有力地支持了论文的核心论点之一：随机选择采样集会导致次优决策，而基于访问频率（如MPKA）动态选择高需求集合能显著提升预测准确性和整体性能。
@@ -386,9 +386,9 @@
 | Network Topology | Mesh, each node has a router, processor, private L1 cache, L2 cache, and an LLC slice                                                                     |
 | DRAM             | Controller: One channel/4-cores, 6400 MT/s, FR-FCFS, write watermark: 7/8th, Chip: 4 KB row-buffer, open page, tRP: 12.5 ns, tRCD: 12.5 ns, tCAS: 12.5 ns |
 
-- 所有缓存层级均采用\*\*多扇区缓冲区（MSHR）\*\*机制，以提升并发处理能力。
+- 所有缓存层级均采用**多扇区缓冲区（MSHR）**机制，以提升并发处理能力。
 - LLC 的**非包含式设计**有助于减少冗余存储，提高整体缓存利用率。
-- **Mesh 拓扑**与\*\*低延迟互连（NOCSTAR）\*\*结合，确保在多核系统中高效通信。
+- **Mesh 拓扑**与**低延迟互连（NOCSTAR）**结合，确保在多核系统中高效通信。
 - DRAM 的**FR-FCFS 调度策略**与**开放页策略**优化了内存访问延迟和带宽利用率。
 
 ### Figure13: Performance improvement with state-of-the-artLLCreplacement policies normalized toLRUon4-core,6-core, 32-core systems with 8MB,32MB,and 64MB sliced LLC across 70 mixes (35 homogeneous and 35 heterogeneous).

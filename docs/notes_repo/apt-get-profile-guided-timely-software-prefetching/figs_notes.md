@@ -49,7 +49,7 @@
 
 ![fae1be1db6294333c2c5daadea36581e3bbad6e49cf18b936f4ff245cac3b7e8.jpg](images/fae1be1db6294333c2c5daadea36581e3bbad6e49cf18b936f4ff245cac3b7e8.jpg)
 
-- 图表展示了在**低复杂度工作函数**和\*\*不同内层循环迭代次数（INNER）\*\*条件下，\*\*预取距离（Prefetch Distance）\*\*对性能提升的影响。
+- 图表展示了在**低复杂度工作函数**和**不同内层循环迭代次数（INNER）**条件下，**预取距离（Prefetch Distance）**对性能提升的影响。
 - 性能提升以“**Speedup over No Prefetching (%)**”衡量，即相对于无预取基线的加速百分比。
 - 三条曲线分别对应三种内层循环迭代次数：**INNER=4**（红色）、**INNER=16**（灰色）、**INNER=64**（青色）。
 - **INNER=4**时，所有预取距离均未带来显著性能增益，甚至部分距离导致轻微性能下降，表明小循环下预取无效或有害。

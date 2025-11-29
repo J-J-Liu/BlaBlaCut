@@ -246,9 +246,7 @@ DIG 的生成和传递是一个软硬件协同的过程，支持手动和自动�
 
 *Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.*
 
-```
-- 
-```
+-
 
 ![](images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg)
 
@@ -315,9 +313,7 @@ Prodigy 的编译器通过一个 **LLVM pass** 自动完成对源码的分析，
 
 *Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.*
 
-```
 - 图 (c) 展示了 LLVM IR，在两个 `malloc` 调用后，分别插入了 `registerNode` 调用，对应图 (a) 和 (b) 中的数组 `a` 和 `b`。
-```
 
 **边（Edge）识别与注册**
 
@@ -533,9 +529,7 @@ Prodigy 的自适应预取算法旨在解决传统预取器在处理不规则工
 
 *Figure 11. Prodigy operation: (a) prefetch sequence initialization, and (b) prefetch sequence advance.*
 
-```
 *图 11 展示了初始化过程：当检测到对 `workQueue` (地址 `0x100`) 的需求访问时，根据预取距离 2，计算出要预取的地址 `0x108` 并发出请求。*
-```
 
 - **选择性丢弃预取序列**
     - 为了确保预取始终 **领先于核心 (run ahead of the core)**，算法引入了反馈机制。

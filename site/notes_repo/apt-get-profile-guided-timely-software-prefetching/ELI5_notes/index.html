@@ -1,0 +1,650 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/apt-get-profile-guided-timely-software-prefetching/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>APT-GET: Profile-Guided Timely Software Prefetching 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#apt-get-profile-guided-timely-software-prefetching" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              APT-GET: Profile-Guided Timely Software Prefetching 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-profile-guided-prefetch-distance-calculation-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Profile-Guided Prefetch Distance Calculation (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-dynamic-prefetch-injection-site-selection-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Dynamic Prefetch Injection Site Selection (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-llvm-compiler-pass-for-profile-guided-prefetching-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. LLVM Compiler Pass for Profile-Guided Prefetching (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-automated-delinquent-load-profiling-methodology-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Automated Delinquent Load Profiling Methodology (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="apt-get-profile-guided-timely-software-prefetching">APT-GET: Profile-Guided Timely Software Prefetching 通俗讲解<a class="headerlink" href="#apt-get-profile-guided-timely-software-prefetching" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 <strong>软件预取 (software prefetching)</strong> 技术，比如 Ainsworth &amp; Jones [9] 的方法，是<strong>静态的</strong>。它们在编译时就决定好要预取多远（prefetch-distance）以及在哪里插入预取指令（prefetch injection site）。</li>
+<li>这个做法在现实世界中“很难受”，因为<strong>最优的预取距离完全取决于程序动态运行时的行为</strong>。一个循环里做的是简单计算还是复杂计算？循环会跑10次还是1000次？这些信息在编译时根本不知道。</li>
+<li>结果就是，静态方法要么预取得太早，数据被挤出缓存白忙活；要么预取得太晚，数据还没到CPU就得等着，完全没隐藏掉内存延迟。这就导致了论文图6中，静态方法平均只有1.04倍的加速，甚至在某些情况下还会拖慢性能。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要给一个正在高速公路上开车的朋友送水。静态方法就像是你在他们出发前，根据地图估算一个固定的距离（比如每100公里），然后在那个位置放一瓶水。</li>
+<li>但如果朋友今天开的是跑车，或者路上堵车，你放水的位置就完全不对了。要么水放太早被别人拿走了（缓存被替换），要么朋友都开过去了水还没送到（预取太晚）。</li>
+<li><strong>APT-GET的做法完全不同</strong>：它先让你朋友开着车跑一趟（<strong>profile run</strong>），你在旁边用秒表和GPS记录下他经过每个路标（load instruction）的实际时间。有了这份真实的“路况报告”，你就能精确计算出下次应该在哪个路口、提前多久把水递给他，确保他刚好口渴时水就到了。这个“路况报告”就是利用Intel CPU里的<strong>Last Branch Record (LBR)</strong> 硬件特性高效收集的。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有试图去构建一个复杂的静态模型来预测运行时间（这几乎不可能准确），而是巧妙地<strong>将动态分析融入编译流程</strong>，实现了一种<strong>Profile-Guided Optimization (PGO)</strong>。</li>
+<li>具体来说，他们在标准的LLVM编译流程中插入了两个关键步骤：<ol>
+<li><strong>动态画像</strong>：利用硬件 <strong>LBR</strong> 和 <strong>PEBS</strong> 功能，在一次低开销的运行中，精准捕获那些造成性能瓶颈的“问题加载指令”（delinquent loads），并记录下包含这些指令的循环的<strong>实际执行时间分布</strong>（如图4所示）。通过分析这个分布的多个峰值，他们能推断出如果数据在L1缓存里，循环应该跑多快（IC_latency），从而反推出需要隐藏的内存延迟（MC_latency）。</li>
+<li><strong>精准制导</strong>：基于上述动态画像，他们计算出<strong>最优的预取距离</strong>（<code>prefetch_distance = MC_latency / IC_latency</code>），并且还能智能判断<strong>预取指令应该插在内层循环还是外层循环</strong>（如图10所示）。对于trip count很小的内层循环，在外层循环进行更激进的预取反而效果更好。</li>
+</ol>
+</li>
+<li>最终，这些动态分析得出的“最优参数”会被喂给一个改进版的LLVM编译器Pass，让它在生成最终代码时，注入<strong>时机恰到好处</strong>的预取指令。这就把原本“盲人摸象”式的静态预取，变成了“有的放矢”的动态优化。</li>
+</ul>
+<p><img alt="" src="../images/aa7cb0a4b4a8e3f8fa632b180321133ecc304f3aab85689f9a5eb0a8edb8adfa.jpg" /></p>
+<p><em>Figure 4. Distribution of a loop’s execution time containing a delinquent load [39] in terms of CPU cycles measured using LBR samples</em></p>
+<p><img alt="" src="../images/0844beaacc88f3137e7802c9c98e5d10be26a0c31589645da5b8ff459909628f.jpg" /></p>
+<p><em>Figure 6. Execution time speedup provided by APT-GET over the non-prefetching baseline: APT-GET achieves 1.30× average speedup on average, compared to the 1.04× speedup provided by the state of the art (Ainsworth &amp; Jones).</em></p>
+<p><img alt="" src="../images/95616f7d281dd9c3f57d85acc5a821fc05dc64b0d6d12103f821a3cb567394c0.jpg" /></p>
+<p><em>Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.</em></p>
+<h3 id="1-profile-guided-prefetch-distance-calculation-eli5">1. Profile-Guided Prefetch Distance Calculation (ELI5)<a class="headerlink" href="#1-profile-guided-prefetch-distance-calculation-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的软件预取（Software Prefetching）最大的问题在于“静态”。它通常由编译器在编译时，基于代码结构和一些启发式规则，硬编码一个固定的 <strong>prefetch-distance</strong>（预取距离）。</li>
+<li>这个做法在现实中非常“难受”，因为最优的预取距离根本不是代码决定的，而是由<strong>动态执行时间</strong>决定的。同一个循环，在不同输入、不同CPU负载下，其每次迭代的耗时天差地别。</li>
+<li>如果预取太早（distance太大），数据可能在真正用到之前就被<strong>cache eviction</strong>（缓存驱逐）了，白忙活一场；如果预取太晚（distance太小），数据还没从内存加载完，CPU就已经stall（停顿）了，完全没起到隐藏延迟的作用。这就是论文里反复强调的 <strong>timeliness</strong>（及时性）问题。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你要给一个正在跑步的朋友递水。你不能在他刚起跑时就把水递过去（太早，他用不上，水还可能洒了），也不能等他跑到你面前快渴晕了才递（太晚，他已经脱水了）。</li>
+<li>最佳时机取决于他的<strong>实时配速</strong>。如果他今天状态好跑得快，你就得提前更远的距离准备好水；如果他今天跑得慢，你就可以晚一点再准备。</li>
+<li>以前的静态方法，就像是你不管他今天跑多快，每次都固定在他跑过第100米标记时递水。而APT-GET的做法是，先偷偷跟拍他跑一圈，精确记录下他每一段的速度，然后根据这个<strong>profile</strong>（画像）来计算出下次递水的最佳位置。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者没有试图去静态地估算代码的执行周期（这在现代复杂CPU上几乎不可能准确），而是巧妙地利用了Intel CPU内置的硬件性能监控单元——**Last Branch Record **(LBR)。</li>
+<li>LBR能以极低开销记录下程序执行过程中最近32次分支跳转的<strong>精确CPU周期数</strong>。对于一个循环来说，两次连续的循环回跳（loop back-edge）之间的周期差，就是这次循环迭代的真实耗时。</li>
+<li>APT-GET的核心洞察在于：一个包含<strong>delinquent load</strong>（导致LLC miss的坏家伙load）的循环，其执行时间的分布图会呈现出多个峰值。<ul>
+<li><img alt="" src="../images/aa7cb0a4b4a8e3f8fa632b180321133ecc304f3aab85689f9a5eb0a8edb8adfa.jpg" /></li>
+</ul>
+</li>
+</ul>
+<p><em>Figure 4. Distribution of a loop’s execution time containing a delinquent load [39] in terms of CPU cycles measured using LBR samples</em></p>
+<ul>
+<li>这些峰值分别对应着load指令从<strong>L1 cache</strong>、<strong>L2 cache</strong>、<strong>LLC</strong> 或 <strong>DRAM</strong> 命中时的不同延迟。最左边的峰值（如图中的~80 cycles）代表了当load能命中L1/L2时的**纯指令执行时间 **(IC_latency)，也就是理想情况下循环应该跑多快。</li>
+<li>最右边的峰值（如图中的~650 cycles）则代表了load发生DRAM miss时的**总延迟 **(IC_latency + MC_latency)。</li>
+<li>通过这两个关键数据点，APT-GET就能算出需要隐藏的**内存延迟 **(MC_latency = 650 - 80 = 570 cycles)。再除以理想情况下每次迭代的时间 (IC_latency = 80 cycles)，就得到了最优的预取距离：<strong>prefetch-distance ≈ MC_latency / IC_latency = 570 / 80 ≈ 7</strong>。</li>
+<li>这个逻辑转换极其精妙：它绕开了无法预测的绝对执行时间，转而通过分析<strong>执行时间的分布特征</strong>，直接提取出了进行有效预取所必需的相对时间关系。</li>
+</ul>
+<h3 id="2-dynamic-prefetch-injection-site-selection-eli5">2. Dynamic Prefetch Injection Site Selection (ELI5)<a class="headerlink" href="#2-dynamic-prefetch-injection-site-selection-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的软件预取（如 Ainsworth &amp; Jones 的工作）有个“死脑筋”：它总是把 prefetch 指令塞到最内层循环里。这在内层循环跑很多次（high trip count）时没问题，因为预取有足够的时间生效。</li>
+<li>但现实很骨感：很多应用（尤其是图计算）的内层循环可能只跑几次（low trip count），甚至只有一次。这时，在内层循环里插预取就“来不及了”——prefetch 指令刚发出，数据还没从内存拿回来，程序就已经要用这个数据了，完全没起到隐藏延迟的作用。</li>
+<li>更糟的是，如果强行在内层循环预取，还会白白增加 <strong>instruction overhead</strong>，拖慢程序。这就像是在短跑比赛里做一套冗长的热身动作，不仅没帮助，反而耽误起跑。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>这就像你要去一个很远的仓库取货。如果你知道接下来一整天都要不停地取货（高 trip count），那你就在每次取完货后，立刻为下一次取货下单（在内层循环预取），这样货总能及时送到。</li>
+<li>但如果你今天只需要去仓库取 <strong>3 次</strong> 货（低 trip count），等你第一次取完再下单，第二次的货肯定来不及。聪明的做法是，在你出门前（在外层循环），就把今天所有要取的货单一次性都下了。这样，当你到达仓库时，货已经快送到了。</li>
+<li>APT-GET 做的就是这个“聪明管家”的角色，它先观察一下你的“取货频率”（通过 LBR 分析 loop trip count），再决定是在“每次取货后下单”还是“出门前一次性下单”。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有沿用“无脑插内层循环”的老路，而是巧妙地利用了现代 CPU 的 <strong>Last Branch Record (LBR)</strong> 硬件特性。</li>
+<li>LBR 记录了最近执行的分支历史。APT-GET 通过分析这些记录，可以精确地数出在一个外层循环迭代中，内层循环平均执行了多少次（即 <strong>average trip count</strong>）。</li>
+<li>基于这个动态信息，APT-GET 引入了一个简单的决策逻辑（论文中的 Equation 2）：<ul>
+<li>如果 <code>average_trip_count * K &lt; prefetch_distance</code>（其中 K 是一个与覆盖率相关的常数），就意味着在内层循环预取覆盖不全、效率低下。</li>
+<li>此时，APT-GET 会“扭转”预取的位置，将 prefetch slice <strong>提升并注入到外层循环</strong>中。</li>
+</ul>
+</li>
+<li>这个操作的关键在于，LLVM Pass 需要能够处理跨循环的依赖关系。它不仅要复制内层循环的地址计算逻辑（load-slice），还要正确地将外层循环的 induction variable 纳入计算，并对内层变量进行合理的初始化（例如设为0）或展开，以确保在外层就能准确计算出未来需要访问的地址。</li>
+</ul>
+<p><img alt="" src="../images/fae1be1db6294333c2c5daadea36581e3bbad6e49cf18b936f4ff245cac3b7e8.jpg" /></p>
+<p><em>Figure 2. Performance impact of prefetch-distance for indirect memory access kernel with low work function complexity and varying inner loop trip count</em></p>
+<p><img alt="" src="../images/95616f7d281dd9c3f57d85acc5a821fc05dc64b0d6d12103f821a3cb567394c0.jpg" /></p>
+<p><em>Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.</em></p>
+<h3 id="3-llvm-compiler-pass-for-profile-guided-prefetching-eli5">3. LLVM Compiler Pass for Profile-Guided Prefetching (ELI5)<a class="headerlink" href="#3-llvm-compiler-pass-for-profile-guided-prefetching-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 <strong>compiler-based software prefetching</strong>（比如 Ainsworth &amp; Jones 的工作）是纯静态的。它在编译时分析代码，决定在哪里插 <code>prefetch</code> 指令以及预取多远（<strong>prefetch-distance</strong>）。</li>
+<li>这个做法在现实世界里“很难受”，因为它完全不知道程序跑起来后的真实情况：<ul>
+<li>它不知道一个循环体到底要花多少 <strong>CPU cycles</strong> 才能跑完一次。这个时间取决于指令本身的延迟、cache hit/miss 状态等等，而这些在编译时是无法精确预知的。</li>
+<li>结果就是，它只能用一个<strong>固定的、拍脑袋的 prefetch-distance</strong>（比如 16 或 32）。如果距离太短，prefetch 发出得太晚，数据还没到 CPU 就得等着（<strong>late prefetch</strong>）；如果距离太长，prefetch 的数据可能早就被 cache evict 掉了，白忙活一场（<strong>early prefetch</strong>）。</li>
+<li>更糟的是，对于<strong>嵌套循环</strong>，它只会傻乎乎地在最内层循环里插 prefetch。但如果内层循环的 trip count 很小（比如只有 4 次），那在内层插 prefetch 根本没时间把数据从内存拉回来，完全无效。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要给一个正在高速公路上开车的朋友送一份他急需的文件。传统编译器的做法就像是，你在地图上量了一下距离，然后在他出发前就打电话告诉他：“你开到第 10 个路牌的时候，我就把文件空投到你车顶上”。</li>
+<li>但问题是，你不知道他今天路上会不会堵车（cache miss）、他的车性能如何（CPU IPC）、甚至他会不会临时改道（分支预测失败）。如果你按不堵车的情况计算，他很可能在空投点等半天文件都没到；如果你按最堵车的情况算，文件可能早就被风吹跑了。</li>
+<li><strong>APT-GET 的做法完全不同</strong>：它先让你朋友开着车跑一趟（<strong>profiling run</strong>），车上装了个黑匣子（<strong>Intel LBR</strong>）记录下他每次经过关键路牌时的精确时间。有了这份真实的时间日志，你就能精确计算出下次他再经过这里时，需要提前多久发出空投指令才能让他刚好在需要时拿到文件。这就是 <strong>profile-guided</strong> 的精髓——用真实世界的动态信息来指导静态代码生成。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有抛弃现有的 LLVM 编译框架，而是巧妙地在中间插入了一个 <strong>profile-driven decision layer</strong>。具体来说，他们实现了一个 <strong>function-level LLVM pass</strong>，其核心逻辑转换如下：<ul>
+<li><strong>第一步：精准定位问题代码</strong>。利用 <strong>perf</strong> 工具和 <strong>PEBS</strong> 采样，找到那些导致大量 <strong>LLC misses</strong> 的“罪魁祸首” load 指令，并记录下它们的 <strong>Program Counter (PC)</strong>。</li>
+<li><strong>第二步：建立 PC 到 IR 的映射</strong>。这是最关键的一步。他们借助了 <strong>AutoFDO</strong> 的能力，将 profiling 阶段得到的二进制 PC 地址，精确地映射回 LLVM <strong>Intermediate Representation (IR)</strong> 中的具体 load 指令。这样，编译器就知道该对哪条 IR 指令动手了。</li>
+<li><strong>第三步：动态计算最优参数</strong>。通过分析 <strong>LBR</strong> 记录的循环执行时间分布（如</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/aa7cb0a4b4a8e3f8fa632b180321133ecc304f3aab85689f9a5eb0a8edb8adfa.jpg" /></p>
+<p><em>Figure 4. Distribution of a loop’s execution time containing a delinquent load [39] in terms of CPU cycles measured using LBR samples</em></p>
+<p>所示），分离出指令执行延迟（<strong>IC_latency</strong>）和内存访问延迟（<strong>MC_latency</strong>），从而计算出理论上能完全隐藏内存延迟的 <strong>optimal prefetch-distance</strong>。同时，通过统计 LBR 中的分支记录，还能判断出循环的 <strong>trip count</strong>，以决定是在内层还是外层循环注入 prefetch。</p>
+<ul>
+<li><strong>第四步：灵活注入 Prefetch Slice</strong>。一旦有了精确的目标 IR 指令和动态计算出的 <strong>prefetch-distance</strong>，LLVM pass 就会执行类似 Ainsworth &amp; Jones 的 <strong>load-slice extraction</strong>，但它注入的不再是固定距离的 prefetch，而是根据 profile 量身定做的、带有<strong>可变距离</strong>的 prefetch slice。对于嵌套循环，它甚至能将 slice 提升到外层循环中执行，如</li>
+</ul>
+<p><img alt="" src="../images/04ee1658f4e9f2f14fd31839754162f14314cea737c0da31a8069af99f0c2a29.jpg" /></p>
+<p><em>Listing 3. The simplified LLVM’s IR-level representation of the microbenchmark 1 before injecting the prefetch slice Listing 4. The simplified LLVM’s IR-level representation of the microbenchmark 1 after injecting the prefetch slice inside the inner loop</em></p>
+<p>所示。</p>
+<hr />
+<p>这种设计的精妙之处在于，它将<strong>动态 profiling 的高精度</strong>与<strong>静态编译的低开销</strong>完美结合。Profiling 只需运行一次，开销极小（\&lt;20秒），而生成的优化代码在后续所有运行中都能持续受益，最终在真实应用上取得了 <strong>1.30x</strong> 的平均加速比，显著优于静态方法的 <strong>1.04x</strong>。</p>
+<p><img alt="" src="../images/0844beaacc88f3137e7802c9c98e5d10be26a0c31589645da5b8ff459909628f.jpg" /></p>
+<p><em>Figure 6. Execution time speedup provided by APT-GET over the non-prefetching baseline: APT-GET achieves 1.30× average speedup on average, compared to the 1.04× speedup provided by the state of the art (Ainsworth &amp; Jones).</em></p>
+<h3 id="4-automated-delinquent-load-profiling-methodology-eli5">4. Automated Delinquent Load Profiling Methodology (ELI5)<a class="headerlink" href="#4-automated-delinquent-load-profiling-methodology-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的软件预取（Software Prefetching）最大的问题不是“不知道要预取什么”，而是“不知道什么时候预取”。编译器在静态分析时，面对一个循环里的间接内存访问（如 <code>T[BO[e]+BI[i]]</code>），它能准确地算出未来要访问的地址（即生成正确的 <strong>prefetch-slice</strong>），但它完全不知道这个循环跑一圈到底需要多长时间。</li>
+<li>这个“时间”至关重要。如果预取得太早，数据可能在用到之前就被 <strong>cache eviction</strong> 赶出去了；如果预取得太晚，CPU还是得干等着 <strong>DRAM latency</strong>。这就像送快递，地址写对了，但要么提前一个月送到（包裹丢了），要么在客户要用的那一刻才出发（客户等急了）。</li>
+<li>静态分析无法获知动态执行时间，因为现代CPU的执行时间受太多因素影响：指令级并行（ILP）、缓存命中/未命中、分支预测等等。因此，现有方法只能靠程序员手动调一个固定的 <strong>prefetch-distance</strong>，这显然无法适应不同应用、不同输入甚至不同硬件。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个餐厅的主厨（CPU），你的助手（Prefetcher）负责从仓库（Memory）里拿食材（Data）。菜单（Program）上写着每道菜需要哪些食材，但没写做每道菜要花多久。</li>
+<li>一个笨助手只会按固定节奏拿食材，比如“做完一道菜就去拿下三道菜的料”。但如果今天客人点的都是快手菜，料还没用就放坏了（Cache Eviction）；如果点的是慢炖菜，做到一半发现料没了，就得停工等待（Stall）。</li>
+<li>APT-GET的做法是，在正式营业前，先试营业一天（Profiling Run）。在试营业时，它给厨房装了一个智能计时器（<strong>LBR</strong>），精确记录下每道菜从开始做到完成花了多少时间，并且特别关注那些因为等食材而耽误时间的菜（<strong>Delinquent Loads</strong>）。通过分析这些数据，它就能为每道菜精确计算出：“在开始做这道菜后的第X秒，助手就应该出发去拿Y道菜之后的食材”。这个X和Y就是最优的 <strong>prefetch-distance</strong> 和 <strong>injection site</strong>。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有试图去构建一个复杂的静态性能模型（那几乎不可能准确），而是巧妙地利用了现代Intel CPU里两个现成的、低开销的硬件特性：**PEBS **(Precise Event-Based Sampling) 和 **LBR **(Last Branch Record)。</li>
+<li><strong>第一步：精准定位问题</strong>。通过 <strong>PEBS</strong>，系统可以精确地捕获到那些导致 **LLC **(Last Level Cache) 的 <strong>delinquent load</strong> 指令的程序计数器（PC）。这就锁定了需要优化的目标。</li>
+<li><strong>第二步：动态测量时间</strong>。在同一个 profiling run 中，系统同时开启 <strong>LBR</strong>。LBR会记录下最近32次分支跳转的源地址、目标地址和<strong>精确的CPU周期数</strong>。</li>
+<li><strong>第三步：建立时间分布模型</strong>。对于每一个被标记的 <strong>delinquent load</strong>，APT-GET会回溯LBR记录，找到包含该load的循环体的两次连续执行，并计算它们之间的时间差。由于内存访问延迟的巨大差异（L1: ~4 cycles, DRAM: ~300+ cycles），这些时间差会形成多个明显的峰值（Peaks），如</li>
+</ul>
+<p><img alt="" src="../images/aa7cb0a4b4a8e3f8fa632b180321133ecc304f3aab85689f9a5eb0a8edb8adfa.jpg" /></p>
+<p><em>Figure 4. Distribution of a loop’s execution time containing a delinquent load [39] in terms of CPU cycles measured using LBR samples</em></p>
+<p>所示。</p>
+<ul>
+<li><strong>第四步：自动推导参数</strong>。最低的那个峰值（如图中的~80 cycles）就代表了当所有数据都在缓存中时，该循环的纯计算开销（<strong>IC_latency</strong>）。最高峰值与最低峰值的差值（如650 - 80 = 570 cycles）就是需要被隐藏的内存延迟（<strong>MC_latency</strong>）。用这个内存延迟除以每次迭代的计算开销，就得到了最优的 <strong>prefetch-distance</strong>（570 / 80 ≈ 7）。整个过程完全自动化，无需任何人工干预。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

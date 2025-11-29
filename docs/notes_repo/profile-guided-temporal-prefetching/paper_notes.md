@@ -376,9 +376,7 @@ Prophet 的自适应学习机制旨在解决传统 Profile-Guided Optimization (
     - 系统维护一个历史准确率值 `A_old`。
     - 当遇到新输入时，采样得到新的准确率 `A_new`。
     - 使用指数移动平均（Exponential Moving Average）进行合并，公式如下：
-        ```
         A_merged = A_old + (A_new - A_old) / N
-        ```
         其中 `N` 是一个由设计者预定义的参数，控制新数据的影响权重。
     - **作用**:
         - 对于行为一致的指令（Load A），`A_new ≈ A_old`，合并后 `A_merged` 变化微小，hints 保持稳定。
@@ -487,9 +485,7 @@ Prophet 的轻量级剖析（Lightweight Profiling）机制摒弃了传统方案
 
 ![](images/35456cc33ab0d442a6cee8546bfa0dac04963ff9a6172c0bb272a68ad507d452.jpg)
 
-```
-- 
-```
+-
 
 ![](images/80e116b52e63cd5dfbc8543d84386bc4f1af72640358658ff952a5835b48ef86.jpg)
 

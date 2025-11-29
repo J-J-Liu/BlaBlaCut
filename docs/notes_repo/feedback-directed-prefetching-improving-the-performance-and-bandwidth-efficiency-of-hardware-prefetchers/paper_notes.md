@@ -146,13 +146,13 @@ ______________________________________________________________________
 
 ![](images/259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg)
 
-```
 - **动态调整预取块缓存插入策略 (Dynamic Insertion Policy)**:
-  - 不再将所有预取块无差别地插入 LRU 栈的 **MRU (Most-Recently-Used)** 位置。
-  - 而是根据估算的 **Cache Pollution** 程度，动态选择插入位置：**MID** (中间位置), **LRU-4** (四分之一位置), 或 **LRU** (最不常用位置)。污染越高，插入位置越靠近 LRU 端，以减少对有用数据的干扰。
-```
+
+    - 不再将所有预取块无差别地插入 LRU 栈的 **MRU (Most-Recently-Used)** 位置。
+    - 而是根据估算的 **Cache Pollution** 程度，动态选择插入位置：**MID** (中间位置), **LRU-4** (四分之一位置), 或 **LRU** (最不常用位置)。污染越高，插入位置越靠近 LRU 端，以减少对有用数据的干扰。
 
 - **适用性与评估**
+
     - FDP 被设计为一个通用框架，论文验证了其在 **Stream-based prefetcher**, **Global-History-Buffer (GHB) based delta correlation prefetcher**, 和 **PC-based stride prefetcher** 三种主流硬件预取器上的有效性。
     - 实验结果表明，FDP 在 **SPEC CPU2000** 套件的 17 个内存密集型基准测试中，相比最佳的传统预取器配置，实现了 **6.5%** 的平均性能提升和 **18.7%** 的内存带宽节省。
     - 其硬件开销极低，仅为 **2.54 KB** 的额外存储，且不增加关键路径延迟。

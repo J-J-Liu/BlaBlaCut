@@ -2,7 +2,9 @@
     "title": "Recent Papers",
     "description": "最近收录的论文笔记，欢迎阅读~",
     "papers": [
+        "apt-get-profile-guided-timely-software-prefetching",
         "atr-out-of-order-register-release-exploiting-atomic-regions",
+        "berti-an-accurate-local-delta-data-prefetcher",
         "bolt-a-practical-binary-optimizer-for-data-centers-and-beyond",
         "drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems",
         "feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers",
@@ -12,12 +14,14 @@
         "ocolos-online-code-layout-optimizations",
         "prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design",
         "profile-guided-temporal-prefetching",
+        "pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning",
         "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
         "rnr-a-software-assisted-record-and-replay-hardware-prefetcher",
-        "rpg2-robust-profile-guided-runtime-prefetch-generation",
+        "rpg2-robust-profile-guided-runtime-prefetch-generation",   
         "shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads",
         "tea-time-proportional-event-analysis",
         "tip-time-proportional-instruction-profiling",
-        "titan-i-an-open-source-high-performance-risc-v-vector-core"
+        "titan-i-an-open-source-high-performance-risc-v-vector-core",
+        "tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory"
     ]
 }

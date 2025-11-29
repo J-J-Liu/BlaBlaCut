@@ -1,0 +1,2506 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>SHADOW: Simultaneous Multi-Threading Architecture with Asymmetric Threads 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SHADOW: Simultaneous Multi-Threading Architecture with Asymmetric Threads 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-shadow-dynamically-redistributes-work-as-ipc-changeshigh-ilp-skews-execution-toward-the-ooo-thread-while-a-low-ipc-distributes-the-work-more-evenly-shadow-adapts-to-the-application-without-software-intervention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: SHADOW dynamically redistributes work as IPC changes.High ILP skews execution toward the OoO thread, while a low IPC distributes the work more evenly. SHADOW adapts to the application without software intervention.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-change-in-the-ipc-and-l2-cache-misses-of-the-spmm-application-with-varying-sparsity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Change in the IPC and L2 cache misses of the SpMM application with varying sparsity.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-speedup-of-95-sparse-spmm-on-a-single-ooo-thread-showing-diminishing-returns-from-enlarging-the-robrs-or-lsq-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Speedup of 95%-sparse SpMM on a single OoO thread, showing diminishing returns from enlarging the ROB/RS or LSQ sizes.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-breakdown-of-ipc-contributions-from-all-threads-for-95-sparse-spmm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Breakdown of IPC contributions from all threads for 95% sparse SpMM.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-microarchitecture-design-of-shadow-configured-with-1-ooo-and-4-ino-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Microarchitecture design of SHADOW configured with 1 OoO and 4 InO threads.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-microarchitecture-of-the-fetch-and-decode-stage-configured-with-1-ooo-and-4-ino-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: Microarchitecture of the fetch and decode stage configured with 1 OoO and 4 InO threads.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-shadows-microarchitecture-of-the-rename-and-wakeupselect-stages-configured-with-1ooo-and-4-ino-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: SHADoW's microarchitecture of the Rename and Wakeup+Select stages configured with 1OoO and 4 inO threads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-register-file-partitioning-in-shadow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Register File partitioning in SHADOW.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-impact-of-adding-an-ino-thread-to-an-ooo-system-an-illustrative-assembly-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9: Impact of adding an InO Thread to an OoO system: An illustrative assembly example.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-1-shadows-work-stealing-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Algorithm 1: SHADOW's Work Stealing Mechanism
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-cpu-microarchitectural-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: CPU Microarchitectural Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-benchmarks-used-to-evaluate-shadow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Benchmarks used to evaluate SHADOW
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-per-workload-speedup-for-various-shadow-thread-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10: Per-workload speedup for various SHADOW thread configurations.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#d9235f2c630d1500fe69874ae2e20f2f56167d3b0c0fe98f06fdc1b39f24f52fjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        d9235f2c630d1500fe69874ae2e20f2f56167d3b0c0fe98f06fdc1b39f24f52f.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-geometric-mean-performance-of-shadow-configurations-on-high-d-cache-miss-rate-benchmarks-from-table-2-normalized-to-a-single-threaded-ooo-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11: Geometric mean performance of SHADOW configurations on high D-cache miss rate benchmarks from Table 2, normalized to a single-threaded OoO core.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-geometric-mean-performance-of-shadow-configurations-on-low-d-cache-miss-rate-benchmarks-from-table-2-normalized-to-a-single-threaded-ooo-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12: Geometric mean performance of SHADOW configurations on low D-cache miss rate benchmarks from Table 2, normalized to a single-threaded OoO core.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-performance-of-shadow-with-varying-degrees-of-sparsity-for-an-8-wide-cpu-over-1-ooo-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13: Performance of SHADOW with varying degrees of sparsity for an 8 wide CPU over 1 OoO thread.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-hardware-overhead-of-shadow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4: Hardware overhead of SHADOW
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-14-performance-of-shadow-with-varying-degrees-of-sparsity-for-a-4-wide-cpu-over-1-ooo-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 14: Performance of SHADOW with varying degrees of sparsity for a 4 wide CPU over 1 OoO thread.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-15-miss-rate-for-different-thread-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 15: Miss rate for different thread configurations.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-16-performance-of-shadow-with-varying-matrix-size-for-95-sparsity-for-an-8-wide-cpu-over-1-ooo-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 16: Performance of SHADOW with varying matrix size for 95% sparsity for an 8 wide CPU over 1 OoO thread.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-17-performance-of-shadow-with-varying-matrix-size-for-90-sparsity-for-a-4-wide-cpu-over1-ooo-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 17: Performance of SHADOW with varying matrix size for 90% sparsity for a 4 wide CPU over1 OoO thread.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-18-breakdown-of-ipc-contribution-from-each-thread-with-varying-degrees-of-sparsity-over-1-ooo-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 18: Breakdown of IPC contribution from each thread with varying degrees of sparsity over 1 OoO thread.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-19-distribution-of-work-across-threads-with-dynamic-work-stealing-for-various-degrees-of-sparsity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 19: Distribution of work across threads with dynamic work stealing for various degrees of sparsity.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads">SHADOW: Simultaneous Multi-Threading Architecture with Asymmetric Threads 图表详解<a class="headerlink" href="#shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-shadow-dynamically-redistributes-work-as-ipc-changeshigh-ilp-skews-execution-toward-the-ooo-thread-while-a-low-ipc-distributes-the-work-more-evenly-shadow-adapts-to-the-application-without-software-intervention">Figure 1: SHADOW dynamically redistributes work as IPC changes.High ILP skews execution toward the OoO thread, while a low IPC distributes the work more evenly. SHADOW adapts to the application without software intervention.<a class="headerlink" href="#figure-1-shadow-dynamically-redistributes-work-as-ipc-changeshigh-ilp-skews-execution-toward-the-ooo-thread-while-a-low-ipc-distributes-the-work-more-evenly-shadow-adapts-to-the-application-without-software-intervention" title="Permanent link">&para;</a></h3>
+<p><img alt="8b08b5a2a75a76711486fc0cc4235b8cd2a6a2a558f75f7c3063674e3baf7c9a.jpg" src="../images/8b08b5a2a75a76711486fc0cc4235b8cd2a6a2a558f75f7c3063674e3baf7c9a.jpg" /></p>
+<ul>
+<li>图片展示了 SHADOW 架构在不同稀疏度（70% 和 98%）下，<strong>OoO 线程与多个 InO 线程的 IPC 贡献比例及工作负载分配情况</strong>，直观体现其动态适应能力。</li>
+<li>左侧为 <strong>70% 稀疏度场景</strong>：<ul>
+<li><strong>IPC 分布</strong>：OoO:Tid0 占比约 35%，四个 InO 线程（Tid1–Tid4）合计占比约 65%，其中 Tid1 和 Tid2 各占约 20%，Tid3 和 Tid4 各占约 12.5%。</li>
+<li><strong>工作分配</strong>：OoO:Tid0 执行约 50% 的工作量，InO 线程平均分担剩余 50%，表明此时 ILP 较高，OoO 线程仍主导执行。</li>
+</ul>
+</li>
+<li>右侧为 <strong>98% 稀疏度场景</strong>：<ul>
+<li><strong>IPC 分布</strong>：OoO:Tid0 占比降至约 25%，四个 InO 线程合计占比提升至 75%，各线程贡献更均衡（Tid1–Tid4 各约 18.75%）。</li>
+<li><strong>工作分配</strong>：OoO:Tid0 仅执行约 25% 的工作，其余 75% 由四个 InO 线程均分，反映高稀疏度下 ILP 极低，系统自动将负载转移至轻量级 InO 线程。</li>
+</ul>
+</li>
+<li>关键结论：<ul>
+<li>随着稀疏度增加，<strong>ILP 下降、TLP 上升</strong>，SHADOW 自动调整资源分配，无需软件干预。</li>
+<li>OoO 线程在低稀疏度时高效利用 ILP，而在高稀疏度时让出执行权，避免因内存停顿导致的资源浪费。</li>
+<li>InO 线程在高稀疏度下承担主要负载，因其无重命名和推测开销，能持续推进工作，维持整体吞吐。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>稀疏度</th>
+<th>线程类型</th>
+<th>IPC 占比</th>
+<th>工作分配占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>70%</td>
+<td>OoO:Tid0</td>
+<td>~35%</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid1</td>
+<td>~20%</td>
+<td>~12.5%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid2</td>
+<td>~20%</td>
+<td>~12.5%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid3</td>
+<td>~12.5%</td>
+<td>~12.5%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid4</td>
+<td>~12.5%</td>
+<td>~12.5%</td>
+</tr>
+<tr>
+<td>98%</td>
+<td>OoO:Tid0</td>
+<td>~25%</td>
+<td>~25%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid1</td>
+<td>~18.75%</td>
+<td>~18.75%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid2</td>
+<td>~18.75%</td>
+<td>~18.75%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid3</td>
+<td>~18.75%</td>
+<td>~18.75%</td>
+</tr>
+<tr>
+<td></td>
+<td>InO:Tid4</td>
+<td>~18.75%</td>
+<td>~18.75%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图验证了 SHADOW 的核心优势：<strong>通过硬件支持的异构 SMT + 软件工作窃取机制，在同一核心内无缝切换 ILP/TLP 平衡点，最大化资源利用率</strong>。</li>
+</ul>
+<h3 id="figure-2-change-in-the-ipc-and-l2-cache-misses-of-the-spmm-application-with-varying-sparsity">Figure 2: Change in the IPC and L2 cache misses of the SpMM application with varying sparsity.<a class="headerlink" href="#figure-2-change-in-the-ipc-and-l2-cache-misses-of-the-spmm-application-with-varying-sparsity" title="Permanent link">&para;</a></h3>
+<p><img alt="5f3b37e9c90fe0d3a863ec1cc08e93da5ec39b0d85e5651e554521633e76cf85.jpg" src="../images/5f3b37e9c90fe0d3a863ec1cc08e93da5ec39b0d85e5651e554521633e76cf85.jpg" /></p>
+<ul>
+<li>图表展示了 <strong>SpMM</strong> 应用在不同稀疏度（Sparsity Level）下，<strong>IPC</strong> 与 <strong>L2 Cache Miss Rate</strong> 的变化趋势。</li>
+<li>横轴为稀疏度，从 <strong>50%</strong> 到 <strong>98%</strong>，代表矩阵中非零元素比例递减。</li>
+<li>左侧纵轴表示 <strong>IPC</strong>（Instructions Per Cycle），右侧纵轴表示 <strong>L2 Cache Miss Rate (%)</strong>。</li>
+<li><strong>IPC 曲线（蓝色）</strong>：在稀疏度低于 <strong>80%</strong> 时保持高位稳定（约 1.8–2.0），随后随稀疏度增加急剧下降，在 <strong>98%</strong> 时降至接近 <strong>0</strong>。</li>
+<li><strong>L2 Miss Rate 曲线（绿色）</strong>：在稀疏度低于 <strong>80%</strong> 时维持极低水平（\&lt;5%），之后迅速攀升，在 <strong>98%</strong> 时达到 <strong>~50%</strong>。</li>
+<li>两条曲线在 <strong>~90% 稀疏度</strong> 处交叉，表明此时 <strong>ILP 开始显著衰减</strong>，而 <strong>内存访问压力剧增</strong>。</li>
+<li>数据表明，随着稀疏度提高，<strong>内存访问模式愈发不规则</strong>，导致缓存失效率上升，进而严重抑制 OoO 核心的指令级并行能力。</li>
+<li>此图直观揭示了传统 OoO 架构在处理高稀疏度工作负载时的瓶颈，为 SHADOW 引入 InO 线程以提升 TLP 提供动机。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Sparsity Level</th>
+<th>IPC (approx.)</th>
+<th>L2 Miss Rate (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50%</td>
+<td>~2.0</td>
+<td>\&lt;5%</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>~1.9</td>
+<td>\&lt;5%</td>
+</tr>
+<tr>
+<td>80%</td>
+<td>~1.8</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>90%</td>
+<td>~1.2</td>
+<td>~25%</td>
+</tr>
+<tr>
+<td>98%</td>
+<td>~0.1</td>
+<td>~50%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>高稀疏度直接导致 ILP 崩溃与 L2 缓存失效激增</strong>，凸显动态平衡 ILP/TLP 的必要性。</li>
+</ul>
+<h3 id="figure-3-speedup-of-95-sparse-spmm-on-a-single-ooo-thread-showing-diminishing-returns-from-enlarging-the-robrs-or-lsq-sizes">Figure 3: Speedup of 95%-sparse SpMM on a single OoO thread, showing diminishing returns from enlarging the ROB/RS or LSQ sizes.<a class="headerlink" href="#figure-3-speedup-of-95-sparse-spmm-on-a-single-ooo-thread-showing-diminishing-returns-from-enlarging-the-robrs-or-lsq-sizes" title="Permanent link">&para;</a></h3>
+<p><img alt="ee60c1cacbb8840d2141136830ec53cc1093e73aedd1d9ff0cb64b3ba5399649.jpg" src="../images/ee60c1cacbb8840d2141136830ec53cc1093e73aedd1d9ff0cb64b3ba5399649.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 3</strong>，展示的是在 <strong>95%-sparse SpMM</strong> 工作负载下，单个 <strong>OoO thread</strong> 的性能加速比（Speedup）随 <strong>ROB/RS</strong> 或 <strong>LSQ</strong> 尺寸扩增的变化趋势，旨在揭示其<strong>收益递减</strong>现象。</li>
+<li>横轴为 <strong>ROB / Reservation Station Size</strong>，取值点为 128、256、512，代表重排序缓冲区与保留站的容量规模。</li>
+<li>纵轴为 <strong>Speedup</strong>，基准为 1.00，表示相对于最小配置（128）的性能提升倍数。</li>
+<li>图中包含两条曲线：<ul>
+<li><strong>蓝色线（ROB scaling）</strong>：对应不同 ROB/RS 大小下的加速比，同时标注了对应的 <strong>LQ/SQ</strong>（Load Queue / Store Queue）大小。</li>
+<li><strong>橙色线（LSQ scaling）</strong>：对应仅扩大 LSQ 容量时的加速比，ROB/RS 固定。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ROB/RS Size</th>
+<th>LQ/SQ Size (ROB scaling)</th>
+<th>Speedup (ROB scaling)</th>
+<th>Speedup (LSQ scaling)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128</td>
+<td>LQ:72 / SQ:68</td>
+<td>1.00</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>256</td>
+<td>LQ:144 / SQ:136</td>
+<td>~1.05</td>
+<td>~1.01</td>
+</tr>
+<tr>
+<td>512</td>
+<td>LQ:216 / SQ:204</td>
+<td>~1.06</td>
+<td>~1.01</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>ROB scaling</strong> 曲线显示，从 128 扩展到 256 时，性能提升约 <strong>5%</strong>；继续扩展至 512，仅再提升约 <strong>1%</strong>，表明<strong>收益显著递减</strong>。</li>
+<li><strong>LSQ scaling</strong> 曲线几乎平坦，即使 LSQ 容量翻倍（从 68 到 204），性能提升微乎其微，说明在该工作负载下，<strong>LSQ 并非瓶颈</strong>。</li>
+<li>图表结论：单纯扩大 <strong>ROB/RS</strong> 可带来有限性能提升，但边际效益快速下降；而扩大 <strong>LSQ</strong> 几乎无效。这支持论文观点——内存密集型负载如 SpMM 需要更高效的 TLP 而非单纯扩大 ILP 窗口。</li>
+<li>该图用于论证传统 OoO 架构在稀疏内存负载下的局限性，为引入 <strong>SHADOW</strong> 的混合执行模型提供动机。</li>
+</ul>
+<h3 id="figure-4-breakdown-of-ipc-contributions-from-all-threads-for-95-sparse-spmm">Figure 4: Breakdown of IPC contributions from all threads for 95% sparse SpMM.<a class="headerlink" href="#figure-4-breakdown-of-ipc-contributions-from-all-threads-for-95-sparse-spmm" title="Permanent link">&para;</a></h3>
+<p><img alt="4ce9a91b85a5a5b6260201ede6e530e005dad4616d5e7508ef03a202b2545473.jpg" src="../images/4ce9a91b85a5a5b6260201ede6e530e005dad4616d5e7508ef03a202b2545473.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了在 <strong>95% 稀疏 SpMM</strong> 工作负载下，不同线程配置中各线程对 <strong>IPC（Instructions Per Cycle）</strong> 的贡献分解。</p>
+</li>
+<li>
+<p>横轴为 <strong>Thread Configuration</strong>，从左至右依次为：1-OoO、1-OoO+1-InO、1-OoO+2-InO、1-OoO+3-InO、1-OoO+4-InO、2-OoO、2-OoO+1-InO、2-OoO+2-InO、3-OoO、6-InO。</p>
+</li>
+<li>
+<p>纵轴为 IPC 值，范围从 0.0 到 1.5。</p>
+</li>
+<li>
+<p>每个柱状图由多个颜色块堆叠而成，代表不同线程（Tid:0 至 Tid:5）的 IPC 贡献，颜色对应图例：</p>
+<ul>
+<li><strong>Tid:0</strong>: 深蓝色</li>
+<li><strong>Tid:1</strong>: 橙色</li>
+<li><strong>Tid:2</strong>: 绿色</li>
+<li><strong>Tid:3</strong>: 红色</li>
+<li><strong>Tid:4</strong>: 紫色</li>
+<li><strong>Tid:5</strong>: 黄色</li>
+</ul>
+</li>
+<li>
+<p>关键观察点：</p>
+<ul>
+<li>在 <strong>1-OoO</strong> 配置下，仅 Tid:0（深蓝色）有贡献，IPC 约为 0.8。</li>
+<li>当引入 InO 线程时（如 1-OoO+1-InO），总 IPC 提升，且 Tid:1（橙色）开始贡献。</li>
+<li><strong>1-OoO+4-InO</strong> 配置下，总 IPC 达到峰值约 1.3，其中 OoO 线程（Tid:0）贡献约 0.5，四个 InO 线程（Tid:1 至 Tid:4）共同贡献剩余部分。</li>
+<li><strong>2-OoO</strong> 配置下，两个 OoO 线程（Tid:0 和 Tid:1）均有贡献，但总 IPC 略低于 1-OoO+4-InO。</li>
+<li><strong>6-InO</strong> 配置下，六个 InO 线程均参与执行，但总 IPC 低于混合配置，约为 1.0。</li>
+</ul>
+</li>
+<li>
+<p>数据汇总表：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Thread Configuration</th>
+<th>Total IPC</th>
+<th>OoO Threads (Tid:0,1,2)</th>
+<th>InO Threads (Tid:1-5)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1-OoO</td>
+<td>~0.8</td>
+<td>Tid:0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1-OoO+1-InO</td>
+<td>~1.0</td>
+<td>Tid:0</td>
+<td>Tid:1</td>
+</tr>
+<tr>
+<td>1-OoO+2-InO</td>
+<td>~1.1</td>
+<td>Tid:0</td>
+<td>Tid:1, Tid:2</td>
+</tr>
+<tr>
+<td>1-OoO+3-InO</td>
+<td>~1.2</td>
+<td>Tid:0</td>
+<td>Tid:1, Tid:2, Tid:3</td>
+</tr>
+<tr>
+<td>1-OoO+4-InO</td>
+<td>~1.3</td>
+<td>Tid:0</td>
+<td>Tid:1, Tid:2, Tid:3, Tid:4</td>
+</tr>
+<tr>
+<td>2-OoO</td>
+<td>~1.2</td>
+<td>Tid:0, Tid:1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>2-OoO+1-InO</td>
+<td>~1.1</td>
+<td>Tid:0, Tid:1</td>
+<td>Tid:2</td>
+</tr>
+<tr>
+<td>2-OoO+2-InO</td>
+<td>~1.0</td>
+<td>Tid:0, Tid:1</td>
+<td>Tid:2, Tid:3</td>
+</tr>
+<tr>
+<td>3-OoO</td>
+<td>~0.9</td>
+<td>Tid:0, Tid:1, Tid:2</td>
+<td>—</td>
+</tr>
+<tr>
+<td>6-InO</td>
+<td>~1.0</td>
+<td>—</td>
+<td>Tid:0 至 Tid:5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<ul>
+<li><strong>混合 OoO + InO 配置</strong>（特别是 1-OoO+4-InO）在 95% 稀疏 SpMM 上实现了最高的 IPC，表明 SHADOW 架构能有效平衡 ILP 与 TLP。</li>
+<li>单纯增加 OoO 线程（如 3-OoO）或全部使用 InO 线程（6-InO）均无法达到最优性能。</li>
+<li><strong>InO 线程</strong>在内存密集型工作负载中能有效补充 OoO 线程的不足，提升整体资源利用率。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-5-microarchitecture-design-of-shadow-configured-with-1-ooo-and-4-ino-threads">Figure 5: Microarchitecture design of SHADOW configured with 1 OoO and 4 InO threads.<a class="headerlink" href="#figure-5-microarchitecture-design-of-shadow-configured-with-1-ooo-and-4-ino-threads" title="Permanent link">&para;</a></h3>
+<p><img alt="8d28aa1cbe5ba02357a36985ddd5b6eaa0005ea5445e853fd4ea1781d8b53f52.jpg" src="../images/8d28aa1cbe5ba02357a36985ddd5b6eaa0005ea5445e853fd4ea1781d8b53f52.jpg" /></p>
+<ul>
+<li><strong>图5展示了SHADOW微架构在1 OoO + 4 InO线程配置下的完整流水线设计</strong>，其核心思想是将<strong>OoO与InO线程并行执行于同一物理核心</strong>，通过硬件分区与软件协作实现动态ILP-TLP平衡。</li>
+<li><strong>前端（Fetch &amp; Decode）阶段</strong>：<ul>
+<li>支持最多6个SMT上下文（PC0至PC4），其中<strong>PC0分配给OoO线程</strong>，<strong>PC1至PC4分配给4个InO线程</strong>。</li>
+<li>所有线程共享<strong>ICache</strong>，通过<strong>ICOUNT策略</strong>选择当前周期访问指令缓存的线程，优先服务队列中指令最多的线程。</li>
+<li><strong>分支预测器（BP）仅服务于OoO线程</strong>，InO线程无预测机制，遇到分支时暂停取指直至解析完成。</li>
+</ul>
+</li>
+<li><strong>重命名与调度阶段</strong>：<ul>
+<li><strong>OoO线程</strong>：经Decode后进入<strong>Rename模块</strong>进行寄存器重命名，消除假依赖，随后被分配至<strong>OoO RS</strong>（Reservation Station）和<strong>ROB</strong>（Reorder Buffer）。</li>
+<li><strong>InO线程</strong>：绕过Rename模块，直接进入各自独立的<strong>FIFO队列</strong>（TID1至TID4），每个FIFO对应一个InO线程。这些FIFO连接至各自的<strong>In Order RS</strong>单元。</li>
+<li><strong>RS资源动态划分</strong>：在运行时，RS被划分为OoO部分和InO部分；每个InO线程独占一个RS条目，其余条目平均分配给OoO线程。</li>
+</ul>
+</li>
+<li><strong>执行与提交阶段</strong>：<ul>
+<li><strong>Execute、Writeback（WB）阶段</strong>对所有线程开放，OoO与InO线程均可从<strong>Register File</strong>读取操作数，在ALU执行，并通过写回旁路（writeback bypass）更新结果。</li>
+<li><strong>Commit阶段仅由OoO线程执行</strong>，因其需按序提交以维护程序语义；InO线程非推测执行，无需提交逻辑，也无回滚机制。</li>
+</ul>
+</li>
+<li><strong>关键结构与数据流</strong>：<ul>
+<li><strong>LD Queue与Store Queue</strong>：仅OoO线程使用，支持推测加载与存储冲突检测；InO线程不使用Load Queue，保守执行，仅检查Store Queue以保证正确性。</li>
+<li><strong>Register File</strong>：物理寄存器文件（PRF）被分区使用。InO线程使用架构寄存器文件（ARF），每个线程获得固定数量的寄存器；剩余寄存器由OoO线程共享，通过Register Alias Table（RAT）管理。</li>
+<li><strong>ROB</strong>：仅OoO线程使用，用于跟踪指令状态与顺序提交；InO线程不占用ROB条目，从而释放宝贵资源供OoO线程使用。</li>
+</ul>
+</li>
+<li><strong>线程间协作机制</strong>：<ul>
+<li><strong>软件工作窃取（Work Stealing）</strong>：由用户级Pthreads实现，各线程独立竞争全局任务队列，根据自身执行效率动态获取更多或更少的工作量。</li>
+<li><strong>无中心调度器</strong>：SHADOW不引入复杂的硬件调度逻辑，而是依赖线程自身的贪婪行为与软件锁机制实现负载均衡。</li>
+</ul>
+</li>
+<li><strong>性能优化点</strong>：<ul>
+<li><strong>InO线程轻量化</strong>：省去重命名、ROB分配、分支预测等复杂机制，降低硬件开销，提升TLP扩展性。</li>
+<li><strong>OoO线程深度ILP挖掘</strong>：保留完整的乱序执行能力，在低缓存缺失率场景下最大化单线程性能。</li>
+<li><strong>资源隔离与共享结合</strong>：关键结构如ICache、ALU、Register File共享，而ROB、RS、LD/ST Queue等按线程类型分区，避免资源争用。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>OoO线程处理路径</th>
+<th>InO线程处理路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fetch</td>
+<td>PC0 → ICache → Fetch</td>
+<td>PC1-4 → ICache → Fetch</td>
+</tr>
+<tr>
+<td>Decode</td>
+<td>Decode → Rename</td>
+<td>Decode → FIFO TID1-4</td>
+</tr>
+<tr>
+<td>Rename</td>
+<td>Rename → ROB &amp; OoO RS</td>
+<td>Bypass Rename</td>
+</tr>
+<tr>
+<td>Issue</td>
+<td>OoO RS → Execute</td>
+<td>In Order RS → Execute</td>
+</tr>
+<tr>
+<td>Execute</td>
+<td>Execute → WB</td>
+<td>Execute → WB</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td>Commit (顺序)</td>
+<td>无Commit</td>
+</tr>
+<tr>
+<td>Load/Store</td>
+<td>使用LD Queue &amp; Store Queue</td>
+<td>仅使用Store Queue，保守执行</td>
+</tr>
+<tr>
+<td>Register</td>
+<td>PRF + RAT (Speculative &amp; Permanent)</td>
+<td>ARF (无重命名)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>整体设计优势</strong>：<ul>
+<li><strong>面积与功耗开销极低</strong>：仅增加约1%的硬件开销，主要来自额外的FIFO队列与RS条目。</li>
+<li><strong>适应性强</strong>：通过软件工作窃取机制，自动适应不同稀疏度、缓存压力的应用场景。</li>
+<li><strong>编程模型透明</strong>：开发者无需修改代码即可利用SHADOW架构，只需在启动时调用<code>shdw_cfg</code>指令配置线程模式。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-6-microarchitecture-of-the-fetch-and-decode-stage-configured-with-1-ooo-and-4-ino-threads">Figure 6: Microarchitecture of the fetch and decode stage configured with 1 OoO and 4 InO threads.<a class="headerlink" href="#figure-6-microarchitecture-of-the-fetch-and-decode-stage-configured-with-1-ooo-and-4-ino-threads" title="Permanent link">&para;</a></h3>
+<p><img alt="c64dcaa40be972466d4ce58da6c16bcb1dac63a8f11a741030b83334dd349f29.jpg" src="../images/c64dcaa40be972466d4ce58da6c16bcb1dac63a8f11a741030b83334dd349f29.jpg" /></p>
+<ul>
+<li>
+<p>图像展示了 SHADOW 架构中 <strong>Fetch 和 Decode 阶段</strong>的微架构设计，配置为 <strong>1 个 OoO 线程</strong>与 <strong>4 个 InO 线程</strong>。</p>
+</li>
+<li>
+<p>整体流程从左至右：程序计数器（PC）→ 指令缓存（ICache）→ Fetch Queue → Decode Queue → Decoded Queue → 分发至 Rename 或 FIFO 队列。</p>
+</li>
+<li>
+<p><strong>PC 选择机制</strong>：</p>
+<ul>
+<li>共有 5 个 PC（PC0 至 PC4），其中 <strong>PC0 为蓝色</strong>，代表 <strong>OoO 线程</strong>；其余 <strong>PC1 至 PC4 为橙色</strong>，代表 <strong>InO 线程</strong>。</li>
+<li>通过 <strong>SELECT (ICOUNT)</strong> 机制选择当前周期访问 ICache 的线程，该策略优先选择指令队列中指令最多的线程，以保证前端持续供料。</li>
+</ul>
+</li>
+<li>
+<p><strong>Fetch Queue 结构</strong>：</p>
+<ul>
+<li>每个线程拥有独立的 Fetch Queue（TID0 至 TID4），分别对应其 PC。</li>
+<li>TID0 为蓝色（OoO），TID1-TID4 为橙色（InO）。</li>
+<li>后续通过 <strong>SELECT (Fetch Queue Utilization)</strong> 决定哪个线程的指令进入 Decode Queue，同样基于队列利用率。</li>
+</ul>
+</li>
+<li>
+<p><strong>Decode 阶段</strong>：</p>
+<ul>
+<li>所有线程共享一个 <strong>Decoder</strong> 单元。</li>
+<li>解码后指令进入 <strong>Decoded Queue</strong>，再通过 <strong>SELECT (ICOUNT)</strong> 机制决定分发路径。</li>
+</ul>
+</li>
+<li>
+<p><strong>分发路径</strong>：</p>
+<ul>
+<li><strong>OoO 线程</strong>（TID0）：解码后指令送往 <strong>Rename</strong> 阶段，参与寄存器重命名和乱序调度。</li>
+<li><strong>InO 线程</strong>（TID1-TID4）：解码后指令直接进入 <strong>FIFO Queues</strong>，跳过重命名，按顺序执行。</li>
+</ul>
+</li>
+<li>
+<p><strong>颜色编码含义</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>颜色</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>蓝色</td>
+<td>OoO 线程</td>
+</tr>
+<tr>
+<td>橙色</td>
+<td>InO 线程</td>
+</tr>
+<tr>
+<td>绿色</td>
+<td>共享资源</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>关键设计特点</strong>：</p>
+<ul>
+<li><strong>硬件隔离</strong>：每个线程拥有独立的 PC 和 Fetch Queue，避免前端争用。</li>
+<li><strong>动态调度</strong>：使用 ICOUNT 和队列利用率作为调度依据，确保高吞吐。</li>
+<li><strong>路径分化</strong>：在 Decode 后明确分流，OoO 走复杂重命名路径，InO 走轻量 FIFO 路径，实现 <strong>不对称多线程</strong>。</li>
+<li><strong>无分支预测开销</strong>：InO 线程不进行分支预测，仅依赖 TLP 掩盖延迟，简化硬件。</li>
+</ul>
+</li>
+<li>
+<p>此设计支持 <strong>运行时可配置</strong>，允许根据工作负载动态调整 OoO/InO 线程比例，同时保持前端结构简洁高效。</p>
+</li>
+</ul>
+<h3 id="figure-7-shadows-microarchitecture-of-the-rename-and-wakeupselect-stages-configured-with-1ooo-and-4-ino-threads">Figure 7: SHADoW's microarchitecture of the Rename and Wakeup+Select stages configured with 1OoO and 4 inO threads<a class="headerlink" href="#figure-7-shadows-microarchitecture-of-the-rename-and-wakeupselect-stages-configured-with-1ooo-and-4-ino-threads" title="Permanent link">&para;</a></h3>
+<p><img alt="92f27eb7d0c1c9ce3c625c401476c7dcf672164a45b743b99227846c548fe33c.jpg" src="../images/92f27eb7d0c1c9ce3c625c401476c7dcf672164a45b743b99227846c548fe33c.jpg" /></p>
+<ul>
+<li>图片展示了 SHADOW 架构中 <strong>Rename</strong> 与 <strong>Wakeup+Select</strong> 阶段的微架构设计，配置为 <strong>1个OoO线程 + 4个InO线程</strong>。</li>
+<li>整体结构分为三个主要区域：左侧为 <strong>Rename</strong> 阶段，中间为 <strong>Reservation Stations</strong> 与 <strong>Select+Wakeup</strong> 逻辑，右侧为 <strong>Partitioned Physical Register File</strong>。</li>
+<li><strong>Decode Instruction</strong> 输入后，根据线程类型分流：<ul>
+<li>OoO 线程进入 <strong>Rename Instruction</strong> 模块，进行寄存器重命名和依赖检查，随后分配至 <strong>ROB</strong>、<strong>LDQ</strong> 和 <strong>STQ</strong>。</li>
+<li>InO 线程直接进入各自的 <strong>FIFO Inst Queue</strong>（TID:1 至 TID:4），跳过重命名阶段，降低硬件开销。</li>
+</ul>
+</li>
+<li><strong>Reservation Stations</strong> 区域包含：<ul>
+<li>一个 <strong>OoO Reservation Station</strong>，服务于唯一的 OoO 线程。</li>
+<li>四个独立的 <strong>In-Order RS</strong>（Tid 1 至 Tid 4），每个 InO 线程独占一个入口，简化调度逻辑。</li>
+</ul>
+</li>
+<li><strong>Select+Wakeup</strong> 机制：<ul>
+<li>所有 RS 条目通过 <strong>WB Reg Broadcast</strong> 接收写回信号，更新源操作数就绪状态。</li>
+<li>使用 <strong>SELECT</strong> 逻辑基于“Cycles since decode”选择最老的就绪指令发送至执行单元。</li>
+<li>InO RS 的条目结构包含 Src1/Src2 Reg、READY 位、D/S/M 标志、Dest Tag、Req 和 Scheduled 位，支持顺序执行与依赖跟踪。</li>
+</ul>
+</li>
+<li>右侧 <strong>Partitioned Physical Register File</strong> 显示物理寄存器按线程 ID 分区：<ul>
+<li>Tid:0 对应 OoO 线程。</li>
+<li>Tid:1 至 Tid:4 对应四个 InO 线程。</li>
+<li>寄存器分区确保线程间隔离，避免资源竞争。</li>
+</ul>
+</li>
+<li>关键设计特点：<ul>
+<li><strong>非对称执行路径</strong>：OoO 线程走完整重命名与乱序调度流程，InO 线程绕过重命名，使用 FIFO 队列与轻量级 RS。</li>
+<li><strong>资源分区</strong>：RS 与寄存器文件均按线程静态划分，避免动态仲裁开销。</li>
+<li><strong>低功耗优化</strong>：InO 线程的 FIFO 队列在空闲时可关闭，节省能耗。</li>
+</ul>
+</li>
+<li>下表总结各模块功能与归属：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模块名称</th>
+<th>所属线程类型</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rename Instruction</td>
+<td>OoO</td>
+<td>寄存器重命名、依赖检查</td>
+</tr>
+<tr>
+<td>ROB / LDQ / STQ</td>
+<td>OoO</td>
+<td>乱序缓冲、加载/存储队列</td>
+</tr>
+<tr>
+<td>FIFO Inst Queue</td>
+<td>InO (TID:1-4)</td>
+<td>指令缓存，无重命名</td>
+</tr>
+<tr>
+<td>OoO Reservation Station</td>
+<td>OoO</td>
+<td>存储待发射指令，支持乱序调度</td>
+</tr>
+<tr>
+<td>In-Order RS</td>
+<td>InO (TID:1-4)</td>
+<td>单入口 RS，支持顺序执行与依赖跟踪</td>
+</tr>
+<tr>
+<td>Partitioned PRF</td>
+<td>All</td>
+<td>物理寄存器按线程分区，确保隔离</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此设计实现了 <strong>ILP 与 TLP 的协同执行</strong>：OoO 线程挖掘深度指令级并行，InO 线程提供高吞吐线程级并行，两者共享执行单元但路径分离，最大化资源利用率。</li>
+</ul>
+<h3 id="figure-8-register-file-partitioning-in-shadow">Figure 8: Register File partitioning in SHADOW.<a class="headerlink" href="#figure-8-register-file-partitioning-in-shadow" title="Permanent link">&para;</a></h3>
+<p><img alt="a01a27e8489933d9fd4f92dfc71a227674c139e8344d13e9e2366e5f299a4376.jpg" src="../images/a01a27e8489933d9fd4f92dfc71a227674c139e8344d13e9e2366e5f299a4376.jpg" /></p>
+<ul>
+<li>图片展示了 SHADOW 架构中 <strong>物理寄存器文件 (PRF)</strong> 的分区机制，核心是为不同线程类型（OoO 与 InO）分配独立的寄存器资源。</li>
+<li>PRF 被划分为多个连续块，每个块对应一个线程 ID（Tid），例如 Tid0、Tid1、Tid2。图中显示了三个线程的分配：<strong>Tid0</strong> 占用 Reg 1-106，<strong>Tid1</strong> 占用 Reg 107-214，<strong>Tid2</strong> 占用 Reg 215-256。</li>
+<li>每个线程块内标注了其执行模式：前两个块（Tid0 和 Tid1）标记为 <strong>(OoO)</strong>，表示它们是乱序执行线程；第三个块（Tid2）标记为 <strong>(InO)</strong>，表示它是顺序执行线程。</li>
+<li>对于 OoO 线程，其寄存器块被进一步细分为 <strong>Speculative RAT</strong>（推测寄存器别名表）和 <strong>Permanent RAT</strong>（永久寄存器别名表）。<ul>
+<li>Speculative RAT 在重命名时更新，用于跟踪当前推测状态。</li>
+<li>Permanent RAT 在提交时更新，用于维护架构状态。</li>
+</ul>
+</li>
+<li>对于 InO 线程，其寄存器块仅关联 <strong>Permanent RAT</strong>，因为 InO 线程不进行推测执行，无需维护推测状态。</li>
+<li>此分区策略确保了：<ul>
+<li><strong>资源隔离</strong>：不同线程的寄存器空间互不干扰。</li>
+<li><strong>模式适配</strong>：OoO 线程获得完整的重命名支持，而 InO 线程则避免了不必要的硬件开销。</li>
+<li><strong>动态配置</strong>：通过调整各线程的寄存器块大小和数量，SHADOW 可在运行时灵活配置 OoO 与 InO 线程的比例。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>线程 ID</th>
+<th>寄存器范围</th>
+<th>执行模式</th>
+<th>关联 RAT 类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tid0</td>
+<td>Reg 1-106</td>
+<td>OoO</td>
+<td>Speculative + Permanent</td>
+</tr>
+<tr>
+<td>Tid1</td>
+<td>Reg 107-214</td>
+<td>OoO</td>
+<td>Speculative + Permanent</td>
+</tr>
+<tr>
+<td>Tid2</td>
+<td>Reg 215-256</td>
+<td>InO</td>
+<td>Permanent Only</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该设计体现了 SHADOW 的核心思想：在单核内同时支持异构线程，通过硬件资源的精细划分，在保持高性能的同时，最小化面积和功耗开销。</li>
+</ul>
+<h3 id="figure-9-impact-of-adding-an-ino-thread-to-an-ooo-system-an-illustrative-assembly-example">Figure 9: Impact of adding an InO Thread to an OoO system: An illustrative assembly example.<a class="headerlink" href="#figure-9-impact-of-adding-an-ino-thread-to-an-ooo-system-an-illustrative-assembly-example" title="Permanent link">&para;</a></h3>
+<p><img alt="71829aec55b1fa03a28462b26db7f62b428c5f97fbc3eba5a5af98543dd377f3.jpg" src="../images/71829aec55b1fa03a28462b26db7f62b428c5f97fbc3eba5a5af98543dd377f3.jpg" /></p>
+<ul>
+<li>
+<p>图 9 展示了在 OoO 系统中引入一个 InO 线程对指令执行和资源占用的影响，通过一个包含 8 条指令（A-H）的汇编序列进行说明。</p>
+</li>
+<li>
+<p>指令序列初始化寄存器 R10, R11, R13, R14，并包含多个 Load 和算术操作，其中 A、B、G、H 为长延迟 Load 指令。</p>
+</li>
+<li>
+<p><strong>图 (a) 仅 OoO 执行</strong>：</p>
+<ul>
+<li>所有指令均分配 ROB 条目，ROB 被填满后无法接受新指令。</li>
+<li>长延迟 Load 指令（如 A、B、G、H）占据 ROB 条目直至退休，即使后续指令（如 D、E、F）已完成也无法释放条目。</li>
+<li>导致 ROB 资源被阻塞，新指令无法进入流水线，系统吞吐量下降。</li>
+<li>最终状态：4 条指令处于“Issued In-Order”（绿色），4 条处于“Stalled”（红色），无空闲 ROB 条目。</li>
+</ul>
+</li>
+<li>
+<p><strong>图 (b) 1-OoO + 1-InO 混合执行</strong>：</p>
+<ul>
+<li>OoO 线程仍使用 ROB，但 InO 线程绕过 ROB，使用轻量级 Circular FIFO 队列。</li>
+<li>InO 线程的指令（如 C、D、E、F）不占用 ROB 条目，可与 OoO 线程并行执行。</li>
+<li>长延迟 Load 指令仍由 OoO 线程处理，但 InO 线程可继续执行非依赖指令，提升整体并行度。</li>
+<li>最终状态：6 条指令处于“Issued In-Order”或“Issued OoO”（绿色/蓝色），2 条处于“Stalled”（红色），相比纯 OoO 更高效利用执行单元。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键对比数据</strong>：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>在飞指令数</th>
+<th>ROB 占用</th>
+<th>Stalled 指令数</th>
+<th>性能优势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>仅 OoO</td>
+<td>4</td>
+<td>100%</td>
+<td>4</td>
+<td>ROB 阻塞严重，吞吐量低</td>
+</tr>
+<tr>
+<td>1 OoO + 1 InO</td>
+<td>6</td>
+<td>\&lt;100%</td>
+<td>2</td>
+<td><strong>提升内存级并行性，增加吞吐</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>核心结论</strong>：<ul>
+<li>引入 InO 线程可有效缓解 OoO 核心因长延迟 Load 导致的 ROB 饱和问题。</li>
+<li>InO 线程无需重命名和推测执行，硬件开销极小，却能显著提升内存密集型负载的性能。</li>
+<li>SHADOW 架构通过这种混合执行模式，在保持 OoO 深 ILP 能力的同时，扩展 TLP，实现动态平衡。</li>
+</ul>
+</li>
+</ul>
+<h3 id="algorithm-1-shadows-work-stealing-mechanism">Algorithm 1: SHADOW's Work Stealing Mechanism<a class="headerlink" href="#algorithm-1-shadows-work-stealing-mechanism" title="Permanent link">&para;</a></h3>
+<p><img alt="55b9d130369755da0560c6ce17669db65b00718ef5e3d416b5dcd93afb791d5e.jpg" src="../images/55b9d130369755da0560c6ce17669db65b00718ef5e3d416b5dcd93afb791d5e.jpg" /></p>
+<ul>
+<li>该图展示了 <strong>SHADOW</strong> 架构中用于动态负载分配的 <strong>Work Stealing Mechanism</strong> 算法，其核心是基于 <strong>Pthreads</strong> 的用户态协作调度。</li>
+<li>算法初始化全局变量 <code>currentChunk</code> 和互斥锁（mutex），并定义 <strong>CHUNK_SIZE</strong> 作为每个线程单次窃取的工作单元大小，此参数可调以平衡负载粒度与同步开销。</li>
+<li>系统并行生成 N 个 worker 线程，每个线程进入无限循环，通过加锁访问共享的 <code>currentChunk</code> 变量，确保原子性地获取下一个工作块起始索引 <code>startChunk</code>。</li>
+<li>获取工作后，线程立即更新 <code>currentChunk</code> 并释放锁，避免阻塞其他线程，体现“<strong>先占后放</strong>”的轻量级同步策略。</li>
+<li>若 <code>startChunk</code> 超出总工作量 <code>TotalWork</code>，线程退出循环；否则计算本次处理的结束索引 <code>endChunk</code>，并在 <code>[startChunk, endChunk)</code> 区间内执行实际计算任务。</li>
+<li>所有线程在完成各自工作后进行同步和汇合（join），最终返回完整工作负载的执行结果，保证程序正确终止。</li>
+<li>该机制无需操作系统介入调度，完全在用户空间通过锁实现去中心化负载均衡，适应 <strong>ILP-TLP</strong> 动态变化：高 ILP 时 OoO 线程窃取更多工作，高 TLP 时 InO 线程分担更多负载。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作描述</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>初始化 <code>currentChunk=0</code> 和 mutex</td>
+<td>建立全局工作分配状态</td>
+</tr>
+<tr>
+<td>2</td>
+<td>定义 <code>CHUNK_SIZE</code></td>
+<td>控制工作窃取粒度</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Spawn N worker threads</td>
+<td>启动并行执行单元</td>
+</tr>
+<tr>
+<td>4–17</td>
+<td>线程循环窃取并执行工作</td>
+<td>实现动态负载均衡</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Synchronize and join threads</td>
+<td>确保所有线程完成</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Return completed workload</td>
+<td>标志任务终结</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>算法设计简洁高效，仅依赖基本同步原语，避免复杂硬件支持或系统调用，符合 SHADOW “<strong>低开销、软件透明</strong>”的设计哲学。</li>
+</ul>
+<h3 id="table-1-cpu-microarchitectural-parameters">Table 1: CPU Microarchitectural Parameters<a class="headerlink" href="#table-1-cpu-microarchitectural-parameters" title="Permanent link">&para;</a></h3>
+<p><img alt="95dcbc054a8ae546b1b788873bcb8e27d42e271c2e902910dd74a8f22fe6bc80.jpg" src="../images/95dcbc054a8ae546b1b788873bcb8e27d42e271c2e902910dd74a8f22fe6bc80.jpg" /></p>
+<ul>
+<li><strong>核心架构参数</strong>：该表详细列出了用于模拟 SHADOW 架构的 CPU 微架构参数，基于 <strong>ARM ISA</strong> 和 <strong>Gem5</strong> 模拟器，旨在评估其在不同工作负载下的性能表现。</li>
+<li><strong>关键缓冲区配置</strong>：<ul>
+<li><strong>Reorder Buffer (ROB)</strong> 和 <strong>Reservation Station (RS)</strong> 大小为 320，用于支持 OoO 执行的指令窗口。</li>
+<li><strong>Circular FIFO Queue Size</strong> 为 20，服务于 InO 线程的轻量级指令队列。</li>
+<li><strong>OoO Thread Store/Load Queue Size</strong> 分别为 68 和 72，用于处理 OoO 线程的内存操作。</li>
+<li><strong>In-Order Thread Store Queue Size</strong> 仅为 5，反映 InO 线程对存储队列的低需求。</li>
+</ul>
+</li>
+<li><strong>寄存器文件分配</strong>：<ul>
+<li><strong>Integer Registers (ARF+PRF)</strong> 总数为 258。</li>
+<li><strong>Floating Point Registers (ARF+PRF)</strong> 和 <strong>Vector Registers (ARF+PRF)</strong> 均为 192，支持浮点和向量运算。</li>
+</ul>
+</li>
+<li><strong>功能单元（FUs）</strong>：<ul>
+<li>包含 6 个整数 ALU、2 个整数乘除单元、4 个浮点/向量单元、2 个 Load/Store 单元、1 个仅 Load 单元和 2 个仅 Store 单元，提供全面的执行能力。</li>
+</ul>
+</li>
+<li><strong>缓存层级结构</strong>：<ul>
+<li><strong>L1 Data Cache</strong>：64 kB，2-way set associative，2 cycles pipelined，24 MSHRs。</li>
+<li><strong>L1 Instruction Cache</strong>：64 kB，2-way set associative，2 cycles pipelined，12 MSHRs。</li>
+<li><strong>L2 Cache</strong>：1 MB，16-way set associative，16 cycles pipelined，24 MSHRs，配备 Strided Prefetcher。</li>
+</ul>
+</li>
+<li><strong>主存系统</strong>：<ul>
+<li>使用 <strong>DDR4-2400 (16x4)</strong>，带宽为 32 GB/Channel，周期时间为 0.833 ns（1.2 GHz），行命中延迟为 17.5 ns，行未命中延迟为 45.8 ns。</li>
+</ul>
+</li>
+<li><strong>流水线宽度</strong>：<ul>
+<li><strong>Issue Width</strong> 为 8/4，表示每周期可发射 8 条指令，但受限于 4 条实际执行。</li>
+<li><strong>Commit Width</strong> 为 8/4，表示每周期可提交 8 条指令，但受限于 4 条实际提交。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISA</td>
+<td>ARM</td>
+</tr>
+<tr>
+<td>Simulator</td>
+<td>Gem5</td>
+</tr>
+<tr>
+<td>Reorder Buffer (ROB) Size and Reservation Station size</td>
+<td>320</td>
+</tr>
+<tr>
+<td>Circular FIFO Queue Size</td>
+<td>20</td>
+</tr>
+<tr>
+<td>OoO Thread Store Queue Size</td>
+<td>68</td>
+</tr>
+<tr>
+<td>OoO Thread Load Queue Size</td>
+<td>72</td>
+</tr>
+<tr>
+<td>In-Order Thread Store Queue Size</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Integer Registers (ARF+PRF)</td>
+<td>258</td>
+</tr>
+<tr>
+<td>Floating Point Registers (ARF+PRF)</td>
+<td>192</td>
+</tr>
+<tr>
+<td>Vector Registers (ARF+PRF)</td>
+<td>192</td>
+</tr>
+<tr>
+<td>FUs</td>
+<td>6 Int ALUs, 2 Int MUL/DIV, 4 FP/Vector, 2 Load/Store, 1 Load-only, 2 Store-only</td>
+</tr>
+<tr>
+<td>L1 Data Cache</td>
+<td>64 kB, 2-way set associative, 2 cycles pipelined, 24 MSHRs</td>
+</tr>
+<tr>
+<td>L1 Instruction Cache</td>
+<td>64 kB, 2-way set associative, 2 cycles pipelined, 12 MSHRs</td>
+</tr>
+<tr>
+<td>L2 Cache</td>
+<td>1 MB, 16-way set associative, 16 cycles pipelined, 24 MSHRs, Strided Prefetcher</td>
+</tr>
+<tr>
+<td>DRAM</td>
+<td>DDR4-2400 (16x4), 32 GB/channel, 0.833 ns cycle (1.2 GHz), 17.5 ns row hit, 45.8 ns row miss</td>
+</tr>
+<tr>
+<td>Issue Width</td>
+<td>8 / 4</td>
+</tr>
+<tr>
+<td>Commit Width</td>
+<td>8 / 4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>设计目标</strong>：这些参数共同构成了一个高性能的 ARM 核心模型，用于评估 SHADOW 在混合 OoO 和 InO 线程执行下的效率，特别是在内存密集型工作负载中的表现。</li>
+</ul>
+<h3 id="table-2-benchmarks-used-to-evaluate-shadow">Table 2: Benchmarks used to evaluate SHADOW<a class="headerlink" href="#table-2-benchmarks-used-to-evaluate-shadow" title="Permanent link">&para;</a></h3>
+<p><img alt="607b7778ed7fc2e3fe80b761169745cbc048164c1bae9d0d7d98963fa25d7b70.jpg" src="../images/607b7778ed7fc2e3fe80b761169745cbc048164c1bae9d0d7d98963fa25d7b70.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 2</strong>，标题为“Benchmarks used to evaluate SHADOW”，用于列出评估 SHADOW 架构所使用的基准测试程序及其关键性能指标。</li>
+<li>表格包含四列：<strong>Benchmark</strong>（基准测试名称）、<strong>L1-D Cache Miss Rate</strong>（一级数据缓存缺失率）、<strong>L2 Cache Miss Rate</strong>（二级缓存缺失率）和 <strong>Added lines of code</strong>（为适配动态工作窃取机制新增的代码行数）。</li>
+<li>所有基准测试均基于 <strong>Pthreads</strong> 实现，以支持 SHADOW 的软件驱动工作窃取机制。</li>
+<li>下表总结了各基准测试的具体数据：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>L1-D Cache Miss Rate</th>
+<th>L2 Cache Miss Rate</th>
+<th>Added lines of code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sparse Matrix Multiplication</td>
+<td>High (&gt;25%)</td>
+<td>Varies</td>
+<td>-</td>
+</tr>
+<tr>
+<td>APSP [5]</td>
+<td>24%</td>
+<td>1%</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Backprop [12]</td>
+<td>45%</td>
+<td>84%</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Heartwall [12]</td>
+<td>71%</td>
+<td>39%</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Tiled Dense Matrix Multiplication</td>
+<td>5%</td>
+<td>1%</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BC [12]</td>
+<td>1.6%</td>
+<td>15%</td>
+<td>0</td>
+</tr>
+<tr>
+<td>TSP [5]</td>
+<td>1%</td>
+<td>98%</td>
+<td>12</td>
+</tr>
+<tr>
+<td>nn [5]</td>
+<td>2%</td>
+<td>96%</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Pathfinder [5]</td>
+<td>1%</td>
+<td>37%</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Sparse Matrix Multiplication (SpMM)</strong> 被列为高 L1 缓存缺失率（&gt;25%），是主要评估对象，其 L2 缺失率随稀疏度变化，未修改代码。</li>
+<li><strong>APSP、Backprop、Heartwall</strong> 属于内存密集型应用，L1 缺失率较高（24%-71%），其中 <strong>Backprop</strong> 和 <strong>Heartwall</strong> 的 L2 缺失率也极高（84%、39%），表明其对内存带宽压力大。</li>
+<li><strong>Tiled Dense Matrix Multiplication</strong> 是计算密集型代表，L1 缺失率仅 5%，L2 缺失率 1%，几乎无缓存压力。</li>
+<li><strong>BC、TSP、nn、Pathfinder</strong> 中，<strong>TSP</strong> 和 <strong>nn</strong> 的 L2 缺失率高达 98%，但 L1 缺失率极低（1%-2%），说明其访问模式高度不规则，导致 L2 预取失效。</li>
+<li>新增代码行数反映集成工作窃取机制的改造成本：<strong>TSP</strong> 最高（12 行），<strong>nn</strong> 和 <strong>Pathfinder</strong> 为 10 行，<strong>Backprop</strong> 和 <strong>Heartwall</strong> 为 8 行，其余如 <strong>APSP</strong>、<strong>BC</strong>、<strong>Tiled Dense MM</strong> 无需修改。</li>
+<li>此表格为后续性能分析（Section 5）提供分类依据，将基准测试按 <strong>L1 缓存缺失率</strong> 分为高（≥25%）和低（\&lt;25%）两类，用于对比不同配置下 SHADOW 的适应性。</li>
+</ul>
+<h3 id="figure-10-per-workload-speedup-for-various-shadow-thread-configurations">Figure 10: Per-workload speedup for various SHADOW thread configurations.<a class="headerlink" href="#figure-10-per-workload-speedup-for-various-shadow-thread-configurations" title="Permanent link">&para;</a></h3>
+<p><img alt="338b5d1963025d649d0ba04ced904b767224453b52ab8b0b757779464fc0f629.jpg" src="../images/338b5d1963025d649d0ba04ced904b767224453b52ab8b0b757779464fc0f629.jpg" /></p>
+<ul>
+<li>
+<p>图片 338b5d1963025d649d0ba04ced904b767224453b52ab8b0b757779464fc0f629.jpg 是 Figure 10，标题为“Per-workload speedup for various SHADOW thread configurations”，展示不同 SHADOW 线程配置在多个基准测试上的性能加速比。</p>
+</li>
+<li>
+<p><strong>横轴</strong>列出八个基准测试：APSP、BC、dense MM、backprop、heartwall、nn、pathfinder、TSP。</p>
+</li>
+<li>
+<p><strong>纵轴</strong>表示相对于单线程 OoO 基线的 Speedup，范围从 0 到 3。</p>
+</li>
+<li>
+<p>图例包含八种配置，颜色与条形图一一对应：</p>
+<ul>
+<li>2-OoO（深蓝）</li>
+<li>3-OoO（橙）</li>
+<li>1-OoO+1-InO（绿）</li>
+<li>1-OoO+2-InO（红）</li>
+<li>1-OoO+3-InO（紫）</li>
+<li>1-OoO+4-InO（黄）</li>
+<li>2-OoO+1-InO（青）</li>
+<li>6-InO（浅绿）</li>
+</ul>
+</li>
+<li>
+<p>各基准测试表现总结如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>最佳配置</th>
+<th>最高加速比</th>
+<th>关键观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>APSP</td>
+<td>1-OoO+4-InO</td>
+<td>~2.5X</td>
+<td>混合配置显著优于纯 OoO 或纯 InO，体现 TLP 优势。</td>
+</tr>
+<tr>
+<td>BC</td>
+<td>2-OoO+1-InO</td>
+<td>~1.5X</td>
+<td>混合配置略优，缓存压力较小，ILP 与 TLP 平衡良好。</td>
+</tr>
+<tr>
+<td>dense MM</td>
+<td>2-OoO</td>
+<td>~1.2X</td>
+<td>纯 OoO 最佳，增加 InO 线程导致缓存冲突，性能下降。</td>
+</tr>
+<tr>
+<td>backprop</td>
+<td>1-OoO+4-InO</td>
+<td>~2.8X</td>
+<td>高度依赖 TLP，混合配置大幅提升性能，纯 InO 表现次之。</td>
+</tr>
+<tr>
+<td>heartwall</td>
+<td>1-OoO</td>
+<td>~1.0X</td>
+<td>单线程 OoO 最优，多线程加剧 L2 缺失，性能恶化。</td>
+</tr>
+<tr>
+<td>nn</td>
+<td>1-OoO</td>
+<td>~1.0X</td>
+<td>对缓存敏感，任何额外线程均降低性能，纯 OoO 保持稳定。</td>
+</tr>
+<tr>
+<td>pathfinder</td>
+<td>1-OoO</td>
+<td>~1.0X</td>
+<td>类似 nn，高度 ILP 密集且缓存敏感，多线程无益。</td>
+</tr>
+<tr>
+<td>TSP</td>
+<td>3-OoO</td>
+<td>~2.0X</td>
+<td>多 OoO 线程提升 ILP，L2 预取有效，性能随线程数上升。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>关键结论</strong>：</p>
+<ul>
+<li><strong>混合配置（如 1-OoO+4-InO）在 TLP 密集型负载（如 APSP、backprop）中表现最优</strong>，可实现高达 2.8X 加速。</li>
+<li><strong>纯 OoO 配置在 ILP 密集或缓存敏感型负载（如 dense MM、nn、pathfinder）中更优</strong>，多线程引入资源竞争和缓存压力。</li>
+<li><strong>SHADOW 的灵活性允许根据工作负载特性动态选择最优配置</strong>，无单一配置适用于所有场景。</li>
+<li><strong>6-InO 配置在多数负载中表现不佳</strong>，尤其在需要 ILP 的场景下，缺乏 OoO 能力导致性能受限。</li>
+</ul>
+</li>
+<li>
+<p>总体趋势显示，SHADOW 的性能增益取决于工作负载的 ILP/TLP 平衡及对共享资源（RF、ROB、SQ、缓存）的压力程度。</p>
+</li>
+</ul>
+<h3 id="d9235f2c630d1500fe69874ae2e20f2f56167d3b0c0fe98f06fdc1b39f24f52fjpg">d9235f2c630d1500fe69874ae2e20f2f56167d3b0c0fe98f06fdc1b39f24f52f.jpg<a class="headerlink" href="#d9235f2c630d1500fe69874ae2e20f2f56167d3b0c0fe98f06fdc1b39f24f52fjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="d9235f2c630d1500fe69874ae2e20f2f56167d3b0c0fe98f06fdc1b39f24f52f.jpg" src="../images/d9235f2c630d1500fe69874ae2e20f2f56167d3b0c0fe98f06fdc1b39f24f52f.jpg" /></p>
+<ul>
+<li>图片内容为一张表格，标题为“Table 3: Best configuration, speedup, and explanation for each benchmark”，用于总结 SHADOW 架构在不同基准测试（Benchmark）下的最优配置、性能提升及原因分析。</li>
+<li>表格包含五列：<strong>Benchmark</strong>、<strong>Best Config</strong>、<strong>Speedup</strong>、<strong>Characterization</strong> 和 <strong>Rationale for Best Config</strong>。</li>
+<li>所有数据均基于 SHADOW 在特定工作负载下的评估结果，旨在展示其动态平衡 ILP 与 TLP 的能力。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Best Config</th>
+<th>Speedup</th>
+<th>Characterization</th>
+<th>Rationale for Best Config</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TSP [5]</td>
+<td>3 OoO</td>
+<td>1.70×</td>
+<td>TLP-rich</td>
+<td>L2 misses drop; TLP helps ILP via prefetching</td>
+</tr>
+<tr>
+<td>APSP [5]</td>
+<td>2 OoO-2 InO</td>
+<td>1.56×</td>
+<td>Resource Pressure</td>
+<td>Additional threads cause RF and SQ contention</td>
+</tr>
+<tr>
+<td>BC [12]</td>
+<td>2 OoO-1 InO</td>
+<td>1.37×</td>
+<td>Resource Pressure</td>
+<td>Additional threads cause RF contention</td>
+</tr>
+<tr>
+<td>Backprop [12]</td>
+<td>1 OoO-3 InO</td>
+<td>3.16×</td>
+<td>Resource Pressure</td>
+<td>Additional threads cause RF, ROB and cache contention</td>
+</tr>
+<tr>
+<td>Tiled Dense MM</td>
+<td>2 OoO</td>
+<td>1.20×</td>
+<td>Cache sensitivity</td>
+<td>2 OoO balances ILP/TLP; more threads degrade cache</td>
+</tr>
+<tr>
+<td>Heartwall [12]</td>
+<td>1 OoO</td>
+<td>1.00×</td>
+<td>Cache sensitivity</td>
+<td>Conflict misses rise with more threads</td>
+</tr>
+<tr>
+<td>Pathfinder [5]</td>
+<td>1 OoO</td>
+<td>1.00×</td>
+<td>Cache sensitivity</td>
+<td>Conflict misses rise with more threads</td>
+</tr>
+<tr>
+<td>nn [5]</td>
+<td>1 OoO</td>
+<td>1.00×</td>
+<td>Cache sensitivity</td>
+<td>Conflict misses rise with more threads</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>–</td>
+<td><strong>1.36×</strong></td>
+<td>–</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键发现</strong>：<ul>
+<li><strong>Backprop</strong> 获得最高加速比 <strong>3.16×</strong>，得益于 1 OoO + 3 InO 配置有效利用了 TLP，同时避免了资源争用。</li>
+<li><strong>TSP</strong> 在 3 OoO 配置下表现最佳，因 TLP 丰富且 L2 缺失率下降，通过预取辅助 ILP。</li>
+<li>多数缓存敏感型应用（如 Heartwall、Pathfinder、nn）在单线程 OoO 下表现最优，增加线程会加剧冲突缺失。</li>
+<li><strong>平均加速比为 1.36×</strong>，表明 SHADOW 在多样化工作负载中具有稳定性能增益。</li>
+</ul>
+</li>
+<li><strong>设计启示</strong>：<ul>
+<li>最优配置高度依赖于工作负载的特性（ILP/TLP 平衡、资源压力、缓存敏感性）。</li>
+<li>SHADOW 的可配置性允许用户根据具体应用选择最佳线程组合，实现自适应性能优化。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-11-geometric-mean-performance-of-shadow-configurations-on-high-d-cache-miss-rate-benchmarks-from-table-2-normalized-to-a-single-threaded-ooo-core">Figure 11: Geometric mean performance of SHADOW configurations on high D-cache miss rate benchmarks from Table 2, normalized to a single-threaded OoO core.<a class="headerlink" href="#figure-11-geometric-mean-performance-of-shadow-configurations-on-high-d-cache-miss-rate-benchmarks-from-table-2-normalized-to-a-single-threaded-ooo-core" title="Permanent link">&para;</a></h3>
+<p><img alt="c3f3a89c5608b14e7d1ecac5c9de6bb84634c30c84c52405d456af27e943af97.jpg" src="../images/c3f3a89c5608b14e7d1ecac5c9de6bb84634c30c84c52405d456af27e943af97.jpg" /></p>
+<ul>
+<li>图片展示了 SHADOW 架构在<strong>高 D-cache miss rate</strong>基准测试上的几何平均性能，所有数据均以<strong>单线程 OoO 核心</strong>为基准（归一化为 1.0）。</li>
+<li>横轴列出了九种不同的线程配置，包括纯 OoO、纯 InO 和混合 OoO+InO 配置。</li>
+<li>纵轴表示<strong>Speedup</strong>，即相对于单线程 OoO 的性能提升倍数。</li>
+<li><strong>关键观察点</strong>：<ul>
+<li><strong>1-OoO + 4-InO</strong> 配置表现最佳，速度提升达到约 <strong>1.47x</strong>，显著优于其他配置。</li>
+<li><strong>2-OoO + 2-InO</strong> 配置次之，速度提升约为 <strong>1.35x</strong>。</li>
+<li><strong>6-InO</strong> 配置表现不佳，速度仅为 <strong>0.9x</strong>，低于基准，表明纯 InO 在高缓存缺失场景下无法有效利用 TLP。</li>
+<li><strong>2-OoO</strong> 和 <strong>3-OoO</strong> 配置性能接近或略低于基准，说明在高缓存缺失情况下，增加 OoO 线程会因 ROB/RF/SQ 资源竞争而降低效率。</li>
+<li><strong>1-OoO + 1-InO</strong> 和 <strong>1-OoO + 2-InO</strong> 配置性能适中，分别约为 <strong>1.2x</strong> 和 <strong>1.25x</strong>。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Thread Configuration</th>
+<th>Speedup (vs. 1 OoO)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-OoO</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>3-OoO</td>
+<td>~1.10</td>
+</tr>
+<tr>
+<td>6-InO</td>
+<td>~0.90</td>
+</tr>
+<tr>
+<td>1-OoO + 1-InO</td>
+<td>~1.20</td>
+</tr>
+<tr>
+<td>1-OoO + 2-InO</td>
+<td>~1.25</td>
+</tr>
+<tr>
+<td>1-OoO + 3-InO</td>
+<td>~1.30</td>
+</tr>
+<tr>
+<td><strong>1-OoO + 4-InO</strong></td>
+<td><strong>~1.47</strong></td>
+</tr>
+<tr>
+<td>2-OoO + 1-InO</td>
+<td>~1.30</td>
+</tr>
+<tr>
+<td>2-OoO + 2-InO</td>
+<td>~1.35</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：在高缓存缺失的工作负载下，<strong>混合 OoO+InO 配置</strong>（特别是 <strong>1-OoO + 4-InO</strong>）能最有效地平衡 ILP 和 TLP，从而实现最高的性能增益。纯 OoO 或纯 InO 配置均无法充分利用资源，导致性能下降。</li>
+</ul>
+<h3 id="figure-12-geometric-mean-performance-of-shadow-configurations-on-low-d-cache-miss-rate-benchmarks-from-table-2-normalized-to-a-single-threaded-ooo-core">Figure 12: Geometric mean performance of SHADOW configurations on low D-cache miss rate benchmarks from Table 2, normalized to a single-threaded OoO core.<a class="headerlink" href="#figure-12-geometric-mean-performance-of-shadow-configurations-on-low-d-cache-miss-rate-benchmarks-from-table-2-normalized-to-a-single-threaded-ooo-core" title="Permanent link">&para;</a></h3>
+<p><img alt="42292afc2ef60f23da1ddbf5c08bc567272f61e1b63461bfe21a6733462abba2.jpg" src="../images/42292afc2ef60f23da1ddbf5c08bc567272f61e1b63461bfe21a6733462abba2.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>SHADOW</strong> 在 <strong>低 L1 D-cache miss rate</strong> 工作负载下的几何平均性能，基准为单线程 OoO 核心。</li>
+<li>所有配置的性能均以 <strong>Speedup</strong>（加速比）形式呈现，数值低于 1.0 表示性能下降。</li>
+<li><strong>2-OoO</strong> 配置表现最佳，加速比约为 <strong>0.95</strong>，接近基准性能，表明在低缓存压力下，增加一个 OoO 线程可带来轻微收益。</li>
+<li><strong>3-OoO</strong> 和 <strong>6-InO</strong> 配置性能显著下降，加速比分别降至约 <strong>0.85</strong> 和 <strong>0.60</strong>，说明过多线程会加剧缓存冲突，导致性能恶化。</li>
+<li>混合配置如 <strong>1-OoO+1-InO</strong>、<strong>1-OoO+2-InO</strong>、<strong>1-OoO+3-InO</strong>、<strong>1-OoO+4-InO</strong> 均表现不佳，加速比在 <strong>0.75–0.85</strong> 之间，表明在低缓存压力下，InO 线程无法有效利用资源，反而引入额外开销。</li>
+<li><strong>2-OoO+1-InO</strong> 和 <strong>2-OoO+2-InO</strong> 配置性能略优于纯 OoO 多线程，但仍未超过基准，加速比分别为 <strong>0.85</strong> 和 <strong>0.80</strong>，显示混合模式在低缓存压力下优势有限。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Thread Configuration</th>
+<th>Speedup (vs. 1-OoO)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-OoO</td>
+<td>~0.95</td>
+</tr>
+<tr>
+<td>3-OoO</td>
+<td>~0.85</td>
+</tr>
+<tr>
+<td>6-InO</td>
+<td>~0.60</td>
+</tr>
+<tr>
+<td>1-OoO+1-InO</td>
+<td>~0.85</td>
+</tr>
+<tr>
+<td>1-OoO+2-InO</td>
+<td>~0.80</td>
+</tr>
+<tr>
+<td>1-OoO+3-InO</td>
+<td>~0.75</td>
+</tr>
+<tr>
+<td>1-OoO+4-InO</td>
+<td>~0.75</td>
+</tr>
+<tr>
+<td>2-OoO+1-InO</td>
+<td>~0.85</td>
+</tr>
+<tr>
+<td>2-OoO+2-InO</td>
+<td>~0.80</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体趋势表明，在低缓存压力工作负载中，<strong>单线程 OoO</strong> 或 <strong>双线程 OoO</strong> 是最优选择，而引入 InO 线程或过度增加 OoO 线程均会导致性能下降。</li>
+</ul>
+<h3 id="figure-13-performance-of-shadow-with-varying-degrees-of-sparsity-for-an-8-wide-cpu-over-1-ooo-thread">Figure 13: Performance of SHADOW with varying degrees of sparsity for an 8 wide CPU over 1 OoO thread.<a class="headerlink" href="#figure-13-performance-of-shadow-with-varying-degrees-of-sparsity-for-an-8-wide-cpu-over-1-ooo-thread" title="Permanent link">&para;</a></h3>
+<p><img alt="b6470f3c13f2aee6c49f0c390cd7c393b7b95af67b8a7f186d1eeafb38293903.jpg" src="../images/b6470f3c13f2aee6c49f0c390cd7c393b7b95af67b8a7f186d1eeafb38293903.jpg" /></p>
+<ul>
+<li>
+<p>图表展示了在 <strong>8-wide CPU</strong> 架构下，不同线程配置的 <strong>SHADOW</strong> 在处理 <strong>SpMM</strong>（Sparse Matrix Multiplication）时，随矩阵稀疏度变化的性能表现，基准为单个 <strong>OoO</strong> 线程。</p>
+</li>
+<li>
+<p>横轴为 <strong>Sparsity Levels</strong>，从 50% 到 99%，表示矩阵中非零元素的比例越低，内存访问越不规则，<strong>ILP</strong> 越难提取。</p>
+</li>
+<li>
+<p>纵轴为 <strong>Speedup</strong>，即相对于单 OoO 线程的加速比。</p>
+</li>
+<li>
+<p>四条曲线分别代表：</p>
+<ul>
+<li><strong>2-OoO</strong>：两个 OoO 线程。</li>
+<li><strong>6-InO</strong>：六个 InO 线程。</li>
+<li><strong>1-OoO+4-InO</strong>：SHADOW 的混合配置，一个 OoO + 四个 InO 线程。</li>
+<li><strong>FIFOShelf</strong>：一种基于指令流切换的 SMT 架构。</li>
+</ul>
+</li>
+<li>
+<p>性能趋势分析：</p>
+<ul>
+<li>在 <strong>低稀疏度</strong>（如 50%-70%），所有配置加速比接近 1，说明此时 <strong>ILP</strong> 充足，单 OoO 线程已能高效利用资源。</li>
+<li>随着稀疏度增加至 <strong>85%</strong>，<strong>2-OoO</strong> 和 <strong>6-InO</strong> 开始出现性能分化，前者因 ROB/RF 压力增长而增速放缓，后者因无投机开销开始显现优势。</li>
+<li>在 <strong>95%</strong> 以上稀疏度，<strong>1-OoO+4-InO</strong> 配置显著领先，最高达到 <strong>3.1X</strong> 加速比，证明其在高内存压力下能有效平衡 <strong>ILP</strong> 与 <strong>TLP</strong>。</li>
+<li><strong>FIFOShelf</strong> 表现稳定但始终落后于 SHADOW 的混合配置，因其仍受限于共享结构（如寄存器文件、LSQ）的竞争。</li>
+</ul>
+</li>
+<li>
+<p>关键数据点（近似值）：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Sparsity</th>
+<th>2-OoO</th>
+<th>6-InO</th>
+<th>1-OoO+4-InO</th>
+<th>FIFOShelf</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50%</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>1.1</td>
+<td>1.0</td>
+<td>1.1</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>85%</td>
+<td>1.2</td>
+<td>1.3</td>
+<td>1.4</td>
+<td>1.2</td>
+</tr>
+<tr>
+<td>95%</td>
+<td>1.5</td>
+<td>1.8</td>
+<td>2.5</td>
+<td>1.6</td>
+</tr>
+<tr>
+<td>98%</td>
+<td>1.7</td>
+<td>2.8</td>
+<td>3.0</td>
+<td>1.8</td>
+</tr>
+<tr>
+<td>99%</td>
+<td>1.8</td>
+<td>3.0</td>
+<td><strong>3.1</strong></td>
+<td>2.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>核心结论：<ul>
+<li><strong>SHADOW 的 1-OoO+4-InO 配置在高稀疏度场景下性能最优</strong>，尤其在 99% 稀疏度时达到 <strong>3.1X</strong> 加速比。</li>
+<li>该配置通过让 <strong>OoO 线程负责 ILP 密集部分，InO 线程承担 TLP 密集任务</strong>，实现了动态负载均衡。</li>
+<li>相较于纯 OoO 或纯 InO 配置，以及 FIFOShelf，SHADOW 在极端稀疏场景下展现出更强的适应性和效率。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-4-hardware-overhead-of-shadow">Table 4: Hardware overhead of SHADOW<a class="headerlink" href="#table-4-hardware-overhead-of-shadow" title="Permanent link">&para;</a></h3>
+<p><img alt="efec98a9627c2c1ce68ca0956e70191f88ea96a8e568aa5c20a8c3cedac80c1d.jpg" src="../images/efec98a9627c2c1ce68ca0956e70191f88ea96a8e568aa5c20a8c3cedac80c1d.jpg" /></p>
+<ul>
+<li><strong>Table 4</strong> 详细列出了 SHADOW 架构引入的硬件开销，其设计目标是在保持高性能的同时，将额外面积和功耗控制在极低水平（仅1%）。</li>
+<li>表格内容按硬件结构分类，清晰展示了新增组件及其规模，体现了 SHADOW 在微架构层面的精简与高效。</li>
+<li>所有新增组件均为轻量级设计，未涉及对核心执行单元（如 ROB、RS、PRF）的修改，从而避免了显著的性能或频率损失。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>HW Structure</th>
+<th>Components</th>
+<th>Quantity / Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Thread Control State Registers</td>
+<td>General-purpose registers, Link register, Program counter and Current Program Status Register</td>
+<td><strong>68 Registers</strong></td>
+</tr>
+<tr>
+<td>Thread Control Block</td>
+<td>Thread State Information, Thread Local Storage (TLS) Pointer, Stack Pointer, Thread ID, Priority Information, Pointers to resources</td>
+<td><strong>1664 Bits</strong></td>
+</tr>
+<tr>
+<td>Circular FIFO Queues</td>
+<td>20 Entries per thread</td>
+<td><strong>5120 Bits</strong></td>
+</tr>
+<tr>
+<td>Multiplexers and Demultiplexers</td>
+<td>Added in Fetch, Decode, Rename and Issue stages</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>Fetch Queues</td>
+<td>Queue to store 8 fetched instructions</td>
+<td><strong>2048 Bits</strong></td>
+</tr>
+<tr>
+<td>Scoreboard</td>
+<td>Six multi-ported tables, one dedicated per thread</td>
+<td><strong>2688 Bits</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Thread Control State Registers</strong> 包含每个线程必需的上下文信息，如程序计数器和状态寄存器，共占用 <strong>68个寄存器</strong>，是支持多线程上下文切换的基础。</li>
+<li><strong>Thread Control Block</strong> 存储线程的元数据，如 TLS 指针和优先级信息，总大小为 <strong>1664位</strong>，用于管理线程资源分配。</li>
+<li><strong>Circular FIFO Queues</strong> 为每个 InO 线程提供独立的指令缓冲区，每线程20条目，总计 <strong>5120位</strong>，确保 InO 线程能绕过重命名阶段并顺序执行。</li>
+<li><strong>Multiplexers and Demultiplexers</strong> 共添加 <strong>4个</strong>，分布在取指、译码、重命名和发射阶段，用于在 OoO 和 InO 路径间路由指令，是实现异构执行的关键但轻量的开关。</li>
+<li><strong>Fetch Queues</strong> 用于暂存从指令缓存取出的指令，容量为8条，总大小 <strong>2048位</strong>，保证前端流水线的持续供给。</li>
+<li><strong>Scoreboard</strong> 为每个 InO 线程配备一个专用的多端口表，共六个，总大小 <strong>2688位</strong>，用于跟踪依赖关系，确保 InO 线程的正确顺序执行，无需复杂的跨路径依赖检测。</li>
+</ul>
+<h3 id="figure-14-performance-of-shadow-with-varying-degrees-of-sparsity-for-a-4-wide-cpu-over-1-ooo-thread">Figure 14: Performance of SHADOW with varying degrees of sparsity for a 4 wide CPU over 1 OoO thread.<a class="headerlink" href="#figure-14-performance-of-shadow-with-varying-degrees-of-sparsity-for-a-4-wide-cpu-over-1-ooo-thread" title="Permanent link">&para;</a></h3>
+<p><img alt="e24b948b898600b0890ccb4daffe0d9c91d545adc1254ea1202ac4dfb9b184da.jpg" src="../images/e24b948b898600b0890ccb4daffe0d9c91d545adc1254ea1202ac4dfb9b184da.jpg" /></p>
+<ul>
+<li>图表展示了在 <strong>4-wide CPU</strong> 架构下，不同线程配置的 <strong>SHADOW</strong> 在处理 <strong>SpMM</strong> 时随矩阵稀疏度变化的性能表现，基准为单个 <strong>OoO</strong> 线程。</li>
+<li>性能以 <strong>Speedup</strong>（加速比）衡量，横轴为 <strong>Sparsity Levels</strong>（稀疏度），从 50% 到 99%，纵轴为加速比，范围 1 至 3。</li>
+<li>四种配置对比：<ul>
+<li><strong>2-OoO</strong>：蓝色线，代表两个 OoO 线程。</li>
+<li><strong>6-InO</strong>：橙色线，代表六个 InO 线程。</li>
+<li><strong>1-OoO+4-InO</strong>：绿色线，代表 SHADOW 的混合配置。</li>
+<li><strong>FIFOShelf</strong>：红色线，作为对比的投机式 SMT 架构。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>50% 稀疏度</th>
+<th>85% 稀疏度</th>
+<th>95% 稀疏度</th>
+<th>99% 稀疏度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-OoO</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>~1.3</td>
+<td>~1.7</td>
+</tr>
+<tr>
+<td>6-InO</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>~1.6</td>
+<td>~2.8</td>
+</tr>
+<tr>
+<td>1-OoO+4-InO</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~1.8</td>
+<td><strong>3.1</strong></td>
+</tr>
+<tr>
+<td>FIFOShelf</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>~1.6</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
+<li>在低稀疏度（如 50%-70%）时，所有配置性能接近，因 ILP 充足，OoO 线程主导。</li>
+<li>当稀疏度上升至 85% 以上，<strong>1-OoO+4-InO</strong> 配置开始显著领先，尤其在 <strong>99% 稀疏度</strong> 达到 <strong>3.1X</strong> 加速比，体现其动态平衡 ILP/TLP 的优势。</li>
+<li><strong>6-InO</strong> 在高稀疏度下表现优异，但低于混合配置，说明纯 InO 缺乏 ILP 支撑。</li>
+<li><strong>FIFOShelf</strong> 始终落后于 SHADOW 混合配置，验证了非投机式线程划分更高效。</li>
+<li><strong>2-OoO</strong> 在高稀疏度下受限于 ROB/RF 资源竞争，性能提升有限。</li>
+</ul>
+</li>
+<li>
+<p>结论：SHADOW 的 <strong>1-OoO+4-InO</strong> 配置在 <strong>4-wide CPU</strong> 上对高稀疏度 SpMM 工作负载展现出最优适应性，通过软件工作窃取机制动态分配任务，在内存受限场景下最大化资源利用率。</p>
+</li>
+</ul>
+<h3 id="figure-15-miss-rate-for-different-thread-configurations">Figure 15: Miss rate for different thread configurations.<a class="headerlink" href="#figure-15-miss-rate-for-different-thread-configurations" title="Permanent link">&para;</a></h3>
+<p><img alt="007ce622ab2caf7367a2c759f12a0a8a67f296badde43e66c59cfb2131765918.jpg" src="../images/007ce622ab2caf7367a2c759f12a0a8a67f296badde43e66c59cfb2131765918.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 15: Miss rate for different thread configurations</strong>，展示在不同线程配置下，<strong>L2 Cache Miss Rate (%)</strong> 随矩阵**稀疏度（% Sparsity）**变化的趋势。</li>
+<li>横轴为<strong>稀疏度百分比</strong>，从50%到99%，覆盖了从低稀疏到高稀疏的典型场景；纵轴为<strong>L2缓存缺失率</strong>，范围0%至60%以上。</li>
+<li>图中包含四条曲线，分别代表四种SHADOW配置：<ul>
+<li><strong>1-OoO</strong>（蓝色圆点线）：单个Out-of-Order线程。</li>
+<li><strong>2-OoO</strong>（橙色方块线）：两个OoO线程。</li>
+<li><strong>6-InO</strong>（绿色三角线）：六个In-Order线程。</li>
+<li><strong>1-OoO + 4-InO</strong>（红色菱形线）：一个OoO线程加四个InO线程的混合配置。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>稀疏度</th>
+<th>1-OoO</th>
+<th>2-OoO</th>
+<th>6-InO</th>
+<th>1-OoO+4-InO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50%</td>
+<td>~5%</td>
+<td>~10%</td>
+<td>~10%</td>
+<td>~10%</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>~10%</td>
+<td>~15%</td>
+<td>~15%</td>
+<td>~15%</td>
+</tr>
+<tr>
+<td>85%</td>
+<td>~15%</td>
+<td>~20%</td>
+<td>~20%</td>
+<td>~20%</td>
+</tr>
+<tr>
+<td>95%</td>
+<td>~30%</td>
+<td>~35%</td>
+<td>~35%</td>
+<td>~35%</td>
+</tr>
+<tr>
+<td>98%</td>
+<td>~60%</td>
+<td>~65%</td>
+<td>~65%</td>
+<td>~65%</td>
+</tr>
+<tr>
+<td>99%</td>
+<td>~73%</td>
+<td>~75%</td>
+<td>~75%</td>
+<td>~75%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在**低稀疏度（如50%）**时，所有配置的L2缺失率均较低，<strong>1-OoO表现最优</strong>，缺失率仅约5%，而其他多线程配置因资源竞争略有上升。</li>
+<li>随着稀疏度增加，所有配置的L2缺失率均显著上升，尤其在<strong>95%以上稀疏度时急剧攀升</strong>，表明内存访问模式高度不规则，硬件预取失效。</li>
+<li><strong>1-OoO + 4-InO</strong>配置在各稀疏度下与<strong>2-OoO</strong>和<strong>6-InO</strong>的缺失率几乎重合，说明其<strong>缓存行为与纯OoO或纯InO配置无显著差异</strong>，未引入额外缓存压力。</li>
+<li>尽管多线程配置导致轻微的L2缺失率上升，但论文指出该影响有限，<strong>并未显著损害整体性能</strong>，因为SHADOW通过动态工作窃取机制有效利用了TLP来掩盖内存延迟。</li>
+<li>该图支持论文核心观点：SHADOW的混合架构能在保持合理缓存效率的同时，通过<strong>动态平衡ILP与TLP</strong>实现性能提升，尤其在高稀疏度场景下优势明显。</li>
+</ul>
+<h3 id="figure-16-performance-of-shadow-with-varying-matrix-size-for-95-sparsity-for-an-8-wide-cpu-over-1-ooo-thread">Figure 16: Performance of SHADOW with varying matrix size for 95% sparsity for an 8 wide CPU over 1 OoO thread.<a class="headerlink" href="#figure-16-performance-of-shadow-with-varying-matrix-size-for-95-sparsity-for-an-8-wide-cpu-over-1-ooo-thread" title="Permanent link">&para;</a></h3>
+<p><img alt="a4db435fa26b1d0a18e2f383570b5f2061e6042aa5069587cc536775f1b67756.jpg" src="../images/a4db435fa26b1d0a18e2f383570b5f2061e6042aa5069587cc536775f1b67756.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 16</strong>，展示的是在 <strong>95% 稀疏度</strong> 条件下，<strong>8-wide CPU</strong> 上不同线程配置的 <strong>SHADOW 架构性能随矩阵尺寸变化的趋势</strong>，基准为单个 <strong>OoO 线程</strong>。</li>
+<li>横轴为 <strong>Matrix Size</strong>，从 <strong>400x400</strong> 到 <strong>900x900</strong>，共六个数据点，代表稀疏矩阵乘法（SpMM）中矩阵规模的变化。</li>
+<li>纵轴为 <strong>Speedup</strong>，表示相对于单 OoO 线程的加速比，范围从 1.0 到 2.5。</li>
+<li>图中包含三条曲线，分别代表三种 SHADOW 配置：<ul>
+<li><strong>蓝色圆点线</strong>：<strong>2-OoO</strong>（两个出序线程）</li>
+<li><strong>橙色圆点线</strong>：<strong>6-InO</strong>（六个入序线程）</li>
+<li><strong>绿色圆点线</strong>：<strong>1-OoO + 4-InO</strong>（一个出序 + 四个入序线程，即 SHADOW 的核心混合配置）</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Matrix Size</th>
+<th>2-OoO Speedup</th>
+<th>6-InO Speedup</th>
+<th>1-OoO+4-InO Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>900x900</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>800x800</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>700x700</td>
+<td>~1.3</td>
+<td>~1.2</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>600x600</td>
+<td>~1.3</td>
+<td>~1.3</td>
+<td>~1.4</td>
+</tr>
+<tr>
+<td>500x500</td>
+<td>~1.3</td>
+<td>~1.3</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>400x400</td>
+<td>~1.3</td>
+<td>~1.4</td>
+<td><strong>~1.7</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在所有矩阵尺寸下，<strong>1-OoO + 4-InO</strong> 配置始终表现最优，其加速比稳定在 <strong>1.4 至 1.7</strong> 之间，尤其在 <strong>400x400</strong> 小矩阵时达到峰值 <strong>1.7X</strong>。</li>
+<li><strong>2-OoO</strong> 配置性能稳定，加速比维持在 <strong>1.3X</strong> 左右，未随矩阵尺寸显著提升。</li>
+<li><strong>6-InO</strong> 配置在小矩阵（如 400x400）时接近甚至略超 2-OoO，但在大矩阵时落后于混合配置，最高仅达 <strong>1.4X</strong>。</li>
+<li>结论：<strong>SHADOW 的混合架构（1-OoO + 4-InO）在不同矩阵规模下均优于纯 OoO 或纯 InO 配置</strong>，尤其在小矩阵场景下优势最明显，证明其能有效平衡 ILP 与 TLP，适应不同工作负载规模。</li>
+</ul>
+<h3 id="figure-17-performance-of-shadow-with-varying-matrix-size-for-90-sparsity-for-a-4-wide-cpu-over1-ooo-thread">Figure 17: Performance of SHADOW with varying matrix size for 90% sparsity for a 4 wide CPU over1 OoO thread.<a class="headerlink" href="#figure-17-performance-of-shadow-with-varying-matrix-size-for-90-sparsity-for-a-4-wide-cpu-over1-ooo-thread" title="Permanent link">&para;</a></h3>
+<p><img alt="27a90094fd719190846eb194fa02ac58b216abb6d20a5bc2819a2fddd59907f7.jpg" src="../images/27a90094fd719190846eb194fa02ac58b216abb6d20a5bc2819a2fddd59907f7.jpg" /></p>
+<ul>
+<li>图表展示了在 <strong>90% 稀疏度</strong> 和 <strong>4-wide CPU</strong> 条件下，不同线程配置对 <strong>SpMM 性能</strong> 的影响，基准为单个 OoO 线程。</li>
+<li>三组配置分别为：<strong>2-OoO</strong>（蓝色）、<strong>6-InO</strong>（橙色）和 <strong>1-OoO+4-InO</strong>（绿色），性能以 <strong>Speedup</strong> 表示。</li>
+<li>随着矩阵尺寸从 <strong>900×900</strong> 缩小至 <strong>400×400</strong>，所有配置的加速比均呈上升趋势，表明小矩阵更易受益于多线程并行。</li>
+<li><strong>1-OoO+4-InO</strong> 配置在所有矩阵尺寸下均表现最优，最高加速比接近 <strong>1.8X</strong>，验证了 SHADOW 在混合 ILP/TLP 场景下的有效性。</li>
+<li><strong>6-InO</strong> 配置次之，加速比稳定在 <strong>1.5X–1.6X</strong> 区间，体现 InO 线程在高稀疏度下的 TLP 优势。</li>
+<li><strong>2-OoO</strong> 配置表现最弱，加速比始终低于 <strong>1.2X</strong>，说明纯 OoO 多线程在内存受限场景下因资源竞争而效率低下。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Matrix Size</th>
+<th>2-OoO Speedup</th>
+<th>6-InO Speedup</th>
+<th>1-OoO+4-InO Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>900×900</td>
+<td>~1.05</td>
+<td>~1.3</td>
+<td>~1.5</td>
+</tr>
+<tr>
+<td>800×800</td>
+<td>~1.07</td>
+<td>~1.35</td>
+<td>~1.55</td>
+</tr>
+<tr>
+<td>700×700</td>
+<td>~1.08</td>
+<td>~1.4</td>
+<td>~1.6</td>
+</tr>
+<tr>
+<td>600×600</td>
+<td>~1.1</td>
+<td>~1.45</td>
+<td>~1.65</td>
+</tr>
+<tr>
+<td>500×500</td>
+<td>~1.12</td>
+<td>~1.5</td>
+<td>~1.7</td>
+</tr>
+<tr>
+<td>400×400</td>
+<td>~1.15</td>
+<td>~1.55</td>
+<td><strong>~1.8</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据表明，SHADOW 的 <strong>异构 SMT 架构</strong> 能有效平衡 ILP 与 TLP，在稀疏矩阵乘法中实现显著性能提升，尤其在小规模数据集上优势更为明显。</li>
+</ul>
+<h3 id="figure-18-breakdown-of-ipc-contribution-from-each-thread-with-varying-degrees-of-sparsity-over-1-ooo-thread">Figure 18: Breakdown of IPC contribution from each thread with varying degrees of sparsity over 1 OoO thread.<a class="headerlink" href="#figure-18-breakdown-of-ipc-contribution-from-each-thread-with-varying-degrees-of-sparsity-over-1-ooo-thread" title="Permanent link">&para;</a></h3>
+<p><img alt="96ef9c06b0f42979bf3890c4f6ed98d44c264234783f0b4192fbf7a19ff1ec47.jpg" src="../images/96ef9c06b0f42979bf3890c4f6ed98d44c264234783f0b4192fbf7a19ff1ec47.jpg" /></p>
+<ul>
+<li>图片展示了在不同稀疏度（50%、70%、85%、98%）下，SHADOW架构中各线程对IPC（Instructions Per Cycle）的贡献分解，基准为单个OoO线程。</li>
+<li><strong>图例说明</strong>：Tid:0至Tid:5分别代表6个硬件线程，其中Tid:0为OoO线程，其余为InO线程。颜色块堆叠表示各线程对总IPC的贡献比例。</li>
+<li>在<strong>50%稀疏度</strong>时，1-OoO配置IPC最高（约4.0），2-OoO次之（约2.0），6-InO和1-OoO+4-InO均低于2.0。此时OoO线程主导性能，InO线程贡献有限。</li>
+<li>在<strong>70%稀疏度</strong>时，1-OoO IPC降至约3.7，2-OoO约为2.0，6-InO和1-OoO+4-InO均接近2.5。OoO线程仍占主导，但InO线程开始分担负载。</li>
+<li>在<strong>85%稀疏度</strong>时，1-OoO IPC进一步下降至约3.0，2-OoO约为2.0，6-InO和1-OoO+4-InO均接近2.8。OoO线程效率降低，InO线程贡献显著提升。</li>
+<li>在<strong>98%稀疏度</strong>时，所有配置IPC均大幅下降，1-OoO仅约0.5，2-OoO约0.8，6-InO和1-OoO+4-InO均约1.4。此时InO线程成为主要性能来源，OoO线程因内存停顿几乎无法有效执行。</li>
+<li>以下表格总结了各稀疏度下不同配置的IPC值：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>稀疏度</th>
+<th>1-OoO</th>
+<th>2-OoO</th>
+<th>6-InO</th>
+<th>1-OoO+4-InO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50%</td>
+<td>~4.0</td>
+<td>~2.0</td>
+<td>~2.0</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>~3.7</td>
+<td>~2.0</td>
+<td>~2.5</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>85%</td>
+<td>~3.0</td>
+<td>~2.0</td>
+<td>~2.8</td>
+<td>~2.8</td>
+</tr>
+<tr>
+<td>98%</td>
+<td>~0.5</td>
+<td>~0.8</td>
+<td>~1.4</td>
+<td>~1.4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：随着稀疏度增加，OoO线程的IPC急剧下降，而InO线程的贡献逐渐上升，最终在高稀疏度下成为性能主力。SHADOW通过动态工作窃取机制，使InO线程在OoO线程停滞时接管更多工作，从而维持整体吞吐量。</li>
+<li>该图验证了SHADOW的核心优势：在低稀疏度时依赖OoO线程提取ILP，在高稀疏度时依靠InO线程扩展TLP，实现自适应负载平衡。</li>
+</ul>
+<h3 id="figure-19-distribution-of-work-across-threads-with-dynamic-work-stealing-for-various-degrees-of-sparsity">Figure 19: Distribution of work across threads with dynamic work stealing for various degrees of sparsity.<a class="headerlink" href="#figure-19-distribution-of-work-across-threads-with-dynamic-work-stealing-for-various-degrees-of-sparsity" title="Permanent link">&para;</a></h3>
+<p><img alt="882fb687091b1b91a70b99910e9fe1f6c57e47ded3245a0ce1cc49633f0007d2.jpg" src="../images/882fb687091b1b91a70b99910e9fe1f6c57e47ded3245a0ce1cc49633f0007d2.jpg" /></p>
+<ul>
+<li>图片展示了在不同稀疏度（50%、70%、85%、98%）下，SHADOW架构中**六个线程（Tid:0 至 Tid:5）**通过动态工作窃取机制所承担的总迭代次数分布。</li>
+<li>每个柱状图代表一种SHADOW配置：1-OoO、2-OoO、6-InO、1-OoO+4-InO。其中，<strong>1-OoO+4-InO</strong>是SHADOW的核心混合配置。</li>
+<li><strong>Tid:0</strong>（深蓝色）始终是唯一的OoO线程，在低稀疏度时承担绝大部分工作；随着稀疏度增加，其工作量占比显著下降。</li>
+<li>在<strong>50%稀疏度</strong>时，1-OoO+4-InO配置中，Tid:0（OoO）完成约350次迭代，其余四个InO线程（Tid:1至Tid:4）合计完成约250次，显示OoO线程主导执行。</li>
+<li>在<strong>70%稀疏度</strong>时，Tid:0的工作量降至约300次，而InO线程的总工作量上升至约300次，表明工作开始向InO线程均衡转移。</li>
+<li>在<strong>85%稀疏度</strong>时，Tid:0与InO线程群的工作量基本持平，各承担约300次迭代，体现ILP下降后TLP的补偿作用。</li>
+<li>在<strong>98%稀疏度</strong>时，Tid:0仅完成约200次迭代，而四个InO线程合计完成约400次，<strong>InO线程成为主要执行单元</strong>，有效维持了整体吞吐。</li>
+<li>该图直观验证了SHADOW的自适应能力：<strong>高ILP时由OoO线程“贪婪”抢占工作，低ILP时由InO线程“接力”维持执行</strong>，无需硬件干预。</li>
+<li>对比纯配置：6-InO在高稀疏度下表现良好，但缺乏ILP利用能力；2-OoO在低稀疏度下优于1-OoO，但在高稀疏度下因ROB压力性能下滑。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>稀疏度</th>
+<th>配置</th>
+<th>Tid:0 (OoO) 迭代数</th>
+<th>InO线程总迭代数</th>
+<th>工作分配趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50%</td>
+<td>1-OoO+4-InO</td>
+<td>~350</td>
+<td>~250</td>
+<td>OoO主导</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>1-OoO+4-InO</td>
+<td>~300</td>
+<td>~300</td>
+<td>开始均衡</td>
+</tr>
+<tr>
+<td>85%</td>
+<td>1-OoO+4-InO</td>
+<td>~300</td>
+<td>~300</td>
+<td>基本均衡</td>
+</tr>
+<tr>
+<td>98%</td>
+<td>1-OoO+4-InO</td>
+<td>~200</td>
+<td>~400</td>
+<td><strong>InO主导</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此动态负载均衡是SHADOW实现高效资源利用率的关键，也是其区别于MorphCore等模式切换架构的核心优势。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

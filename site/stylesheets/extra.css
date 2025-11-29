@@ -99,3 +99,8 @@
         height: auto;
     }
 }
+/* 将内容区域的所有图片设置为块级元素并居中 */
+.md-typeset img {
+    display: block;
+    margin: 0 auto;
+}

@@ -1,0 +1,1302 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/berti-an-accurate-local-delta-data-prefetcher/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Berti: an Accurate Local-Delta Data Prefetcher 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#berti-an-accurate-local-delta-data-prefetcher" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Berti: an Accurate Local-Delta Data Prefetcher 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-local-delta-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Local-Delta Learning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-timely-delta-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Timely Delta Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-coverage-based-prefetch-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Coverage-Based Prefetch Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-multi-level-prefetch-orchestration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Multi-Level Prefetch Orchestration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-efficient-hardware-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Efficient Hardware Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="berti-an-accurate-local-delta-data-prefetcher">Berti: an Accurate Local-Delta Data Prefetcher 论文解析<a class="headerlink" href="#berti-an-accurate-local-delta-data-prefetcher" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Agustín Navarro-Torres, Biswabandan Panda, Jesus Alastruey-Benedé, et al.</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: unknown</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2022</p>
+<p><strong>研究机构 (Affiliations)</strong>: Universidad de Zaragoza, Indian Institute of Technology Bombay, University of Murcia</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决现有基于<strong>全局delta (global deltas)</strong> 的硬件预取器（如BOP、MLOP）因忽略<strong>局部上下文 (local contextual information)</strong> 而导致的预取机会丢失问题。</li>
+<li>设计一种位于<strong>一级数据缓存 (L1D)</strong> 的高精度、低成本预取器，通过利用<strong>指令指针 (Instruction Pointer, IP)</strong> 信息来学习和预测<strong>局部delta (local deltas)</strong>，以实现<strong>高覆盖率</strong>和<strong>高准确性</strong>的预取。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Berti</strong> 预取器，其核心思想是为每个IP单独学习和选择<strong>准确且及时的局部delta (accurate and timely local deltas)</strong>。</li>
+<li><strong>训练机制</strong>:<ul>
+<li><strong>测量获取延迟</strong>: 通过在MSHR和预取队列(PQ)中记录时间戳，精确测量每次L1D填充的实际延迟。</li>
+<li><strong>学习及时的delta</strong>: 利用历史访问记录和测量到的延迟，回溯找出哪些过去的访问本应触发一个能及时覆盖当前缺失的预取请求，并计算出对应的delta。</li>
+<li><strong>计算delta覆盖率</strong>: 统计每个及时delta在历史搜索中出现的频率，将其作为该delta的覆盖率指标。</li>
+</ul>
+</li>
+<li><strong>预测与预取机制</strong>:<ul>
+<li>基于delta的<strong>覆盖率</strong>和L1D的<strong>MSHR占用率</strong>，使用<strong>置信度水印 (confidence watermarks)</strong> 决定预取请求的激进程度：<ul>
+<li><strong>高覆盖率 (&gt;65%)</strong>: 将数据预取至L1D。</li>
+<li><strong>中等覆盖率 (35%-65%)</strong>: 将数据预取至L2。</li>
+<li><strong>低覆盖率 (\&lt;35%)</strong>: 不进行预取。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>硬件实现</strong>:<ul>
+<li>使用两个主要表格：<strong>History Table</strong>（记录每个IP最近的访问地址和时间戳）和<strong>Table of Deltas</strong>（存储每个IP的候选delta及其覆盖率和状态）。</li>
+<li>总存储开销仅为 <strong>2.55 KB</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li>在 <strong>SPEC CPU2017</strong> 和 <strong>GAP</strong> 工作负载上，与基线 <strong>IP-stride</strong> 预取器相比，Berti平均性能提升 <strong>8.5%</strong>；与当时最先进的L1D预取器 <strong>IPCP</strong> 相比，性能提升 <strong>3.5%</strong>。</li>
+<li>Berti实现了接近 <strong>90%</strong> 的<strong>预取准确率</strong>，远高于MLOP (62.4%) 和 IPCP (50.6%)。</li>
+<li>得益于高准确率，Berti显著降低了内存层次结构的动态能耗，与IPCP相比，能耗降低 <strong>33.6%</strong>。</li>
+<li><img alt="" src="../images/d292cd0ecf22d3d0888a54fc7b934a814275e859eb274b9ec2e6c64a1bb327b3.jpg" /> <em>Figure 7. Speedup vs. storage requirements. Speedup is normalized to L1D IP-stride and averaged across memory-intensive SPEC CPU2017 and GAP traces. X+Y denotes prefetcher X at L1D and prefetcher Y at L2.</em></li>
+<li><img alt="" src="images/cbd4fe566452757c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg" /></li>
+<li>下表总结了Berti与其他先进预取器的关键性能对比：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">预取器</th>
+<th style="text-align: center;">相对于IP-stride的平均性能提升</th>
+<th style="text-align: center;">L1D预取准确率</th>
+<th style="text-align: center;">存储开销</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Berti</strong></td>
+<td style="text-align: center;"><strong>8.5%</strong></td>
+<td style="text-align: center;"><strong>~87.2%</strong></td>
+<td style="text-align: center;"><strong>2.55 KB</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">IPCP</td>
+<td style="text-align: center;">5.0%</td>
+<td style="text-align: center;">50.6%</td>
+<td style="text-align: center;">~2.5 KB</td>
+</tr>
+<tr>
+<td style="text-align: left;">MLOP</td>
+<td style="text-align: center;">5.0%</td>
+<td style="text-align: center;">62.4%</td>
+<td style="text-align: center;">~10 KB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论</strong></p>
+<ul>
+<li>利用<strong>局部上下文 (local context)</strong>，特别是<strong>指令指针 (IP)</strong>，来学习<strong>及时的局部delta</strong>，是设计高效L1D预取器的有效途径。</li>
+<li>Berti通过其<strong>高精度</strong>和<strong>及时性</strong>的预取策略，在极低的硬件开销（<strong>2.55 KB</strong>）下，显著超越了现有的先进预取器，在性能和能效方面取得了最佳平衡。</li>
+<li>该研究表明，针对L1D的预取器设计应更加关注<strong>局部性</strong>和<strong>预取时机</strong>，而非依赖全局地址流模式。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li>现代高性能处理器严重依赖 <strong>data prefetching</strong> 技术来隐藏长延迟的内存访问。</li>
+<li>当前许多先进的硬件预取器（如 <strong>BOP</strong>, <strong>MLOP</strong>）基于 <strong>global deltas</strong>（全局增量）进行训练和预测，即不考虑发起内存访问的具体指令上下文。</li>
+<li><strong>L1D (first-level data cache) 预取器</strong> 具有天然优势：能观察到未经过滤的、基于虚拟地址的原始访问流，并可利用 <strong>instruction pointer (IP)</strong> 等丰富上下文信息，从而实现更精准的预取。然而，设计高效的 L1D 预取器面临存储开销、带宽争用和缓存污染等挑战。</li>
+<li>现有预取器普遍存在 <strong>accuracy</strong>（准确率）低下的问题，导致大量无用数据块被加载，不仅浪费 <strong>dynamic energy</strong>，还可能因污染缓存而损害性能。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li>作者观察到，为整个应用选择一个 <strong>global delta</strong> 会错失大量预取机会，因为最优的 delta 高度依赖于具体的 <strong>program context</strong>（如 IP）。<ul>
+<li>如 <img alt="" src="../images/4e8844a11efa68128cf674df9b11e8d0d49eaa0d1952ce5362166c5549f26762.jpg" /> <em>Figure 3. Best delta selected by BOP (based on global deltas) and Berti (based on per-IP local deltas) for mcf-1554B. Prefetch coverage is shown in grayscale. BOP selects +62 as the best delta (red line), which is not always accurate and provides a coverage of only 2%.</em> 所示，在 <code>mcf</code> 基准测试中，不同 IP 的最佳 delta 差异巨大，而 BOP 选择的全局 delta (+62) 覆盖率极低（仅 2%）。</li>
+</ul>
+</li>
+<li>现有的 <strong>local L1D prefetchers</strong>（如 IP-stride, IPCP）也存在不足：<ul>
+<li><strong>IP-stride</strong> 只能处理连续的恒定步长，无法应对复杂或非及时的模式。</li>
+<li><strong>IPCP</strong> 虽能分类处理不同模式，但忽略了预取的 <strong>timeliness</strong>（及时性），且其全局流（GS）组件会产生大量无用预取。</li>
+</ul>
+</li>
+<li>在 <strong>out-of-order</strong> 处理器中，内存访问会被重排序，破坏了 stride 模式的连续性。而 <strong>timely local deltas</strong> 因其能回溯所有历史访问，对乱序不敏感，更具鲁棒性。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了 <strong>Berti</strong>，一种新颖的、基于 <strong>local-delta</strong>（局部增量）的 L1D 数据预取器。其核心思想是为每个 <strong>IP</strong> 单独学习并选择 <strong>accurate and timely deltas</strong>（准确且及时的增量）。</li>
+<li>设计了一套完整的机制来实现高精度预取：<ul>
+<li><strong>测量获取延迟</strong>：通过在 <strong>MSHR</strong> 和 <strong>PQ</strong> 中记录时间戳，精确测量每次 L1D 填充的实际延迟。</li>
+<li><strong>学习及时增量</strong>：利用历史访问记录和测量到的延迟，反向推导出哪些历史访问本应触发一个“及时”的预取请求，并计算出对应的 <strong>timely local delta</strong>。</li>
+<li><strong>计算增量覆盖率</strong>：统计每个 delta 在历史搜索中出现的频率，将其作为 <strong>coverage</strong>（覆盖率）指标，高覆盖率直接转化为高预取准确率。</li>
+<li><strong>分级预取决策</strong>：根据 delta 的覆盖率设置不同水位线（high/medium/low），决定预取请求应填充到 L1D、L2 还是 LLC，以平衡准确率与覆盖范围。</li>
+</ul>
+</li>
+<li><strong>Berti</strong> 以极低的 <strong>2.55 KB</strong> 存储开销，实现了卓越的性能和能效：<ul>
+<li>在 SPEC CPU2017 和 GAP 工作负载上，相比基线 <strong>IP-stride</strong> 平均性能提升 <strong>8.5%</strong>，相比 SOTA 预取器 <strong>IPCP</strong> 提升 <strong>3.5%</strong>。</li>
+<li>预取准确率高达 <strong>~90%</strong>，显著优于 MLOP (62.4%) 和 IPCP (50.6%)。</li>
+<li>得益于高准确率，<strong>Berti</strong> 将内存层次结构的动态能耗降低了 <strong>33.6%</strong>（相比 IPCP）。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体架构概览</strong></p>
+<p>Berti 是一个位于 <strong>L1D (first-level data cache)</strong> 的硬件数据预取器，其核心思想是利用高置信度的、<strong>及时的本地增量 (timely local deltas)</strong> 来生成高精度的预取请求。与依赖全局地址流的预取器（如 BOP, MLOP）不同，Berti 为每个 <strong>IP (Instruction Pointer)</strong> 单独学习和预测最佳增量，从而更好地捕捉程序的局部访问模式。</p>
+<p><strong>核心组件与工作流程</strong></p>
+<p>Berti 的架构主要由训练（Training）和预测（Prediction）两大阶段组成，并通过一组轻量级的硬件表来实现。</p>
+<ul>
+<li>
+<p><strong>训练阶段 (Training Phase)</strong></p>
+<ul>
+<li><strong>测量获取延迟 (Measuring fetch latency)</strong>: 通过在 <strong>MSHR (Miss Status Holding Register)</strong> 和 <strong>PQ (Prefetch Queue)</strong> 中记录时间戳，精确计算每次 L1D 填充（无论是需求缺失还是预取命中）的实际延迟。</li>
+<li><strong>学习及时增量 (Learning timely deltas)</strong>: 利用一个 <strong>History Table</strong> 来追踪每个 IP 最近的访问历史（包括虚拟地址和时间戳）。当一个缓存行被填充时，Berti 会回溯该 IP 的历史，找出所有能够“及时”预取到当前地址的过去访问点，并计算出对应的增量（当前地址 - 历史地址）。
+    <img alt="" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /> <em>Figure 4. Learning timely deltas.</em></li>
+<li><strong>计算增量覆盖率 (Computing coverage of deltas)</strong>: 将学习到的及时增量累积到一个 <strong>Table of Deltas</strong> 中。该表为每个 IP 维护一个条目，其中包含多个候选增量及其对应的 <strong>覆盖率 (coverage)</strong> 计数器。覆盖率定义为该增量在历史搜索中出现的频率。</li>
+</ul>
+</li>
+<li>
+<p><strong>预测阶段 (Prediction Phase)</strong></p>
+<ul>
+<li><strong>决策与预取 (Decision and Issuing)</strong>: 在每次 L1D 访问时，查询 <strong>Table of Deltas</strong> 以获取与当前 IP 匹配的增量。</li>
+<li><strong>基于覆盖率的分级预取策略</strong>: 根据增量的覆盖率，决定预取请求的激进程度和目标缓存层级：<ul>
+<li><strong>高覆盖率 (High-coverage)</strong>: 覆盖率 &gt; <strong>65%</strong>，且 L1D MSHR 占用率低于阈值时，预取到 <strong>L1D</strong>。</li>
+<li><strong>中等覆盖率 (Medium-coverage)</strong>: 覆盖率在 <strong>35%-65%</strong> 之间，预取到 <strong>L2</strong>。</li>
+<li><strong>低覆盖率 (Low-coverage)</strong>: 覆盖率 &lt; 35%，不发出预取请求。</li>
+</ul>
+</li>
+<li><strong>预取执行</strong>: 将选定的增量加到当前访问地址上，生成新的虚拟地址预取请求，并将其插入 PQ。</li>
+</ul>
+</li>
+</ul>
+<p><strong>硬件实现细节</strong></p>
+<p>Berti 的硬件设计追求成本效益，总存储开销仅为 <strong>2.55 KB</strong>。</p>
+<ul>
+<li><strong>History Table</strong>: 一个 8-set, 16-way 的缓存，使用 IP 进行索引。每个条目存储 IP tag、24位虚拟地址和16位时间戳。</li>
+<li><strong>Table of Deltas</strong>: 一个16-entry的全相联缓存。每个条目包含一个 IP hash tag、一个用于计数的4位计数器，以及一个包含16个增量的数组。每个增量条目存储13位的增量值、4位的覆盖率和2位的状态（指示预取层级）。
+    <img alt="" src="../images/89d6667fb897e3b9b23adea64286b26a9ecd370b1b3075753ef7ba0dac6e385c.jpg" /> <em>Figure 6. History table and Table of deltas entry format.</em></li>
+<li><strong>系统集成</strong>: Berti 直接集成在 L1D 控制器旁，通过扩展 MSHR 和 PQ 来支持时间戳记录，并利用 L1D 的 shadow tag 存储预取请求的延迟信息，以便在需求命中时进行回溯学习。
+    <img alt="" src="../images/4687673a72ee43cb3b2eafce7f9b78d9575373cf70b658c43ba276687ce6368a.jpg" /> <em>Figure 5. Berti design overview. Hardware extensions are shown in gray.</em></li>
+</ul>
+<p><strong>关键创新与优势</strong></p>
+<ul>
+<li><strong>本地化 (Locality)</strong>: 通过 per-IP 的增量学习，避免了全局增量因不同指令流交织而导致的模式混淆问题。
+    <img alt="" src="../images/4e8844a11efa68128cf674df9b11e8d0d49eaa0d1952ce5362166c5549f26762.jpg" /> <em>Figure 3. Best delta selected by BOP (based on global deltas) and Berti (based on per-IP local deltas) for mcf-1554B. Prefetch coverage is shown in grayscale. BOP selects +62 as the best delta (red line), which is not always accurate and provides a coverage of only 2%.</em></li>
+<li><strong>及时性 (Timeliness)</strong>: 显式地将获取延迟纳入训练过程，确保学习到的增量能够在需求发生前及时将数据带回。</li>
+<li><strong>高精度 (High Accuracy)</strong>: 严格的覆盖率阈值机制过滤掉了低置信度的增量，使得 Berti 的平均预取精度接近 <strong>90%</strong>，远高于 IPCP (50.6%) 和 MLOP (62.4%)。
+    <img alt="" src="../images/cbd4fe566452727c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg" /> <em>Figure 10. Prefetch accuracy at the L1D. Percentages of useful requests are broken down into timely (gray) and late (black) prefetch requests.</em></li>
+<li><strong>能效比 (Energy Efficiency)</strong>: 高精度直接转化为更低的内存层次动态能耗，相比 IPCP 降低了 <strong>33.6%</strong>。
+    <img alt="" src="../images/61753161e45e9cbf84aeb666f0ae8b8514db7db4c30ba5eef0543c9c6a6869e2.jpg" /> <em>Figure 1. Prefetch accuracy and dynamic energy consumption of the memory hierarchy for state-of-the-art prefetchers (IPCP [40], MLOP [48], SPP-PPF [17], and Bingo [13]) averaged across single-threaded traces from memory-intensive SPEC CPU2017 [55] and GAP [14] workloads.</em></li>
+</ul>
+<h3 id="1-local-delta-learning">1. Local-Delta Learning<a class="headerlink" href="#1-local-delta-learning" title="Permanent link">&para;</a></h3>
+<p><strong>Local-Delta Learning 的实现原理与算法流程</strong></p>
+<p>Berti 的核心在于其 <strong>Local-Delta Learning</strong> 机制，该机制旨在为每个 <strong>Instruction Pointer (IP)</strong> 独立地学习和选择最有效的预取偏移量（delta）。其根本思想是，由同一个 IP 产生的内存访问模式具有高度的局部性和可预测性，而全局的、不区分上下文的 delta 会因不同 IP 访问模式的交织而失效。</p>
+<ul>
+<li><strong>Local Delta 的定义</strong>：一个 <strong>local delta</strong> 被定义为由<strong>同一个 IP</strong> 发出的两次 <strong>demand access</strong> 所访问的缓存行地址之间的差值。这与传统的 <strong>stride</strong>（连续两次访问的地址差）不同，local delta 考虑了更长的历史窗口，从而能捕捉到非连续但有规律的访问模式。</li>
+<li><strong>Timely Delta 的关键性</strong>：并非所有 local delta 都有用。Berti 引入了 <strong>timeliness</strong>（及时性）的概念，即一个 delta 必须能确保预取请求在数据被真正需要之前完成，才能被视为有效。这直接解决了传统预取器因预取过晚而导致 L1D miss latency 无法被隐藏的问题。</li>
+<li><strong>整体目标</strong>：通过精确测量访存延迟，并回溯历史访问记录，Berti 能够识别出那些“如果当时被用来预取，就能及时命中”的 <strong>timely local deltas</strong>，并统计它们的 <strong>coverage</strong>（覆盖率），最终只使用高覆盖率的 delta 来触发预取，从而保证极高的 <strong>prefetch accuracy</strong>。</li>
+</ul>
+<p><img alt="" src="../images/b74b15fdee8589931ff6fe5d15d903ab9ff5c33bf8cbfcf16a437047ad294cb9.jpg" /> <em>Figure 2. Strides, local deltas, and timely local deltas. The values on the timeline (2, 5, 7 ...) represent the addresses referenced by the same instruction.</em></p>
+<p><strong>训练阶段的详细算法流程</strong></p>
+<p>Berti 的训练过程是一个闭环反馈系统，它利用实际的缓存填充（cache fill）事件来校准其预取决策。</p>
+<ul>
+<li>
+<p><strong>步骤一：测量 Fetch Latency</strong></p>
+<ul>
+<li>在 L1D 发生 <strong>demand miss</strong> 时，将当前时间戳存入 <strong>MSHR</strong>。</li>
+<li>在生成 <strong>prefetch request</strong> 时，将当前时间戳存入 <strong>Prefetch Queue (PQ)</strong>。</li>
+<li>当一个缓存行（无论是因 demand miss 还是 prefetch request）最终填充回 L1D 时，通过当前时间戳减去存储的时间戳，计算出精确的 <strong>fetch latency</strong>。这个延迟反映了在当前系统负载下，获取该数据块所需的真实时间。</li>
+</ul>
+</li>
+<li>
+<p><strong>步骤二：学习 Timely Deltas</strong></p>
+<ul>
+<li>每当一个缓存行被填充回 L1D（无论是 demand 还是 prefetched），且其 fetch latency 已知时，Berti 就会触发一次学习过程。</li>
+<li>它查询 <strong>History Table</strong>，该表按 IP 索引，记录了该 IP 最近的访问地址和对应的时间戳。</li>
+<li>对于当前填充的地址 <code>A_current</code> 和已知的 <code>fetch_latency</code>，Berti 计算出一个 <strong>deadline timestamp</strong> (<code>T_current - fetch_latency</code>)。</li>
+<li>它在 History Table 中查找所有时间戳早于 <code>deadline timestamp</code> 的历史访问记录。这些历史访问点就是理论上可以发起一个“及时”预取请求的时机。</li>
+<li>对于每一个这样的历史地址 <code>A_history</code>，计算 <strong>timely delta</strong> = <code>A_current - A_history</code>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /> <em>Figure 4. Learning timely deltas.</em></p>
+<ul>
+<li><strong>步骤三：计算 Delta Coverage</strong><ul>
+<li>所有在单次学习过程中发现的 timely deltas 会被送入 <strong>Table of Deltas</strong>。</li>
+<li>该表同样按 IP（通过哈希）索引，每个条目包含一个 delta 数组，每个 delta 有自己的 <strong>coverage counter</strong>。</li>
+<li>每发现一次某个 delta，其对应的 counter 就递增。</li>
+<li>当一个条目的总搜索次数计数器（4-bit counter）溢出（达到16次）时，Berti 会为该条目中的所有 deltas 计算其 <strong>coverage</strong>（即 <code>delta_counter / 16</code>）。</li>
+<li>根据预设的 <strong>watermarks</strong>（阈值），为每个 delta 设置 <strong>status</strong>：<ul>
+<li><strong>High-coverage</strong> (&gt;65%): <code>L1D_pref</code>，预取到 L1D。</li>
+<li><strong>Medium-coverage</strong> (35%-65%): <code>L2_pref</code>，预取到 L2。</li>
+<li><strong>Low-coverage</strong> (\&lt;35%): <code>No_pref</code>，不进行预取。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>硬件实现与参数设置</strong></p>
+<p>Berti 的设计追求低成本和高效率，其硬件结构简洁。</p>
+<ul>
+<li>
+<p><strong>History Table</strong>:</p>
+<ul>
+<li>结构: <strong>8-set, 16-way</strong> 组相联缓存。</li>
+<li>索引: 使用 IP。</li>
+<li>条目内容: 包含 <strong>7-bit IP tag</strong>, <strong>24-bit cache line address</strong>, <strong>16-bit timestamp</strong>。</li>
+<li>功能: 记录最近的访问历史，用于回溯查找 timely deltas。</li>
+</ul>
+</li>
+<li>
+<p><strong>Table of Deltas</strong>:</p>
+<ul>
+<li>结构: <strong>16-entry fully-associative</strong> 缓存。</li>
+<li>索引: 使用 <strong>10-bit hash of the IP</strong>。</li>
+<li>条目内容: 包含一个 <strong>16-delta array</strong>，每个 delta 有 <strong>13-bit delta value</strong>, <strong>4-bit coverage</strong>, <strong>2-bit status</strong>。</li>
+<li>功能: 存储每个 IP 学习到的高价值 deltas 及其状态。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键参数</strong>:</p>
+<ul>
+<li><strong>Fetch Latency Counter</strong>: <strong>12-bit</strong>，足以覆盖平均278周期的延迟。</li>
+<li><strong>Confidence Watermarks</strong>: <strong>High (65%)</strong>, <strong>Medium/Low (35%)</strong>。这是准确性和覆盖率之间的关键权衡点。</li>
+<li><strong>Total Storage Overhead</strong>: <strong>2.55 KB</strong> per core，非常轻量。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/89d6667fb897e3b9b23adea64286b26a9ecd370b1b3075753ef7ba0dac6e385c.jpg" /> <em>Figure 6. History table and Table of deltas entry format.</em>
+<img alt="" src="../images/92c023f5b766e980c7be588e6c1f07838123c1cbad5b89621d965b1c52a79a49.jpg" /> <em>Table I STORAGE OVERHEAD OF BERTI.</em></p>
+<p><strong>输入输出关系及在整体系统中的作用</strong></p>
+<ul>
+<li>
+<p><strong>输入</strong>:</p>
+<ul>
+<li><strong>Demand Accesses</strong>: 来自处理器核心的、未命中的加载请求，携带 <strong>IP</strong> 和 <strong>Virtual Address (VA)</strong>。</li>
+<li><strong>Cache Fill Events</strong>: 来自下级缓存或内存的填充响应，携带 <strong>物理地址</strong>、<strong>IP</strong>（对于 demand misses）以及用于计算 <strong>fetch latency</strong> 的时间信息。</li>
+</ul>
+</li>
+<li>
+<p><strong>输出</strong>:</p>
+<ul>
+<li><strong>Prefetch Requests</strong>: 基于 Table of Deltas 中状态为 <code>L1D_pref</code> 或 <code>L2_pref</code> 的 deltas 生成的虚拟地址预取请求。这些请求被送入 <strong>Prefetch Queue (PQ)</strong>，并根据其状态决定预取深度（L1D 或 L2）。</li>
+</ul>
+</li>
+<li>
+<p><strong>在整体系统中的作用</strong>:</p>
+<ul>
+<li><strong>精准的上下文感知</strong>: 通过 per-IP 的学习，Berti 能够隔离不同代码段的访问模式，避免了全局预取器因模式混淆而导致的精度下降。</li>
+<li><strong>动态适应性</strong>: 通过实时测量 fetch latency，Berti 能够适应由 <strong>MSHR contention</strong>, <strong>DRAM bank conflicts</strong> 等因素引起的<strong>可变延迟</strong>，确保预取的及时性。</li>
+<li><strong>高精度驱动</strong>: 其“只预取高覆盖率 delta”的策略，从根本上抑制了<strong>无用预取</strong>（useless prefetches），从而大幅降低了 <strong>memory hierarchy</strong> 的动态能耗，并避免了 <strong>L1D pollution</strong>。</li>
+<li><strong>作为 L1D 预取器的优势</strong>: 由于位于 L1D，Berti 能看到原始的 <strong>virtual addresses</strong> 和完整的 <strong>IP</strong> 信息，这使其能够进行 <strong>cross-page prefetching</strong> 并做出更精细的上下文决策，这是 L2/LLC 预取器难以做到的。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-timely-delta-detection">2. Timely Delta Detection<a class="headerlink" href="#2-timely-delta-detection" title="Permanent link">&para;</a></h3>
+<p><strong>Timely Delta Detection 的实现原理与算法流程</strong></p>
+<p>Berti 的核心创新在于其 <strong>Timely Delta Detection</strong> 机制，该机制通过精确测量内存访问延迟，并回溯历史访问记录，来识别那些能够“及时”触发预取请求的 <strong>local delta</strong>。其实现依赖于对 <strong>L1D miss latency</strong> 的精准捕获。</p>
+<ul>
+<li>
+<p><strong>延迟测量 (Latency Measurement)</strong>:</p>
+<ul>
+<li>在 <strong>MSHR (Miss Status Holding Register)</strong> 中为每个 <strong>demand miss</strong> 条目扩展一个 <strong>16-bit timestamp</strong> 字段，记录该请求进入 MSHR 的时间。</li>
+<li>在 <strong>PQ (Prefetch Queue)</strong> 中为每个 <strong>prefetch request</strong> 条目同样扩展一个 <strong>16-bit timestamp</strong> 字段，记录该预取请求被生成的时间。</li>
+<li>当一个 cache line 最终 <strong>fill</strong> 回 L1D 时（无论是由 demand miss 还是 prefetch request 触发），通过当前时钟减去存储的 timestamp 来计算 <strong>fetch latency</strong>，结果用 <strong>12-bit</strong> 存储。</li>
+<li>如果计算出的延迟发生溢出（overflow），则将其置零，表示该次填充不用于学习 timely delta。</li>
+</ul>
+</li>
+<li>
+<p><strong>Timely Delta 的学习流程 (Learning Timely Deltas)</strong>:</p>
+<ul>
+<li>该学习过程在两种情况下触发：<ol>
+<li>一个 <strong>demand miss</strong> 填充了 L1D。</li>
+<li>一个由预取带来的 cache line 被 <strong>core demand</strong>（即，如果没有预取器，这里会发生一次 miss）。</li>
+</ol>
+</li>
+<li>对于上述任一情况，系统会获取该次填充的 <strong>IP (Instruction Pointer)</strong>、<strong>虚拟地址 (VA)</strong> 和 <strong>fetch latency</strong>。</li>
+<li>系统查询 <strong>History Table</strong>（一个按 IP 索引的缓存结构），查找该 IP 的所有历史访问记录。</li>
+<li>对于每条历史记录，计算其访问时间戳与“理想预取触发时间”的关系。“理想预取触发时间” = “当前访问的填充完成时间” - “fetch latency”。</li>
+<li>如果某条历史访问的发生时间 <strong>早于或等于</strong> “理想预取触发时间”，那么从该历史地址到当前地址的差值（delta）就被认为是一个 <strong>timely delta</strong>。</li>
+<li><img alt="" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /> <em>Figure 4. Learning timely deltas.</em></li>
+<li>如图所示，当地址 12 被填充时，其 fetch latency 决定了预取必须在 T1 时刻前发出。历史访问地址 2 发生在 T1 之前，因此 delta +10 (12-2) 被识别为 timely delta。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及在整体中的作用</strong></p>
+<ul>
+<li>
+<p><strong>输入</strong>:</p>
+<ul>
+<li><strong>L1D Fill Event</strong>: 包含 IP、虚拟地址 (VA)、fetch latency。</li>
+<li><strong>History Table</strong>: 存储了近期按 IP 分类的访问记录，每条记录包含 IP tag、地址和 timestamp。</li>
+</ul>
+</li>
+<li>
+<p><strong>输出</strong>:</p>
+<ul>
+<li><strong>一组 Timely Deltas</strong>: 针对当前 fill event，识别出的所有能及时覆盖它的历史 delta。</li>
+<li>这些 deltas 被送入 <strong>Table of Deltas</strong> 结构，用于更新其 <strong>coverage counter</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>在 Berti 整体架构中的作用</strong>:</p>
+<ul>
+<li><strong>Accuracy 的基石</strong>: 通过只考虑 <strong>timely</strong> 的 delta，Berti 从根本上过滤掉了那些虽然模式正确但发出太晚、无法掩盖延迟的预取请求，这是其实现 <strong>近90%高准确率</strong> 的关键。</li>
+<li><strong>Coverage 的来源</strong>: 通过统计每个 timely delta 的出现频率（coverage），Berti 能够区分出哪些 delta 是稳定可靠的（高 coverage），并仅使用这些高置信度的 delta 来生成未来的预取请求。</li>
+<li><strong>适应动态环境</strong>: 由于每次 fill 都会重新测量 latency，该机制能自动适应 <strong>variable cache fill latency</strong>（如由 MSHR contention, DRAM bank conflicts 等引起的变化），确保预取的 timeliness 在各种系统负载下都有效。</li>
+</ul>
+</li>
+</ul>
+<p><strong>关键数据结构与参数</strong></p>
+<p><img alt="" src="../images/89d6667fb897e3b9b23adea64286b26a9ecd370b1b3075753ef7ba0dac6e385c.jpg" /> <em>Figure 6. History table and Table of deltas entry format.</em></p>
+<ul>
+<li>
+<p><strong>History Table</strong>:</p>
+<ul>
+<li>组织形式: <strong>8-set, 16-way</strong> 直接映射缓存。</li>
+<li>索引方式: 使用 IP。</li>
+<li>替换策略: <strong>FIFO</strong>。</li>
+<li>每项内容: 7-bit IP tag, 24-bit 地址, 16-bit timestamp。</li>
+</ul>
+</li>
+<li>
+<p><strong>Table of Deltas</strong>:</p>
+<ul>
+<li>组织形式: <strong>16-entry fully-associative</strong> 缓存。</li>
+<li>索引方式: 使用 IP 的哈希值 (10-bit tag)。</li>
+<li>替换策略: <strong>FIFO</strong>。</li>
+<li>每项内容: 包含一个最多 <strong>16</strong> 个 delta 的数组。每个 delta 记录其值 (13-bit)、coverage (4-bit) 和 status (2-bit)。</li>
+<li><strong>Coverage Watermarks</strong>:<ul>
+<li><strong>High-coverage watermark</strong>: <strong>65%</strong> (coverage &gt; 10)，状态设为 <code>L1D_pref</code>。</li>
+<li><strong>Medium-coverage watermark</strong>: <strong>35%</strong> (coverage &gt; 5)，状态设为 <code>L2_pref</code>。</li>
+<li>低于此阈值的 delta 不会触发预取 (<code>No_pref</code>)。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-coverage-based-prefetch-filtering">3. Coverage-Based Prefetch Filtering<a class="headerlink" href="#3-coverage-based-prefetch-filtering" title="Permanent link">&para;</a></h3>
+<p><strong>Coverage-Based Prefetch Filtering 的实现原理与算法流程</strong></p>
+<p>Berti 的核心创新之一是其基于 <strong>coverage</strong>（覆盖率）的预取过滤机制。该机制确保只有那些被证明在历史访问中具有高预测价值的 <strong>local delta</strong> 才会被用于生成预取请求，从而实现了极高的 <strong>prefetch accuracy</strong>（预取准确率）。</p>
+<ul>
+<li>
+<p><strong>Coverage 的定义与计算</strong>:</p>
+<ul>
+<li><strong>Coverage</strong> 被定义为一个特定 <strong>delta</strong> 在所有“及时性学习”（timeliness learning）事件中出现的频率。</li>
+<li>具体计算方式为：<code>coverage = (delta 出现的次数) / (总的学习搜索次数)</code>。</li>
+<li>这个计算是在每个 <strong>Instruction Pointer (IP)</strong> 的上下文中独立进行的，保证了 <strong>locality</strong>（局部性）。</li>
+<li>如论文图4所示，在每次 L1D 填充（无论是因 demand miss 还是 prefetched line 被 demand）后，系统会回溯该 IP 的历史访问记录，找出所有能“及时”预取到当前地址的 <strong>timely deltas</strong>。这些被发现的 deltas 的计数器会递增。</li>
+</ul>
+</li>
+<li>
+<p><strong>Confidence Watermarks 与状态机</strong>:</p>
+<ul>
+<li>Berti 使用一套 <strong>confidence watermarks</strong>（置信度水位线）来决定一个 delta 是否值得信任以及应将其预取到哪一级缓存。</li>
+<li>算法维护一个 <strong>Table of deltas</strong>，其中每个条目包含一个 delta 值、一个 <strong>4-bit coverage counter</strong> 和一个 <strong>2-bit status</strong> 字段。</li>
+<li>流程如下：<ol>
+<li>每次成功的学习搜索（即找到 timely deltas）会使该 IP 对应的主计数器（4-bit）加一。</li>
+<li>同时，本次搜索中发现的每个 timely delta 的内部 coverage 计数器也加一。</li>
+<li>当主计数器溢出（达到16次）时，系统进入决策阶段：<ul>
+<li>对于每个 delta，计算其最终 coverage 值（内部计数器值 / 16）。</li>
+<li>根据预设的水位线设置其 <strong>status</strong>:<ul>
+<li><strong>L1D_pref</strong>: 如果 coverage &gt; <strong>65%</strong> (即计数值 &gt; 10)。</li>
+<li><strong>L2_pref</strong>: 如果 35% &lt; coverage ≤ 65% (即 5 &lt; 计数值 ≤ 10)。</li>
+<li><strong>No_pref</strong>: 如果 coverage ≤ 35% (即计数值 ≤ 5)，不生成预取。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>决策完成后，所有计数器和状态被重置，开始新一轮的学习周期。</li>
+</ol>
+</li>
+<li>此外，在学习初期（warming-up phase），当收集到的 deltas 少于8个时，系统会采用更严格的 <strong>80%</strong> 高水位线以增加置信度。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/89d6667fb897e3b9b23adea64286b26a9ecd370b1b3075753ef7ba0dac6e385c.jpg" /> <em>Figure 6. History table and Table of deltas entry format.</em></p>
+<ul>
+<li><strong>参数设置与硬件实现</strong>:<ul>
+<li><strong>高置信度水位线 (High-coverage watermark)</strong>: <strong>65%</strong>。这是触发 L1D 预取的关键阈值。</li>
+<li><strong>中置信度水位线 (Medium-coverage watermark)</strong>: <strong>35%</strong>。用于触发 L2 预取。</li>
+<li><strong>低置信度水位线 (Low-coverage watermark)</strong>: 实际上被设为与中水位线相同（35%），禁用了仅预取到 LLC 的选项，因为评估显示这没有性能收益。</li>
+<li><strong>计数器精度</strong>: 使用 <strong>4-bit</strong> 计数器，最大计数值为16，这在精度和硬件开销之间取得了良好平衡。</li>
+<li><strong>状态字段</strong>: <strong>2-bit</strong>，足以编码 <code>L1D_pref</code>, <code>L2_pref</code>, <code>No_pref</code> 三种状态。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及在整体架构中的作用</strong></p>
+<ul>
+<li>
+<p><strong>输入</strong>:</p>
+<ul>
+<li><strong>IP (Instruction Pointer)</strong>: 用于索引 <strong>History table</strong> 和 <strong>Table of deltas</strong>，确保所有操作都在正确的上下文中进行。</li>
+<li><strong>Virtual Address (VA)</strong>: 用于计算 delta 和生成预取请求。</li>
+<li><strong>Fetch Latency</strong>: 从 MSHR 或 L1D shadow tag 中获取，是判断一个历史访问是否能产生 <strong>timely delta</strong> 的关键依据。</li>
+<li><strong>L1D MSHR Occupancy</strong>: 在预测阶段，与 delta 的 coverage 一起决定最终的预取目标（L1D 或 L2）。</li>
+</ul>
+</li>
+<li>
+<p><strong>输出</strong>:</p>
+<ul>
+<li><strong>Prefetch Requests</strong>: 仅当 delta 的 <strong>status</strong> 为 <code>L1D_pref</code> 或 <code>L2_pref</code> 时才会生成。请求地址通过 <code>current VA + selected delta</code> 计算得出，并被插入 <strong>Prefetch Queue (PQ)</strong>。</li>
+<li><strong>Cache Fill Level</strong>: 由 delta 的 <strong>status</strong> 和 <strong>MSHR occupancy</strong> 共同决定。例如，即使一个 delta 是 <code>L1D_pref</code>，如果 MSHR 占用率过高（&gt;70%），请求也可能只填充到 L2 以避免拥塞。</li>
+</ul>
+</li>
+<li>
+<p><strong>在整体架构中的作用</strong>:</p>
+<ul>
+<li><strong>Accuracy Guarantor</strong>: 这是 Berti 实现 <strong>~90%</strong> 高准确率的核心。通过严格过滤掉低 coverage 的 deltas，系统几乎只发出有用的预取请求，极大减少了 <strong>cache pollution</strong>（缓存污染）和 <strong>useless traffic</strong>（无用流量）。</li>
+<li><strong>Timeliness Enforcer</strong>: 因为 coverage 的计算本身就基于 <strong>timely deltas</strong>，所以高 coverage 的 deltas 天然具有良好的及时性。</li>
+<li><strong>Resource Orchestrator</strong>: 通过将不同置信度的预取请求导向不同的缓存层级（L1D 或 L2），该机制智能地管理了有限的 L1D 带宽和 MSHR 资源，避免了因过度激进预取而导致的性能下降。</li>
+<li><strong>Energy Efficiency Driver</strong>: 高准确率直接转化为更低的内存层次动态能耗。如图15所示，Berti 相比 IPCP 将内存层次的动态能耗降低了 <strong>33.6%</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/cbd4fe566452727c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg" /> <em>Figure 10. Prefetch accuracy at the L1D. Percentages of useful requests are broken down into timely (gray) and late (black) prefetch requests.</em>
+<img alt="" src="images/15.png" /></p>
+<hr />
+<p><strong>对设计选择的敏感性分析</strong></p>
+<p>论文图21展示了不同水位线配置对性能的影响，验证了所选参数的有效性。</p>
+<p><img alt="" src="../images/4a12a3b3d96dbbf8433945d01658207113105ef3a53fa392a974724ecdaa3778.jpg" /> <em>Figure 21. Normalized speedup with different L1D and L2 confidence watermarks averaged across memory intensive SPEC CPU2017 and GAP benchmarks. Speedup is rounded to two decimal places (1.085 is rounded to 1.09).</em></p>
+<ul>
+<li>选择 <strong>65%</strong> 作为高水位线是一个 <strong>sweet-spot</strong>（最佳平衡点）。过低的水位线会引入噪声，降低准确率；过高的水位线则会过于保守，牺牲 coverage 和性能。</li>
+<li>该机制对参数变化表现出一定的鲁棒性，在一个较宽的水位线范围内都能获得不错的性能，但 <strong>65%/35%</strong> 的组合提供了最高的准确率和性能。</li>
+</ul>
+<h3 id="4-multi-level-prefetch-orchestration">4. Multi-Level Prefetch Orchestration<a class="headerlink" href="#4-multi-level-prefetch-orchestration" title="Permanent link">&para;</a></h3>
+<p>Berti 的 <strong>Multi-Level Prefetch Orchestration</strong> 机制是其实现高精度与高性能平衡的核心，它通过一套基于置信度和资源状态的动态决策系统，智能地将预取请求引导至 L1D、L2 或 LLC，从而避免因盲目填充 L1D 而导致的 <strong>L1D pollution</strong> 和 <strong>bandwidth starvation</strong>。</p>
+<p><strong>核心决策逻辑</strong></p>
+<ul>
+<li>Berti 的决策主要依赖两个关键输入：<ul>
+<li><strong>Delta Coverage</strong>: 每个本地 delta 在历史训练中被验证为“及时”的频率，该指标直接反映了其作为预取依据的<strong>准确性</strong>。</li>
+<li><strong>L1D MSHR Occupancy</strong>: L1D Miss Status Holding Registers 的当前占用率，用于感知 L1D 填充路径的<strong>资源争用压力</strong>。</li>
+</ul>
+</li>
+<li>基于这两个输入，Berti 使用一组可配置的 <strong>watermarks (水位线)</strong> 来决定预取请求的目标缓存层级。</li>
+</ul>
+<p><strong>预取目标层级判定流程</strong></p>
+<ul>
+<li>系统定义了三个覆盖度水位线：<strong>high-coverage watermark</strong>, <strong>medium-coverage watermark</strong>, 和 <strong>low-coverage watermark</strong>。</li>
+<li>具体的判定规则如下：<ul>
+<li><strong>填充至 L1D</strong>: 当一个 delta 的覆盖度 <strong>高于 high-coverage watermark</strong>（论文中设定为 <strong>65%</strong>），并且 <strong>L1D MSHR occupancy 低于 occupancy watermark</strong>（论文中设定为 <strong>70%</strong>）时，生成的预取请求会被允许填充到 L1D。这确保了只有高置信度的请求在资源充裕时才会进入最宝贵的 L1D。</li>
+<li><strong>填充至 L2</strong>: 当一个 delta 的覆盖度 <strong>高于 medium-coverage watermark</strong>（论文中设定为 <strong>35%</strong>）但未达到 high-coverage watermark，或者虽然覆盖度高但 <strong>L1D MSHR occupancy 过高</strong> 时，预取请求只会被填充到 L2。这作为一种折衷方案，既利用了中等置信度的预测，又避免了在 L1D 繁忙时加剧拥塞。</li>
+<li><strong>不进行预取 / 仅填充至 LLC</strong>: 论文明确指出，对于低覆盖度的 delta，即使理论上可以只填充到 LLC，但在实际评估中并未带来性能提升。因此，作者将 <strong>low-coverage watermark 设置为与 medium-coverage watermark 相同（35%）</strong>，有效地禁用了向 LLC 的低置信度预取，进一步控制了不必要的内存流量。</li>
+</ul>
+</li>
+</ul>
+<p><strong>硬件实现与状态管理</strong></p>
+<ul>
+<li>这一决策逻辑在 <strong>Table of deltas</strong> 结构中实现。该表的每个条目为每个 delta 维护一个 <strong>status (2-bit)</strong> 字段，用于记录其当前的预取目标层级。</li>
+<li><img alt="" src="../images/89d6667fb897e3b9b23adea64286b26a9ecd370b1b3075753ef7ba0dac6e385c.jpg" /> <em>Figure 6. History table and Table of deltas entry format.</em></li>
+<li><strong>Status 字段的可能值</strong>:<ul>
+<li><code>L1D_pref</code>: 预取至 L1D。</li>
+<li><code>L2_pref</code>: 预取至 L2。</li>
+<li><code>No_pref</code>: 不发起预取。</li>
+</ul>
+</li>
+<li>在 <strong>Prediction</strong> 阶段，每当发生一次 L1D 访问，Berti 会查询 <strong>Table of deltas</strong>。对于状态为 <code>L1D_pref</code> 或 <code>L2_pref</code> 的 delta，系统会将其与当前访问地址相加，生成预取地址并插入 <strong>Prefetch Queue (PQ)</strong>。后续的缓存子系统会根据该请求的 status 字段决定其最终填充的层级。</li>
+</ul>
+<p><strong>参数设置与效果</strong></p>
+<ul>
+<li>论文通过敏感性分析（Figure 21）验证了所选水位线的有效性，表明 <strong>65%/35%</strong> 的组合在准确性和覆盖率之间取得了最佳平衡。</li>
+<li><img alt="" src="../images/4a12a3b3d96dbbf8433945d01658207113105ef3a53fa392a974724ecdaa3778.jpg" /> <em>Figure 21. Normalized speedup with different L1D and L2 confidence watermarks averaged across memory intensive SPEC CPU2017 and GAP benchmarks. Speedup is rounded to two decimal places (1.085 is rounded to 1.09).</em></li>
+<li>此外，为了在学习初期也能谨慎地进行预取，Berti 引入了 <strong>warm-up</strong> 机制：当收集到的 delta 数量少于 8 个时，会临时将 high-coverage watermark 提高到 <strong>80%</strong>，以要求更高的置信度。</li>
+</ul>
+<p><strong>在整体架构中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>: 来自 <strong>Training</strong> 阶段的、带有覆盖度统计信息的 <strong>timely local deltas</strong>。</li>
+<li><strong>输出</strong>: 根据资源状态和置信度动态调整目标层级的 <strong>prefetch requests</strong>。</li>
+<li><strong>作用</strong>: 该机制是 Berti 实现 <strong>高精度</strong>（约 87.2%）和 <strong>低能耗</strong>（相比 IPCP 降低 33.6% 动态能耗）的关键。它通过精细化的流量控制，将宝贵的 L1D 带宽和存储空间留给最有价值的数据，同时利用 L2 作为次优选择来捕获更多潜在的有用数据，从而在性能、精度和资源开销之间达成了卓越的平衡。</li>
+</ul>
+<h3 id="5-efficient-hardware-implementation">5. Efficient Hardware Implementation<a class="headerlink" href="#5-efficient-hardware-implementation" title="Permanent link">&para;</a></h3>
+<p><strong>硬件实现概览</strong></p>
+<p>Berti 的硬件设计核心在于以极低的 <strong>2.55 KB</strong> 存储开销，高效地学习和应用 <strong>timely local deltas</strong>。其架构主要由两个关键数据结构组成，并通过与 L1D 缓存、MSHR（Miss Status Holding Registers）和 PQ（Prefetch Queue）的交互来完成训练和预测。</p>
+<p><img alt="" src="../images/4687673a72ee43cb3b2eafce7f9b78d9575373cf70b658c43ba276687ce6368a.jpg" /> <em>Figure 5. Berti design overview. Hardware extensions are shown in gray.</em></p>
+<ul>
+<li>
+<p><strong>History Table (历史表)</strong>:</p>
+<ul>
+<li><strong>组织形式</strong>: 一个 <strong>8-set, 16-way</strong> 的缓存结构，采用 <strong>FIFO</strong> 替换策略。</li>
+<li><strong>索引方式</strong>: 使用 <strong>IP (Instruction Pointer)</strong> 进行索引和搜索。</li>
+<li><strong>条目内容 (Entry Format)</strong>:<ul>
+<li><strong>Tag</strong>: IP 的 <strong>7 个最低有效位</strong> (用于匹配)。</li>
+<li><strong>Address</strong>: 目标缓存行地址的 <strong>24 个最低有效位</strong>。</li>
+<li><strong>Timestamp</strong>: <strong>16-bit</strong> 时间戳，记录该访问发生的时间。</li>
+</ul>
+</li>
+<li><strong>写入时机</strong>: 在 <strong>L1D demand miss</strong> 或 <strong>prefetched line 被 demand hit</strong> 时，将当前的 <strong>IP、虚拟地址 (VA) 和时间戳</strong> 写入表中。</li>
+<li><strong>作用</strong>: 为学习 <strong>timely deltas</strong> 提供过去访问的历史记录。</li>
+</ul>
+</li>
+<li>
+<p><strong>Table of Deltas (Delta 表)</strong>:</p>
+<ul>
+<li><strong>组织形式</strong>: 一个 <strong>16-entry</strong> 的 <strong>fully-associative</strong> 缓存，同样采用 <strong>FIFO</strong> 替换策略。</li>
+<li><strong>条目内容 (Entry Format)</strong>:<ul>
+<li><strong>Tag</strong>: 基于 <strong>IP 的哈希值 (10-bit)</strong>。</li>
+<li><strong>Counter</strong>: <strong>4-bit</strong> 计数器，记录针对该 IP 的搜索次数。</li>
+<li><strong>Delta Array</strong>: 包含 <strong>16 个 delta 条目</strong>，每个条目包含：<ul>
+<li><strong>Delta Value</strong>: <strong>13-bit</strong> 的 delta 值。</li>
+<li><strong>Coverage</strong>: <strong>4-bit</strong> 的覆盖率计数器。</li>
+<li><strong>Status</strong>: <strong>2-bit</strong> 状态位，决定预取请求填充到哪一级缓存（<code>L1D_pref</code>, <code>L2_pref</code>, <code>No_pref</code>）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>作用</strong>: 存储和管理每个 IP 对应的高覆盖率 delta，并根据其置信度决定预取的激进程度。</li>
+</ul>
+</li>
+</ul>
+<p><strong>训练流程：学习 Timely Deltas</strong></p>
+<p>训练过程旨在识别出那些能够 <strong>及时</strong> 将数据预取到 L1D 的 delta，并计算它们的覆盖率。</p>
+<ul>
+<li>
+<p><strong>测量 Fetch Latency (获取延迟)</strong>:</p>
+<ul>
+<li><strong>MSHR 扩展</strong>: 在 MSHR 中增加一个 <strong>16-bit 时间戳</strong> 字段，在 demand miss 发生时记录时间。</li>
+<li><strong>PQ 扩展</strong>: 在 PQ 中也增加一个 <strong>16-bit 时间戳</strong> 字段，在预取请求生成时记录时间。</li>
+<li><strong>延迟计算</strong>: 当 L1D 完成填充（fill）时，用当前时间戳减去存储的时间戳，得到 <strong>fetch latency</strong>，并用 <strong>12-bit</strong> 字段存储。如果发生溢出，则丢弃该延迟数据。</li>
+</ul>
+</li>
+<li>
+<p><strong>学习 Timely Deltas</strong>:</p>
+<ul>
+<li><strong>触发时机</strong>: 在 <strong>demand miss fill</strong> 或 <strong>prefetched line 被 demand hit</strong> 时触发。</li>
+<li><strong>搜索历史</strong>: 利用刚计算出的 <strong>fetch latency</strong>，在 <strong>History Table</strong> 中搜索同一 IP 的历史访问记录。</li>
+<li><strong>识别 Timely Access</strong>: 对于当前访问地址 A 和其 fetch latency L，任何在时间 <code>(current_time - L)</code> 之前发生的、由同一 IP 发起的访问 B，都可以作为触发对 A 的及时预取的起点。</li>
+<li><strong>计算 Delta</strong>: Delta = A - B。系统会收集最多 <strong>8 个</strong> 最近的、能产生及时预取的 delta。</li>
+</ul>
+</li>
+<li>
+<p><strong>计算 Delta Coverage (覆盖率)</strong>:</p>
+<ul>
+<li><strong>累加计数</strong>: 将每次搜索得到的 timely delta，在 <strong>Table of Deltas</strong> 中对应的 coverage 计数器上进行累加。</li>
+<li><strong>覆盖率计算</strong>: 当 <strong>4-bit 搜索计数器</strong> 溢出（达到 16 次）时，计算每个 delta 的覆盖率 = (coverage counter / 16)。</li>
+<li><strong>设置状态 (Status)</strong>:<ul>
+<li><strong>高覆盖率 (&gt;65%, 即 coverage &gt; 10)</strong>: 设置状态为 <code>L1D_pref</code>，允许预取到 L1D。</li>
+<li><strong>中等覆盖率 (35%-65%)</strong>: 设置状态为 <code>L2_pref</code>，只预取到 L2。</li>
+<li><strong>低覆盖率 (\&lt;35%)</strong>: 设置状态为 <code>No_pref</code>，不发起预取。</li>
+</ul>
+</li>
+<li><strong>重置与替换</strong>: 状态设置后，计数器和 coverage 数组被重置，开始新一轮学习。对于新 delta 的插入，会优先替换掉状态为 <code>L2_pref_repl</code> (覆盖率\&lt;50%) 或 <code>No_pref</code> 的条目。</li>
+</ul>
+</li>
+</ul>
+<p><strong>预测流程：发起预取请求</strong></p>
+<p>预测阶段利用训练好的 <strong>Table of Deltas</strong> 来指导实际的预取操作。</p>
+<ul>
+<li><strong>查找匹配条目</strong>: 在每次 L1D 访问时，使用当前 <strong>IP</strong> 在 <strong>Table of Deltas</strong> 中进行查找。</li>
+<li><strong>生成预取地址</strong>: 对于查找到的条目，遍历其 <strong>Delta Array</strong>，将所有状态为 <code>L1D_pref</code> 或 <code>L2_pref</code> 的 delta 值加到当前访问的 <strong>虚拟地址 (VA)</strong> 上，生成新的预取目标地址。</li>
+<li><strong>插入 PQ</strong>: 将生成的预取请求（虚拟地址）插入 <strong>Prefetch Queue (PQ)</strong>。</li>
+<li><strong>动态调整填充级别</strong>:<ul>
+<li>对于 <code>L1D_pref</code> 的请求，还需检查 <strong>L1D MSHR occupancy</strong>。只有当占用率低于 <strong>70%</strong> 时，才允许填充到 L1D；否则，降级为只填充到 L2。</li>
+<li><code>L2_pref</code> 的请求则直接填充到 L2。</li>
+</ul>
+</li>
+<li><strong>地址翻译</strong>: 预取请求在 L2 使用 <strong>STLB (Second-level TLB)</strong> 进行虚拟地址到物理地址的翻译。若 STLB miss，则丢弃该预取请求。</li>
+</ul>
+<p><strong>存储开销明细</strong></p>
+<p>Berti 的总存储开销被严格控制在 <strong>2.55 KB</strong>，具体分配如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">结构</th>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">总大小 (Bytes)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>History Table</strong></td>
+<td style="text-align: left;">8 sets * 16 ways * (7 tag + 24 addr + 16 timestamp) bits</td>
+<td style="text-align: left;">752</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Table of Deltas</strong></td>
+<td style="text-align: left;">16 entries * (10 tag + 4 counter + 16*(13 delta + 4 cov + 2 status)) bits</td>
+<td style="text-align: left;">1840</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>总计</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong>2592 (≈ 2.55 KB)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/92c023f5b766e980c7be588e6c1f07838123c1cbad5b89621d965b1c52a79a49.jpg" /> <em>Table I STORAGE OVERHEAD OF BERTI.</em></p>
+<p><strong>在整体系统中的作用</strong></p>
+<p>Berti 作为一个 <strong>L1D prefetcher</strong>，其高效的硬件实现使其能够在处理器的关键路径之外完成复杂的训练逻辑，同时以极低的存储代价提供高精度的预取。</p>
+<ul>
+<li><strong>输入</strong>: 处理器发出的所有 <strong>L1D 访问请求</strong>（包含 <strong>IP</strong> 和 <strong>虚拟地址 VA</strong>），以及来自 <strong>MSHR/PQ</strong> 的 <strong>fill 事件</strong> 和 <strong>latency 信息</strong>。</li>
+<li><strong>输出</strong>: 生成的 <strong>预取请求</strong>（虚拟地址），并注入到 <strong>PQ</strong> 中，最终影响 <strong>L1D/L2/LLC</strong> 的缓存填充行为。</li>
+<li><strong>核心价值</strong>: 通过 <strong>per-IP local context</strong> 和 <strong>timeliness-aware</strong> 的学习机制，Berti 能够在 <strong>不污染 L1D</strong> 的前提下，显著提升预取 <strong>accuracy</strong>（约 87.2%）和 <strong>timeliness</strong>，从而在降低内存层次 <strong>dynamic energy</strong> 消耗的同时，最大化性能收益。</li>
+</ul>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li>仿真平台基于 <strong>ChampSim</strong>，并扩展了 <strong>decoupled front-end</strong> 和详细的地址转换内存层次结构。</li>
+<li>系统配置模仿 <strong>Intel Sunny Cove</strong> 微架构，具体参数见下表。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Core / ROB</strong></td>
+<td style="text-align: left;">4-wide OoO / 256 entries</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L1D Cache</strong></td>
+<td style="text-align: left;">32 KB, 8-way, 64B line, 4-cycle hit latency, 2 read ports</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>L2 Cache</strong></td>
+<td style="text-align: left;">512 KB, 8-way, 64B line, 12-cycle hit latency</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LLC</strong></td>
+<td style="text-align: left;">8 MB, 16-way, 64B line, inclusive</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DRAM</strong></td>
+<td style="text-align: left;">DDR5-6400, 4-channel, detailed timing model</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>工作负载</strong>：使用 <strong>SPEC CPU2017</strong> 和 <strong>GAP</strong> 基准测试套件中的 <strong>memory-intensive traces</strong>（共64个），以及 <strong>CloudSuite</strong>。</li>
+<li><strong>评估指标</strong>：以 <strong>IPC speedup</strong>（相对于 <strong>IP-stride</strong> 基线）、<strong>prefetch accuracy</strong>、<strong>demand MPKI</strong>（每千条指令的缺失数）和 <strong>memory hierarchy dynamic energy</strong> 为主要指标。</li>
+<li><strong>Prefetcher 对比</strong>：<ul>
+<li><strong>L1D-only</strong>: Berti, IPCP (DPC-3 winner), MLOP (DPC-3 3rd place)。</li>
+<li><strong>Multi-level</strong>: 上述 L1D prefetcher 与 <strong>SPP-PPF</strong>、<strong>Bingo</strong> 等 L2 prefetcher 的组合。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/7eed2de8d27d2ab2cbf9bf11cef48a2b103c31a7911f2533c4ae3ebe80f4c7c9.jpg" /> <em>Table II SIMULATION PARAMETERS OF THE BASELINE SYSTEM.</em></p>
+<p><strong>核心结果数据</strong></p>
+<ul>
+<li><strong>性能提升 (Speedup)</strong>：<ul>
+<li>相对于 <strong>IP-stride</strong> 基线，<strong>Berti</strong> 在 SPEC+GAP 上平均提升 <strong>8.5%</strong>。</li>
+<li>相对于当前最先进的 <strong>IPCP</strong>，<strong>Berti</strong> 仍能获得 <strong>3.5%</strong> 的显著性能提升。</li>
+<li>在 <strong>SPEC CPU2017</strong> 上，Berti 平均提升 <strong>11.6%</strong>；在更具挑战性的 <strong>GAP</strong> 套件上，Berti 是唯一能带来正向收益（<strong>+1.9%</strong>）的 L1D prefetcher，而 IPCP 和 MLOP 分别下降 <strong>2.9%</strong> 和 <strong>7.8%</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/d292cd0ecf22d3d0888a54fc7b934a814275e859eb274b9ec2e6c64a1bb327b3.jpg" /> <em>Figure 7. Speedup vs. storage requirements. Speedup is normalized to L1D IP-stride and averaged across memory-intensive SPEC CPU2017 and GAP traces. X+Y denotes prefetcher X at L1D and prefetcher Y at L2.</em>
+<img alt="" src="../images/26a8a8b83a919f217592c906fb9008f2206cc5428ddb2efeb276b02e29ebc624.jpg" /> <em>Figure 8. Speedup of L1D prefetchers compared to a system with L1D IP-stride for memory-intensive SPEC CPU2017 and GAP traces.</em></p>
+<ul>
+<li><strong>准确率 (Accuracy)</strong>：<ul>
+<li><strong>Berti</strong> 的 <strong>prefetch accuracy</strong> 高达 <strong>87.2%</strong>。</li>
+<li>作为对比，<strong>MLOP</strong> 为 <strong>62.4%</strong>，<strong>IPCP</strong> 仅为 <strong>50.6%</strong>。</li>
+<li>几乎所有 Berti 的预取请求都是 <strong>timely</strong>（及时的），而其他 prefetcher 会产生大量 <strong>late</strong>（延迟的）请求。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/cbd4fe566452727c7370b7f67ff00369cb9c21008627878a9d5cce1fd50d71be.jpg" /> <em>Figure 10. Prefetch accuracy at the L1D. Percentages of useful requests are broken down into timely (gray) and late (black) prefetch requests.</em></p>
+<ul>
+<li><strong>覆盖度 (Coverage)</strong>：<ul>
+<li>Berti 能更有效地减少各级缓存的 <strong>demand misses</strong>，尤其是在 <strong>L2</strong> 和 <strong>LLC</strong>。</li>
+<li>在 GAP 工作负载上，Berti 相比 IPCP 将 <strong>LLC demand MPKI</strong> 降低了 <strong>12.4%</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/53c8582eeb0e26a3b2639cda0060bb7bedef2622cf80658ffe1d4e5909a69e82.jpg" /> <em>Figure 11. Prefetch coverage in terms of average L1D, L2, and LLC demand MPKIs for all L1D prefetchers.</em></p>
+<ul>
+<li><strong>能效 (Energy Efficiency)</strong>：<ul>
+<li>得益于其高准确率，<strong>Berti</strong> 显著降低了内存层次结构的动态能耗。</li>
+<li>相比 <strong>IPCP</strong>，<strong>Berti</strong> 将动态能耗降低了 <strong>33.6%</strong>。</li>
+<li>在 SPEC 和 GAP 上，Berti 的能耗开销分别为 <strong>9.0%</strong> 和 <strong>14.3%</strong>，远低于其他 prefetcher。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="images/15c8582eeb0e26a3b2639cda0060bb7bedef2622cf80658ffe1d4e5909a69e82.jpg" /></p>
+<p><strong>消融实验 (Ablation Studies)</strong></p>
+<ul>
+<li><strong>Confidence Watermarks 的影响</strong>：<ul>
+<li>实验探索了不同 <strong>L1D</strong> 和 <strong>L2</strong> 置信度阈值对性能的影响。</li>
+<li>结果表明，论文选择的 <strong>high watermark (65%)</strong> 和 <strong>medium watermark (35%)</strong> 是一个 sweet-spot，在准确率和覆盖率之间取得了最佳平衡。过高或过低的阈值都会损害性能。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/4a12a3b3d96dbbf8433945d01658207113105ef3a53fa392a974724ecdaa3778.jpg" /> <em>Figure 21. Normalized speedup with different L1D and L2 confidence watermarks averaged across memory intensive SPEC CPU2017 and GAP benchmarks. Speedup is rounded to two decimal places (1.085 is rounded to 1.09).</em></p>
+<ul>
+<li><strong>Berti 表大小的敏感性</strong>：<ul>
+<li>将 <strong>Table of deltas</strong> 的大小减少到 1/4 会导致性能严重下降 <strong>12.1%</strong>，说明该表对存储历史 delta 模式至关重要。</li>
+<li>增加表的大小（2x 或 4x）只能带来边际性能增益，证明了原始设计的 <strong>storage efficiency</strong>。</li>
+<li>对于 <strong>CactuBSSN</strong> 这类具有大量交织 IP 的 benchmark，增大表尺寸可以带来显著收益（+22%），这解释了 Berti 在该 benchmark 上的相对劣势。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/bfb45b72321f62154d8853a2de580f24fc0839105ec810edf4a43fc3a60a8226.jpg" /> <em>Figure 22. Speedup vs. size of Berti tables and number of deltas. 0.25× to 4× correspond to one-fourth and four times, respectively.</em></p>
+<ul>
+<li>
+<p><strong>Latency Counter 精度的影响</strong>：</p>
+<ul>
+<li>使用 <strong>4-bit timestamp</strong> 会导致性能明显下降（SPEC: 1.16 -&gt; 1.07, GAP: 1.02 -&gt; 0.98），证明了精确测量 <strong>fetch latency</strong> 对学习 <strong>timely deltas</strong> 的重要性。</li>
+<li>将 counter 从 12-bit 增加到 32-bit 并未带来性能提升，说明 12-bit 已足够。</li>
+</ul>
+</li>
+<li>
+<p><strong>Cross-page Prefetching 的作用</strong>：</p>
+<ul>
+<li>通过禁用跨页预取进行测试，发现性能有所下降（SPEC: 1.16 -&gt; 1.10, GAP: 1.02 -&gt; 1.01）。</li>
+<li>这表明 <strong>cross-page prefetching</strong> 确实有用，但 Berti 学习到的大多数有效 delta 仍位于 <strong>4KB OS page</strong> 边界内。</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

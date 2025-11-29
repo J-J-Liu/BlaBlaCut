@@ -542,9 +542,7 @@ ______________________________________________________________________
 
 *Figure 11: Geometric mean performance of SHADOW configurations on high D-cache miss rate benchmarks from Table 2, normalized to a single-threaded OoO core.*
 
-```
 - **低缓存未命中率工作负载**（如 Dense MM, NN）: 单 OoO 线程通常表现最好，因为增加线程会引入**缓存冲突未命中**，损害 OoO 线程的 ILP。
-```
 
 ![](images/42292afc2ef60f23da1ddbf5c08bc567272f61e1b63461bfe21a6733462abba2.jpg)
 
@@ -557,17 +555,13 @@ ______________________________________________________________________
 
 *Figure 13: Performance of SHADOW with varying degrees of sparsity for an 8 wide CPU over 1 OoO thread.*
 
-```
 - **动态工作分配**: 通过软件工作窃取机制，工作负载能根据线程的即时吞吐能力（IPC）自动重新分配。在低稀疏度下，高 IPC 的 OoO 线程处理更多工作；在高稀疏度下，工作更均匀地分配给所有线程。
-```
 
 ![](images/882fb687091b1b91a70b99910e9fe1f6c57e47ded3245a0ce1cc49633f0007d2.jpg)
 
 *Figure 19: Distribution of work across threads with dynamic work stealing for various degrees of sparsity.*
 
-```
 - **IPC 分析**: `1 OoO + 4 InO` 配置在高稀疏度下维持了最高的总体 IPC，证明了其有效平衡 ILP 和 TLP 的能力。
-```
 
 ![](images/96ef9c06b0f42979bf3890c4f6ed98d44c264234783f0b4192fbf7a19ff1ec47.jpg)
 

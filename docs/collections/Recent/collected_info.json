@@ -45,6 +45,28 @@
             "_source_folder": "atr-out-of-order-register-release-exploiting-atomic-regions"
         },
         {
+            "index": "berti-an-accurate-local-delta-data-prefetcher",
+            "paper_title": "Berti: an Accurate Local-Delta Data Prefetcher",
+            "metadata": {
+                "authors": [
+                    "Agustín Navarro-Torres",
+                    "Biswabandan Panda",
+                    "Jesus Alastruey-Benedé",
+                    "et al."
+                ],
+                "affiliations": [
+                    "Universidad de Zaragoza",
+                    "Indian Institute of Technology Bombay",
+                    "University of Murcia"
+                ],
+                "venue": "10.1109/MICRO56248.2022.00072",
+                "year": 2022,
+                "doi": null
+            },
+            "description": "论文提出Berti，一种基于本地及时性delta的L1数据缓存预取器。其核心创新在于为每个指令指针(IP)学习高覆盖率的及时性本地delta，而非使用全局delta，从而显著提升准确率。实验表明，Berti仅用2.55KB存储开销，在SPEC CPU2017和GAP负载上相比IP-stride和SOTA预取器IPCP分别提升性能8.5%和3.5%，并减少内存层次动态能耗33.6%。",
+            "_source_folder": "berti-an-accurate-local-delta-data-prefetcher"
+        },
+        {
             "index": "bolt-a-practical-binary-optimizer-for-data-centers-and-beyond",
             "paper_title": "BOLT: A Practical Binary Optimizer for Data Centers and Beyond",
             "metadata": {
@@ -236,6 +258,28 @@
             "_source_folder": "profile-guided-temporal-prefetching"
         },
         {
+            "index": "pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning",
+            "paper_title": "Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning",
+            "metadata": {
+                "authors": [
+                    "Rahul Bera",
+                    "Konstantinos Kanellopoulos",
+                    "Anant V. Nori",
+                    "et al."
+                ],
+                "affiliations": [
+                    "ETH Zürich",
+                    "Processor Architecture Research Labs, Intel Labs",
+                    "TU Delft"
+                ],
+                "venue": "MICRO",
+                "year": 2021,
+                "doi": "10.1145/3466752.3480114"
+            },
+            "description": "提出Pythia，一个基于在线强化学习的可定制硬件预取框架，能同时利用多种程序特征和系统级反馈（如内存带宽）进行决策。相比MLOP和Bingo，在单核、12核及带宽受限配置下性能分别提升最高3.8%、9.6%和20.2%，且仅增加1.03%面积开销。",
+            "_source_folder": "pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning"
+        },
+        {
             "index": "rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding",
             "paper_title": "RICH Prefetcher: Storing Rich Information in Memory to Trade Capacity and Bandwidth for Latency Hiding",
             "metadata": {
@@ -367,8 +411,8 @@
             "_source_folder": "tip-time-proportional-instruction-profiling"
         },
         {
-            "index": "titan-i-an-open-source-high-performance-risc-v-vector-core",
-            "paper_title": "Titan-I: An Open-Source, High Performance RISC-V Vector Core",
+            "index": "titan-l-an-open-source-high-performance-risc-v-vector-core",
+            "paper_title": "Titan-l: An Open-Source, High Performance RISC-V Vector Core",
             "metadata": {
                 "authors": [
                     "Jiuyang Liu",
@@ -386,7 +430,7 @@
                 "year": 2025,
                 "doi": "10.1145/3725843.3756059"
             },
-            "description": "提出Titan-I (T1)，一个开源、高性能的乱序RISC-V向量核，通过粗粒度布局求解器、全数据通路置换单元和掩码寄存器缓存解决扩展VLEN/DLEN时的布线瓶颈。结合细粒度链接、提交即发射等技术优化ILP。在密码学 workload 上比Nvidia 3090/5090快2.41x/1.85x，在HPC上比HiSilicon KP920快4.59x（4倍数据通路），面积仅为其19%。",
+            "description": "论文提出了Titan-I (T1)，一个开源、高性能、乱序执行的RISC-V向量处理器。其通过粗粒度布局规划器、全数据通路置换单元和掩码寄存器缓存解决扩展性问题，并采用细粒度链接、提交即发射等技术优化ILP。在密码学 workload 上，T1性能比Nvidia 3090高2.41倍，面积仅为其40%；在HPC workload上，以19%的面积实现与HiSilicon TaiShan V120相当的性能。",
             "_source_folder": "titan-i-an-open-source-high-performance-risc-v-vector-core"
         },
         {

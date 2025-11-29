@@ -1,0 +1,959 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Tolerate It if You Cannot Reduce It: Handling Latency in Tiered Memory 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tolerate It if You Cannot Reduce It: Handling Latency in Tiered Memory 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-current-tiering-systems-are-trying-to-optimize-load-time-3-by-demoting-1-and-promoting-2-between-the-nodes-however-not-each-load-equally-created-there-is-an-opportunity-to-3-prefetch-into-the-cache-before-accessing-to-hide-the-access-latency-of-slower-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Current tiering systems are trying to optimize load time (3) by demoting (1) and promoting (2) between the nodes. However not each load equally created, there is an opportunity to (3) prefetch into the cache before accessing to hide the access latency of slower tier.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-when-the-number-of-threads-increases-the-prefetching-effectiveness-of-cxl-decreases-while-dram-being-constant-and-for-high-number-of-threads-prefetching-hurts-the-performance-on-cxl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: When the number of threads increases the prefetching effectiveness of CXL decreases while DRAM being constant, and for high number of threads prefetching hurts the performance on CXL.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-under-high-load-prefetching-causes-latency-to-increase-dramatically-at-lower-loads-compared-to-when-prefetching-is-disabled-resulting-in-up-to-63-higher-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Under high load, prefetching causes latency to increase dramatically at lower loads compared to when prefetching is disabled, resulting in up to 6.3× higher latency.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-dram-and-cxl-have-different-optimal-prefetch-distances-for-example-in-the-scan-microbenchmark-dram-performs-best-with-a-prefetch-distance-of-4-while-cxl-requires-a-longer-distance-of-7-due-to-its-higher-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: DRAM and CXL have different optimal prefetch distances. For example, in the scan microbenchmark, DRAM performs best with a prefetch distance of 4, while CXL requires a longer distance of 7 due to its higher latency.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-linden-consists-of-a-compiler-and-runtime-compiler-takes-a-program-and-finds-the-prefetchable-regions-in-the-program-runtime-is-responsible-for-detecting-hotness-hardware-monitoring-and-compiler-hints-to-enforce-different-policies-runtime-able-to-migrate-pages-between-the-tiers-enabledisable-hardware-prefetchers-and-change-the-software-behavior-in-terms-prefetchability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Linden consists of a compiler and runtime. Compiler takes a program and finds the prefetchable regions in the program. Runtime is responsible for detecting hotness, hardware monitoring, and compiler hints to enforce different policies. Runtime able to migrate pages between the tiers, enable/disable hardware prefetchers and change the software behavior in terms prefetchability.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-an-example-of-a-prefetchability-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: An example of a prefetchability table.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#listing-1-algorithm-for-policy-enforcement-in-the-linden-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Listing 1: Algorithm for policy enforcement in the Linden runtime.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory">Tolerate It if You Cannot Reduce It: Handling Latency in Tiered Memory 图表详解<a class="headerlink" href="#tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-current-tiering-systems-are-trying-to-optimize-load-time-3-by-demoting-1-and-promoting-2-between-the-nodes-however-not-each-load-equally-created-there-is-an-opportunity-to-3-prefetch-into-the-cache-before-accessing-to-hide-the-access-latency-of-slower-tier">Figure 1: Current tiering systems are trying to optimize load time (3) by demoting (1) and promoting (2) between the nodes. However not each load equally created, there is an opportunity to (3) prefetch into the cache before accessing to hide the access latency of slower tier.<a class="headerlink" href="#figure-1-current-tiering-systems-are-trying-to-optimize-load-time-3-by-demoting-1-and-promoting-2-between-the-nodes-however-not-each-load-equally-created-there-is-an-opportunity-to-3-prefetch-into-the-cache-before-accessing-to-hide-the-access-latency-of-slower-tier" title="Permanent link">&para;</a></h3>
+<p><img alt="7ca1b49a1b7f9b49b02dfd4b841dc7727bb483655b909262fd3dfe732e8d9a1e.jpg" src="../images/7ca1b49a1b7f9b49b02dfd4b841dc7727bb483655b909262fd3dfe732e8d9a1e.jpg" /></p>
+<ul>
+<li>图片展示了当前 <strong>tiered memory</strong> 系统的核心操作流程，包含三个关键步骤：<strong>demote</strong>、<strong>promote</strong> 和 <strong>load/prefetch</strong>。</li>
+<li><strong>Fast Tier</strong> 与 <strong>Slow Tier</strong> 分别代表高性能与高容量但低带宽的内存层级，如 DRAM 与 CXL 内存。</li>
+<li>步骤① <strong>demote</strong>：将访问频率低（cold）的数据页从 Fast Tier 移动到 Slow Tier，释放高速资源。</li>
+<li>步骤② <strong>promote</strong>：将访问频繁（hot）的数据页从 Slow Tier 提升至 Fast Tier，提升局部性。</li>
+<li>步骤③ <strong>load / prefetch</strong>：CPU Cache 从任一内存层级加载数据；图中特别指出，<strong>prefetch</strong> 可在实际 load 前预取数据，以隐藏 Slow Tier 的高延迟。</li>
+<li>图注强调：并非所有 load 都同等重要，存在通过 <strong>prefetch</strong> 隐藏慢速层级访问延迟的机会，这正是本文提出“容忍延迟”策略的视觉基础。</li>
+<li>该图直观揭示了当前系统仅依赖迁移（reduce latency）的局限，而未充分利用 <strong>prefetching</strong> 来容忍延迟，为论文核心论点提供可视化支撑。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤编号</th>
+<th>操作名称</th>
+<th>方向</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td>demote</td>
+<td>Fast → Slow</td>
+<td>释放快存空间，优化资源分配</td>
+</tr>
+<tr>
+<td>②</td>
+<td>promote</td>
+<td>Slow → Fast</td>
+<td>提升热点数据访问速度</td>
+</tr>
+<tr>
+<td>③</td>
+<td>load/prefetch</td>
+<td>Tier → CPU Cache</td>
+<td>实际加载或预取，隐藏访问延迟</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键术语保留英文：<strong>Fast Tier</strong>, <strong>Slow Tier</strong>, <strong>CPU Cache</strong>, <strong>demote</strong>, <strong>promote</strong>, <strong>prefetch</strong>。</li>
+<li>核心洞察：<strong>prefetch</strong> 是隐藏慢速层级延迟的关键手段，应与迁移策略协同使用，而非被忽略。</li>
+</ul>
+<h3 id="figure-2-when-the-number-of-threads-increases-the-prefetching-effectiveness-of-cxl-decreases-while-dram-being-constant-and-for-high-number-of-threads-prefetching-hurts-the-performance-on-cxl">Figure 2: When the number of threads increases the prefetching effectiveness of CXL decreases while DRAM being constant, and for high number of threads prefetching hurts the performance on CXL.<a class="headerlink" href="#figure-2-when-the-number-of-threads-increases-the-prefetching-effectiveness-of-cxl-decreases-while-dram-being-constant-and-for-high-number-of-threads-prefetching-hurts-the-performance-on-cxl" title="Permanent link">&para;</a></h3>
+<p><img alt="e80a467b48594078b5b1c12b1d80f001962739efceeed5f8a319375dd13ceb5a.jpg" src="../images/e80a467b48594078b5b1c12b1d80f001962739efceeed5f8a319375dd13ceb5a.jpg" /></p>
+<ul>
+<li>图片展示了两个应用（BC with twitter graph 和 XSBench）在不同线程数下，启用硬件预取（prefetching）时相对于禁用预取的性能比值（Speedup），对比了 <strong>DRAM</strong> 与 <strong>CXL</strong> 两种内存配置。</li>
+<li>性能比值以 1.0 为基准：高于 1.0 表示预取带来加速，低于 1.0 表示预取导致性能下降。</li>
+<li>在 <strong>DRAM</strong> 配置下，无论线程数如何增加，性能比值基本稳定在 1.0–1.1 之间，说明预取对 DRAM 的影响较小且稳定。</li>
+<li>在 <strong>CXL</strong> 配置下，随着线程数增加，性能比值显著下降：<ul>
+<li>当线程数较低（如 5–10）时，CXL 上预取仍带来轻微加速（比值 &gt;1.0）。</li>
+<li>当线程数超过 15 后，性能比值持续下滑，至 25 线程时已降至约 0.75–0.85，表明预取开始<strong>损害性能</strong>。</li>
+</ul>
+</li>
+<li>数据趋势表明：CXL 的高延迟虽在低并发时可被预取掩盖，但其<strong>带宽受限</strong>特性在多线程高负载下引发资源争用，导致预取请求加剧链路拥塞，最终拉低整体性能。</li>
+<li>对比两图可见，XSBench 的性能衰减略缓于 BC，但整体趋势一致，验证了该现象在不同工作负载下的普适性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用名称</th>
+<th>内存类型</th>
+<th>线程数 5</th>
+<th>线程数 25</th>
+<th>趋势描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BC with twitter</td>
+<td>DRAM</td>
+<td>~1.1</td>
+<td>~1.1</td>
+<td>基本恒定</td>
+</tr>
+<tr>
+<td></td>
+<td>CXL</td>
+<td>~1.1</td>
+<td>~0.75</td>
+<td>显著下降，性能受损</td>
+</tr>
+<tr>
+<td>XSBench</td>
+<td>DRAM</td>
+<td>~1.1</td>
+<td>~1.1</td>
+<td>基本恒定</td>
+</tr>
+<tr>
+<td></td>
+<td>CXL</td>
+<td>~1.1</td>
+<td>~0.85</td>
+<td>下降，但衰减较缓</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>核心结论：在 CXL 内存系统中，<strong>硬件预取的有效性随线程数增加而急剧降低</strong>，高并发场景下应动态关闭或限制预取，以避免因带宽争用导致的性能退化。</li>
+</ul>
+<h3 id="figure-3-under-high-load-prefetching-causes-latency-to-increase-dramatically-at-lower-loads-compared-to-when-prefetching-is-disabled-resulting-in-up-to-63-higher-latency">Figure 3: Under high load, prefetching causes latency to increase dramatically at lower loads compared to when prefetching is disabled, resulting in up to 6.3× higher latency.<a class="headerlink" href="#figure-3-under-high-load-prefetching-causes-latency-to-increase-dramatically-at-lower-loads-compared-to-when-prefetching-is-disabled-resulting-in-up-to-63-higher-latency" title="Permanent link">&para;</a></h3>
+<p><img alt="82e82afcd67dcb0186eb4c930aea9f218f378027d44fe0d2df88d72d5abd4c62.jpg" src="../images/82e82afcd67dcb0186eb4c930aea9f218f378027d44fe0d2df88d72d5abd4c62.jpg" /></p>
+<ul>
+<li>图表标题为“Loaded latency on memory tiers”，横轴为“Load”，纵轴为“Latency (ns)”，展示在不同负载下启用与禁用预取（Prefetch）对内存延迟的影响。</li>
+<li><strong>红色实线带十字标记</strong>代表“Prefetch enabled”，<strong>绿色虚线带叉号标记</strong>代表“Prefetch disabled”，用于对比两种状态下的延迟表现。</li>
+<li>在低负载区间（Load 0–70），两条曲线基本重合，延迟稳定在约200 ns，表明此时预取未引入额外开销。</li>
+<li>当负载超过70后，启用预取的延迟急剧上升，在Load=95附近达到峰值约1500 ns，而禁用预取仍维持在约300 ns。</li>
+<li>根据图注，预取在高负载下导致延迟最高可达禁用时的<strong>6.3倍</strong>，凸显其在CXL等带宽受限系统中的潜在危害。</li>
+<li>数据趋势显示：预取在轻载时无害甚至有益，但在重载时因争抢带宽引发严重延迟恶化，尤其在CXL这类低带宽内存层级中更为显著。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Load Range</th>
+<th>Prefetch Enabled Latency (ns)</th>
+<th>Prefetch Disabled Latency (ns)</th>
+<th>Performance Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–70</td>
+<td>~200</td>
+<td>~200</td>
+<td>无明显影响</td>
+</tr>
+<tr>
+<td>70–95</td>
+<td>200 → 1500</td>
+<td>~300</td>
+<td>延迟激增，达6.3×</td>
+</tr>
+<tr>
+<td>&gt;95</td>
+<td>下降但仍高于禁用状态</td>
+<td>稳定略升</td>
+<td>持续性能劣化</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图支撑论文核心论点：在tiered memory系统中，仅依赖预取可能适得其反，需结合运行时监控与策略调控以避免带宽争用。</li>
+</ul>
+<h3 id="figure-4-dram-and-cxl-have-different-optimal-prefetch-distances-for-example-in-the-scan-microbenchmark-dram-performs-best-with-a-prefetch-distance-of-4-while-cxl-requires-a-longer-distance-of-7-due-to-its-higher-latency">Figure 4: DRAM and CXL have different optimal prefetch distances. For example, in the scan microbenchmark, DRAM performs best with a prefetch distance of 4, while CXL requires a longer distance of 7 due to its higher latency.<a class="headerlink" href="#figure-4-dram-and-cxl-have-different-optimal-prefetch-distances-for-example-in-the-scan-microbenchmark-dram-performs-best-with-a-prefetch-distance-of-4-while-cxl-requires-a-longer-distance-of-7-due-to-its-higher-latency" title="Permanent link">&para;</a></h3>
+<p><img alt="ae1bb199e2a6c62bf74c0e61f6f7a3b45062625cd7e1f5a9eb6485944eef2587.jpg" src="../images/ae1bb199e2a6c62bf74c0e61f6f7a3b45062625cd7e1f5a9eb6485944eef2587.jpg" /></p>
+<ul>
+<li>图表展示了在 <strong>scan microbenchmark</strong> 中，<strong>DRAM</strong> 与 <strong>CXL</strong> 内存的完成时间（Time to completion）随 <strong>prefetch distance</strong> 变化的趋势。</li>
+<li><strong>DRAM</strong>（红色实线+十字标记）在 prefetch distance = 4 时达到最低完成时间（约 1100 ms），之后趋于平稳，表明其最优预取距离为 <strong>4</strong>。</li>
+<li><strong>CXL</strong>（绿色虚线+叉号标记）在 prefetch distance = 7 时达到最低完成时间（约 1100 ms），在此之前下降明显，之后略有回升，表明其最优预取距离为 <strong>7</strong>。</li>
+<li>两者在 prefetch distance 较小时（如 1–3）性能差异显著：CXL 完成时间远高于 DRAM，说明高延迟内存更依赖提前预取。</li>
+<li>当 prefetch distance 超过最优值后，两者性能均轻微上升，反映“预取过早”导致缓存污染或无效预取。</li>
+<li>数据对比清晰揭示：<strong>CXL 因更高访问延迟，需更大预取距离才能有效隐藏延迟</strong>，而 DRAM 延迟低，较小距离即可满足。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetch Distance</th>
+<th>DRAM Completion Time (ms)</th>
+<th>CXL Completion Time (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>~1300</td>
+<td>~1300</td>
+</tr>
+<tr>
+<td>2</td>
+<td>~1150</td>
+<td>~1200</td>
+</tr>
+<tr>
+<td>3</td>
+<td>~1110</td>
+<td>~1190</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>~1100 (optimal)</strong></td>
+<td>~1160</td>
+</tr>
+<tr>
+<td>5</td>
+<td>~1100</td>
+<td>~1140</td>
+</tr>
+<tr>
+<td>6</td>
+<td>~1100</td>
+<td>~1120</td>
+</tr>
+<tr>
+<td>7</td>
+<td>~1100</td>
+<td><strong>~1100 (optimal)</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td>~1100</td>
+<td>~1110</td>
+</tr>
+<tr>
+<td>9</td>
+<td>~1100</td>
+<td>~1105</td>
+</tr>
+<tr>
+<td>10</td>
+<td>~1100</td>
+<td>~1105</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>预取距离必须根据内存层级特性动态调整</strong>，否则无法最大化性能。该图支撑论文核心观点——<strong>tiered memory 系统中，软件预取需感知层级延迟差异</strong>。</li>
+</ul>
+<h3 id="figure-5-linden-consists-of-a-compiler-and-runtime-compiler-takes-a-program-and-finds-the-prefetchable-regions-in-the-program-runtime-is-responsible-for-detecting-hotness-hardware-monitoring-and-compiler-hints-to-enforce-different-policies-runtime-able-to-migrate-pages-between-the-tiers-enabledisable-hardware-prefetchers-and-change-the-software-behavior-in-terms-prefetchability">Figure 5: Linden consists of a compiler and runtime. Compiler takes a program and finds the prefetchable regions in the program. Runtime is responsible for detecting hotness, hardware monitoring, and compiler hints to enforce different policies. Runtime able to migrate pages between the tiers, enable/disable hardware prefetchers and change the software behavior in terms prefetchability.<a class="headerlink" href="#figure-5-linden-consists-of-a-compiler-and-runtime-compiler-takes-a-program-and-finds-the-prefetchable-regions-in-the-program-runtime-is-responsible-for-detecting-hotness-hardware-monitoring-and-compiler-hints-to-enforce-different-policies-runtime-able-to-migrate-pages-between-the-tiers-enabledisable-hardware-prefetchers-and-change-the-software-behavior-in-terms-prefetchability" title="Permanent link">&para;</a></h3>
+<p><img alt="3809248474e6c7ccbbedb62aa62164adcbf81725375e6f86f4075678f2e15501.jpg" src="../images/3809248474e6c7ccbbedb62aa62164adcbf81725375e6f86f4075678f2e15501.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Linden</strong> 系统的架构，分为 <strong>Linden Compiler</strong> 和 <strong>Linden Runtime</strong> 两大模块，旨在协同优化 tiered memory 中的数据访问延迟。</li>
+<li><strong>Linden Compiler</strong> 模块：<ul>
+<li>输入为原始应用程序（App）。</li>
+<li>通过 <strong>Program Analyzer</strong> 与 <strong>Backend</strong> 组合分析程序，识别出可预取的内存区域（prefetchable regions）。</li>
+<li>输出为经过插桩的程序（Instrumented App），该程序在运行时能向 runtime 提供关键信息，如线程 ID、内存区域标识符和访问模式类型。</li>
+</ul>
+</li>
+<li><strong>Linden Runtime</strong> 模块：<ul>
+<li>包含三个核心部分：<strong>Metrics</strong>、<strong>Policy Enforcer</strong> 和 <strong>Mechanisms</strong>。</li>
+<li><strong>Metrics</strong> 收集三类数据：<ul>
+<li><strong>Hotness</strong>：用于判断页面访问频率。</li>
+<li><strong>Hardware Monitoring</strong>：监控硬件性能计数器，如 L2 硬件预取命中率和无用预取数量。</li>
+<li><strong>Compiler Hints</strong>：接收来自编译器插桩代码的提示，用于构建 prefetchability 表。</li>
+</ul>
+</li>
+<li><strong>Policy Enforcer</strong> 是决策中心，根据 Metrics 数据动态调整策略，目标是 <strong>Reduce</strong>（减少延迟）和 <strong>Tolerate</strong>（容忍延迟）。</li>
+<li><strong>Mechanisms</strong> 执行具体操作：<ul>
+<li><strong>Page Migration</strong>：在不同内存层级间迁移页面，提升局部性。</li>
+<li><strong>Hardware Adaptation</strong>：通过 MSR 寄存器控制硬件预取器的启用/禁用，避免带宽争用。</li>
+<li><strong>Software Adaptation</strong>：动态调整软件预取指令的距离或插入新指令，以适应当前内存层级的延迟特性。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Linden Compiler</strong></td>
+<td>分析源码，识别 prefetchable regions，并生成插桩后的二进制文件。</td>
+</tr>
+<tr>
+<td><strong>Program Analyzer + Backend</strong></td>
+<td>使用编译器 passes 或机器学习等技术检测访问模式。</td>
+</tr>
+<tr>
+<td><strong>Instrumented App</strong></td>
+<td>运行时向 runtime 报告内存区域的访问特征。</td>
+</tr>
+<tr>
+<td><strong>Metrics</strong></td>
+<td>收集 hotness、硬件状态、编译器提示，作为策略决策依据。</td>
+</tr>
+<tr>
+<td><strong>Policy Enforcer</strong></td>
+<td>根据当前系统状态，决定是否迁移页面、启用预取器或调整预取距离。</td>
+</tr>
+<tr>
+<td><strong>Page Migration</strong></td>
+<td>将热数据迁移到快速层级，冷数据迁移到慢速层级。</td>
+</tr>
+<tr>
+<td><strong>Hardware Adaptation</strong></td>
+<td>动态开关硬件预取器，防止在 CXL 层级因带宽不足导致性能下降。</td>
+</tr>
+<tr>
+<td><strong>Software Adaptation</strong></td>
+<td>调整软件预取指令的时间点（prefetch distance），确保 timeliness。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键设计思想是：当无法通过迁移减少延迟时，就利用预取来容忍延迟。例如，对于热点且可预测的区域，即使将其放在慢速 CXL 层级，也可通过预取隐藏其高延迟，从而节省昂贵的 DRAM 空间。</li>
+<li>系统强调 <strong>动态适应性</strong>：随着页面在不同层级间迁移，runtime 会实时更新预取距离，确保预取指令始终在最优时机发出。</li>
+<li>整体架构体现了 <strong>编译期分析</strong> 与 <strong>运行时监控</strong> 的紧密结合，使系统能针对不同应用和负载做出细粒度优化。</li>
+</ul>
+<h3 id="table-1-an-example-of-a-prefetchability-table">Table 1: An example of a prefetchability table.<a class="headerlink" href="#table-1-an-example-of-a-prefetchability-table" title="Permanent link">&para;</a></h3>
+<p><img alt="05dde22738dbf5f005fff77c457cc574ca7db2c2bee35b687336c9ac65234763.jpg" src="../images/05dde22738dbf5f005fff77c457cc574ca7db2c2bee35b687336c9ac65234763.jpg" /></p>
+<ul>
+<li>该图片展示的是 <strong>Table 1</strong>，标题为“An example of a prefetchability table”，用于说明 <strong>Linden 系统</strong>中如何记录和管理内存区域的预取能力。</li>
+<li>表格包含六列：<strong>Thread</strong>、<strong>region</strong>、<strong>ratio</strong>、<strong>type</strong>、<strong>freshness</strong> 和 <strong>target</strong>，分别描述线程、内存区域、预取潜力比率、访问模式类型、数据新鲜度及目标预取指令。</li>
+<li>表格内容以三行数据为例，对应三个线程（T₀, T₁, T₂）对不同内存区域（A, B）的访问行为：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Thread</th>
+<th>region</th>
+<th>ratio</th>
+<th>type</th>
+<th>freshness</th>
+<th>target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T₀</td>
+<td>A</td>
+<td>0.9</td>
+<td>Sequential</td>
+<td>200</td>
+<td>l₁, d₁</td>
+</tr>
+<tr>
+<td>T₁</td>
+<td>A</td>
+<td>0.05</td>
+<td>None</td>
+<td>1</td>
+<td>None</td>
+</tr>
+<tr>
+<td>T₂</td>
+<td>B</td>
+<td>0.7</td>
+<td>Chase</td>
+<td>50</td>
+<td>l₂, d₂</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>T₀</strong> 对区域 A 执行顺序访问，具有高 <strong>prefetchability ratio (0.9)</strong>，表明其访问模式高度可预测，适合预取；目标为 <strong>l₁, d₁</strong>，表示预取地址与距离。</li>
+<li><strong>T₁</strong> 同样访问区域 A，但访问模式为 <strong>None</strong>，<strong>ratio 仅 0.05</strong>，说明其随机或不可预测，预取无效；目标为空。</li>
+<li><strong>T₂</strong> 访问区域 B，采用指针追逐（Chase）模式，<strong>ratio 为 0.7</strong>，虽非顺序但仍具一定可预测性，需软件预取支持；目标为 <strong>l₂, d₂</strong>。</li>
+<li><strong>freshness</strong> 列反映该区域信息更新后的时长，数值越大表示越“陈旧”，影响运行时策略决策。</li>
+<li>此表是 <strong>Linden runtime</strong> 的核心数据结构之一，用于动态调整预取策略，实现“Reduce”与“Tolerate”双目标。</li>
+</ul>
+<h3 id="listing-1-algorithm-for-policy-enforcement-in-the-linden-runtime">Listing 1: Algorithm for policy enforcement in the Linden runtime.<a class="headerlink" href="#listing-1-algorithm-for-policy-enforcement-in-the-linden-runtime" title="Permanent link">&para;</a></h3>
+<p><img alt="4950cea33d775343cb93b18962b015f4b21456804391e0fe6b9d3468dafd7f78.jpg" src="../images/4950cea33d775343cb93b18962b015f4b21456804391e0fe6b9d3468dafd7f78.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Listing 1</strong>，即 <strong>Linden runtime</strong> 中用于策略执行的算法伪代码，核心目标是动态协调“减少延迟”与“容忍延迟”两种机制。</li>
+<li>算法首先收集三类关键指标：<strong>hotness</strong>（页面热度）、<strong>hw_info</strong>（硬件状态，如预取器效率、带宽争用）、<strong>sw_info</strong>（软件预取信息）。</li>
+<li>执行流程分为两个主要阶段：<ul>
+<li><strong>Reduce 阶段</strong>：调用 <code>reduce(state, metrics.hotness, metrics.hw_info)</code>，基于热度和硬件状态进行页面迁移，提升数据局部性。</li>
+<li><strong>Tolerate 阶段</strong>：根据硬件争用情况决定如何调整预取行为。<ul>
+<li>若硬件争用低于阈值（<code>metrics.hw_info &lt; contention_threshold</code>），则启用更激进的软件预取（<code>adapt_sw(state, RELAXED)</code>），最大化隐藏延迟的机会。</li>
+<li>否则，为避免性能退化，禁用或限制硬件预取（<code>adapt_hw(state)</code>），并采用保守型软件预取（<code>adapt_sw(state, CONSERVATIVE)</code>）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>行号</th>
+<th>代码片段</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>metrics = [hotness, hw_info, sw_info]</code></td>
+<td>初始化监控指标集合</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code># Reduce</code></td>
+<td>标记进入“减少延迟”阶段</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>reduce(state, metrics.hotness, metrics.hw_info)</code></td>
+<td>执行页面迁移等操作以优化局部性</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code># Check for any contention</code></td>
+<td>检查是否存在硬件资源争用</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>if (metrics.hw_info &lt; contention_threshold):</code></td>
+<td>判断是否低争用环境</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>tolerate(state, metrics.sw_info)</code></td>
+<td>在低争用下启动容忍策略</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code># Adapt software after tolerating if needed</code></td>
+<td>可选调整软件预取行为</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>adapt_sw(state, RELAXED)</code></td>
+<td>设置软件预取为宽松模式（提前量更大）</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>else:</code></td>
+<td>进入高争用分支</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code># Adapt hardware to avoid perf degradation</code></td>
+<td>调整硬件预取以防止性能下降</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>adapt_hw(state)</code></td>
+<td>关闭或降级硬件预取器</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>adapt_sw(state, CONSERVATIVE)</code></td>
+<td>设置软件预取为保守模式（提前量更小）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该算法体现了 <strong>Linden</strong> 的核心设计理念：<strong>不盲目依赖单一策略</strong>，而是根据实时系统状态（尤其是硬件争用）在“减少”与“容忍”之间动态切换。</li>
+<li><strong>RELAXED</strong> 和 <strong>CONSERVATIVE</strong> 是预取行为的两种模式，分别对应高/低系统负载下的不同激进程度，确保在CXL等带宽受限场景下不会因过度预取引发性能恶化。</li>
+<li>此策略执行逻辑是 <strong>Linden runtime</strong> 实现智能内存管理的关键组件，支撑其在多层内存架构中实现高效延迟控制。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+    
+  </body>
+</html>

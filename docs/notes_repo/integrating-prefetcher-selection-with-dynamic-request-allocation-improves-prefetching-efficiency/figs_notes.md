@@ -6,7 +6,7 @@
 
 - 图片展示了在相同复合预取器（Composite Prefetchers）配置下，**有无动态需求请求分配（DDRA）机制**对预取器表缺失（Prefetcher Table Misses）的影响对比。
 - 横轴为两个基准测试集：**SPEC CPU2006** 和 **SPEC CPU2017**，纵轴单位为“千次”（Thousand），表示预取器表缺失的总量。
-- 蓝色柱状图代表**未采用 DDRA 的传统方案（prior works）**，橙色柱状图代表\*\*采用 Alecto 框架（即启用 DDRA）\*\*的方案。
+- 蓝色柱状图代表**未采用 DDRA 的传统方案（prior works）**，橙色柱状图代表**采用 Alecto 框架（即启用 DDRA）**的方案。
 - 数据表明，在两个测试集上，Alecto 均显著降低预取器表缺失：
     - **SPEC CPU2006**：传统方案约 350 千次缺失，Alecto 约 110 千次，降幅达 **68.6%**。
     - **SPEC CPU2017**：传统方案约 350 千次缺失，Alecto 约 100 千次，降幅达 **71.4%**。
@@ -354,10 +354,10 @@
 
 ![46c6baff03cb5eedbb4223203e7d566f547265749ddc080c1c955d12815f83bf.jpg](images/46c6baff03cb5eedbb4223203e7d566f547265749ddc080c1c955d12815f83bf.jpg)
 
-- 图表展示了三种不同需求请求分配策略（Bandit、Triangle、Alecto）在\*\*时间预取（temporal prefetching）\*\*场景下的性能加速比（Normalized Speedup），基准为仅启用L1复合预取器时的IPC。
+- 图表展示了三种不同需求请求分配策略（Bandit、Triangle、Alecto）在**时间预取（temporal prefetching）**场景下的性能加速比（Normalized Speedup），基准为仅启用L1复合预取器时的IPC。
 - **Alecto**在绝大多数测试用例中表现最优，其性能显著优于Bandit和Triangle。例如，在`gcc_166`上，Alecto的加速比接近**1.4**，而Bandit约为1.15，Triangle约为1.2。
 - 在`mcf`和`sphinx3`等基准测试中，Alecto与Triangle性能接近，但依然略胜一筹；而在`astar_lakes`和`omnetpp`上，Alecto表现最突出，远超其他两种方案。
-- 从\*\*Geomean（几何平均）\*\*来看，Alecto整体性能提升最为稳定且最高，表明其动态需求请求分配机制能更有效地优化时间预取器的元数据存储利用率。
+- 从**Geomean（几何平均）**来看，Alecto整体性能提升最为稳定且最高，表明其动态需求请求分配机制能更有效地优化时间预取器的元数据存储利用率。
 - 下表总结了各策略在关键基准上的加速比：
 
 | Benchmark   | Bandit | Triangle | Alecto    |

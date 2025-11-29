@@ -634,23 +634,33 @@
 <p><img alt="ecc40e98e18c6bdb3873388b4b28409104be5c8b8557c3017f7867538f98fcb3.jpg" src="../images/ecc40e98e18c6bdb3873388b4b28409104be5c8b8557c3017f7867538f98fcb3.jpg" /></p>
 <ul>
 <li>图片展示了 Prodigy 系统的整体架构与核心贡献，分为 <strong>Software</strong> 和 <strong>Hardware</strong> 两大模块，通过 <strong>Data Indirection Graph (DIG)</strong> 实现软硬件协同。</li>
-<li><strong>Software 层</strong>：</li>
+<li><strong>Software 层</strong>：<ul>
 <li>输入为 <strong>Application source code</strong>，经由 <strong>Compiler analysis</strong> 自动提取关键数据结构与访问模式。</li>
 <li>编译器插入 API 调用（如 <code>regNode</code>, <code>regTravEdge</code>），生成 <strong>Instrumented application binary</strong>，其中嵌入 DIG 表示。</li>
 <li>示例代码片段显示在 <code>bfs.cc</code> 中，标注了 DIG 注册逻辑，如 <code>regTrigEdge(...)</code> 用于触发预取序列。</li>
-<li><strong>Hardware 层</strong>：</li>
+</ul>
+</li>
+<li><strong>Hardware 层</strong>：<ul>
 <li>运行时，<strong>Program the prefetcher</strong> 模块读取二进制中的 DIG 数据，将其加载至硬件预取器本地存储。</li>
 <li>预取器根据 DIG 动态生成 <strong>prefetch requests</strong>，响应 L1D 缓存的负载请求，实现智能预取。</li>
-<li><strong>核心贡献</strong>：</li>
+</ul>
+</li>
+<li><strong>核心贡献</strong>：<ul>
 <li>提出 <strong>Data Indirection Graph (DIG)</strong>：一种紧凑图结构，节点代表数据结构（含基址、容量、元素大小），边代表间接访问模式（单值/范围索引）。</li>
 <li>支持 <strong>Adjustable prefetch distance</strong>：根据核心执行速度动态调整预取距离，维持及时性。</li>
 <li>实现 <strong>Low-cost</strong> 设计：仅需 0.8KB 存储开销，适合现代“暗硅”时代专用加速器趋势。</li>
-<li><strong>系统交互流程</strong>：</li>
+</ul>
+</li>
+<li><strong>系统交互流程</strong>：<ul>
 <li>软件编译阶段注入 DIG → 硬件运行时加载并编程预取器 → 预取器监听 L1D 请求 → 根据 DIG 触发并推进预取序列。</li>
-<li><strong>视觉强调内容</strong>：</li>
+</ul>
+</li>
+<li><strong>视觉强调内容</strong>：<ul>
 <li><strong>DIG representation</strong> 是连接软硬件的核心桥梁。</li>
 <li><strong>Programmable Prefetcher</strong> 是硬件端的关键组件，具备可编程性和自适应能力。</li>
 <li><strong>Instrumented binary</strong> 是软件分析输出的载体，包含预取所需语义信息。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -745,18 +755,22 @@
 <p><img alt="2ffedc644c4e163942cd11238ce1bcc341b44f9cf3adc50b792b20f7c67dc617.jpg" src="../images/2ffedc644c4e163942cd11238ce1bcc341b44f9cf3adc50b792b20f7c67dc617.jpg" /></p>
 <ul>
 <li>图片展示了 <strong>BFS</strong> 算法的两个核心部分：<strong>(a)</strong> 并行实现的伪代码，<strong>(b)</strong> 使用 <strong>CSR</strong> 格式存储图数据时的遍历示例。</li>
-<li>伪代码部分包含关键控制结构：</li>
+<li>伪代码部分包含关键控制结构：<ul>
 <li>初始化 <code>workQueue.enqueue(source)</code> 将源节点入队。</li>
 <li>外层循环 <code>while workQueue not empty</code> 持续处理队列中的节点。</li>
 <li>内层使用 <code>#pragma omp parallel</code> 实现并行化，对每个节点 <code>u</code> 执行遍历。</li>
 <li>遍历逻辑为：从 <code>offsetList(u)</code> 到 <code>offsetList(u+1)</code> 获取邻居范围，再通过 <code>edgeList(w)</code> 访问具体邻居节点 <code>v</code>。</li>
 <li>对每个邻居 <code>v</code>，检查 <code>visited[v]</code> 状态，若未访问则标记并入队。</li>
-<li>数据结构与遍历模式部分展示了一个玩具图及其 <strong>CSR</strong> 存储方式：</li>
+</ul>
+</li>
+<li>数据结构与遍历模式部分展示了一个玩具图及其 <strong>CSR</strong> 存储方式：<ul>
 <li>图中包含 7 个顶点（0–6），边以邻接关系表示。</li>
 <li><strong>offsetList</strong> 数组记录每个顶点在 <strong>edgeList</strong> 中的起始位置和结束位置（不包括）。</li>
 <li><strong>edgeList</strong> 数组按顺序存储所有边的目标顶点编号。</li>
 <li><strong>visited</strong> 数组记录每个顶点是否已被访问（0 表示未访问，1 表示已访问）。</li>
 <li>遍历方向箭头指示了 BFS 的层级扩展过程，从源节点开始逐层访问邻居。</li>
+</ul>
+</li>
 <li>下表总结了 CSR 格式中各数组的具体内容：</li>
 </ul>
 <table>
@@ -855,9 +869,11 @@
 <ul>
 <li>图片展示了 Prodigy 系统中核心的数据结构抽象——<strong>Data Indirection Graph (DIG)</strong>，用于描述不规则工作负载中的内存访问模式，特别是针对 BFS 算法的示例。</li>
 <li>图 (a) 呈现了 BFS 算法的 DIG 表示：节点代表关键数据结构（如 workQ、offsetList、edgeList、visited），边表示它们之间的数据依赖访问关系。边上的权重 w0 和 w1 分别对应两种间接访问模式；w2 为触发边，用于启动预取序列。</li>
-<li>图 (b) 详细说明了 DIG 节点和边所捕获的信息：</li>
+<li>图 (b) 详细说明了 DIG 节点和边所捕获的信息：<ul>
 <li><strong>节点信息</strong>包含 node_id、base_addr、capacity 和 data_size，用于描述数据结构的内存布局。</li>
 <li><strong>边信息</strong>包含 src_base_addr、dest_base_addr 和 edge_type，用于描述算法遍历模式。</li>
+</ul>
+</li>
 <li>图 (c) 展示了 <strong>single-valued indirection (w0)</strong> 模式：源数组 a 的元素作为索引去访问目标数组 b，例如 <code>tmp += b[a[i]]</code>。图中用紫色高亮显示了索引值 3 对应访问 b[3] = 56。</li>
 <li>图 (d) 展示了 <strong>ranged indirection (w1)</strong> 模式：源数组 a 的连续两个元素 a[i] 和 a[i+1] 作为边界，访问目标数组 b 中的一个范围，例如 <code>for(j=a[i]; j&lt;a[i+1]; ++j) tmp += b[j]</code>。图中用紫色高亮显示了 i=1 时，访问 b[4] 到 b[5] 的范围。</li>
 <li>该图清晰地将复杂的不规则内存访问模式抽象为一个加权有向图，便于硬件预取器理解和执行。</li>
@@ -901,16 +917,22 @@
 <ul>
 <li>图片展示了 <strong>BFS</strong> 算法源代码的片段，重点在于如何通过 <strong>程序员手动注解</strong> 来构建 <strong>Data Indirection Graph (DIG)</strong>。</li>
 <li>代码中第 9 至 16 行被高亮标记，这些是用于注册 DIG 节点和边的核心 API 调用。</li>
-<li><strong>registerNode()</strong> 用于向硬件 prefetcher 注册数据结构节点，参数包括：数据结构指针、元素总数、每个元素大小（字节）、节点 ID。例如：</li>
+<li><strong>registerNode()</strong> 用于向硬件 prefetcher 注册数据结构节点，参数包括：数据结构指针、元素总数、每个元素大小（字节）、节点 ID。例如：<ul>
 <li><code>registerNode(&amp;workQueue, g.numNodes(), 4, 0);</code> 注册工作队列，ID 为 0。</li>
 <li><code>registerNode(offsetlist, g.numNodes()+1, 4, 1);</code> 注册偏移列表，ID 为 1。</li>
 <li><code>registerNode(edgelist, g.numEdges(), 4, 2);</code> 注册边列表，ID 为 2。</li>
 <li><code>registerNode(visited, g.numNodes(), 4, 3);</code> 注册访问标记数组，ID 为 3。</li>
-<li><strong>registerTravEdge()</strong> 用于注册数据结构间的遍历边（即间接内存访问模式），参数包括：源节点地址、目标节点地址、边类型（w0 或 w1）。例如：</li>
+</ul>
+</li>
+<li><strong>registerTravEdge()</strong> 用于注册数据结构间的遍历边（即间接内存访问模式），参数包括：源节点地址、目标节点地址、边类型（w0 或 w1）。例如：<ul>
 <li><code>registerTravEdge(&amp;workQueue, offsetlist, w0);</code> 表示从 workQueue 到 offsetlist 的单值间接访问（single-valued indirection）。</li>
 <li><code>registerTravEdge(edgelist, visited, w0);</code> 表示从 edgelist 到 visited 的单值间接访问。</li>
-<li><strong>registerTrigEdge()</strong> 用于注册触发边（trigger edge），参数包括：触发数据结构地址、边类型（w2）。例如：</li>
+</ul>
+</li>
+<li><strong>registerTrigEdge()</strong> 用于注册触发边（trigger edge），参数包括：触发数据结构地址、边类型（w2）。例如：<ul>
 <li><code>registerTrigEdge(&amp;workQueue, w2);</code> 表示当对 workQueue 发生需求加载时，触发 prefetch 序列。</li>
+</ul>
+</li>
 <li>这些 API 调用在程序运行时会被翻译成对 prefetcher 局部存储器的写入操作，从而将 DIG 结构传递给硬件。</li>
 <li>此方法依赖程序员对算法数据结构和访问模式的深刻理解，适用于复杂或难以自动分析的场景。</li>
 <li>与编译器自动分析相比，手动注解更精确，但增加了开发负担；两者可结合使用以提高整体准确性。</li>
@@ -921,13 +943,17 @@
 <li>图片展示了 Prodigy 系统中 <strong>编译器分析与代码生成</strong> 的关键步骤，通过一个 C 语言示例程序及其对应的 LLVM IR 代码，说明如何自动插入 API 调用以构建 <strong>Data Indirection Graph (DIG)</strong>。</li>
 <li>图 (a) 是主函数 <code>main()</code>，其中调用 <code>malloc</code> 分配两个数组 <code>a</code> 和 <code>b</code>，然后调用 <code>kernel</code> 函数处理数据。</li>
 <li>图 (b) 是 <code>kernel</code> 函数的源码，其核心是单值间接访问模式：<code>*(dst+i) = b[a[i]]</code>，即使用数组 <code>a</code> 的元素作为索引去访问数组 <code>b</code>，并将结果写入 <code>dst</code>。这正是 Prodigy 支持的 <strong>single-valued indirection</strong> 模式。</li>
-<li>图 (c) 是经过编译器分析和插桩后的 LLVM IR 代码，绿色高亮部分为插入的 API 调用：</li>
+<li>图 (c) 是经过编译器分析和插桩后的 LLVM IR 代码，绿色高亮部分为插入的 API 调用：<ul>
 <li>在 <code>main</code> 函数中，第 15 行和第 17 行分别调用 <code>@registerNode</code> 来注册数组 <code>a</code> 和 <code>b</code> 的节点信息（基地址、大小、元素尺寸等）。</li>
 <li>在 <code>kernel</code> 函数中，第 2 行和第 3 行调用 <code>@registerTrigEdge</code> 和 <code>@registerTravEdge</code> 来注册触发边和遍历边，从而定义了从 <code>a</code> 到 <code>b</code> 的间接访问路径。</li>
-<li>编译器分析流程如下：</li>
+</ul>
+</li>
+<li>编译器分析流程如下：<ul>
 <li><strong>节点识别</strong>：扫描 <code>malloc</code> 调用，提取分配信息并插入 <code>registerNode</code>。</li>
 <li><strong>边识别</strong>：跟踪指针或数组索引的使用，识别如 <code>b[a[i]]</code> 这样的间接访问模式，并插入 <code>registerTravEdge</code>。</li>
 <li><strong>触发边识别</strong>：确定哪个数据结构的访问会启动预取序列，插入 <code>registerTrigEdge</code>。</li>
+</ul>
+</li>
 <li>插入的 API 调用在运行时会被翻译成对硬件预取器本地内存的存储操作，从而将 DIG 结构加载到硬件中，指导后续的智能预取行为。</li>
 </ul>
 <table>
@@ -1032,7 +1058,7 @@
 <li><strong>Edge Index Table (b)</strong> 是一个索引表，其作用类似于软件中的 offset list。它通过 <strong>Edge Index</strong> 来定位 Edge Table 中的边记录。<ul>
 <li>表格内容如下：
     | Edge Index |
-    |------------|
+    | ---------- |
     | 0          |
     | 1          |
     | 2          |</li>
@@ -1042,10 +1068,10 @@
 <li><strong>Edge Table (c)</strong> 存储了 DIG 中每条边的具体属性，包括源节点地址、目标节点地址和边类型。<ul>
 <li>表格内容如下：
     | Src Node Addr | Dest Node Addr | Edge Type |
-    |---------------|----------------|---------|
-    | 0x00010       | 0x001A0        | 0       |
-    | 0x001A0       | 0x00334        | 1       |
-    | 0x00334       | 0x00B04        | 0       |</li>
+    | ------------- | -------------- | --------- |
+    | 0x00010       | 0x001A0        | 0         |
+    | 0x001A0       | 0x00334        | 1         |
+    | 0x00334       | 0x00B04        | 0         |</li>
 <li><strong>Src Node Addr</strong> 和 <strong>Dest Node Addr</strong> 分别代表源节点和目标节点在虚拟地址空间中的基地址。</li>
 <li><strong>Edge Type</strong> 字段定义了边的语义，其中 <code>0</code> 代表 <strong>single-valued indirection</strong>，<code>1</code> 代表 <strong>ranged indirection</strong>。</li>
 <li>从数据可以看出，这三条边构成了一个链式访问路径：从地址 <code>0x00010</code> 开始，经由单值间接访问到 <code>0x001A0</code>，再经由范围间接访问到 <code>0x00334</code>，最后又通过单值间接访问到 <code>0x00B04</code>。</li>
@@ -1058,12 +1084,14 @@
 <ul>
 <li>该图像展示了 Prodigy 系统中 <strong>Prefetch Status Handling Register (PFHR) 文件</strong> 的一个快照，用于跟踪多个并发预取序列的状态。</li>
 <li>PFHR 是 Prodigy 硬件设计的核心组件，其作用类似于缓存中的 <strong>Miss Status Handling Registers (MSHRs)</strong>，但专门针对长链式、数据依赖的预取序列进行管理，并支持非阻塞预取。</li>
-<li>图像中的表格包含五列，分别记录了每个 PFHR 条目的关键状态信息：</li>
+<li>图像中的表格包含五列，分别记录了每个 PFHR 条目的关键状态信息：<ul>
 <li><strong>Free</strong>: 标识该条目是否空闲（<code>true</code>/<code>false</code>）。</li>
 <li><strong>Node ID</strong>: 关联的 DIG 节点标识符，指向当前预取请求所涉及的数据结构。</li>
 <li><strong>Prefetch Trigger Addr</strong>: 触发该预取序列的初始虚拟地址。当核心访问到此地址时，系统会评估是否需要丢弃该序列以保持及时性。</li>
 <li><strong>Outstanding Prefetch Addr</strong>: 当前正在等待响应的预取请求的物理地址（已对齐到缓存行）。</li>
 <li><strong>Offset Bitmap</strong>: 一个位图，标记在上述缓存行内哪些字节偏移量对应的预取请求是“待处理”的。</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -1107,12 +1135,14 @@
 </tbody>
 </table>
 <ul>
-<li>表格内容分析：</li>
+<li>
+<p>表格内容分析：</p>
+<ul>
 <li>第一行：一个由 <strong>Node ID 2</strong> 发起的预取序列处于活跃状态（<code>Free=false</code>），其触发地址为 <code>0x00020</code>，当前正在等待物理地址 <code>0x00468</code> 的数据返回。位图 <code>01010000</code> 表明该缓存行内的第1位和第3位（从右至左计数）对应的字节偏移量有未完成的预取请求。</li>
 <li>第二行：一个条目为空闲状态（<code>Free=true</code>），表明该 PFHR 可被分配给新的预取序列。</li>
 <li>第三行：一个由 <strong>Node ID 1</strong> 发起的序列正在等待地址 <code>0x00200</code> 的数据，其触发地址为 <code>0x00080</code>。</li>
-<li>
-<p>第四行：另一个由 <strong>Node ID 2</strong> 发起的序列正在等待地址 <code>0x00A00</code> 的数据，触发地址为 <code>0x00188</code>。这表明同一个数据结构（Node ID 2）可以同时发起多个独立的预取序列。</p>
+<li>第四行：另一个由 <strong>Node ID 2</strong> 发起的序列正在等待地址 <code>0x00A00</code> 的数据，触发地址为 <code>0x00188</code>。这表明同一个数据结构（Node ID 2）可以同时发起多个独立的预取序列。</li>
+</ul>
 </li>
 <li>
 <p>此设计允许 Prodigy 在硬件层面高效地管理复杂的、多层级的预取操作，避免因等待单一序列完成而导致的阻塞，从而最大化利用内存带宽并维持预取的及时性。</p>
@@ -1168,17 +1198,21 @@
 <ul>
 <li>图片展示了 Prodigy 系统在运行时的两个核心阶段：<strong>(a) Prefetch sequence initialization</strong> 和 <strong>(b) Prefetch sequence advance</strong>，用于说明其如何根据 Data Indirection Graph (DIG) 动态发起和推进预取序列。</li>
 <li>图中左侧为 <strong>Core</strong>（黄色圆圈），中间为 <strong>Memory system</strong>（灰色虚线框），右侧为 <strong>Prodigy</strong> 硬件模块（绿色区域），包含 <strong>Node table</strong>、<strong>Edge tables</strong> 和 <strong>PFHR file</strong>。右上角图例清晰标注了各组件符号含义。</li>
-<li>在阶段 (a) 中，<strong>Core 发起一次 load 请求（1）到地址 0x100</strong>，该地址属于触发数据结构（如 BFS 的 workQueue）。Prodigy 捕获此请求后，进入初始化流程：</li>
+<li>在阶段 (a) 中，<strong>Core 发起一次 load 请求（1）到地址 0x100</strong>，该地址属于触发数据结构（如 BFS 的 workQueue）。Prodigy 捕获此请求后，进入初始化流程：<ul>
 <li>步骤 2.0.1: L1D snoop — Prodigy 监听到 L1D 缓存的 load 请求。</li>
 <li>步骤 2.0.2: pf addr gen — 根据 DIG 中的 trigger edge 定义的 prefetch look-ahead distance（假设为 2），计算出下一个预取地址 0x108（0x100 + 2×4）。</li>
 <li>步骤 2.0.3: allocate PFHR — 分配一个 <strong>PFHR (Prefetch Status Handling Register)</strong> 条目来跟踪此预取序列。</li>
 <li>随后，Prodigy 向内存系统发出预取请求（2），目标地址为 0x108，并通过 TLB 转换为物理地址。</li>
-<li>在阶段 (b) 中，当 Core 发起另一次 load 请求（3）到地址 0x124 时，同时预取地址 0x108 的数据已返回（4），触发预取序列推进：</li>
+</ul>
+</li>
+<li>在阶段 (b) 中，当 Core 发起另一次 load 请求（3）到地址 0x124 时，同时预取地址 0x108 的数据已返回（4），触发预取序列推进：<ul>
 <li>步骤 4.0.1: pf fill — Prodigy 接收到预取填充的数据。</li>
 <li>步骤 4.0.2: DIG edge + indirection — Prodigy 使用接收到的数据（值为 2）作为索引，结合 DIG 中存储的边信息（从节点 0x100 到 0x11C 的 w0 边，即 single-valued indirection），计算出下一个预取地址 0x12C。</li>
 <li>步骤 4.0.3: pf addr gen — 生成新的预取地址 0x12C。</li>
 <li>步骤 4.0.4: allocate PFHR — 为新预取分配另一个 PFHR 条目（若非叶节点）。</li>
 <li>最终，Prodigy 发出新的预取请求（4），目标地址为 0x12C。</li>
+</ul>
+</li>
 <li>图中关键数据结构展示如下：</li>
 </ul>
 <table>
@@ -1328,10 +1362,12 @@
 <li>横轴列出了九种不同的工作负载（Workload），包括 bc、bfs、cc、pr、sssp、spmv、symgs、cg 和 is。</li>
 <li>纵轴表示归一化后的加速比（Speedup, x），范围从 0.0 到 1.4。</li>
 <li>图例用四种颜色区分了 PFHR 文件大小：<strong>黄色代表 4 entries，绿色代表 8 entries，青色代表 16 entries，蓝色代表 32 entries</strong>。</li>
-<li>性能趋势显示：</li>
+<li>性能趋势显示：<ul>
 <li>多数工作负载在 PFHR 从 4 增加到 16 时性能提升明显，尤其在 bfs、pr、sssp 上表现突出。</li>
 <li>当 PFHR 扩展至 32 entries 时，部分工作负载（如 cc、is）性能反而下降，表明存在结构冲突或缓存污染。</li>
 <li><strong>bc 工作负载在 16 entries 时达到峰值性能，而 cg 在 32 entries 时略优于 16 entries</strong>。</li>
+</ul>
+</li>
 <li>根据图示数据，可总结如下性能对比表：</li>
 </ul>
 <table>
@@ -1399,9 +1435,11 @@
 <li>图片展示了在<strong>非预取基线</strong>（no-prefetching baseline）下，不同工作负载的<strong>LLC miss</strong>地址被分类为“可预取”（Prefetchable）和“不可预取”（Non-prefetchable）的比例。</li>
 <li><strong>横轴</strong>为工作负载名称，包括：bc、bfs、cc、pr、sssp、spmv、symgs、cg、is，以及一个平均值（avg）。</li>
 <li><strong>纵轴</strong>表示百分比（%），范围从0到100。</li>
-<li>每个柱状图由两部分组成：</li>
+<li>每个柱状图由两部分组成：<ul>
 <li><strong>蓝色部分</strong>代表“可预取”的LLC miss地址比例。</li>
 <li><strong>黄色部分</strong>代表“不可预取”的LLC miss地址比例。</li>
+</ul>
+</li>
 <li>所有工作负载的“可预取”比例均超过90%，其中多个工作负载接近或达到100%。</li>
 <li>平均值（avg）显示，“可预取”比例高达<strong>96.4%</strong>，表明ProDIGy的DIG表示法能够覆盖绝大多数潜在的预取机会。</li>
 <li>这一数据支持了论文中的结论：理想情况下，ProDIGy可以将96.4%的DRAM访问转化为缓存命中，从而设定性能上限。</li>
@@ -1479,10 +1517,12 @@
 <li><strong>加速比普遍提升</strong>：黑色折线显示 Prodigy 在所有工作负载上均带来正向加速，平均加速比达 <strong>2.6×</strong>，部分负载如 symgs 和 is 达到 7× 以上。</li>
 <li><strong>缓存停顿略有上升</strong>：由于预取将原本的 DRAM 访问转化为缓存命中，导致 Cache-stall 比例上升，但整体 CPI 下降，说明预取有效减少了高延迟访问。</li>
 <li><strong>分支停顿减少</strong>：尤其在 bfs、pr、sssp 等图算法中，Branch-stall 明显降低，平均减少 <strong>65.3%</strong>，这是因为预取缓解了数据依赖分支的等待时间。</li>
-<li><strong>各工作负载表现差异</strong>：</li>
+<li><strong>各工作负载表现差异</strong>：<ul>
 <li>图算法（bc, bfs, cc, pr, sssp）：加速比集中在 1.5x–4x，其中 pr-po、sssp-po 表现最优。</li>
 <li>线性代数（spmv, symgs）：symgs 加速高达 7x，spmv 约 2x。</li>
 <li>流体动力学（cg, is）：is 达到 7x，cg 约 2x。</li>
+</ul>
+</li>
 <li>数据汇总如下：</li>
 </ul>
 <table>
@@ -1541,11 +1581,13 @@
 <ul>
 <li>图片展示了 Prodigy 预取器在不同工作负载下，预取数据被实际需求时在缓存层级中的位置分布，用于衡量预取的“有用性”（Usefulness），<strong>蓝色区域越大表示预取越有效</strong>。</li>
 <li>数据按 workload 分类，包括 bc、bfs、cc、pr、sssp、spmv、symgs、cg、is，以及一个平均值（avg）。</li>
-<li>每个柱状图由四部分堆叠组成，分别代表：</li>
+<li>每个柱状图由四部分堆叠组成，分别代表：<ul>
 <li><strong>L1 prefetch hit</strong>（深蓝色）：数据在 L1D 缓存中被命中，延迟最低，性能最优。</li>
 <li><strong>L2 prefetch hit</strong>（青色）：数据在 L2 缓存中被命中，延迟次之。</li>
 <li><strong>L3 prefetch hit</strong>（浅绿色）：数据在 L3 缓存中被命中，延迟较高。</li>
 <li><strong>Prefetch eviction before demanded</strong>（米黄色）：数据在被需求前已被逐出缓存，属于无效预取，浪费带宽和缓存空间。</li>
+</ul>
+</li>
 <li>从图表可见，大部分工作负载的预取数据主要落在 L1 和 L2 缓存中，说明 Prodigy 能够较及时地将数据预取到靠近处理器的位置。</li>
 <li><strong>平均值（avg）显示，约 62.7% 的预取数据在被需求时仍驻留在缓存中（L1/L2/L3 hit），其中 L1 占比最高，表明预取具有较高的准确性和时效性</strong>。</li>
 <li>少量数据（平均约 37.3%）在被需求前已被逐出，这与论文第 VI-C 节所述“由于不完美的时效性导致的逐出”相符，但整体预取有效性仍处于较高水平。</li>
@@ -1643,7 +1685,7 @@
 <li>图片展示了 Prodigy 系统将 <strong>prefetchable LLC misses</strong> 转换为 <strong>cache hits</strong> 的效率，衡量其 prefetching 有效性。</li>
 <li>横轴为不同 workload，包括 bc、bfs、cc、pr、sssp、spmv、symgs、cg、is，以及一个平均值 avg。</li>
 <li>纵轴为百分比，表示被 prefetching 成功节省的 LLC miss 占比，<strong>蓝色部分越高越好</strong>。</li>
-<li>数据表明，Prodigy 在所有 workload 中均能有效转化大部分 prefetchable 访问：</li>
+<li>数据表明，Prodigy 在所有 workload 中均能有效转化大部分 prefetchable 访问：<ul>
 <li><strong>bc</strong>: 约 85%</li>
 <li><strong>bfs</strong>: 约 75%</li>
 <li><strong>cc</strong>: 约 90%</li>
@@ -1654,6 +1696,8 @@
 <li><strong>cg</strong>: 约 85%</li>
 <li><strong>is</strong>: 约 90%</li>
 <li><strong>avg</strong>: <strong>85.1%</strong></li>
+</ul>
+</li>
 <li>表格化数据如下：</li>
 </ul>
 <table>
@@ -1718,15 +1762,19 @@
 <li>该图覆盖了 <strong>9 个不同的工作负载</strong>，包括图算法（bc, bfs, cc, pr, sssp）、稀疏线性代数（spmv, symgs）和计算流体动力学（cg, is），以及一个未明确标注的“gm”。</li>
 <li><strong>Ainsworth &amp; Jones</strong> 和 <strong>DROPLET</strong> 仅针对图算法设计，因此在非图工作负载（如 spmv, symgs, cg, is）中未显示数据。</li>
 <li><strong>IMP</strong> 和 <strong>Prodigy</strong> 覆盖所有工作负载，体现其通用性。</li>
-<li>各工作负载下 Prodigy 的加速比显著优于其他预取器：</li>
+<li>各工作负载下 Prodigy 的加速比显著优于其他预取器：<ul>
 <li>在 <strong>pr</strong> 上达到 <strong>7.3x</strong> 加速；</li>
 <li>在 <strong>spmv</strong> 上达到 <strong>5.8x</strong>；</li>
 <li>在 <strong>symgs</strong> 上达到 <strong>8.4x</strong>；</li>
 <li>在 <strong>is</strong> 上达到 <strong>5.0x</strong>。</li>
-<li>对比其他预取器：</li>
+</ul>
+</li>
+<li>对比其他预取器：<ul>
 <li><strong>Ainsworth &amp; Jones</strong> 在部分图算法上表现尚可，但在 pr 上仅为约 2.5x，远低于 Prodigy 的 7.3x。</li>
 <li><strong>DROPLET</strong> 在图算法上表现一般，例如在 pr 上约为 3.0x。</li>
 <li><strong>IMP</strong> 在多数工作负载上表现较弱，例如在 pr 上约为 1.5x，在 spmv 上约为 1.2x。</li>
+</ul>
+</li>
 <li>性能优势归因于 Prodigy 的<strong>硬件-软件协同设计</strong>，通过 DIG 表达程序语义，支持单值和范围间接访问模式，实现更精准、及时的预取。</li>
 </ul>
 <table>
@@ -1860,10 +1908,12 @@
 </tbody>
 </table>
 <ul>
-<li><strong>关键观察</strong>：</li>
+<li><strong>关键观察</strong>：<ul>
 <li>对于图算法组合（bc, bfs, pr），Prodigy 达到 <strong>2.8×</strong> 加速，优于 Ainsworth &amp; Jones 的 <strong>2.4×</strong>。</li>
 <li>当加入 sssp 后，Prodigy 仍保持 <strong>2.9×</strong>，而 DROPLET 仅 <strong>1.9×</strong>，说明 Prodigy 更全面支持多种图算法。</li>
 <li>在稀疏线性代数算法（bfs, pr, spmv, symgs）上，Prodigy 实现 <strong>4.6×</strong> 加速，远超 IMP 的 <strong>1.8×</strong>，凸显其对非图类不规则负载的适应性。</li>
+</ul>
+</li>
 <li>表格脚注“*”注明：使用的是各先前工作中报告的最佳输入数据集，确保比较公平。</li>
 <li>总体而言，该表有力支撑了论文核心主张：<strong>Prodigy 在多种不规则负载下实现显著性能提升，且优于现有最先进预取器</strong>。</li>
 </ul>
@@ -1919,11 +1969,13 @@
 <ul>
 <li>图片展示了 <strong>Figure 19</strong>，即 Prodigy 与非预取基线（non-prefetching baseline）在不同工作负载下的归一化能耗对比，<strong>越低越好</strong>。</li>
 <li>每个工作负载包含两根柱状图：第一根代表基线，第二根代表 Prodigy，用于直观比较节能效果。</li>
-<li>能耗按组件拆分为四类，用不同颜色表示：</li>
+<li>能耗按组件拆分为四类，用不同颜色表示：<ul>
 <li><strong>Core</strong>（紫色）：处理器核心能耗</li>
 <li><strong>Cache</strong>（绿色）：缓存系统能耗</li>
 <li><strong>DRAM</strong>（蓝色）：主存访问能耗</li>
 <li><strong>Others</strong>（红色）：其他部分能耗</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>

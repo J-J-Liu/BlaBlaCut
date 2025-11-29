@@ -78,9 +78,7 @@ ______________________________________________________________________
 
 ![](images/1970890555c7f00a5cf660d3b688d30bff1dc943809016e826a17962ca70f36a.jpg)
 
-```
-- 
-```
+-
 
 ![](images/133735d0929e8f5cc5edaf07abfdf5841e2b5cea3475fa6d2166ab22212d55e1.jpg)
 
@@ -92,9 +90,7 @@ ______________________________________________________________________
 
 *Figure 5: Miss per kilo accesses (MPKA) per LLC set with three different 16-core homogeneous workloads.*
 
-```
-- 
-```
+-
 
 ![](images/a414717151ed11725279a36c126d05e1e6488e3fe8c84436b02d3fb137d31f89.jpg)
 
@@ -108,18 +104,17 @@ ______________________________________________________________________
 *Figure 9: Drishti's enhancement: Tracking reuse behavior and training the per-core and yet global reuse predictor with local (per-slice) sampled caches.*
 
 ```
-    - 
+- 
 ```
 
 ![](images/70c486d52e124569e24857169dd1a3d7d26dbe698f4633315f2dbe79781b491a.jpg)
 
 *Figure 11: (a) Slowdown in Mockingjay with Drishti without a low-latency interconnect between slices and the predictors. (b)Interconnect latency sensitivity on a 32-core system across 35 homogeneous and 35 heterogeneous mixes.*
 
-```
 - **动态采样缓存 (Dynamic Sampled Cache)**：不再随机选择采样集，而是通过**饱和计数器**动态监控每个 Slice 内各 Set 的 MPKA，并优先选择**高 MPKA** 的 Set 作为采样集，确保采样缓存能捕获到最具信息量的缓存缺失事件。
-```
 
 - **效果与优势**：
+
     - 在 **32-core** 系统上，Drishti 将 **Hawkeye** 和 **Mockingjay** 相对于 **LRU** 基线的性能提升从 **3.3%** 和 **6.7%** 显著提高到 **5.6%** 和 **13.2%**。
     - 该方案不仅提升了性能，还**节省了存储开销**，因为动态采样允许使用更少但更有效的采样集。
     - Drishti 的设计理念具有普适性，可有效应用于多种基于采样和预测的替换策略（如 **SHiP++**, **CHROME**, **Glider**）。

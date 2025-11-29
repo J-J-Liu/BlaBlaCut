@@ -444,10 +444,12 @@
 
 <h1 id="prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design">Prodigy: Improving the Memory Latency of Data-Indirect Irregular Workloads Using Hardware-Software Co-Design 通俗讲解<a class="headerlink" href="#prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design" title="Permanent link">&para;</a></h1>
 <h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
-<p><strong>痛点直击 (The "Why")</strong>
-- 传统的 <strong>硬件预取器</strong>（如 GHB-based prefetcher）依赖于地址的<strong>空间局部性</strong>或<strong>固定步长</strong>，但像图计算、稀疏矩阵这类<strong>不规则工作负载</strong>（irregular workloads）的内存访问是“跳跃式”的，完全无法预测，导致这些预取器基本失效。
-- 纯<strong>软件预取</strong>虽然知道程序逻辑，但它是在编译时静态插入指令的，无法感知运行时 CPU 的实际执行速度。如果 CPU 跑得快，预取的数据还没到；如果 CPU 跑得慢，预取的数据早就被挤出缓存了，造成<strong>缓存污染</strong>。这就是典型的“顾头不顾尾”。
-- 之前一些针对图计算的专用硬件方案（如 IMP, DROPLET）要么只能处理简单的指针跳转（<strong>single-valued indirection</strong>），要么只覆盖部分数据结构，无法应对更复杂的、通过一个数组的两个值来界定另一个数组访问范围的模式（<strong>ranged indirection</strong>，比如 CSR 格式中通过 offset 数组找 edge 数组的一段邻居）。</p>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 <strong>硬件预取器</strong>（如 GHB-based prefetcher）依赖于地址的<strong>空间局部性</strong>或<strong>固定步长</strong>，但像图计算、稀疏矩阵这类<strong>不规则工作负载</strong>（irregular workloads）的内存访问是“跳跃式”的，完全无法预测，导致这些预取器基本失效。</li>
+<li>纯<strong>软件预取</strong>虽然知道程序逻辑，但它是在编译时静态插入指令的，无法感知运行时 CPU 的实际执行速度。如果 CPU 跑得快，预取的数据还没到；如果 CPU 跑得慢，预取的数据早就被挤出缓存了，造成<strong>缓存污染</strong>。这就是典型的“顾头不顾尾”。</li>
+<li>之前一些针对图计算的专用硬件方案（如 IMP, DROPLET）要么只能处理简单的指针跳转（<strong>single-valued indirection</strong>），要么只覆盖部分数据结构，无法应对更复杂的、通过一个数组的两个值来界定另一个数组访问范围的模式（<strong>ranged indirection</strong>，比如 CSR 格式中通过 offset 数组找 edge 数组的一段邻居）。</li>
+</ul>
 <p><strong>通俗比方 (The Analogy)</strong>
 想象你要在一个巨大的、杂乱无章的图书馆里找书。传统预取器就像一个只会沿着书架一行行扫的机器人，对你要找的书毫无概念。而 Prodigy 则像是你给了图书管理员一张<strong>藏宝图</strong>（DIG）。这张图不是告诉你具体哪本书，而是清晰地画出了“先去 A 区域拿一张索引卡，索引卡上写着要去 B 区域的第 X 排；到了 B 区域，你会发现一整排书（从 Y 到 Z）都是你需要的”。管理员（硬件预取器）拿着这张图，就能在你真正走到 A 区域之前，就提前把 B 区域那整排书都搬到你手边的桌子上，让你随用随取。</p>
 <p><img alt="" src="../images/0aab14dcd9203f49a1db8b1ac1541003f0871237dbe86509213aff373b5db95b.jpg" /></p>
@@ -472,7 +474,7 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>Prodigy </strong>(本文)</td>
+<td style="text-align: left;">**Prodigy **(本文)</td>
 <td style="text-align: center;"><strong>2.6×</strong></td>
 <td style="text-align: center;"><strong>0.8KB</strong></td>
 </tr>
@@ -532,30 +534,38 @@
 </ul>
 <p>这一招的核心扭转在于：<strong>把“理解语义”的重担交给了离源码最近、最懂逻辑的编译器，而把“高效执行”的任务留给了硬件</strong>。两者通过 DIG 这个精巧的“契约”进行沟通，实现了“1+1远大于2”的效果。</p>
 <h3 id="2-eli5">2. 编译器自动分析与代码生成 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
-<p><strong>痛点直击</strong>
-- 以前处理像图计算、稀疏矩阵这类 <strong>irregular workloads</strong> 时，硬件 prefetcher 几乎是瞎子。因为它们的内存访问模式不是简单的步长或流式，而是由数据内容决定的（data-dependent），比如 <code>A[B[i]]</code> 这种间接寻址。
-- 程序员可以手动加注解告诉硬件怎么预取（就像论文里提到的 <code>registerNode()</code> 那一套 API），但这活儿又脏又累，还容易出错。你得对算法和数据结构有非常深的理解，才能准确地把那些复杂的遍历关系描述清楚。
-- 所以问题就卡在这儿了：<strong>理想很丰满</strong>（用语义信息指导预取效果极佳），但<strong>现实很骨感</strong>（没人愿意/能干好这个体力活）。这就导致再好的硬件设计也难以推广。</p>
-<p><strong>通俗比方</strong>
-- 想象你要给一个完全没见过乐高的新手（硬件 prefetcher）一套图纸（DIG），让他能提前把下一块要用的积木（数据）找出来。最笨的办法是你（程序员）自己对照着说明书，手动画一张新图纸给他。
-- 而 Prodigy 的做法是，直接给了他一个<strong>智能扫描仪</strong>（compiler pass）。这个扫描仪能自动读取原始的乐高说明书（源代码），理解里面的拼装逻辑（比如“先找到红色底座，然后在它的第3个接口上插一个蓝色横梁”），并自动生成一份新手能看懂的、清晰的行动指南（DIG）。你完全不用动手，机器就替你完成了从“人类知识”到“机器指令”的翻译。</p>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>以前处理像图计算、稀疏矩阵这类 <strong>irregular workloads</strong> 时，硬件 prefetcher 几乎是瞎子。因为它们的内存访问模式不是简单的步长或流式，而是由数据内容决定的（data-dependent），比如 <code>A[B[i]]</code> 这种间接寻址。</li>
+<li>程序员可以手动加注解告诉硬件怎么预取（就像论文里提到的 <code>registerNode()</code> 那一套 API），但这活儿又脏又累，还容易出错。你得对算法和数据结构有非常深的理解，才能准确地把那些复杂的遍历关系描述清楚。</li>
+<li>所以问题就卡在这儿了：<strong>理想很丰满</strong>（用语义信息指导预取效果极佳），但<strong>现实很骨感</strong>（没人愿意/能干好这个体力活）。这就导致再好的硬件设计也难以推广。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你要给一个完全没见过乐高的新手（硬件 prefetcher）一套图纸（DIG），让他能提前把下一块要用的积木（数据）找出来。最笨的办法是你（程序员）自己对照着说明书，手动画一张新图纸给他。</li>
+<li>而 Prodigy 的做法是，直接给了他一个<strong>智能扫描仪</strong>（compiler pass）。这个扫描仪能自动读取原始的乐高说明书（源代码），理解里面的拼装逻辑（比如“先找到红色底座，然后在它的第3个接口上插一个蓝色横梁”），并自动生成一份新手能看懂的、清晰的行动指南（DIG）。你完全不用动手，机器就替你完成了从“人类知识”到“机器指令”的翻译。</li>
+</ul>
 <p><strong>关键一招</strong>
 作者并没有要求程序员做额外工作，而是巧妙地在 <strong>LLVM 编译流程</strong>中插入了一个分析器。这个分析器干了两件核心的事：</p>
 <ul>
-<li><strong>静态“侦探”工作</strong>：</li>
-<li>它首先扫描代码中的内存分配点（如 <code>malloc</code>），把这些当作潜在的 <strong>DIG Node</strong> 候选，并记录下它们的基地址、大小等布局信息。</li>
 <li>
-<p>接着，它追踪这些分配出来的内存是如何被使用的。它会特别关注那些<strong>嵌套的数组访问</strong>模式，比如 <code>b[a[i]]</code>。通过分析 LLVM IR 中的地址计算（<code>AddrCalc</code>）和加载（<code>Load</code>）指令之间的依赖关系，它能自动识别出两种关键模式：</p>
+<p><strong>静态“侦探”工作</strong>：</p>
 <ul>
+<li>它首先扫描代码中的内存分配点（如 <code>malloc</code>），把这些当作潜在的 <strong>DIG Node</strong> 候选，并记录下它们的基地址、大小等布局信息。</li>
+<li>接着，它追踪这些分配出来的内存是如何被使用的。它会特别关注那些<strong>嵌套的数组访问</strong>模式，比如 <code>b[a[i]]</code>。通过分析 LLVM IR 中的地址计算（<code>AddrCalc</code>）和加载（<code>Load</code>）指令之间的依赖关系，它能自动识别出两种关键模式：<ul>
 <li><strong>Single-valued indirection</strong>: <code>a[i]</code> 的结果直接作为 <code>b</code> 的索引。</li>
 <li><strong>Ranged indirection</strong>: <code>a[i]</code> 和 <code>a[i+1]</code> 的结果共同决定了 <code>b</code> 中一个连续区间的访问范围（这正是 CSR 格式的核心）。</li>
 </ul>
 </li>
+</ul>
+</li>
 <li>
 <p><strong>自动化“翻译”工作</strong>：</p>
-</li>
+<ul>
 <li>一旦识别出这些模式和相关的数据结构，编译器 pass 就会<strong>自动在二进制代码中插入</strong>对 Prodigy API 的调用（如 <code>registerNode</code>, <code>registerTravEdge</code>）。</li>
-<li>这些 API 调用会在程序运行初期被执行，从而动态地在硬件上构建出完整的 <strong>Data Indirection Graph </strong>(DIG)。这样，硬件 prefetcher 在程序真正开始密集计算前，就已经“胸有成竹”，知道了整个数据遍历的路线图。</li>
+<li>这些 API 调用会在程序运行初期被执行，从而动态地在硬件上构建出完整的 **Data Indirection Graph **(DIG)。这样，硬件 prefetcher 在程序真正开始密集计算前，就已经“胸有成竹”，知道了整个数据遍历的路线图。</li>
+</ul>
+</li>
 </ul>
 <p><img alt="" src="../images/5a39f8b3b22856f52bd442acfdfcc7d26236d6278afafe07daadef828aaf69dc.jpg" /></p>
 <p><em>Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.</em></p>
@@ -572,11 +582,13 @@
 <p>作者解决这个问题的关键一招，在于<strong>将软件的静态语义知识与硬件的动态执行信息完美桥接</strong>，并且用一种极度紧凑的方式编码。</p>
 <ul>
 <li>他们没有试图在硬件里用复杂的模式识别电路去“学习”这些不规则模式（那样成本太高），而是设计了一个叫 <strong>Data Indirection Graph (DIG)</strong> 的中间表示。</li>
-<li>这个 DIG 由编译器在<strong>编译期自动分析</strong>源代码生成（也可以手动标注），它只干一件事：用一个<strong>带权重的有向图</strong>来抽象程序中关键数据结构之间的<strong>两种核心间接访问关系</strong>：</li>
-<li><strong>Single-valued indirection </strong>(w0)：一个数据结构里的值作为索引，去访问另一个数据结构里的单个元素（如用顶点ID查属性）。</li>
-<li><strong>Ranged indirection </strong>(w1)：一个数据结构里的一对值（base, bound）定义了对另一个数据结构的一段连续访问范围（如用offset数组查邻居列表）。</li>
+<li>这个 DIG 由编译器在<strong>编译期自动分析</strong>源代码生成（也可以手动标注），它只干一件事：用一个<strong>带权重的有向图</strong>来抽象程序中关键数据结构之间的<strong>两种核心间接访问关系</strong>：<ul>
+<li>**Single-valued indirection **(w0)：一个数据结构里的值作为索引，去访问另一个数据结构里的单个元素（如用顶点ID查属性）。</li>
+<li>**Ranged indirection **(w1)：一个数据结构里的一对值（base, bound）定义了对另一个数据结构的一段连续访问范围（如用offset数组查邻居列表）。</li>
+</ul>
+</li>
 <li>这个 DIG 被编码后，仅需 <strong>0.8KB</strong> 的存储空间就能放进硬件。硬件预取器在运行时，通过监听 L1D cache 的请求，一旦发现对“触发节点”（trigger edge）的访问，就立刻启动预取。</li>
-<li>预取器会根据 DIG 中的边（edge）类型，动态地解析刚预取回来的数据，并据此计算出下一批要预取的地址。为了保证预取的“及时性”（timeliness），它还引入了 <strong>PFHR </strong>(PreFetch status Handling Register) 文件来跟踪多个并行的预取序列，并能在 CPU 追上预取进度时果断丢弃过时的序列，避免污染缓存。</li>
+<li>预取器会根据 DIG 中的边（edge）类型，动态地解析刚预取回来的数据，并据此计算出下一批要预取的地址。为了保证预取的“及时性”（timeliness），它还引入了 **PFHR **(PreFetch status Handling Register) 文件来跟踪多个并行的预取序列，并能在 CPU 追上预取进度时果断丢弃过时的序列，避免污染缓存。</li>
 </ul>
 <p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
@@ -584,58 +596,74 @@
 <h3 id="4-pfhr-eli5">4. 预取状态处理寄存器文件 (PFHR) (ELI5)<a class="headerlink" href="#4-pfhr-eli5" title="Permanent link">&para;</a></h3>
 <p>之前做<strong>硬件预取</strong>（Hardware Prefetching）处理像图计算这种不规则负载时，有个特别难受的地方：预取器一旦启动一个复杂的、跨多个数据结构的预取链（比如从 work queue -&gt; offset list -&gt; edge list -&gt; visited list），就必须傻乎乎地等这条链上所有请求都完成才能干下一件事。这就像你派了一个快递员去帮你买咖啡，但他必须先去超市买咖啡豆，再去磨坊磨粉，最后才去咖啡机冲泡——在这整个漫长的过程中，他被“阻塞”了，没法接新活。更要命的是，如果你自己走路比他骑车还快，等他把咖啡送到时，你早就喝完水走人了，这杯咖啡就成了<strong>过时的垃圾</strong>，白白占着你的背包（Cache），这就是所谓的<strong>预取时效性</strong>（Prefetch Timeliness）问题。</p>
 <p><strong>通俗比方</strong>
-你可以把 <strong>PFHR</strong>（PreFetch status Handling Register）文件想象成一个<strong>智能外卖调度中心的看板</strong>。以前的预取器只有一个脑子，记不住多件事。现在，这个调度中心有了一块大看板（PFHR file），上面有很多小卡片（PFHR entries）。每当你（CPU核心）点了一份“复杂套餐”（触发一个预取序列），调度中心就立刻在看板上挂一张新卡片，上面写着：
-- 这单是谁点的（<strong>Node ID</strong>）
-- 从哪开始送的（<strong>Prefetch trigger address</strong>）
-- 现在已经派出去但还没送到的有哪些菜（<strong>Outstanding prefetch addresses</strong>）</p>
+你可以把 <strong>PFHR</strong>（PreFetch status Handling Register）文件想象成一个<strong>智能外卖调度中心的看板</strong>。以前的预取器只有一个脑子，记不住多件事。现在，这个调度中心有了一块大看板（PFHR file），上面有很多小卡片（PFHR entries）。每当你（CPU核心）点了一份“复杂套餐”（触发一个预取序列），调度中心就立刻在看板上挂一张新卡片，上面写着：</p>
+<ul>
+<li>这单是谁点的（<strong>Node ID</strong>）</li>
+<li>从哪开始送的（<strong>Prefetch trigger address</strong>）</li>
+<li>现在已经派出去但还没送到的有哪些菜（<strong>Outstanding prefetch addresses</strong>）</li>
+</ul>
 <p>最关键的是，调度中心会一直盯着你的位置。如果你已经走到餐厅门口准备自己吃了（CPU发出了对 trigger address 的需求），调度中心立刻就把这张卡片撕掉，告诉外卖员：“别送了，客户等不及了！” 这样既避免了送一堆没用的菜过来污染你的餐桌（Cache Pollution），又立刻空出了人手（Free PFHR entry）去接真正有价值的下一单。</p>
 <p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
 <p><strong>关键一招</strong>
 作者并没有沿用传统 Cache 里 <strong>MSHR</strong>（Miss Status Handling Register）那种只为处理缺失而设计的简单思路，而是巧妙地在预取器内部<strong>专门设计了一个状态机和配套的寄存器文件</strong>，用来管理预取特有的长链条和动态性。具体来说，他们做了两个核心扭转：</p>
 <ul>
-<li><strong>引入了“触发地址”作为时效性锚点</strong>：</li>
+<li>
+<p><strong>引入了“触发地址”作为时效性锚点</strong>：</p>
+<ul>
 <li>每个 PFHR 条目都记录下预取序列开始的那个虚拟地址（<strong>Prefetch trigger address</strong>）。</li>
 <li>预取器会持续监听 CPU 的 L1D 访问。一旦发现 CPU 自己访问了这个“触发地址”，就立刻判定：“坏了，我预取得太慢了，CPU已经追上来了！”</li>
-<li>
-<p>于是，它会<strong>果断丢弃</strong>（drop）整个与之关联的预取序列，释放所有相关资源。这保证了预取器永远在“有效提前量”的范围内工作，而不是盲目地、过时地搬运数据。</p>
+<li>于是，它会<strong>果断丢弃</strong>（drop）整个与之关联的预取序列，释放所有相关资源。这保证了预取器永远在“有效提前量”的范围内工作，而不是盲目地、过时地搬运数据。</li>
+</ul>
 </li>
 <li>
 <p><strong>实现了真正的非阻塞多路预取</strong>：</p>
-</li>
+<ul>
 <li>传统的预取器在处理一个长链条时是串行阻塞的。而 PFHR 文件允许多个预取序列<strong>并行存在、独立追踪</strong>。</li>
 <li>当一个预取请求的数据返回时，预取器通过 <strong>CAM</strong>（Content-Addressable Memory）查找 <strong>Outstanding prefetch addresses</strong> 字段，瞬间定位到对应的 PFHR 条目。</li>
 <li>然后，它利用存储在 DIG 中的语义信息（比如是 <strong>single-valued indirection</strong> 还是 <strong>ranged indirection</strong>），立刻计算出下一个要预取的地址，并发出新的请求，同时更新该 PFHR 条目的状态。</li>
 <li>这个过程完全不阻塞其他正在执行的预取序列，极大地提升了预取器的吞吐量和对复杂遍历模式的覆盖能力。</li>
 </ul>
+</li>
+</ul>
 <h3 id="5-eli5">5. 自适应预取算法 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
-<p>传统硬件预取器在处理图计算这类不规则负载时，常常陷入两难境地：
-- 如果预取得太“激进”（lookahead distance 太大），核心还没用到数据，缓存就被新来的预取项挤出去了，造成 <strong>cache pollution</strong>，白忙活一场。
-- 如果预取得太“保守”（lookahead distance 太小），核心执行速度一旦变快，就会立刻追上预取器，导致 <strong>stall on DRAM</strong>，预取完全没起到隐藏延迟的作用。
-- 更麻烦的是，不同算法的内存访问模式差异巨大。比如 BFS 可能要连续穿越四五个数据结构（offset list -&gt; edge list -&gt; visited list -&gt; ...），而 PageRank 的路径可能就短很多。用一个固定的预取距离去应付所有情况，注定是顾此失彼。</p>
+<p>传统硬件预取器在处理图计算这类不规则负载时，常常陷入两难境地：</p>
+<ul>
+<li>如果预取得太“激进”（lookahead distance 太大），核心还没用到数据，缓存就被新来的预取项挤出去了，造成 <strong>cache pollution</strong>，白忙活一场。</li>
+<li>如果预取得太“保守”（lookahead distance 太小），核心执行速度一旦变快，就会立刻追上预取器，导致 <strong>stall on DRAM</strong>，预取完全没起到隐藏延迟的作用。</li>
+<li>更麻烦的是，不同算法的内存访问模式差异巨大。比如 BFS 可能要连续穿越四五个数据结构（offset list -&gt; edge list -&gt; visited list -&gt; ...），而 PageRank 的路径可能就短很多。用一个固定的预取距离去应付所有情况，注定是顾此失彼。</li>
+</ul>
 <p><strong>通俗比方</strong></p>
-<p>想象你在一条崎岖的山路上给前方的朋友送水。你朋友走路的速度时快时慢，而你每次只能背有限的几瓶水。
-- 一个笨办法是：不管朋友走多快，你每次都固定在他前面100米的地方放一瓶水。如果他突然加速，很快就跑到你放水点的前面去了，渴得不行；如果他走得很慢，你放的水早就被太阳晒干（被缓存替换）了。
-- Prodigy 的聪明做法是：你先观察这条路有多“绕”（对应 DIG 中的 <strong>遍历深度</strong>）。如果路很绕（深度大），你知道朋友走完整个流程需要很久，那你就在离他近一点的地方（比如20米）放水，保证水是新鲜的。如果路很直（深度小），你就大胆地把水放到更远的地方（比如80米），让他一路畅通无阻。
-- 同时，你还一直盯着朋友的位置。一旦发现他已经走到你上次放水点附近了，你就立刻放弃那个已经没意义的送水计划，转而集中精力为他下一个位置准备新的水。这就叫 <strong>选择性丢弃预取序列</strong>。</p>
+<p>想象你在一条崎岖的山路上给前方的朋友送水。你朋友走路的速度时快时慢，而你每次只能背有限的几瓶水。</p>
+<ul>
+<li>一个笨办法是：不管朋友走多快，你每次都固定在他前面100米的地方放一瓶水。如果他突然加速，很快就跑到你放水点的前面去了，渴得不行；如果他走得很慢，你放的水早就被太阳晒干（被缓存替换）了。</li>
+<li>Prodigy 的聪明做法是：你先观察这条路有多“绕”（对应 DIG 中的 <strong>遍历深度</strong>）。如果路很绕（深度大），你知道朋友走完整个流程需要很久，那你就在离他近一点的地方（比如20米）放水，保证水是新鲜的。如果路很直（深度小），你就大胆地把水放到更远的地方（比如80米），让他一路畅通无阻。</li>
+<li>同时，你还一直盯着朋友的位置。一旦发现他已经走到你上次放水点附近了，你就立刻放弃那个已经没意义的送水计划，转而集中精力为他下一个位置准备新的水。这就叫 <strong>选择性丢弃预取序列</strong>。</li>
+</ul>
 <p><strong>关键一招</strong></p>
 <p>作者并没有采用一个僵化的预取策略，而是在预取器内部植入了一个动态反馈和调整机制，其核心逻辑转换在于：</p>
 <ul>
-<li><strong>将静态的“预取距离”参数，转变为由 DIG 遍历深度驱动的动态变量</strong>。</li>
 <li>
-<p>具体来说，系统内置了一个简单的启发式规则：<strong>遍历深度越高，预取距离越短</strong>。论文中提到，对于穿越四个或更多数据结构的算法，预取距离直接设为1。这确保了在长依赖链下，预取的数据能及时被用上，避免因等待太久而失效。</p>
+<p><strong>将静态的“预取距离”参数，转变为由 DIG 遍历深度驱动的动态变量</strong>。</p>
+<ul>
+<li>具体来说，系统内置了一个简单的启发式规则：<strong>遍历深度越高，预取距离越短</strong>。论文中提到，对于穿越四个或更多数据结构的算法，预取距离直接设为1。这确保了在长依赖链下，预取的数据能及时被用上，避免因等待太久而失效。</li>
+</ul>
 </li>
 <li>
 <p><strong>引入了基于“触发地址”的实时监控与清理机制</strong>。</p>
+<ul>
+<li>每当启动一个新的预取序列时，硬件会记录下这个序列的起始虚拟地址（即 <strong>prefetch trigger address</strong>，见</li>
+</ul>
 </li>
-<li>每当启动一个新的预取序列时，硬件会记录下这个序列的起始虚拟地址（即 <strong>prefetch trigger address</strong>，见 </li>
 </ul>
 <p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
-<p>中的 PFHR 结构）。
-  - 在后续执行中，如果核心发出了一个对这个“触发地址”的需求加载（demand load），就意味着核心已经赶上了这个预取序列的进度。
-  - 此时，系统会果断 <strong>drop the prefetch sequence</strong>，因为继续完成这个序列只能部分隐藏延迟，性价比极低。释放出的硬件资源（如 PFHR 条目）可以立即用于启动更有价值的新预取任务。</p>
+<p>中的 PFHR 结构）。</p>
+<ul>
+<li>在后续执行中，如果核心发出了一个对这个“触发地址”的需求加载（demand load），就意味着核心已经赶上了这个预取序列的进度。</li>
+<li>此时，系统会果断 <strong>drop the prefetch sequence</strong>，因为继续完成这个序列只能部分隐藏延迟，性价比极低。释放出的硬件资源（如 PFHR 条目）可以立即用于启动更有价值的新预取任务。</li>
+</ul>
 <p>这个设计的精妙之处在于，它用极低的硬件开销（仅需在 PFHR 中增加一个地址字段和一个比较器），就实现了预取器与核心执行节奏的动态同步，从根本上解决了预取“过犹不及”的难题。</p>
 
 

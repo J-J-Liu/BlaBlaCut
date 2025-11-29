@@ -332,10 +332,9 @@ LVM 的核心创新之一在于其能够有效应对现代数据中心中普遍�
 
 *Figure 3: Median percentage of free memory in a Meta's datacenter that can be allocated contiguously at various sizes.*
 
-```
 - 然而，**数百千字节 (hundreds of KBs)** 级别的小块连续内存仍然广泛可用，即使在高度碎片化的服务器上也是如此。
+
 - 因此，LVM 的设计目标是将内存分配需求适配到这个可行的粒度上。
-```
 
 - **核心机制：Per-Leaf-Node Gapped Page Tables (GPTs)**
 

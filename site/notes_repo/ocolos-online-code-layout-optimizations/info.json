@@ -15,7 +15,8 @@
       "University of California, Santa Cruz"
     ],
     "venue": "MICRO",
-    "year": 2023
+    "year": 2022,
+    "doi": "10.1109/MICRO56248.2022.00045"
   },
-  "description": "提出OCOLOS，首个面向非托管语言（如C/C++）的在线代码布局优化系统。它在运行时对进程进行Profile-Guided Optimization (PGO)，解决了离线PGO因配置文件过时或代码变更导致的优化失效问题。通过安全的在线代码替换技术，无需修改应用即可加速复杂多线程程序，在MySQL、Verilator和Clang构建上分别实现了最高1.41倍、2.20倍和1.14倍的加速。"
+  "description": "提出了OCOLOS，首个面向非托管语言（如C/C++）的在线代码布局优化系统。它在运行时对进程进行Profile-Guided Optimization（PGO），解决了离线PGO中配置文件过时和代码变更导致映射失效的问题。通过安全的在线代码替换技术，无需修改应用即可加速复杂多线程程序，在MySQL、Verilator和Clang构建上分别实现了最高1.41×、2.20×和1.14×的加速比。"
 }
