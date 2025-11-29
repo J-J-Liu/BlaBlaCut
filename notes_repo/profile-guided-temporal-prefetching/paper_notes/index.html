@@ -942,8 +942,7 @@
 <li>系统维护一个历史准确率值 <code>A_old</code>。</li>
 <li>当遇到新输入时，采样得到新的准确率 <code>A_new</code>。</li>
 <li>使用指数移动平均（Exponential Moving Average）进行合并，公式如下：
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>A_merged = A_old + (A_new - A_old) / N
-</code></pre></div>
+    A_merged = A_old + (A_new - A_old) / N
     其中 <code>N</code> 是一个由设计者预定义的参数，控制新数据的影响权重。</li>
 <li><strong>作用</strong>:<ul>
 <li>对于行为一致的指令（Load A），<code>A_new ≈ A_old</code>，合并后 <code>A_merged</code> 变化微小，hints 保持稳定。</li>
@@ -1072,8 +1071,7 @@
 </li>
 </ul>
 <p><img alt="" src="../images/35456cc33ab0d442a6cee8546bfa0dac04963ff9a6172c0bb272a68ad507d452.jpg" /></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>- 
-</code></pre></div>
+<p>-</p>
 <p><img alt="" src="../images/80e116b52e63cd5dfbc8543d84386bc4f1af72640358658ff952a5835b48ef86.jpg" /></p>
 <ul>
 <li><strong>保证“Lightweight”特性</strong>：整个剖析过程开销极低。根据论文引用 [15]，采样少量 PEBS 事件引入的性能开销 <strong>小于 2%</strong>，且并非每次程序执行都需要剖析，通常每 10-100 次执行一次即可。</li>
@@ -1289,6 +1287,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

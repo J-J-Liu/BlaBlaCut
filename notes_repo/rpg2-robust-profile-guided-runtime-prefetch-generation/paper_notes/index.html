@@ -597,12 +597,14 @@
 </ul>
 <p><img alt="" src="../images/3a1ec04fb133efa439de9006c2e67e74495c23f7af7fed9cced3c6c8e6873d31.jpg" /></p>
 <p><em>Figure 1. The sssp benchmark from CRONO [2] has very different optimal prefetch distances (shaded regions) with different inputs.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 在 `pr` 基准测试中，同一个输入在 **Intel Cascade Lake** 和 **Intel Haswell** 上的表现可能完全相反（一个加速，一个减速）。
-</code></pre></div>
+<ul>
+<li>在 <code>pr</code> 基准测试中，同一个输入在 <strong>Intel Cascade Lake</strong> 和 <strong>Intel Haswell</strong> 上的表现可能完全相反（一个加速，一个减速）。</li>
+</ul>
 <p><img alt="" src="../images/03dfcbf2b0aa3a9436e546f6f6bbf72a2eb548d91fdcfb3274af86448e13ca28.jpg" /></p>
 <p><em>Figure 2. The pr benchmark from CRONO [2] sees a speedup or a slowdown with prefetching, depending on the microarchitecture.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>- 在 `bfs` 基准测试中，预取甚至会导致高达 **50-70%** 的严重性能下降。
-</code></pre></div>
+<ul>
+<li>在 <code>bfs</code> 基准测试中，预取甚至会导致高达 <strong>50-70%</strong> 的严重性能下降。</li>
+</ul>
 <p><img alt="" src="../images/e029dea67c7e2233a7d0df0aff3bd1d55b18e961d14fc41f78abf323162cf45b.jpg" /></p>
 <p><em>Figure 3. The bfs benchmark from CRONO [2] often (but not always) suffers significant performance slowdown with prefetching.</em></p>
 <ul>
@@ -619,11 +621,16 @@
 </ul>
 <p><img alt="" src="../images/8806a8fc532258cfa443880bb5424d8f57d264409c9b84d884d8ec41f3ee51c2.jpg" /></p>
 <p><em>Figure 4. RPG2 proceeds through four phases when optimizing a target process.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>- **Phase 3: Runtime Code Insertion**：利用 **ptrace** 和自定义库 **libpg2**，将包含预取内核的新函数版本注入到目标进程的地址空间中，并通过创新的 **On-Stack Replacement (OSR)** 技术，将正在执行的旧函数调用无缝切换到新版本，这是首个支持 C/C++ 等非托管语言的 OSR 实现。
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>- **Phase 4: Monitoring And Tuning**：通过一个**有界搜索算法**在线调整预取距离，并持续监控 **IPC (Instructions Per Cycle)** 性能指标。如果任何预取距离都无法带来性能提升，RPG2 会**自动回滚 (roll back)** 到原始代码，从而避免性能损失。
-</code></pre></div>
 <ul>
-<li>RPG2 的关键优势在于其<strong>鲁棒性 (robustness)</strong>：它不仅能提供高达 <strong>2.15×</strong> 的加速比（与最佳静态编译器相当），还能在预取有害时安全地恢复原始性能，这是静态方法无法做到的。</li>
+<li>
+<p><strong>Phase 3: Runtime Code Insertion</strong>：利用 <strong>ptrace</strong> 和自定义库 <strong>libpg2</strong>，将包含预取内核的新函数版本注入到目标进程的地址空间中，并通过创新的 <strong>On-Stack Replacement (OSR)</strong> 技术，将正在执行的旧函数调用无缝切换到新版本，这是首个支持 C/C++ 等非托管语言的 OSR 实现。</p>
+</li>
+<li>
+<p><strong>Phase 4: Monitoring And Tuning</strong>：通过一个<strong>有界搜索算法</strong>在线调整预取距离，并持续监控 <strong>IPC (Instructions Per Cycle)</strong> 性能指标。如果任何预取距离都无法带来性能提升，RPG2 会<strong>自动回滚 (roll back)</strong> 到原始代码，从而避免性能损失。</p>
+</li>
+<li>
+<p>RPG2 的关键优势在于其<strong>鲁棒性 (robustness)</strong>：它不仅能提供高达 <strong>2.15×</strong> 的加速比（与最佳静态编译器相当），还能在预取有害时安全地恢复原始性能，这是静态方法无法做到的。</p>
+</li>
 </ul>
 <hr />
 <h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
@@ -1123,6 +1130,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

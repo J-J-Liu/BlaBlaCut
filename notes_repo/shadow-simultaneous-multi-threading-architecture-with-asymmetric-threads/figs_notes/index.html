@@ -2126,7 +2126,7 @@
 <h3 id="figure-15-miss-rate-for-different-thread-configurations">Figure 15: Miss rate for different thread configurations.<a class="headerlink" href="#figure-15-miss-rate-for-different-thread-configurations" title="Permanent link">&para;</a></h3>
 <p><img alt="007ce622ab2caf7367a2c759f12a0a8a67f296badde43e66c59cfb2131765918.jpg" src="../images/007ce622ab2caf7367a2c759f12a0a8a67f296badde43e66c59cfb2131765918.jpg" /></p>
 <ul>
-<li>图表标题为 <strong>Figure 15: Miss rate for different thread configurations</strong>，展示在不同线程配置下，<strong>L2 Cache Miss Rate (%)</strong> 随矩阵**稀疏度（% Sparsity）**变化的趋势。</li>
+<li>图表标题为 <strong>Figure 15: Miss rate for different thread configurations</strong>，展示在不同线程配置下，<strong>L2 Cache Miss Rate (%)</strong> 随矩阵<strong>稀疏度（% Sparsity）</strong>变化的趋势。</li>
 <li>横轴为<strong>稀疏度百分比</strong>，从50%到99%，覆盖了从低稀疏到高稀疏的典型场景；纵轴为<strong>L2缓存缺失率</strong>，范围0%至60%以上。</li>
 <li>图中包含四条曲线，分别代表四种SHADOW配置：<ul>
 <li><strong>1-OoO</strong>（蓝色圆点线）：单个Out-of-Order线程。</li>
@@ -2192,7 +2192,7 @@
 </tbody>
 </table>
 <ul>
-<li>在**低稀疏度（如50%）**时，所有配置的L2缺失率均较低，<strong>1-OoO表现最优</strong>，缺失率仅约5%，而其他多线程配置因资源竞争略有上升。</li>
+<li>在<strong>低稀疏度（如50%）</strong>时，所有配置的L2缺失率均较低，<strong>1-OoO表现最优</strong>，缺失率仅约5%，而其他多线程配置因资源竞争略有上升。</li>
 <li>随着稀疏度增加，所有配置的L2缺失率均显著上升，尤其在<strong>95%以上稀疏度时急剧攀升</strong>，表明内存访问模式高度不规则，硬件预取失效。</li>
 <li><strong>1-OoO + 4-InO</strong>配置在各稀疏度下与<strong>2-OoO</strong>和<strong>6-InO</strong>的缺失率几乎重合，说明其<strong>缓存行为与纯OoO或纯InO配置无显著差异</strong>，未引入额外缓存压力。</li>
 <li>尽管多线程配置导致轻微的L2缺失率上升，但论文指出该影响有限，<strong>并未显著损害整体性能</strong>，因为SHADOW通过动态工作窃取机制有效利用了TLP来掩盖内存延迟。</li>
@@ -2385,7 +2385,7 @@
 <h3 id="figure-19-distribution-of-work-across-threads-with-dynamic-work-stealing-for-various-degrees-of-sparsity">Figure 19: Distribution of work across threads with dynamic work stealing for various degrees of sparsity.<a class="headerlink" href="#figure-19-distribution-of-work-across-threads-with-dynamic-work-stealing-for-various-degrees-of-sparsity" title="Permanent link">&para;</a></h3>
 <p><img alt="882fb687091b1b91a70b99910e9fe1f6c57e47ded3245a0ce1cc49633f0007d2.jpg" src="../images/882fb687091b1b91a70b99910e9fe1f6c57e47ded3245a0ce1cc49633f0007d2.jpg" /></p>
 <ul>
-<li>图片展示了在不同稀疏度（50%、70%、85%、98%）下，SHADOW架构中**六个线程（Tid:0 至 Tid:5）**通过动态工作窃取机制所承担的总迭代次数分布。</li>
+<li>图片展示了在不同稀疏度（50%、70%、85%、98%）下，SHADOW架构中<strong>六个线程（Tid:0 至 Tid:5）</strong>通过动态工作窃取机制所承担的总迭代次数分布。</li>
 <li>每个柱状图代表一种SHADOW配置：1-OoO、2-OoO、6-InO、1-OoO+4-InO。其中，<strong>1-OoO+4-InO</strong>是SHADOW的核心混合配置。</li>
 <li><strong>Tid:0</strong>（深蓝色）始终是唯一的OoO线程，在低稀疏度时承担绝大部分工作；随着稀疏度增加，其工作量占比显著下降。</li>
 <li>在<strong>50%稀疏度</strong>时，1-OoO+4-InO配置中，Tid:0（OoO）完成约350次迭代，其余四个InO线程（Tid:1至Tid:4）合计完成约250次，显示OoO线程主导执行。</li>
@@ -2500,6 +2500,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

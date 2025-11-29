@@ -1,6 +1,6 @@
 {
-  "index": "titan-i-an-open-source-high-performance-risc-v-vector-core",
-  "paper_title": "Titan-I: An Open-Source, High Performance RISC-V Vector Core",
+  "index": "titan-l-an-open-source-high-performance-risc-v-vector-core",
+  "paper_title": "Titan-l: An Open-Source, High Performance RISC-V Vector Core",
   "metadata": {
     "authors": [
       "Jiuyang Liu",
@@ -18,5 +18,5 @@
     "year": 2025,
     "doi": "10.1145/3725843.3756059"
   },
-  "description": "提出Titan-I (T1)，一个开源、高性能的乱序RISC-V向量核，通过粗粒度布局求解器、全数据通路置换单元和掩码寄存器缓存解决扩展VLEN/DLEN时的布线瓶颈。结合细粒度链接、提交即发射等技术优化ILP。在密码学 workload 上比Nvidia 3090/5090快2.41x/1.85x，在HPC上比HiSilicon KP920快4.59x（4倍数据通路），面积仅为其19%。"
+  "description": "论文提出了Titan-I (T1)，一个开源、高性能、乱序执行的RISC-V向量处理器。其通过粗粒度布局规划器、全数据通路置换单元和掩码寄存器缓存解决扩展性问题，并采用细粒度链接、提交即发射等技术优化ILP。在密码学 workload 上，T1性能比Nvidia 3090高2.41倍，面积仅为其40%；在HPC workload上，以19%的面积实现与HiSilicon TaiShan V120相当的性能。"
 }

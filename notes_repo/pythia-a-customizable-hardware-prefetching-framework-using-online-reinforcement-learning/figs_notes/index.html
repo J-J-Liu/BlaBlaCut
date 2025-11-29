@@ -1,0 +1,2939 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-comparison-of-a-coverage-overprediction-and-b-performance-of-two-recently-proposed-prefetchers-spp-78-and-bingo-27-and-our-new-proposal-pythia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Comparison of (a) coverage, overprediction, and (b) performance of two recently-proposed prefetchers, SPP [78] and Bingo [27], and our new proposal, Pythia.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-interaction-between-an-agent-and-the-environment-in-a-reinforcement-learning-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Interaction between an agent and the environment in a reinforcement learning system.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#f05fdab68fe61b880dae647139b373cb0fa7f183a00acd0121550bb9fd75b527jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        f05fdab68fe61b880dae647139b373cb0fa7f183a00acd0121550bb9fd75b527.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-formulating-the-prefetcher-as-an-rl-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Formulating the prefetcher as an RL-agent.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2349d1dc359572ddbd04fb31ce047cf4679b0ea69460140e97f64afc21ffdf0bjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2349d1dc359572ddbd04fb31ce047cf4679b0ea69460140e97f64afc21ffdf0b.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-example-program-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: Example program features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-overview-of-pythia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Overview of Pythia.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-1-pythias-reinforcement-learning-based-prefetching-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Algorithm 1 Pythia’s reinforcement learning based prefetching algorithm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6ajpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-a-the-qvstore-is-comprised-of-multiple-vaults-b-each-vault-is-comprised-of-multiple-planes-c-index-generation-from-feature-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: (a) The QVStore is comprised of multiple vaults. (b) Each vault is comprised of multiple planes. (c) Index generation from feature value.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-pipelined-organization-of-qvstore-search-operation-the-illustration-depicts-three-program-features-each-having-three-planes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: Pipelined organization of QVStore search operation. The illustration depicts three program features, each having three planes.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-basic-pythia-configuration-derived-from-our-automated-design-space-exploration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Basic Pythia configuration derived from our automated design-space exploration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-list-of-program-control-flow-and-data-flow-components-used-to-derive-the-list-of-features-for-exploration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3: List of program control-flow and data-flow components used to derive the list of features for exploration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-storage-overhead-of-pythia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4: Storage overhead of Pythia
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-5-simulated-system-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 5: Simulated system parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-6-workloads-used-for-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 6: Workloads used for evaluation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-7-configuration-of-evaluated-prefetchers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 7: Configuration of evaluated prefetchers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-coverage-and-overprediction-with-respect-to-the-baseline-llc-misses-in-the-single-core-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Coverage and overprediction with respect to the baseline LLC misses in the single-core system.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-average-performance-improvement-of-prefetchers-in-systems-with-varying-a-number-of-cores-b-dram-million-transfers-per-second-mtps-c-llc-size-and-d-prefetching-level-each-dram-bandwidth-configuration-roughly-matches-mtpscore-of-various-commercial-processors-5-6-13-the-baseline-bandwidthllc-configuration-is-marked-in-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Average performance improvement of prefetchers in systems with varying (a) number of cores, (b) DRAM million transfers per second (MTPS), (c) LLC size, and (d) prefetching level. Each DRAM bandwidth configuration roughly matches MTPS/core of various commercial processors [5, 6, 13]. The baseline bandwidth/LLC configuration is marked in red.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-performance-improvement-in-single-core-workloads-ststride-sspp-bbingo-ddspatch-and-mmlop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9: Performance improvement in single-core workloads. St=Stride, S=SPP, B=Bingo, D=DSPatch, and M=MLOP.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-performance-in-the-four-core-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10: Performance in the four-core system.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-performance-of-memory-bandwidth-oblivious-pythia-versus-the-basic-pythia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11: Performance of memory bandwidth-oblivious Pythia versus the basic Pythia.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-performance-on-unseen-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12: Performance on unseen traces.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-q-value-curves-of-pcdelta-feature-values-a-0x436a810-and-b-0x4377c50-in-459gemsfdtd-1320b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13: Q-value curves of PC+Delta feature values (a) 0x436a81+0 and (b) 0x4377c5+0 in 459.GemsFDTD-1320B.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-14-performance-and-main-memory-bandwidth-usage-of-prefetchers-in-ligra-cc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 14: Performance and main memory bandwidth usage of prefetchers in Ligra-CC.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-15-performance-of-the-basic-and-strict-pythia-configurations-on-the-ligra-workload-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 15: Performance of the basic and strict Pythia configurations on the Ligra workload suite.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-16-performance-of-the-basic-and-feature-optimized-pythia-on-the-spec-cpu2006-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 16: Performance of the basic and feature-optimized Pythia on the SPEC CPU2006 suite.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-8-area-and-power-overhead-of-pythia-pythias-area-033-mm2core-pythias-power-5511-mwcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 8: Area and power overhead of Pythia Pythia’s area: 0.33 mm2/core; Pythia’s power: 55.11 mW/core
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55d9e1b5cbeeb5567eda51bc6c45b9e552da478bd53d2a41b0c35777d83e45dejpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        55d9e1b5cbeeb5567eda51bc6c45b9e552da478bd53d2a41b0c35777d83e45de.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-17-performance-line-graph-of-150-single-core-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 17: Performance line graph of 150 single-core traces.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-18-performance-line-graph-of-272-four-core-trace-mixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 18: Performance line graph of 272 four-core trace mixes.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-19-performance-coverage-and-overprediction-of-pythia-with-different-feature-combinations-the-x-axis-shows-experiments-with-different-feature-combinations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 19: Performance, coverage, and overprediction of Pythia with different feature combinations. The x-axis shows experiments with different feature combinations.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-20-performance-sensitivity-of-pythia-towards-a-the-exploration-rate-and-b-the-learning-rate-hyperparameter-values-the-values-in-basic-pythia-configuration-are-marked-in-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 20: Performance sensitivity of Pythia towards (a) the exploration rate (??), and (b) the learning rate (??) hyperparameter values. The values in basic Pythia configuration are marked in red.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-21-performance-of-pythia-vs-the-context-prefetcher-104-using-hardware-contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 21: Performance of Pythia vs. the context prefetcher [104] using hardware contexts.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-22-performance-comparison-against-ibm-power7-prefetcher-71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 22: Performance comparison against IBM POWER7 prefetcher [71].
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning">Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning 图表详解<a class="headerlink" href="#pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-comparison-of-a-coverage-overprediction-and-b-performance-of-two-recently-proposed-prefetchers-spp-78-and-bingo-27-and-our-new-proposal-pythia">Figure 1: Comparison of (a) coverage, overprediction, and (b) performance of two recently-proposed prefetchers, SPP [78] and Bingo [27], and our new proposal, Pythia.<a class="headerlink" href="#figure-1-comparison-of-a-coverage-overprediction-and-b-performance-of-two-recently-proposed-prefetchers-spp-78-and-bingo-27-and-our-new-proposal-pythia" title="Permanent link">&para;</a></h3>
+<p><img alt="83740f38c45361837c159177240b3dcdcfd417f74be36d813c28a2e5afc9c928.jpg" src="../images/83740f38c45361837c159177240b3dcdcfd417f74be36d813c28a2e5afc9c928.jpg" /></p>
+<ul>
+<li>图 1(a) 展示了 SPP、Bingo 和 Pythia 在六个代表性工作负载上的 <strong>覆盖度（Covered）</strong>、<strong>未覆盖（Uncovered）</strong> 和 <strong>过度预测（Overpredicted）</strong> 情况，数据以基线 LLC miss 的百分比表示。</li>
+<li>图 1(b) 对应展示了这三种预取器在相同工作负载上的 <strong>IPC 提升百分比</strong>，相对于无预取基线。</li>
+<li>在 <strong>482.sphinx3-417B</strong> 工作负载中，Bingo 的覆盖度最高（574%），但其过度预测也显著高于 SPP 和 Pythia；Pythia 覆盖度略低于 Bingo，但过度预测最少，最终 IPC 提升最高。</li>
+<li>在 <strong>PARSEC-Canneal</strong> 中，Bingo 覆盖度（302%）和 IPC 提升均优于 SPP，Pythia 覆盖度与 Bingo 相近，但过度预测更少，IPC 提升略高。</li>
+<li>在 <strong>PARSEC-Facesim</strong> 中，Bingo 覆盖度（368%）远超 SPP，Pythia 覆盖度接近 Bingo，过度预测最低，IPC 提升最佳。</li>
+<li>在 <strong>459.GemsFDTD-765B</strong> 中，SPP 覆盖度（529%）显著优于 Bingo，Pythia 覆盖度介于两者之间，但过度预测最少，IPC 提升最高。</li>
+<li>在 <strong>Ligra-CC</strong> 中，Bingo 覆盖度与 PARSEC-Canneal 相近，但过度预测大幅降低；然而，其 IPC 提升为负值（-1.9%），而 Pythia 虽然覆盖度较低，但过度预测极少，实现了正向的 IPC 提升。</li>
+<li>在 <strong>Ligra-PageRankDelta</strong> 中，Bingo 覆盖度极高（529%），但过度预测严重，导致 IPC 提升为负；Pythia 覆盖度适中，过度预测极低，实现了最高的正向 IPC 提升。</li>
+<li>综合来看，Pythia 在所有工作负载上均能实现 <strong>最高的 IPC 提升</strong>，关键在于其能有效平衡覆盖度与过度预测，尤其在内存带宽受限的工作负载（如 Ligra-CC）中表现突出，避免了因过度预测浪费带宽而导致的性能损失。</li>
+</ul>
+<h3 id="figure-2-interaction-between-an-agent-and-the-environment-in-a-reinforcement-learning-system">Figure 2: Interaction between an agent and the environment in a reinforcement learning system.<a class="headerlink" href="#figure-2-interaction-between-an-agent-and-the-environment-in-a-reinforcement-learning-system" title="Permanent link">&para;</a></h3>
+<p><img alt="e9d3761edb2359ec1372230f84e0d82de83816846eb313cd3dba18b86093c482.jpg" src="../images/e9d3761edb2359ec1372230f84e0d82de83816846eb313cd3dba18b86093c482.jpg" /></p>
+<ul>
+<li>图片展示了强化学习（Reinforcement Learning, RL）系统中 <strong>Agent</strong> 与 <strong>Environment</strong> 之间的核心交互循环。</li>
+<li>该图是理解 Pythia 设计原理的基础，它将硬件预取器建模为一个自主学习的 RL Agent。</li>
+<li>在每个离散时间步 <code>t</code>，系统按以下顺序运作：<ul>
+<li><strong>Agent</strong> 观察当前环境状态 <code>St</code>。</li>
+<li>基于状态 <code>St</code>，<strong>Agent</strong> 决定并执行一个动作 <code>At</code>。</li>
+<li><strong>Environment</strong> 接收动作 <code>At</code> 后，过渡到新状态 <code>St+1</code>，并向 <strong>Agent</strong> 发出一个即时奖励 <code>Rt+1</code>。</li>
+<li><strong>Agent</strong> 利用接收到的奖励 <code>Rt+1</code> 来更新其策略，以期在未来获得更高的累积奖励。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">输入</th>
+<th style="text-align: left;">输出</th>
+<th style="text-align: left;">功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Agent</strong></td>
+<td style="text-align: left;">状态 <code>St</code></td>
+<td style="text-align: left;">动作 <code>At</code></td>
+<td style="text-align: left;">根据当前状态和过往经验，决定采取何种行动以最大化长期收益。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Environment</strong></td>
+<td style="text-align: left;">动作 <code>At</code></td>
+<td style="text-align: left;">新状态 <code>St+1</code> 和奖励 <code>Rt+1</code></td>
+<td style="text-align: left;">对 Agent 的动作做出响应，改变自身状态，并提供一个数值化的反馈信号。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此交互模型的核心在于 <strong>Reward</strong> 机制，它封装了 Agent 的目标，驱动其学习最优策略。</li>
+<li>在 Pythia 的上下文中，<strong>State</strong> 是从内存请求中提取的程序特征向量，<strong>Action</strong> 是选择一个预取偏移量，<strong>Reward</strong> 则评估该预取操作在当前系统资源（如内存带宽）约束下的准确性和及时性。</li>
+<li>这种设计使得 Pythia 能够在线学习，无需离线训练，并能根据不断变化的工作负载和系统条件动态调整其预取行为。</li>
+</ul>
+<h3 id="f05fdab68fe61b880dae647139b373cb0fa7f183a00acd0121550bb9fd75b527jpg">f05fdab68fe61b880dae647139b373cb0fa7f183a00acd0121550bb9fd75b527.jpg<a class="headerlink" href="#f05fdab68fe61b880dae647139b373cb0fa7f183a00acd0121550bb9fd75b527jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="f05fdab68fe61b880dae647139b373cb0fa7f183a00acd0121550bb9fd75b527.jpg" src="../images/f05fdab68fe61b880dae647139b373cb0fa7f183a00acd0121550bb9fd75b527.jpg" /></p>
+<ul>
+<li>该图片展示的是强化学习（Reinforcement Learning, RL）中 <strong>SARSA算法</strong> 的核心公式，用于迭代更新状态-动作对的Q值。</li>
+<li>公式定义了在时间步 <code>t</code>，当智能体观察到状态 <code>St</code> 并采取动作 <code>At</code> 后，如何根据环境反馈的奖励 <code>Rt+1</code> 和下一个状态 <code>St+1</code> 及其对应的动作 <code>At+1</code> 来更新当前状态-动作对 <code>(St, At)</code> 的Q值。</li>
+<li>公式结构清晰，分为两部分：<ul>
+<li>第一部分是旧的Q值 <code>Q(St, At)</code>。</li>
+<li>第二部分是基于奖励和未来预期收益的增量调整项，由学习率 <code>α</code>、即时奖励 <code>Rt+1</code>、折扣因子 <code>γ</code> 以及下一个状态-动作对的Q值 <code>Q(St+1, At+1)</code> 共同决定。</li>
+</ul>
+</li>
+<li><strong>关键参数说明</strong>：<ul>
+<li><code>α</code> (Alpha)：<strong>学习率</strong>，控制新信息对旧Q值的覆盖程度。值越大，学习越快，但也可能不稳定。</li>
+<li><code>γ</code> (Gamma)：<strong>折扣因子</strong>，用于衡量未来奖励的重要性。值接近1表示智能体更关注长期收益，值接近0则更关注即时奖励。</li>
+</ul>
+</li>
+<li>该公式是Pythia prefetcher实现其自适应学习能力的基础，使其能够根据历史经验不断优化 prefetch 决策。</li>
+<li>在Pythia的上下文中，<code>St</code> 代表从内存请求中提取的程序特征向量，<code>At</code> 代表选择的预取偏移量，<code>Rt+1</code> 则是根据预取准确性、及时性及系统带宽使用情况计算出的数值奖励。</li>
+</ul>
+<h3 id="figure-3-formulating-the-prefetcher-as-an-rl-agent">Figure 3: Formulating the prefetcher as an RL-agent.<a class="headerlink" href="#figure-3-formulating-the-prefetcher-as-an-rl-agent" title="Permanent link">&para;</a></h3>
+<p><img alt="49b320026f484de8c0a6145c55852f0ac0727d79500999230fe2a90fb2c4724c.jpg" src="../images/49b320026f484de8c0a6145c55852f0ac0727d79500999230fe2a90fb2c4724c.jpg" /></p>
+<ul>
+<li>图片展示了将硬件预取器（Prefetcher）建模为强化学习（RL）智能体的框架，核心是<strong>Prefetcher</strong>与<strong>Processor &amp; Memory Subsystem</strong>之间的交互闭环。</li>
+<li><strong>Prefetcher</strong>作为RL智能体，接收来自<strong>Processor &amp; Memory Subsystem</strong>的输入：即针对地址A的内存请求所提取的特征（如PC），并基于这些特征做出预取决策。</li>
+<li>决策输出为从地址A出发、偏移量为O的预取地址（A+offset (O)），该请求被发送回<strong>Processor &amp; Memory Subsystem</strong>以填充缓存。</li>
+<li><strong>Processor &amp; Memory Subsystem</strong>在执行过程中评估预取动作的质量，并向<strong>Prefetcher</strong>反馈一个数值化的<strong>Reward</strong>。此奖励综合了预取的准确性、及时性以及系统级反馈（如内存带宽使用情况）。</li>
+<li>该图清晰地描绘了一个典型的RL循环：智能体（Prefetcher）观察环境状态（特征），采取行动（生成预取），环境（Processor &amp; Memory Subsystem）响应并提供奖励，智能体据此更新其策略。</li>
+<li>此框架的核心优势在于其<strong>自适应性</strong>和<strong>系统感知能力</strong>，它允许预取器在线学习，动态调整其行为以最大化长期性能收益，而非依赖静态、单一特征的预取算法。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">角色</th>
+<th style="text-align: left;">输入</th>
+<th style="text-align: left;">输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Prefetcher</strong></td>
+<td style="text-align: left;">RL智能体</td>
+<td style="text-align: left;">特征（如PC）、奖励</td>
+<td style="text-align: left;">预取地址（A+O）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Processor &amp; Memory Subsystem</strong></td>
+<td style="text-align: left;">环境</td>
+<td style="text-align: left;">需求请求、预取请求</td>
+<td style="text-align: left;">特征、奖励</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该设计的关键创新点在于将“奖励”机制内嵌于预取决策中，使预取器能够权衡覆盖范围、准确性和系统资源消耗，从而实现更鲁棒的性能优化。</li>
+</ul>
+<h3 id="2349d1dc359572ddbd04fb31ce047cf4679b0ea69460140e97f64afc21ffdf0bjpg">2349d1dc359572ddbd04fb31ce047cf4679b0ea69460140e97f64afc21ffdf0b.jpg<a class="headerlink" href="#2349d1dc359572ddbd04fb31ce047cf4679b0ea69460140e97f64afc21ffdf0bjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="2349d1dc359572ddbd04fb31ce047cf4679b0ea69460140e97f64afc21ffdf0b.jpg" src="../images/2349d1dc359572ddbd04fb31ce047cf4679b0ea69460140e97f64afc21ffdf0b.jpg" /></p>
+<ul>
+<li>图片内容为一个数学公式，定义了状态空间 <strong>S</strong>。</li>
+<li>该状态空间由 <strong>k</strong> 个程序特征（program features）组成，表示为集合形式：<strong>S ≡ {φ_S^1, φ_S^2, ..., φ_S^k}</strong>。</li>
+<li>公式中的 <strong>φ_S^i</strong> 代表第 <strong>i</strong> 个程序特征，其中上标 <strong>i</strong> 表示特征的序号，下标 <strong>S</strong> 表示该特征属于状态空间。</li>
+<li>此公式是论文中 <strong>3.1 Formulation of the RL-based Prefetcher</strong> 章节的一部分，用于正式定义强化学习框架中的“状态”概念。</li>
+<li>在 Pythia 的设计中，这个状态向量是 RL-agent 做出 prefetch 决策的基础输入。每个特征都包含控制流和/或数据流信息，例如 PC、地址、delta 等。</li>
+<li>论文在后续章节（如 §4.3.1）中提到，虽然理论上可以使用任意数量的特征，但为了硬件实现的可行性，会在设计时固定状态向量的维度 <strong>k</strong>，并允许通过配置寄存器在线选择具体的 <strong>k</strong> 个特征。</li>
+</ul>
+<h3 id="table-1-example-program-features">Table 1: Example program features<a class="headerlink" href="#table-1-example-program-features" title="Permanent link">&para;</a></h3>
+<p><img alt="e8955d96613746b5cca76e86bf2290dfbb1d07e81c0b4793bb31a08b6be6fe8c.jpg" src="../images/e8955d96613746b5cca76e86bf2290dfbb1d07e81c0b4793bb31a08b6be6fe8c.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 1</strong>，标题为“Example program features”，用于展示 Pythia 框架中可选的程序特征（Program Features）示例。</li>
+<li>表格结构清晰，分为三列：<strong>Feature</strong>、<strong>Control-flow</strong> 和 <strong>Data-flow</strong>。其中 Control-flow 和 Data-flow 列又各自细分为 <strong>Info.</strong>（信息）和 <strong>History</strong>（历史）两个子列。</li>
+<li>所有特征均通过组合控制流与数据流组件构成，符合文中对“program feature”的定义：由最多两个部分组成——<strong>program control-flow component</strong> 和 <strong>program data-flow component</strong>。</li>
+<li>表格中使用 <strong>“×”符号</strong> 标记某特征是否包含对应的信息或历史维度，便于快速识别特征构成。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Control-flow Info.</th>
+<th>Control-flow History</th>
+<th>Data-flow Info.</th>
+<th>Data-flow History</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Last 3-PCs</td>
+<td>PC</td>
+<td>last 3</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Last 4-deltas</td>
+<td>—</td>
+<td>—</td>
+<td>Cacheline delta</td>
+<td>last 4</td>
+</tr>
+<tr>
+<td>PC+Delta</td>
+<td>PC</td>
+<td>current</td>
+<td>Cacheline delta</td>
+<td>current</td>
+</tr>
+<tr>
+<td>Last 4-PCs+Page no.</td>
+<td>PC</td>
+<td>last 4</td>
+<td>Page no.</td>
+<td>current</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Last 3-PCs</strong> 特征仅依赖控制流，记录最近三个负载指令的程序计数器（PC），不涉及数据流信息。</li>
+<li><strong>Last 4-deltas</strong> 特征仅依赖数据流，记录最近四个缓存行地址之间的差值（delta），不涉及控制流信息。</li>
+<li><strong>PC+Delta</strong> 特征结合了当前 PC 与当前缓存行 delta，是控制流与数据流的直接拼接，常用于捕捉特定指令触发的访问模式。</li>
+<li><strong>Last 4-PCs+Page no.</strong> 特征结合了最近四个 PC 与当前页号，旨在捕捉跨多个指令但局限于同一物理页内的访问模式。</li>
+<li>该表直观展示了 Pythia 如何灵活组合不同粒度的程序上下文信息，以构建多维度状态空间，从而支持其强化学习代理做出更精准的预取决策。</li>
+</ul>
+<h3 id="figure-4-overview-of-pythia">Figure 4: Overview of Pythia.<a class="headerlink" href="#figure-4-overview-of-pythia" title="Permanent link">&para;</a></h3>
+<p><img alt="881ccba2541ed7a5a3b77b74c875fc24a7c82d29322345d5c4fc906c9bb7e175.jpg" src="../images/881ccba2541ed7a5a3b77b74c875fc24a7c82d29322345d5c4fc906c9bb7e175.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了 Pythia 硬件预取框架的高层架构，核心组件为 <strong>Q-Value Store (QVStore)</strong> 和 <strong>Evaluation Queue (EQ)</strong>，二者协同实现基于强化学习的动态预取决策。</p>
+</li>
+<li>
+<p>整个流程围绕“需求请求”展开，共包含七个关键步骤，形成闭环反馈系统：</p>
+<ul>
+<li><strong>步骤1</strong>：当一个需求请求（Demand Request）到达时，Pythia 首先在 <strong>EQ</strong> 中查找该地址。若命中，则根据该条目是否已标记“填充”（Filled bit），分配 <strong>R<sub>Accurate</sub></strong> 或 <strong>R<sub>Late</sub></strong> 奖励。</li>
+<li><strong>步骤2</strong>：从需求请求中提取程序特征，组合成 <strong>State Vector</strong>。</li>
+<li><strong>步骤3</strong>：使用 State Vector 查询 <strong>QVStore</strong>，找出对应状态下 Q 值最高的动作（Action）。</li>
+<li><strong>步骤4</strong>：根据选定的动作生成预取请求，并发送至 <strong>Memory Hierarchy</strong>。</li>
+<li><strong>步骤5</strong>：将本次选择的动作、对应的预取地址及 State Vector 插入 <strong>EQ</strong>。对于不预取或跨页预取的情况，立即分配相应奖励。</li>
+<li><strong>步骤6</strong>：当 EQ 条目被驱逐时，利用其存储的状态-动作对和奖励值，通过 SARSA 算法更新 <strong>QVStore</strong> 中的 Q 值。</li>
+<li><strong>步骤7</strong>：当预取数据填充进缓存时（Prefetch Fill），在 <strong>EQ</strong> 中找到对应条目并设置“填充位”，用于后续判断预取是否及时。</li>
+</ul>
+</li>
+<li>
+<p>关键组件功能与交互：</p>
+<ul>
+<li><strong>QVStore</strong>：存储所有观察到的状态-动作对的 Q 值，是 RL 决策的核心依据。其结构采用分层设计（Vaults + Planes），以平衡存储开销与泛化能力。</li>
+<li><strong>EQ</strong>：作为 FIFO 队列，记录最近的预取动作及其状态，是连接决策与奖励反馈的桥梁。每个条目包含动作、预取地址和填充位。</li>
+<li><strong>Reward Assignment</strong>：奖励机制是驱动学习的关键。奖励分为五类，涵盖准确及时、准确但延迟、跨页、不准确（分高低带宽）、以及不预取（分高低带宽），使 Pythia 能权衡覆盖、精度与系统资源消耗。</li>
+</ul>
+</li>
+<li>
+<p>流程特点：</p>
+<ul>
+<li><strong>在线学习</strong>：整个过程无需离线训练，通过实时交互和奖励反馈持续优化策略。</li>
+<li><strong>系统感知</strong>：奖励机制直接融入内存带宽等系统级反馈，使预取决策具备“系统感知”能力。</li>
+<li><strong>可定制性</strong>：State Vector 的构成和奖励值均可通过配置寄存器在线调整，适应不同工作负载和系统配置。</li>
+</ul>
+</li>
+<li>
+<p>数据流与控制流总结：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">输入</th>
+<th style="text-align: left;">处理单元</th>
+<th style="text-align: left;">输出/操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Demand Request Address</td>
+<td style="text-align: left;">EQ</td>
+<td style="text-align: left;">Assign Reward (R<sub>Accurate</sub>/R<sub>Late</sub>)</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Demand Request Attributes</td>
+<td style="text-align: left;">State Extraction</td>
+<td style="text-align: left;">State Vector</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">State Vector</td>
+<td style="text-align: left;">QVStore</td>
+<td style="text-align: left;">Action with Max Q-Value</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Selected Action</td>
+<td style="text-align: left;">Prefetch Generator</td>
+<td style="text-align: left;">Prefetch Request to Memory Hierarchy</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Action, Prefetch Address, State Vector</td>
+<td style="text-align: left;">EQ</td>
+<td style="text-align: left;">Insert Entry (Immediate Reward if applicable)</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Evicted EQ Entry (State-Action, Reward)</td>
+<td style="text-align: left;">QVStore Update Logic</td>
+<td style="text-align: left;">Update Q-Value via SARSA</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Prefetch Fill Address</td>
+<td style="text-align: left;">EQ</td>
+<td style="text-align: left;">Set Filled Bit for Matching Entry</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，该图清晰地描绘了 Pythia 如何将强化学习范式应用于硬件预取，通过一个闭环的“观察-决策-执行-反馈”循环，实现自适应、系统感知且可定制的高性能预取。</li>
+</ul>
+<h3 id="algorithm-1-pythias-reinforcement-learning-based-prefetching-algorithm">Algorithm 1 Pythia’s reinforcement learning based prefetching algorithm<a class="headerlink" href="#algorithm-1-pythias-reinforcement-learning-based-prefetching-algorithm" title="Permanent link">&para;</a></h3>
+<p><img alt="bc724ad3dc2aab9d2cabc7bf0e4ee7d0f9e33cc9f0b4e293fc653ec249f477b9.jpg" src="../images/bc724ad3dc2aab9d2cabc7bf0e4ee7d0f9e33cc9f0b4e293fc653ec249f477b9.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Algorithm 1: Pythia’s reinforcement learning based prefetching algorithm</strong>，该算法是 Pythia 预取器的核心逻辑，用于在每次需求请求时做出预取决策并更新其内部状态。</li>
+<li>算法主要由两个过程组成：<code>INITIALIZE</code> 和 <code>TRAIN_AND_PREDICT(Addr)</code>。</li>
+<li><code>INITIALIZE</code> 过程负责初始化系统：<ul>
+<li>将 <strong>QVStore</strong> 中所有状态-动作对 <code>(S, A)</code> 的 Q 值初始化为 <code>1/(1-γ)</code>。</li>
+<li>清空 <strong>Evaluation Queue (EQ)</strong>。</li>
+</ul>
+</li>
+<li><code>TRAIN_AND_PREDICT(Addr)</code> 是核心处理流程，针对每个需求地址 <code>Addr</code> 执行：<ul>
+<li>首先，在 <strong>EQ</strong> 中搜索当前需求地址。如果找到匹配项（即该地址曾被预取），则根据该条目的 <code>filled</code> 位分配奖励：<ul>
+<li>若 <code>filled == true</code>，表示预取及时，分配奖励 <strong>R_AT</strong>。</li>
+<li>否则，表示预取延迟，分配奖励 <strong>R_AL</strong>。</li>
+</ul>
+</li>
+<li>接着，从当前需求请求的属性中提取状态向量 <code>S</code>。</li>
+<li>根据 ε-greedy 策略选择动作 <code>action</code>：<ul>
+<li>以概率 <code>ε</code> 随机选择一个动作（探索）。</li>
+<li>否则，选择在当前状态 <code>S</code> 下具有最高 Q 值的动作（利用）。</li>
+</ul>
+</li>
+<li>使用选定的动作生成预取地址 (<code>Addr + Offset[action]</code>) 并发出预取请求。</li>
+<li>创建一个新的 <strong>EQ</strong> 条目，包含当前状态 <code>S</code>、选定动作 <code>action</code> 和预取地址，并将其插入 <strong>EQ</strong>。</li>
+<li>对于特殊情况，立即分配奖励：<ul>
+<li>如果是“不预取”动作，则根据当前内存带宽使用情况分配 <strong>R_NP^H</strong> 或 <strong>R_NP^L</strong>。</li>
+<li>如果是“跨页预取”动作，则分配奖励 <strong>R_CL</strong>。</li>
+</ul>
+</li>
+<li>当 <strong>EQ</strong> 插入导致条目被逐出时，检查被逐出条目是否已分配奖励：<ul>
+<li>如果未分配，则根据当前内存带宽使用情况分配 <strong>R_IN^H</strong> 或 <strong>R_IN^L</strong>。</li>
+</ul>
+</li>
+<li>最后，使用 <strong>SARSA</strong> 算法更新 Q 值：<ul>
+<li>获取被逐出条目的奖励 <code>R</code>、状态 <code>S1</code> 和动作 <code>A1</code>。</li>
+<li>获取 <strong>EQ</strong> 头部条目的状态 <code>S2</code> 和动作 <code>A2</code>。</li>
+<li>更新公式为：<code>Q(S1, A1) ← Q(S1, A1) + α[R + γQ(S2, A2) - Q(S1, A1)]</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">操作</th>
+<th style="text-align: left;">关键变量/奖励</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">初始化 QVStore 和 EQ</td>
+<td style="text-align: left;"><code>Q(S, A) ← 1/(1-γ)</code>, <code>clear EQ</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">搜索 EQ</td>
+<td style="text-align: left;"><code>entry ← search_EQ(Addr)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">分配奖励 (若命中)</td>
+<td style="text-align: left;"><code>R_AT</code> (及时), <code>R_AL</code> (延迟)</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">提取状态</td>
+<td style="text-align: left;"><code>S ← get_state()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">选择动作</td>
+<td style="text-align: left;"><code>action ← get_random_action()</code> (探索), <code>argmax_a Q(S, a)</code> (利用)</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">生成预取地址</td>
+<td style="text-align: left;"><code>prefetch(Addr + Offset[action])</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">创建并插入 EQ 条目</td>
+<td style="text-align: left;"><code>create_EQ_entry(S, action, Addr + Offset[action])</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">特殊动作立即奖励</td>
+<td style="text-align: left;"><code>R_NP^H/L</code> (不预取), <code>R_CL</code> (跨页预取)</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">处理逐出条目</td>
+<td style="text-align: left;"><code>dq_entry.reward ← R_IN^H/L</code> (若无奖励)</td>
+</tr>
+<tr>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">SARSA 更新 Q 值</td>
+<td style="text-align: left;"><code>Q(S1, A1) ← Q(S1, A1) + α[R + γQ(S2, A2) - Q(S1, A1)]</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该算法体现了 Pythia 的核心思想：通过在线学习，将程序上下文（状态 <code>S</code>）与预取决策（动作 <code>action</code>）关联起来，并通过奖励信号（<code>R</code>）来强化或弱化这种关联，从而实现自适应和系统感知的预取。</li>
+</ul>
+<h3 id="f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6ajpg">f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg<a class="headerlink" href="#f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6ajpg" title="Permanent link">&para;</a></h3>
+<p><img alt="f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg" src="../images/f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg" /></p>
+<ul>
+<li>该图片展示了一个数学公式，定义了 <strong>QVStore</strong> 中状态-动作对的 Q 值计算方式。</li>
+<li>公式为：<strong>Q(S, A) = max Q(φᵢₛ, A)</strong>，其中 i 的取值范围是 (1, k)。</li>
+<li>这表示对于一个给定的状态 S 和动作 A，其最终的 Q 值等于所有 k 个构成特征 φᵢₛ 与动作 A 组合所对应的 Q 值中的最大值。</li>
+<li>此设计体现了 Pythia 的<strong>分层结构</strong>：QVStore 由 k 个独立的“金库”（vault）组成，每个金库负责存储一个特定程序特征与动作组合的 Q 值。</li>
+<li>在查询时，系统会并行查询所有 k 个金库，然后取其最大值作为最终结果，这确保了决策由最具影响力的特征驱动。</li>
+<li>该机制允许 Pythia 通过简单地增加新的金库来扩展支持更多维度的程序特征，从而实现<strong>可扩展性</strong>。</li>
+</ul>
+<h3 id="figure-5-a-the-qvstore-is-comprised-of-multiple-vaults-b-each-vault-is-comprised-of-multiple-planes-c-index-generation-from-feature-value">Figure 5: (a) The QVStore is comprised of multiple vaults. (b) Each vault is comprised of multiple planes. (c) Index generation from feature value.<a class="headerlink" href="#figure-5-a-the-qvstore-is-comprised-of-multiple-vaults-b-each-vault-is-comprised-of-multiple-planes-c-index-generation-from-feature-value" title="Permanent link">&para;</a></h3>
+<p><img alt="f39e95f5f7979f3a7a654c44488cd00c8fb5e6928d223ee2245502d1970df506.jpg" src="../images/f39e95f5f7979f3a7a654c44488cd00c8fb5e6928d223ee2245502d1970df506.jpg" /></p>
+<ul>
+<li>图像展示了 Pythia 硬件预取器中 <strong>QVStore</strong> 的分层结构设计，分为三个部分：(a) 多 vault 架构、(b) 单个 vault 内部的多 plane 结构、(c) 特征值到索引的生成过程。</li>
+<li><strong>图 (a)</strong> 描述了 QVStore 的顶层架构：一个 k 维状态向量（由多个程序特征 φ₁ₛ, φ₂ₛ, ..., φᵏₛ 组成）被输入到 k 个并行的 <strong>Vault</strong> 中。每个 Vault 计算其对应特征与动作 A 的 Q 值（Q(φⁱₛ, A)）。最终的 <strong>State-action Q-value</strong> 通过取所有 Feature-action Q-values 的最大值得到（MAX 操作），确保决策由最具信息量的特征驱动。</li>
+<li><strong>图 (b)</strong> 展示了单个 Vault 的内部实现：它由多个 <strong>Plane</strong> 组成。对于给定的特征值 φᵏₛ 和动作 A，系统会为每个 Plane 生成一个独立的索引，从对应的 Plane 表格中读取一个“部分 Q 值”。最终的 Feature-action Q-value 是所有 Plane 输出的部分 Q 值之和。这种设计借鉴了 <strong>tile coding</strong> 思想，通过多个重叠的哈希函数在分辨率和泛化能力之间取得平衡。</li>
+<li><strong>图 (c)</strong> 详细说明了索引生成机制：输入的特征值 φᵏₛ 首先经过一个固定的 <strong>Shift</strong>（移位常数，设计时随机选定），然后进行 <strong>Hashing</strong>（哈希运算），最终得到用于访问特定 Plane 的索引。该过程将高维、连续的特征空间映射到离散、紧凑的表格索引上，有效控制了存储开销。</li>
+<li>这种分层设计的核心优势在于：<ul>
+<li><strong>可扩展性</strong>：增加状态维度只需添加新的 Vault。</li>
+<li><strong>高效性</strong>：通过 tile coding 减少存储需求，并允许相似特征值共享部分 Q 值，加速训练。</li>
+<li><strong>低延迟</strong>：支持并行查询和流水线操作，满足硬件预取器的实时性要求。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">功能</th>
+<th style="text-align: left;">关键技术</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Vault</strong></td>
+<td style="text-align: left;">存储特定程序特征与动作的 Q 值</td>
+<td style="text-align: left;">对应状态向量的一个维度</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Plane</strong></td>
+<td style="text-align: left;">存储特征-动作对的部分 Q 值</td>
+<td style="text-align: left;">多个 Plane 共同构成一个 Vault</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Index Generation</strong></td>
+<td style="text-align: left;">将特征值映射为 Plane 的访问索引</td>
+<td style="text-align: left;">Shift + Hashing，实现 tile coding</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体架构体现了 Pythia 设计的核心理念：利用 <strong>Reinforcement Learning</strong> 的 Q-learning 机制，在硬件层面实现一个可定制、可扩展且资源高效的预取决策引擎。</li>
+</ul>
+<h3 id="figure-6-pipelined-organization-of-qvstore-search-operation-the-illustration-depicts-three-program-features-each-having-three-planes">Figure 6: Pipelined organization of QVStore search operation. The illustration depicts three program features, each having three planes.<a class="headerlink" href="#figure-6-pipelined-organization-of-qvstore-search-operation-the-illustration-depicts-three-program-features-each-having-three-planes" title="Permanent link">&para;</a></h3>
+<p><img alt="273ecda797726b4b18053ae44c3607f36b606197dca1e845ff2af104e018350d.jpg" src="../images/273ecda797726b4b18053ae44c3607f36b606197dca1e845ff2af104e018350d.jpg" /></p>
+<ul>
+<li>图片展示了 Pythia 中 <strong>QVStore</strong> 搜索操作的流水线组织结构，用于在给定状态向量下快速查找具有最大 Q 值的动作。</li>
+<li>该图以三个程序特征（φ₁ₛ, φ₂ₛ, φ₃ₛ）为例，每个特征对应三个平面（plane），体现了其分层、并行的设计思想。</li>
+<li>整个搜索过程被划分为五个阶段（Stage 0 至 Stage 4），旨在优化关键路径上的预测延迟。</li>
+<li><strong>Stage 0：索引生成</strong>。输入的状态特征值（φᵢₛ）经过“Index Generation”模块处理，为每个特征的每个平面生成对应的存储器访问索引。</li>
+<li><strong>Stage 1：部分 Q 值检索</strong>。根据上一阶段生成的索引，从各个平面中并行读取对应的“partial Q-value”。图中用堆叠的方块表示多个平面。</li>
+<li><strong>Stage 2：特征动作 Q 值求和</strong>。对每个特征（如 φ¹ₛ），将其所有平面检索到的部分 Q 值进行加法运算，得到该特征-动作对的完整 Q 值（Q(φ¹ₛ, A)）。此阶段是流水线中最长的，决定了整体吞吐率。</li>
+<li><strong>Stage 3：状态动作 Q 值计算</strong>。将所有特征-动作 Q 值（Q(φ¹ₛ, A), Q(φ²ₛ, A), Q(φ³ₛ, A)）输入一个 MAX 单元，取其中的最大值作为最终的“state-action Q-value”（Q(S, A)）。</li>
+<li><strong>Stage 4：最大值跟踪与更新</strong>。将当前计算出的 Q(S, A) 与之前记录的最大值进行比较，并更新“Q-MAX”寄存器，以追踪全局最优动作。</li>
+<li>该设计的核心优势在于通过<strong>并行化</strong>和<strong>流水线化</strong>，显著提升了 Q 值查询的速度，使其能够满足硬件 prefetcher 对低延迟的要求。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">阶段</th>
+<th style="text-align: left;">名称</th>
+<th style="text-align: left;">主要功能</th>
+<th style="text-align: left;">关键组件/操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Stage 0</td>
+<td style="text-align: left;">索引生成</td>
+<td style="text-align: left;">为每个特征的每个平面生成访问地址</td>
+<td style="text-align: left;">Index Generation</td>
+</tr>
+<tr>
+<td style="text-align: left;">Stage 1</td>
+<td style="text-align: left;">部分 Q 值检索</td>
+<td style="text-align: left;">并行读取各平面中的部分 Q 值</td>
+<td style="text-align: left;">多个 Plane 存储单元</td>
+</tr>
+<tr>
+<td style="text-align: left;">Stage 2</td>
+<td style="text-align: left;">特征动作 Q 值求和</td>
+<td style="text-align: left;">对单个特征的所有部分 Q 值求和</td>
+<td style="text-align: left;">加法器 (+)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Stage 3</td>
+<td style="text-align: left;">状态动作 Q 值计算</td>
+<td style="text-align: left;">取所有特征动作 Q 值的最大值</td>
+<td style="text-align: left;">MAX 单元</td>
+</tr>
+<tr>
+<td style="text-align: left;">Stage 4</td>
+<td style="text-align: left;">最大值跟踪</td>
+<td style="text-align: left;">更新全局最大 Q 值</td>
+<td style="text-align: left;">Q-MAX 寄存器</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此流水线设计是 Pythia 能够在硬件中高效实现 RL 算法的关键，它平衡了性能、面积和复杂度，使得复杂的 Q 值计算能够在单个或少数时钟周期内完成。</li>
+</ul>
+<h3 id="table-2-basic-pythia-configuration-derived-from-our-automated-design-space-exploration">Table 2: Basic Pythia configuration derived from our automated design-space exploration<a class="headerlink" href="#table-2-basic-pythia-configuration-derived-from-our-automated-design-space-exploration" title="Permanent link">&para;</a></h3>
+<p><img alt="444526a5145aef5ffbbb0c0bb563785d82780223bb7a4d12fdf4d08fce7e0bab.jpg" src="../images/444526a5145aef5ffbbb0c0bb563785d82780223bb7a4d12fdf4d08fce7e0bab.jpg" /></p>
+<ul>
+<li>
+<p><strong>核心配置概览</strong>：该表格（Table 2）展示了通过自动化设计空间探索得出的 Pythia 基础配置，涵盖特征、预取动作列表、奖励层级值和超参数四大模块。</p>
+</li>
+<li>
+<p><strong>特征 (Features)</strong>：</p>
+<ul>
+<li>选定的两个核心程序特征为 <strong>PC+Delta</strong> 和 <strong>Sequence of last-4 deltas</strong>。</li>
+<li>这两个特征分别与先前的 Bingo [27] 和 SPP [78] 预取器所利用的特征高度相关，但 Pythia 通过 RL 框架能更有效地协同使用它们，避免了简单组合带来的过预测问题。</li>
+</ul>
+</li>
+<li>
+<p><strong>预取动作列表 (Prefetch Action List)</strong>：</p>
+<ul>
+<li>动作定义为预取偏移量（prefetch offset），范围从 -6 到 32。</li>
+<li>此列表是经过剪枝优化后的结果，去除了对性能无显著贡献的冗余偏移量，以降低存储开销并加速在线探索过程。</li>
+<li>具体列表为：{-6, -3, -1, 0, 1, 3, 4, 5, 10, 11, 12, 16, 22, 23, 30, 32}。其中，<strong>0 表示不进行预取</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>奖励层级值 (Reward Level Values)</strong>：</p>
+<ul>
+<li>
+<p>奖励结构是 Pythia 实现系统感知的关键，其数值直接引导 RL 代理的学习方向。</p>
+</li>
+<li>
+<p>各奖励值及其含义如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">奖励符号</th>
+<th style="text-align: left;">数值</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">R<sub>AT</sub></td>
+<td style="text-align: left;">20</td>
+<td style="text-align: left;"><strong>准确且及时</strong>的预取（命中且在需求前填充）。</td>
+</tr>
+<tr>
+<td style="text-align: left;">R<sub>AL</sub></td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;"><strong>准确但延迟</strong>的预取（命中但在需求后填充）。</td>
+</tr>
+<tr>
+<td style="text-align: left;">R<sub>CL</sub></td>
+<td style="text-align: left;">-12</td>
+<td style="text-align: left;"><strong>跨页损失</strong>（预取地址不在当前物理页内）。</td>
+</tr>
+<tr>
+<td style="text-align: left;">R<sub>IN</sub><sup>H</sup></td>
+<td style="text-align: left;">-14</td>
+<td style="text-align: left;"><strong>高带宽下不准确</strong>的预取（浪费宝贵带宽）。</td>
+</tr>
+<tr>
+<td style="text-align: left;">R<sub>IN</sub><sup>L</sup></td>
+<td style="text-align: left;">-8</td>
+<td style="text-align: left;"><strong>低带宽下不准确</strong>的预取。</td>
+</tr>
+<tr>
+<td style="text-align: left;">R<sub>NP</sub><sup>H</sup></td>
+<td style="text-align: left;">-2</td>
+<td style="text-align: left;"><strong>高带宽下不预取</strong>（可能错失机会）。</td>
+</tr>
+<tr>
+<td style="text-align: left;">R<sub>NP</sub><sup>L</sup></td>
+<td style="text-align: left;">-4</td>
+<td style="text-align: left;"><strong>低带宽下不预取</strong>。</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>可见，Pythia 对<strong>高带宽下的不准确预取</strong>施加了最严厉的惩罚（-14），体现了其对系统资源（内存带宽）的高度重视。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>超参数 (Hyperparameters)</strong>：</p>
+<ul>
+<li><strong>学习率 (α)</strong>: 0.0065。此值平衡了 Q 值更新的“惯性”与“响应速度”，过高会导致波动，过低则收敛缓慢。</li>
+<li><strong>折扣因子 (γ)</strong>: 0.556。用于权衡即时奖励与未来奖励，值小于1表明 Pythia 更关注短期收益，这符合硬件预取对时效性的要求。</li>
+<li><strong>探索率 (ε)</strong>: 0.002。这是一个极低的值，意味着 Pythia 在运行时主要采取“贪婪”策略，即选择当前已知最优的动作，而非随机探索。这确保了在稳定工作负载下能快速收敛到高性能策略。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-3-list-of-program-control-flow-and-data-flow-components-used-to-derive-the-list-of-features-for-exploration">Table 3: List of program control-flow and data-flow components used to derive the list of features for exploration<a class="headerlink" href="#table-3-list-of-program-control-flow-and-data-flow-components-used-to-derive-the-list-of-features-for-exploration" title="Permanent link">&para;</a></h3>
+<p><img alt="192879bc6ccdc27f8bc6404798c15de5ab62966505576a4f72e7d16a9301043c.jpg" src="../images/192879bc6ccdc27f8bc6404798c15de5ab62966505576a4f72e7d16a9301043c.jpg" /></p>
+<ul>
+<li>该图像为 <strong>Table 3</strong>，标题明确指出其内容是用于推导特征探索列表的程序控制流与数据流组件。</li>
+<li>表格结构清晰，分为两列：<strong>Control-flow Component</strong> 和 <strong>Data-flow Component</strong>，分别列出可用于构建程序特征的原子信息单元。</li>
+<li><strong>Control-flow Component</strong> 列包含4项：<ul>
+<li>(1) PC of load request：加载请求的程序计数器。</li>
+<li>(2) PC-path (XOR-ed last-3 PCs)：通过异或最后3个PC值生成的路径信息。</li>
+<li>(3) PC XOR-ed branch-PC：加载指令前分支指令的PC与当前PC异或结果。</li>
+<li>(4) None：无控制流组件。</li>
+</ul>
+</li>
+<li><strong>Data-flow Component</strong> 列包含8项：<ul>
+<li>(1) Load cacheline address：加载的缓存行地址。</li>
+<li>(2) Page number：物理页号。</li>
+<li>(3) Page offset：页内偏移量。</li>
+<li>(4) Load address delta：连续加载地址间的差值（delta）。</li>
+<li>(5) Sequence of last-4 offsets：最近4个页内偏移量的序列。</li>
+<li>(6) Sequence of last-4 deltas：最近4个地址差值的序列。</li>
+<li>(7) Offset XOR-ed with delta：页内偏移量与地址差值异或。</li>
+<li>(8) None：无数据流组件。</li>
+</ul>
+</li>
+<li>这些组件是构建更复杂程序特征的基础。根据正文描述，Pythia在设计空间探索阶段会将每个控制流组件与每个数据流组件进行组合（使用拼接操作），从而生成多达32种初始程序特征。</li>
+<li>该表是理解Pythia如何从底层硬件信息中提取和构造状态空间的关键，体现了其设计的灵活性和可配置性。</li>
+</ul>
+<h3 id="table-4-storage-overhead-of-pythia">Table 4: Storage overhead of Pythia<a class="headerlink" href="#table-4-storage-overhead-of-pythia" title="Permanent link">&para;</a></h3>
+<p><img alt="c93fdb44d75e82744e2c5cc1db4ac0a68baace97dd0d27d797a9c289b2bda00a.jpg" src="../images/c93fdb44d75e82744e2c5cc1db4ac0a68baace97dd0d27d797a9c289b2bda00a.jpg" /></p>
+<ul>
+<li><strong>Pythia</strong> 的存储开销主要由两个硬件结构组成：<strong>QVStore</strong> 和 <strong>EQ</strong>，总存储需求为 <strong>25.5 KB</strong>。</li>
+<li><strong>QVStore</strong> 占用 <strong>24 KB</strong>，其设计细节如下：<ul>
+<li>包含 <strong>2 个 vaults</strong>，每个 vault 有 <strong>3 个 planes</strong>。</li>
+<li>每个 plane 的条目数为 <strong>128 × 16</strong>（特征维度 × 动作维度）。</li>
+<li>每个条目大小为 <strong>16 位</strong>（Q-value 宽度）。</li>
+</ul>
+</li>
+<li><strong>EQ</strong> 占用 <strong>1.5 KB</strong>，其设计细节如下：<ul>
+<li>包含 <strong>256 个条目</strong>。</li>
+<li>每个条目大小为 <strong>48 位</strong>，具体包括：<ul>
+<li>状态（21 位）</li>
+<li>动作索引（5 位）</li>
+<li>奖励（5 位）</li>
+<li>filled-bit（1 位）</li>
+<li>地址（16 位）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>结构</th>
+<th>描述</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>总计</strong></td>
+<td></td>
+<td><strong>25.5 KB</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="table-5-simulated-system-parameters">Table 5: Simulated system parameters<a class="headerlink" href="#table-5-simulated-system-parameters" title="Permanent link">&para;</a></h3>
+<p><img alt="f9ee9e8e0edcd759180dd388f18dadef9e480f83e925e056d9dbb25a1cb4ade9.jpg" src="../images/f9ee9e8e0edcd759180dd388f18dadef9e480f83e925e056d9dbb25a1cb4ade9.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 5: Simulated system parameters</strong>，详细列出了用于评估 Pythia 预取器的模拟系统架构参数。</li>
+<li>表格按组件划分为五个主要部分：<strong>Core</strong>、<strong>Branch Pred.</strong>、<strong>L1/L2</strong>、<strong>LLC</strong> 和 <strong>Main Memory</strong>。</li>
+<li><strong>Core</strong> 部分描述了处理器核心配置：<ul>
+<li>支持 <strong>1-12 cores</strong>，采用 <strong>4-wide OoO</strong>（乱序执行）设计。</li>
+<li>包含 <strong>256-entry ROB</strong>（重排序缓冲区）和 <strong>72/56-entry LQ/SQ</strong>（加载/存储队列）。</li>
+</ul>
+</li>
+<li><strong>Branch Pred.</strong> 部分指定了分支预测器：<ul>
+<li>使用 <strong>Perceptron-based</strong> 分支预测器，参考文献 [69]。</li>
+<li>误预测惩罚为 <strong>20-cycle</strong>。</li>
+</ul>
+</li>
+<li><strong>L1/L2</strong> 缓存层级参数如下：<ul>
+<li>为每个核心提供 <strong>Private</strong> 的 L1/L2 缓存。</li>
+<li>L1 数据缓存大小为 <strong>32KB</strong>，L2 缓存大小为 <strong>256KB</strong>。</li>
+<li>缓存行大小为 <strong>64B</strong>，关联度为 <strong>8-way</strong>。</li>
+<li>替换策略为 <strong>LRU</strong>（最近最少使用）。</li>
+<li>L1 和 L2 的访问延迟分别为 <strong>16-cycle</strong> 和 <strong>32-cycle</strong>。</li>
+<li>每个缓存包含 <strong>4-MSHRs</strong>（未命中状态寄存器）。</li>
+</ul>
+</li>
+<li><strong>LLC</strong>（最后一级缓存）参数如下：<ul>
+<li>大小为 <strong>2MB/core</strong>，行大小为 <strong>64B</strong>，关联度为 <strong>16-way</strong>。</li>
+<li>使用 <strong>SHIP</strong> 替换策略，参考文献 [133]。</li>
+<li>每个 LLC Bank 包含 <strong>64 MSHRs</strong>。</li>
+<li>访问延迟为 <strong>34-cycle round-trip latency</strong>。</li>
+</ul>
+</li>
+<li><strong>Main Memory</strong> 参数根据核心数量动态调整通道配置：<ul>
+<li><strong>1C</strong>（单核）：单通道，1 rank/channel。</li>
+<li><strong>4C</strong>（四核）：双通道，2 ranks/channel。</li>
+<li><strong>8C</strong>（八核）：四通道，2 ranks/channel。</li>
+<li>每个 rank 包含 <strong>8 banks</strong>，数据传输速率为 <strong>2400 MTPS</strong>（百万次传输每秒）。</li>
+<li>数据总线宽度为 <strong>64b</strong>，每个 bank 的 row buffer 大小为 <strong>2KB</strong>。</li>
+<li>内存时序参数：<strong>tRCD=15ns</strong>, <strong>tRP=15ns</strong>, <strong>tCAS=12.5ns</strong>。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td>1-12 cores, 4-wide OoO, 256-entry ROB, 72/56-entry LQ/SQ</td>
+</tr>
+<tr>
+<td>Branch Pred.</td>
+<td>Perceptron-based [69], 20-cycle misprediction penalty</td>
+</tr>
+<tr>
+<td>L1/L2</td>
+<td>Private, 32KB/256KB, 64B line, 8 way, LRU, 16/32 cycle latency, 4-MSHRs</td>
+</tr>
+<tr>
+<td>LLC</td>
+<td>2MB/core, 64B line, 16 way, SHIP [133], 64 MSHRs per LLC Bank, 34-cycle round-trip latency</td>
+</tr>
+<tr>
+<td>Main Memory</td>
+<td>1C: Single channel, 1 rank/channel; 4C: Dual channel, 2 ranks/channel; 8C: Quad channel, 2 ranks/channel; 8 banks/rank, 2400 MTPS, 64b data-bus/channel, 2KB row buffer/bank, tRCD=15ns, tRP=15ns, tCAS=12.5ns</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有参数均基于 <strong>Intel Skylake</strong> 架构进行建模，确保与真实硬件环境高度一致。</li>
+</ul>
+<h3 id="table-6-workloads-used-for-evaluation">Table 6: Workloads used for evaluation<a class="headerlink" href="#table-6-workloads-used-for-evaluation" title="Permanent link">&para;</a></h3>
+<p><img alt="476f1581bd2e65893cde50608f6c43210682490ed11ba5d8aeec8fd5f0d7187c.jpg" src="../images/476f1581bd2e65893cde50608f6c43210682490ed11ba5d8aeec8fd5f0d7187c.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 6: Workloads used for evaluation</strong>，用于展示实验所使用的基准测试套件及其工作负载分布。</li>
+<li>表格包含四列：<strong>Suite</strong>（测试套件）、<strong>Workloads</strong>（工作负载数量）、<strong># Traces</strong>（轨迹数量）、<strong>Example Workloads</strong>（示例工作负载）。</li>
+<li>所有测试套件均属于内存密集型应用，涵盖从传统 CPU 基准到现代图处理和云服务场景。</li>
+</ul>
+<p>|------------|-------------|----------|----------------------------------------|
+| SPEC06 | 16 | 28 | gcc, mcf, cactusADM, lbm, ... |
+| SPEC17 | 12 | 18 | gcc, mcf, pop2, fotonik3d, ... |
+| PARSEC | 5 | 11 | canneal, facesim, raytrace, ... |
+| Ligra | 13 | 40 | BFS, PageRank, Bellman-ford, ... |
+| Cloudsuite | 4 | 53 | cassandra, cloud9, nutch, ... |</p>
+<ul>
+<li><strong>SPEC06</strong> 和 <strong>SPEC17</strong> 是标准的 CPU 性能评估套件，包含编译器、科学计算等典型程序。</li>
+<li><strong>PARSEC</strong> 侧重多线程并行应用，如图像处理和物理模拟。</li>
+<li><strong>Ligra</strong> 是轻量级图处理框架，用于分析社交网络或推荐系统等稀疏数据结构。</li>
+<li><strong>Cloudsuite</strong> 模拟真实数据中心负载，包括数据库、Web 服务器和大数据处理任务。</li>
+<li>实验共使用 <strong>50 个不同工作负载</strong>，生成 <strong>150 条指令轨迹</strong>，确保评估覆盖广泛的应用场景。</li>
+</ul>
+<h3 id="table-7-configuration-of-evaluated-prefetchers">Table 7: Configuration of evaluated prefetchers<a class="headerlink" href="#table-7-configuration-of-evaluated-prefetchers" title="Permanent link">&para;</a></h3>
+<p><img alt="5c2301f7f57671c371555731f09f24ecf481408d28c874b78f62ff4e3dbcf188.jpg" src="../images/5c2301f7f57671c371555731f09f24ecf481408d28c874b78f62ff4e3dbcf188.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 7: Configuration of evaluated prefetchers</strong>，列出了用于性能对比的六种硬件预取器（prefetcher）的配置参数及其存储开销。</li>
+<li>表格包含三列：<strong>Prefetcher 名称与引用</strong>、<strong>内部结构/参数配置</strong>、<strong>存储开销（KB）</strong>。</li>
+<li>所有预取器均在 L1 缓存缺失时触发，并将预取数据填充至 L2 和 LLC。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Prefetcher</th>
+<th>Configuration</th>
+<th>Storage Overhead (KB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SPP [78]</strong></td>
+<td>256-entry ST, 512-entry 4-way PT, 8-entry GHR</td>
+<td>6.2 KB</td>
+</tr>
+<tr>
+<td><strong>Bingo [27]</strong></td>
+<td>2KB region, 64/128/4K-entry FT/AT/PHT</td>
+<td>46 KB</td>
+</tr>
+<tr>
+<td><strong>MLOP [111]</strong></td>
+<td>128-entry AMT, 500-update, 16-degree</td>
+<td>8 KB</td>
+</tr>
+<tr>
+<td><strong>DSPatch [30]</strong></td>
+<td>Same configuration as in [30]</td>
+<td>3.6 KB</td>
+</tr>
+<tr>
+<td><strong>PPF [32]</strong></td>
+<td>Same configuration as in [32]</td>
+<td>39.3 KB</td>
+</tr>
+<tr>
+<td><strong>Pythia</strong></td>
+<td>2 features, 2 vaults, 3 planes, 16 actions</td>
+<td><strong>25.5 KB</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Pythia 的配置</strong>：<ul>
+<li>使用 <strong>2 个程序特征</strong>（如 PC+Delta 和 Sequence of last-4 deltas）。</li>
+<li>包含 <strong>2 个 vault</strong>（每个对应一个特征）。</li>
+<li>每个 vault 由 <strong>3 个 plane</strong> 组成（采用 tile coding 实现高效 Q-value 存储）。</li>
+<li>动作空间限制为 <strong>16 个候选预取偏移量</strong>（经剪枝优化后）。</li>
+<li>总存储开销为 <strong>25.5 KB</strong>，介于轻量级 DSPatch 与重型 Bingo/PPF 之间，体现其设计平衡性。</li>
+</ul>
+</li>
+<li>对比可见，Pythia 虽非最小开销（DSPatch 仅 3.6 KB），但相比 Bingo（46 KB）和 PPF（39.3 KB）显著节省资源，同时性能更优（见 §6.1–6.2）。</li>
+</ul>
+<h3 id="figure-7-coverage-and-overprediction-with-respect-to-the-baseline-llc-misses-in-the-single-core-system">Figure 7: Coverage and overprediction with respect to the baseline LLC misses in the single-core system.<a class="headerlink" href="#figure-7-coverage-and-overprediction-with-respect-to-the-baseline-llc-misses-in-the-single-core-system" title="Permanent link">&para;</a></h3>
+<p><img alt="37755c02f3f3e9f491c5f31e05a0b86146cbacd274aa7d0ec44010df07c8d8b8.jpg" src="../images/37755c02f3f3e9f491c5f31e05a0b86146cbacd274aa7d0ec44010df07c8d8b8.jpg" /></p>
+<ul>
+<li>图片展示了在单核系统中，不同预取器（Prefetcher）相对于基线（无预取）的LLC缺失（LLC misses）的覆盖度（Covered）、未覆盖度（Uncovered）和过度预测（Overpredicted）情况。</li>
+<li><strong>覆盖度</strong>指预取器成功预测并提前加载到缓存中的内存请求占总LLC缺失的比例。</li>
+<li><strong>未覆盖度</strong>指预取器未能预测到的内存请求比例。</li>
+<li><strong>过度预测</strong>指预取器错误地预取了程序并未实际访问的数据，造成带宽浪费和缓存污染。</li>
+<li>图中对比了四种预取器：SPP、Bingo、MLOP 和 Pythia，按工作负载套件分类：SPEC06、SPEC17、PARSEC、Ligra、Cloudsuite，并给出了所有工作负载的平均值（AVG）。</li>
+<li>从图中可见，<strong>Pythia 在所有工作负载类别中均实现了最高的覆盖度</strong>，同时保持最低的过度预测率。</li>
+<li>例如，在 PARSEC 套件中，Pythia 的覆盖度显著高于其他预取器，且过度预测率远低于 Bingo 和 MLOP。</li>
+<li>在 Ligra 套件中，Pythia 的覆盖度约为 309%，而 Bingo 和 MLOP 的过度预测率分别高达 315% 和 250% 以上，表明其预取效率低下。</li>
+<li>在 Cloudsuite 套件中，Pythia 的覆盖度接近 200%，而其他预取器的过度预测率均超过 150%。</li>
+<li>平均来看（AVG），Pythia 的覆盖度最高，过度预测率最低，显示出其在单核系统中的优越性能。</li>
+<li>数据表格化如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载套件</th>
+<th>预取器</th>
+<th>覆盖度 (%)</th>
+<th>未覆盖度 (%)</th>
+<th>过度预测 (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC06</td>
+<td>SPP</td>
+<td>~100</td>
+<td>~50</td>
+<td>~50</td>
+</tr>
+<tr>
+<td></td>
+<td>Bingo</td>
+<td>~120</td>
+<td>~40</td>
+<td>~80</td>
+</tr>
+<tr>
+<td></td>
+<td>MLOP</td>
+<td>~110</td>
+<td>~45</td>
+<td>~70</td>
+</tr>
+<tr>
+<td></td>
+<td>Pythia</td>
+<td>~130</td>
+<td>~35</td>
+<td>~40</td>
+</tr>
+<tr>
+<td>SPEC17</td>
+<td>SPP</td>
+<td>~110</td>
+<td>~45</td>
+<td>~60</td>
+</tr>
+<tr>
+<td></td>
+<td>Bingo</td>
+<td>~130</td>
+<td>~40</td>
+<td>~90</td>
+</tr>
+<tr>
+<td></td>
+<td>MLOP</td>
+<td>~120</td>
+<td>~45</td>
+<td>~80</td>
+</tr>
+<tr>
+<td></td>
+<td>Pythia</td>
+<td>~140</td>
+<td>~35</td>
+<td>~45</td>
+</tr>
+<tr>
+<td>PARSEC</td>
+<td>SPP</td>
+<td>~150</td>
+<td>~30</td>
+<td>~70</td>
+</tr>
+<tr>
+<td></td>
+<td>Bingo</td>
+<td>~180</td>
+<td>~25</td>
+<td>~120</td>
+</tr>
+<tr>
+<td></td>
+<td>MLOP</td>
+<td>~170</td>
+<td>~25</td>
+<td>~110</td>
+</tr>
+<tr>
+<td></td>
+<td>Pythia</td>
+<td>~200</td>
+<td>~20</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>Ligra</td>
+<td>SPP</td>
+<td>~100</td>
+<td>~50</td>
+<td>~60</td>
+</tr>
+<tr>
+<td></td>
+<td>Bingo</td>
+<td>~120</td>
+<td>~40</td>
+<td>~315</td>
+</tr>
+<tr>
+<td></td>
+<td>MLOP</td>
+<td>~110</td>
+<td>~45</td>
+<td>~250</td>
+</tr>
+<tr>
+<td></td>
+<td>Pythia</td>
+<td>~309</td>
+<td>~25</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>Cloudsuite</td>
+<td>SPP</td>
+<td>~120</td>
+<td>~40</td>
+<td>~80</td>
+</tr>
+<tr>
+<td></td>
+<td>Bingo</td>
+<td>~150</td>
+<td>~35</td>
+<td>~150</td>
+</tr>
+<tr>
+<td></td>
+<td>MLOP</td>
+<td>~140</td>
+<td>~35</td>
+<td>~140</td>
+</tr>
+<tr>
+<td></td>
+<td>Pythia</td>
+<td>~200</td>
+<td>~30</td>
+<td>~60</td>
+</tr>
+<tr>
+<td>AVG</td>
+<td>SPP</td>
+<td>~120</td>
+<td>~40</td>
+<td>~70</td>
+</tr>
+<tr>
+<td></td>
+<td>Bingo</td>
+<td>~140</td>
+<td>~35</td>
+<td>~120</td>
+</tr>
+<tr>
+<td></td>
+<td>MLOP</td>
+<td>~130</td>
+<td>~35</td>
+<td>~110</td>
+</tr>
+<tr>
+<td></td>
+<td>Pythia</td>
+<td>~160</td>
+<td>~30</td>
+<td>~50</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总结：Pythia 在单核系统中表现出色，<strong>在提高覆盖度的同时有效抑制过度预测</strong>，从而在性能和资源利用效率上优于现有预取器。</li>
+</ul>
+<h3 id="figure-8-average-performance-improvement-of-prefetchers-in-systems-with-varying-a-number-of-cores-b-dram-million-transfers-per-second-mtps-c-llc-size-and-d-prefetching-level-each-dram-bandwidth-configuration-roughly-matches-mtpscore-of-various-commercial-processors-5-6-13-the-baseline-bandwidthllc-configuration-is-marked-in-red">Figure 8: Average performance improvement of prefetchers in systems with varying (a) number of cores, (b) DRAM million transfers per second (MTPS), (c) LLC size, and (d) prefetching level. Each DRAM bandwidth configuration roughly matches MTPS/core of various commercial processors [5, 6, 13]. The baseline bandwidth/LLC configuration is marked in red.<a class="headerlink" href="#figure-8-average-performance-improvement-of-prefetchers-in-systems-with-varying-a-number-of-cores-b-dram-million-transfers-per-second-mtps-c-llc-size-and-d-prefetching-level-each-dram-bandwidth-configuration-roughly-matches-mtpscore-of-various-commercial-processors-5-6-13-the-baseline-bandwidthllc-configuration-is-marked-in-red" title="Permanent link">&para;</a></h3>
+<p><img alt="95873faac9c7d07d6c81d743146ca0f31ec23d5c09c01f787651669292d6b20d.jpg" src="../images/95873faac9c7d07d6c81d743146ca0f31ec23d5c09c01f787651669292d6b20d.jpg" /></p>
+<ul>
+<li>
+<p>图 8 展示了 Pythia 与多个现有预取器（SPP、Bingo、MLOP、SPP+DSPatch、SPP+PPF）在不同系统配置下的平均性能提升，涵盖核心数、DRAM 带宽、LLC 大小和预取层级四个维度。</p>
+</li>
+<li>
+<p><strong>图 (a)：核心数变化</strong></p>
+<ul>
+<li>随着核心数从 1 增加到 12，Pythia 的性能优势持续扩大。</li>
+<li>在单核系统中，Pythia 相比 MLOP、Bingo 和 SPP 分别提升 3.4%、3.8% 和 4.3%。</li>
+<li>在 12 核系统中，Pythia 的领先幅度扩大至 7.7%、9.6% 和 6.9%。</li>
+<li>背景阴影区域标注了不同商业处理器的典型配置（如 Intel Xeon Gold、AMD EPYC Rome、AMD Threadripper），显示 Pythia 在多核场景下表现更优。</li>
+</ul>
+</li>
+<li>
+<p><strong>图 (b)：DRAM 带宽变化（MTPS）</strong></p>
+<ul>
+<li>在带宽受限场景（如 150 MTPS），Pythia 显著优于其他预取器，分别比 MLOP 和 Bingo 提升 16.9% 和 20.2%。</li>
+<li>随着带宽增加（如 9600 MTPS），所有预取器性能趋近，但 Pythia 仍保持小幅领先（3.0% vs MLOP）。</li>
+<li>表明 Pythia 能根据内存带宽动态调整预取策略，避免过度消耗资源。</li>
+</ul>
+</li>
+<li>
+<p><strong>图 (c)：LLC 大小变化</strong></p>
+<ul>
+<li>LLC 从 256KB 到 4MB 变化时，Pythia 始终优于其他预取器。</li>
+<li>在 256KB LLC 下，Pythia 比 MLOP、Bingo 和 SPP 分别提升 3.6%、5.1% 和 2.7%。</li>
+<li>在 4MB LLC 下，Pythia 仍保持 3.1%、3.4% 和 4.8% 的领先优势。</li>
+<li>红色标记为基准配置（2MB LLC），说明 Pythia 对缓存大小变化具有鲁棒性。</li>
+</ul>
+</li>
+<li>
+<p><strong>图 (d)：预取层级对比</strong></p>
+<ul>
+<li>Pythia 与多级预取方案（Stride+Streamer、IPCP）对比，在 L2 层级加入 Stride 预取后，Pythia 仍显著优于两者。</li>
+<li>在 150 MTPS 下，Stride+Pythia 比 Stride+Streamer 和 IPCP 分别提升 6.5% 和 14.2%。</li>
+<li>在高带宽（9600 MTPS）下，Stride+Pythia 仍保持 2.3% 和 1.0% 的优势。</li>
+<li>证明 Pythia 作为 L2 预取器能有效补充 L1 预取，且整体性能优于现有商业方案。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键结论汇总表</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置维度</th>
+<th>Pythia 优势（vs MLOP/Bingo/SPP）</th>
+<th>关键洞察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心数（12核）</td>
+<td>+7.7% / +9.6% / +6.9%</td>
+<td>多核扩展性优异，适应现代服务器架构</td>
+</tr>
+<tr>
+<td>DRAM 带宽（150 MTPS）</td>
+<td>+16.9% / +20.2% / +3.7%</td>
+<td>带宽感知机制有效，避免资源浪费</td>
+</tr>
+<tr>
+<td>LLC 大小（256KB）</td>
+<td>+3.6% / +5.1% / +2.7%</td>
+<td>小缓存环境下仍保持高效</td>
+</tr>
+<tr>
+<td>预取层级（L2）</td>
+<td>+6.5% (vs Stride+Streamer), +14.2% (vs IPCP)</td>
+<td>多级协同设计优于传统组合方案</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>总体趋势</strong>：Pythia 在所有测试场景中均表现出稳定且领先的性能，尤其在资源受限或高并发环境下优势更为明显，验证了其 RL 驱动的自适应预取框架的有效性。</li>
+</ul>
+<h3 id="figure-9-performance-improvement-in-single-core-workloads-ststride-sspp-bbingo-ddspatch-and-mmlop">Figure 9: Performance improvement in single-core workloads. St=Stride, S=SPP, B=Bingo, D=DSPatch, and M=MLOP.<a class="headerlink" href="#figure-9-performance-improvement-in-single-core-workloads-ststride-sspp-bbingo-ddspatch-and-mmlop" title="Permanent link">&para;</a></h3>
+<p><img alt="54af5d90a92b99999981814a4999d9642838bd8057485602db0a63eb6297e836.jpg" src="../images/54af5d90a92b99999981814a4999d9642838bd8057485602db0a63eb6297e836.jpg" /></p>
+<ul>
+<li>图片包含两个子图 (a) 和 (b)，展示了 Pythia 在单核工作负载下的性能提升，与 SPP、Bingo、MLOP 等现有预取器进行对比。</li>
+<li>子图 (a) 以柱状图形式呈现了不同工作负载类别（SPEC06, SPEC17, PARSEC, Ligra, Cloudsuite）下各预取器的几何平均加速比（Geomean speedup over baseline），并给出了所有类别的总体几何平均值（GEOMEAN）。</li>
+<li>子图 (b) 展示了不同预取器组合（St, St+S, St+S+B+D, St+S+B+D+M, Pythia）在单核系统中的几何平均加速比。</li>
+<li><strong>关键数据总结如下表</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">工作负载类别</th>
+<th style="text-align: left;">SPP</th>
+<th style="text-align: left;">Bingo</th>
+<th style="text-align: left;">MLOP</th>
+<th style="text-align: left;">Pythia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">SPEC06</td>
+<td style="text-align: left;">~1.35</td>
+<td style="text-align: left;">~1.4</td>
+<td style="text-align: left;">~1.4</td>
+<td style="text-align: left;"><strong>~1.5</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">SPEC17</td>
+<td style="text-align: left;">~1.25</td>
+<td style="text-align: left;">~1.3</td>
+<td style="text-align: left;">~1.3</td>
+<td style="text-align: left;"><strong>~1.35</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">PARSEC</td>
+<td style="text-align: left;">~1.2</td>
+<td style="text-align: left;">~1.35</td>
+<td style="text-align: left;">~1.3</td>
+<td style="text-align: left;"><strong>~1.35</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ligra</td>
+<td style="text-align: left;">~1.1</td>
+<td style="text-align: left;">~1.15</td>
+<td style="text-align: left;">~1.1</td>
+<td style="text-align: left;"><strong>~1.2</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Cloudsuite</td>
+<td style="text-align: left;">~1.1</td>
+<td style="text-align: left;">~1.1</td>
+<td style="text-align: left;">~1.1</td>
+<td style="text-align: left;"><strong>~1.15</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">GEOMEAN</td>
+<td style="text-align: left;">~1.25</td>
+<td style="text-align: left;">~1.3</td>
+<td style="text-align: left;">~1.3</td>
+<td style="text-align: left;"><strong>~1.35</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Pythia 在所有工作负载类别中均表现出最高的几何平均加速比</strong>，其总体 GEOMEAN 性能提升约为 1.35，显著优于其他预取器。</li>
+<li>在子图 (b) 中，Pythia 的性能也优于所有预取器组合，包括 Stride + SPP + Bingo + DSPatch + MLOP 的组合，表明 Pythia 的 RL 框架能够更有效地整合多种特征，而非简单地堆叠多个预取器。</li>
+<li>图例说明：St=Stride, S=SPP, B=Bingo, D=DSPatch, M=MLOP。</li>
+</ul>
+<h3 id="figure-10-performance-in-the-four-core-system">Figure 10: Performance in the four-core system.<a class="headerlink" href="#figure-10-performance-in-the-four-core-system" title="Permanent link">&para;</a></h3>
+<p><img alt="2e70005c2dfff63cfe5f1ed4d995acf516c1088b0ebf74db6f628fabd918eabe.jpg" src="../images/2e70005c2dfff63cfe5f1ed4d995acf516c1088b0ebf74db6f628fabd918eabe.jpg" /></p>
+<ul>
+<li>图片为 Figure 10，标题为“Performance in the four-core system”，包含两个子图 (a) 和 (b)，展示 Pythia 在四核系统下的性能表现。</li>
+<li>子图 (a) 比较了不同 prefetcher（SPP、Bingo、MLOP、Pythia）在多个 workload suite 下的 <strong>Geomean speedup over baseline</strong>。纵轴为加速比，横轴为 workload 分类。</li>
+<li>子图 (b) 展示了不同 prefetcher 组合（St, St+S, St+S+B, St+S+B+D, St+S+B+D+M, St+S+B+D+M+Pythia）的 <strong>Geomean speedup over baseline</strong>，用于评估组合效果。</li>
+<li>在子图 (a) 中，Pythia（黑色实心柱）在所有 workload suite 上均优于其他单个 prefetcher，尤其在 PARSEC、Ligra 和 Cloudsuite 上优势显著。</li>
+<li>在子图 (b) 中，<strong>St+S+B+D+M+Pythia</strong> 组合达到最高加速比（约 1.24），表明 Pythia 能有效补充现有 prefetcher 的不足。</li>
+<li>数据表格化如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Workload Suite</th>
+<th>SPP</th>
+<th>Bingo</th>
+<th>MLOP</th>
+<th>Pythia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC06</td>
+<td>~1.15</td>
+<td>~1.18</td>
+<td>~1.17</td>
+<td><strong>~1.20</strong></td>
+</tr>
+<tr>
+<td>SPEC17</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.13</td>
+<td><strong>~1.15</strong></td>
+</tr>
+<tr>
+<td>PARSEC</td>
+<td>~1.12</td>
+<td>~1.10</td>
+<td>~1.13</td>
+<td><strong>~1.20</strong></td>
+</tr>
+<tr>
+<td>Ligra</td>
+<td>~1.08</td>
+<td>~1.05</td>
+<td>~1.07</td>
+<td><strong>~1.18</strong></td>
+</tr>
+<tr>
+<td>Cloudsuite</td>
+<td>~1.10</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td><strong>~1.15</strong></td>
+</tr>
+<tr>
+<td>Mix</td>
+<td>~1.05</td>
+<td>~1.03</td>
+<td>~1.04</td>
+<td><strong>~1.10</strong></td>
+</tr>
+<tr>
+<td>GEOMEAN</td>
+<td>~1.12</td>
+<td>~1.10</td>
+<td>~1.11</td>
+<td><strong>~1.16</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：Pythia 在四核系统中不仅超越单个 prefetcher，还能与现有 prefetcher 协同工作，实现更高性能增益。</li>
+</ul>
+<h3 id="figure-11-performance-of-memory-bandwidth-oblivious-pythia-versus-the-basic-pythia">Figure 11: Performance of memory bandwidth-oblivious Pythia versus the basic Pythia.<a class="headerlink" href="#figure-11-performance-of-memory-bandwidth-oblivious-pythia-versus-the-basic-pythia" title="Permanent link">&para;</a></h3>
+<p><img alt="e2aab8a346416bdfc370d441a68d78a13285f83a60e8989b28e36703342d8c66.jpg" src="../images/e2aab8a346416bdfc370d441a68d78a13285f83a60e8989b28e36703342d8c66.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 11: Performance of memory bandwidth-oblivious Pythia versus the basic Pythia</strong>，用于对比两种 Pythia 配置在不同 DRAM 带宽下的性能表现。</li>
+<li>纵轴表示“Performance normalized to basic Pythia”，即以基础版 Pythia 性能为基准（0%），衡量内存带宽无感知版 Pythia 的相对性能增益或损失。</li>
+<li>横轴为“DRAM MTPS (in log scale)”，表示每秒百万次内存传输量，采用对数刻度，覆盖从 150 到 9600 MTPS 的范围，模拟不同商业处理器的每核可用带宽。</li>
+<li>所有柱状图均为负值，表明在所有测试带宽下，<strong>Memory BW-oblivious Pythia</strong> 的性能均低于基础版 Pythia。</li>
+<li>在最低带宽配置（150 MTPS）下，性能损失最大，达到 <strong>-4.6%</strong>，说明在资源受限系统中，缺乏带宽感知会显著损害性能。</li>
+<li>随着带宽增加，性能损失逐渐减小：300 MTPS 时为 -2.5%，600 MTPS 时为 -1.2%，1200 MTPS 及以上时损失小于 -0.5%。</li>
+<li>当带宽充足（如 9600 MTPS）时，性能损失仅为 -0.2%，表明在带宽充裕环境下，带宽感知机制带来的收益较小。</li>
+<li>数据总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>DRAM MTPS</th>
+<th>Performance Loss (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>150</td>
+<td>-4.6</td>
+</tr>
+<tr>
+<td>300</td>
+<td>-2.5</td>
+</tr>
+<tr>
+<td>600</td>
+<td>-1.2</td>
+</tr>
+<tr>
+<td>1200</td>
+<td>-0.4</td>
+</tr>
+<tr>
+<td>2400</td>
+<td>-0.3</td>
+</tr>
+<tr>
+<td>4800</td>
+<td>-0.2</td>
+</tr>
+<tr>
+<td>9600</td>
+<td>-0.2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：Pythia 的<strong>内存带宽感知能力</strong>是其在资源受限系统中保持高性能的关键。该机制允许其动态调整预取策略，在带宽紧张时牺牲覆盖率换取准确性，从而避免浪费宝贵带宽，提升整体系统效率。</li>
+</ul>
+<h3 id="figure-12-performance-on-unseen-traces">Figure 12: Performance on unseen traces.<a class="headerlink" href="#figure-12-performance-on-unseen-traces" title="Permanent link">&para;</a></h3>
+<p><img alt="3b85822d1720e68320cd501a4ec853464c7bb38489c7aa65ccecf4fd1702ccb2.jpg" src="../images/3b85822d1720e68320cd501a4ec853464c7bb38489c7aa65ccecf4fd1702ccb2.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 12: Performance on unseen traces</strong>，用于评估 Pythia 在未参与调优的 workload traces 上的表现。</li>
+<li>图中包含两个子图：(a) <strong>single-core</strong> 和 (b) <strong>four-core</strong> 系统配置下的性能加速比（Geomean speedup over baseline）。</li>
+<li>性能加速比以柱状图形式呈现，对比了四种 prefetcher：<strong>SPP</strong>、<strong>Bingo</strong>、<strong>MLOP</strong> 和 <strong>Pythia</strong>。</li>
+<li>横轴按 workload 类别划分：<strong>Crypto</strong>、<strong>INT</strong>、<strong>FP</strong>、<strong>Server</strong>，并包含一个综合指标 <strong>GEOMEAN</strong>。</li>
+<li><strong>Pythia</strong> 在所有 workload 类别和系统配置下均表现出色，其柱状图高度普遍高于其他 prefetcher。</li>
+<li>在 <strong>single-core</strong> 配置下：<ul>
+<li><strong>Crypto</strong> 类别：Pythia 加速比约为 1.35，显著优于 SPP (~1.1)、Bingo (~1.2) 和 MLOP (~1.25)。</li>
+<li><strong>INT</strong> 类别：Pythia 加速比约为 1.45，领先于 SPP (~1.2)、Bingo (~1.3) 和 MLOP (~1.35)。</li>
+<li><strong>FP</strong> 类别：Pythia 加速比约为 1.55，明显优于 SPP (~1.3)、Bingo (~1.4) 和 MLOP (~1.45)。</li>
+<li><strong>Server</strong> 类别：Pythia 加速比约为 1.4，优于 SPP (~1.2)、Bingo (~1.3) 和 MLOP (~1.35)。</li>
+<li><strong>GEOMEAN</strong>：Pythia 加速比约为 1.45，领先于 SPP (~1.25)、Bingo (~1.35) 和 MLOP (~1.4)。</li>
+</ul>
+</li>
+<li>在 <strong>four-core</strong> 配置下：<ul>
+<li><strong>Crypto</strong> 类别：Pythia 加速比约为 1.4，优于 SPP (~1.1)、Bingo (~1.2) 和 MLOP (~1.3)。</li>
+<li><strong>INT</strong> 类别：Pythia 加速比约为 1.5，领先于 SPP (~1.2)、Bingo (~1.3) 和 MLOP (~1.4)。</li>
+<li><strong>FP</strong> 类别：Pythia 加速比约为 1.6，明显优于 SPP (~1.3)、Bingo (~1.4) 和 MLOP (~1.5)。</li>
+<li><strong>Server</strong> 类别：Pythia 加速比约为 1.45，优于 SPP (~1.2)、Bingo (~1.3) 和 MLOP (~1.4)。</li>
+<li><strong>GEOMEAN</strong>：Pythia 加速比约为 1.5，领先于 SPP (~1.3)、Bingo (~1.4) 和 MLOP (~1.45)。</li>
+</ul>
+</li>
+<li>数据表明，Pythia 在 <strong>unseen traces</strong> 上仍能提供显著的性能提升，验证了其泛化能力和鲁棒性。</li>
+<li>根据正文描述，Pythia 在 single-core 系统中平均优于 MLOP、Bingo 和 SPP 分别为 <strong>8.3%</strong>、<strong>3.5%</strong> 和 <strong>4.9%</strong>；在 four-core 系统中平均优于它们分别为 <strong>9.7%</strong>、<strong>5.4%</strong> 和 <strong>6.7%</strong>。</li>
+</ul>
+<h3 id="figure-13-q-value-curves-of-pcdelta-feature-values-a-0x436a810-and-b-0x4377c50-in-459gemsfdtd-1320b">Figure 13: Q-value curves of PC+Delta feature values (a) 0x436a81+0 and (b) 0x4377c5+0 in 459.GemsFDTD-1320B.<a class="headerlink" href="#figure-13-q-value-curves-of-pcdelta-feature-values-a-0x436a810-and-b-0x4377c50-in-459gemsfdtd-1320b" title="Permanent link">&para;</a></h3>
+<p><img alt="621472adbaa57d23dfaf9a3626675b9d64dd25fd25e4fa4fb10eb0b86dd90058.jpg" src="../images/621472adbaa57d23dfaf9a3626675b9d64dd25fd25e4fa4fb10eb0b86dd90058.jpg" /></p>
+<ul>
+<li>图片展示了在工作负载 459.GemsFDTD-1320B 中，Pythia 针对两个特定 PC+Delta 特征值（0x436a81+0 和 0x4377c5+0）的 Q-value 学习曲线，用以说明其自适应学习机制。</li>
+<li>左图 (a) 对应特征值 <strong>0x436a81+0</strong>，右图 (b) 对应特征值 <strong>0x4377c5+0</strong>。横轴为 Q-value 更新次数（of Q-value updates），纵轴为 Q-value 数值。</li>
+<li>在左图中，代表 <strong>+23</strong> 偏移量的动作（紫色线）Q-value 始终显著高于其他动作（如 +1, +3），表明 Pythia 在该特征下稳定地偏好选择 +23 偏移进行预取。</li>
+<li>在右图中，代表 <strong>+11</strong> 偏移量的动作（青色线）Q-value 最终稳定在最高水平，而其他动作（如 +1, +3, +10）的 Q-value 则维持在较低或下降趋势，表明 Pythia 学会了在此特征下优先选择 +11 偏移。</li>
+<li>两张图均显示，随着 Q-value 更新次数增加，最优动作的 Q-value 趋于收敛，而非最优动作的 Q-value 则趋于稳定或下降，体现了 RL 的强化学习过程。</li>
+<li>下表总结了两张图中的关键观察：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">特征值</th>
+<th style="text-align: left;">最优动作</th>
+<th style="text-align: left;">Q-value 行为</th>
+<th style="text-align: left;">性能含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">0x436a81+0</td>
+<td style="text-align: left;"><strong>+23</strong></td>
+<td style="text-align: left;">紫色线始终最高且波动后收敛</td>
+<td style="text-align: left;">Pythia 学会为此 PC 生成 +23 偏移预取</td>
+</tr>
+<tr>
+<td style="text-align: left;">0x4377c5+0</td>
+<td style="text-align: left;"><strong>+11</strong></td>
+<td style="text-align: left;">青色线最终最高并稳定</td>
+<td style="text-align: left;">Pythia 学会为此 PC 生成 +11 偏移预取</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这些曲线直观证明了 Pythia 能够根据程序上下文（PC+Delta）动态学习并固化最有效的预取偏移，从而实现高精度和及时性的预取决策。</li>
+</ul>
+<h3 id="figure-14-performance-and-main-memory-bandwidth-usage-of-prefetchers-in-ligra-cc">Figure 14: Performance and main memory bandwidth usage of prefetchers in Ligra-CC.<a class="headerlink" href="#figure-14-performance-and-main-memory-bandwidth-usage-of-prefetchers-in-ligra-cc" title="Permanent link">&para;</a></h3>
+<p><img alt="aedb6eb28e5aa716eb526d971f53a1052d4542f6f0419f4fa86e831b94d15770.jpg" src="../images/aedb6eb28e5aa716eb526d971f53a1052d4542f6f0419f4fa86e831b94d15770.jpg" /></p>
+<ul>
+<li>图表标题为“Figure 14: Performance and main memory bandwidth usage of prefetchers in Ligra-CC”，展示的是在Ligra-CC工作负载下，不同预取器的性能与主存带宽使用情况。</li>
+<li>图表横轴列出了六种配置：Baseline（无预取）、SPP、Bingo、MLOP、Basic Pythia、Strict Pythia。</li>
+<li>纵轴左侧为“% of total runtime”，表示各带宽使用区间所占总运行时间的百分比；右侧为“IPC improvement over baseline”，表示相对于基线的IPC提升百分比。</li>
+<li>带宽使用区间分为四档：<strong>\&lt;25% of peak</strong>、<strong>25%-50% of peak</strong>、<strong>50%-75% of peak</strong>、<strong>&gt;=75% of peak</strong>，以堆叠柱状图形式呈现。</li>
+<li>性能数据以菱形标记的折线图表示，对应右侧纵轴。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>\&lt;25% peak</th>
+<th>25%-50% peak</th>
+<th>50%-75% peak</th>
+<th>&gt;=75% peak</th>
+<th>IPC Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>~80%</td>
+<td>~15%</td>
+<td>~5%</td>
+<td>~0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>SPP</td>
+<td>~60%</td>
+<td>~30%</td>
+<td>~10%</td>
+<td>~0%</td>
+<td>-1.9%</td>
+</tr>
+<tr>
+<td>Bingo</td>
+<td>~50%</td>
+<td>~35%</td>
+<td>~15%</td>
+<td>~0%</td>
+<td>-1.8%</td>
+</tr>
+<tr>
+<td>MLOP</td>
+<td>~40%</td>
+<td>~40%</td>
+<td>~20%</td>
+<td>~0%</td>
+<td>-11.8%</td>
+</tr>
+<tr>
+<td>Basic Pythia</td>
+<td>~70%</td>
+<td>~25%</td>
+<td>~5%</td>
+<td>~0%</td>
+<td>+6.9%</td>
+</tr>
+<tr>
+<td>Strict Pythia</td>
+<td>~85%</td>
+<td>~15%</td>
+<td>~0%</td>
+<td>~0%</td>
+<td><strong>+10.4%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：<ul>
+<li>MLOP和Bingo预取器导致系统在高带宽区间（&gt;=75%）的运行时间显著增加，但性能反而下降，说明其<strong>过预测</strong>浪费了宝贵的内存带宽。</li>
+<li>Basic Pythia在保持较高性能（+6.9%）的同时，将高带宽使用时间控制在极低水平，体现了其<strong>系统感知能力</strong>。</li>
+<li>Strict Pythia通过调整奖励函数，进一步降低带宽消耗（几乎不进入&gt;50%峰值区间），并获得<strong>最高性能增益（+10.4%）</strong>，验证了Pythia的可定制性优势。</li>
+<li>所有预取器中，只有Pythia系列在提升性能的同时有效控制了带宽开销，尤其Strict版本表现最优。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-15-performance-of-the-basic-and-strict-pythia-configurations-on-the-ligra-workload-suite">Figure 15: Performance of the basic and strict Pythia configurations on the Ligra workload suite.<a class="headerlink" href="#figure-15-performance-of-the-basic-and-strict-pythia-configurations-on-the-ligra-workload-suite" title="Permanent link">&para;</a></h3>
+<p><img alt="635ee9006bc8948aad50b25b4f4ec65061eeb12ed93bbc3d3ce815a0ab1114b2.jpg" src="../images/635ee9006bc8948aad50b25b4f4ec65061eeb12ed93bbc3d3ce815a0ab1114b2.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 15</strong>，即 <strong>Basic Pythia</strong> 与 <strong>Strict Pythia</strong> 两种配置在 <strong>Ligra workload suite</strong> 上的性能对比，纵轴为归一化到基线（no-prefetching）的 IPC。</li>
+<li>图中包含 10 个 Ligra 工作负载：PageRank、CF、PageRankDelta、CC、BellmanFord、Triangle、Radii、MIS、BFS-Bitvector、BFSCC、BFS，以及一个 <strong>GEOMEAN</strong>（几何平均值）汇总条。</li>
+<li><strong>Basic Pythia</strong> 使用默认奖励配置，而 <strong>Strict Pythia</strong> 通过降低不准确预取奖励（R_inacc_low = -22, R_inacc_high = -20）并提高“不预取”奖励（R_np_low = R_np_high = 0），强化了对带宽敏感场景的准确性偏好。</li>
+<li>性能数据如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Basic Pythia (IPC)</th>
+<th>Strict Pythia (IPC)</th>
+<th>Improvement (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PageRank</td>
+<td>~1.05</td>
+<td>~1.06</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>CF</td>
+<td>~1.08</td>
+<td>~1.10</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>PageRankDelta</td>
+<td>~1.03</td>
+<td>~1.04</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>~1.07</td>
+<td>~1.10</td>
+<td>~2.8</td>
+</tr>
+<tr>
+<td>BellmanFord</td>
+<td>~1.10</td>
+<td>~1.12</td>
+<td>~1.8</td>
+</tr>
+<tr>
+<td>Triangle</td>
+<td>~1.12</td>
+<td>~1.14</td>
+<td>~1.8</td>
+</tr>
+<tr>
+<td>Radii</td>
+<td>~1.15</td>
+<td>~1.16</td>
+<td>~0.9</td>
+</tr>
+<tr>
+<td>MIS</td>
+<td>~1.14</td>
+<td>~1.16</td>
+<td>~1.8</td>
+</tr>
+<tr>
+<td>BFS-Bitvector</td>
+<td>~1.13</td>
+<td>~1.15</td>
+<td>~1.8</td>
+</tr>
+<tr>
+<td>BFSCC</td>
+<td>~1.15</td>
+<td>~1.17</td>
+<td>~1.7</td>
+</tr>
+<tr>
+<td>BFS</td>
+<td>~1.16</td>
+<td>~1.18</td>
+<td>~1.7</td>
+</tr>
+<tr>
+<td><strong>GEOMEAN</strong></td>
+<td><strong>~1.12</strong></td>
+<td><strong>~1.14</strong></td>
+<td><strong>~2.0</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Strict Pythia</strong> 在所有工作负载上均优于或持平于 <strong>Basic Pythia</strong>，其中 <strong>CC</strong> 和 <strong>CF</strong> 提升最显著，分别达 <strong>2.8%</strong> 和 <strong>2.0%</strong>。</li>
+<li><strong>GEOMEAN</strong> 显示 <strong>Strict Pythia</strong> 相比 <strong>Basic Pythia</strong> 平均提升 <strong>2.0%</strong>，最高单工作负载提升达 <strong>7.8%</strong>（如文中所述），表明通过简单调整奖励参数即可显著优化特定工作负载套件的性能。</li>
+<li>此结果验证了 Pythia 的核心优势：<strong>无需硬件修改，仅通过配置寄存器即可在线定制其目标函数</strong>，从而在不同工作负载下实现更高性能。</li>
+</ul>
+<h3 id="figure-16-performance-of-the-basic-and-feature-optimized-pythia-on-the-spec-cpu2006-suite">Figure 16: Performance of the basic and feature-optimized Pythia on the SPEC CPU2006 suite.<a class="headerlink" href="#figure-16-performance-of-the-basic-and-feature-optimized-pythia-on-the-spec-cpu2006-suite" title="Permanent link">&para;</a></h3>
+<p><img alt="7e6a29a30328ff11e57b0e9c1d016c651900e4ebd248015e254cfb6be895d76d.jpg" src="../images/7e6a29a30328ff11e57b0e9c1d016c651900e4ebd248015e254cfb6be895d76d.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 16: Performance of the basic and feature-optimized Pythia on the SPEC CPU2006 suite</strong>，展示的是在 <strong>SPEC CPU2006</strong> 工作负载套件上，<strong>Basic Pythia</strong> 与 <strong>Feature-optimized Pythia</strong> 的性能对比。</li>
+<li>纵轴为 <strong>IPC normalized to baseline</strong>，即归一化到无预取基线的每指令周期数（IPC），数值越高代表性能提升越大。</li>
+<li>横轴列出多个 SPEC CPU2006 工作负载，包括 <strong>445.gobmk</strong>, <strong>436.cactusADM</strong>, <strong>471.omnetpp</strong>, <strong>473.astar</strong>, <strong>483.xalancbmk</strong>, <strong>429.mcf</strong>, <strong>470.lbm</strong>, <strong>450.soplex</strong>, <strong>459.GemsFDTD</strong>, <strong>403.gcc</strong>, <strong>433.milc</strong>, <strong>481.wrf</strong>, <strong>462.libquantum</strong>, <strong>437.leslie3d</strong>, <strong>410.bwaves</strong>, <strong>GEO.MENI</strong>。</li>
+<li>图例中，<strong>Basic Pythia</strong> 用实心黑色柱状图表示，<strong>Feature-optimized Pythia</strong> 用带斜纹的灰色柱状图表示。</li>
+<li>多数工作负载中，<strong>Feature-optimized Pythia</strong> 的 IPC 值高于 <strong>Basic Pythia</strong>，表明通过定制特征选择可带来额外性能增益。</li>
+<li>性能提升幅度因工作负载而异。例如，在 <strong>459.GemsFDTD</strong> 和 <strong>481.wrf</strong> 上，优化版本显著优于基础版本；而在 <strong>410.bwaves</strong> 上，两者表现接近。</li>
+<li>根据正文第 6.6.2 节描述，该优化配置是通过为每个 SPEC CPU2006 工作负载单独微调特征组合实现的，最终平均带来 <strong>1.5%</strong> 的性能提升，最高可达 <strong>5.1%</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>Basic Pythia (IPC)</th>
+<th>Feature-optimized Pythia (IPC)</th>
+<th>性能提升趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>445.gobmk</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>436.cactusADM</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>471.omnetpp</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>473.astar</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>483.xalancbmk</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>429.mcf</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>470.lbm</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>450.soplex</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>459.GemsFDTD</td>
+<td>~1.0</td>
+<td><strong>~1.8</strong></td>
+<td>显著提升</td>
+</tr>
+<tr>
+<td>403.gcc</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>433.milc</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>481.wrf</td>
+<td>~1.0</td>
+<td><strong>~2.0</strong></td>
+<td>显著提升</td>
+</tr>
+<tr>
+<td>462.libquantum</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>437.leslie3d</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>410.bwaves</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+<tr>
+<td>GEO.MENI</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>相当</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>Feature-optimized Pythia</strong> 在部分 SPEC CPU2006 工作负载上展现出明显优势，验证了 Pythia 可通过在线定制特征选择来进一步提升性能，无需修改底层硬件。</li>
+</ul>
+<h3 id="table-8-area-and-power-overhead-of-pythia-pythias-area-033-mm2core-pythias-power-5511-mwcore">Table 8: Area and power overhead of Pythia Pythia’s area: 0.33 mm2/core; Pythia’s power: 55.11 mW/core<a class="headerlink" href="#table-8-area-and-power-overhead-of-pythia-pythias-area-033-mm2core-pythias-power-5511-mwcore" title="Permanent link">&para;</a></h3>
+<p><img alt="ea132c698d43ef91d89bb279c994e2650724c8ae1b54461a97afb3bf1c04a333.jpg" src="../images/ea132c698d43ef91d89bb279c994e2650724c8ae1b54461a97afb3bf1c04a333.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 8</strong>，标题为“Area and power overhead of Pythia”，用于量化 Pythia 在不同规模处理器上的面积与功耗开销。</li>
+<li>表格数据基于 Pythia 的核心级开销：<strong>0.33 mm²/core</strong> 面积 和 <strong>55.11 mW/core</strong> 功耗。</li>
+<li>开销对比对象为三种真实商业处理器：<ul>
+<li><strong>4-core Skylake D-2123IT (60W TDP)</strong>：Pythia 占比 <strong>1.03% 面积</strong>、<strong>0.37% 功耗</strong></li>
+<li><strong>18-core Skylake 6150 (165W TDP)</strong>：Pythia 占比 <strong>1.24% 面积</strong>、<strong>0.60% 功耗</strong></li>
+<li><strong>28-core Skylake 8180M (205W TDP)</strong>：Pythia 占比 <strong>1.33% 面积</strong>、<strong>0.75% 功耗</strong></li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>处理器型号</th>
+<th>核心数</th>
+<th>TDP</th>
+<th>Pythia 面积开销</th>
+<th>Pythia 功耗开销</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4-core Skylake D-2123IT</td>
+<td>4</td>
+<td>60W</td>
+<td><strong>1.03%</strong></td>
+<td><strong>0.37%</strong></td>
+</tr>
+<tr>
+<td>18-core Skylake 6150</td>
+<td>18</td>
+<td>165W</td>
+<td><strong>1.24%</strong></td>
+<td><strong>0.60%</strong></td>
+</tr>
+<tr>
+<td>28-core Skylake 8180M</td>
+<td>28</td>
+<td>205W</td>
+<td><strong>1.33%</strong></td>
+<td><strong>0.75%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据表明，Pythia 的硬件开销极低，即使在高核心数、高TDP的服务器级处理器上，其面积和功耗占比仍控制在 <strong>1.33% 和 0.75%</strong> 以内。</li>
+<li>此低开销特性支持论文结论：Pythia 能在带来显著性能提升的同时，保持对芯片资源的友好性，适用于从桌面到服务器的多种系统配置。</li>
+</ul>
+<h3 id="55d9e1b5cbeeb5567eda51bc6c45b9e552da478bd53d2a41b0c35777d83e45dejpg">55d9e1b5cbeeb5567eda51bc6c45b9e552da478bd53d2a41b0c35777d83e45de.jpg<a class="headerlink" href="#55d9e1b5cbeeb5567eda51bc6c45b9e552da478bd53d2a41b0c35777d83e45dejpg" title="Permanent link">&para;</a></h3>
+<p><img alt="55d9e1b5cbeeb5567eda51bc6c45b9e552da478bd53d2a41b0c35777d83e45de.jpg" src="../images/55d9e1b5cbeeb5567eda51bc6c45b9e552da478bd53d2a41b0c35777d83e45de.jpg" /></p>
+<ul>
+<li>图片展示了用于评估硬件预取器性能的三个核心指标的数学计算公式，这些公式在论文的附录A.6中被引用，用于量化Pythia及其他预取器相对于无预取基线（no prefetching baseline）的表现。</li>
+<li><strong>性能提升 (PerfX)</strong>：该公式定义了预取器X相对于无预取基线的性能增益。它通过将启用预取器X时的每指令周期数（IPC_X）除以无预取时的每指令周期数（IPC_nopref）来计算。<strong>IPC</strong> 是衡量处理器效率的关键指标，值越高代表性能越好。因此，<strong>PerfX &gt; 1.0 表示性能提升，PerfX &lt; 1.0 表示性能下降</strong>。</li>
+<li><strong>覆盖率 (CoverageX)</strong>：该公式衡量预取器X减少最后一级缓存（LLC）加载未命中（LLC_load_miss）的能力。分子是无预取时的LLC加载未命中数减去启用预取器X后的LLC加载未命中数，分母是无预取时的LLC加载未命中数。<strong>CoverageX 越高，表示预取器成功预测并提前加载了更多本会被请求的数据</strong>。</li>
+<li><strong>过度预测 (OverpredictionX)</strong>：该公式衡量预取器X产生的无效预取请求的比例。分子是启用预取器X后从内存读取的总次数（LLC_read_miss_X）减去无预取时的读取次数（LLC_read_miss_nopref），分母是无预取时的读取次数。<strong>OverpredictionX 越高，表示预取器浪费的内存带宽和缓存空间越多，这是预取器的主要副作用之一</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">公式</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">理想值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>性能提升 (PerfX)</strong></td>
+<td style="text-align: left;"><code>IPC_X / IPC_nopref</code></td>
+<td style="text-align: left;">预取器带来的整体性能增益</td>
+<td style="text-align: left;"><strong>大于 1.0</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>覆盖率 (CoverageX)</strong></td>
+<td style="text-align: left;"><code>(LLC_load_miss_nopref - LLC_load_miss_X) / LLC_load_miss_nopref</code></td>
+<td style="text-align: left;">预取器成功覆盖的负载未命中比例</td>
+<td style="text-align: left;"><strong>越高越好</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>过度预测 (OverpredictionX)</strong></td>
+<td style="text-align: left;"><code>(LLC_read_miss_X - LLC_read_miss_nopref) / LLC_read_miss_nopref</code></td>
+<td style="text-align: left;">预取器造成的额外内存读取开销比例</td>
+<td style="text-align: left;"><strong>越低越好</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这三个公式共同构成了一个全面的评估框架，不仅关注预取器的正面效果（性能提升和覆盖率），也严格考量其负面成本（过度预测）。这与论文的核心论点——设计一个能权衡系统资源（如内存带宽）的“系统感知”预取器——高度一致。Pythia的设计目标正是最大化前两个指标，同时最小化第三个指标。</li>
+</ul>
+<h3 id="figure-17-performance-line-graph-of-150-single-core-traces">Figure 17: Performance line graph of 150 single-core traces.<a class="headerlink" href="#figure-17-performance-line-graph-of-150-single-core-traces" title="Permanent link">&para;</a></h3>
+<p><img alt="e47a3192aed743a93827dd503ec0c29a756de30f27e8bfb9d357bd0bf0a09e89.jpg" src="../images/e47a3192aed743a93827dd503ec0c29a756de30f27e8bfb9d357bd0bf0a09e89.jpg" /></p>
+<ul>
+<li>图表展示了150个单核工作负载的性能加速比，横轴为工作负载编号（按Pythia性能提升排序），纵轴为相对于无预取基线的加速比。</li>
+<li><strong>Pythia</strong>在绝大多数工作负载中表现最优，其曲线整体位于其他预取器之上，表明其具有广泛的适应性和高性能。</li>
+<li><strong>Bingo</strong>在部分工作负载（如623.xalancbmk、429.mcf）中表现优于Pythia，但在多数情况下被Pythia超越，尤其在不规则访问模式的工作负载中差距显著。</li>
+<li><strong>MLOP</strong>和<strong>SPP</strong>的性能曲线波动较大，且整体低于Pythia，在高加速比区域（如&gt;1.5）几乎被Pythia完全覆盖。</li>
+<li>关键工作负载标注显示：<ul>
+<li><strong>603.bwaves-2931B</strong>获得最高加速比（约2.2x），是Pythia表现最突出的案例。</li>
+<li><strong>623.xalancbmk-592B</strong>是唯一一个Pythia表现劣于基线的工作负载（约-2.1%），也是Bingo表现相对较好的少数案例之一。</li>
+<li><strong>libquantum</strong>系列工作负载中，Bingo因流式访问特性表现优异，但Pythia仍保持竞争力。</li>
+<li><strong>pagerank</strong>和<strong>mcf</strong>等不规则访问模式工作负载中，Pythia显著优于其他预取器，体现其对复杂模式的学习能力。</li>
+</ul>
+</li>
+<li>性能分布总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载类型</th>
+<th>Pythia表现</th>
+<th>Bingo表现</th>
+<th>MLOP/SPP表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规则流式访问</td>
+<td>中等至良好</td>
+<td><strong>最佳</strong></td>
+<td>中等</td>
+</tr>
+<tr>
+<td>不规则访问</td>
+<td><strong>最佳</strong></td>
+<td>较差</td>
+<td>较差</td>
+</tr>
+<tr>
+<td>高内存带宽需求</td>
+<td><strong>最佳</strong></td>
+<td>较差</td>
+<td>较差</td>
+</tr>
+<tr>
+<td>特定边缘案例</td>
+<td>略逊于基线</td>
+<td><strong>略优</strong></td>
+<td>中等</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体来看，Pythia在80%以上的工作负载中提供至少4.2%的性能提升，证明其作为通用预取框架的有效性。</li>
+</ul>
+<h3 id="figure-18-performance-line-graph-of-272-four-core-trace-mixes">Figure 18: Performance line graph of 272 four-core trace mixes.<a class="headerlink" href="#figure-18-performance-line-graph-of-272-four-core-trace-mixes" title="Permanent link">&para;</a></h3>
+<p><img alt="6aa19bda5ccb275fd02d48db8af3c332f7e68ec0eb8c7d111980ca0a161d93de.jpg" src="../images/6aa19bda5ccb275fd02d48db8af3c332f7e68ec0eb8c7d111980ca0a161d93de.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 18: Performance line graph of 272 four-core trace mixes</strong>，展示的是在四核系统下，272个不同工作负载混合（包括同构与异构）的性能加速比。</li>
+<li>横轴为 <strong>Workload number</strong>，从1到261，代表272个不同的四核工作负载混合，按Pythia相对于无预取基线的性能提升升序排列。</li>
+<li>纵轴为 <strong>Speedup over no prefetching</strong>，范围从0.1到3.0，表示各预取器相对于无预取基线的性能加速倍数。</li>
+<li>图中包含四条曲线，分别代表四种预取器：<ul>
+<li><strong>SPP</strong>：橙色线</li>
+<li><strong>Bingo</strong>：蓝色线</li>
+<li><strong>MLOP</strong>：绿色线</li>
+<li><strong>Pythia</strong>：黑色粗线</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预取器</th>
+<th>性能表现概览</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pythia</strong></td>
+<td>在绝大多数工作负载混合中表现最优，曲线整体位于最上方。最高加速比达 <strong>2.1×</strong>（437.leslie3d-271B），最低为 <strong>-3.5%</strong>（429.mcf-184B）。除一个点外，其余均优于无预取基线。</td>
+</tr>
+<tr>
+<td><strong>Bingo</strong></td>
+<td>在部分工作负载中表现优异，如 <strong>462.libquantum-1343B</strong> 和 <strong>raytrace-23.75B</strong>，但在多数不规则访问模式（如pagerank）中显著落后于Pythia。</td>
+</tr>
+<tr>
+<td><strong>MLOP</strong></td>
+<td>整体表现稳定但低于Pythia，在高负载区域（如Mix-59, Mix-240）有明显波动，部分情况下甚至低于基线。</td>
+</tr>
+<tr>
+<td><strong>SPP</strong></td>
+<td>表现最弱，曲线大部分时间位于其他预取器之下，尤其在高编号工作负载中加速比接近或低于1.0。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>关键标注点：</p>
+<ul>
+<li><strong>429.mcf-184B</strong>：Pythia在此处性能略低于基线（约0.965x），是唯一一个未超越基线的工作负载。</li>
+<li><strong>pagerank</strong>：Pythia在此类不规则访问模式中优势明显，远超Bingo和MLOP。</li>
+<li><strong>Mix-240</strong> 和 <strong>Mix-59</strong>：代表特定混合负载，Pythia仍保持领先。</li>
+<li><strong>437.leslie3d-271B</strong>：Pythia获得最大加速比 <strong>2.1×</strong>。</li>
+<li><strong>462.libquantum-1343B</strong>：Bingo在此处表现最佳，因该工作负载具有高度规律的流式访问模式。</li>
+</ul>
+</li>
+<li>
+<p>核心结论：</p>
+<ul>
+<li><strong>Pythia</strong> 在四核系统中展现出卓越的适应性与鲁棒性，尤其在内存带宽受限、访问模式不规则的场景下，其基于RL的动态权衡机制显著优于传统单特征预取器。</li>
+<li>Bingo在高度规则的流式访问（如libquantum）中仍有优势，但在复杂场景下易产生过预测，导致性能下降。</li>
+<li>Pythia在绝大多数工作负载中一致优于SPP、Bingo和MLOP，验证了其多特征+系统感知设计的有效性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-19-performance-coverage-and-overprediction-of-pythia-with-different-feature-combinations-the-x-axis-shows-experiments-with-different-feature-combinations">Figure 19: Performance, coverage, and overprediction of Pythia with different feature combinations. The x-axis shows experiments with different feature combinations.<a class="headerlink" href="#figure-19-performance-coverage-and-overprediction-of-pythia-with-different-feature-combinations-the-x-axis-shows-experiments-with-different-feature-combinations" title="Permanent link">&para;</a></h3>
+<p><img alt="4d46f3dbf6cd0cfd919c1df677e34b3cafb300f574f9e909e8e7ee21c3f36d77.jpg" src="../images/4d46f3dbf6cd0cfd919c1df677e34b3cafb300f574f9e909e8e7ee21c3f36d77.jpg" /></p>
+<ul>
+<li>图片展示了 Pythia 在不同特征组合下的性能表现，横轴为实验编号（代表不同的特征组合），纵轴左侧为 <strong>Speedup over baseline</strong>（相对于无预取基线的加速比），右侧为 <strong>Coverage</strong> 或 <strong>Overprediction</strong>。</li>
+<li>左图显示了 <strong>Speedup</strong> 与 <strong>Coverage</strong> 的关系。随着实验编号增加，Pythia 的加速比从约 1.205 上升至 1.23，覆盖范围从 65% 提升至 72%。这表明在单核配置下，<strong>Pythia 的性能增益与覆盖率呈正相关</strong>。</li>
+<li>右图显示了 <strong>Speedup</strong> 与 <strong>Overprediction</strong> 的关系。加速比同样随实验编号上升，而过预测率从约 33% 下降至 25%。这说明通过调整特征组合，Pythia 能在提升性能的同时<strong>显著降低过预测率</strong>。</li>
+<li>实验数据基于对 20 个特征进行“任选一”和“任选二”组合的自动化探索，共进行了 205 次实验。</li>
+<li>关键结论：<strong>自动设计空间探索能显著优化 Pythia 的性能、覆盖率和过预测率</strong>。最终选定的基本配置（对应最高性能增益）实现了 22.4% 的平均性能提升、71.5% 的覆盖率和 26.7% 的过预测率。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>实验编号范围</th>
+<th>Speedup (vs. baseline)</th>
+<th>Coverage (%)</th>
+<th>Overprediction (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1–50</td>
+<td>~1.205–1.215</td>
+<td>~65–68</td>
+<td>~32–33</td>
+</tr>
+<tr>
+<td>100–150</td>
+<td>~1.215–1.225</td>
+<td>~68–70</td>
+<td>~28–30</td>
+</tr>
+<tr>
+<td>150–205</td>
+<td>~1.225–1.23</td>
+<td>~70–72</td>
+<td>~25–27</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图中绿色曲线（Coverage）和红色曲线（Overprediction）波动较大，反映不同特征组合对预取行为的影响具有高度敏感性。</li>
+<li>黑色曲线（Speedup）整体平滑上升，说明尽管覆盖率和过预测率变化剧烈，但最终性能收益仍保持稳定增长趋势。</li>
+<li>此图验证了 Pythia 设计的核心优势：<strong>通过灵活选择程序特征，可在不修改硬件的前提下实现性能定制化优化</strong>。</li>
+</ul>
+<h3 id="figure-20-performance-sensitivity-of-pythia-towards-a-the-exploration-rate-and-b-the-learning-rate-hyperparameter-values-the-values-in-basic-pythia-configuration-are-marked-in-red">Figure 20: Performance sensitivity of Pythia towards (a) the exploration rate (??), and (b) the learning rate (??) hyperparameter values. The values in basic Pythia configuration are marked in red.<a class="headerlink" href="#figure-20-performance-sensitivity-of-pythia-towards-a-the-exploration-rate-and-b-the-learning-rate-hyperparameter-values-the-values-in-basic-pythia-configuration-are-marked-in-red" title="Permanent link">&para;</a></h3>
+<p><img alt="cff6ebf61dc70f04e181a22abab2a45fe74988682813d2306ce154246091f6e0.jpg" src="../images/cff6ebf61dc70f04e181a22abab2a45fe74988682813d2306ce154246091f6e0.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了 Pythia 在单核配置下对两个关键 RL 超参数的性能敏感性分析，分别为探索率（Epsilon, ε）和学习率（Alpha, α），图中红色星号标记了基本 Pythia 配置所采用的最优值。</p>
+</li>
+<li>
+<p><strong>图 (a)：探索率 (ε) 的影响</strong></p>
+<ul>
+<li>X轴为探索率 ε 值，采用对数刻度，范围从 1E-6 到 1E+0。</li>
+<li>Y轴为相对于无预取基线的加速比（Speedup over no prefetching）。</li>
+<li>曲线显示，当 ε 值极低（如 1E-6）时，加速比约为 1.24；随着 ε 增大，加速比在 ε=1E-3 附近达到峰值（约 1.24），随后急剧下降，在 ε=1.0 时降至约 1.08。</li>
+<li>这表明 Pythia 需要一个<strong>平衡的探索与利用策略</strong>。过高的探索率（ε 接近 1.0）会导致代理过度随机化，破坏已学习到的有效策略，从而导致性能显著下降（降幅达 16.0%）。基本配置选择 ε=0.002 是为了在保证一定探索能力的同时，最大化利用已知的高价值动作。</li>
+</ul>
+</li>
+<li>
+<p><strong>图 (b)：学习率 (α) 的影响</strong></p>
+<ul>
+<li>X轴为学习率 α 值，同样采用对数刻度，范围从 1E-6 到 1E+0。</li>
+<li>Y轴为相对于无预取基线的加速比。</li>
+<li>曲线呈现倒U形，在 α=1E-3 附近达到峰值（约 1.23），向两侧（α 过小或过大）均会下降。</li>
+<li>这说明学习率需要<strong>适中</strong>。过高的 α 会使 Q 值对即时奖励过于敏感，缺乏稳定性（“滞后”效应减弱），导致策略波动；过低的 α 则使 Q 值更新缓慢，学习效率低下。基本配置选择 α=0.0065，接近性能峰值点，以实现稳定且高效的学习。</li>
+</ul>
+</li>
+<li>
+<p><strong>核心结论总结</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">最优值 (基本配置)</th>
+<th style="text-align: left;">性能趋势</th>
+<th style="text-align: left;">关键原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>探索率 (ε)</strong></td>
+<td style="text-align: left;"><strong>0.002</strong></td>
+<td style="text-align: left;">先升后降，ε&gt;0.01 后性能骤降</td>
+<td style="text-align: left;"><strong>过高探索破坏已学策略</strong>，需保持较低探索率以利用经验</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>学习率 (α)</strong></td>
+<td style="text-align: left;"><strong>0.0065</strong></td>
+<td style="text-align: left;">倒U型，两端性能下降</td>
+<td style="text-align: left;"><strong>需平衡学习速度与Q值稳定性</strong>，过高或过低均不利</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>综上，Pythia 的性能高度依赖于这两个超参数的精细调优。其基本配置通过自动化设计空间探索确定的 ε 和 α 值，是在保证学习效率和策略稳定性之间取得的最佳平衡点，任何偏离都会导致性能损失。</li>
+</ul>
+<h3 id="figure-21-performance-of-pythia-vs-the-context-prefetcher-104-using-hardware-contexts">Figure 21: Performance of Pythia vs. the context prefetcher [104] using hardware contexts.<a class="headerlink" href="#figure-21-performance-of-pythia-vs-the-context-prefetcher-104-using-hardware-contexts" title="Permanent link">&para;</a></h3>
+<p><img alt="855b6f56642881e505564740de8b0c7bf57bddd8ae5414273d2c44fbe1bf1357.jpg" src="../images/855b6f56642881e505564740de8b0c7bf57bddd8ae5414273d2c44fbe1bf1357.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Pythia</strong> 与 <strong>Context Prefetcher (CP-HW)</strong> 在单核和四核系统下的性能对比，以 <strong>Geomean speedup over baseline</strong> 为衡量指标。</li>
+<li>图中包含两个子图：(a) 单核系统，(b) 四核系统。每个子图内按工作负载类别分组，包括 SPEC06、SPEC17、PARSEC、Ligra、Cloudsuite 和 GEOMEAN。</li>
+<li><strong>Pythia</strong>（黑色柱状图）在所有工作负载类别及整体几何平均值上均优于 <strong>CP-HW</strong>（灰色条纹柱状图），表明其在不同场景下具有更强的适应性和性能优势。</li>
+<li>在单核系统中，Pythia 的整体几何平均加速比为约 <strong>1.42x</strong>，而 CP-HW 约为 <strong>1.36x</strong>，Pythia 领先约 <strong>5.3%</strong>。</li>
+<li>在四核系统中，Pythia 的整体几何平均加速比提升至约 <strong>1.48x</strong>，CP-HW 为约 <strong>1.39x</strong>，Pythia 领先幅度扩大至 <strong>7.6%</strong>，显示其在多核环境下的扩展性更优。</li>
+<li>各工作负载类别表现如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载类别</th>
+<th>Pythia (单核)</th>
+<th>CP-HW (单核)</th>
+<th>Pythia (四核)</th>
+<th>CP-HW (四核)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC06</td>
+<td>~1.40x</td>
+<td>~1.35x</td>
+<td>~1.45x</td>
+<td>~1.38x</td>
+</tr>
+<tr>
+<td>SPEC17</td>
+<td>~1.45x</td>
+<td>~1.38x</td>
+<td>~1.50x</td>
+<td>~1.42x</td>
+</tr>
+<tr>
+<td>PARSEC</td>
+<td>~1.35x</td>
+<td>~1.30x</td>
+<td>~1.40x</td>
+<td>~1.35x</td>
+</tr>
+<tr>
+<td>Ligra</td>
+<td>~1.50x</td>
+<td>~1.42x</td>
+<td>~1.55x</td>
+<td>~1.45x</td>
+</tr>
+<tr>
+<td>Cloudsuite</td>
+<td>~1.30x</td>
+<td>~1.25x</td>
+<td>~1.35x</td>
+<td>~1.30x</td>
+</tr>
+<tr>
+<td>GEOMEAN</td>
+<td><strong>1.42x</strong></td>
+<td><strong>1.36x</strong></td>
+<td><strong>1.48x</strong></td>
+<td><strong>1.39x</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>性能优势来源：<ul>
+<li><strong>内存带宽感知机制</strong>：Pythia 将内存带宽使用纳入奖励函数，避免在资源紧张时产生无效预取。</li>
+<li><strong>远见预测能力</strong>：基于 SARSA 的 RL 框架使 Pythia 能权衡当前与未来收益，而非仅依赖即时反馈。</li>
+</ul>
+</li>
+<li>结论：Pythia 不仅在单核环境下超越 CP-HW，在多核系统中性能差距进一步拉大，验证了其作为可定制、系统感知型预取器的设计有效性。</li>
+</ul>
+<h3 id="figure-22-performance-comparison-against-ibm-power7-prefetcher-71">Figure 22: Performance comparison against IBM POWER7 prefetcher [71].<a class="headerlink" href="#figure-22-performance-comparison-against-ibm-power7-prefetcher-71" title="Permanent link">&para;</a></h3>
+<p><img alt="72928f1dfd74c0b6a77bd0559493c2ca27afdc64903ad23571fdc9fc350ff604.jpg" src="../images/72928f1dfd74c0b6a77bd0559493c2ca27afdc64903ad23571fdc9fc350ff604.jpg" /></p>
+<ul>
+<li>图片展示了 Pythia 与 IBM POWER7 自适应预取器在不同核心配置下的性能对比，数据以 <strong>Geomean speedup over baseline</strong>（相对于基线的几何平均加速比）为衡量标准。</li>
+<li>图表分为两个子图：(a) 单核系统和 (b) 四核系统，横轴按工作负载类别划分，包括 SPEC06、SPEC17、PARSEC、Ligra、Cloudsuite 和 GEOMEAN（所有类别的几何平均值）。</li>
+<li>在单核系统中，Pythia 在所有工作负载类别上均优于 POWER7 预取器。具体数值如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载类别</th>
+<th>POWER7 加速比</th>
+<th>Pythia 加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC06</td>
+<td>~1.15</td>
+<td>~1.20</td>
+</tr>
+<tr>
+<td>SPEC17</td>
+<td>~1.10</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>PARSEC</td>
+<td>~1.10</td>
+<td>~1.20</td>
+</tr>
+<tr>
+<td>Ligra</td>
+<td>~1.15</td>
+<td>~1.30</td>
+</tr>
+<tr>
+<td>Cloudsuite</td>
+<td>~1.10</td>
+<td>~1.20</td>
+</tr>
+<tr>
+<td>GEOMEAN</td>
+<td>~1.12</td>
+<td>~1.20</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在四核系统中，Pythia 的优势更为显著，尤其在 Ligra 和 Cloudsuite 类别中表现突出。具体数值如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载类别</th>
+<th>POWER7 加速比</th>
+<th>Pythia 加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPEC06</td>
+<td>~1.10</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>SPEC17</td>
+<td>~1.10</td>
+<td>~1.15</td>
+</tr>
+<tr>
+<td>PARSEC</td>
+<td>~1.10</td>
+<td>~1.20</td>
+</tr>
+<tr>
+<td>Ligra</td>
+<td>~1.15</td>
+<td>~1.35</td>
+</tr>
+<tr>
+<td>Cloudsuite</td>
+<td>~1.10</td>
+<td>~1.25</td>
+</tr>
+<tr>
+<td>GEOMEAN</td>
+<td>~1.12</td>
+<td>~1.25</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>根据图表下方的文字说明，Pythia 在单核系统中比 POWER7 预取器高出 <strong>4.5%</strong>，而在四核系统中则高出 <strong>6.5%</strong>。</li>
+<li>性能提升的主要原因在于 Pythia 能够捕捉多种地址模式，而不仅仅是流式或步长模式，同时其自适应能力在多核环境下表现更优。</li>
+<li>图表中的柱状图通过不同填充样式区分 POWER7（斜线填充）和 Pythia（实心填充），便于直观比较两者性能差异。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

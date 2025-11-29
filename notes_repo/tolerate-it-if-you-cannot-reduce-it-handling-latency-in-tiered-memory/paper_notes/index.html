@@ -633,20 +633,29 @@
 </ul>
 <p><img alt="" src="../images/05dde22738dbf5f005fff77c457cc574ca7db2c2bee35b687336c9ac65234763.jpg" /></p>
 <p><em>Table 1: An example of a prefetchability table.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  - **Hardware Monitoring**: 通过硬件性能计数器采样，监控三类关键指标：
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    - 预取器相关计数器（如 **L2_RQSTS.ALL_HWPF**, **L2_LINES_OUT.USELESS_HWPF**）。
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    - 各内存层级的 **bandwidth** 和 **latency**。
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    - 各层级的 **congestion indicators**（拥塞指标）。
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>- **Policy Enforcement (策略执行)**
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  - 基于监控到的指标，通过三种核心机制来执行 **Reduce**（减少延迟）和 **Tolerate**（容忍延迟）两类策略：
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    - **Page Migration**: 在 **DRAM** 和 **CXL** 等内存层级之间迁移页面，以提升数据局部性。
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    - **Hardware Adaptation**: 通过 **MSR registers** 动态地为特定核心 **enable/disable** 硬件预取器（如 stream, stride），以避免在 **CXL** 上因带宽争用导致的性能下降。
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    - **Software Adaptation**: 动态调整软件预取行为，包括：
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      - 修改 **prefetch distance**（预取距离）以适应不同内存层级的延迟特性（例如，**DRAM** 最优距离为 **4**，而 **CXL** 为 **7**）。
-</code></pre></div>
+<ul>
+<li><strong>Hardware Monitoring</strong>: 通过硬件性能计数器采样，监控三类关键指标：<ul>
+<li>预取器相关计数器（如 <strong>L2_RQSTS.ALL_HWPF</strong>, <strong>L2_LINES_OUT.USELESS_HWPF</strong>）。</li>
+<li>各内存层级的 <strong>bandwidth</strong> 和 <strong>latency</strong>。</li>
+<li>各层级的 <strong>congestion indicators</strong>（拥塞指标）。</li>
+</ul>
+</li>
+<li><strong>Policy Enforcement (策略执行)</strong><ul>
+<li>基于监控到的指标，通过三种核心机制来执行 <strong>Reduce</strong>（减少延迟）和 <strong>Tolerate</strong>（容忍延迟）两类策略：<ul>
+<li><strong>Page Migration</strong>: 在 <strong>DRAM</strong> 和 <strong>CXL</strong> 等内存层级之间迁移页面，以提升数据局部性。</li>
+<li><strong>Hardware Adaptation</strong>: 通过 <strong>MSR registers</strong> 动态地为特定核心 <strong>enable/disable</strong> 硬件预取器（如 stream, stride），以避免在 <strong>CXL</strong> 上因带宽争用导致的性能下降。</li>
+<li><strong>Software Adaptation</strong>: 动态调整软件预取行为，包括：<ul>
+<li>修改 <strong>prefetch distance</strong>（预取距离）以适应不同内存层级的延迟特性（例如，<strong>DRAM</strong> 最优距离为 <strong>4</strong>，而 <strong>CXL</strong> 为 <strong>7</strong>）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <p><img alt="" src="../images/ae1bb199e2a6c62bf74c0e61f6f7a3b45062625cd7e1f5a9eb6485944eef2587.jpg" /></p>
 <p><em>Figure 4: DRAM and CXL have different optimal prefetch distances. For example, in the scan microbenchmark, DRAM performs best with a prefetch distance of 4, while CXL requires a longer distance of 7 due to its higher latency.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>      - 利用 **JIT compilers** 在运行时动态插入新的预取指令。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  - 利用 **JIT compilers** 在运行时动态插入新的预取指令。
 </code></pre></div>
 <p><strong>核心设计原则</strong></p>
 <ul>
@@ -1095,6 +1104,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

@@ -916,10 +916,13 @@
 </li>
 </ul>
 <p><em>Figure 3: Median percentage of free memory in a Meta's datacenter that can be allocated contiguously at various sizes.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 然而，**数百千字节 (hundreds of KBs)** 级别的小块连续内存仍然广泛可用，即使在高度碎片化的服务器上也是如此。
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>- 因此，LVM 的设计目标是将内存分配需求适配到这个可行的粒度上。
-</code></pre></div>
 <ul>
+<li>
+<p>然而，<strong>数百千字节 (hundreds of KBs)</strong> 级别的小块连续内存仍然广泛可用，即使在高度碎片化的服务器上也是如此。</p>
+</li>
+<li>
+<p>因此，LVM 的设计目标是将内存分配需求适配到这个可行的粒度上。</p>
+</li>
 <li>
 <p><strong>核心机制：Per-Leaf-Node Gapped Page Tables (GPTs)</strong></p>
 <ul>
@@ -1301,6 +1304,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>
