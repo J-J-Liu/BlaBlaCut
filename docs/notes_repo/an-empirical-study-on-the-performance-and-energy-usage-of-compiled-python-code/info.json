@@ -1,0 +1,18 @@
+{
+  "index": "an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code",
+  "paper_title": "An Empirical Study on the Performance and Energy Usage of Compiled Python Code",
+  "metadata": {
+    "authors": [
+      "Vincenzo Stoico",
+      "Andrei Calin Dragomir",
+      "Patricia Lago"
+    ],
+    "affiliations": [
+      "Vrije Universiteit Amsterdam, The Netherlands"
+    ],
+    "venue": "EASE",
+    "year": 2025,
+    "doi": "10.1145/nnnnnnn.nnnnnnn"
+  },
+  "description": "该研究实证评估了8种Python编译器（如Codon、PyPy、Numba）相比CPython在性能与能耗上的提升。在7个基准测试中，Codon、PyPy和Numba平均实现超90%的执行时间和能耗优化，Nuitka显著降低内存使用。实验在固定频率和单核条件下进行，控制了代码特征与平台变量。"
+}

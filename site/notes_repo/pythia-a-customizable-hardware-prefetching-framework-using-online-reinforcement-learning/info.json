@@ -1,0 +1,21 @@
+{
+  "index": "pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning",
+  "paper_title": "Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning",
+  "metadata": {
+    "authors": [
+      "Rahul Bera",
+      "Konstantinos Kanellopoulos",
+      "Anant V. Nori",
+      "et al."
+    ],
+    "affiliations": [
+      "ETH Zürich",
+      "Processor Architecture Research Labs, Intel Labs",
+      "TU Delft"
+    ],
+    "venue": "MICRO",
+    "year": 2021,
+    "doi": "10.1145/3466752.3480114"
+  },
+  "description": "提出Pythia，一个基于在线强化学习的可定制硬件预取框架，能同时利用多种程序特征和系统级反馈（如内存带宽）进行决策。相比MLOP和Bingo，在单核、12核及带宽受限配置下性能分别提升最高3.8%、9.6%和20.2%，且仅增加1.03%面积开销。"
+}

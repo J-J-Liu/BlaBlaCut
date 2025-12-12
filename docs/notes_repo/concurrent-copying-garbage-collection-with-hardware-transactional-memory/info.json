@@ -1,0 +1,16 @@
+{
+  "index": "concurrent-copying-garbage-collection-with-hardware-transactional-memory",
+  "paper_title": "Concurrent Copying Garbage Collection with Hardware Transactional Memory",
+  "metadata": {
+    "authors": [
+      "Zixian Cai"
+    ],
+    "affiliations": [
+      "The Australian National University"
+    ],
+    "venue": "unknown",
+    "year": 2020,
+    "doi": null
+  },
+  "description": "该论文提出了一种利用硬件事务内存（HTM）来降低并发复制垃圾回收（GC）中mutator开销的新算法。通过让mutator在事务中短暂执行，确保了堆视图的一致性，避免了传统读屏障或页保护的高开销。作者深入分析了Intel TSX的事务容量特性，并基于此设计了乐观复制和缓存预热等优化。实验结果表明，该HTM-based GC方案是可行的。"
+}

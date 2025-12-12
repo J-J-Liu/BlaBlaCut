@@ -1,0 +1,43 @@
+{
+    "title": "动态语言加速",
+    "description": "动态语言加速相关的论文笔记",
+    "categories": [
+        {
+            "title": "负载分析",
+            "description": "**负载特征化与性能差距归因**：深入分析 Python、JavaScript、Java 等托管语言在真实应用场景下的运行时行为。重点考察其与静态编译语言（Native Code）在指令级并行度（ILP）、缓存局部性以及能效比上的量化差异，旨在揭示导致动态语言‘性能税’（Performance Tax）的关键瓶颈，为后续优化提供数据支撑。",
+            "papers": [
+                "an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code",
+                "rethinking-java-performance-analysis",
+                "investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster",
+                "porting-a-jit-compiler-to-risc-v-challenges-and-opportunities",
+                "a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008"
+            ]
+        },
+        {
+            "title": "动态类型",
+            "description": "动态类型检查与分派：由于变量类型在运行时可变，解释器或JIT编译器必须在每次操作前检查操作数的类型标签（Tag），并根据类型动态分派（Dispatch）到相应的处理函数。这一过程引入了大量的数据依赖性条件跳转和间接跳转指令。",
+            "papers": [
+                "checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors",
+                "typed-architectures-architectural-support-for-lightweight-scripting"
+            ]
+        },
+        {
+            "title": "解释器开销",
+            "description": "**解释器开销**：在未被JIT编译之前，代码运行在解释器模式下，存在大量的解码-分派循环，导致极低的指令级并行度（ILP）。",
+            "papers": [
+                "branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore",
+                "virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware",
+                "bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design"
+            ]
+        },
+        {
+            "title": "垃圾回收开销",
+            "description": "**自动内存管理与硬件加速**：垃圾回收（GC）产生的‘全停顿’（Stop-The-World）和高内存带宽占用是制约系统响应能力的主要因素，尤其在多核环境下，原子操作和锁竞争进一步加剧了开销。本部分探讨如何利用硬件事务内存（HTM）、近数据处理（PIM）或专用加速器来卸载对象扫描、引用计数更新等操作，以实现低延迟、高吞吐的并发垃圾回收。",
+            "papers": [
+                "concurrent-copying-garbage-collection-with-hardware-transactional-memory",
+                "flexible-reference-counting-based-hardware-acceleration-for-garbage-collection",
+                "gray-in-young-a-generational-garbage-collection-for-processing-in-memory"
+            ]
+        }
+    ]
+}

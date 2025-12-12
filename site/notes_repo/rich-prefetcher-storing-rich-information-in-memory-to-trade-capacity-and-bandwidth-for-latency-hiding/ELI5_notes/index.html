@@ -473,8 +473,7 @@
 </li>
 </ul>
 <p><em>Figure 4: Achieving high accuracy in large spatial regions and high coverage in small spatial regions by using different numbers of trigger offsets Figure 5: Placing 16 KB PHT off-chip keeps most prefetch opportunities, even with additional memory access latency</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>这张图清晰地表明，即使加上50ns的额外延迟，将16KB PHT放在片外也只会损失不到15%的预取机会，证明了该设计的可行性。
-</code></pre></div>
+<p>这张图清晰地表明，即使加上50ns的额外延迟，将16KB PHT放在片外也只会损失不到15%的预取机会，证明了该设计的可行性。</p>
 <p>最终，RICH 通过这种“<strong>小区域广撒网，大区域精耕细作，并用分层存储降低成本</strong>”的策略，在几乎不增加片上面积（on-chip area）的前提下，显著提升了 <strong>coverage</strong> 和 <strong>timeliness</strong>，从而在高延迟内存系统中获得了远超现有技术的性能优势。</p>
 <h3 id="1-eli5">1. 多尺度空间预取与多偏移触发机制 (ELI5)<a class="headerlink" href="#1-eli5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
@@ -677,6 +676,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

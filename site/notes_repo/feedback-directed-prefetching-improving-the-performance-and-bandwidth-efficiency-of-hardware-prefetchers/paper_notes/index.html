@@ -674,12 +674,17 @@
 </li>
 </ul>
 <p><img alt="" src="../images/259f1d313ba55402790845e6f0b34855d99d5731a54f5972b0a78ef7c2b6c014.jpg" /></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- **动态调整预取块缓存插入策略 (Dynamic Insertion Policy)**:
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  - 不再将所有预取块无差别地插入 LRU 栈的 **MRU (Most-Recently-Used)** 位置。
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  - 而是根据估算的 **Cache Pollution** 程度，动态选择插入位置：**MID** (中间位置), **LRU-4** (四分之一位置), 或 **LRU** (最不常用位置)。污染越高，插入位置越靠近 LRU 端，以减少对有用数据的干扰。
-</code></pre></div>
 <ul>
-<li><strong>适用性与评估</strong><ul>
+<li>
+<p><strong>动态调整预取块缓存插入策略 (Dynamic Insertion Policy)</strong>:</p>
+<ul>
+<li>不再将所有预取块无差别地插入 LRU 栈的 <strong>MRU (Most-Recently-Used)</strong> 位置。</li>
+<li>而是根据估算的 <strong>Cache Pollution</strong> 程度，动态选择插入位置：<strong>MID</strong> (中间位置), <strong>LRU-4</strong> (四分之一位置), 或 <strong>LRU</strong> (最不常用位置)。污染越高，插入位置越靠近 LRU 端，以减少对有用数据的干扰。</li>
+</ul>
+</li>
+<li>
+<p><strong>适用性与评估</strong></p>
+<ul>
 <li>FDP 被设计为一个通用框架，论文验证了其在 <strong>Stream-based prefetcher</strong>, <strong>Global-History-Buffer (GHB) based delta correlation prefetcher</strong>, 和 <strong>PC-based stride prefetcher</strong> 三种主流硬件预取器上的有效性。</li>
 <li>实验结果表明，FDP 在 <strong>SPEC CPU2000</strong> 套件的 17 个内存密集型基准测试中，相比最佳的传统预取器配置，实现了 <strong>6.5%</strong> 的平均性能提升和 <strong>18.7%</strong> 的内存带宽节省。</li>
 <li>其硬件开销极低，仅为 <strong>2.54 KB</strong> 的额外存储，且不增加关键路径延迟。</li>
@@ -1091,6 +1096,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

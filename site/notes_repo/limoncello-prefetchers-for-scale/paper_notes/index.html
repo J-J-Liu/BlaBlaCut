@@ -939,8 +939,7 @@
 </li>
 </ul>
 <p><em>Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 
-</code></pre></div>
+<p>-</p>
 <p><img alt="" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></p>
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
 <ul>
@@ -963,7 +962,9 @@
 </ul>
 <p><em>Figure 14. memcpy argument size distribution. The chart shows the probability density function (PDF) of the number of times each copy size appears in the profiling data. Most copy sizes are small.</em></p>
 <ul>
-<li><strong>微基准测试驱动的参数搜索</strong>：<ul>
+<li>
+<p><strong>微基准测试驱动的参数搜索</strong>：</p>
+<ul>
 <li>基于上述洞察，团队构建了专门的微基准测试（如 LLVM libc 微基准套件），用于系统性地搜索最优参数组合。</li>
 <li>测试策略采用<strong>控制变量法</strong>：<ul>
 <li>固定<strong>预取度</strong>（例如 256 字节），扫描不同的<strong>预取距离</strong>，找到使性能最佳的距离值。</li>
@@ -974,12 +975,12 @@
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>- 
-</code></pre></div>
+<p>-</p>
 <p><img alt="" src="../images/dea517edd792c10c583301b3163656b05a2b31b4a095e4049b7577013eab80ec.jpg" /></p>
 <p><em>(b) Microbenchmark exercising different prefetch degrees. Prefetching is fixed at a distance of 512 bytes.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>- 最终的性能验证在更接近真实负载的**负载测试 (load tests)** 中完成，确保微基准中的收益能在生产环境中复现。
-</code></pre></div>
+<ul>
+<li>最终的性能验证在更接近真实负载的<strong>负载测试 (load tests)</strong> 中完成，确保微基准中的收益能在生产环境中复现。</li>
+</ul>
 <p><strong>输入输出关系及整体作用</strong></p>
 <ul>
 <li>
@@ -1079,8 +1080,9 @@
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
 <p><img alt="" src="../images/d65b4e6c70306f8f96ede45bba9a365910221ff2137f82a038eece0f41d5cce7.jpg" /></p>
 <p><em>Figure 12. Aggregated change in CPU cycles (%) from Hard Limoncello. Data center tax functions (green) increased in CPU cycles under Hard Limoncello. In contrast, overall nondata center tax functions (blue) decreased in cycles.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>- **带宽影响**: 消融实验数据（见表1）显示，禁用硬件预取器可将整个集群的平均内存带宽降低 **11.2%–15.7%**，对峰值和 P99 尾部带宽也有显著影响。
-</code></pre></div>
+<ul>
+<li><strong>带宽影响</strong>: 消融实验数据（见表1）显示，禁用硬件预取器可将整个集群的平均内存带宽降低 <strong>11.2%–15.7%</strong>，对峰值和 P99 尾部带宽也有显著影响。</li>
+</ul>
 <p><img alt="" src="../images/3ded760aa91cf2009e7fd09df2699c7def831a9007b35a6b91944e30c0fcff59.jpg" /></p>
 <p><em>Table 1. Disabling hardware prefetchers reduces both average and tail memory bandwidth.</em></p>
 <ul>
@@ -1148,6 +1150,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

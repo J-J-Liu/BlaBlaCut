@@ -1,0 +1,20 @@
+{
+  "index": "typed-architectures-architectural-support-for-lightweight-scripting",
+  "paper_title": "Typed Architectures: Architectural Support for Lightweight Scripting",
+  "metadata": {
+    "authors": [
+      "Channoh Kim",
+      "Jaehyeok Kim",
+      "Sungmin Kim",
+      "et al."
+    ],
+    "affiliations": [
+      "Sungkyunkwan University, Suwon, Korea",
+      "Seoul National University, Seoul, Korea"
+    ],
+    "venue": "ASPLOS",
+    "year": 2017,
+    "doi": "http://dx.doi.org/10.1145/3037697.3037726"
+  },
+  "description": "论文提出Typed Architectures，通过ISA级硬件支持动态类型检查，引入多态指令和灵活的类型标签提取/插入机制。在RISC-V上实现，对JavaScript和Lua解释器分别取得11.2%和9.9%的平均加速，EDP提升19.3%和16.5%，面积开销仅1.6%。"
+}

@@ -1,0 +1,22 @@
+{
+  "index": "virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar",
+  "paper_title": "Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar",
+  "metadata": {
+    "authors": [
+      "Hyesoon Kim",
+      "José A. Joao",
+      "Onur Mutlu",
+      "et al."
+    ],
+    "affiliations": [
+      "Georgia Institute of Technology",
+      "University of Texas at Austin",
+      "Carnegie Mellon University",
+      "Intel Corporation"
+    ],
+    "venue": "IEEE Transactions on Computers",
+    "year": 2009,
+    "doi": "10.1109/TC.2008.227"
+  },
+  "description": "论文提出虚拟程序计数器（VPC）预测技术，利用现有条件分支预测硬件低成本地预测间接分支目标，避免了专用存储结构。该方法在C/C++和Java应用上分别平均提升性能26.7%和21.9%，并显著降低能耗，且可与任意条件分支预测器协同工作。"
+}

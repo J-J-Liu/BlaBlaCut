@@ -3,6 +3,40 @@ import sys
 import os
 from pathlib import Path
 
+def aggregate_papers_from_list(notes_list, docs_notes_repo_dir):
+    """从论文名称列表中聚合论文数据"""
+    aggregated_papers = []
+    
+    for note_name in notes_list:
+        note_folder = docs_notes_repo_dir / note_name
+        json_file = note_folder / "info.json"
+
+        if not note_folder.exists():
+            print(f"  [跳过] 找不到笔记文件夹: {note_name}")
+            continue
+
+        if not json_file.exists():
+            print(f"  [跳过] 找不到 info.json: {note_name}")
+            continue
+        
+        try:
+            with open(json_file, 'r', encoding='utf-8') as jf:
+                data = json.load(jf)
+                # 统一处理列表或字典，并注入来源文件夹名
+                if isinstance(data, dict):
+                    data['_source_folder'] = note_name
+                    aggregated_papers.append(data)
+                elif isinstance(data, list):
+                    for item in data:
+                        if isinstance(item, dict):
+                            item['_source_folder'] = note_name
+                    aggregated_papers.extend(data)
+            print(f"  [成功] 已合并: {note_name}")
+        except Exception as e:
+            print(f"  [错误] 读取 {note_name} 失败: {e}")
+    
+    return aggregated_papers
+
 def generate_collection_data():
     print("--- MkDocs 集合数据与页面生成工具 ---")
     
@@ -39,14 +73,17 @@ def generate_collection_data():
     target_dir = config_path.parent
     collection_title = config.get("title")
     collection_description = config.get("description", "") # 获取描述，默认为空
-    notes_list = config.get("papers", [])
+    
+    # 检查是否有分类结构
+    has_categories = "categories" in config and isinstance(config.get("categories"), list) and len(config.get("categories", [])) > 0
+    notes_list = config.get("papers", [])  # 向后兼容：如果没有分类，使用 papers
 
     if not collection_title:
         print("错误: 配置文件中缺少 'title' (集合标题)。")
         return
     
-    if not notes_list:
-        print("警告: 配置文件中 'papers' (论文列表) 为空。")
+    if not has_categories and not notes_list:
+        print("警告: 配置文件中既没有 'categories' 也没有 'papers' (论文列表) 为空。")
 
     # 3. 确定数据源目录
     # 假设论文笔记位于脚本目录同级的 ../docs/notes_repo
@@ -60,43 +97,44 @@ def generate_collection_data():
     print(f"数据来源: {docs_notes_repo_dir}")
 
     # 4. 聚合数据
-    aggregated_papers = []
     print(f"\n开始为集合 '{collection_title}' 查找并合并数据...")
-
-    for note_name in notes_list:
-        note_folder = docs_notes_repo_dir / note_name
-        json_file = note_folder / "info.json"
-
-        if not note_folder.exists():
-            print(f"  [跳过] 找不到笔记文件夹: {note_name}")
-            continue
-
-        if not json_file.exists():
-            print(f"  [跳过] 找不到 info.json: {note_name}")
-            continue
+    
+    if has_categories:
+        # 按分类处理
+        categories_data = []
         
-        try:
-            with open(json_file, 'r', encoding='utf-8') as jf:
-                data = json.load(jf)
-                # 统一处理列表或字典，并注入来源文件夹名
-                if isinstance(data, dict):
-                    data['_source_folder'] = note_name
-                    aggregated_papers.append(data)
-                elif isinstance(data, list):
-                    for item in data:
-                        if isinstance(item, dict):
-                            item['_source_folder'] = note_name
-                    aggregated_papers.extend(data)
-            print(f"  [成功] 已合并: {note_name}")
-        except Exception as e:
-            print(f"  [错误] 读取 {note_name} 失败: {e}")
-
-    # 5. 构建最终的 JSON 数据结构
-    final_output = {
-        "title": collection_title,
-        "description": collection_description, # 加入描述字段
-        "papers": aggregated_papers
-    }
+        for category in config.get("categories", []):
+            cat_title = category.get("title", "未命名分类")
+            cat_description = category.get("description", "")
+            cat_papers_list = category.get("papers", [])
+            
+            print(f"\n处理分类: {cat_title}")
+            aggregated_papers = aggregate_papers_from_list(cat_papers_list, docs_notes_repo_dir)
+            
+            categories_data.append({
+                "title": cat_title,
+                "description": cat_description,
+                "papers": aggregated_papers
+            })
+        
+        # 构建最终的 JSON 数据结构（带分类）
+        final_output = {
+            "title": collection_title,
+            "description": collection_description,
+            "categories": categories_data
+        }
+        aggregated_papers = None  # 标记为分类模式
+    else:
+        # 单层结构（向后兼容）
+        aggregated_papers = aggregate_papers_from_list(notes_list, docs_notes_repo_dir)
+        
+        # 构建最终的 JSON 数据结构（单层）
+        final_output = {
+            "title": collection_title,
+            "description": collection_description,
+            "papers": aggregated_papers
+        }
+        categories_data = None  # 标记为单层模式
 
     # 6. 保存 JSON 结果 (文件名改为 collected_info.json)
     output_json_path = target_dir / "collected_info.json"
@@ -124,10 +162,8 @@ def generate_collection_data():
             md_content.append(collection_description)
             md_content.append("")
 
-        md_content.append(f"本页面共收录了 {len(aggregated_papers)} 篇论文笔记。")
-        md_content.append("")
-        
-        for paper in aggregated_papers:
+        # 生成论文条目的辅助函数
+        def generate_paper_entry(paper, md_content):
             # 提取字段
             p_title = paper.get('paper_title', paper.get('title', 'Unknown Title'))
             desc = paper.get('description', '暂无描述')
@@ -196,11 +232,47 @@ def generate_collection_data():
             md_content.append("---")
             md_content.append("")
 
+        if has_categories:
+            # 按分类组织显示
+            total_papers_count = sum(len(cat.get("papers", [])) for cat in categories_data)
+            md_content.append(f"本页面共收录了 {total_papers_count} 篇论文笔记，分为 {len(categories_data)} 个分类。")
+            md_content.append("")
+            
+            for category in categories_data:
+                cat_title = category.get("title", "未命名分类")
+                cat_description = category.get("description", "")
+                cat_papers = category.get("papers", [])
+                
+                md_content.append(f"## {cat_title}")
+                md_content.append("")
+                
+                if cat_description:
+                    md_content.append(cat_description)
+                    md_content.append("")
+                
+                md_content.append(f"*本分类包含 {len(cat_papers)} 篇论文*")
+                md_content.append("")
+                
+                for paper in cat_papers:
+                    generate_paper_entry(paper, md_content)
+        else:
+            # 单层结构显示（向后兼容）
+            md_content.append(f"本页面共收录了 {len(aggregated_papers)} 篇论文笔记。")
+            md_content.append("")
+            
+            for paper in aggregated_papers:
+                generate_paper_entry(paper, md_content)
+
         with open(output_md_path, 'w', encoding='utf-8') as f:
             f.write("\n".join(md_content))
-            
-        print(f"[2/2] Markdown 页面已生成至: {output_md_path}")
-        print(f"\n处理完成！共包含 {len(aggregated_papers)} 篇论文。")
+        
+        if has_categories:
+            total_count = sum(len(cat.get("papers", [])) for cat in categories_data)
+            print(f"[2/2] Markdown 页面已生成至: {output_md_path}")
+            print(f"\n处理完成！共包含 {len(categories_data)} 个分类，{total_count} 篇论文。")
+        else:
+            print(f"[2/2] Markdown 页面已生成至: {output_md_path}")
+            print(f"\n处理完成！共包含 {len(aggregated_papers)} 篇论文。")
         
     except Exception as e:
         print(f"生成 Markdown 文件失败: {e}")

@@ -851,7 +851,7 @@
 <li>增加触发条件中的访问偏移量可有效提升 <strong>Accuracy</strong>，尤其在大区域（如16 KB）中效果显著，能将准确率从不足50%提升至90%以上。</li>
 <li>代价是 <strong>Coverage</strong> 显著降低，因为更严格的触发条件导致更少的预取机会被激活。</li>
 <li><strong>Timeliness</strong> 受影响较小，表明该机制主要影响预测是否发生，而非预测时机。</li>
-<li>RICH设计据此采用差异化策略：对16 KB区域采用**(PC,5 offsets)<strong>以追求高精度，对4 KB区域采用</strong>(PC,3 offsets)<strong>平衡精度与覆盖，对2 KB区域保留</strong>(PC,1 offset)<strong>或</strong>(PC,address)**以最大化覆盖。</li>
+<li>RICH设计据此采用差异化策略：对16 KB区域采用<strong>(PC,5 offsets)</strong>以追求高精度，对4 KB区域采用<strong>(PC,3 offsets)</strong>平衡精度与覆盖，对2 KB区域保留<strong>(PC,1 offset)</strong>或<strong>(PC,address)</strong>以最大化覆盖。</li>
 </ul>
 </li>
 </ul>
@@ -2169,6 +2169,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

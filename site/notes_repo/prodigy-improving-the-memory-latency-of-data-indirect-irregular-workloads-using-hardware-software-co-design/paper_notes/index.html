@@ -804,8 +804,7 @@
 </li>
 </ul>
 <p><em>Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 
-</code></pre></div>
+<p>-</p>
 <p><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></p>
 <p><em>Figure 12. Design space exploration on the PFHR file size. Performance of each configuration is normalized to 4 entries.</em></p>
 <p><strong>DIG 在硬件中的存储与作用</strong></p>
@@ -893,8 +892,9 @@
 <li><img alt="" src="../images/5a39f8b3b22856f52bd442acfdfcc7d26236d6278afafe07daadef828aaf69dc.jpg" /></li>
 </ul>
 <p><em>Figure 7. An example C program (a) and (b), translated into LLVM IR (c) and instrumented with our API calls to register DIG nodes and edges. Figure 8. Pseudocode of Prodigy’s compiler analyses for (a) node identification, (b) single-valued indirection, (c) ranged indirection, and (d) runtime.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>- 图 (c) 展示了 LLVM IR，在两个 `malloc` 调用后，分别插入了 `registerNode` 调用，对应图 (a) 和 (b) 中的数组 `a` 和 `b`。
-</code></pre></div>
+<ul>
+<li>图 (c) 展示了 LLVM IR，在两个 <code>malloc</code> 调用后，分别插入了 <code>registerNode</code> 调用，对应图 (a) 和 (b) 中的数组 <code>a</code> 和 <code>b</code>。</li>
+</ul>
 <p><strong>边（Edge）识别与注册</strong></p>
 <p>在识别出节点后，编译器通过追踪数据流来发现节点之间的 <strong>indirection</strong>（间接访问）关系，并将其分类为 <strong>single-valued indirection</strong> 或 <strong>ranged indirection</strong>。</p>
 <ul>
@@ -1168,8 +1168,7 @@
 </ul>
 <p><img alt="" src="../images/9b80fb995e9c1e0049f74b0aa423412b98fedaf0d85e3e717e066d9fe2f62df0.jpg" /></p>
 <p><em>Figure 11. Prodigy operation: (a) prefetch sequence initialization, and (b) prefetch sequence advance.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>*图 11 展示了初始化过程：当检测到对 `workQueue` (地址 `0x100`) 的需求访问时，根据预取距离 2，计算出要预取的地址 `0x108` 并发出请求。*
-</code></pre></div>
+<p><em>图 11 展示了初始化过程：当检测到对 <code>workQueue</code> (地址 <code>0x100</code>) 的需求访问时，根据预取距离 2，计算出要预取的地址 <code>0x108</code> 并发出请求。</em></p>
 <ul>
 <li><strong>选择性丢弃预取序列</strong><ul>
 <li>为了确保预取始终 <strong>领先于核心 (run ahead of the core)</strong>，算法引入了反馈机制。</li>
@@ -1371,6 +1370,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

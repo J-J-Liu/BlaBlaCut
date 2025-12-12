@@ -635,7 +635,7 @@
 <ul>
 <li>图片展示了在相同复合预取器（Composite Prefetchers）配置下，<strong>有无动态需求请求分配（DDRA）机制</strong>对预取器表缺失（Prefetcher Table Misses）的影响对比。</li>
 <li>横轴为两个基准测试集：<strong>SPEC CPU2006</strong> 和 <strong>SPEC CPU2017</strong>，纵轴单位为“千次”（Thousand），表示预取器表缺失的总量。</li>
-<li>蓝色柱状图代表<strong>未采用 DDRA 的传统方案（prior works）</strong>，橙色柱状图代表**采用 Alecto 框架（即启用 DDRA）**的方案。</li>
+<li>蓝色柱状图代表<strong>未采用 DDRA 的传统方案（prior works）</strong>，橙色柱状图代表<strong>采用 Alecto 框架（即启用 DDRA）</strong>的方案。</li>
 <li>数据表明，在两个测试集上，Alecto 均显著降低预取器表缺失：<ul>
 <li><strong>SPEC CPU2006</strong>：传统方案约 350 千次缺失，Alecto 约 110 千次，降幅达 <strong>68.6%</strong>。</li>
 <li><strong>SPEC CPU2017</strong>：传统方案约 350 千次缺失，Alecto 约 100 千次，降幅达 <strong>71.4%</strong>。</li>
@@ -1544,10 +1544,10 @@
 <h3 id="fig-13-the-performance-speedup-of-temporal-prefetching-with-different-demand-request-allocation-policies">Fig. 13. The performance speedup of temporal prefetching with different demand request allocation policies.<a class="headerlink" href="#fig-13-the-performance-speedup-of-temporal-prefetching-with-different-demand-request-allocation-policies" title="Permanent link">&para;</a></h3>
 <p><img alt="46c6baff03cb5eedbb4223203e7d566f547265749ddc080c1c955d12815f83bf.jpg" src="../images/46c6baff03cb5eedbb4223203e7d566f547265749ddc080c1c955d12815f83bf.jpg" /></p>
 <ul>
-<li>图表展示了三种不同需求请求分配策略（Bandit、Triangle、Alecto）在**时间预取（temporal prefetching）**场景下的性能加速比（Normalized Speedup），基准为仅启用L1复合预取器时的IPC。</li>
+<li>图表展示了三种不同需求请求分配策略（Bandit、Triangle、Alecto）在<strong>时间预取（temporal prefetching）</strong>场景下的性能加速比（Normalized Speedup），基准为仅启用L1复合预取器时的IPC。</li>
 <li><strong>Alecto</strong>在绝大多数测试用例中表现最优，其性能显著优于Bandit和Triangle。例如，在<code>gcc_166</code>上，Alecto的加速比接近<strong>1.4</strong>，而Bandit约为1.15，Triangle约为1.2。</li>
 <li>在<code>mcf</code>和<code>sphinx3</code>等基准测试中，Alecto与Triangle性能接近，但依然略胜一筹；而在<code>astar_lakes</code>和<code>omnetpp</code>上，Alecto表现最突出，远超其他两种方案。</li>
-<li>从**Geomean（几何平均）**来看，Alecto整体性能提升最为稳定且最高，表明其动态需求请求分配机制能更有效地优化时间预取器的元数据存储利用率。</li>
+<li>从<strong>Geomean（几何平均）</strong>来看，Alecto整体性能提升最为稳定且最高，表明其动态需求请求分配机制能更有效地优化时间预取器的元数据存储利用率。</li>
 <li>下表总结了各策略在关键基准上的加速比：</li>
 </ul>
 <table>
@@ -2110,6 +2110,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

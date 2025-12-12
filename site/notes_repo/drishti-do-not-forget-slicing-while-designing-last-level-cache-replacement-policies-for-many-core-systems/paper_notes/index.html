@@ -569,8 +569,7 @@
 <li><strong>短视预测问题 (Myopic Predictions)</strong>：在切片 LLC 中，每个 Slice 维护自己的局部预测器。由于来自同一个 <strong>Program Counter (PC)</strong> 的内存请求会根据地址散列到不同的 Slice，每个局部预测器只能看到该 PC 访问模式的一个<strong>局部片段 (myopic view)</strong>，无法学习到全局的重用行为，导致预测不准确。</li>
 </ul>
 <p><img alt="" src="../images/1970890555c7f00a5cf660d3b688d30bff1dc943809016e826a17962ca70f36a.jpg" /></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 
-</code></pre></div>
+<p>-</p>
 <p><img alt="" src="../images/133735d0929e8f5cc5edaf07abfdf5841e2b5cea3475fa6d2166ab22212d55e1.jpg" /></p>
 <p><em>Figure 4: Frequency distributionofETRs and RRIPs in Mockingjay and Hawkeye for xalan and pr running ona16-core system</em></p>
 <ul>
@@ -578,8 +577,7 @@
 </ul>
 <p><img alt="" src="../images/dafe876c740783f360803ce2027231754468b90417c9aafbfb613a15a50b7d32.jpg" /></p>
 <p><em>Figure 5: Miss per kilo accesses (MPKA) per LLC set with three different 16-core homogeneous workloads.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>- 
-</code></pre></div>
+<p>-</p>
 <p><img alt="" src="../images/a414717151ed11725279a36c126d05e1e6488e3fe8c84436b02d3fb137d31f89.jpg" /></p>
 <p><strong>核心贡献</strong></p>
 <ul>
@@ -590,14 +588,17 @@
 </ul>
 <p><img alt="" src="../images/d1fb66abe495352f9851f1eec950332b277dc1a0372947b9d3718aa0ce6e1c72.jpg" /></p>
 <p><em>Figure 9: Drishti's enhancement: Tracking reuse behavior and training the per-core and yet global reuse predictor with local (per-slice) sampled caches.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    - 
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>- 
 </code></pre></div>
 <p><img alt="" src="../images/70c486d52e124569e24857169dd1a3d7d26dbe698f4633315f2dbe79781b491a.jpg" /></p>
 <p><em>Figure 11: (a) Slowdown in Mockingjay with Drishti without a low-latency interconnect between slices and the predictors. (b)Interconnect latency sensitivity on a 32-core system across 35 homogeneous and 35 heterogeneous mixes.</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>- **动态采样缓存 (Dynamic Sampled Cache)**：不再随机选择采样集，而是通过**饱和计数器**动态监控每个 Slice 内各 Set 的 MPKA，并优先选择**高 MPKA** 的 Set 作为采样集，确保采样缓存能捕获到最具信息量的缓存缺失事件。
-</code></pre></div>
 <ul>
-<li><strong>效果与优势</strong>：<ul>
+<li>
+<p><strong>动态采样缓存 (Dynamic Sampled Cache)</strong>：不再随机选择采样集，而是通过<strong>饱和计数器</strong>动态监控每个 Slice 内各 Set 的 MPKA，并优先选择<strong>高 MPKA</strong> 的 Set 作为采样集，确保采样缓存能捕获到最具信息量的缓存缺失事件。</p>
+</li>
+<li>
+<p><strong>效果与优势</strong>：</p>
+<ul>
 <li>在 <strong>32-core</strong> 系统上，Drishti 将 <strong>Hawkeye</strong> 和 <strong>Mockingjay</strong> 相对于 <strong>LRU</strong> 基线的性能提升从 <strong>3.3%</strong> 和 <strong>6.7%</strong> 显著提高到 <strong>5.6%</strong> 和 <strong>13.2%</strong>。</li>
 <li>该方案不仅提升了性能，还<strong>节省了存储开销</strong>，因为动态采样允许使用更少但更有效的采样集。</li>
 <li>Drishti 的设计理念具有普适性，可有效应用于多种基于采样和预测的替换策略（如 <strong>SHiP++</strong>, <strong>CHROME</strong>, <strong>Glider</strong>）。</li>
@@ -1120,6 +1121,8 @@
       <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
       
     
   </body>

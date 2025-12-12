@@ -1,0 +1,1204 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 基于强化学习的预取框架
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-q-qvstore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 分层Q值存储结构 (QVStore)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 可配置的多特征状态空间与奖励机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-evaluation-queue-eq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 评估队列 (Evaluation Queue, EQ)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning">Pythia: A Customizable Hardware Prefetching Framework Using Online Reinforcement Learning 论文解析<a class="headerlink" href="#pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Rahul Bera, Konstantinos Kanellopoulos, Anant V. Nori, et al.</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: MICRO</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2021</p>
+<p><strong>研究机构 (Affiliations)</strong>: ETH Zürich, Processor Architecture Research Labs, Intel Labs, TU Delft</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决现有硬件预取器的三大关键缺陷：(1) 仅依赖<strong>单一程序特征</strong>（如PC或地址）进行预测；(2) <strong>缺乏内在的系统感知能力</strong>，无法根据内存带宽等系统级反馈调整行为；(3) <strong>设计僵化</strong>，难以在线定制以适应不同工作负载和系统配置。</li>
+<li>提出一种<strong>整体性</strong>（holistic）的预取算法，能够同时利用多种程序上下文信息和系统级反馈，以生成<strong>高精度、及时且系统感知</strong>的预取请求。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Pythia</strong>，一个基于<strong>在线强化学习</strong>（Online Reinforcement Learning）的可定制硬件预取框架。</li>
+<li>将预取器建模为一个<strong>RL agent</strong>：<ul>
+<li><strong>状态</strong>（State）: 一个由多种<strong>程序特征</strong>（program features）组成的向量，例如 <code>PC+Delta</code> 和 <code>Sequence of last-4 deltas</code>。</li>
+<li><strong>动作</strong>（Action）: 从一组候选预取偏移量（offsets）中选择一个，而非完整的缓存行地址，以大幅缩小动作空间。</li>
+<li><strong>奖励</strong>（Reward）: 一个包含<strong>五个离散级别</strong>的数值信号，用于评估预取质量。该信号不仅考虑<strong>准确性</strong>和<strong>及时性</strong>，还明确纳入了<strong>内存带宽使用情况</strong>作为系统级反馈。</li>
+</ul>
+</li>
+<li>设计了低开销的硬件实现：<ul>
+<li>**Q-Value Store **(QVStore): 采用分层的“<strong>vault-plane</strong>”表结构存储Q值，支持高效查询和扩展。</li>
+<li>**Evaluation Queue **(EQ): 一个FIFO队列，用于跟踪最近的预取动作及其结果，以便分配奖励和更新Q值。</li>
+</ul>
+</li>
+<li>通过<strong>自动化设计空间探索</strong>确定基础配置，包括特征选择、动作集剪枝和奖励/超参数调优。</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li>Pythia在性能上显著优于SOTA预取器（MLOP和Bingo），且优势在资源受限场景下更为突出：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">系统配置</th>
+<th style="text-align: center;">相对于 MLOP 的性能提升</th>
+<th style="text-align: center;">相对于 Bingo 的性能提升</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>单核</strong></td>
+<td style="text-align: center;"><strong>3.4%</strong></td>
+<td style="text-align: center;"><strong>3.8%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>十二核</strong></td>
+<td style="text-align: center;"><strong>7.7%</strong></td>
+<td style="text-align: center;"><strong>9.6%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>带宽受限</strong>（150 MTPS）</td>
+<td style="text-align: center;"><strong>16.9%</strong></td>
+<td style="text-align: center;"><strong>20.2%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Pythia通过<strong>更高的预取覆盖率</strong>和<strong>更低的过度预测率</strong>（overprediction）实现了上述性能增益。</li>
+<li>Pythia具有出色的<strong>可定制性</strong>：<ul>
+<li>通过简单修改<strong>配置寄存器</strong>中的奖励值，可在Ligra图处理套件上获得<strong>最高7.8%</strong>（平均1.9%）的额外性能提升。</li>
+<li>通过在线调整使用的程序特征，可在SPEC CPU2006套件上获得<strong>最高5.1%</strong>（平均1.5%）的额外性能提升。</li>
+</ul>
+</li>
+<li>硬件开销极低：在桌面级处理器上仅增加**1.03%<strong>的面积和</strong>0.37%**的功耗。</li>
+<li><img alt="" src="../images/95873faac9c7d07d6c81d743146ca0f31ec23d5c09c01f787651669292d6b20d.jpg" /> <em>Figure 8: Average performance improvement of prefetchers in systems with varying (a) number of cores, (b) DRAM million transfers per second (MTPS), (c) LLC size, and (d) prefetching level. Each DRAM bandwidth configuration roughly matches MTPS/core of various commercial processors [5, 6, 13]. The baseline bandwidth/LLC configuration is marked in red.</em></li>
+<li><img alt="" src="../images/e2aab8a346416bdfc370d441a68d78a13285f83a60e8989b28e36703342d8c66.jpg" /> <em>Figure 11: Performance of memory bandwidth-oblivious Pythia versus the basic Pythia.</em></li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li>将硬件预取问题形式化为<strong>强化学习</strong>问题是一种有效且实用的方法。</li>
+<li>Pythia通过其<strong>多特征融合</strong>和<strong>内在系统感知</strong>的设计，成功克服了传统预取器的局限性，在多样化的<strong>工作负载</strong>和<strong>系统配置</strong>下均能提供<strong>稳健且优越</strong>的性能。</li>
+<li>其<strong>可定制的框架</strong>和<strong>低硬件开销</strong>使其成为未来处理器设计中一个极具吸引力的解决方案，有望减轻架构师设计复杂预取机制的负担。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li>传统硬件预取器（如 SPP、Bingo）通常只利用<strong>单一类型</strong>的程序上下文信息（例如 <strong>PC</strong>、<strong>Address</strong> 或 <strong>Delta</strong>）来预测未来的内存访问。</li>
+<li>这些设计要么完全忽略预取带来的负面系统影响（如<strong>内存带宽消耗</strong>、缓存污染），要么将系统级反馈作为事后补救措施，而非内置于算法核心。</li>
+<li>由于其固有的局限性，现有预取器在面对<strong>多样化的工作负载</strong>和<strong>变化的系统配置</strong>（尤其是带宽受限场景）时，性能收益往往不稳定甚至为负。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li>作者观察到三个关键短板严重限制了先前预取器的普适性：<ul>
+<li><strong>单特征预测</strong>: 仅依赖一种程序特征，导致在不匹配该特征的负载上表现不佳。</li>
+<li><strong>缺乏内在的系统感知</strong>: 无法根据当前系统状态（如内存带宽压力）动态调整预取策略。</li>
+<li><strong>缺乏在线可定制性</strong>: 硬件结构在设计时即固化，无法在硅片上灵活地适应新负载或改变优化目标（如侧重覆盖率或准确性）。</li>
+</ul>
+</li>
+<li>因此，亟需一个<strong>整体性</strong>的预取框架，能够<strong>同时学习多种程序特征</strong>并<strong>内化系统级反馈</strong>，以实现稳健且自适应的性能提升。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了 <strong>Pythia</strong>，一个基于<strong>在线强化学习 (Online Reinforcement Learning)</strong> 的可定制硬件预取框架。<ul>
+<li>将预取器建模为一个 <strong>RL agent</strong>，其<strong>状态 (State)</strong> 是由多种程序特征（如 <strong>PC+Delta</strong>, <strong>Sequence of Deltas</strong>）组成的向量。</li>
+<li>其<strong>动作 (Action)</strong> 是选择一个预取偏移量（<strong>prefetch offset</strong>）。</li>
+<li>其<strong>奖励 (Reward)</strong> 是一个数值信号，综合评估了预取的<strong>准确性</strong>、<strong>及时性</strong>以及当前<strong>内存带宽使用情况</strong>。</li>
+</ul>
+</li>
+<li>Pythia 的设计具有两大独特优势：<ul>
+<li><strong>整体性学习</strong>: 能够在一个统一的框架内，自主学习如何结合多种程序特征和系统反馈，以生成<strong>高精度、及时且系统感知</strong>的预取请求。</li>
+<li><strong>在线可定制性</strong>: 通过简单的<strong>配置寄存器</strong>，即可在硅片上动态更改所使用的程序特征或奖励值，从而针对特定工作负载套件（如 Ligra 图处理）进行优化，而无需修改底层硬件。</li>
+</ul>
+</li>
+<li>实验结果表明，Pythia 在各种配置下均显著优于 SOTA 预取器：<ul>
+<li>在<strong>单核</strong>配置下，性能优于 <strong>MLOP</strong> 和 <strong>Bingo</strong> 分别达 <strong>3.4%</strong> 和 <strong>3.8%</strong>。</li>
+<li>在<strong>十二核</strong>配置下，优势扩大至 <strong>7.7%</strong> 和 <strong>9.6%</strong>。</li>
+<li>在<strong>带宽受限</strong>的服务器类配置下，优势最为显著，分别领先 <strong>16.9%</strong> 和 <strong>20.2%</strong>。</li>
+</ul>
+</li>
+<li>Pythia 的硬件开销极低，仅带来 <strong>1.03%</strong> 的面积和 <strong>0.37%</strong> 的功耗开销，并已<strong>开源</strong>其代码和数据集。<img alt="" src="../images/83740f38c45361837c159177240b3dcdcfd417f74be36d813c28a2e5afc9c928.jpg" /> <em>Figure 1: Comparison of (a) coverage, overprediction, and (b) performance of two recently-proposed prefetchers, SPP [78] and Bingo [27], and our new proposal, Pythia.</em></li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>Pythia 的核心思想是将硬件预取器建模为一个 <strong>Reinforcement Learning (RL) Agent</strong>，使其能够通过与处理器和内存子系统的交互，在线学习如何做出最优的预取决策。其架构围绕 RL 的三个基本要素——<strong>State (状态)</strong>、<strong>Action (动作)</strong> 和 <strong>Reward (奖励)</strong>——进行设计，并通过两个主要的硬件结构来实现。</p>
+<ul>
+<li>
+<p><strong>状态 (State) 定义</strong>:</p>
+<ul>
+<li>状态是一个 <strong>k 维向量</strong>，由多个 <strong>program features (程序特征)</strong> 构成。</li>
+<li>每个程序特征由 <strong>control-flow component</strong> (如 load-PC) 和 <strong>data-flow component</strong> (如 cacheline address, delta) 组合而成。</li>
+<li>示例特征包括 <code>PC+Delta</code> 和 <code>Sequence of last-4 deltas</code>，这使得 Pythia 能够同时利用多种上下文信息进行决策。</li>
+</ul>
+</li>
+<li>
+<p><strong>动作 (Action) 定义</strong>:</p>
+<ul>
+<li>动作被定义为选择一个 <strong>prefetch offset (预取偏移量)</strong>，而非完整的缓存行地址，这极大地缩小了动作空间。</li>
+<li>偏移量范围被限制在物理页内（例如 [-63, 63]），因为大多数后 L1 预取器都在页内工作。</li>
+<li>动作 <code>0</code> 表示不进行预取。</li>
+</ul>
+</li>
+<li>
+<p><strong>奖励 (Reward) 机制</strong>:</p>
+<ul>
+<li>奖励方案是 Pythia <strong>系统感知 (system-aware)</strong> 能力的关键，它定义了预取器的优化目标。</li>
+<li>奖励分为五个级别，综合评估了预取的 <strong>accuracy (准确性)</strong>、<strong>timeliness (及时性)</strong> 和 <strong>系统级反馈 (如 memory bandwidth usage)</strong>。</li>
+<li>具体包括：<strong>Accurate and timely (R_AT)</strong>、<strong>Accurate but late (R_AL)</strong>、<strong>Loss of coverage (R_LC)</strong>、<strong>Inaccurate (R_IN)</strong>（根据带宽使用情况细分）以及 <strong>No-prefetch (R_NP)</strong>（同样根据带宽使用情况细分）。</li>
+<li>这种离散且可配置的奖励结构允许 Pythia 在带宽紧张时主动牺牲覆盖率以换取更高的准确性。</li>
+</ul>
+</li>
+</ul>
+<p><strong>核心硬件组件</strong></p>
+<p>Pythia 的硬件实现主要由两个结构组成：</p>
+<ul>
+<li>
+<p><strong>Q-Value Store (QVStore)</strong>:</p>
+<ul>
+<li>用于存储所有观察到的 <strong>state-action pair</strong> 的 <strong>Q-values</strong>。</li>
+<li>采用了一种创新的 <strong>分层表结构 (hierarchical table-based organization)</strong>，而非复杂的神经网络，以满足硬件对面积和延迟的要求。<ul>
+<li><strong>Vaults</strong>: QVStore 被划分为 k 个 <strong>vault</strong>，每个 vault 对应状态向量中的一个特征，独立存储该特征与所有动作的 Q 值。</li>
+<li><strong>Planes</strong>: 每个 vault 又由多个 <strong>plane</strong> 组成，借鉴了 <strong>tile coding</strong> 的思想。这允许相似的特征值共享部分 Q 值，加速学习过程并控制存储开销。</li>
+</ul>
+</li>
+<li>最终的 state-action Q 值通过取所有 constituent feature-action Q 值的最大值得到。</li>
+<li>QVStore 的查找操作被设计为 <strong>五级流水线</strong>，以降低关键路径延迟。</li>
+</ul>
+</li>
+<li>
+<p><strong>Evaluation Queue (EQ)</strong>:</p>
+<ul>
+<li>一个 <strong>FIFO 队列</strong>，用于追踪最近执行的预取动作及其结果。</li>
+<li>每个条目包含：所选动作、生成的预取地址、一个 <strong>filled bit</strong>（标记预取是否已填入缓存）以及对应的状态向量。</li>
+<li>EQ 是连接预取动作与其最终奖励的桥梁：<ul>
+<li>当一个需求请求命中 EQ 中的地址时，根据 <strong>filled bit</strong> 分配 <strong>R_AT</strong> 或 <strong>R_AL</strong>。</li>
+<li>当一个 EQ 条目被驱逐时，若仍未被需求命中，则根据当前的内存带宽使用情况分配 <strong>R_IN</strong> 或 <strong>R_NP</strong>。</li>
+<li>驱逐时，条目中的奖励和 state-action pair 会被用来通过 <strong>SARSA 算法</strong> 更新 QVStore 中的 Q 值。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/881ccba2541ed7a5a3b77b74c875fc24a7c82d29322345d5c4fc906c9bb7e175.jpg" /> <em>Figure 4: Overview of Pythia.</em></p>
+<p><strong>在线学习与定制化流程</strong></p>
+<p>Pythia 的工作流程是一个闭环的在线学习过程：</p>
+<ul>
+<li>
+<p>对于每个新的 <strong>demand request</strong>:</p>
+<ol>
+<li>在 <strong>EQ</strong> 中查找其地址，以确定之前的预取是否成功，并分配相应奖励。</li>
+<li>从请求中提取 <strong>state-vector</strong>。</li>
+<li>查询 <strong>QVStore</strong>，使用 <strong>ε-greedy 策略</strong> 选择具有最高 Q 值的动作。</li>
+<li>执行预取动作（或不预取），并将新条目插入 <strong>EQ</strong>。</li>
+<li>当 <strong>EQ</strong> 条目被驱逐时，利用其累积的奖励更新 <strong>QVStore</strong>。</li>
+</ol>
+</li>
+<li>
+<p><strong>高度可定制性</strong>:</p>
+<ul>
+<li><strong>Program features</strong> 的选择和 <strong>reward level values</strong> 都可以通过 <strong>简单的配置寄存器</strong> 在线修改。</li>
+<li>这使得 Pythia 能够针对特定的工作负载套件（如 Ligra 图处理或 SPEC CPU2006）进行微调，而无需更改底层硬件，从而获得比基础配置更高的性能收益。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1_1">1. 基于强化学习的预取框架<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
+<p><strong>核心观点</strong></p>
+<ul>
+<li>Pythia 的核心创新在于将硬件预取问题形式化为一个 <strong>在线强化学习 (Online Reinforcement Learning)</strong> 问题，其目标是让预取器（RL 智能体）通过与运行环境（处理器和内存子系统）的持续交互，自主学习最优的预取策略。</li>
+<li>该框架的关键优势在于其 <strong>整体性 (holistic)</strong> 和 <strong>可定制性 (customizable)</strong>：它能同时利用 <strong>多种程序特征 (multiple program features)</strong> 和 <strong>系统级反馈 (system-level feedback)</strong> 进行决策，并且可以通过简单的配置寄存器在硅片上动态调整其行为，而无需修改底层硬件。</li>
+</ul>
+<p><strong>Pythia 的 RL 形式化定义</strong></p>
+<ul>
+<li><strong>状态 (State)</strong>: 状态被定义为一个 <strong>k 维向量</strong>，其中每一维都是一个 <strong>程序特征 (program feature)</strong>。这些特征由控制流组件（如 load-PC、branch-PC）和数据流组件（如 cacheline address、page offset、cacheline delta）组合而成。<ul>
+<li>例如，<code>PC+Delta</code> 表示加载指令的程序计数器与其访问地址的增量。</li>
+<li>论文通过自动化设计空间探索，最终选定的基本配置包含两个特征：<code>PC+Delta</code> 和 <code>Sequence of last-4 deltas</code>。</li>
+<li><img alt="" src="../images/e8955d96613746b5cca76e86bf2290dfbb1d07e81c0b4793bb31a08b6be6fe8c.jpg" /> <em>Table 1: Example program features</em></li>
+</ul>
+</li>
+<li><strong>动作 (Action)</strong>: 动作被定义为从一组候选 <strong>预取偏移量 (prefetch offsets)</strong> 中进行选择。偏移量是相对于当前请求缓存行地址的增量（Δ）。<ul>
+<li>由于预取通常发生在物理页内，对于 4KB 页和 64B 缓存行，偏移量范围为 [-63, 63]。</li>
+<li>为了降低复杂度，论文通过剪枝将动作空间缩减至一个更小的集合（见下表）。</li>
+<li>动作为 0 表示不进行预取。</li>
+</ul>
+</li>
+<li><strong>奖励 (Reward)</strong>: 奖励方案是 Pythia 实现 <strong>系统感知 (system-awareness)</strong> 的关键。它定义了五个离散的奖励级别，用以评估预取决策的质量：<ul>
+<li><strong>R_AT</strong>: 准确且及时 (Accurate and timely)。</li>
+<li><strong>R_AL</strong>: 准确但延迟 (Accurate but late)。</li>
+<li><strong>R_LC</strong>: 覆盖率损失 (Loss of coverage)，即预取到了错误的物理页。</li>
+<li><strong>R_IN</strong>: 不准确 (Inaccurate)，根据当前内存带宽使用情况进一步细分为 <strong>R_IN_LB</strong> (低带宽) 和 <strong>R_IN_HB</strong> (高带宽)。</li>
+<li><strong>R_NP</strong>: 不预取 (No-prefetch)，同样根据带宽使用情况细分为 <strong>R_NP_LB</strong> 和 <strong>R_NP_HB</strong>。</li>
+<li>通过调整这些奖励值，可以引导智能体在不同系统条件下（如高/低内存带宽）权衡覆盖率、准确性和带宽消耗。</li>
+</ul>
+</li>
+</ul>
+<p><strong>算法流程与硬件实现</strong></p>
+<ul>
+<li>Pythia 的工作流程围绕两个主要硬件结构展开：<strong>Q-Value Store (QVStore)</strong> 和 <strong>Evaluation Queue (EQ)</strong>。<ul>
+<li><img alt="" src="../images/881ccba2541ed7a5a3b77b74c875fc24a7c82d29322345d5c4fc906c9bb7e175.jpg" /> <em>Figure 4: Overview of Pythia.</em></li>
+</ul>
+</li>
+<li><strong>核心算法流程 (Algorithm 1)</strong>:<ol>
+<li><strong>处理需求请求</strong>: 当一个新的需求请求到达时，Pythia 首先在 EQ 中查找其地址。<ul>
+<li>如果找到匹配项，则根据其 <code>filled</code> 位分配奖励 <strong>R_AT</strong> 或 <strong>R_AL</strong>。</li>
+</ul>
+</li>
+<li><strong>提取状态并选择动作</strong>: 从需求请求中提取 k 维状态向量，并查询 QVStore 以找到具有最高 Q 值的动作（采用 ε-greedy 策略进行探索与利用的平衡）。</li>
+<li><strong>生成预取请求</strong>: 使用选定的动作（偏移量）生成预取地址，并向内存层次结构发出请求。</li>
+<li><strong>更新 EQ</strong>: 将新选择的动作、预取地址和状态向量插入 EQ 的尾部。<ul>
+<li>对于“不预取”或“跨页预取”的动作，会立即为其分配相应的奖励。</li>
+</ul>
+</li>
+<li><strong>处理 EQ 驱逐</strong>: 当 EQ 条目被驱逐时：<ul>
+<li>如果该条目尚未分配奖励，则根据当前内存带宽使用情况分配 <strong>R_IN_HB</strong> 或 <strong>R_IN_LB</strong>。</li>
+<li>使用 SARSA 算法和存储在驱逐条目中的奖励来更新 QVStore 中对应的 Q 值。</li>
+</ul>
+</li>
+<li><strong>处理预取填充</strong>: 当一个预取请求完成并填充到缓存时，在 EQ 中找到对应条目并将其 <code>filled</code> 位置为 1，用于后续判断预取是否及时。</li>
+</ol>
+</li>
+<li><strong>QVStore 的分层设计</strong>:<ul>
+<li>为了解决高维状态空间带来的存储爆炸问题，QVStore 采用了创新的 <strong>Vault-Plane</strong> 分层组织。<ul>
+<li><strong>Vault</strong>: QVStore 被划分为 k 个 Vault，每个 Vault 对应状态向量中的一个特征。最终的状态-动作 Q 值是所有 Vault 返回的特征-动作 Q 值中的 <strong>最大值</strong>。<ul>
+<li><img alt="" src="../images/f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg" /></li>
+</ul>
+</li>
+<li><strong>Plane</strong>: 每个 Vault 内部由多个 <strong>Plane</strong> 组成，这是对 <strong>Tile Coding</strong> 技术的硬件适配。每个特征值通过多个哈希函数映射到不同 Plane 的索引，最终的特征-动作 Q 值是所有 Plane 中对应条目的 <strong>部分 Q 值之和</strong>。<ul>
+<li>这种设计既实现了相似特征值之间的 <strong>泛化 (generalization)</strong>，又通过多哈希减少了不相关特征值的冲突。</li>
+<li><img alt="" src="../images/f39e95f5f7979f3a7a654c44488cd00c8fb5e6928d223ee2245502d1970df506.jpg" /> <em>Figure 5: (a) The QVStore is comprised of multiple vaults. (b) Each vault is comprised of multiple planes. (c) Index generation from feature value.</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与自动化探索</strong></p>
+<ul>
+<li>论文通过一个三阶段的自动化设计空间探索过程来确定 Pythia 的基本配置。</li>
+<li><strong>特征选择</strong>: 从 32 个初始特征中，通过线性回归和性能测试，选出了 <code>PC+Delta</code> 和 <code>Sequence of last-4 deltas</code> 的组合。</li>
+<li><strong>动作选择</strong>: 通过对完整动作集 [-63, 63] 进行剪枝，移除了对性能影响不大的动作。</li>
+<li><strong>奖励与超参数调优</strong>: 使用网格搜索在 10 个测试轨迹上筛选出 25 个最佳配置，再在全部单核工作负载上选出最终胜者。</li>
+<li>最终的基本配置如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>状态维度 (k)</strong></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>程序特征</strong></td>
+<td style="text-align: left;">PC+Delta, Sequence of last-4 deltas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>动作集</strong></td>
+<td style="text-align: left;">{-63, -31, -15, -7, -3, -1, 0, 1, 3, 7, 15, 31, 63}</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>奖励值</strong></td>
+<td style="text-align: left;">R_AT=15, R_AL=5, R_LC=-10, R_IN_LB=-8, R_IN_HB=-15, R_NP_LB=-4, R_NP_HB=-8</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>超参数</strong></td>
+<td style="text-align: left;">学习率 α=0.0065, 折扣因子 γ=0.9, 探索率 ε=0.002</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/444526a5145aef5ffbbb0c0bb563785d82780223bb7a4d12fdf4d08fce7e0bab.jpg" /> <em>Table 2: Basic Pythia configuration derived from our automated design-space exploration</em></p>
+<p><strong>输入输出关系及整体作用</strong></p>
+<ul>
+<li><strong>输入</strong>: Pythia 的主要输入是来自 L1 缓存未命中（或其他触发点）的 <strong>需求请求 (demand request)</strong>。从这个请求中，它可以提取出 PC、地址、历史 Delta 等原始信息，进而构建其 <strong>状态向量</strong>。此外，它还持续监控 <strong>内存带宽使用情况</strong> 作为系统级反馈。</li>
+<li><strong>输出</strong>: Pythia 的输出是一个或多个 <strong>预取请求 (prefetch requests)</strong>，这些请求被发送到 L2 缓存或更低层级的内存。</li>
+<li><strong>在整体系统中的作用</strong>:<ul>
+<li><strong>性能提升</strong>: 通过生成高覆盖率、高准确性的预取，有效隐藏内存访问延迟，从而提升 IPC 和整体性能。评估显示，Pythia 在单核、多核和带宽受限场景下均显著优于 SOTA 预取器（如 MLOP 和 Bingo）。</li>
+<li><strong>资源效率</strong>: 其内在的系统感知能力使其能够在资源紧张（如高内存带宽压力）时自动抑制过度预取，避免因 <strong>缓存污染 (cache pollution)</strong> 和 <strong>带宽浪费</strong> 而导致的性能下降。</li>
+<li><strong>适应性与可定制性</strong>: 作为一款 <strong>可定制框架</strong>，Pythia 可以通过修改配置寄存器（如奖励值、特征选择）来针对特定工作负载套件（如 Ligra 图计算）进行优化，而无需任何硬件改动，这大大降低了部署和维护成本。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-q-qvstore">2. 分层Q值存储结构 (QVStore)<a class="headerlink" href="#2-q-qvstore" title="Permanent link">&para;</a></h3>
+<p><strong>分层Q值存储结构 (QVStore) 的设计原理与实现</strong></p>
+<p>Pythia的<strong>QVStore</strong>是其强化学习框架的核心硬件组件，用于高效存储和查询状态-动作对（state-action pair）的<strong>Q-value</strong>。为克服传统单表或神经网络方法在硬件实现上的高开销和高延迟问题，Pythia提出了一种创新的、基于<strong>tile coding</strong>思想的分层表结构。</p>
+<p><strong>核心架构：Vault 与 Plane</strong></p>
+<ul>
+<li><strong>整体组织</strong>：QVStore被组织为 <strong>k</strong> 个独立的分区，称为 <strong>vault</strong>。每个 vault 对应状态向量（state-vector）中的一个特定<strong>program feature</strong>（例如 PC+Delta）。</li>
+<li><strong>Vault 内部结构</strong>：每个 vault 并非一个巨大的二维单表，而是由 <strong>p</strong> 个更小的二维表组成，这些表被称为 <strong>plane</strong>。这种设计直接源于 <strong>tile coding</strong> 技术。</li>
+<li><strong>Q值计算逻辑</strong>：<ul>
+<li>对于一个给定的状态-动作对 (s, a)，其中 s = {f1, f2, ..., fk}，系统会并行查询所有 k 个 vault。</li>
+<li>在第 i 个 vault 中，针对特征 fi 和动作 a，系统会查询其内部所有的 p 个 plane，并将从每个 plane 中获取的<strong>partial Q-value</strong>相加，得到该特征-动作对 (fi, a) 的最终 Q 值。</li>
+<li>最终的状态-动作 Q 值 Q(s, a) 被定义为所有 k 个特征-动作 Q 值中的<strong>最大值</strong>。公式表示为：<code>Q(s, a) = max(Q(f1, a), Q(f2, a), ..., Q(fk, a))</code>。</li>
+<li>这种“<strong>取最大值</strong>”的聚合策略确保了决策由状态向量中最具判别力的那个特征所主导。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg" /></p>
+<p><strong>Tile Coding 机制详解</strong></p>
+<ul>
+<li><strong>动机</strong>：直接用特征原始值作为索引会导致表规模随特征位宽指数级增长，这在硬件上不可行。Tile coding 通过引入重叠的哈希函数，在<strong>分辨率</strong>（区分不同特征值的能力）和<strong>泛化能力</strong>（相似特征值共享部分信息以加速学习）之间取得平衡。</li>
+<li><strong>Plane 查询流程</strong>：<ul>
+<li>对于一个输入特征值（如一个PC值），在查询某个特定 plane 时，首先将其与一个在设计时随机选定的<strong>shifting constant</strong>相加。</li>
+<li>然后，对移位后的结果进行<strong>哈希</strong>操作，生成该 plane 内的<strong>feature index</strong>。</li>
+<li>这个 feature index 与<strong>action index</strong>共同构成地址，用于从该 plane 中读取一个 partial Q-value。</li>
+</ul>
+</li>
+<li><strong>优势</strong>：<ul>
+<li><strong>泛化能力</strong>：相似的特征值经过不同的 shifting constant 和哈希后，可能会在某些 plane 中映射到相同的索引，从而共享 partial Q-value，这有助于加速对新但相似模式的学习。</li>
+<li><strong>高分辨率</strong>：由于存在多个 plane（即多个不同的 shifting constant 和哈希函数），两个差异较大的特征值不太可能在所有 plane 中都发生冲突，从而保证了区分度。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/f39e95f5f7979f3a7a654c44488cd00c8fb5e6928d223ee2245502d1970df506.jpg" /> <em>Figure 5: (a) The QVStore is comprised of multiple vaults. (b) Each vault is comprised of multiple planes. (c) Index generation from feature value.</em></p>
+<p><strong>硬件实现与参数设置</strong></p>
+<ul>
+<li><strong>基本配置</strong>：根据论文中的自动化设计空间探索（见表2），Pythia的基本配置使用 <strong>k=2</strong> 个 vault（对应特征 PC+Delta 和 Sequence of last-4 deltas），每个 vault 包含 <strong>p=4</strong> 个 plane。</li>
+<li><strong>存储开销</strong>：整个 QVStore 在基本配置下仅消耗 <strong>24KB</strong> 的存储空间，加上 <strong>1.5KB</strong> 的 Evaluation Queue (EQ)，总元数据开销仅为 <strong>25.5KB</strong>，这对于现代处理器核心而言是极低的开销。</li>
+<li><strong>查询流水线</strong>：为了满足硬件 prefetcher 的低延迟要求，QVStore 的查询操作被设计为一个 <strong>5-stage pipeline</strong>。关键步骤包括并行计算所有 plane 的索引、读取 partial Q-values、求和得到每个 vault 的 Q 值、取最大值得到最终 Q(s, a)、并与当前已知的最大 Q 值进行比较以确定最优动作。</li>
+<li><strong>可扩展性</strong>：该架构具有天然的可扩展性。若需增加状态向量的维度（即使用更多 program features），只需简单地向 QVStore 中添加一个新的 vault，而无需重构整个存储结构。</li>
+</ul>
+<p><strong>在整体系统中的作用与输入输出关系</strong></p>
+<ul>
+<li><strong>输入</strong>：QVStore 的主要输入是来自当前<strong>demand request</strong>的<strong>state-vector</strong>（由多个 program features 组成）和一个候选<strong>action</strong>（prefetch offset）。</li>
+<li><strong>处理</strong>：QVStore 根据上述分层和 tile coding 机制，快速计算出该 state-action 对的 Q-value。</li>
+<li><strong>输出</strong>：在 Pythia 的决策阶段，系统会遍历所有可能的 action，利用 QVStore 找到能产生<strong>最高 Q-value</strong>的那个 action，并据此生成 prefetch 请求。</li>
+<li><strong>反馈更新</strong>：当一个 prefetch action 的结果（通过 EQ 获得 reward）最终确定后，对应的 state-action pair 的 Q-value 会根据 <strong>SARSA</strong> 更新算法进行迭代优化，并写回 QVStore。这个过程使得 Pythia 能够持续学习和改进其 prefetching 策略。</li>
+</ul>
+<h3 id="3_1">3. 可配置的多特征状态空间与奖励机制<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<p><strong>Pythia的可配置多特征状态空间</strong></p>
+<ul>
+<li>Pythia的状态（State）被定义为一个 <strong>k维向量</strong>，该向量由多个<strong>程序特征</strong>（program features）构成。每个程序特征是<strong>控制流组件</strong>（如load-PC、branch-PC）与<strong>数据流组件</strong>（如cacheline address, page offset, cacheline delta）的组合。</li>
+<li>状态空间的设计核心在于其<strong>可配置性</strong>。虽然向量维度k在硬件设计时因存储预算而固定，但具体选择哪k个特征可以在<strong>硅片上通过简单的配置寄存器在线更改</strong>，无需修改硬件结构。</li>
+<li>论文通过自动化设计空间探索（§4.3.1）确定了基础配置中的两个关键特征：<strong>PC+Delta</strong> 和 <strong>Sequence of last-4 deltas</strong>。这一选择直观地融合了Bingo和SPP两种前沿预取器的优势特征。</li>
+<li>为了高效处理高维状态空间，Pythia设计了分层的<strong>QVStore</strong>（Q-Value Store）结构。QVStore由多个<strong>vault</strong>（保险库）组成，每个vault对应状态向量中的一个特征，并记录该特征与所有可能动作（action）的Q值。</li>
+<li>每个vault内部采用受<strong>tile coding</strong>启发的组织方式，由多个<strong>plane</strong>（平面）构成。这使得相似的特征值可以共享部分Q值，加速学习过程，同时通过多plane减少不相关特征值间的冲突。</li>
+</ul>
+<p><img alt="" src="../images/f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg" />
+<img alt="" src="../images/f39e95f5f7979f3a7a654c44488cd00c8fb5e6928d223ee2245502d1970df506.jpg" /> <em>Figure 5: (a) The QVStore is comprised of multiple vaults. (b) Each vault is comprised of multiple planes. (c) Index generation from feature value.</em></p>
+<p><strong>基于系统反馈的精细化奖励机制</strong></p>
+<ul>
+<li>Pythia的奖励（Reward）方案定义了五个离散级别，明确地将<strong>内存带宽使用情况</strong>作为系统级反馈信息融入其中，以指导预取策略在覆盖率、准确性和系统资源消耗之间进行权衡。</li>
+<li>五个奖励级别及其作用如下：<ul>
+<li><strong>R_AT</strong>: <strong>Accurate and timely</strong>（准确且及时）。当预取地址在被填充到缓存后才被需求时给予此正向奖励，鼓励生成高质量的预取。</li>
+<li><strong>R_AL</strong>: <strong>Accurate but late</strong>（准确但延迟）。当预取地址在填充前就被需求时给予此较低的正向奖励，表明预取虽正确但未隐藏延迟。</li>
+<li><strong>R_LC</strong>: <strong>Loss of coverage</strong>（覆盖率损失）。当预取动作产生的地址与触发它的需求访问不在同一物理页时给予此负向奖励，引导预取器在页内操作。</li>
+<li><strong>R_IN</strong>: <strong>Inaccurate</strong>（不准确）。当预取地址在时间窗口内未被需求时给予此负向奖励，并进一步细分为：<ul>
+<li><strong>R_IN_LB</strong>: 在<strong>低带宽使用</strong>（low bandwidth usage）情况下。</li>
+<li><strong>R_IN_HB</strong>: 在<strong>高带宽使用</strong>（high bandwidth usage）情况下。</li>
+</ul>
+</li>
+<li><strong>R_NP</strong>: <strong>No-prefetch</strong>（无预取）。当决定不进行预取时给予此奖励，同样根据带宽使用情况细分为 <strong>R_NP_LB</strong> 和 <strong>R_NP_HB</strong>。</li>
+</ul>
+</li>
+<li>这种设计使得Pythia能够<strong>自适应地调整其激进程度</strong>。例如，在高带宽压力下，<code>R_IN_HB</code> 的惩罚会远大于 <code>R_IN_LB</code>，从而有效抑制产生不准确预取的倾向，优先保证带宽效率。</li>
+</ul>
+<p><strong>算法流程与输入输出关系</strong></p>
+<ul>
+<li><strong>输入</strong>：每个新的<strong>需求请求</strong>（demand request）到达时，Pythia从中提取<strong>状态向量</strong>（包含PC、地址、delta等信息），并获取当前的<strong>内存带宽使用情况</strong>。</li>
+<li><strong>处理流程</strong>：<ol>
+<li><strong>评估历史动作</strong>：检查<strong>Evaluation Queue (EQ)</strong>，看当前需求地址是否匹配之前发出的预取地址。若匹配，则根据预取是否已填充（filled bit）分配 <code>R_AT</code> 或 <code>R_AL</code> 奖励。</li>
+<li><strong>决策新动作</strong>：使用提取的状态向量查询QVStore，通过<strong>ε-greedy策略</strong>选择能带来最高预期Q值的<strong>预取偏移量</strong>（prefetch offset）作为动作。</li>
+<li><strong>执行与记录</strong>：执行预取动作（或不预取），并将状态、动作、生成的预取地址（如有）作为一个新条目插入EQ。</li>
+<li><strong>更新学习模型</strong>：当EQ条目被驱逐时，为其分配最终奖励（若尚未分配），并使用<strong>SARSA算法</strong>更新QVStore中对应的Q值。</li>
+</ol>
+</li>
+<li><strong>输出</strong>：一个<strong>预取请求</strong>（或空操作），该请求是基于对多维程序特征的理解和对当前系统状态（特别是带宽）的考量而做出的<strong>系统感知</strong>（system-aware）决策。</li>
+<li><strong>在整体中的作用</strong>：这套机制使Pythia成为一个<strong>在线强化学习代理</strong>，它不仅能从程序的内存访问模式中学习，还能从其行为对整个内存子系统的影响中学习，从而在各种工作负载和系统配置下持续优化其预取策略。</li>
+</ul>
+<p><strong>基础配置参数</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>状态空间</strong></td>
+<td style="text-align: left;">特征维度 (k)</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">特征1</td>
+<td style="text-align: left;">PC + Delta</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">特征2</td>
+<td style="text-align: left;">Sequence of last-4 deltas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>动作空间</strong></td>
+<td style="text-align: left;">预取偏移量范围</td>
+<td style="text-align: left;">[-16, -8, -4, -2, -1, 0, 1, 2, 4, 8, 16]</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>奖励</strong></td>
+<td style="text-align: left;">R_AT</td>
+<td style="text-align: left;">+16</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">R_AL</td>
+<td style="text-align: left;">+8</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">R_LC</td>
+<td style="text-align: left;">-16</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">R_IN_HB</td>
+<td style="text-align: left;">-16</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">R_IN_LB</td>
+<td style="text-align: left;">-8</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">R_NP_HB</td>
+<td style="text-align: left;">-4</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">R_NP_LB</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>超参数</strong></td>
+<td style="text-align: left;">学习率 (α)</td>
+<td style="text-align: left;">0.0065</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">折扣因子 (γ)</td>
+<td style="text-align: left;">0.9</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">探索率 (ε)</td>
+<td style="text-align: left;">0.002</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/444526a5145aef5ffbbb0c0bb563785d82780223bb7a4d12fdf4d08fce7e0bab.jpg" /> <em>Table 2: Basic Pythia configuration derived from our automated design-space exploration</em></p>
+<h3 id="4-evaluation-queue-eq">4. 评估队列 (Evaluation Queue, EQ)<a class="headerlink" href="#4-evaluation-queue-eq" title="Permanent link">&para;</a></h3>
+<p><strong>评估队列 (Evaluation Queue, EQ) 的核心作用与实现原理</strong></p>
+<ul>
+<li><strong>EQ 是 Pythia 实现闭环强化学习的关键硬件结构</strong>，其主要功能是作为一个先进先出（FIFO）的缓冲区，用于<strong>跟踪和评估</strong>最近执行的预取动作（prefetch action）的有效性。</li>
+<li>它通过将<strong>预取决策</strong>与后续的<strong>需求访问（demand request）</strong> 进行关联，为强化学习代理提供延迟奖励（delayed reward），从而驱动 Q-value 的更新和策略的优化。</li>
+</ul>
+<p><strong>EQ 的内部结构与数据项</strong></p>
+<p>每个 EQ 条目（entry）包含以下三个关键信息：</p>
+<ul>
+<li><strong>所采取的动作 (taken action)</strong>：即从动作空间中选择的预取偏移量（prefetch offset），值为 0 表示未进行预取。</li>
+<li><strong>生成的预取地址 (prefetch address)</strong>：根据当前需求地址和所选偏移量计算得出的完整缓存行地址。</li>
+<li><strong>填充位 (filled bit)</strong>：一个布尔标志位，用于指示该预取请求是否已经从内存成功填充到缓存中。</li>
+</ul>
+<p><strong>EQ 的工作流程与算法逻辑</strong></p>
+<ul>
+<li>
+<p><strong>插入阶段 (Insertion)</strong>:</p>
+<ul>
+<li>对于每一个新的<strong>需求请求 (demand request)</strong>，Pythia 在做出预取决策后，会立即将该决策（动作、计算出的预取地址）以及当前的状态向量（state-vector）打包成一个新的条目，插入到 EQ 的尾部。</li>
+<li>如果决策是“不预取”或预取地址超出了当前物理页，则会<strong>立即分配一个即时奖励</strong>（分别为 <code>R_no_pref</code> 或 <code>R_page_cross</code>）给该新条目。</li>
+</ul>
+</li>
+<li>
+<p><strong>奖励分配阶段 (Reward Assignment)</strong>:</p>
+<ul>
+<li><strong>在队列驻留期间 (During Residency)</strong>: 当一个新的<strong>需求请求</strong>到达时，Pythia 会用其地址查询 EQ。如果命中某个条目，说明该需求访问了之前被预取的数据。此时，Pythia 会检查该条目的 <strong>filled bit</strong>：<ul>
+<li>如果 <strong>filled bit 被置位</strong>，说明预取在需求到来前已完成，这是一个<strong>准确且及时 (accurate and timely)</strong> 的预取，分配奖励 <code>R_acc_timely</code>。</li>
+<li>如果 <strong>filled bit 未被置位</strong>，说明需求在预取完成前就已发生，这是一个<strong>准确但过晚 (accurate but late)</strong> 的预取，分配奖励 <code>R_acc_late</code>。</li>
+</ul>
+</li>
+<li><strong>在队列驱逐时 (During Eviction)</strong>: 当一个 EQ 条目因 FIFO 策略需要被驱逐时，如果它尚未被分配奖励（即其预取地址从未被需求访问过），则 Pythia 会根据<strong>当前的内存带宽使用情况</strong>为其分配一个<strong>不准确 (inaccurate)</strong> 的奖励：<ul>
+<li>高带宽使用时，分配 <code>R_inacc_high_bw</code>。</li>
+<li>低带宽使用时，分配 <code>R_inacc_low_bw</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Q-value 更新阶段 (Q-value Update)</strong>:</p>
+<ul>
+<li>在一个 EQ 条目被驱逐时，它携带的<strong>状态-动作对 (state-action pair)</strong> 和<strong>已分配的奖励 (reward)</strong> 会被用来更新 <strong>QVStore</strong> 中对应的 Q-value。</li>
+<li>具体来说，Pythia 使用 <strong>SARSA 算法</strong>进行更新，该算法不仅利用当前获得的奖励，还会参考下一个状态-动作对（即当前 EQ 头部的条目）的 Q-value，以实现对长期收益的考量。</li>
+</ul>
+</li>
+</ul>
+<p><strong>EQ 在 Pythia 整体架构中的输入输出关系</strong></p>
+<ul>
+<li>
+<p><strong>输入</strong>:</p>
+<ul>
+<li>来自处理器的<strong>需求请求地址</strong>（用于查询 EQ 以分配奖励）。</li>
+<li>来自预取决策逻辑的<strong>动作、预取地址和状态向量</strong>（用于创建新条目）。</li>
+<li>来自内存子系统的<strong>预取填充信号</strong>（用于设置 EQ 条目的 filled bit）。</li>
+<li>来自系统监控单元的<strong>内存带宽使用情况</strong>（用于在驱逐时分配不准确奖励）。</li>
+</ul>
+</li>
+<li>
+<p><strong>输出</strong>:</p>
+<ul>
+<li><strong>奖励信号 (reward)</strong>：传递给 QVStore 更新逻辑，用于指导学习过程。</li>
+<li><strong>状态-动作对 (state-action pair)</strong>：与奖励一同传递给 QVStore，指明需要更新的具体 Q-value。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/881ccba2541ed7a5a3b77b74c875fc24a7c82d29322345d5c4fc906c9bb7e175.jpg" /> <em>Figure 4: Overview of Pythia.</em></p>
+<p><strong>参数设置与设计考量</strong></p>
+<ul>
+<li><strong>队列深度</strong>: EQ 的大小是一个关键的设计参数。它必须足够深，以覆盖从发出预取请求到该数据可能被需求访问之间的最大时间窗口（即最长的内存延迟）。如果队列太浅，有效的预取可能会在被需求访问前就被驱逐，导致被错误地归类为“不准确”，从而损害学习效果。</li>
+<li><strong>存储开销</strong>: 根据论文中的 <strong>Table 4</strong>，EQ 在基础配置下仅消耗 <strong>1.5KB</strong> 的存储空间，这在整个 Pythia 框架（总开销 25.5KB）中占比较小，体现了其设计的高效性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">存储开销</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>QVStore</strong></td>
+<td style="text-align: left;">24 KB</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>EQ</strong></td>
+<td style="text-align: left;"><strong>1.5 KB</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>总计</strong></td>
+<td style="text-align: left;"><strong>25.5 KB</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>总结</strong></p>
+<p><strong>EQ 本质上是一个硬件实现的“经验回放”机制</strong>，它巧妙地解决了强化学习中奖励延迟的问题。通过将预取动作与其未来的结果（是否被需求、是否及时）进行绑定，EQ 为 Pythia 提供了一个精确、系统感知的反馈信号，使其能够在线学习并不断优化其预取策略，最终实现高覆盖率、高准确率且对系统资源友好的预取效果。</p>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>模拟平台与基准</strong>：使用 <strong>ChampSim</strong> 跟踪驱动模拟器，模拟一个类似 <strong>Intel Skylake</strong> 的多核处理器。单核模拟预热 1 亿条指令并模拟后续 5 亿条；多核（最多 12 核）则分别预热和模拟 5 千万和 1.5 亿条指令。</li>
+<li><strong>工作负载</strong>：评估集包含来自 <strong>SPEC CPU2006/2017</strong>, <strong>PARSEC 2.1</strong>, <strong>Ligra</strong>, 和 <strong>Cloudsuite</strong> 的 <strong>150 条</strong>内存密集型工作负载轨迹。此外，还使用了 <strong>500 条</strong>来自 <strong>CVP-2</strong> 的未见过的轨迹进行泛化能力测试。</li>
+<li><strong>对比基线</strong>：与五种前沿预取器进行比较：<strong>SPP</strong>, <strong>SPP+PPF</strong>, <strong>SPP+DSPatch</strong>, <strong>Bingo</strong>, 和 <strong>MLOP</strong>。在特定实验中，也与商业多级预取方案（L1 <strong>stride</strong> + L2 <strong>streamer</strong>）及 <strong>IPCP</strong> 进行了对比。</li>
+<li><strong>系统配置变量</strong>：<ul>
+<li><strong>核心数量</strong>：从单核到十二核，并相应调整 DRAM 通道数以模拟真实场景。</li>
+<li><strong>DRAM 带宽</strong>：从 <strong>150 MTPS</strong> (极度受限) 到 <strong>9600 MTPS</strong> (非常充裕)，以评估在不同带宽压力下的表现。</li>
+<li><strong>LLC 大小</strong>：从 <strong>256KB</strong> 到 <strong>4MB</strong>，以测试对缓存容量变化的鲁棒性。</li>
+</ul>
+</li>
+<li><strong>硬件开销评估</strong>：使用 <strong>Chisel HDL</strong> 实现 Pythia，并通过 <strong>Synopsys Design Compiler</strong> 和 <strong>14nm 工艺库</strong> 进行综合，以精确测量面积和功耗开销。</li>
+</ul>
+<p><strong>结果数据</strong></p>
+<ul>
+<li><strong>性能提升</strong>：Pythia 在各种配置下均显著优于基线。<ul>
+<li>在 <strong>单核</strong> 配置下，平均性能优于 <strong>MLOP</strong> 和 <strong>Bingo</strong> <strong>3.4%</strong> 和 <strong>3.8%</strong>。</li>
+<li>在 <strong>十二核</strong> 配置下，优势扩大至 <strong>7.7%</strong> 和 <strong>9.6%</strong>。</li>
+<li>在 <strong>带宽极度受限</strong> (150 MTPS) 的服务器类配置下，优势最为显著，分别领先 <strong>MLOP</strong> 和 <strong>Bingo</strong> <strong>16.9%</strong> 和 <strong>20.2%</strong>。</li>
+</ul>
+</li>
+<li><strong>预取质量</strong>：Pythia 的卓越性能源于其更高的预取质量和更低的系统干扰。<ul>
+<li>相比 <strong>MLOP</strong>, <strong>Bingo</strong>, 和 <strong>SPP</strong>，Pythia 平均提供 <strong>6.9%</strong>, <strong>8.8%</strong>, 和 <strong>14%</strong> 更高的 <strong>coverage</strong>。</li>
+<li>同时，其 <strong>overprediction</strong> 率分别降低了 <strong>83.8%</strong>, <strong>78.2%</strong>, 和 <strong>3.6%</strong>。</li>
+</ul>
+</li>
+<li><strong>硬件开销</strong>：性能提升的代价极小。<ul>
+<li>在桌面级 4 核处理器上，仅增加 <strong>1.03%</strong> 的面积和 <strong>0.37%</strong> 的功耗开销。</li>
+<li>其元数据存储开销仅为 <strong>25.5KB</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/95873faac9c7d07d6c81d743146ca0f31ec23d5c09c01f787651669292d6b20d.jpg" /> <em>Figure 8: Average performance improvement of prefetchers in systems with varying (a) number of cores, (b) DRAM million transfers per second (MTPS), (c) LLC size, and (d) prefetching level. Each DRAM bandwidth configuration roughly matches MTPS/core of various commercial processors [5, 6, 13]. The baseline bandwidth/LLC configuration is marked in red.</em></p>
+<p><strong>消融实验</strong></p>
+<ul>
+<li><strong>系统感知能力的重要性</strong>：通过创建一个对内存带宽使用情况“无感知”的 Pythia 变体（将高/低带宽下的奖励值设为相同）来验证。<ul>
+<li>结果表明，在 <strong>低带宽</strong> (150-600 MTPS) 场景下，该变体平均性能比完整版 Pythia <strong>下降 4.6%</strong>。</li>
+<li>在 <strong>高带宽</strong> 场景下，两者性能相当。这证明了 <strong>内存带宽感知</strong> 对于在资源受限环境中保持鲁棒性能至关重要。
+    <img alt="" src="../images/e2aab8a346416bdfc370d441a68d78a13285f83a60e8989b28e36703342d8c66.jpg" /> <em>Figure 11: Performance of memory bandwidth-oblivious Pythia versus the basic Pythia.</em></li>
+</ul>
+</li>
+<li><strong>多特征融合 vs. 预取器组合</strong>：将 Pythia 与多个单一特征预取器（如 Stride, SPP, Bingo 等）的组合进行比较。<ul>
+<li>在单核下，Pythia 比最佳组合平均高出 <strong>1.4%</strong>。</li>
+<li>在四核下，优势扩大到 <strong>4.9%</strong>。这是因为组合多个预取器会<strong>叠加各自的 overprediction</strong>，在多核带宽竞争环境下造成严重性能损失，而 Pythia 的 RL 框架能<strong>协同学习</strong>多个特征，避免了这一问题。
+    <img alt="" src="../images/54af5d90a92b99999981814a4999d9642838bd8057485602db0a63eb6297e836.jpg" /> <em>Figure 9: Performance improvement in single-core workloads. St=Stride, S=SPP, B=Bingo, D=DSPatch, and M=MLOP.</em>
+    <img alt="" src="../images/2e70005c2dfff63cfe5f1ed4d995acf516c1088b0ebf74db6f628fabd918eabe.jpg" /> <em>Figure 10: Performance in the four-core system.</em></li>
+</ul>
+</li>
+<li><strong>在线定制化能力</strong>：<ul>
+<li><strong>奖励函数定制</strong>：针对 <strong>Ligra</strong> 图处理套件，通过调整奖励函数（更严厉地惩罚不准确预取，更鼓励不预取），在基本配置基础上平均再提升 <strong>2.0%</strong> (最高 <strong>7.8%</strong>) 的性能。
+    <img alt="" src="../images/635ee9006bc8948aad50b25b4f4ec65061eeb12ed93bbc3d3ce815a0ab1114b2.jpg" /> <em>Figure 15: Performance of the basic and strict Pythia configurations on the Ligra workload suite.</em></li>
+<li><strong>特征选择定制</strong>：针对 <strong>SPEC CPU2006</strong> 套件，通过为每个工作负载选择最优的特征组合，平均再获得 <strong>1.5%</strong> (最高 <strong>5.1%</strong>) 的性能提升。
+    <img alt="" src="../images/7e6a29a30328ff11e57b0e9c1d016c651900e4ebd248015e254cfb6be895d76d.jpg" /> <em>Figure 16: Performance of the basic and feature-optimized Pythia on the SPEC CPU2006 suite.</em></li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>
