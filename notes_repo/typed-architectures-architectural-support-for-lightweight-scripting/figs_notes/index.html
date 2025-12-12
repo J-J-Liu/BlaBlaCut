@@ -1,0 +1,2360 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Typed Architectures: Architectural Support for Lightweight Scripting 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#typed-architectures-architectural-support-for-lightweight-scripting" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Typed Architectures: Architectural Support for Lightweight Scripting 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-iot-device-platforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: IoT device platforms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-a-usages-of-polymorphic-add-operator-in-lua-b-bytecode-add-in-c-c-risc-v-assembly-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: (a) Usages of polymorphic ”+” (add) operator in Lua; (b) Bytecode ADD in C; (c) RISC-V assembly code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-a-breakdown-of-dynamic-bytecodes-in-lua-b-dynamic-instruction-count-per-bytecode-for-top-five-bytecodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: (a) Breakdown of dynamic bytecodes in Lua; (b) Dynamic instruction count per bytecode for top five bytecodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-description-of-extended-isa-64-bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Description of Extended ISA (64-bit)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-transformed-bytecode-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Transformed bytecode ADD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-pipeline-structure-augmented-with-typed-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Pipeline structure augmented with Typed Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-modified-bytecodes-in-lua-and-spidermonkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3: Modified bytecodes in Lua and SpiderMonkey
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-special-purpose-register-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4: Special-purpose register settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-5-type-rule-table-settings-for-lua-and-spidermonkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 5: Type Rule Table settings for Lua and SpiderMonkey
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-6-evaluation-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 6: Evaluation parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-7-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 7: Benchmarks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-overall-speedups-for-lua-and-javascript-interpreters-the-higher-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Overall speedups for Lua and JavaScript interpreters (the higher, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-reduction-of-dynamic-instruction-count-the-higher-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: Reduction of dynamic instruction count (the higher, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-branch-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Branch miss rates in misses per kilo-instructions (MPKI) (the lower, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-instruction-cache-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Instruction cache miss rates in misses per kilo-instructions (MPKI) (the lower, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-type-hit-and-miss-rates-normalized-to-dynamic-bytecode-count-for-a-lua-and-b-spidermonkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9: Type hit and miss rates normalized to dynamic bytecode count for (a) Lua and (b) SpiderMonkey
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-8-hardware-overhead-breakdown-area-power" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 8: Hardware overhead breakdown (area, power)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="typed-architectures-architectural-support-for-lightweight-scripting">Typed Architectures: Architectural Support for Lightweight Scripting 图表详解<a class="headerlink" href="#typed-architectures-architectural-support-for-lightweight-scripting" title="Permanent link">&para;</a></h1>
+<h3 id="table-1-iot-device-platforms">Table 1: IoT device platforms<a class="headerlink" href="#table-1-iot-device-platforms" title="Permanent link">&para;</a></h3>
+<p><img alt="8991753f352b3b17a80195fea777f3f602d5080a9bd27ffadd5e7014c0fa8ff8.jpg" src="../images/8991753f352b3b17a80195fea777f3f602d5080a9bd27ffadd5e7014c0fa8ff8.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 1: IoT device platforms</strong>，列出了五款主流物联网（IoT）单板计算机平台的关键硬件与软件规格。</li>
+<li>表格横向对比了 <strong>SAMA5D3</strong>、<strong>Galileo Gen 2</strong>、<strong>Arduino Yun</strong>、<strong>LaunchPad</strong> 和 <strong>ARM mbed</strong> 五个平台。</li>
+<li>各平台核心参数如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>平台名称</th>
+<th>SAMA5D3 [20]</th>
+<th>Galileo Gen 2 [5]</th>
+<th>Arduino Yun [2]</th>
+<th>LaunchPad [8]</th>
+<th>ARM mbed [29]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Processor</strong></td>
+<td>ARM Cortex-A5</td>
+<td>Intel Quark SoC X1000</td>
+<td>MIPS 24K</td>
+<td>ARM Cortex-M4</td>
+<td>ARM Cortex-M0</td>
+</tr>
+<tr>
+<td><strong>ISA</strong></td>
+<td>ARMv7-A</td>
+<td>x86 (IA32)</td>
+<td>MIPS32</td>
+<td>ARMv7-M</td>
+<td>ARMv6-M</td>
+</tr>
+<tr>
+<td><strong>Clock Frequency</strong></td>
+<td>536MHz</td>
+<td>400MHz</td>
+<td>400MHz</td>
+<td>80MHz</td>
+<td>48MHz</td>
+</tr>
+<tr>
+<td><strong>L1 Cache</strong></td>
+<td>64KB</td>
+<td>16KB</td>
+<td>0 ~ 64KB</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Main Memory</strong></td>
+<td>256MB DDR2 DRAM</td>
+<td>256MB DDR3 DRAM</td>
+<td>64MB DDR2 DRAM</td>
+<td>32KB SRAM</td>
+<td>8KB SRAM</td>
+</tr>
+<tr>
+<td><strong>Flash Memory</strong></td>
+<td>256MB</td>
+<td>8MB</td>
+<td>16MB</td>
+<td>256KB</td>
+<td>32KB</td>
+</tr>
+<tr>
+<td><strong>OS</strong></td>
+<td>Linux</td>
+<td>Yocto Linux</td>
+<td>Linux (OpenWrt)</td>
+<td>TI RTOS</td>
+<td>ARM mbed OS</td>
+</tr>
+<tr>
+<td><strong>Power</strong></td>
+<td>0.25 ~ 1.85W</td>
+<td>2.6 ~ 4W</td>
+<td>700 ~ 1500mW</td>
+<td>75 ~ 225mW</td>
+<td>100 ~ 110mW</td>
+</tr>
+<tr>
+<td><strong>Price (2016)</strong></td>
+<td>$159</td>
+<td>$64.99</td>
+<td>$74.95</td>
+<td>$12.99</td>
+<td>$10.32</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有平台均采用低功耗、低成本设计，适用于 <strong>DIY电子</strong> 和 <strong>IoT应用</strong>。</li>
+<li>处理器架构多样，涵盖 <strong>ARM</strong>、<strong>x86</strong> 和 <strong>MIPS</strong>，反映市场对异构计算的需求。</li>
+<li>主存容量从 <strong>8KB SRAM</strong> 到 <strong>256MB DRAM</strong> 不等，体现不同应用场景的资源约束。</li>
+<li>操作系统包括 <strong>Linux</strong>、<strong>RTOS</strong> 和专用嵌入式系统，支持脚本语言运行环境。</li>
+<li>功耗范围从 <strong>100mW</strong> 到 <strong>4W</strong>，价格从 <strong>$10.32</strong> 到 <strong>$159</strong>，满足不同预算和性能需求。</li>
+<li>论文引用此表说明：在这些资源受限设备上，传统脚本语言因动态类型检查开销大而性能不佳，亟需如 <strong>Typed Architectures</strong> 的硬件加速方案。</li>
+</ul>
+<h3 id="figure-1-a-usages-of-polymorphic-add-operator-in-lua-b-bytecode-add-in-c-c-risc-v-assembly-code">Figure 1: (a) Usages of polymorphic ”+” (add) operator in Lua; (b) Bytecode ADD in C; (c) RISC-V assembly code<a class="headerlink" href="#figure-1-a-usages-of-polymorphic-add-operator-in-lua-b-bytecode-add-in-c-c-risc-v-assembly-code" title="Permanent link">&para;</a></h3>
+<p><img alt="dded8f289b3272eb187c6d1ae4fa821356f7cad2ae74e44f0349d7fd21f14298.jpg" src="../images/dded8f289b3272eb187c6d1ae4fa821356f7cad2ae74e44f0349d7fd21f14298.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了动态脚本语言中 <strong>polymorphic “+” operator</strong> 的实现开销，以 Lua 为例，分为三个部分：(a) 语义用法，(b) C 语言字节码解释器实现，(c) RISC-V 汇编代码。</p>
+</li>
+<li>
+<p><strong>图 (a)</strong> 展示了 <code>add(x,y)</code> 函数在不同输入类型下的行为：</p>
+<ul>
+<li>输入 <code>(1,2)</code> → 返回整数 <code>3</code></li>
+<li>输入 <code>(1,2.2)</code> → 返回浮点数 <code>3.2</code></li>
+<li>输入 <code>(1.1,2.2)</code> → 返回浮点数 <code>3.3</code></li>
+<li>输入 <code>("1","2")</code> → 返回字符串 <code>"3.0"</code>（隐式转换）</li>
+<li>输入 <code>("a","b")</code> → 报错</li>
+<li>这体现了动态类型语言的灵活性与运行时类型检查的必要性。</li>
+</ul>
+</li>
+<li>
+<p><strong>图 (b)</strong> 是 Lua 字节码解释器中 ADD 操作的 C 语言伪代码实现：</p>
+<ul>
+<li>核心逻辑是先加载操作数指针 <code>rb</code> 和 <code>rc</code>。</li>
+<li>然后通过 <code>isInt()</code> 和 <code>toNumber()</code> 等函数进行 <strong>type guard</strong> 检查。</li>
+<li>若两个操作数均为整数，则执行整数加法并设置结果类型为 INTEGER。</li>
+<li>否则尝试转换为浮点数再相加，设置类型为 FLOAT。</li>
+<li>最后处理异常情况。</li>
+<li>关键路径被灰色背景高亮，突显了 <strong>类型检查和分支判断</strong> 是性能瓶颈。</li>
+</ul>
+</li>
+<li>
+<p><strong>图 (c)</strong> 是由 GCC 编译生成的 RISC-V 汇编代码，对应图 (b) 的 ADD 实现：</p>
+<ul>
+<li>代码结构清晰地反映了类型检查流程：<ul>
+<li>首先加载操作数 <code>rb</code> 和 <code>rc</code> 的类型标签（<code>lw a2,8(s10)</code>）。</li>
+<li>使用条件跳转（<code>bne</code>, <code>beq</code>）根据类型标签分发到不同处理路径。</li>
+<li>分支包括：整数加法路径 (<code>ADD(int,int)</code>)、浮点加法路径 (<code>ADD(flt,flt)</code>)、慢速路径 (<code>ADD_slow</code>)。</li>
+</ul>
+</li>
+<li>关键指令如 <code>sw a4,8(s14)</code> 用于存储结果类型标签，<code>j .loop_header</code> 用于循环调度。</li>
+<li>灰色背景区域再次强调了 <strong>类型提取、比较、分支</strong> 所占的指令比例，说明其开销巨大。</li>
+</ul>
+</li>
+<li>
+<p>下表总结了三部分的核心关注点：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>内容</th>
+<th>关键问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a) 语义用法</td>
+<td><code>add(x,y)</code> 在不同输入下的输出</td>
+<td><strong>动态类型导致的行为不确定性</strong></td>
+</tr>
+<tr>
+<td>(b) C 伪代码</td>
+<td>字节码解释器中的类型检查逻辑</td>
+<td><strong>软件层面的类型守卫开销大</strong></td>
+</tr>
+<tr>
+<td>(c) RISC-V 汇编</td>
+<td>编译后的机器指令序列</td>
+<td><strong>硬件执行效率受类型检查拖累</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>综上，该图直观揭示了动态脚本语言中 <strong>类型检查</strong> 如何在软件层面转化为大量额外的指令和分支，成为性能瓶颈。这正是论文提出 <strong>Typed Architectures</strong> 的动机——将类型信息和检查机制下沉到硬件层，以减少软件开销。</li>
+</ul>
+<h3 id="figure-2-a-breakdown-of-dynamic-bytecodes-in-lua-b-dynamic-instruction-count-per-bytecode-for-top-five-bytecodes">Figure 2: (a) Breakdown of dynamic bytecodes in Lua; (b) Dynamic instruction count per bytecode for top five bytecodes<a class="headerlink" href="#figure-2-a-breakdown-of-dynamic-bytecodes-in-lua-b-dynamic-instruction-count-per-bytecode-for-top-five-bytecodes" title="Permanent link">&para;</a></h3>
+<p><img alt="293e2cbf5f5811b389cb89315acfebfdf6603211795695bae4a61ea758f93c4a.jpg" src="../images/293e2cbf5f5811b389cb89315acfebfdf6603211795695bae4a61ea758f93c4a.jpg" /></p>
+<ul>
+<li>图片 293e2cbf5f5811b389cb89315acfebfdf6603211795695bae4a61ea758f93c4a.jpg 包含两个子图，分别标记为 (a) 和 (b)，共同构成 Figure 2，用于展示 Lua 脚本引擎中动态字节码的分布及其执行开销。</li>
+<li>子图 (a) 是一个堆叠条形图，显示了 11 个不同 Lua 基准测试程序（如 ackermann, binary-trees, fannkuch-redux 等）中各类动态字节码的占比。横轴为百分比，纵轴列出各基准测试名称。图例说明了不同字节码类型，包括 <strong>ADD</strong>, <strong>SUB</strong>, <strong>MUL</strong>, <strong>GETTABLE</strong>, <strong>SETTABLE</strong>, <strong>FORLOOP</strong>, <strong>CALL</strong>, <strong>RETURN</strong>, <strong>MOVE</strong>, <strong>GETUPVAL</strong> 及 <strong>OTHERS</strong>。</li>
+<li>从图 (a) 可见，尽管 Lua 定义了 47 种字节码，但实际运行中，<strong>ADD</strong>, <strong>SUB</strong>, <strong>MUL</strong>, <strong>GETTABLE</strong>, <strong>SETTABLE</strong> 这五种字节码在多数基准测试中占据主导地位，合计占比常超过 50%，甚至在某些程序（如 n-sieve）中接近 80%。这表明这些操作是 Lua 性能优化的关键目标。</li>
+<li>子图 (b) 是一个分组柱状图，详细展示了上述五种最频繁使用的字节码（<strong>ADD</strong>, <strong>SUB</strong>, <strong>MUL</strong>, <strong>GETTABLE</strong>, <strong>SETTABLE</strong>）在不同操作数类型组合下的动态指令计数。每个柱子分为两部分：深色代表“Non-Guard”指令（即核心计算或访问指令），浅色代表“Guard”指令（即用于类型检查和分派的额外开销）。</li>
+<li>图 (b) 的横轴按字节码类型分组，每组内又按操作数类型对划分，例如 (int,int), (Flt,Flt), (Tab,int), (Tab,Str) 等。纵轴表示指令数量。</li>
+<li>关键观察：<ul>
+<li>对于算术操作（<strong>ADD</strong>, <strong>SUB</strong>, <strong>MUL</strong>），当操作数类型匹配时（如 (int,int) 或 (Flt,Flt)），Guard 指令占比相对较小；而当类型不匹配时，Guard 开销显著增加。</li>
+<li>对于表操作（<strong>GETTABLE</strong>, <strong>SETTABLE</strong>），特别是使用字符串作为键（(Tab,Str)）时，Guard 指令的开销远大于非 Guard 指令，有时甚至占总指令数的 50% 以上。这凸显了动态类型系统在处理多态操作时的巨大性能代价。</li>
+</ul>
+</li>
+<li>综上，该图直观地证明了论文的核心论点：动态类型检查（Guard）是脚本语言性能瓶颈的主要来源，尤其是在处理多态字节码时。这也为引入 Typed Architectures 提供了充分的数据支持。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字节码</th>
+<th>操作数类型</th>
+<th>Non-Guard 指令数</th>
+<th>Guard 指令数</th>
+<th>总指令数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADD</td>
+<td>(int,int)</td>
+<td>~6</td>
+<td>~4</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>(Flt,Flt)</td>
+<td>~6</td>
+<td>~4</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>GETTABLE</td>
+<td>(Tab,int)</td>
+<td>~28</td>
+<td>~8</td>
+<td>~36</td>
+</tr>
+<tr>
+<td>GETTABLE</td>
+<td>(Tab,Str)</td>
+<td>~35</td>
+<td>~15</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>SETTABLE</td>
+<td>(Tab,Str)</td>
+<td>~35</td>
+<td>~15</td>
+<td>~50</td>
+</tr>
+</tbody>
+</table>
+<p><em>注：表中数据为根据图 (b) 视觉估算的近似值，用于说明趋势。</em></p>
+<h3 id="table-2-description-of-extended-isa-64-bit">Table 2: Description of Extended ISA (64-bit)<a class="headerlink" href="#table-2-description-of-extended-isa-64-bit" title="Permanent link">&para;</a></h3>
+<p><img alt="1dc1d3f748709f2fbc158c69e80745435d67173cf74c15c26df0c1bbe79f5690.jpg" src="../images/1dc1d3f748709f2fbc158c69e80745435d67173cf74c15c26df0c1bbe79f5690.jpg" /></p>
+<ul>
+<li>该图是论文中 <strong>Table 2: Description of Extended ISA (64-bit)</strong>，详细列出了为支持动态脚本语言而扩展的指令集架构（ISA）。</li>
+<li>表格按功能划分为四类：<strong>Memory Instructions</strong>、<strong>Arithmetic and Logical Instructions</strong>、<strong>Configuration Instructions</strong> 和 <strong>Miscellaneous</strong>。</li>
+<li>每条指令包含三列信息：<strong>Instruction</strong>（指令名称）、<strong>Operation</strong>（操作语义）、<strong>Type Tag Handling</strong>（类型标签处理逻辑）和 <strong>Description</strong>（简要说明）。</li>
+</ul>
+<p>以下是各指令分类的详细分析：</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Operation</th>
+<th>Type Tag Handling</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>tld Rc, imm(Ra)</strong></td>
+<td><code>Rc.v ← Mem[Ra.v+imm]</code></td>
+<td><code>Rc.t ← extract(Mem[Ra.v+imm+R_offset])</code></td>
+<td>从内存加载双字值，并提取其关联的类型标签。</td>
+</tr>
+<tr>
+<td><strong>tsd Rc, imm(Ra)</strong></td>
+<td><code>Mem[Ra.v+imm] ← Rc.v</code></td>
+<td><code>Mem[Ra.v+imm+R_offset] ← insert(Rc.t)</code></td>
+<td>将寄存器中的值存储到内存，并插入对应的类型标签。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键机制</strong>：通过 <strong>R_offset</strong> 寄存器控制标签在内存中的相对位置（如前/后双字或同双字），实现对不同脚本引擎数据布局的灵活适配。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Operation</th>
+<th>Type Tag Handling</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>xadd Ra,Rb,Rc</strong></td>
+<td><code>Ra.v[63:0] ← Rb.v[63:0] + Rc.v[63:0]</code></td>
+<td><code>if (type hits) Ra.t ← OutputType(op, Ra.t, Rb.t) else NextPC ← R_hdl</code></td>
+<td>执行加法，若类型匹配则写入输出类型；否则跳转至慢路径。</td>
+</tr>
+<tr>
+<td><strong>xsub Ra,Rb,Rc</strong></td>
+<td><code>Ra.v[63:0] ← Rb.v[63:0] - Rc.v[63:0]</code></td>
+<td>同上</td>
+<td>执行减法，支持类型检查与分支。</td>
+</tr>
+<tr>
+<td><strong>xmul Ra,Rb,Rc</strong></td>
+<td><code>Ra.v[63:0] ← Rb.v[63:0] × Rc.v[63:0]</code></td>
+<td>同上</td>
+<td>执行乘法，支持类型检查与分支。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>核心创新</strong>：<strong>xadd/xsub/xmul</strong> 是<strong>多态指令</strong>，在硬件流水线内并行完成运算与类型检查，避免软件显式判断。</li>
+<li><strong>类型规则表（TRT）</strong>：根据源操作数类型和操作码查表，决定是否命中及输出类型。</li>
+<li><strong>慢路径机制</strong>：未命中时跳转至由 <strong>R_hdl</strong> 指向的软件处理代码。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Operation</th>
+<th>Type Tag Handling</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>setoffset Ra</strong></td>
+<td><code>R_offset ← Ra.v</code></td>
+<td>-</td>
+<td>设置标签偏移寄存器。</td>
+</tr>
+<tr>
+<td><strong>setmask Ra</strong></td>
+<td><code>R_mask ← Ra.v</code></td>
+<td>-</td>
+<td>设置标签掩码寄存器。</td>
+</tr>
+<tr>
+<td><strong>setshift Ra</strong></td>
+<td><code>R_shift ← Ra.v</code></td>
+<td>-</td>
+<td>设置标签位移寄存器。</td>
+</tr>
+<tr>
+<td><strong>set_trt Ra</strong></td>
+<td><code>TypeRuleTable.push.data(Ra.v)</code></td>
+<td>-</td>
+<td>向类型规则表推送新条目。</td>
+</tr>
+<tr>
+<td><strong>flush_trt</strong></td>
+<td><code>TypeRuleTable.flush()</code></td>
+<td>-</td>
+<td>清空类型规则表。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>灵活性保障</strong>：通过 <strong>R_offset</strong>、<strong>R_mask</strong>、<strong>R_shift</strong> 三个特殊寄存器，支持不同脚本引擎自定义标签提取/插入方式。</li>
+<li><strong>TRT 动态配置</strong>：允许运行时加载特定于脚本引擎的类型转换规则。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Operation</th>
+<th>Type Tag Handling</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>thdl label</strong></td>
+<td><code>R_hdl ← NextPC + (disp &lt;&lt; 2)</code></td>
+<td>-</td>
+<td>设置慢路径入口地址。</td>
+</tr>
+<tr>
+<td><strong>tchk Rb,Rc</strong></td>
+<td>-</td>
+<td><code>NextPC ← (type hits) ? PC + 4 : R_hdl</code></td>
+<td>仅执行类型检查，不计算数值。</td>
+</tr>
+<tr>
+<td><strong>tget Ra,Rb</strong></td>
+<td><code>Ra.v ← ZeroExt64(Rb.t)</code></td>
+<td>-</td>
+<td>读取寄存器 B 的类型标签到寄存器 A。</td>
+</tr>
+<tr>
+<td><strong>tset Ra,Rb</strong></td>
+<td><code>Rb.t ← Ra.v[7:0]</code></td>
+<td>-</td>
+<td>将寄存器 A 的低 8 位写入寄存器 B 的类型字段。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>辅助功能完备</strong>：提供设置慢路径、纯类型检查、标签读写等指令，增强编程灵活性。</p>
+</li>
+<li>
+<p><strong>类型标签管理</strong>：<strong>tget/tset</strong> 允许软件直接操作寄存器内的类型字段，用于调试或特殊场景。</p>
+</li>
+<li>
+<p>该扩展 ISA 的设计目标明确：<strong>降低动态类型检查开销</strong>，同时保持<strong>跨脚本引擎的兼容性</strong>。</p>
+</li>
+<li>
+<p>核心机制包括：<strong>统一寄存器文件</strong>（含 type/F/I 字段）、<strong>多态 ALU 指令</strong>、<strong>可配置标签提取/插入逻辑</strong>、<strong>类型规则表</strong>。</p>
+</li>
+<li>
+<p>所有指令均围绕“<strong>隐式硬件类型检查</strong>”展开，显著减少软件层面的类型守卫指令，从而提升性能与能效。</p>
+</li>
+</ul>
+<h3 id="figure-3-transformed-bytecode-add">Figure 3: Transformed bytecode ADD<a class="headerlink" href="#figure-3-transformed-bytecode-add" title="Permanent link">&para;</a></h3>
+<p><img alt="b8fe2d47d47125fe94b3644d395bcd7cba9d17f89a6abaeb1c142747adbbf5f6.jpg" src="../images/b8fe2d47d47125fe94b3644d395bcd7cba9d17f89a6abaeb1c142747adbbf5f6.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Typed Architecture</strong> 的 ISA 扩展下，原始 Lua 字节码 <code>ADD</code> 指令被转换后的 C 语言内联汇编实现。</li>
+<li>该代码段位于一个 <code>case: ADD</code> 分支中，用于处理虚拟机中的加法操作。</li>
+<li>核心逻辑通过内联汇编（<code>asm volatile</code>）实现，其中包含对新引入的 <strong>tagged instructions</strong> 的调用：<ul>
+<li>第5行：<code>tld %0,0(%2)\n\t</code> —— 使用 <code>tld</code> 指令从内存加载寄存器 <code>rb</code> 的值和类型标签到临时变量 <code>tmp1</code>。</li>
+<li>第6行：<code>tld %1,0(%3)\n\t</code> —— 同样使用 <code>tld</code> 加载寄存器 <code>rc</code> 的值和类型标签到 <code>tmp2</code>。</li>
+<li>第7行：<code>thdl ADD_slow\n\t</code> —— 设置 Handler Register (<code>Rhdl</code>) 指向慢路径入口 <code>ADD_slow</code>，用于处理类型不匹配或溢出情况。</li>
+<li>第8行：<code>xadd %0,%1,%0\n\t</code> —— 执行 <strong>polymorphic instruction</strong> <code>xadd</code>，硬件根据操作数类型自动选择整数加法或浮点加法，并在 Type Rule Table 命中时写回结果及输出类型。</li>
+<li>第9行：<code>tsd %0,0(%4)\n\t</code> —— 使用 <code>tsd</code> 指令将结果值和类型标签存储回目标寄存器 <code>ra</code> 对应的内存位置。</li>
+<li>第10行：<code>j .loop_header\n\t</code> —— 跳转回主解释器循环头部，继续执行下一条字节码。</li>
+</ul>
+</li>
+<li>内联汇编的输入/输出约束部分（第11–13行）指定了寄存器与 C 变量的映射关系：<ul>
+<li><code>"=r"(tmp1)</code> 和 <code>"=r"(tmp2)</code> 表示 <code>tmp1</code> 和 <code>tmp2</code> 是输出寄存器。</li>
+<li><code>"r"(rb)</code>, <code>"r"(rc)</code>, <code>"r"(ra)</code> 表示 <code>rb</code>, <code>rc</code>, <code>ra</code> 是输入寄存器。</li>
+<li><code>"memory"</code> 约束表示内存可能被修改，防止编译器优化重排。</li>
+</ul>
+</li>
+<li>下方定义了慢路径 <code>ADD_slow</code>，当 <code>xadd</code> 发生类型不匹配或溢出时跳转至此：<ul>
+<li>第16–17行：声明局部变量 <code>nb</code>, <code>nc</code> 用于存储转换后的数值。</li>
+<li>第18–22行：调用 <code>toNumber</code> 尝试将操作数转换为浮点数，若成功则执行浮点加法并设置结果类型为 <code>FLOAT</code>。</li>
+<li>第23–24行：否则进入异常处理分支（注释为 <code>/* handle exception cases*/</code>），实际代码未展开。</li>
+<li>第25行：<code>break;</code> 结束当前 case。</li>
+</ul>
+</li>
+<li>整体流程体现了 Typed Architecture 的核心思想：<strong>硬件隐式处理类型检查与分派</strong>，仅在类型不匹配时才退回到软件慢路径，从而显著减少动态指令数。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>行号</th>
+<th>指令/语句</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td><code>tld %0,0(%2)\n\t</code></td>
+<td>加载 <code>rb</code> 的值和类型标签</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>tld %1,0(%3)\n\t</code></td>
+<td>加载 <code>rc</code> 的值和类型标签</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>thdl ADD_slow\n\t</code></td>
+<td>设置慢路径处理器地址</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>xadd %0,%1,%0\n\t</code></td>
+<td>执行多态加法，硬件自动分派并检查类型</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>tsd %0,0(%4)\n\t</code></td>
+<td>存储结果值和类型标签</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>j .loop_header\n\t</code></td>
+<td>跳转回主循环</td>
+</tr>
+<tr>
+<td>16–25</td>
+<td><code>ADD_slow</code> 分支</td>
+<td>软件慢路径：类型转换、浮点运算、异常处理</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键术语保留英文：<code>tld</code>, <code>thdl</code>, <code>xadd</code>, <code>tsd</code>, <code>ADD_slow</code>, <code>Type Rule Table</code>, <code>polymorphic instruction</code>。</li>
+<li>此转换使原本需要多条显式类型检查和分支的代码，压缩为几条硬件加速指令，是性能提升的核心机制。</li>
+</ul>
+<h3 id="figure-4-pipeline-structure-augmented-with-typed-architecture">Figure 4: Pipeline structure augmented with Typed Architecture<a class="headerlink" href="#figure-4-pipeline-structure-augmented-with-typed-architecture" title="Permanent link">&para;</a></h3>
+<p><img alt="cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" src="../images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Typed Architecture</strong> 增强后的处理器流水线结构，核心目标是硬件级动态类型检查与多态指令执行。</li>
+<li>流水线从左至右依次为：<strong>PC Gen.</strong> → 指令寄存器（Inst $）→ <strong>Unified RF</strong> → 执行单元（ALU/FPU）→ 数据存储器（Data $）→ 写回阶段。</li>
+<li><strong>Unified RF</strong> 是关键扩展，每个寄存器条目包含三字段：<strong>Value</strong>、<strong>Tag</strong>（8位）、<strong>F/I bit</strong>（1位），支持整数与浮点值统一存储。</li>
+<li><strong>Type Rule Table</strong> 位于解码/执行阶段，接收两个源操作数的 Tag 和 Opcode，输出目标寄存器的 Type Tag。若无匹配项，则触发“类型预测失败”，跳转至慢路径。</li>
+<li><strong>Tag extraction / insertion logic</strong> 与 Data $ 协同工作，负责从内存中提取或插入类型标签，其行为由三个配置寄存器控制：<strong>Roffset</strong>、<strong>Rshift</strong>、<strong>Rmask</strong>。</li>
+<li>多态 ALU 指令（如 xadd）在执行时根据 F/I bit 自动选择 <strong>ALU</strong> 或 <strong>FPU</strong> 路径，实现运行时绑定。</li>
+<li>写回阶段将计算结果（Ra.v）和对应的类型信息（Ra.t, Ra.f）同时写入 Unified RF，确保类型状态同步更新。</li>
+<li>整体设计强调<strong>硬件隐式类型检查</strong>，避免软件显式类型守卫带来的指令开销，提升脚本语言执行效率。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Unified RF</strong></td>
+<td>存储带类型标签的值，支持整数/浮点混合运算</td>
+</tr>
+<tr>
+<td><strong>Type Rule Table</strong></td>
+<td>硬件查找表，决定多态操作的输出类型及是否触发慢路径</td>
+</tr>
+<tr>
+<td><strong>Tag extraction / insertion logic</strong></td>
+<td>根据 Roffset/Rshift/Rmask 配置，灵活处理不同脚本引擎的数据布局</td>
+</tr>
+<tr>
+<td><strong>ALU/FPU</strong></td>
+<td>根据 F/I bit 选择执行路径，实现多态指令的硬件绑定</td>
+</tr>
+<tr>
+<td><strong>Data $</strong></td>
+<td>支持带标签的加载/存储（tld/tsd），与标签逻辑协同</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该架构通过<strong>并行化类型检查与数值计算</strong>，显著减少动态指令数，尤其适用于 Lua 和 JavaScript 等脚本引擎。</li>
+<li>流水线未增加关键路径延迟，因<strong>Type Rule Table 查找与 ALU/FPU 计算并行进行</strong>，且最终写回阶段仅需额外传输类型字段。</li>
+<li>设计兼顾<strong>灵活性与低开销</strong>，通过可配置寄存器适配不同脚本引擎的标签布局，硬件面积仅增加 1.6%。</li>
+</ul>
+<h3 id="table-3-modified-bytecodes-in-lua-and-spidermonkey">Table 3: Modified bytecodes in Lua and SpiderMonkey<a class="headerlink" href="#table-3-modified-bytecodes-in-lua-and-spidermonkey" title="Permanent link">&para;</a></h3>
+<p><img alt="18d6456e17255e5091e7bd434ccdb6bd4a1cd4255b51c64e36075313125f777a.jpg" src="../images/18d6456e17255e5091e7bd434ccdb6bd4a1cd4255b51c64e36075313125f777a.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 3</strong>，标题为 “Modified bytecodes in Lua and SpiderMonkey”，用于展示在 Typed Architectures 中被重点优化的字节码指令。</li>
+<li>表格结构清晰，包含三列：<strong>VM</strong>（虚拟机）、<strong>Bytecode</strong>（字节码指令）和 <strong>Description</strong>（描述）。</li>
+<li>表格内容分为两部分，分别对应 <strong>Lua</strong> 和 <strong>SpiderMonkey</strong> 两个脚本引擎。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>VM</th>
+<th>Bytecode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lua</td>
+<td>ADD</td>
+<td>R(A) := R(B) + R(C)</td>
+</tr>
+<tr>
+<td></td>
+<td>SUB</td>
+<td>R(A) := R(B) - R(C)</td>
+</tr>
+<tr>
+<td></td>
+<td>MUL</td>
+<td>R(A) := R(B) × R(C)</td>
+</tr>
+<tr>
+<td></td>
+<td>GETTABLE</td>
+<td>R(A) := R(B)[R(C)]</td>
+</tr>
+<tr>
+<td></td>
+<td>SETTABLE</td>
+<td>R(A)[R(B)] := R(C)</td>
+</tr>
+<tr>
+<td>SpiderMonkey</td>
+<td>ADD</td>
+<td>St[-2] := St[-1] + St[-2]</td>
+</tr>
+<tr>
+<td></td>
+<td>SUB</td>
+<td>St[-2] := St[-1] - St[-2]</td>
+</tr>
+<tr>
+<td></td>
+<td>MUL</td>
+<td>St[-2] := St[-1] × St[-2]</td>
+</tr>
+<tr>
+<td></td>
+<td>GETELEM</td>
+<td>St[-2] := St[-2][St[-1]]</td>
+</tr>
+<tr>
+<td></td>
+<td>SETELEM</td>
+<td>St[-2][St[-1]] := St[-2]</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Lua</strong> 使用寄存器式虚拟机，其字节码操作基于寄存器（如 R(A), R(B), R(C)），其中 A、B、C 为寄存器编号。</li>
+<li><strong>SpiderMonkey</strong> 使用栈式虚拟机，其字节码操作基于栈顶元素（如 St[-1], St[-2]），其中 St[-1] 代表栈顶，St[-2] 代表次栈顶。</li>
+<li>所有列出的字节码均为 <strong>多态操作</strong>，需在执行前进行类型检查，是动态类型语言性能瓶颈的主要来源。</li>
+<li>这些字节码被选中是因为它们在实际工作负载中出现频率高，且涉及频繁的类型判断与分派，是 Typed Architectures 优化的重点对象。</li>
+<li>在 Typed Architectures 中，这些字节码被重写为使用 <strong>xadd, xsub, xmul</strong> 等多态指令，并结合硬件支持的类型标签管理，以减少软件层面的类型检查开销。</li>
+</ul>
+<h3 id="table-4-special-purpose-register-settings">Table 4: Special-purpose register settings<a class="headerlink" href="#table-4-special-purpose-register-settings" title="Permanent link">&para;</a></h3>
+<p><img alt="27a67567f10ec8b1aa421b7a37983fc0d469362eb83c9646dd972f94ee1bc42f.jpg" src="../images/27a67567f10ec8b1aa421b7a37983fc0d469362eb83c9646dd972f94ee1bc42f.jpg" /></p>
+<ul>
+<li>该图片为 <strong>Table 4: Special-purpose register settings</strong>，展示了在 <strong>Typed Architectures</strong> 中，针对 <strong>Lua</strong> 和 <strong>SpiderMonkey</strong> 两个脚本引擎，用于控制类型标签提取与插入的三个特殊寄存器的配置值。</li>
+<li>这三个寄存器分别是：<strong>Roffset</strong>（3位）、<strong>Rshift</strong>（6位）和 <strong>Rmask</strong>（8位），它们共同决定了如何从内存中定位、提取和重构类型标签。</li>
+<li>配置值以二进制形式给出，具体如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>Lua</th>
+<th>SpiderMonkey</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Roffset</strong></td>
+<td>0b001</td>
+<td>0b100</td>
+</tr>
+<tr>
+<td><strong>Rshift</strong></td>
+<td>0b000000</td>
+<td>0b101111</td>
+</tr>
+<tr>
+<td><strong>Rmask</strong></td>
+<td>0b11111111</td>
+<td>0b00001111</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>Roffset</strong> 的设置反映了两种引擎对类型标签存储位置的不同约定：</p>
+<ul>
+<li>在 <strong>Lua</strong> 中，值为 <code>0b001</code>，表示类型标签位于“下一个双字”（next double-word），即紧跟在8字节数据值之后的字节。</li>
+<li>在 <strong>SpiderMonkey</strong> 中，值为 <code>0b100</code>，表示类型标签与数据值位于“同一个双字”（same double-word），且启用了 NaN 检测机制。</li>
+</ul>
+</li>
+<li>
+<p><strong>Rshift</strong> 的设置指定了类型标签在目标双字中的起始位偏移量：</p>
+<ul>
+<li><strong>Lua</strong> 使用 <code>0b000000</code>，意味着标签从最低位开始提取。</li>
+<li><strong>SpiderMonkey</strong> 使用 <code>0b101111</code>（即十进制47），意味着对于非浮点数（NaN值），类型标签位于双字的第47位至第50位之间。</li>
+</ul>
+</li>
+<li>
+<p><strong>Rmask</strong> 的设置定义了用于提取类型标签的掩码：</p>
+<ul>
+<li><strong>Lua</strong> 使用全1掩码 <code>0b11111111</code>，表明其8位类型标签占据整个字节。</li>
+<li><strong>SpiderMonkey</strong> 使用 <code>0b00001111</code>，表明其仅使用低4位来编码类型信息。</li>
+</ul>
+</li>
+<li>
+<p>这些配置值是引擎初始化时一次性设定的，体现了 <strong>Typed Architectures</strong> 的灵活性，能够适应不同脚本引擎的数据布局差异。</p>
+</li>
+</ul>
+<h3 id="table-5-type-rule-table-settings-for-lua-and-spidermonkey">Table 5: Type Rule Table settings for Lua and SpiderMonkey<a class="headerlink" href="#table-5-type-rule-table-settings-for-lua-and-spidermonkey" title="Permanent link">&para;</a></h3>
+<p><img alt="7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg" src="../images/7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg" /></p>
+<ul>
+<li>该图片展示了 <strong>Table 5: Type Rule Table settings for Lua and SpiderMonkey</strong>，用于定义 Typed Architectures 中 <strong>Type Rule Table</strong> 的内容。</li>
+<li>表格包含四列：<strong>Opcode</strong>、<strong>Type_in1</strong>、<strong>Type_in2</strong> 和 <strong>Type_out</strong>，描述了在执行特定操作码时，输入类型如何映射到输出类型。</li>
+<li>所有条目均基于 <strong>Lua</strong> 引擎的类型系统设计，未包含 SpiderMonkey 的具体设置，表明该表是为 Lua 定制的。</li>
+<li><strong>xadd</strong> 指令支持两种合法组合：<ul>
+<li>输入均为 <strong>Int</strong>，输出为 <strong>Int</strong>。</li>
+<li>输入均为 <strong>Float</strong>，输出为 <strong>Float</strong>。</li>
+</ul>
+</li>
+<li><strong>xsub</strong> 指令同样支持两种组合：<ul>
+<li>输入均为 <strong>Int</strong>，输出为 <strong>Int</strong>。</li>
+<li>输入均为 <strong>Float</strong>，输出为 <strong>Float</strong>。</li>
+</ul>
+</li>
+<li><strong>xmul</strong> 指令也支持相同组合：<ul>
+<li>输入均为 <strong>Int</strong>，输出为 <strong>Int</strong>。</li>
+<li>输入均为 <strong>Float</strong>，输出为 <strong>Float</strong>。</li>
+</ul>
+</li>
+<li><strong>tchk</strong> 指令用于类型检查，不进行计算，支持两种组合：<ul>
+<li>输入为 <strong>Table</strong> 和 <strong>Int</strong>，输出为 <strong>Table</strong>。</li>
+<li>输入为 <strong>Int</strong> 和 <strong>Table</strong>，输出为 <strong>Table</strong>。</li>
+</ul>
+</li>
+<li>这些规则确保了在硬件中执行多态指令时，能根据操作数类型自动选择正确的原生指令（如 add 或 fadd），并在类型不匹配时跳转至慢路径。</li>
+<li>表格结构简洁，仅列出有效组合，未涵盖所有可能类型对，体现了 <strong>Type Rule Table</strong> 的紧凑性和高效性。</li>
+</ul>
+<h3 id="table-6-evaluation-parameters">Table 6: Evaluation parameters<a class="headerlink" href="#table-6-evaluation-parameters" title="Permanent link">&para;</a></h3>
+<p><img alt="08115ac5da44e54c9004c69c4e725044ecc21d43bdc87d5020cb7c3494405c60.jpg" src="../images/08115ac5da44e54c9004c69c4e725044ecc21d43bdc87d5020cb7c3494405c60.jpg" /></p>
+<ul>
+<li><strong>实验平台参数</strong>：该表格详细列出了用于评估 Typed Architectures 性能的硬件和软件配置，为后续性能对比提供基准。</li>
+<li><strong>ISA 与架构</strong>：<ul>
+<li>采用 <strong>64-bit RISC-V v2</strong> 指令集架构。</li>
+<li>处理器为 <strong>Single-Issue In-Order</strong> 设计，主频 <strong>50MHz</strong>，基于可综合的 RTL 模型。</li>
+</ul>
+</li>
+<li><strong>流水线结构</strong>：<ul>
+<li>采用经典的五级流水线：<strong>Fetch/Decode/Execute/Memory/Writeback</strong>。</li>
+</ul>
+</li>
+<li><strong>分支预测器</strong>：<ul>
+<li>配备 <strong>32B</strong> 的分支预测器，包含 <strong>128-entry gshare</strong> 表。</li>
+<li><strong>62-entry</strong> 全相联 BTB（Branch Target Buffer）。</li>
+<li><strong>2-entry RAS</strong>（Return Address Stack），分支未命中惩罚为 <strong>2-cycle</strong>。</li>
+</ul>
+</li>
+<li><strong>缓存系统</strong>：<ul>
+<li><strong>L1 I-cache</strong>：<strong>16KB</strong>，<strong>4-way</strong> 组相联，<strong>1-cycle</strong> 访问延迟。</li>
+<li><strong>L1 D-cache</strong>：<strong>16KB</strong>，<strong>4-way</strong> 组相联，<strong>1-cycle</strong> 访问延迟。</li>
+<li><strong>TLB</strong>：<strong>8-entry I-TLB</strong> 和 <strong>8-entry D-TLB</strong>。</li>
+<li>块大小为 <strong>64B</strong>，替换策略为 <strong>LRU</strong>。</li>
+</ul>
+</li>
+<li><strong>内存子系统</strong>：<ul>
+<li>主存容量为 <strong>1GB</strong>，使用 <strong>DDR3-1066</strong> 内存。</li>
+<li>内存时序参数为 <strong>tCL/tRCD/tRP = 7/7/7</strong>。</li>
+</ul>
+</li>
+<li><strong>工作负载</strong>：<ul>
+<li>使用两个主流脚本引擎作为测试基准：<ul>
+<li><strong>Lua-5.3.0</strong></li>
+<li><strong>JavaScript (SpiderMonkey-17.0.0)</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数类别</th>
+<th>具体配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISA</td>
+<td>64-bit RISC-V v2</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>Single-Issue In-Order, 50MHz (Synthesized)</td>
+</tr>
+<tr>
+<td>Pipeline</td>
+<td>Fetch/Decode/Execute/Memory/Writeback (5 stages)</td>
+</tr>
+<tr>
+<td>Branch Predictor</td>
+<td>32B predictor (128-entry gshare), 62-entry BTB, 2-entry RAS, 2-cycle penalty</td>
+</tr>
+<tr>
+<td>Caches</td>
+<td>16KB I-cache (4-way, 1-cycle), 16KB D-cache (4-way, 1-cycle), 8-entry TLBs, 64B block, LRU</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>1GB, DDR3-1066, tCL/tRCD/tRP = 7/7/7</td>
+</tr>
+<tr>
+<td>Workloads</td>
+<td>Lua-5.3.0, JavaScript (SpiderMonkey-17.0.0)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键设计点</strong>：<ul>
+<li>所有参数均针对在 <strong>FPGA</strong> 上进行仿真和性能计数而设定，确保了实验结果的可复现性和准确性。</li>
+<li>选择 <strong>In-Order</strong> 架构是为了模拟资源受限的 IoT 设备，突出 Typed Architectures 在此类场景下的优势。</li>
+<li>使用 <strong>RISC-V Rocket Core</strong> 作为基础，便于集成自定义扩展并进行面积/功耗评估。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-7-benchmarks">Table 7: Benchmarks<a class="headerlink" href="#table-7-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="e4f5f8afad834ae60f214863e2af8d845c6a8ced6795a3f2d4694ba86810bb18.jpg" src="../images/e4f5f8afad834ae60f214863e2af8d845c6a8ced6795a3f2d4694ba86810bb18.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 7: Benchmarks</strong>，用于说明实验所使用的基准测试程序及其输入参数和功能描述。</li>
+<li>表格包含三列：<strong>Input script</strong>、<strong>Input parameter</strong> 和 <strong>Description</strong>，共列出10个基准测试程序。</li>
+<li>所有基准测试均来自 <strong>Computer Language Benchmarks Game</strong>，部分替换自原研究 [47] 中无法在目标引擎上运行的程序（如 fasta, meteor, reverse-complement）或开销过大的程序（如 regex-dna）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Input script</th>
+<th>Input parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ackermann</td>
+<td>7</td>
+<td>Use of the Ackermann function to provide a benchmark for computer performance.</td>
+</tr>
+<tr>
+<td>binary-trees</td>
+<td>12</td>
+<td>Allocate and deallocate many binary trees.</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>9</td>
+<td>Indexed-access to tiny integer-sequence.</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>32</td>
+<td>Calculate fibonacci number.</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>250,000</td>
+<td>Hash table update and k-nucleotide strings.</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>250</td>
+<td>Generate Mandelbrot set portable bitmap file.</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>500,000</td>
+<td>Double-precision N-body simulation.</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>7</td>
+<td>Count the prime numbers from 2 to M (Sieve of Eratosthenes algorithm).</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>500</td>
+<td>Streaming arbitrary-precision arithmetic.</td>
+</tr>
+<tr>
+<td>random</td>
+<td>300,000</td>
+<td>Generate random number.</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>500</td>
+<td>Eigenvalue using the power method.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这些基准测试覆盖了多种计算模式，包括递归（ackermann, fibo）、数据结构操作（binary-trees, k-nucleotide）、数值计算（n-body, spectral-norm）、素数筛选（n-sieve）和随机数生成（random），旨在全面评估 <strong>Typed Architectures</strong> 在不同工作负载下的性能提升。</li>
+<li>输入参数值反映了各程序的规模或迭代次数，例如 <strong>k-nucleotide</strong> 使用 250,000 作为输入以模拟大规模哈希表更新，而 <strong>n-sieve</strong> 仅使用 7 以测试小规模素数筛选。</li>
+<li>描述中明确指出各程序的核心功能，如 <strong>fannkuch-redux</strong> 用于“tiny integer-sequence”的索引访问，<strong>pidigits</strong> 用于“arbitrary-precision arithmetic”，表明其对类型系统和算术运算的敏感性，适合作为动态类型语言优化效果的评估对象。</li>
+</ul>
+<h3 id="figure-5-overall-speedups-for-lua-and-javascript-interpreters-the-higher-the-better">Figure 5: Overall speedups for Lua and JavaScript interpreters (the higher, the better)<a class="headerlink" href="#figure-5-overall-speedups-for-lua-and-javascript-interpreters-the-higher-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="faf222a9648408ba3885a02642ca484bc0761821514f047c02630bdb87747b54.jpg" src="../images/faf222a9648408ba3885a02642ca484bc0761821514f047c02630bdb87747b54.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Typed Architecture</strong> 与 <strong>Checked Load</strong> 两种硬件加速方案在 Lua 和 JavaScript 解释器上的整体性能提升对比，基准为未优化的 RISC-V Rocket Core。</li>
+<li>性能提升以 <strong>Speedup over Baseline (%)</strong> 表示，数值越高代表加速效果越显著。</li>
+<li>数据按语言分为两组：左侧为 <strong>Lua</strong>，右侧为 <strong>JavaScript</strong>，每组包含多个基准测试程序及一个 <strong>GEOMEAN</strong>（几何平均值）汇总项。</li>
+<li><strong>Typed Architecture</strong> 使用黑色实心柱状图表示，<strong>Checked Load</strong> 使用斜线填充柱状图表示。</li>
+</ul>
+<p>以下是各基准测试的具体性能数据：</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Lua - Typed Architecture (%)</th>
+<th>Lua - Checked Load (%)</th>
+<th>JavaScript - Typed Architecture (%)</th>
+<th>JavaScript - Checked Load (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ackermann</td>
+<td>~3%</td>
+<td>~0%</td>
+<td>~12%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>binary-trees</td>
+<td>~8%</td>
+<td>~7%</td>
+<td>~14%</td>
+<td>~6%</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td><strong>43.5%</strong></td>
+<td><strong>40.8%</strong></td>
+<td><strong>32.6%</strong></td>
+<td><strong>32.4%</strong></td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>~5%</td>
+<td>~5%</td>
+<td>~5%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>~5%</td>
+<td>~5%</td>
+<td>~8%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>~7%</td>
+<td>~0%</td>
+<td>~8%</td>
+<td>~0%</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>~3%</td>
+<td>~-5%</td>
+<td>~14%</td>
+<td>~-5%</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td><strong>32.9%</strong></td>
+<td><strong>33.0%</strong></td>
+<td><strong>21.8%</strong></td>
+<td><strong>20.0%</strong></td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>~13%</td>
+<td>~10%</td>
+<td>~10%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>random</td>
+<td>~5%</td>
+<td>~0%</td>
+<td>~10%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>~10%</td>
+<td>~8%</td>
+<td><strong>18.6%</strong></td>
+<td><strong>15.0%</strong></td>
+</tr>
+<tr>
+<td>GEOMEAN</td>
+<td><strong>9.9%</strong></td>
+<td><strong>7.3%</strong></td>
+<td><strong>11.2%</strong></td>
+<td><strong>5.4%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：<ul>
+<li>在 <strong>Lua</strong> 上，<strong>Typed Architecture</strong> 的 <strong>GEOMEAN</strong> 为 <strong>9.9%</strong>，优于 <strong>Checked Load</strong> 的 <strong>7.3%</strong>；在 <strong>JavaScript</strong> 上，<strong>Typed Architecture</strong> 达到 <strong>11.2%</strong>，远超 <strong>Checked Load</strong> 的 <strong>5.4%</strong>。</li>
+<li><strong>fannkuch-redux</strong> 是两个语言中加速最显著的基准，<strong>Typed Architecture</strong> 分别达到 <strong>43.5%</strong>（Lua）和 <strong>32.6%</strong>（JavaScript），均略高于 <strong>Checked Load</strong>。</li>
+<li><strong>n-body</strong> 在 <strong>Checked Load</strong> 下表现负加速（约 -5%），而 <strong>Typed Architecture</strong> 保持正向加速（Lua 约 3%，JavaScript 约 14%），显示其对复杂类型场景的鲁棒性更强。</li>
+<li><strong>Typed Architecture</strong> 在多数基准上表现稳定且优于 <strong>Checked Load</strong>，尤其在 JavaScript 上优势明显，说明其设计更适应多语言、多数据布局的动态脚本环境。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-6-reduction-of-dynamic-instruction-count-the-higher-the-better">Figure 6: Reduction of dynamic instruction count (the higher, the better)<a class="headerlink" href="#figure-6-reduction-of-dynamic-instruction-count-the-higher-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="046440db3a6b2466d009e11eb3df521c492c54057e4d7c14ad6c076d3dec6b60.jpg" src="../images/046440db3a6b2466d009e11eb3df521c492c54057e4d7c14ad6c076d3dec6b60.jpg" /></p>
+<ul>
+<li>图表标题为“Figure 6: Reduction of dynamic instruction count (the higher, the better)”，展示的是 <strong>Typed Architecture</strong> 与 <strong>Checked Load</strong> 两种方案在 Lua 和 JavaScript 引擎上对动态指令数的减少效果，数值越高代表优化越显著。</li>
+<li>横轴按语言分组：左侧为 <strong>Lua</strong>，右侧为 <strong>JavaScript</strong>，每个语言下包含多个基准测试程序（benchmark），如 <code>fannkuch-redux</code>、<code>n-sieve</code>、<code>binary-trees</code> 等，最后以 <strong>GEOMEAN</strong> 表示几何平均值。</li>
+<li>纵轴为“Normalized Instruction Count Reduction (%)”，即归一化的指令数减少百分比，正值表示优化有效，负值表示性能退化。</li>
+<li>图例中，斜线填充柱状图代表 <strong>Checked Load</strong>，黑色实心柱状图代表 <strong>Typed Architecture</strong>。</li>
+</ul>
+<p>以下是各基准测试的指令数减少百分比数据摘要：</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Checked Load (%)</th>
+<th>Typed Architecture (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ackermann (Lua)</td>
+<td>~1%</td>
+<td>~10%</td>
+</tr>
+<tr>
+<td>binary-trees (Lua)</td>
+<td>~9%</td>
+<td>~10%</td>
+</tr>
+<tr>
+<td>fannkuch-redux (Lua)</td>
+<td>~31%</td>
+<td><strong>~33%</strong></td>
+</tr>
+<tr>
+<td>fibo (Lua)</td>
+<td>~0%</td>
+<td>~1%</td>
+</tr>
+<tr>
+<td>k-nucleotide (Lua)</td>
+<td>~-2%</td>
+<td>~-5%</td>
+</tr>
+<tr>
+<td>mandelbrot (Lua)</td>
+<td>~-5%</td>
+<td>~13%</td>
+</tr>
+<tr>
+<td>n-body (Lua)</td>
+<td>~-2%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>n-sieve (Lua)</td>
+<td>~30%</td>
+<td><strong>~32%</strong></td>
+</tr>
+<tr>
+<td>pidigits (Lua)</td>
+<td>~12%</td>
+<td><strong>~15%</strong></td>
+</tr>
+<tr>
+<td>random (Lua)</td>
+<td>~1%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>spectral-norm (Lua)</td>
+<td>~7%</td>
+<td>~11%</td>
+</tr>
+<tr>
+<td>GEOMEAN (Lua)</td>
+<td>7.3%</td>
+<td><strong>9.9%</strong></td>
+</tr>
+<tr>
+<td>ackermann (JS)</td>
+<td>~3%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>binary-trees (JS)</td>
+<td>~8%</td>
+<td><strong>~10%</strong></td>
+</tr>
+<tr>
+<td>fannkuch-redux (JS)</td>
+<td>~9%</td>
+<td><strong>~9%</strong></td>
+</tr>
+<tr>
+<td>fibo (JS)</td>
+<td>~1%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>k-nucleotide (JS)</td>
+<td>~3%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>mandelbrot (JS)</td>
+<td>~1%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>n-body (JS)</td>
+<td>~1%</td>
+<td>~4%</td>
+</tr>
+<tr>
+<td>n-sieve (JS)</td>
+<td>~6%</td>
+<td><strong>~12%</strong></td>
+</tr>
+<tr>
+<td>pidigits (JS)</td>
+<td>~1%</td>
+<td>~5%</td>
+</tr>
+<tr>
+<td>random (JS)</td>
+<td>~1%</td>
+<td>~2%</td>
+</tr>
+<tr>
+<td>spectral-norm (JS)</td>
+<td>~6%</td>
+<td><strong>~19%</strong></td>
+</tr>
+<tr>
+<td>GEOMEAN (JS)</td>
+<td>5.4%</td>
+<td><strong>11.2%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 <strong>Lua</strong> 上，<strong>Typed Architecture</strong> 在多数基准测试中优于 <strong>Checked Load</strong>，尤其在 <code>fannkuch-redux</code>、<code>n-sieve</code>、<code>pidigits</code> 和 <code>spectral-norm</code> 中表现突出；<code>mandelbrot</code> 和 <code>n-body</code> 也实现正向优化，而 Checked Load 在这些程序中出现负优化。</li>
+<li>在 <strong>JavaScript</strong> 上，<strong>Typed Architecture</strong> 同样全面领先，特别是在 <code>n-sieve</code> 和 <code>spectral-norm</code> 中取得显著优势，几何平均值达到 <strong>11.2%</strong>，远超 Checked Load 的 5.4%。</li>
+<li><strong>GEOMEAN</strong> 显示，<strong>Typed Architecture</strong> 在 Lua 和 JavaScript 上分别实现 <strong>9.9%</strong> 和 <strong>11.2%</strong> 的指令数减少，证明其在多语言、多工作负载下的稳定性和高效性。</li>
+<li>部分程序如 <code>k-nucleotide</code> 和 <code>fibo</code> 优化幅度较小甚至为负，主要因频繁调用系统函数或类型不匹配导致慢路径执行增多，符合 Amdahl 定律限制。</li>
+</ul>
+<h3 id="figure-7-branch-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better">Figure 7: Branch miss rates in misses per kilo-instructions (MPKI) (the lower, the better)<a class="headerlink" href="#figure-7-branch-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="b8a016ed009f998731ffd18eb4bf6ce075d7ba72774ca45b98a78af5df612019.jpg" src="../images/b8a016ed009f998731ffd18eb4bf6ce075d7ba72774ca45b98a78af5df612019.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 7</strong>，即不同架构下 <strong>Branch Miss Rate (MPKI)</strong> 的对比，单位为每千条指令的分支错误预测次数，数值越低越好。</li>
+<li>数据分为两组：左侧为 <strong>Lua</strong> 引擎结果，右侧为 <strong>JavaScript (SpiderMonkey)</strong> 引擎结果。</li>
+<li>每个基准测试（benchmark）下有三组柱状图，分别代表：<ul>
+<li><strong>Baseline</strong>：原始 RISC-V Rocket Core 架构。</li>
+<li><strong>CheckedLoad</strong>：基于 Anderson 等人提出的硬件类型检查扩展。</li>
+<li><strong>Typed Architecture</strong>：本文提出的架构。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Lua - Baseline MPKI</th>
+<th>Lua - CheckedLoad MPKI</th>
+<th>Lua - Typed Architecture MPKI</th>
+<th>JavaScript - Baseline MPKI</th>
+<th>JavaScript - CheckedLoad MPKI</th>
+<th>JavaScript - Typed Architecture MPKI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ackermann</td>
+<td>~65</td>
+<td>~48</td>
+<td>~60</td>
+<td>~102</td>
+<td>~100</td>
+<td>~98</td>
+</tr>
+<tr>
+<td>binary-trees</td>
+<td>~85</td>
+<td>~83</td>
+<td>~82</td>
+<td>~100</td>
+<td>~100</td>
+<td>~98</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>~35</td>
+<td>~30</td>
+<td>~30</td>
+<td>~75</td>
+<td>~70</td>
+<td>~55</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>~75</td>
+<td>~65</td>
+<td>~65</td>
+<td>~100</td>
+<td>~100</td>
+<td>~95</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>~100</td>
+<td>~95</td>
+<td>~95</td>
+<td>~100</td>
+<td>~100</td>
+<td>~98</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>~70</td>
+<td>~68</td>
+<td>~68</td>
+<td>~90</td>
+<td>~88</td>
+<td>~85</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>~65</td>
+<td>~60</td>
+<td>~60</td>
+<td>~85</td>
+<td>~80</td>
+<td>~78</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>~50</td>
+<td>~40</td>
+<td>~30</td>
+<td>~70</td>
+<td>~65</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>~85</td>
+<td>~85</td>
+<td>~85</td>
+<td>~90</td>
+<td>~88</td>
+<td>~85</td>
+</tr>
+<tr>
+<td>random</td>
+<td>~85</td>
+<td>~85</td>
+<td>~85</td>
+<td>~90</td>
+<td>~85</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>~85</td>
+<td>~85</td>
+<td>~85</td>
+<td>~90</td>
+<td>~88</td>
+<td>~85</td>
+</tr>
+<tr>
+<td>GEOMEAN</td>
+<td>~75</td>
+<td>~70</td>
+<td>~65</td>
+<td>~90</td>
+<td>~88</td>
+<td>~82</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：<ul>
+<li>在 <strong>Lua</strong> 中，<strong>Typed Architecture</strong> 在多个基准上显著降低分支错误率，尤其在 <strong>n-sieve</strong> 和 <strong>fannkuch-redux</strong> 上表现突出，分别降至约 <strong>30 MPKI</strong> 和 <strong>30 MPKI</strong>，远低于 Baseline。</li>
+<li>在 <strong>JavaScript</strong> 中，<strong>Typed Architecture</strong> 同样在 <strong>fannkuch-redux</strong> 和 <strong>n-sieve</strong> 上取得最大改进，分别降至 <strong>55 MPKI</strong> 和 <strong>50 MPKI</strong>。</li>
+<li><strong>CheckedLoad</strong> 在部分基准上略优于 Baseline，但整体提升幅度小于 <strong>Typed Architecture</strong>。</li>
+<li><strong>GEOMEAN</strong> 显示，<strong>Typed Architecture</strong> 在 Lua 和 JavaScript 上均实现最低平均分支错误率，分别为 <strong>65 MPKI</strong> 和 <strong>82 MPKI</strong>，证明其在减少控制流开销方面的有效性。</li>
+<li>部分基准如 <strong>ackermann</strong>、<strong>binary-trees</strong>、<strong>pidigits</strong> 等，三种架构差异较小，表明这些程序对分支预测优化不敏感或受其他因素主导。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-8-instruction-cache-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better">Figure 8: Instruction cache miss rates in misses per kilo-instructions (MPKI) (the lower, the better)<a class="headerlink" href="#figure-8-instruction-cache-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="2eb3643d8603e0cc2795c60844eb2bc494a36004ca7c70ae8fa17faf75d91195.jpg" src="../images/2eb3643d8603e0cc2795c60844eb2bc494a36004ca7c70ae8fa17faf75d91195.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了 <strong>Figure 8</strong>，即指令缓存未命中率（I-Cache Miss Rate），单位为每千条指令未命中次数（MPKI），数值越低越好。</p>
+</li>
+<li>
+<p>图表横向分为两组：左侧为 <strong>Lua</strong> 引擎的测试结果，右侧为 <strong>JavaScript</strong> 引擎的测试结果。</p>
+</li>
+<li>
+<p>纵轴范围从 0 到 16 MPKI，以虚线网格辅助读数。</p>
+</li>
+<li>
+<p>图例包含三种架构配置：</p>
+<ul>
+<li><strong>Baseline</strong>：基准架构（白色柱）</li>
+<li><strong>Checked Load</strong>：硬件支持类型检查的优化方案（斜线填充柱）</li>
+<li><strong>Typed Architecture</strong>：本文提出的带类型信息的架构（黑色实心柱）</li>
+</ul>
+</li>
+<li>
+<p>对于 <strong>Lua</strong> 引擎：</p>
+<ul>
+<li>多数基准测试中，<strong>Typed Architecture</strong> 的 I-Cache Miss Rate 显著低于 Baseline 和 Checked Load。</li>
+<li>特别在 <strong>n-sieve</strong>、<strong>fannkuch-redux</strong>、<strong>spectral-norm</strong> 等程序上，性能提升明显。</li>
+<li><strong>GEOMEAN</strong>（几何平均值）显示 Typed Architecture 达到约 2.5 MPKI，优于 Baseline（约 4.5 MPKI）和 Checked Load（约 3.5 MPKI）。</li>
+</ul>
+</li>
+<li>
+<p>对于 <strong>JavaScript</strong> 引擎：</p>
+<ul>
+<li><strong>binary-trees</strong>、<strong>k-nucleotide</strong>、<strong>random</strong> 等程序中，<strong>Typed Architecture</strong> 表现出显著优势。</li>
+<li>在 <strong>random</strong> 测试中，Typed Architecture 的 I-Cache Miss Rate 降至接近 0，而 Baseline 高达约 14 MPKI。</li>
+<li><strong>GEOMEAN</strong> 显示 Typed Architecture 约为 2.0 MPKI，远优于 Baseline（约 7.0 MPKI）和 Checked Load（约 5.0 MPKI）。</li>
+</ul>
+</li>
+<li>
+<p>关键数据对比（近似值）：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Lua - Baseline</th>
+<th>Lua - Checked Load</th>
+<th>Lua - Typed Arch</th>
+<th>JS - Baseline</th>
+<th>JS - Checked Load</th>
+<th>JS - Typed Arch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ackermann</td>
+<td>~3.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~3.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>binary-trees</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~14.5</td>
+<td>~10.5</td>
+<td>~7.5</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>~14.5</td>
+<td>~13.5</td>
+<td>~11.5</td>
+<td>~14.5</td>
+<td>~13.5</td>
+<td>~11.5</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~15.0</td>
+<td>~10.0</td>
+<td>~7.5</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>~0.5</td>
+<td>~0.5</td>
+<td>~0.5</td>
+<td>~1.5</td>
+<td>~1.0</td>
+<td>~0.5</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>~3.5</td>
+<td>~3.5</td>
+<td>~2.5</td>
+<td>~3.5</td>
+<td>~3.5</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>~14.5</td>
+<td>~13.5</td>
+<td>~11.5</td>
+<td>~14.5</td>
+<td>~13.5</td>
+<td>~11.5</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>~4.0</td>
+<td>~3.5</td>
+<td>~3.0</td>
+<td>~4.0</td>
+<td>~3.5</td>
+<td>~3.0</td>
+</tr>
+<tr>
+<td>random</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~2.5</td>
+<td>~14.5</td>
+<td>~10.5</td>
+<td>~0.5</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>~7.5</td>
+<td>~6.5</td>
+<td>~5.5</td>
+<td>~7.5</td>
+<td>~6.5</td>
+<td>~5.5</td>
+</tr>
+<tr>
+<td>GEOMEAN</td>
+<td>~4.5</td>
+<td>~3.5</td>
+<td>~2.5</td>
+<td>~7.0</td>
+<td>~5.0</td>
+<td>~2.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体趋势表明，<strong>Typed Architecture</strong> 在降低指令缓存未命中率方面表现最优，尤其在 JavaScript 引擎中效果更为突出。</li>
+<li>这一改进源于其硬件级类型管理减少了动态类型检查带来的额外指令开销，从而降低了代码密度和缓存压力。</li>
+</ul>
+<h3 id="figure-9-type-hit-and-miss-rates-normalized-to-dynamic-bytecode-count-for-a-lua-and-b-spidermonkey">Figure 9: Type hit and miss rates normalized to dynamic bytecode count for (a) Lua and (b) SpiderMonkey<a class="headerlink" href="#figure-9-type-hit-and-miss-rates-normalized-to-dynamic-bytecode-count-for-a-lua-and-b-spidermonkey" title="Permanent link">&para;</a></h3>
+<p><img alt="9e399789f7bd42938699e018bb3e5558de3587d372f0c6d750c6c581614bb549.jpg" src="../images/9e399789f7bd42938699e018bb3e5558de3587d372f0c6d750c6c581614bb549.jpg" /></p>
+<ul>
+<li>图片 9e399789f7bd42938699e018bb3e5558de3587d372f0c6d750c6c581614bb549.jpg 包含两个子图 (a) 和 (b)，分别展示 <strong>Lua</strong> 和 <strong>SpiderMonkey</strong> 引擎在不同基准测试程序中的 <strong>Type Hit</strong>、<strong>Type Miss</strong> 和 <strong>Not Applicable</strong> 的比例，数据已归一化至动态字节码总数。</li>
+<li>子图 (a) 对应 <strong>Lua</strong> 引擎，其性能表现与类型命中率高度相关。例如：<ul>
+<li><strong>fannkuch-redux</strong> 和 <strong>n-sieve</strong> 的 Type Hits 超过 50%，分别达到约 60% 和 45%，这与其在实验中获得的高指令数减少（32.9% 和 31.8%）和显著加速（&gt;30%）相吻合。</li>
+<li><strong>mandelbrot</strong> 和 <strong>n-body</strong> 虽然 Type Hits 较高（约 75% 和 50%），但因频繁调用系统函数（如 printf）或使用字符串键进行表查找，导致整体加速受限。</li>
+<li><strong>random</strong> 和 <strong>spectral-norm</strong> 的 Type Hits 约为 40%-50%，但因分支预测压力降低，仍获得可观加速。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Type Hits (%)</th>
+<th>Type Misses (%)</th>
+<th>Not Applicable (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ackermann</td>
+<td>~25</td>
+<td>~25</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>binary-trees</td>
+<td>~30</td>
+<td>~30</td>
+<td>~40</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>~60</td>
+<td>~30</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>~25</td>
+<td>~25</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>~20</td>
+<td>~20</td>
+<td>~60</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>~75</td>
+<td>~15</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>~50</td>
+<td>~35</td>
+<td>~15</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>~45</td>
+<td>~15</td>
+<td>~40</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>~45</td>
+<td>~15</td>
+<td>~40</td>
+</tr>
+<tr>
+<td>random</td>
+<td>~40</td>
+<td>~20</td>
+<td>~40</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>~45</td>
+<td>~15</td>
+<td>~40</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>子图 (b) 对应 <strong>SpiderMonkey</strong> 引擎，其类型命中率普遍低于 Lua，且部分程序存在大量 “Not Applicable” 情况。<ul>
+<li><strong>fannkuch-redux</strong> 和 <strong>n-sieve</strong> 的 Type Hits 分别约为 20% 和 15%，但它们仍实现了 32.6% 和 21.8% 的加速，主要得益于指令缓存命中率提升和分支预测改善。</li>
+<li><strong>binary-trees</strong>、<strong>k-nucleotide</strong> 和 <strong>random</strong> 的 Type Hits 极低（\&lt;20%），但通过降低指令缓存缺失率（最高达 50.8%）实现了显著加速。</li>
+<li><strong>n-body</strong> 的 Type Misses 高达 20%，导致性能劣于基线，因为其溢出检测机制强制进入慢路径。</li>
+<li><strong>spectral-norm</strong> 的 Type Hits 约为 20%，是 SpiderMonkey 中表现最好的程序之一。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Type Hits (%)</th>
+<th>Type Misses (%)</th>
+<th>Not Applicable (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ackermann</td>
+<td>~10</td>
+<td>~10</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>binary-trees</td>
+<td>~10</td>
+<td>~10</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>~20</td>
+<td>~10</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>~15</td>
+<td>~15</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>~10</td>
+<td>~10</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>~15</td>
+<td>~15</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>~15</td>
+<td>~20</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>~15</td>
+<td>~10</td>
+<td>~75</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>~10</td>
+<td>~10</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>random</td>
+<td>~10</td>
+<td>~10</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>~20</td>
+<td>~10</td>
+<td>~70</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，<strong>Typed Architecture</strong> 的加速效果不仅取决于 Type Hits，还受制于其他因素，如分支预测、指令缓存效率及程序结构（如系统调用频率）。对于 <strong>SpiderMonkey</strong>，即使 Type Hits 较低，通过优化缓存行为也能获得显著收益。而 <strong>Lua</strong> 则更依赖于高 Type Hits 来实现最大加速。</li>
+</ul>
+<h3 id="table-8-hardware-overhead-breakdown-area-power">Table 8: Hardware overhead breakdown (area, power)<a class="headerlink" href="#table-8-hardware-overhead-breakdown-area-power" title="Permanent link">&para;</a></h3>
+<p><img alt="0ca44b112ba78cb5d1be9777297f7c39c41f6d157132c5634074a900a5eaac64.jpg" src="../images/0ca44b112ba78cb5d1be9777297f7c39c41f6d157132c5634074a900a5eaac64.jpg" /></p>
+<ul>
+<li>
+<p><strong>Table 8</strong> 展示了在 RISC-V Rocket Core 上实现 Typed Architecture 后，芯片各模块的面积与功耗开销分解。数据基于 TSMC 40nm 工艺节点的综合结果。</p>
+</li>
+<li>
+<p>总体来看，Typed Architecture 引入后，芯片总面积从 <strong>0.684 mm²</strong> 增加到 <strong>0.695 mm²</strong>，增幅为 <strong>1.6%</strong>；总功耗从 <strong>18.72 mW</strong> 增至 <strong>19.41 mW</strong>，增幅为 <strong>3.7%</strong>。</p>
+</li>
+<li>
+<p>核心模块（Core）是主要开销来源：</p>
+<ul>
+<li>面积从 <strong>0.038 mm²</strong> 增至 <strong>0.047 mm²</strong>，增长 <strong>23.7%</strong>，占总芯片面积比例从 <strong>5.5%</strong> 提升至 <strong>6.7%</strong>。</li>
+<li>功耗从 <strong>2.22 mW</strong> 增至 <strong>2.74 mW</strong>，增长 <strong>23.4%</strong>，占总功耗比例从 <strong>11.8%</strong> 提升至 <strong>14.1%</strong>。</li>
+<li>此增长源于寄存器文件扩展（增加 8-bit type 和 F/¯I 位）、Type Rule Table（8项）及标签传播路径。</li>
+</ul>
+</li>
+<li>
+<p>其他模块如 CSR、Div、FPU、ICache、DCache、Uncore 和 Wrapping 的面积和功耗变化极小，表明 Typed Architecture 的改动高度集中于核心执行路径，对其他子系统影响微弱。</p>
+</li>
+<li>
+<p>下表总结关键模块对比：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模块层级</th>
+<th>Baseline 面积 (mm²)</th>
+<th>Typed Architecture 面积 (mm²)</th>
+<th>面积增幅</th>
+<th>Baseline 功耗 (mW)</th>
+<th>Typed Architecture 功耗 (mW)</th>
+<th>功耗增幅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Top</td>
+<td>0.684</td>
+<td>0.695</td>
+<td>+1.6%</td>
+<td>18.72</td>
+<td>19.41</td>
+<td>+3.7%</td>
+</tr>
+<tr>
+<td>Core</td>
+<td>0.038</td>
+<td>0.047</td>
+<td>+23.7%</td>
+<td>2.22</td>
+<td>2.74</td>
+<td>+23.4%</td>
+</tr>
+<tr>
+<td>FPU</td>
+<td>0.089</td>
+<td>0.089</td>
+<td>0%</td>
+<td>3.18</td>
+<td>3.23</td>
+<td>+1.6%</td>
+</tr>
+<tr>
+<td>ICache</td>
+<td>0.251</td>
+<td>0.251</td>
+<td>0%</td>
+<td>3.49</td>
+<td>3.50</td>
+<td>+0.3%</td>
+</tr>
+<tr>
+<td>DCache</td>
+<td>0.249</td>
+<td>0.250</td>
+<td>+0.4%</td>
+<td>3.71</td>
+<td>3.82</td>
+<td>+3.0%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键结论</strong>：Typed Architecture 以极低硬件成本（<strong>1.6% 面积开销</strong>）实现了显著性能提升（Lua 9.9%，JavaScript 11.2%），其能效比（EDP）分别优化 <strong>16.5%</strong> 和 <strong>19.3%</strong>，证明其设计高度适合资源受限的 IoT 平台。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

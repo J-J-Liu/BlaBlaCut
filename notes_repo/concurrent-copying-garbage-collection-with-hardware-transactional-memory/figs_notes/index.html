@@ -1,0 +1,1182 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Concurrent Copying Garbage Collection with Hardware Transactional Memory 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#concurrent-copying-garbage-collection-with-hardware-transactional-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Concurrent Copying Garbage Collection with Hardware Transactional Memory 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-41-machines-used-in-the-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4.1: Machines used in the evaluation.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-51-success-rate-curves-on-haswell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.1: Success rate curves on Haswell.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-52-success-rate-curves-on-broadwell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.2: Success rate curves on Broadwell.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-53-success-rate-curves-on-skylake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.3: Success rate curves on Skylake.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-54-success-rate-curves-on-coffee-lake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.4: Success rate curves on Coffee Lake.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-55-fig-56-fig-57-and-fig-58-for-haswell-broadwell-skylake-and-coffee-lake-respectively-figure-55-success-rate-curves-on-haswell-when-reusing-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 5.5, Fig. 5.6, Fig. 5.7, and Fig. 5.8 for Haswell, Broadwell, Skylake and Coffee Lake respectively. Figure 5.5: Success rate curves on Haswell when reusing memory.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-56-success-rate-curves-on-broadwell-when-reusing-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.6: Success rate curves on Broadwell when reusing memory.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-57-success-rate-curves-on-skylake-when-reusing-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.7: Success rate curves on Skylake when reusing memory.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-58-success-rate-curves-on-coffee-lake-when-reusing-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.8: Success rate curves on Coffee Lake when reusing memory.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-59-success-rate-curves-on-coffee-lake-when-invalidating-caches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.9: Success rate curves on Coffee Lake when invalidating caches.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-510-success-rate-curves-on-coffee-lake-when-warming-up-caches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.10: Success rate curves on Coffee Lake when warming up caches.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="concurrent-copying-garbage-collection-with-hardware-transactional-memory">Concurrent Copying Garbage Collection with Hardware Transactional Memory 图表详解<a class="headerlink" href="#concurrent-copying-garbage-collection-with-hardware-transactional-memory" title="Permanent link">&para;</a></h1>
+<h3 id="table-41-machines-used-in-the-evaluation">Table 4.1: Machines used in the evaluation.<a class="headerlink" href="#table-41-machines-used-in-the-evaluation" title="Permanent link">&para;</a></h3>
+<p><img alt="8b375db05156e9ea8aed0dff8505f95304e194664632086d16ecd5828f5cebc3.jpg" src="../images/8b375db05156e9ea8aed0dff8505f95304e194664632086d16ecd5828f5cebc3.jpg" /></p>
+<ul>
+<li>该图像为论文中 <strong>Table 4.1</strong>，标题为 “Machines used in the evaluation”，用于展示实验所用的四款不同微架构处理器的硬件规格。</li>
+<li>表格横向列出四种架构：<strong>Haswell</strong>、<strong>Broadwell</strong>、<strong>Skylake</strong> 和 <strong>Coffee Lake</strong>，纵向则列出各项关键硬件参数。</li>
+<li>所有测试机器均启用 <strong>SMT</strong>（Simultaneous Multithreading），但关闭了频率缩放功能，以确保实验环境的一致性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Haswell</th>
+<th>Broadwell</th>
+<th>Skylake</th>
+<th>Coffee Lake</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>Core i7-4770</td>
+<td>Xeon D-1540</td>
+<td>Core i7-6700K</td>
+<td>Core i9-9900K</td>
+</tr>
+<tr>
+<td>Technology</td>
+<td>22nm</td>
+<td>14nm</td>
+<td>14nm</td>
+<td>14nm</td>
+</tr>
+<tr>
+<td>Clock</td>
+<td>3.4GHz</td>
+<td>2.0GHz</td>
+<td>4.0GHz</td>
+<td>3.6GHz</td>
+</tr>
+<tr>
+<td>Cores × SMT</td>
+<td>4 × 2</td>
+<td>8 × 2</td>
+<td>4 × 2</td>
+<td>8 × 2</td>
+</tr>
+<tr>
+<td>L1 Data Cache</td>
+<td>32KB × 4</td>
+<td>32KB × 8</td>
+<td>32KB × 4</td>
+<td>32KB × 8</td>
+</tr>
+<tr>
+<td>L2 Cache</td>
+<td>256KB × 4</td>
+<td>256KB × 8</td>
+<td>256KB × 4</td>
+<td>256KB × 8</td>
+</tr>
+<tr>
+<td>L3 Cache</td>
+<td>8MB</td>
+<td>12MB</td>
+<td>8MB</td>
+<td>16MB</td>
+</tr>
+<tr>
+<td>Memory Size</td>
+<td>16GB</td>
+<td>16GB</td>
+<td>16GB</td>
+<td>32GB</td>
+</tr>
+<tr>
+<td>Memory Type</td>
+<td>DDR3-1600</td>
+<td>DDR4-2133</td>
+<td>DDR3-1600</td>
+<td>DDR4-2133</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Haswell</strong> 与 <strong>Skylake</strong> 均采用 14nm 或 22nm 工艺，L3 缓存均为 8MB，内存为 16GB DDR3-1600，但 Skylake 主频更高（4.0GHz）。</li>
+<li><strong>Broadwell</strong> 与 <strong>Coffee Lake</strong> 均为 14nm 工艺，支持更多核心（8核）和更大 L3 缓存（12MB / 16MB），内存升级至 DDR4-2133，其中 Coffee Lake 内存容量达 32GB。</li>
+<li>此配置选择旨在覆盖不同代际的 Intel 处理器，以评估 <strong>Intel TSX</strong> 在不同硬件平台上的 HTM 容量表现。</li>
+</ul>
+<h3 id="figure-51-success-rate-curves-on-haswell">Figure 5.1: Success rate curves on Haswell.<a class="headerlink" href="#figure-51-success-rate-curves-on-haswell" title="Permanent link">&para;</a></h3>
+<p><img alt="fca77d7a9e12d5dad7efe61d5344235db8aeb939383bcc018089466fd3496ab0.jpg" src="../images/fca77d7a9e12d5dad7efe61d5344235db8aeb939383bcc018089466fd3496ab0.jpg" /></p>
+<ul>
+<li>该图（Figure 5.1）展示了在 <strong>Haswell</strong> 微架构上，不同类型的事务性内存操作的成功率随操作大小（bytes/op）变化的曲线，是论文第5章“Experiments and Results”的核心数据之一。</li>
+<li>图中包含四个子图，分别对应四种不同的事务操作类型：<ul>
+<li>(a) Transactional 32-bit read</li>
+<li>(b) Transactional 64-bit read</li>
+<li>(c) Transactional 32-bit write</li>
+<li>(d) Transactional 64-bit write</li>
+</ul>
+</li>
+<li>每个子图的纵轴为成功率百分比（%），横轴为每次操作访问的字节数（bytes/op）。图例统一包含四条曲线：<strong>success</strong>（成功）、<strong>unknown</strong>（未知原因失败）、<strong>conflict-retry</strong>（冲突重试）、<strong>overflow</strong>（容量溢出）。</li>
+<li>关键观察结果如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">子图</th>
+<th style="text-align: left;">操作类型</th>
+<th style="text-align: left;">成功率峰值位置</th>
+<th style="text-align: left;">主要失败原因</th>
+<th style="text-align: left;">最大成功操作大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">(a)</td>
+<td style="text-align: left;">x_read32</td>
+<td style="text-align: left;">~16KB</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~22KB</td>
+</tr>
+<tr>
+<td style="text-align: left;">(b)</td>
+<td style="text-align: left;">x_read64</td>
+<td style="text-align: left;">~16KB</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~25KB</td>
+</tr>
+<tr>
+<td style="text-align: left;">(c)</td>
+<td style="text-align: left;">x_write32</td>
+<td style="text-align: left;">~16KB</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~20KB</td>
+</tr>
+<tr>
+<td style="text-align: left;">(d)</td>
+<td style="text-align: left;">x_write64</td>
+<td style="text-align: left;">~16KB</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~25KB</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有四条 <strong>success</strong> 曲线均在约 <strong>16KB</strong> 处开始急剧下降，表明这是 Haswell 平台上 HTM 事务的一个关键容量阈值。</li>
+<li>在所有情况下，<strong>overflow</strong> 曲线在成功率下降时同步上升，明确指出事务失败的主要原因是硬件事务缓冲区溢出，而非冲突或未知错误。</li>
+<li>对于读操作，使用 <strong>64-bit</strong> 访问（图b）相比 <strong>32-bit</strong> 访问（图a）能支持略大的操作规模（~25KB vs ~22KB），这与论文中关于内存访问粒度影响有效容量的讨论一致。</li>
+<li>写操作的容量限制（图c和图d）与读操作类似，但其成功率曲线的下降趋势更为陡峭，且最大成功操作大小普遍小于读操作，印证了论文中“写集容量远小于读集容量”的结论。</li>
+<li>该实验结果与作者引用的 Ritson and Barnes [2013] 的研究高度吻合，验证了其实验平台和方法的有效性，为后续章节中基于 HTM 的 GC 算法设计提供了关键的容量基准。</li>
+</ul>
+<h3 id="figure-52-success-rate-curves-on-broadwell">Figure 5.2: Success rate curves on Broadwell.<a class="headerlink" href="#figure-52-success-rate-curves-on-broadwell" title="Permanent link">&para;</a></h3>
+<p><img alt="573ff1d98148715e9ecdc109fc6fd39d4c0e260749622f993a571e0e8399bb0b.jpg" src="../images/573ff1d98148715e9ecdc109fc6fd39d4c0e260749622f993a571e0e8399bb0b.jpg" /></p>
+<ul>
+<li>图片展示了在 Broadwell 微架构上，Intel TSX 的事务成功率曲线，用于评估其容量特性。图中包含六个子图，分别对应不同类型的内存操作（读/写）和数据宽度（32位/64位），并以线性或对数尺度呈现。</li>
+<li>所有子图的纵轴均为成功率百分比（%），横轴为每次操作访问的字节数（bytes/op）。图例统一包含四条曲线：<strong>success</strong>（成功提交）、<strong>unknown</strong>（未知原因中止）、<strong>conflict-retry</strong>（冲突重试）和 <strong>overflow</strong>（缓冲区溢出）。</li>
+<li>在线性尺度下，读操作（图 a, b）的成功率在约 20,000 bytes/op 处开始急剧下降，而写操作（图 e, f）则在约 15,000 bytes/op 处出现陡降。这表明 <strong>写集容量远小于读集容量</strong>，与文献中普遍观察到的现象一致。</li>
+<li>对数尺度下的读操作图（图 c, d）揭示了更广阔的容量范围。在 10^4 bytes/op 附近，成功率从接近 100% 骤降至 0%，但随后在 10^5 至 10^7 bytes/op 区间内，成功率又回升至 80% 以上。这种非单调行为暗示了 HTM 内部存在复杂的缓存管理策略，例如 L3 缓存的二级跟踪结构。</li>
+<li>64位操作（图 b, d, f）相比32位操作（图 a, c, e），在相同字节数下通常能维持更高的成功率，尤其是在大容量区域。这可能是因为64位操作访问的内存地址空间更稀疏，减少了缓存行冲突的概率。</li>
+<li>写操作的失败模式与读操作显著不同。写操作的失败主要由 <strong>overflow</strong> 引起，且在容量上限处表现为尖锐的下降，几乎没有“重试”或“未知”错误。这印证了 Intel 文档中关于写集必须驻留在 L1 缓存中的设计，一旦超出即触发溢出。</li>
+<li>下表总结了各子图的关键特征：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">子图</th>
+<th style="text-align: left;">操作类型</th>
+<th style="text-align: left;">数据宽度</th>
+<th style="text-align: left;">主要失败原因</th>
+<th style="text-align: left;">容量拐点 (bytes/op)</th>
+<th style="text-align: left;">特殊现象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">(a)</td>
+<td style="text-align: left;">读</td>
+<td style="text-align: left;">32-bit</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~20,000</td>
+<td style="text-align: left;">线性尺度下平滑下降</td>
+</tr>
+<tr>
+<td style="text-align: left;">(b)</td>
+<td style="text-align: left;">读</td>
+<td style="text-align: left;">64-bit</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~20,000</td>
+<td style="text-align: left;">成功率略高于32位</td>
+</tr>
+<tr>
+<td style="text-align: left;">(c)</td>
+<td style="text-align: left;">读</td>
+<td style="text-align: left;">32-bit</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~10,000</td>
+<td style="text-align: left;">对数尺度下出现“U型”曲线</td>
+</tr>
+<tr>
+<td style="text-align: left;">(d)</td>
+<td style="text-align: left;">读</td>
+<td style="text-align: left;">64-bit</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~10,000</td>
+<td style="text-align: left;">“U型”曲线更明显，高容量区成功率更高</td>
+</tr>
+<tr>
+<td style="text-align: left;">(e)</td>
+<td style="text-align: left;">写</td>
+<td style="text-align: left;">32-bit</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~15,000</td>
+<td style="text-align: left;">尖锐下降，无重试</td>
+</tr>
+<tr>
+<td style="text-align: left;">(f)</td>
+<td style="text-align: left;">写</td>
+<td style="text-align: left;">64-bit</td>
+<td style="text-align: left;">overflow</td>
+<td style="text-align: left;">~15,000</td>
+<td style="text-align: left;">尖锐下降，无重试</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>综合来看，该图清晰地描绘了 Broadwell 平台上 HTM 的容量边界，并揭示了其内部机制的复杂性，特别是读集容量受缓存状态影响巨大，而写集容量则严格受限于 L1 缓存大小。这些发现对于设计基于 HTM 的并发算法（如本论文中的 GC）至关重要。</li>
+</ul>
+<h3 id="figure-53-success-rate-curves-on-skylake">Figure 5.3: Success rate curves on Skylake.<a class="headerlink" href="#figure-53-success-rate-curves-on-skylake" title="Permanent link">&para;</a></h3>
+<p><img alt="3e7ac435f47b2ee0991a4572a95522ad9c5ba4bbd81f69f34cc88f178b219055.jpg" src="../images/3e7ac435f47b2ee0991a4572a95522ad9c5ba4bbd81f69f34cc88f178b219055.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Skylake</strong> 微架构上，Intel TSX 的事务成功率曲线，分为四个子图，分别对应不同类型的内存操作。</li>
+<li>子图 (a) 和 (b) 展示了 <strong>Transactional 32-bit read</strong> 和 <strong>64-bit read</strong> 在对数坐标下的表现。两者均显示，在约 10^4 bytes/op 时，成功率从接近 100% 急剧下降至 0%，表明读取容量在此处达到瓶颈。64-bit 读取的容量略高于 32-bit。</li>
+<li>子图 (c) 和 (d) 展示了 <strong>Transactional 32-bit write</strong> 和 <strong>64-bit write</strong> 在线性坐标下的表现。两者均显示，在约 20,000 bytes/op 附近，成功率开始急剧下降，并在 25,000 bytes/op 左右降至 0%。这表明写入容量远小于读取容量，且 64-bit 写入的容量略低于 32-bit。</li>
+<li>所有子图中，“success” 曲线代表事务成功提交的比例，“unknown”、“conflict”、“overflow” 等曲线代表不同的失败原因。在读取操作中，失败主要归因于 “overflow”；在写入操作中，失败主要归因于 “conflict” 和 “overflow”。</li>
+<li>数据总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">操作类型</th>
+<th style="text-align: left;">成功率骤降点 (bytes/op)</th>
+<th style="text-align: left;">主要失败原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">x_read32</td>
+<td style="text-align: left;">~10,000</td>
+<td style="text-align: left;">overflow</td>
+</tr>
+<tr>
+<td style="text-align: left;">x_read64</td>
+<td style="text-align: left;">~10,000</td>
+<td style="text-align: left;">overflow</td>
+</tr>
+<tr>
+<td style="text-align: left;">x_write32</td>
+<td style="text-align: left;">~20,000</td>
+<td style="text-align: left;">conflict, overflow</td>
+</tr>
+<tr>
+<td style="text-align: left;">x_write64</td>
+<td style="text-align: left;">~20,000</td>
+<td style="text-align: left;">conflict, overflow</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图验证了论文中的核心发现：<strong>HTM 的写入容量远小于读取容量</strong>，且写入容量受限于 L1 缓存大小，而读取容量则可能受更高级缓存或二级结构影响。</li>
+</ul>
+<h3 id="figure-54-success-rate-curves-on-coffee-lake">Figure 5.4: Success rate curves on Coffee Lake.<a class="headerlink" href="#figure-54-success-rate-curves-on-coffee-lake" title="Permanent link">&para;</a></h3>
+<p><img alt="06532af4750ccb7976030552dd6e5c5ebfcd550dc236c7c0eb5fc12de7760f0d.jpg" src="../images/06532af4750ccb7976030552dd6e5c5ebfcd550dc236c7c0eb5fc12de7760f0d.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Coffee Lake</strong> 微架构上，使用 <strong>Intel TSX</strong> 进行事务性内存操作的 <strong>成功率曲线</strong>，分为读操作和写操作，以及 32 位和 64 位两种数据宽度。</li>
+<li>图 (a) 和 (b) 分别显示了 <strong>32 位</strong> 和 <strong>64 位</strong> 事务性读操作的成功率。横轴为每操作字节数（bytes/op），采用对数刻度；纵轴为成功率百分比。两条曲线均在约 10^4 字节处开始急剧下降，在约 10^5 字节处降至接近 0%。这表明 <strong>读操作容量</strong> 在此平台约为 100KB。</li>
+<li>图 (c) 和 (d) 分别显示了 <strong>32 位</strong> 和 <strong>64 位</strong> 事务性写操作的成功率。横轴为线性刻度，范围从 0 到 30,000 字节。两条曲线均在约 18,000 字节处开始急剧下降，并在约 20,000 字节处降至接近 0%。这表明 <strong>写操作容量</strong> 在此平台约为 20KB。</li>
+<li>所有子图中，除了“success”（成功）曲线外，还包含“unknown”、“conflict”、“conflict-retry”和“overflow”等其他状态的曲线，用于说明事务失败的原因。其中，“overflow”曲线在读操作图中不明显，但在写操作图中于容量极限附近出现，表明写集溢出是主要失败原因。</li>
+<li>对比 32 位和 64 位操作，<strong>64 位读操作</strong> 的成功率曲线在高容量区域略高于 32 位，表明其能支持稍大的读集。而 <strong>写操作</strong> 的容量则基本不受数据宽度影响。</li>
+<li>综合来看，该图清晰地揭示了 <strong>Coffee Lake</strong> 平台上 <strong>HTM</strong> 的容量限制：<strong>写集容量远小于读集容量</strong>，且写集容量受硬件缓存大小（L1 数据缓存）严格限制。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">操作类型</th>
+<th style="text-align: left;">数据宽度</th>
+<th style="text-align: left;">容量上限 (bytes)</th>
+<th style="text-align: left;">主要失败原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">读操作</td>
+<td style="text-align: left;">32-bit</td>
+<td style="text-align: left;">~100,000</td>
+<td style="text-align: left;">冲突/溢出</td>
+</tr>
+<tr>
+<td style="text-align: left;">读操作</td>
+<td style="text-align: left;">64-bit</td>
+<td style="text-align: left;">~100,000</td>
+<td style="text-align: left;">冲突/溢出</td>
+</tr>
+<tr>
+<td style="text-align: left;">写操作</td>
+<td style="text-align: left;">32-bit</td>
+<td style="text-align: left;">~20,000</td>
+<td style="text-align: left;">溢出</td>
+</tr>
+<tr>
+<td style="text-align: left;">写操作</td>
+<td style="text-align: left;">64-bit</td>
+<td style="text-align: left;">~20,000</td>
+<td style="text-align: left;">溢出</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fig-55-fig-56-fig-57-and-fig-58-for-haswell-broadwell-skylake-and-coffee-lake-respectively-figure-55-success-rate-curves-on-haswell-when-reusing-memory">Fig. 5.5, Fig. 5.6, Fig. 5.7, and Fig. 5.8 for Haswell, Broadwell, Skylake and Coffee Lake respectively. Figure 5.5: Success rate curves on Haswell when reusing memory.<a class="headerlink" href="#fig-55-fig-56-fig-57-and-fig-58-for-haswell-broadwell-skylake-and-coffee-lake-respectively-figure-55-success-rate-curves-on-haswell-when-reusing-memory" title="Permanent link">&para;</a></h3>
+<p><img alt="285727733597f3a323012def6824b75ad555152879fa5c9c96af26f0cf96d698.jpg" src="../images/285727733597f3a323012def6824b75ad555152879fa5c9c96af26f0cf96d698.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Haswell</strong> 微架构上，当<strong>重复使用内存区域</strong>时，事务性读操作的成功率曲线。该图是论文中 Figure 5.5 的一部分，用于对比不同内存访问模式对 HTM 容量的影响。</li>
+<li>图表包含两个子图，分别对应 <strong>32-bit 读取 (a)</strong> 和 <strong>64-bit 读取 (b)</strong> 操作，横轴为每操作字节数（bytes/op），纵轴为成功率百分比（%）。</li>
+<li>两个子图均包含三条曲线：<ul>
+<li><strong>success</strong> (实线): 表示事务成功提交的百分比。</li>
+<li><strong>unknown</strong> (虚线): 表示因未知原因（如异步中断、特权指令等）导致的事务中止百分比。</li>
+<li><strong>overflow</strong> (点线): 表示因内部缓冲区溢出导致的事务中止百分比。</li>
+</ul>
+</li>
+<li>关键观察结果如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">操作类型</th>
+<th style="text-align: left;">成功提交峰值</th>
+<th style="text-align: left;">成功提交骤降点</th>
+<th style="text-align: left;">最大可提交事务大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>x_read32</strong></td>
+<td style="text-align: left;">接近 100%</td>
+<td style="text-align: left;">约 10^6 bytes/op</td>
+<td style="text-align: left;">约 10^6 bytes/op</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>x_read64</strong></td>
+<td style="text-align: left;">接近 100%</td>
+<td style="text-align: left;">约 10^6 bytes/op</td>
+<td style="text-align: left;">约 10^7 bytes/op</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 <strong>x_read32</strong> 情况下，事务成功率在约 10^5 bytes/op 时开始下降，并在 10^6 bytes/op 附近急剧降至 0%，此时 overflow 曲线急剧上升，表明容量限制是主要瓶颈。</li>
+<li>在 <strong>x_read64</strong> 情况下，事务成功率同样在约 10^6 bytes/op 开始下降，但其最大可提交事务大小显著更大，达到约 10^7 bytes/op，这表明使用更大的数据单元进行读取可以有效提升 HTM 的读集容量。</li>
+<li>与基线实验（使用独立内存区域）相比，<strong>重复使用内存区域</strong>显著提升了读事务的容量，这验证了作者关于缓存状态影响 HTM 容量的假设。缓存预热和重用使得相关数据更可能驻留在高速缓存中，从而减少了因缓存行驱逐导致的事务中止。</li>
+</ul>
+<h3 id="figure-56-success-rate-curves-on-broadwell-when-reusing-memory">Figure 5.6: Success rate curves on Broadwell when reusing memory.<a class="headerlink" href="#figure-56-success-rate-curves-on-broadwell-when-reusing-memory" title="Permanent link">&para;</a></h3>
+<p><img alt="ed375a170dc9add684be03c249f0760793d4cccae22ac348f32adbe664a98a69.jpg" src="../images/ed375a170dc9add684be03c249f0760793d4cccae22ac348f32adbe664a98a69.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Broadwell</strong> 微架构上，当<strong>重复使用内存区域</strong>时，事务性读操作的成功率曲线。该图分为两个子图：(a) 32位读取和 (b) 64位读取。</li>
+<li>两个子图的横轴均为 <strong>bytes/op</strong>（每操作字节数），采用对数刻度，范围从 10² 到 10⁷。纵轴为百分比（%），表示事务成功、未知或溢出的比例。</li>
+<li>在图 (a) 中，<strong>32位读取</strong>：<ul>
+<li><strong>成功</strong>（solid line）曲线在约 10⁵ bytes/op 之前保持接近 100%，随后急剧下降，在约 10⁶ bytes/op 处降至 0%。</li>
+<li><strong>溢出</strong>（dotted line）曲线在约 10⁵ bytes/op 开始上升，并在约 10⁶ bytes/op 达到峰值后迅速下降。</li>
+<li><strong>未知</strong>（dashed line）曲线在整个范围内始终接近 0%。</li>
+</ul>
+</li>
+<li>在图 (b) 中，<strong>64位读取</strong>：<ul>
+<li><strong>成功</strong>（solid line）曲线在约 10⁵ bytes/op 之前保持接近 100%，随后急剧下降，在约 10⁶ bytes/op 处降至 0%。</li>
+<li><strong>溢出</strong>（dotted line）曲线在约 10⁵ bytes/op 开始上升，并在约 10⁶ bytes/op 达到峰值后迅速下降。</li>
+<li><strong>未知</strong>（dashed line）曲线在整个范围内始终接近 0%。</li>
+</ul>
+</li>
+<li>关键观察：<strong>64位读取</strong>的事务容量略高于<strong>32位读取</strong>，这与论文中提到的“当使用64位读取而非32位读取时，只读事务的容量在所有平台上都一致更大”的结论相符。</li>
+<li>数据总结如下表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>操作类型</th>
+<th>成功率开始下降点 (bytes/op)</th>
+<th>成功率降至0点 (bytes/op)</th>
+<th>溢出峰值点 (bytes/op)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32-bit read</td>
+<td>~10⁵</td>
+<td>~10⁶</td>
+<td>~10⁶</td>
+</tr>
+<tr>
+<td>64-bit read</td>
+<td>~10⁵</td>
+<td>~10⁶</td>
+<td>~10⁶</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此结果表明，<strong>重复使用内存区域</strong>可以显著提高事务容量，尤其是在只读事务中，这解释了先前文献中关于 HTM 容量报告不一致的原因。</li>
+</ul>
+<h3 id="figure-57-success-rate-curves-on-skylake-when-reusing-memory">Figure 5.7: Success rate curves on Skylake when reusing memory.<a class="headerlink" href="#figure-57-success-rate-curves-on-skylake-when-reusing-memory" title="Permanent link">&para;</a></h3>
+<p><img alt="ba35df4a1299a082ce069a3573c97208ee02b02f4a3d61c595d565f158b3644f.jpg" src="../images/ba35df4a1299a082ce069a3573c97208ee02b02f4a3d61c595d565f158b3644f.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Skylake</strong> 微架构上，当<strong>重用内存区域</strong>时，事务性读操作的成功率曲线，具体分为 32 位读（图 a）和 64 位读（图 b）两种情况。</li>
+<li>两幅子图的横坐标均为每操作字节数（bytes/op），采用对数刻度，范围从 10² 到 10⁷；纵坐标为百分比（%），表示不同事务结果的占比。</li>
+<li>图例清晰地标明了四种事务结果：<strong>success</strong>（实线）、<strong>unknown</strong>（灰色实线）、<strong>conflict-retry</strong>（点线）和 <strong>overflow</strong>（虚线）。</li>
+<li>在图 (a) 中，<strong>32 位读事务</strong>的成功率在约 10⁵ bytes/op 时开始急剧下降，并在约 10⁶ bytes/op 时降至接近 0。此时，<strong>overflow</strong>（虚线）的比例迅速上升至接近 100%，表明事务因容量溢出而失败是主要瓶颈。</li>
+<li>在图 (b) 中，<strong>64 位读事务</strong>的成功率曲线与 32 位读类似，但其性能表现更优。成功率达到 100% 的阈值更高，且在约 10⁶ bytes/op 时才开始显著下降，最终也由 <strong>overflow</strong> 主导失败原因。</li>
+<li>对比两图可发现，使用 64 位读操作相较于 32 位读操作，能支持更大规模的事务（即更高的 bytes/op 值）仍保持高成功率，这与正文第 5.2 节的结论一致，即“当事务使用 64 位读而非 32 位读时，只读事务的容量在所有平台上都一致更大”。</li>
+<li>下表总结了关键数据点：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">操作类型</th>
+<th style="text-align: left;">成功率开始显著下降点 (bytes/op)</th>
+<th style="text-align: left;">主要失败原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">x_read32</td>
+<td style="text-align: left;">~10⁵</td>
+<td style="text-align: left;">overflow</td>
+</tr>
+<tr>
+<td style="text-align: left;">x_read64</td>
+<td style="text-align: left;">~10⁶</td>
+<td style="text-align: left;">overflow</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此实验结果验证了作者的假设：重用内存区域可以提升只读事务的容量，因为事务间的交互影响了缓存内容，从而间接提升了 HTM 的有效容量。</li>
+</ul>
+<h3 id="figure-58-success-rate-curves-on-coffee-lake-when-reusing-memory">Figure 5.8: Success rate curves on Coffee Lake when reusing memory.<a class="headerlink" href="#figure-58-success-rate-curves-on-coffee-lake-when-reusing-memory" title="Permanent link">&para;</a></h3>
+<p><img alt="6cfaa4e583958ba2970f31ac7b07255d9be2c8e86ed9ace96340668c8b1117e5.jpg" src="../images/6cfaa4e583958ba2970f31ac7b07255d9be2c8e86ed9ace96340668c8b1117e5.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Coffee Lake</strong> 微架构上，当<strong>重复使用内存区域</strong>时，事务性读操作的成功率曲线。该图分为两个子图：(a) 32位读取和 (b) 64位读取。</li>
+<li>两个子图的横轴均为 <strong>bytes/op</strong>（每操作字节数），采用对数刻度，范围从 10² 到 10⁷；纵轴为成功率百分比（%），范围从 0 到 100。</li>
+<li>图例包含三条曲线：<ul>
+<li><strong>success</strong>（实线）：事务成功提交的比例。</li>
+<li><strong>unknown</strong>（虚线）：未知原因导致的事务状态比例。</li>
+<li><strong>overflow</strong>（点线）：因内部缓冲区溢出导致的事务中止比例。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>子图</th>
+<th>操作类型</th>
+<th>成功峰值位置 (bytes/op)</th>
+<th>成功率下降拐点 (bytes/op)</th>
+<th>最大可提交事务大小 (bytes/op)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a)</td>
+<td>Transactional 32-bit read</td>
+<td>~10⁶</td>
+<td>~10⁵</td>
+<td>~10⁶</td>
+</tr>
+<tr>
+<td>(b)</td>
+<td>Transactional 64-bit read</td>
+<td>&gt;10⁶</td>
+<td>~10⁶</td>
+<td>&gt;10⁶</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 <strong>32位读取</strong>（图 a）中，事务成功率在约 10⁶ bytes/op 处达到峰值，随后急剧下降，在约 10⁶.⁵ bytes/op 处降至接近 0。此时，<strong>overflow</strong> 曲线迅速上升，表明事务失败主要由缓冲区溢出引起。</li>
+<li>在 <strong>64位读取</strong>（图 b）中，事务成功率在超过 10⁶ bytes/op 后仍保持高位，直到约 10⁶.⁵ bytes/op 才开始显著下降。这表明<strong>64位读取能支持更大的事务容量</strong>。</li>
+<li>与基线实验相比，重复使用内存区域显著提升了事务容量，尤其是在64位读取场景下，最大可提交事务大小明显大于32位读取。</li>
+<li>该结果验证了作者在第5.2节中的假设：重复访问同一内存区域有助于缓存预热，从而提升HTM事务的成功率和容量。</li>
+</ul>
+<h3 id="figure-59-success-rate-curves-on-coffee-lake-when-invalidating-caches">Figure 5.9: Success rate curves on Coffee Lake when invalidating caches.<a class="headerlink" href="#figure-59-success-rate-curves-on-coffee-lake-when-invalidating-caches" title="Permanent link">&para;</a></h3>
+<p><img alt="5e6c6cb543e2599d4e8c5f0989ed846ab5137bcd7a6d78dd13489e494445c681.jpg" src="../images/5e6c6cb543e2599d4e8c5f0989ed846ab5137bcd7a6d78dd13489e494445c681.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Coffee Lake</strong> 平台上，当使用 <strong>wbinvd</strong> 指令 <strong>无效化所有缓存</strong> 后，事务性读取操作的成功率曲线。该图分为两个子图：(a) 32位读取和 (b) 64位读取。</li>
+<li>两个子图的横轴均为 <strong>bytes/op</strong>（每操作字节数），采用对数刻度，范围从 10² 到 10⁷；纵轴为成功率百分比（%），范围从 0 到 100。</li>
+<li>图例包含三条曲线：<ul>
+<li><strong>success</strong>（实线）：事务成功提交的比例。</li>
+<li><strong>unknown</strong>（灰色实线）：未知原因导致的中止比例。</li>
+<li><strong>overflow</strong>（虚线）：因缓冲区溢出导致的中止比例。</li>
+</ul>
+</li>
+<li>在 <strong>x_read32</strong> 子图 (a) 中：<ul>
+<li>成功率在约 10⁶ bytes/op 之前保持接近 100%，随后急剧下降，在约 1.5×10⁷ bytes/op 处降至 0。</li>
+<li><strong>overflow</strong> 曲线在约 10⁶ bytes/op 开始显著上升，并在约 1.5×10⁷ bytes/op 达到峰值后下降。</li>
+<li><strong>unknown</strong> 曲线在整个范围内都较低，仅在高负载时略有上升。</li>
+</ul>
+</li>
+<li>在 <strong>x_read64</strong> 子图 (b) 中：<ul>
+<li>成功率同样在约 10⁶ bytes/op 前维持高位，之后快速下降，在约 1.8×10⁷ bytes/op 处归零。</li>
+<li><strong>overflow</strong> 曲线在约 10⁶ bytes/op 后开始上升，其峰值位置比 32位读取更靠右，表明 <strong>64位读取能支持更大的事务容量</strong>。</li>
+<li><strong>unknown</strong> 曲线表现与 (a) 类似，始终处于低位。</li>
+</ul>
+</li>
+<li>关键观察：<ul>
+<li><strong>缓存无效化后，事务容量显著提升</strong>，最大成功事务大小远超基线实验（见图 5.4），甚至接近文献报道的最大值。</li>
+<li><strong>64位读取的事务容量大于32位读取</strong>，这与第5.2节中“重用内存区域”实验的结论一致，说明数据宽度影响有效容量。</li>
+<li><strong>overflow 是主要失败原因</strong>，尤其在大事务时，表明 HTM 的硬件缓冲区是容量瓶颈。</li>
+</ul>
+</li>
+<li>数据对比表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>x_read32 (32-bit)</th>
+<th>x_read64 (64-bit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最大成功事务大小</td>
+<td>~1.5×10⁷ bytes/op</td>
+<td>~1.8×10⁷ bytes/op</td>
+</tr>
+<tr>
+<td>成功率开始下降点</td>
+<td>~10⁶ bytes/op</td>
+<td>~10⁶ bytes/op</td>
+</tr>
+<tr>
+<td>主要失败类型</td>
+<td>overflow</td>
+<td>overflow</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>缓存无效化通过避免伪LRU替换策略导致的过早驱逐，提升了事务容量</strong>，验证了作者关于缓存状态影响 HTM 容量的假设。同时，64位操作因访问密度更低，能容纳更大规模的事务。</li>
+</ul>
+<h3 id="figure-510-success-rate-curves-on-coffee-lake-when-warming-up-caches">Figure 5.10: Success rate curves on Coffee Lake when warming up caches.<a class="headerlink" href="#figure-510-success-rate-curves-on-coffee-lake-when-warming-up-caches" title="Permanent link">&para;</a></h3>
+<p><img alt="3205642b8258cabc26576371092cc40f6fe045f106fec3d6a9e56798a14eb2d6.jpg" src="../images/3205642b8258cabc26576371092cc40f6fe045f106fec3d6a9e56798a14eb2d6.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Coffee Lake</strong> 微架构上，当执行 <strong>缓存预热（cache warmup）</strong> 操作时，<strong>事务性读取（transactional read）</strong> 的成功率曲线。</li>
+<li>该图包含两个子图，分别对应 <strong>32位读取（x_read32）</strong> 和 <strong>64位读取（x_read64）</strong> 两种内存访问模式。</li>
+<li>两幅图的横坐标均为 <strong>bytes/op</strong>（每操作字节数），采用对数刻度，范围从 10² 到 10⁷；纵坐标为 <strong>成功率百分比（%）</strong>，范围从 0 到 100。</li>
+<li>图例中包含三条曲线：<ul>
+<li><strong>success</strong>：实线，表示事务成功提交的比例。</li>
+<li><strong>unknown</strong>：灰色填充区域，表示因系统中断等原因导致结果未知的事务比例。</li>
+<li><strong>overflow</strong>：虚线，表示因硬件资源溢出（如缓冲区满）导致事务中止的比例。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">子图</th>
+<th style="text-align: left;">事务类型</th>
+<th style="text-align: left;">成功曲线特征</th>
+<th style="text-align: left;">溢出曲线特征</th>
+<th style="text-align: left;">关键观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">(a) x_read32</td>
+<td style="text-align: left;">32位读取</td>
+<td style="text-align: left;">在约 10⁶ bytes/op 处开始显著下降，在 10⁷ bytes/op 附近降至 0。</td>
+<td style="text-align: left;">在 10⁶ bytes/op 后急剧上升，与成功曲线呈镜像关系。</td>
+<td style="text-align: left;">最大成功事务规模约为 10⁷ bytes/op。</td>
+</tr>
+<tr>
+<td style="text-align: left;">(b) x_read64</td>
+<td style="text-align: left;">64位读取</td>
+<td style="text-align: left;">在约 10⁵ bytes/op 处开始下降，但在 10⁶ bytes/op 附近出现一个局部峰值（约85%），随后继续下降至 10⁷ bytes/op 附近归零。</td>
+<td style="text-align: left;">在 10⁵ bytes/op 后开始上升，中间有波动，最终在 10⁷ bytes/op 附近达到峰值。</td>
+<td style="text-align: left;">64位读取在中等规模（~10⁶ bytes/op）时表现优于32位，但最大容量相近。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键结论</strong>：在缓存预热条件下，<strong>64位读取</strong>在中等规模事务（约 10⁶ bytes/op）时表现出更高的成功率，这可能与缓存行利用率或硬件内部优化有关。然而，两种模式的最大可提交事务规模均接近 <strong>10⁷ bytes/op</strong>，表明缓存预热能有效提升 HTM 容量，使其接近文献中报道的最大值。</li>
+<li>此结果支持了作者在第5.3节提出的假设：<strong>伪LRU（pseudo-LRU）</strong> 替换策略下，预热缓存可以避免因替换算法导致的有效容量损失，从而提高大事务的成功率。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

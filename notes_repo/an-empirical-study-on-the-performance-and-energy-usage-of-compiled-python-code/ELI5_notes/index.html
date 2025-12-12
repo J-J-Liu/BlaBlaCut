@@ -1,0 +1,705 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>An Empirical Study on the Performance and Energy Usage of Compiled Python Code 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              An Empirical Study on the Performance and Energy Usage of Compiled Python Code 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 受控实验设计 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 多维度效能评估指标 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 跨平台验证 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-python-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 广泛的Python编译器对比 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 标准化的数据分析方法 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code">An Empirical Study on the Performance and Energy Usage of Compiled Python Code 通俗讲解<a class="headerlink" href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>这篇论文要解决的核心问题，不是“Python慢不慢”，而是“<strong>到底哪些编译器真正管用？在什么维度上管用？</strong>”。</li>
+<li>之前的很多研究和开发者讨论都停留在模糊的印象层面，比如“PyPy快”、“Numba适合科学计算”。但这些说法缺乏<strong>严谨、可控的实证</strong>。</li>
+<li>具体来说，过去的实验往往忽略了关键的<strong>混杂变量（confounding variables）</strong>：<ul>
+<li><strong>硬件干扰</strong>：CPU频率动态调整、多核并行调度会极大地影响<strong>执行时间</strong>和<strong>能耗</strong>的测量结果，导致数据不可比。</li>
+<li><strong>代码干扰</strong>：很多基准测试（如pyperformance）大量使用NumPy等C扩展库，这会让性能提升归功于底层C代码，而非Python编译器本身，从而<strong>高估</strong>了编译器的效果。</li>
+<li><strong>评估维度单一</strong>：大多数比较只看速度，而忽略了同样重要的<strong>能耗</strong>、<strong>内存占用</strong>，甚至像<strong>LLC缓存命中率</strong>这样能揭示性能瓶颈根源的指标。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要评测不同品牌的<strong>节能灯泡</strong>。过去的做法是，把它们装在不同人家的客厅里，有的客厅大、有的小，有的主人喜欢开一整晚，有的只开一小时。然后你问：“哪个灯泡更省电？”——这种比较毫无意义。</li>
+<li>这篇论文的做法是，把所有灯泡放进一个<strong>完全相同的、密封的暗室</strong>里，用<strong>同一个开关</strong>控制，点亮<strong>完全相同的时间</strong>，然后用<strong>同一个高精度电表</strong>来测量耗电量。不仅如此，它还同时记录了灯泡的<strong>发热量（类比内存）</strong> 和<strong>内部电路的稳定性（类比缓存）</strong>。</li>
+<li>它本质上是在构建一个<strong>纯净的、隔离的实验室环境</strong>，只为回答一个问题：抛开一切外部因素，这些Python编译器自身的“体质”到底如何？</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有发明新的编译器，而是设计了一个极其<strong>严谨的对照实验</strong>。其巧妙之处在于对实验变量的<strong>极致控制</strong>：<ul>
+<li><strong>基准选择</strong>：只选用来自<strong>Computer Language Benchmarks Game (CLBG)</strong> 的代码。这些代码是<strong>纯Python</strong>、<strong>单线程</strong>、<strong>无第三方库依赖</strong>的，确保了性能差异完全源于编译器本身。</li>
+<li><strong>硬件控制</strong>：在两台不同的机器（NUC和服务器）上，都<strong>禁用超线程</strong>、<strong>锁定CPU频率</strong>、并将所有任务<strong>绑定到单个核心</strong>上运行。这彻底消除了操作系统调度和硬件动态调频带来的噪音。</li>
+<li><strong>多维评估</strong>：不仅仅测量<strong>执行时间</strong>，还通过Intel RAPL接口精确测量<strong>能耗（KiloJoules）</strong>，通过<code>perf</code>工具监控<strong>LLC miss rate</strong>，并通过EnergiBridge跟踪<strong>内存占用（RSS）</strong>。</li>
+</ul>
+</li>
+<li>通过这套方法，他们得以清晰地分离出不同编译器的真实效果。例如，他们发现<strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 在速度和能耗上实现了<strong>超过90%的惊人改进</strong>，而像<strong>Nuitka</strong>则在<strong>内存优化</strong>上表现最为稳定。同时，他们也揭示了某些编译器（如Nuitka）在特定场景下（如<code>n_body</code>）反而会因为糟糕的缓存行为（<strong>极高的LLC miss rate</strong>）而导致性能下降。</li>
+</ul>
+<p><img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<p>这张图完美地总结了他们的发现：红色虚线代表CPython基线，可以看到Codon、PyPy、Numba在几乎所有benchmark上都大幅超越了基线，而其他编译器的表现则参差不齐，甚至在某些情况下（如<code>n_body</code>）表现更差。这种清晰、直观、多维度的对比，正是这篇论文最核心的贡献。</p>
+<h3 id="1-eli5">1. 受控实验设计 (ELI5)<a class="headerlink" href="#1-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前很多关于 Python 编译器性能和能耗的研究，结论其实很“虚”。为什么？因为它们的实验环境太“脏”了。</li>
+<li><strong>硬件层面</strong>：CPU 频率会动态调整（比如 Intel 的 Turbo Boost），多核调度策略也千变万化。一个程序跑得快，到底是编译器牛，还是刚好撞上了高频核心？根本分不清。</li>
+<li><strong>代码层面</strong>：很多 benchmark（比如 pyperformance）重度依赖 <strong>NumPy</strong> 这类用 C 写的库。测出来的性能提升，到底是 Python 编译器的功劳，还是底层 C 库的功劳？这就像给一辆车换了个新方向盘，却说它跑得更快了。</li>
+<li>这种混杂变量导致的结果就是：不同研究之间无法公平比较，开发者也无法根据论文结果做出可靠的技术选型。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要测试十种不同品牌的汽油，看哪种最省油。但你每次测试都用不同的车、在不同的路况（上坡/下坡）、由不同的司机来开。那最后省油的数据，到底反映的是汽油的好坏，还是车、路、人的差异？</li>
+<li>这篇论文的做法，就相当于把所有测试都放在<strong>同一辆车上</strong>，由<strong>同一个机器人司机</strong>，在<strong>一条完全平坦、笔直、无风的封闭跑道</strong>上，以<strong>恒定的速度</strong>跑完。这样，任何油耗的差异，才能真正归因于汽油本身——也就是这里的 <strong>Python 编译器</strong>。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有去追求更复杂的模型或更大的数据集，而是反其道而行之，做了一个极致“干净”的实验。他们通过三重控制，把干扰项全部锁死：<ul>
+<li><strong>控制代码特征</strong>：只选用 <strong>CLBG</strong> 中的七个基准测试。这些代码都是<strong>单线程</strong>、<strong>不依赖任何第三方库</strong>（如 NumPy, Pandas），确保性能差异纯粹来自编译器对 Python 语言本身的优化能力。</li>
+<li><strong>控制硬件执行环境</strong>：在两台不同的机器（NUC 和 Server）上，都强制将程序绑定到<strong>单个 CPU 核心</strong>上运行，并通过 Linux 的 <strong>CPU governor</strong> 将频率<strong>固定</strong>在一个值（Server: 1.6GHz, NUC: 2.1GHz）。这彻底消除了多核并行和动态频率缩放带来的噪音。</li>
+<li><strong>控制测量方法</strong>：使用 <strong>EnergiBridge</strong> (基于 RAPL)、<strong>perf</strong> 和 <strong>time</strong> 等工具，在完全相同的条件下，精确测量 <strong>能量消耗 (KJ)</strong>、<strong>执行时间 (min)</strong>、<strong>内存占用 (RSS, MB)</strong> 和 <strong>LLC miss rate (%)</strong> 这四个核心指标。</li>
+</ul>
+</li>
+<li>这个设计的精妙之处在于，它牺牲了“现实世界的复杂性”，换取了“因果关系的清晰性”。只有在这种受控环境下得出的结论——比如 <strong>Codon</strong>, <strong>PyPy</strong>, <strong>Numba</strong> 能带来超过 <strong>90%</strong> 的性能和能效提升——才具有真正的说服力和可复现性。</li>
+</ul>
+<p><img alt="" src="../images/72911aedd5a555d0efb78c0232cce464978c5d57ccdfe54eebb455570f3c53c8.jpg" /> <em>Figure 1: Experiment Execution</em></p>
+<h3 id="2-eli5">2. 多维度效能评估指标 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>以前评估 Python 编译器，往往只盯着 <strong>执行时间</strong> 这一个指标。这就像买车只看百公里加速，完全不管油耗、保养成本和乘坐空间。</li>
+<li>这种单一视角会带来严重误导：<ul>
+<li>一个编译器可能通过疯狂占用 <strong>内存</strong> 来换取速度，这在资源受限的边缘设备上是灾难。</li>
+<li>另一个编译器可能跑得快，但因为糟糕的内存访问模式导致 <strong>LLC miss rate</strong> 极高，这会让它在不同硬件上的表现极不稳定。</li>
+<li>最关键的是，在当今绿色计算（Green Computing）的背景下，<strong>能量消耗</strong> 是一个无法回避的成本。一个省电但稍慢的方案，可能比一个耗电巨兽更具实际价值。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>这套 <strong>多维度效能评估指标</strong> 的思路，就像是给每个编译器做一次全面的“体检”，而不是只量体温。</li>
+<li>想象你是一个系统架构师，需要为公司的新项目选型。你的决策不能只基于“谁跑得最快”，而必须综合考虑：<ul>
+<li><strong>执行时间</strong>：任务完成的速度（工作效率）。</li>
+<li><strong>能量消耗</strong>：运行这个任务要花多少电费（运营成本）。</li>
+<li><strong>内存使用 (RSS)</strong>：它占用了多少宝贵的物理内存（资源占用）。</li>
+<li><strong>LLC miss rate</strong>：它对 CPU 缓存的“友好度”如何，这直接关系到其性能的可预测性和在不同服务器上的移植性（底层效率）。</li>
+</ul>
+</li>
+<li>这四个指标合在一起，才能描绘出一个编译器真实的、立体的“能效画像”。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者的核心洞察在于，<strong>性能</strong>（Performance）和 <strong>能效</strong>（Energy Efficiency）虽然相关，但并非总是一致，必须分开测量和分析。</li>
+<li>为了实现这个目标，他们在实验设计上做了几个关键扭转：<ul>
+<li><strong>控制变量</strong>：他们刻意选择了 <strong>单线程</strong>、<strong>无第三方库</strong> 的基准测试，并在 <strong>固定CPU频率</strong> 和 <strong>单核</strong> 上运行。这剥离了并行计算和外部库优化的干扰，让测量结果纯粹反映编译器本身的优化能力。</li>
+<li><strong>引入硬件级监控</strong>：他们没有依赖操作系统层面的粗略估算，而是直接利用 Intel CPU 的 <strong>RAPL</strong> 接口来精确测量 <strong>能量消耗</strong>，并用 <strong>perf</strong> 工具来抓取 <strong>LLC miss rate</strong> 这种底层硬件事件。</li>
+<li><strong>跨平台验证</strong>：他们在 <strong>NUC</strong>（客户端/边缘设备代表）和 <strong>Server</strong>（服务器代表）两个截然不同的硬件平台上重复实验，以检验结论的普适性。</li>
+</ul>
+</li>
+<li>正是这套严谨的、多维度的测量方法，让他们得出了像“<strong>Codon, PyPy, and Numba achieve over 90% speed and energy improvements</strong>”这样既具体又可靠的结论，并揭示了像 <strong>Nuitka</strong> 在 <strong>内存使用</strong> 上表现优异但在 <strong>LLC miss rate</strong> 上表现极差这样的复杂权衡。</li>
+</ul>
+<p><img alt="" src="../images/555037709359a2af7afdc2e64329f6bc4c3a2c674d5dac761cd6b7f8fc1cb7d8.jpg" /> <em>Table 2: Descriptive Statistics from Server data. The highlighted number shows the minimum average value.</em></p>
+<p>上表清晰地展示了这种多维评估的价值。例如，<strong>PyPy</strong> 虽然在 <strong>Execution Time</strong> 和 <strong>Energy</strong> 上表现极佳，但其 <strong>Memory</strong> 消耗却是所有编译器中最高的。而 <strong>Nuitka</strong> 则正好相反，它的 <strong>Memory</strong> 使用最低，但 <strong>LLC miss rate</strong> 高得惊人。如果只看单一指标，我们可能会错过这些关键的取舍（trade-offs）。</p>
+<h3 id="3-eli5">3. 跨平台验证 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>以前很多关于编译器或语言性能的实验，结论往往“飘在天上”，因为它们只在一个特定的机器上跑。这带来一个致命问题：你看到的<strong>速度提升</strong>或<strong>能耗降低</strong>，到底是编译器真牛，还是恰好这个编译器和这台机器的CPU、缓存、内存控制器“八字相合”？</li>
+<li>这种“单点验证”的结果非常脆弱。今天在你的工作站上快如闪电，明天换到云服务器上可能就原形毕露，甚至更慢。对于工程师来说，这种不可预测性是最难受的——我没法放心地在生产环境里用。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>这就像测试一种新配方的汽油。你不能只在一辆法拉利上测试它能跑多快，就宣称它是“终极燃油”。你必须把它加到出租车、卡车甚至拖拉机里试试。如果它在各种引擎上都能稳定地省油提速，那才是真本事。</li>
+<li>在这篇论文里，“Intel NUC”代表了<strong>现代高性能客户端设备</strong>（比如开发者的笔记本），而“服务器”则代表了<strong>传统的数据中心计算单元</strong>。它们的CPU微架构、缓存层次、功耗墙都不同。跨平台验证，就是看这些Python编译器是不是“通才”，而不是只会讨好某一款硬件的“偏科生”。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者并没有满足于在一个环境里跑出漂亮数据，而是把整个实验流程<strong>完整地复制</strong>到了两个差异显著的硬件平台上。</li>
+<li>具体来说，他们做了两件关键的事来保证验证的有效性：<ul>
+<li><strong>严格控制变量</strong>：在两个平台上，都<strong>固定CPU频率</strong>、<strong>禁用超线程</strong>、<strong>绑定到单核</strong>运行。这剥离了操作系统调度和动态频率缩放带来的噪音，让比较聚焦在编译器本身和硬件微架构的交互上。</li>
+<li><strong>交叉验证结论</strong>：他们不是简单地看两个平台的数据是否一样，而是分析<strong>优化效果的趋势是否一致</strong>。例如，论文发现<strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 在两个平台上都带来了<strong>超过90%的性能和能效提升</strong>，这就强有力地证明了它们的优势是普适的，而非平台特例。</li>
+</ul>
+</li>
+<li>这个设计直接回应了相关工作中的一个普遍缺陷：很多研究使用像<code>pyperformance</code>这样的基准套件，其中包含大量依赖NumPy等C扩展的测试项，这会掩盖纯Python代码的优化效果，并且其并行特性会干扰单线程性能分析。本文选用的CLBG基准是<strong>纯Python、单线程、无第三方库</strong>的，再叠加<strong>跨平台</strong>验证，就构建了一个干净、可靠、可复现的评估框架。</li>
+</ul>
+<p><img alt="" src="../images/750c0034543fec6991a1d724b01db7a8aa3f63e208d8a28e2dcff778f21492fa.jpg" /> <em>Figure 3: Speedup and Energy improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<p>上图清晰地展示了跨平台验证的价值。我们可以看到，尽管NUC和服务器的绝对性能不同，但各编译器相对于CPython的<strong>speedup（加速比）</strong> 和 <strong>energy improvement（能效提升）</strong> 的<strong>相对排名和趋势</strong>在两个平台上高度一致。特别是<strong>Codon</strong>, <strong>PyPy</strong>, <strong>Numba</strong> 这三者始终处于领先地位，而<strong>Pyston-lite</strong>的效果则不明显。这种一致性，正是“跨平台验证”想要捕捉和证明的核心。</p>
+<h3 id="4-python-eli5">4. 广泛的Python编译器对比 (ELI5)<a class="headerlink" href="#4-python-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>以前大家都知道 Python <strong>慢</strong>、<strong>耗电</strong>，也知道用编译器能提速，但具体该选哪个？这就像面对一堆“偏方”，有人说 A 好，有人说 B 强，但没人告诉你：<ul>
+<li>这些“神药”在<strong>不同病症</strong>（代码特征）下效果天差地别。比如，一个编译器对纯数学计算快如闪电，但对字符串处理可能毫无作用，甚至更慢。</li>
+<li>很多比较实验本身就有问题：有的在<strong>多核</strong>上跑，有的让 CPU <strong>动态调频</strong>，还有的代码里塞满了 <strong>NumPy</strong> 这种本身就高度优化的 C 库。这根本没法公平比较，因为测出来的性能提升，到底是编译器的功劳，还是底层库或硬件调度的功劳？</li>
+<li>所以，开发者和研究者很“难受”：想优化代码，却不知道哪种工具投入产出比最高，甚至可能白忙活一场。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>这项研究就像是给八位不同的“健身教练”（编译器）做了一场严格的体能测试。</li>
+<li>之前的测试很混乱：有的教练带着学员在平地上跑，有的在山上跑；有的允许吃能量棒（NumPy），有的不让。结果自然没法比。</li>
+<li>而这次，研究者把所有教练和学员都带到<strong>同一个标准跑道</strong>（单核、固定频率）上，并且规定所有人都只能用自己的<strong>身体</strong>（纯 Python 逻辑，无第三方库）来完成<strong>同一套标准化的体能动作</strong>（CLBG 基准测试）。这样，谁是真的“肌肉猛男”，谁是“花架子”，就一目了然了。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者并没有去发明新编译器，而是巧妙地设计了一个<strong>极其干净、受控的实验环境</strong>，把所有干扰变量都锁死了。</li>
+<li>具体来说，他们做了三件事来“扭转”局面：<ul>
+<li><strong>统一战场</strong>：强制所有代码在<strong>单核</strong>上运行，并将 <strong>CPU 频率固定</strong>，彻底排除了并行和动态频率缩放带来的噪音。</li>
+<li><strong>净化代码</strong>：精心挑选了 <strong>CLBG</strong> 中的基准程序，确保它们都是<strong>单线程</strong>且<strong>不依赖任何第三方库</strong>（如 NumPy），这样测出的性能差异才能真正归因于编译器本身。</li>
+<li><strong>全面体检</strong>：不仅看<strong>执行时间</strong>这个老指标，还同时测量了<strong>能量消耗</strong>、<strong>内存占用</strong>和 <strong>LLC (Last-Level Cache) miss rate</strong> 这三个关键维度，给出了一个全方位的健康报告。</li>
+</ul>
+</li>
+<li>正是这个严谨的设计，让他们得出了清晰、可靠的结论：<strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 是真正的“全能选手”，在速度和能效上带来了超过 <strong>90%</strong> 的巨大提升；而 <strong>Nuitka</strong> 则是“节食专家”，在<strong>内存优化</strong>上表现最为稳定。</li>
+</ul>
+<p><img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<p>上图直观地展示了这一对比结果。红色虚线代表 <strong>CPython</strong> 基准，可以看到 <strong>Codon</strong>, <strong>PyPy</strong>, <strong>Numba</strong> 在绝大多数基准测试中都远低于这条线，意味着它们在<strong>执行时间</strong>、<strong>能耗</strong>和<strong>内存</strong>上都实现了显著优化。这种系统性的、多维度的对比，正是本研究最核心的价值所在。</p>
+<h3 id="5-eli5">5. 标准化的数据分析方法 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前很多系统性能或能效的对比实验，结论往往很“飘”。作者们经常只画个柱状图，说“A比B快了20%”，就完事了。但这种说法在科学上是站不住脚的。</li>
+<li><strong>真正的痛点在于</strong>：性能数据天然具有<strong>高波动性</strong>。同一段代码跑十次，执行时间、能耗都可能不一样，这受操作系统调度、缓存状态、甚至CPU温度的影响。如果不用严格的统计方法去分析，你根本分不清观察到的“提升”是编译器真的牛，还是纯粹的<strong>随机噪音</strong>。</li>
+<li>更糟糕的是，即使差异是真实的，你也不知道这个差异到底“大不大”。快1%和快90%对用户来说是天壤之别，但简单的平均值比较无法量化这种<strong>效应的强度</strong>。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>这套标准化的数据分析方法，就像是给你的实验结果做一次<strong>全面的医学体检</strong>，而不是靠肉眼看看气色。</li>
+<li><strong>Shapiro-Wilk检验</strong> 就像先验血，看看你的数据分布是不是“健康”的（正态分布）。如果是健康的，就可以用更精确的“处方”（ANOVA）；如果不健康（非正态），就得换一套更稳健的“治疗方案”（Kruskal-Wallis）。</li>
+<li>而 <strong>Cliff's Delta</strong> 则像是一个<strong>疗效评估报告</strong>。它不只告诉你新药（编译器）和安慰剂（CPython）有没有区别，还会明确告诉你，这个药的效果是“微乎其微”、“略有改善”还是“立竿见影”。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有停留在计算平均值和画图的层面，而是构建了一个严谨的<strong>统计推断流水线</strong>来支撑每一个结论。</li>
+<li><strong>核心逻辑转换在于</strong>：将“哪个编译器更好”这个工程问题，转化为了“不同编译器产生的性能指标分布之间是否存在<strong>统计学上显著且有实际意义的差异</strong>”这个科学问题。</li>
+<li>具体来说，他们做了两步关键操作：<ul>
+<li><strong>第一步：选择正确的检验工具</strong>。通过 <strong>Shapiro-Wilk test</strong> 对每个编译器在每个指标上的数据进行正态性检验。因为论文中的能耗、执行时间等数据跨不同benchmark尺度差异巨大（如图2a所示），几乎必然非正态，所以他们明智地选用了非参数的 <strong>Kruskal-Wallis test</strong> 来判断多组数据间是否存在<strong>任何</strong>显著差异。</li>
+<li><strong>第二步：量化差异的实际价值</strong>。仅仅知道“有差异”还不够。他们使用 <strong>Cliff's Delta</strong> 这个<strong>非参数效应量</strong>指标，将CPython作为基线，与每个编译器进行两两比较。这个指标能告诉你，从CPython随机抽取一个样本，其性能比从编译器X中随机抽取一个样本更差的概率是多少。例如，论文中提到PyPy、Numba和Codon的Cliff's Delta为1.0，这意味着在他们的实验中，<strong>CPython的每一次运行结果都比这三个编译器的任何一次运行结果要差</strong>，这是一个极其强大且清晰的结论。</li>
+</ul>
+</li>
+<li>这套方法确保了论文的核心发现——“Codon, PyPy, and Numba achieve over 90% speed and energy improvements”——不是一句模糊的营销口号，而是一个经过<strong>统计学验证</strong>的、可靠的科学论断。<img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

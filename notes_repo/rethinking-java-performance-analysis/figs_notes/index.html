@@ -1,0 +1,944 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/rethinking-java-performance-analysis/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Rethinking Java Performance Analysis 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rethinking-java-performance-analysis" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Rethinking Java Performance Analysis 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#b-lower-bound-total-cpu-overheads-linux-task_clock-figure-1-lower-bounds-on-the-overheads-of-five-openjdk-21-production-garbage-collectors-with-their-default-settings-as-a-function-of-heap-size-showing-the-geometric-mean-of-overhead-over-all-22-dacapo-chopin-benchmarks-we-only-plot-data-points-where-the-respective-collector-can-run-all-22-benchmarks-to-completion-in-the-best-case-wall-clock-overheads-are-9-g1-and-parallel-and-total-cpu-overheads-are-15-serial-at-smaller-heaps-overheads-exceed-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (b) Lower bound total CPU overheads (Linux TASK_CLOCK). Figure 1. Lower bounds on the overheads of five OpenJDK 21 production garbage collectors with their default settings, as a function of heap size, showing the geometric mean of overhead over all 22 DaCapo Chopin benchmarks. We only plot data points where the respective collector can run all 22 benchmarks to completion. In the best case, wall clock overheads are 9 % (G1 and Parallel) and total CPU overheads are 15 % (Serial). At smaller heaps, overheads exceed 2×.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-cheng-and-blelloch-12-used-a-figure-like-this-to-illustrate-the-problem-with-using-gc-pauses-as-a-measure-of-responsiveness-and-proposed-the-minimum-mutator-utilization-mmu-metric-as-a-response-gc-pause-time-continues-to-be-widely-misused-as-a-proxy-for-responsiveness-more-than-twenty-years-later" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. Cheng and Blelloch [12] used a figure like this to illustrate the problem with using GC pauses as a measure of responsiveness and proposed the minimum mutator utilization (MMU) metric as a response. GC pause time continues to be widely (mis)used as a proxy for responsiveness more than twenty years later.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-dacapo-chopin-records-the-time-for-each-event-for-its-latency-sensitive-workloads-avoiding-the-need-for-users-to-resort-to-using-misleading-proxies-such-as-gc-pause-times-these-figures-plot-the-distribution-of-request-latencies-for-cassandra-for-each-of-openjdk-21s-five-production-collectors-with-the-95th-percentile-indicated-by-the-shaded-area-even-at-the-generous-60-heap-the-newer-collectors-do-not-deliver-better-latency-than-g1-on-this-workload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. DaCapo Chopin records the time for each event for its latency-sensitive workloads, avoiding the need for users to resort to using misleading proxies such as GC pause times. These figures plot the distribution of request latencies for cassandra for each of OpenJDK 21’s five production collectors, with the 95th percentile indicated by the shaded area. Even at the generous 6.0× heap, the newer collectors do not deliver better latency than G1 on this workload.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-principal-components-analysis-of-the-22-dacapo-workloads-with-respect-to-the-33-nominal-statistics-which-had-non-null-results-for-all-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. Principal components analysis of the 22 DaCapo workloads with respect to the 33 nominal statistics which had non-null results for all benchmarks.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-lbo-overheads-for-cassandra-and-lusearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. LBO overheads for cassandra and lusearch.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-user-experienced-latency-for-h2-plotting-the-latency-distribution-for-100000-requests-using-each-collector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. User-experienced latency for h2, plotting the latency distribution for 100000 requests using each collector.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rethinking-java-performance-analysis">Rethinking Java Performance Analysis 图表详解<a class="headerlink" href="#rethinking-java-performance-analysis" title="Permanent link">&para;</a></h1>
+<h3 id="b-lower-bound-total-cpu-overheads-linux-task_clock-figure-1-lower-bounds-on-the-overheads-of-five-openjdk-21-production-garbage-collectors-with-their-default-settings-as-a-function-of-heap-size-showing-the-geometric-mean-of-overhead-over-all-22-dacapo-chopin-benchmarks-we-only-plot-data-points-where-the-respective-collector-can-run-all-22-benchmarks-to-completion-in-the-best-case-wall-clock-overheads-are-9-g1-and-parallel-and-total-cpu-overheads-are-15-serial-at-smaller-heaps-overheads-exceed-2">(b) Lower bound total CPU overheads (Linux TASK_CLOCK). Figure 1. Lower bounds on the overheads of five OpenJDK 21 production garbage collectors with their default settings, as a function of heap size, showing the geometric mean of overhead over all 22 DaCapo Chopin benchmarks. We only plot data points where the respective collector can run all 22 benchmarks to completion. In the best case, wall clock overheads are 9 % (G1 and Parallel) and total CPU overheads are 15 % (Serial). At smaller heaps, overheads exceed 2×.<a class="headerlink" href="#b-lower-bound-total-cpu-overheads-linux-task_clock-figure-1-lower-bounds-on-the-overheads-of-five-openjdk-21-production-garbage-collectors-with-their-default-settings-as-a-function-of-heap-size-showing-the-geometric-mean-of-overhead-over-all-22-dacapo-chopin-benchmarks-we-only-plot-data-points-where-the-respective-collector-can-run-all-22-benchmarks-to-completion-in-the-best-case-wall-clock-overheads-are-9-g1-and-parallel-and-total-cpu-overheads-are-15-serial-at-smaller-heaps-overheads-exceed-2" title="Permanent link">&para;</a></h3>
+<p><img alt="fcac4d2752bcd5a947bf272dcf0b2f0110baff20bb3e822ed09c461fcea15e1f.jpg" src="../images/fcac4d2752bcd5a947bf272dcf0b2f0110baff20bb3e822ed09c461fcea15e1f.jpg" /></p>
+<ul>
+<li>图片包含两个子图，分别展示五种 OpenJDK 21 生产级 <strong>garbage collector</strong> 在不同堆大小下的开销表现，数据基于 22 个 <strong>DaCapo Chopin</strong> 基准测试的几何平均值。</li>
+<li>子图 (a) 显示 <strong>wall clock time overheads</strong>，即程序总运行时间相对于理想 GC 的归一化开销；子图 (b) 显示 <strong>total CPU overheads</strong>，使用 Linux <strong>TASK_CLOCK</strong> 统计所有线程的累计 CPU 时间，反映系统总计算资源消耗。</li>
+<li>五种收集器按引入年份排序：<strong>Serial (1998)</strong>、<strong>Parallel (2005)</strong>、<strong>G1 (2009)</strong>、<strong>Shenandoah (2014)</strong>、<strong>ZGC (2018)</strong>。其中 ZGC 不支持压缩指针，比较时需注意其内存模型差异。</li>
+<li>所有曲线均随堆大小（以最小堆 minheap 的倍数表示）增加而下降，体现典型的 <strong>time-space tradeoff</strong>：堆越小，GC 频率越高，开销越大。</li>
+<li>在最佳情况下（大堆），<strong>wall clock overhead</strong> 最低为 <strong>9%</strong>（G1 和 Parallel），<strong>total CPU overhead</strong> 最低为 <strong>15%</strong>（Serial）。但在小堆（如 1×minheap）下，部分收集器开销可超过 <strong>2×</strong>，甚至高达 <strong>17×</strong>（小堆）或 <strong>63%</strong>（大堆）。</li>
+<li><strong>Serial</strong> 收集器在 total CPU 开销上表现最优（最低 15%），因其单线程设计避免了并行开销；但其 wall clock 开销在小堆时最高，因无法利用多核加速。</li>
+<li><strong>Parallel</strong> 虽能利用多核加速，但因并行效率不完美，其 total CPU 开销高于 Serial，尤其在小堆时更明显。</li>
+<li><strong>G1</strong> 通过分区域并发回收，在 latency 上优于 Parallel，但代价是更高的 CPU 开销。</li>
+<li><strong>Shenandoah</strong> 和 <strong>ZGC</strong> 作为低暂停收集器，几乎全程与应用并发执行，虽改善了 pause times，但引入了显著的额外开销，尤其在 small heap 下表现最差。</li>
+<li>图中 ZGC 使用虚线标记，因其不支持压缩指针，与其他收集器存在架构差异，直接比较需谨慎。</li>
+<li>数据点仅在收集器能完成全部 22 个基准测试时绘制，确保结果可比性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>收集器</th>
+<th>引入年份</th>
+<th>Wall Clock 最佳开销</th>
+<th>Total CPU 最佳开销</th>
+<th>小堆开销趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serial</td>
+<td>1998</td>
+<td>较高</td>
+<td><strong>15%</strong></td>
+<td>急剧上升</td>
+</tr>
+<tr>
+<td>Parallel</td>
+<td>2005</td>
+<td><strong>9%</strong></td>
+<td>中等</td>
+<td>上升</td>
+</tr>
+<tr>
+<td>G1</td>
+<td>2009</td>
+<td><strong>9%</strong></td>
+<td>中等偏高</td>
+<td>平缓下降</td>
+</tr>
+<tr>
+<td>Shenandoah</td>
+<td>2014</td>
+<td>高</td>
+<td>高</td>
+<td>剧烈波动</td>
+</tr>
+<tr>
+<td>ZGC</td>
+<td>2018</td>
+<td>高</td>
+<td>高</td>
+<td>高且不稳定</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图揭示了一个关键问题：尽管新式收集器旨在降低延迟，但其 <strong>total CPU overhead</strong> 却普遍更高，这在多租户环境（如移动设备、数据中心）中可能带来隐性成本，却被长期忽视。</li>
+<li>作者强调，这种“开销被忽略”的现象源于方法论滞后——研究者常只关注 wall clock 或 pause times，而忽略 total CPU 消耗和用户实际体验。</li>
+<li>图表设计清晰，横轴为堆大小倍数，纵轴为归一化开销（LBO），便于横向比较不同收集器在不同内存配置下的相对性能。</li>
+<li>结论：<strong>GC 开销不应仅用 wall clock 或 pause times 衡量，必须结合 total CPU 和 user-experienced latency 进行多维评估</strong>，否则将误导技术选型与研究方向。</li>
+</ul>
+<h3 id="figure-2-cheng-and-blelloch-12-used-a-figure-like-this-to-illustrate-the-problem-with-using-gc-pauses-as-a-measure-of-responsiveness-and-proposed-the-minimum-mutator-utilization-mmu-metric-as-a-response-gc-pause-time-continues-to-be-widely-misused-as-a-proxy-for-responsiveness-more-than-twenty-years-later">Figure 2. Cheng and Blelloch [12] used a figure like this to illustrate the problem with using GC pauses as a measure of responsiveness and proposed the minimum mutator utilization (MMU) metric as a response. GC pause time continues to be widely (mis)used as a proxy for responsiveness more than twenty years later.<a class="headerlink" href="#figure-2-cheng-and-blelloch-12-used-a-figure-like-this-to-illustrate-the-problem-with-using-gc-pauses-as-a-measure-of-responsiveness-and-proposed-the-minimum-mutator-utilization-mmu-metric-as-a-response-gc-pause-time-continues-to-be-widely-misused-as-a-proxy-for-responsiveness-more-than-twenty-years-later" title="Permanent link">&para;</a></h3>
+<p><img alt="b3dd4435ca847f087509226870e280fe91d592e53a18c72959616dee976f7e4f.jpg" src="../images/b3dd4435ca847f087509226870e280fe91d592e53a18c72959616dee976f7e4f.jpg" /></p>
+<ul>
+<li>图片展示了两个并列的时间轴示意图，用于对比不同垃圾回收（GC）暂停模式对程序（Prog）执行的影响。</li>
+<li>左侧图示为“Several short pauses”，表示程序执行过程中被多个短暂的 GC 暂停打断，每个暂停块较小且分散。</li>
+<li>右侧图示为“One long pause”，表示程序仅被一次较长的 GC 暂停中断，暂停块较大但集中。</li>
+<li>该图旨在说明：<strong>单纯比较 GC 暂停时长无法准确反映用户感知的响应性（responsiveness）</strong>。多个短暂停可能累积影响更大，甚至超过单次长暂停。</li>
+<li>此图源自 Cheng 和 Blelloch [12] 的研究，他们指出使用 GC pause time 作为响应性代理指标是错误的，并提出 <strong>Minimum Mutator Utilization (MMU)</strong> 作为更合理的度量标准。</li>
+<li>尽管已有二十年以上学术共识，论文指出当前业界仍广泛<strong>误用 GC pause time 作为响应性指标</strong>，凸显方法论滞后问题。</li>
+<li>下表总结图中关键元素及其含义：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>含义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prog</td>
+<td>程序执行时间</td>
+<td>白色块代表应用线程运行时段</td>
+</tr>
+<tr>
+<td>GC</td>
+<td>垃圾回收暂停</td>
+<td>灰色块代表 Stop-The-World 暂停时段</td>
+</tr>
+<tr>
+<td>Several short pauses</td>
+<td>多次短暂停</td>
+<td>分散打断，可能影响用户体验连续性</td>
+</tr>
+<tr>
+<td>One long pause</td>
+<td>单次长暂停</td>
+<td>集中打断，可能造成明显卡顿感</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图强调：评估 Java 性能，尤其是延迟敏感场景，必须超越简单暂停时长，转向如 MMU 或 DaCapo Chopin 提供的 <strong>Simple Latency / Metered Latency</strong> 等更贴近用户实际体验的指标。</li>
+</ul>
+<h3 id="figure-3-dacapo-chopin-records-the-time-for-each-event-for-its-latency-sensitive-workloads-avoiding-the-need-for-users-to-resort-to-using-misleading-proxies-such-as-gc-pause-times-these-figures-plot-the-distribution-of-request-latencies-for-cassandra-for-each-of-openjdk-21s-five-production-collectors-with-the-95th-percentile-indicated-by-the-shaded-area-even-at-the-generous-60-heap-the-newer-collectors-do-not-deliver-better-latency-than-g1-on-this-workload">Figure 3. DaCapo Chopin records the time for each event for its latency-sensitive workloads, avoiding the need for users to resort to using misleading proxies such as GC pause times. These figures plot the distribution of request latencies for cassandra for each of OpenJDK 21’s five production collectors, with the 95th percentile indicated by the shaded area. Even at the generous 6.0× heap, the newer collectors do not deliver better latency than G1 on this workload.<a class="headerlink" href="#figure-3-dacapo-chopin-records-the-time-for-each-event-for-its-latency-sensitive-workloads-avoiding-the-need-for-users-to-resort-to-using-misleading-proxies-such-as-gc-pause-times-these-figures-plot-the-distribution-of-request-latencies-for-cassandra-for-each-of-openjdk-21s-five-production-collectors-with-the-95th-percentile-indicated-by-the-shaded-area-even-at-the-generous-60-heap-the-newer-collectors-do-not-deliver-better-latency-than-g1-on-this-workload" title="Permanent link">&para;</a></h3>
+<p><img alt="160e4d777abbd273dffa3d84dd5a63c80039934effad11d5c9a567a40887952c.jpg" src="../images/160e4d777abbd273dffa3d84dd5a63c80039934effad11d5c9a567a40887952c.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Cassandra</strong> 工作负载在不同垃圾回收器（GC）和堆大小配置下的请求延迟分布，数据来自 <strong>DaCapo Chopin</strong> 套件，使用 <strong>OpenJDK 21</strong>。</li>
+<li>六个子图分别呈现了 <strong>Simple Latency</strong> 和 <strong>Metered Latency</strong> 在 <strong>2× heap (256 MB)</strong> 与 <strong>6× heap (768 MB)</strong> 下的表现，其中 Metered Latency 又细分为 <strong>100ms smoothing</strong> 和 <strong>full smoothing</strong> 两种模式。</li>
+<li>所有图表的横轴为 <strong>Percentile</strong>（从 0 到 99.9999），纵轴为 <strong>Request latency (ms)</strong>（对数刻度），清晰展示尾部延迟行为。</li>
+<li>图中包含五种 GC：<strong>Serial</strong>、<strong>Parallel</strong>、<strong>G1</strong>、<strong>Shenandoah (Shen.)</strong>、<strong>ZGC</strong>*，每种 GC 用不同颜色/线型表示，便于对比。</li>
+<li><strong>95th percentile</strong> 以阴影区域标出，直观显示主流请求的延迟范围；高百分位（如 99.9+）则反映极端情况，是衡量系统稳定性的关键。</li>
+<li>在 <strong>2× heap</strong> 条件下，<strong>G1</strong> 的 Simple Latency 表现最优，尤其在 99.9% 以上分位点明显优于其他 GC；<strong>Shenandoah</strong> 和 <strong>ZGC</strong> 在高百分位出现陡峭上升，表明其尾部延迟较差。</li>
+<li>当堆增大至 <strong>6× heap</strong>，所有 GC 的 Simple Latency 曲线整体右移，意味着平均延迟增加，但 <strong>G1</strong> 仍保持相对优势，<strong>Shenandoah</strong> 和 <strong>ZGC</strong> 的尾部延迟问题依旧显著。</li>
+<li><strong>Metered Latency</strong> 引入“排队效应”模拟，使延迟曲线更贴近真实用户感知。在 <strong>100ms smoothing</strong> 模式下，各 GC 曲线与 Simple Latency 相近；但在 <strong>full smoothing</strong> 模式下，曲线趋于平滑，尾部延迟被放大，更能暴露 GC 对系统响应的累积影响。</li>
+<li>关键发现：即使在 <strong>6× heap</strong> 这种内存充裕的条件下，<strong>新式低暂停 GC（Shenandoah, ZGC）并未在 Cassandra 上展现出比 G1 更优的延迟表现</strong>，这挑战了“新 GC 必然更好”的直觉。</li>
+<li>数据表格化总结如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>最佳 GC（低延迟）</th>
+<th>尾部延迟最差 GC</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple Latency @ 2× heap</td>
+<td>G1</td>
+<td>Shenandoah, ZGC</td>
+<td>G1 在 99.9%+ 分位点领先</td>
+</tr>
+<tr>
+<td>Simple Latency @ 6× heap</td>
+<td>G1</td>
+<td>Shenandoah, ZGC</td>
+<td>所有 GC 延迟上升，G1 仍最优</td>
+</tr>
+<tr>
+<td>Metered Latency @ 2× heap (100ms)</td>
+<td>G1</td>
+<td>Shenandoah, ZGC</td>
+<td>排队效应轻微，趋势同 Simple</td>
+</tr>
+<tr>
+<td>Metered Latency @ 6× heap (100ms)</td>
+<td>G1</td>
+<td>Shenandoah, ZGC</td>
+<td>同上，但绝对延迟更高</td>
+</tr>
+<tr>
+<td>Metered Latency @ 2× heap (full)</td>
+<td>G1</td>
+<td>Shenandoah, ZGC</td>
+<td>尾部延迟被放大，差距更明显</td>
+</tr>
+<tr>
+<td>Metered Latency @ 6× heap (full)</td>
+<td>G1</td>
+<td>Shenandoah, ZGC</td>
+<td>所有 GC 延迟进一步恶化</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此分析强调：<strong>不能仅依赖 GC pause time 评估性能</strong>，必须测量真实用户请求延迟；<strong>堆大小并非越大越好</strong>，需权衡内存成本与延迟表现；<strong>新 GC 不一定适合所有场景</strong>，需结合工作负载特性选择。</li>
+</ul>
+<h3 id="figure-4-principal-components-analysis-of-the-22-dacapo-workloads-with-respect-to-the-33-nominal-statistics-which-had-non-null-results-for-all-benchmarks">Figure 4. Principal components analysis of the 22 DaCapo workloads with respect to the 33 nominal statistics which had non-null results for all benchmarks.<a class="headerlink" href="#figure-4-principal-components-analysis-of-the-22-dacapo-workloads-with-respect-to-the-33-nominal-statistics-which-had-non-null-results-for-all-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="34348e1e4e2f2e9e0ae0e6ba2905702f1ec9fb8dc14746272215b58fcaac00b2.jpg" src="../images/34348e1e4e2f2e9e0ae0e6ba2905702f1ec9fb8dc14746272215b58fcaac00b2.jpg" /></p>
+<ul>
+<li>图片展示了对22个DaCapo Chopin工作负载进行主成分分析（PCA）的结果，基于33个所有基准测试均有有效数据的名义统计量。</li>
+<li>分析结果分为两个子图：(a) PC1与PC2，(b) PC3与PC4，分别代表前四个主成分中的两组组合。</li>
+<li><strong>PC1解释了18%的方差</strong>，是最重要的主成分；<strong>PC2解释了16%</strong>，<strong>PC3解释了14%</strong>，<strong>PC4解释了11%</strong>。前四者合计解释超过50%的总方差。</li>
+<li>每个点代表一个工作负载，其在坐标系中的位置反映其在对应主成分上的得分，点间距离越大表示行为差异越显著。</li>
+<li>工作负载分布广泛，无明显聚集，表明DaCapo Chopin套件具有良好的多样性，避免了功能重复或过度偏向特定行为模式。</li>
+<li>关键工作负载如<code>zxing</code>、<code>jme</code>、<code>cassandra</code>、<code>h2</code>、<code>lusearch</code>等分布在不同象限，显示其在性能特征上存在显著差异。</li>
+<li>以下为各主成分所占方差比例及对应子图：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>主成分</th>
+<th>解释方差比例</th>
+<th>子图标识</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC1</td>
+<td>18%</td>
+<td>(a)</td>
+</tr>
+<tr>
+<td>PC2</td>
+<td>16%</td>
+<td>(a)</td>
+</tr>
+<tr>
+<td>PC3</td>
+<td>14%</td>
+<td>(b)</td>
+</tr>
+<tr>
+<td>PC4</td>
+<td>11%</td>
+<td>(b)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此PCA可视化支持论文核心主张：DaCapo Chopin通过多维特征刻画工作负载，有助于研究人员理解其行为并设计更科学的实验方法。</li>
+</ul>
+<h3 id="figure-5-lbo-overheads-for-cassandra-and-lusearch">Figure 5. LBO overheads for cassandra and lusearch.<a class="headerlink" href="#figure-5-lbo-overheads-for-cassandra-and-lusearch" title="Permanent link">&para;</a></h3>
+<p><img alt="0192fa4e61cb449c8b9f2370c4e8d60544e5f173efdd6c91ad59c3e08f8c24f5.jpg" src="../images/0192fa4e61cb449c8b9f2370c4e8d60544e5f173efdd6c91ad59c3e08f8c24f5.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 5</strong>，即针对 <strong>cassandra</strong> 和 <strong>lusearch</strong> 两个基准测试的 <strong>LBO（Lower Bound Overhead）开销分析</strong>，分为四个子图，分别从 <strong>wall clock</strong> 和 <strong>task clock</strong> 两个维度衡量不同垃圾回收器在不同堆大小下的性能开销。</li>
+<li>子图 (a) 显示 <strong>cassandra 的 wall clock 开销</strong>。随着堆大小从 1× 到 6× minheap 增加，所有 GC 的归一化开销均下降。<strong>Serial</strong> 和 <strong>Parallel</strong> 在大堆时表现最佳（接近 1.0），而 <strong>ZGC</strong> 在小堆时开销极高（&gt;2.0），但在大堆时趋于稳定。<strong>G1</strong> 和 <strong>Shenandoah</strong> 表现居中。</li>
+<li>子图 (b) 显示 <strong>cassandra 的 total CPU 开销（task clock）</strong>。与 wall clock 不同，<strong>task clock 开销普遍更高</strong>，尤其在小堆时。<strong>Serial</strong> 和 <strong>Parallel</strong> 在 3× 堆以上仍保持较低开销（约 1.1–1.3），但 <strong>G1</strong> 在 3× 堆时开销已达 1.6，<strong>Shenandoah</strong> 和 <strong>ZGC</strong> 更高。这表明这些并发收集器虽减少应用暂停，却消耗更多 CPU 资源。</li>
+<li>子图 (c) 显示 <strong>lusearch 的 wall clock 开销</strong>。<strong>Shenandoah</strong> 在所有堆大小下开销均超过 2.0，远高于其他收集器。<strong>Serial</strong> 和 <strong>Parallel</strong> 在大堆时表现最优（接近 1.0）。<strong>G1</strong> 和 <strong>ZGC</strong> 居中，但 ZGC 在小堆时开销显著上升。</li>
+<li>子图 (d) 显示 <strong>lusearch 的 total CPU 开销（task clock）</strong>。与 wall clock 相反，<strong>Shenandoah</strong> 的 task clock 开销反而低于 wall clock，且在大堆时接近 1.0。这表明 Shenandoah 在 lusearch 上通过 <strong>主动节流（throttling）应用线程</strong> 来保证 GC 进度，从而降低整体 CPU 使用率，但牺牲了 wall clock 时间。</li>
+<li>关键观察：<strong>wall clock 与 task clock 结果常不一致</strong>，凸显仅依赖单一指标评估 GC 性能的局限性。例如，cassandra 中 G1 的 wall clock 开销低，但 task clock 开销高；lusearch 中 Shenandoah 的 wall clock 开销高，但 task clock 开销低。</li>
+<li>下表总结各 GC 在两个基准上的关键表现：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>GC</th>
+<th>Wall Clock (6× minheap)</th>
+<th>Task Clock (6× minheap)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cassandra</td>
+<td>Serial</td>
+<td>~1.0</td>
+<td>~1.1</td>
+<td>最稳定</td>
+</tr>
+<tr>
+<td>cassandra</td>
+<td>Parallel</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>略高于 Serial</td>
+</tr>
+<tr>
+<td>cassandra</td>
+<td>G1</td>
+<td>~1.0</td>
+<td>~1.6</td>
+<td>CPU 开销显著</td>
+</tr>
+<tr>
+<td>cassandra</td>
+<td>Shenandoah</td>
+<td>~1.1</td>
+<td>~1.8</td>
+<td>并发代价高</td>
+</tr>
+<tr>
+<td>cassandra</td>
+<td>ZGC</td>
+<td>~1.0</td>
+<td>~1.7</td>
+<td>小堆开销大</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>Serial</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>最优</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>Parallel</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>G1</td>
+<td>~1.2</td>
+<td>~1.2</td>
+<td>均衡</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>Shenandoah</td>
+<td>&gt;2.0</td>
+<td>~1.0</td>
+<td><strong>节流导致 wall clock 高，task clock 低</strong></td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>ZGC</td>
+<td>~1.4</td>
+<td>~1.2</td>
+<td>中等</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>LBO 方法揭示了传统评估忽略的 GC 真实成本</strong>，特别是并发收集器在多核环境下的资源竞争和节流行为。研究者应同时报告 <strong>wall clock</strong> 和 <strong>task clock</strong> 开销，以全面理解 GC 对系统性能的影响。</li>
+</ul>
+<h3 id="figure-6-user-experienced-latency-for-h2-plotting-the-latency-distribution-for-100000-requests-using-each-collector">Figure 6. User-experienced latency for h2, plotting the latency distribution for 100000 requests using each collector.<a class="headerlink" href="#figure-6-user-experienced-latency-for-h2-plotting-the-latency-distribution-for-100000-requests-using-each-collector" title="Permanent link">&para;</a></h3>
+<p><img alt="eff67411b2b27cc43c8002497669a0210af552905307b79d7e0f743df10683aa.jpg" src="../images/eff67411b2b27cc43c8002497669a0210af552905307b79d7e0f743df10683aa.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>h2</strong> 数据库工作负载在不同垃圾回收器（GC）和堆大小配置下的 <strong>用户感知延迟</strong> 分布，共包含四个子图，分别对应 <strong>简单延迟</strong> 和 <strong>计量延迟</strong> 在 <strong>2× 堆</strong> 与 <strong>6× 堆</strong> 下的表现。</li>
+<li>所有子图的 Y 轴为 <strong>请求延迟（ms）</strong>，采用对数刻度，范围从 10⁻² ms 到 10² ms；X 轴为 <strong>百分位数</strong>，覆盖从 0 到 99.9999%，重点突出尾部延迟行为。</li>
+<li>图例统一标识五种 OpenJDK 21 生产级 GC：<strong>Serial</strong>（黑色实线）、<strong>Parallel</strong>（紫色实线）、<strong>G1</strong>（蓝色实线）、<strong>Shenandoah</strong>（橙色实线）、<strong>ZGC</strong>（红色虚线）。</li>
+<li><strong>简单延迟</strong>（Simple Latency）直接测量每个请求从开始到结束的时间，反映应用自身执行时间，不考虑外部排队效应。</li>
+<li><strong>计量延迟</strong>（Metered Latency）通过引入“均匀合成起始时间”模拟真实系统中的请求排队效应，更贴近用户实际体验，尤其在高并发或 GC 暂停场景下更能暴露系统瓶颈。</li>
+<li>在 <strong>2× 堆（1.36 GB）</strong> 配置下：<ul>
+<li>简单延迟（图 a）显示所有 GC 的曲线高度重合，尤其在 99% 百分位以下，表明此时 GC 暂停对单个请求影响较小。</li>
+<li>计量延迟（图 c）同样与简单延迟接近，说明 h2 工作负载在此堆大小下 GC 暂停未显著引发请求堆积。</li>
+<li><strong>Serial</strong> 表现相对较好，尾部延迟略低于其他 GC，因其单线程设计避免了并行/并发 GC 的同步开销。</li>
+</ul>
+</li>
+<li>在 <strong>6× 堆（4 GB）</strong> 配置下：<ul>
+<li>简单延迟（图 b）中各 GC 曲线仍较接近，但 <strong>Shenandoah</strong> 和 <strong>ZGC</strong> 在 99.9% 之后出现轻微上扬，暗示其并发处理可能带来额外开销。</li>
+<li>计量延迟（图 d）中差异更为明显，<strong>Shenandoah</strong> 的尾部延迟显著恶化，甚至超过 <strong>Serial</strong>，这与其“突变器节流”机制有关——当无法及时回收内存时，它会主动限制应用线程以腾出资源给 GC，导致请求排队加剧。</li>
+</ul>
+</li>
+<li>关键观察：<ul>
+<li><strong>h2</strong> 是一个低内存周转率（GTO）但高分配率（ARA）的工作负载，其主要压力集中在数据库构建阶段，查询阶段 GC 频率低且高效，因此即使使用简单 GC 如 Serial 也能表现良好。</li>
+<li>新型低暂停 GC（如 Shenandoah、ZGC）在 h2 上并未展现预期的延迟优势，反而在大堆下因资源竞争和节流机制导致性能退化。</li>
+<li><strong>计量延迟</strong> 更能揭示系统级延迟问题，尤其在高百分位处，是评估真实用户体验的关键指标。</li>
+</ul>
+</li>
+<li>性能对比摘要：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>GC 类型</th>
+<th>2× 堆简单延迟</th>
+<th>2× 堆计量延迟</th>
+<th>6× 堆简单延迟</th>
+<th>6× 堆计量延迟</th>
+<th>尾部延迟表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Serial</strong></td>
+<td>优</td>
+<td>优</td>
+<td>优</td>
+<td>优</td>
+<td>最稳定</td>
+</tr>
+<tr>
+<td><strong>Parallel</strong></td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>略逊于 Serial</td>
+</tr>
+<tr>
+<td><strong>G1</strong></td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>平衡</td>
+</tr>
+<tr>
+<td><strong>Shenandoah</strong></td>
+<td>中</td>
+<td>中</td>
+<td>中偏弱</td>
+<td><strong>差</strong></td>
+<td>大堆下显著恶化</td>
+</tr>
+<tr>
+<td><strong>ZGC</strong></td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>中偏弱</td>
+<td>略优于 Shenandoah</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：该图强调了在评估 GC 性能时，不能仅依赖 GC 暂停时间或墙钟时间，而应结合 <strong>用户感知延迟</strong>（尤其是计量延迟）和 <strong>工作负载特性</strong>（如 h2 的低 GC 频率、高分配率）进行多维度分析。新型 GC 并非在所有场景下都优于传统 GC，需根据具体应用场景选择。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

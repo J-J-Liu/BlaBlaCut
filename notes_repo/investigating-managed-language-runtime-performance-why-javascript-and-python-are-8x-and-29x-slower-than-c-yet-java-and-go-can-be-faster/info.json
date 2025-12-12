@@ -1,0 +1,20 @@
+{
+  "index": "investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster",
+  "paper_title": "Investigating Managed Language Runtime Performance: Why JavaScript and Python are 8x and 29x slower than C++, yet Java and Go can be Faster?",
+  "metadata": {
+    "authors": [
+      "David Lion",
+      "Adrian Chiu",
+      "Michael Stumm",
+      "et al."
+    ],
+    "affiliations": [
+      "University of Toronto",
+      "YScope Inc."
+    ],
+    "venue": "USENIX ATC",
+    "year": 2022,
+    "doi": null
+  },
+  "description": "该论文对Java、Go、JavaScript和Python的运行时性能进行了深入分析，以C++为基线。通过自研的LangBench基准测试套件和对OpenJDK、V8、CPython运行时的深度插桩，量化了各语言的开销来源。研究发现CPython和V8/Node.js分别比C++慢29.5倍和8倍且难以并行扩展，而OpenJDK和Go仅慢1.43倍和1.3倍，并在部分场景下因GC改善缓存局部性或优化I/O而超越C++。"
+}

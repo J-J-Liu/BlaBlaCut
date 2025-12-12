@@ -1,0 +1,1544 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gray-in-young-a-generational-garbage-collection-for-processing-in-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1dram-read-throughput-different-lines-represent-different-transfer-sizes-81664and-1024-bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1.DRAM read throughput; different lines represent different transfer sizes (8,16,64,and 1024 bytes)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2dram-write-throughput-different-lines-represent-different-transfer-sizes-81664and-1024-bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2.DRAM write throughput; different lines represent different transfer sizes (8,16,64,and 1024 bytes)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-copy-with-cheneys-copying-algorithm-light-gray-objects-may-have-pointers-to-young-space-and-dark-gray-objects-do-not-have-pointers-to-young-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. Copy with Cheney's copying algorithm; light gray objects may have pointers to young space, and dark gray objects do not have pointers to young space.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5copy-with-giy-algorithm-white-objects-in-old-space-are-empty-shells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5.Copy with GiY algorithm; white objects in old space are empty shells.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-copying-function-of-the-giy-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. Copying function of the GiY algorithm.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-gc-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. GC stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8batch-copy-of-the-compaction-based-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8.Batch copy of the compaction-based algorithm.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#392f73897e421f1546bc9a9d7605f3282eedfb3814270a9357bfd34e8448a547jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        392f73897e421f1546bc9a9d7605f3282eedfb3814270a9357bfd34e8448a547.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9class-table-dashed-line-indicates-where-the-index-refers-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9.class table; dashed line indicates where the index refers to.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10oli-cache-dashed-line-indicates-where-the-index-refers-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10.OLI cache; dashed line indicates where the index refers to.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-average-promotion-ratio-and-the-number-of-major-and-minor-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1. Average promotion ratio and the number of major and minor collections.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-execution-time-of-the-benchmark-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11. Execution time of the benchmark program.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-total-minor-collection-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12. Total minor collection time.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13total-minor-collection-time-for-the-variations-of-giy-executed-in-11-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13.Total minor collection time for the variations of GiY executed in 11 threads.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2dram-access-count-and-bytes-for-the-variants-of-giy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2.DRAM access count and bytes for the variants of GiY.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-14-scalability-of-parallel-giy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 14. Scalability of parallel GiY.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-15-binary-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 15. Binary size.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="gray-in-young-a-generational-garbage-collection-for-processing-in-memory">Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory 图表详解<a class="headerlink" href="#gray-in-young-a-generational-garbage-collection-for-processing-in-memory" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1dram-read-throughput-different-lines-represent-different-transfer-sizes-81664and-1024-bytes">Figure 1.DRAM read throughput; different lines represent different transfer sizes (8,16,64,and 1024 bytes)<a class="headerlink" href="#figure-1dram-read-throughput-different-lines-represent-different-transfer-sizes-81664and-1024-bytes" title="Permanent link">&para;</a></h3>
+<p><img alt="37d0d14e618364c941af1117b30055185a2c4a0e7db89e02788a367d6fc8d004.jpg" src="../images/37d0d14e618364c941af1117b30055185a2c4a0e7db89e02788a367d6fc8d004.jpg" /></p>
+<ul>
+<li>图表标题为“Read”，纵轴表示吞吐量（单位：MB/sec），横轴表示线程数量（threads），范围从1到10。</li>
+<li>图中包含四条曲线，分别代表不同DMA传输大小下的DRAM读取吞吐量：<strong>8字节</strong>（红色方块）、<strong>16字节</strong>（绿色圆点）、<strong>64字节</strong>（橙色菱形）、<strong>1024字节</strong>（蓝色三角）。</li>
+<li><strong>1024字节</strong>传输在所有线程数下均表现出最高吞吐量，峰值接近600 MB/sec，在2线程时达到最大值后略有下降，但整体维持高位。</li>
+<li><strong>64字节</strong>传输在2线程时吞吐量跃升至约300 MB/sec，之后趋于平稳，稳定在280–300 MB/sec区间。</li>
+<li><strong>16字节</strong>传输在2线程时吞吐量约为100 MB/sec，随后缓慢上升并在5线程后稳定于120 MB/sec左右。</li>
+<li><strong>8字节</strong>传输表现最弱，即使在10线程下吞吐量也仅约70 MB/sec，增长幅度极小。</li>
+<li>从趋势可见，<strong>增大DMA传输粒度显著提升吞吐量</strong>，而多线程对小粒度传输的优化效果更明显；大粒度传输本身已高效，多线程增益有限。</li>
+<li>数据概览如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Transfer Size (bytes)</th>
+<th>Max Throughput (MB/sec)</th>
+<th>Peak Thread Count</th>
+<th>Trend after Peak</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1024</td>
+<td>~600</td>
+<td>2</td>
+<td>Slight decline</td>
+</tr>
+<tr>
+<td>64</td>
+<td>~300</td>
+<td>3</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>16</td>
+<td>~120</td>
+<td>5+</td>
+<td>Slow rise then stable</td>
+</tr>
+<tr>
+<td>8</td>
+<td>~70</td>
+<td>10</td>
+<td>Nearly flat</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图验证了论文中关于DMA访问特性的描述：<strong>小粒度访问需依赖多线程掩盖延迟，大粒度访问则天然高效</strong>，与DPU架构设计相呼应。</li>
+</ul>
+<h3 id="figure-2dram-write-throughput-different-lines-represent-different-transfer-sizes-81664and-1024-bytes">Figure 2.DRAM write throughput; different lines represent different transfer sizes (8,16,64,and 1024 bytes)<a class="headerlink" href="#figure-2dram-write-throughput-different-lines-represent-different-transfer-sizes-81664and-1024-bytes" title="Permanent link">&para;</a></h3>
+<p><img alt="bce71da43470012ef3ce5cbd2f1f58c1796737f772da37fb7e5700efd4ee1a10.jpg" src="../images/bce71da43470012ef3ce5cbd2f1f58c1796737f772da37fb7e5700efd4ee1a10.jpg" /></p>
+<ul>
+<li>图表标题为“Write”，纵轴表示“throughput (MB/sec)”，横轴表示“threads”，展示了不同 DMA 传输大小下 DRAM 写入吞吐量随线程数变化的趋势。</li>
+<li>图中包含四条曲线，分别代表四种 DMA 传输大小：<strong>8 bytes</strong>（红色方块）、<strong>16 bytes</strong>（绿色圆点）、<strong>64 bytes</strong>（橙色菱形）、<strong>1024 bytes</strong>（蓝色三角）。</li>
+<li><strong>1024 bytes</strong> 的写入吞吐量最高，稳定在约 <strong>550–600 MB/sec</strong>，且从 2 线程起即达到峰值，后续线程增加对性能提升有限。</li>
+<li><strong>64 bytes</strong> 的吞吐量次之，约 <strong>300–350 MB/sec</strong>，在 3–4 线程后趋于平稳。</li>
+<li><strong>16 bytes</strong> 和 <strong>8 bytes</strong> 吞吐量较低，分别在 <strong>100–150 MB/sec</strong> 和 <strong>50–100 MB/sec</strong> 区间，且随线程数增加缓慢上升，但始终远低于大块传输。</li>
+<li>数据表明，<strong>DMA 传输粒度越大，吞吐量越高</strong>；多线程可缓解小粒度传输的延迟，但无法弥补其固有带宽劣势。</li>
+<li>下表总结各传输大小在 10 线程下的近似吞吐量：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Transfer Size</th>
+<th>Throughput (MB/sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1024 bytes</td>
+<td>~580</td>
+</tr>
+<tr>
+<td>64 bytes</td>
+<td>~330</td>
+</tr>
+<tr>
+<td>16 bytes</td>
+<td>~140</td>
+</tr>
+<tr>
+<td>8 bytes</td>
+<td>~90</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：在 DPU 架构中，优化 GC 应尽量采用<strong>大粒度 DMA 传输</strong>以最大化吞吐量，小粒度访问即使并行化也难以弥补性能损失。</li>
+</ul>
+<h3 id="figure-3-overview">Figure 3. Overview<a class="headerlink" href="#figure-3-overview" title="Permanent link">&para;</a></h3>
+<p><img alt="062f75c491cfdf611fad3a35c71acec74b556bdb356b1a86622024e80f4605f3.jpg" src="../images/062f75c491cfdf611fad3a35c71acec74b556bdb356b1a86622024e80f4605f3.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Gray-in-Young</strong> 垃圾回收器在 UPMEM PIM 系统中的整体架构，分为 <strong>host CPU</strong> 和 <strong>DPU</strong> 两个主要部分。</li>
+<li>在 <strong>host CPU</strong> 侧，存储了多个二进制文件，包括：<ul>
+<li><code>kernel1 + minor GC</code>：包含计算内核和次要垃圾回收例程。</li>
+<li><code>major GC</code>：独立的、用于执行主要垃圾回收的二进制文件。</li>
+<li><code>kernel3 + minor GC</code>：另一个包含不同内核和次要垃圾回收例程的二进制文件。</li>
+</ul>
+</li>
+<li><strong>host CPU</strong> 通过“load &amp; launch”机制将选定的内核二进制加载到 <strong>DPU</strong> 上执行。</li>
+<li><strong>DPU</strong> 内部结构清晰划分：<ul>
+<li><strong>SPM (Scratch Pad Memory)</strong> 区域包含：<ul>
+<li><code>young space</code>：位于 SPM 中，用于存放新生代对象。</li>
+<li><code>runtime data</code>：运行时数据，与年轻代空间并列。</li>
+</ul>
+</li>
+<li><strong>DRAM</strong> 区域包含：<ul>
+<li><code>old space</code>：位于 DRAM 中，用于存放老年代对象。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>当 <strong>DPU</strong> 执行 <code>kernel3 + minor GC</code> 时，其线程（用波浪线表示）在 SPM 的 <code>young space</code> 中进行对象分配和垃圾回收操作。</li>
+<li>该图强调了 <strong>minor GC</strong> 例程被链接到每个内核二进制中，而 <strong>major GC</strong> 例程则作为独立二进制由 host CPU 按需加载，以节省 DPU 有限的程序内存（24 KB）。</li>
+<li>整体设计体现了 <strong>generational GC</strong> 的核心思想：年轻代在高速 SPM，老年代在大容量 DRAM，并通过 DMA 进行数据迁移。</li>
+</ul>
+<h3 id="figure-4-copy-with-cheneys-copying-algorithm-light-gray-objects-may-have-pointers-to-young-space-and-dark-gray-objects-do-not-have-pointers-to-young-space">Figure 4. Copy with Cheney's copying algorithm; light gray objects may have pointers to young space, and dark gray objects do not have pointers to young space.<a class="headerlink" href="#figure-4-copy-with-cheneys-copying-algorithm-light-gray-objects-may-have-pointers-to-young-space-and-dark-gray-objects-do-not-have-pointers-to-young-space" title="Permanent link">&para;</a></h3>
+<p><img alt="62ef87aed55028804b62630b50812dd4b3b75544b35886940ed2293d6a254338.jpg" src="../images/62ef87aed55028804b62630b50812dd4b3b75544b35886940ed2293d6a254338.jpg" /></p>
+<ul>
+<li>图片展示了使用 <strong>Cheney's copying algorithm</strong> 进行对象复制的四步过程，用于说明在 <strong>generational GC</strong> 中从 <strong>young space</strong>（位于 SPM）向 <strong>old space</strong>（位于 DRAM）复制对象时的指针更新问题。</li>
+<li>该图强调了在 DPU 架构下，由于 <strong>DRAM access latency</strong> 高昂，频繁的指针级访问会带来显著性能开销。</li>
+<li>四个子图分别表示：<ul>
+<li>(1) 初始状态：对象 A 和 B 位于 young space，A 指向 B。</li>
+<li>(2) 复制 A：将 A 复制到 old space 形成 A'，此时 A' 的指针仍指向 young space 中的 B。</li>
+<li>(3) 复制 B 并更新 A'：复制 B 到 old space 形成 B'，然后扫描 A' 并将其指针从 B 更新为 B'。</li>
+<li>(4) 完成：所有指针已更新，B' 被标记为无指向 young space 的指针（深灰色），表明其已完全处理。</li>
+</ul>
+</li>
+<li>关键观察点：<ul>
+<li>在步骤 (3) 中，GC 需要<strong>回访 old space 中的对象 A'</strong> 来更新其指针，这导致了对 DRAM 的额外访问。</li>
+<li>每次更新指针都可能触发一次小粒度的 DMA 操作，加剧了性能瓶颈。</li>
+<li>此算法在 DPU 上效率低下的原因在于：<strong>对象扫描和指针更新均发生在 DRAM 中</strong>，且对象是逐个复制而非批量操作。</li>
+</ul>
+</li>
+<li>与论文提出的 <strong>Gray-in-Young (GiY)</strong> 算法对比：<ul>
+<li>GiY 将“灰对象”保留在 young space，仅在对象变为“黑对象”后才复制到 old space。</li>
+<li>GiY 在 young space 内完成所有指针更新，避免了在 DRAM 中进行多次小粒度访问。</li>
+<li>GiY 对每个对象仅执行一次 DMA 操作，而 Cheney 算法涉及 N + 2NR 次 DMA 操作（N 为存活对象数，R 为平均指针数）。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>描述</th>
+<th>关键动作</th>
+<th>DRAM 访问</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(1)</td>
+<td>初始状态</td>
+<td>A → B (都在 young space)</td>
+<td>无</td>
+</tr>
+<tr>
+<td>(2)</td>
+<td>复制 A</td>
+<td>A' 被创建于 old space，A' → B</td>
+<td>1 次写入 (A')</td>
+</tr>
+<tr>
+<td>(3)</td>
+<td>复制 B &amp; 更新 A'</td>
+<td>B' 被创建，A' 的指针从 B 更新为 B'</td>
+<td>1 次写入 (B') + 1 次读取/写入 (更新 A')</td>
+</tr>
+<tr>
+<td>(4)</td>
+<td>完成</td>
+<td>所有指针有效，B' 为深灰色</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观揭示了传统复制算法在 PIM 架构下的缺陷，为论文提出 <strong>GiY 算法</strong> 提供了动机和对比基础。</li>
+</ul>
+<h3 id="figure-5copy-with-giy-algorithm-white-objects-in-old-space-are-empty-shells">Figure 5.Copy with GiY algorithm; white objects in old space are empty shells.<a class="headerlink" href="#figure-5copy-with-giy-algorithm-white-objects-in-old-space-are-empty-shells" title="Permanent link">&para;</a></h3>
+<p><img alt="c25e9a01d208db5ce7269fadc7aea15c8a848947ac08ae8e8fc21f41314519a4.jpg" src="../images/c25e9a01d208db5ce7269fadc7aea15c8a848947ac08ae8e8fc21f41314519a4.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Gray-in-Young (GiY)</strong> 算法在对象复制过程中的四个关键步骤，旨在减少对 <strong>DRAM</strong> 的访问。</li>
+<li>该图以对象 A 和 B 为例，演示了从 <strong>young space</strong>（位于 SPM）到 <strong>old space</strong>（位于 DRAM）的复制流程。</li>
+<li>每个子图下方标注了序号和简要说明，清晰呈现算法执行顺序。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>描述</th>
+<th>关键操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(1) initial state</td>
+<td>初始状态</td>
+<td>对象 A 和 B 均位于 young space，A 指向 B。</td>
+</tr>
+<tr>
+<td>(2) allocate A'</td>
+<td>分配 A'</td>
+<td>在 old space 中为 A 的副本 A' 分配内存空间，此时 A' 是一个 <strong>empty shell</strong>（空壳）。</td>
+</tr>
+<tr>
+<td>(3) allocate B', update A</td>
+<td>分配 B' 并更新 A 的指针</td>
+<td>为 B 的副本 B' 分配空间，并将 A 中指向 B 的指针更新为指向 B'。</td>
+</tr>
+<tr>
+<td>(4) copy A</td>
+<td>复制 A 的内容</td>
+<td>将 A 的完整内容通过单次 DMA 操作复制到 A'，完成 A 的晋升。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>核心优化点</strong>：</p>
+<ul>
+<li>所有指针更新操作均在对象仍位于 <strong>young space</strong> 时完成，避免后续在 DRAM 中进行多次小粒度指针修改。</li>
+<li>使用 <strong>empty shell</strong> 预分配机制，确保对象复制前其目标地址已确定，便于指针提前重定向。</li>
+<li>最终复制采用单次 DMA，最大化传输效率，减少总 DMA 次数至等于存活对象数量 N。</li>
+</ul>
+</li>
+<li>
+<p>该图直观体现了 GiY 算法如何通过 <strong>预分配 + 指针前置更新 + 单次批量复制</strong> 的策略，显著降低 DRAM 访问频率与开销。</p>
+</li>
+</ul>
+<h3 id="figure-6-copying-function-of-the-giy-algorithm">Figure 6. Copying function of the GiY algorithm.<a class="headerlink" href="#figure-6-copying-function-of-the-giy-algorithm" title="Permanent link">&para;</a></h3>
+<p><img alt="db997ecdf4a8201a592f3a88a327e0b00d8649533113ac6763957b84c1b45f7d.jpg" src="../images/db997ecdf4a8201a592f3a88a327e0b00d8649533113ac6763957b84c1b45f7d.jpg" /></p>
+<ul>
+<li>该图展示了 <strong>Gray-in-Young (GiY)</strong> 算法的核心函数 <code>copy(r)</code>，用于在 Minor GC 中递归复制对象及其引用的子对象。</li>
+<li>函数分为两个阶段：<strong>准备阶段</strong>（Lines 2–7）和 <strong>DFS 遍历阶段</strong>（Lines 8–17）。</li>
+<li>在准备阶段，若对象 <code>r</code> 的 <code>forwarding</code> 字段非空，则直接返回其已分配的副本地址；否则，为其分配内存并压入 GC 栈，标记为待处理。</li>
+<li>DFS 遍历阶段通过栈结构实现深度优先搜索，每次弹出一个对象 <code>o</code>，遍历其所有指针字段 <code>f</code>。</li>
+<li>对每个指针 <code>p = o[f]</code>，若其目标对象尚未分配副本（<code>p.forwarding == null</code>），则为其分配内存、压入栈，并更新 <code>o[f]</code> 指向新副本地址。</li>
+<li>当对象 <code>o</code> 的所有指针更新完毕后，调用 <code>dma_copy(o, o.forwarding, o.size)</code> 将整个对象内容一次性 DMA 复制到 DRAM 中的目标位置。</li>
+<li>最终返回根对象 <code>r</code> 的副本地址，完成整个子图的复制与指针重定向。</li>
+<li>该设计的关键优势在于：<strong>所有指针更新均在 SPM 内完成</strong>，避免了在 DRAM 中频繁进行小粒度指针访问；同时，<strong>每个对象仅触发一次 DMA 操作</strong>，最大化 DMA 效率。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>行号</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2–4</td>
+<td>检查是否已分配副本，若已分配则直接返回</td>
+</tr>
+<tr>
+<td>5–7</td>
+<td>分配副本内存，设置 forwarding 指针，压入 GC 栈</td>
+</tr>
+<tr>
+<td>8–9</td>
+<td>循环弹出栈顶对象进行处理</td>
+</tr>
+<tr>
+<td>10–16</td>
+<td>遍历对象指针，为未分配副本的目标对象分配内存并更新指针</td>
+</tr>
+<tr>
+<td>17</td>
+<td>使用 DMA 一次性复制对象内容至目标地址</td>
+</tr>
+<tr>
+<td>18</td>
+<td>返回根对象副本地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此伪代码体现了 GiY 算法“<strong>先更新指针，再批量复制</strong>”的设计哲学，有效减少 DRAM 访问次数，提升 GC 性能。</li>
+</ul>
+<h3 id="figure-7-gc-stack">Figure 7. GC stack<a class="headerlink" href="#figure-7-gc-stack" title="Permanent link">&para;</a></h3>
+<p><img alt="602b2ea8d0832c9aa93e71dacd776c0cb8b297bb2fbaea83a1e921687ab744e5.jpg" src="../images/602b2ea8d0832c9aa93e71dacd776c0cb8b297bb2fbaea83a1e921687ab744e5.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>GC stack</strong> 的分层架构，旨在优化 DPU 上的并行垃圾回收性能。</li>
+<li>整体结构分为三层：<strong>local GC stack</strong>、<strong>global GC stack (top)</strong> 和 <strong>global GC stack (bottom)</strong>，分别位于不同内存层级。</li>
+<li><strong>local GC stack</strong> 位于 <strong>SPM</strong>，每个线程独占一个小栈（图中显示三个），容量极小（仅4个条目），用于快速本地任务分配。</li>
+<li>当 local GC stack 溢出时，线程会将一半内容导出至 <strong>global GC stack (top)</strong>，该层也位于 <strong>SPM</strong>，容量较大（256个条目），作为共享缓冲区。</li>
+<li>若 global GC stack (top) 溢出，则继续将一半内容下推至 <strong>global GC stack (bottom)</strong>，该层位于 <strong>DRAM</strong>，作为最终存储层，容量无硬性限制。</li>
+<li>此设计通过“<strong>局部优先 + 分层导出</strong>”机制实现负载均衡，减少对慢速 DRAM 的频繁访问，同时鼓励多线程协作。</li>
+<li>箭头指示数据流向：从 local → global top → global bottom，以及反向回填（如 global top 可接收来自 bottom 的数据）。</li>
+<li>关键目标是利用 SPM 的高速访问特性，最小化 DMA 开销，提升并行 GC 的吞吐量与可扩展性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>存储位置</th>
+<th>容量</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local GC stack</td>
+<td>SPM</td>
+<td>4 entries per thread</td>
+<td>线程私有，快速处理本地对象引用</td>
+</tr>
+<tr>
+<td>global GC stack (top)</td>
+<td>SPM</td>
+<td>256 entries</td>
+<td>共享缓冲，平衡各线程负载</td>
+</tr>
+<tr>
+<td>global GC stack (bottom)</td>
+<td>DRAM</td>
+<td>无上限</td>
+<td>最终存储，应对大规模对象图遍历</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该架构支持最多 <strong>11个硬件线程</strong> 并行执行 GC，符合 DPU 的流水线利用率要求。</li>
+</ul>
+<h3 id="figure-8batch-copy-of-the-compaction-based-algorithm">Figure 8.Batch copy of the compaction-based algorithm.<a class="headerlink" href="#figure-8batch-copy-of-the-compaction-based-algorithm" title="Permanent link">&para;</a></h3>
+<p><img alt="7fca03338e6393636b604969976529da84cd1501d905e60d6db91d1d1d5ba3e0.jpg" src="../images/7fca03338e6393636b604969976529da84cd1501d905e60d6db91d1d1d5ba3e0.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>compaction-based algorithm</strong> 的批处理复制过程，核心是将年轻代（young space）中经过压缩的存活对象一次性批量复制到老年代（old space）。</li>
+<li><strong>young space</strong> 位于图上部，其起始地址标记为 <strong>Y₀</strong>。经过压缩后，所有存活对象被紧凑排列在 young space 的起始位置，形成一个连续的数据块。</li>
+<li><strong>old space</strong> 位于图下部，其当前空闲区域的起始地址标记为 <strong>O_free</strong>。该区域用于接收从 young space 复制过来的对象。</li>
+<li>一条粗黑箭头标有 <strong>DMA</strong>，表示数据传输路径。它从 young space 中压缩后的对象块指向 old space 中的 O_free 地址，表明整个压缩后的对象块通过 <strong>DMA</strong> 操作被一次性搬移到老年代。</li>
+<li>虚线框在 old space 中表示即将被填充的目标区域，其大小与 young space 中压缩后的对象块相匹配。</li>
+<li>此设计旨在最大化利用 DMA 的高吞吐量特性，通过一次大粒度传输（最大可达 2048 字节）替代多次小粒度访问，从而显著减少 DRAM 访问次数和相关开销。</li>
+<li>该算法基于 <strong>Lisp2</strong> 标记-压缩算法，在复制前已更新对象内部指针，确保复制到 old space 后指针仍有效。</li>
+</ul>
+<h3 id="392f73897e421f1546bc9a9d7605f3282eedfb3814270a9357bfd34e8448a547jpg">392f73897e421f1546bc9a9d7605f3282eedfb3814270a9357bfd34e8448a547.jpg<a class="headerlink" href="#392f73897e421f1546bc9a9d7605f3282eedfb3814270a9357bfd34e8448a547jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="392f73897e421f1546bc9a9d7605f3282eedfb3814270a9357bfd34e8448a547.jpg" src="../images/392f73897e421f1546bc9a9d7605f3282eedfb3814270a9357bfd34e8448a547.jpg" /></p>
+<ul>
+<li>图片内容为一个数学公式，用于计算对象在<strong>compaction-based algorithm</strong>中被移动到<strong>old space</strong>后的新地址。</li>
+<li>公式表达式为：<strong>new_address = forwarding - Y₀ + O_free</strong>。</li>
+<li><strong>forwarding</strong> 指的是在第一遍扫描时，对象在<strong>young space</strong>中被计算出的“目标偏移地址”，存储于对象头的<strong>forwarding field</strong>中。</li>
+<li><strong>Y₀</strong> 代表<strong>young space</strong>的起始地址，用于将对象在年轻代中的相对位置转换为绝对地址。</li>
+<li><strong>O_free</strong> 是<strong>old space</strong>中当前可用的、连续空闲区域的起始地址，确保所有被压缩的对象能被集中复制到一块连续内存中。</li>
+<li>该公式是<strong>Lisp2算法</strong>第三阶段（对象移动）的关键步骤，其目的是在不破坏对象间指针关系的前提下，将所有存活对象紧凑地迁移到老年代。</li>
+<li>此设计避免了在对象移动后再逐个更新指针，而是提前在第二阶段就将指针指向最终目标地址，从而减少后续的<strong>DRAM访问</strong>开销。</li>
+</ul>
+<h3 id="figure-9class-table-dashed-line-indicates-where-the-index-refers-to">Figure 9.class table; dashed line indicates where the index refers to.<a class="headerlink" href="#figure-9class-table-dashed-line-indicates-where-the-index-refers-to" title="Permanent link">&para;</a></h3>
+<p><img alt="8a0ed4165fe2b4debb213024d5bd89f4cec998967560eba0f8d41daafab5ea54.jpg" src="../images/8a0ed4165fe2b4debb213024d5bd89f4cec998967560eba0f8d41daafab5ea54.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Object Layout Information (OLI)</strong> 在 <strong>class table</strong> 中的存储结构，用于支持垃圾回收器（GC）在扫描对象时定位指针字段。</li>
+<li>对象头部包含一个 <strong>global class index</strong> 字段，该字段通过虚线指向 <strong>class table</strong> 中对应的条目。这个索引是全局唯一的，标识了对象所属的类。</li>
+<li><strong>class table</strong> 是一个数组，每个条目包含一个 <strong>OLI</strong> 结构体和一个指向 <strong>bitmap</strong> 的指针。</li>
+<li><strong>OLI</strong> 结构体本身包含两个关键信息：对象大小（以字节为单位）和一个指向 <strong>bitmap</strong> 的指针。</li>
+<li><strong>bitmap</strong> 用于标记对象中哪些字段是指针。由于对象字段数量可变，<strong>bitmap</strong> 的大小不固定，因此被分配在堆上，并通过指针引用，而不是直接内嵌在 <strong>OLI</strong> 中。</li>
+<li>图中的灰色方块代表 <strong>OLI</strong> 结构体，而黑白相间的条形图代表 <strong>bitmap</strong>。</li>
+<li>这种设计允许 GC 在扫描对象时，根据对象头中的 <strong>global class index</strong> 快速查找到其 <strong>OLI</strong>，进而通过 <strong>bitmap</strong> 确定哪些字段需要被更新或追踪。</li>
+<li>该图强调了 <strong>DRAM</strong> 访问的开销：因为 <strong>class table</strong> 和 <strong>bitmap</strong> 都存储在 <strong>DRAM</strong> 中，每次扫描对象都需要进行一次或多次 <strong>DRAM</strong> 访问，这正是论文中提出缓存 <strong>OLI</strong> 到 <strong>SPM</strong> 的动机所在。</li>
+</ul>
+<h3 id="figure-10oli-cache-dashed-line-indicates-where-the-index-refers-to">Figure 10.OLI cache; dashed line indicates where the index refers to.<a class="headerlink" href="#figure-10oli-cache-dashed-line-indicates-where-the-index-refers-to" title="Permanent link">&para;</a></h3>
+<p><img alt="b4ccbc9ed3922d5c2f3e1a3bce2dc31eb1018bfbeabbfed35ec698385db47b03.jpg" src="../images/b4ccbc9ed3922d5c2f3e1a3bce2dc31eb1018bfbeabbfed35ec698385db47b03.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>OLI cache</strong> 的结构及其与对象和类表的交互关系，核心目的是减少 <strong>DRAM</strong> 访问。</li>
+<li><strong>young object</strong> 中存储的是 <strong>local class index</strong>（如图中值为 1），而非全局索引，这是为了在 <strong>SPM</strong> 中快速查找 OLI。</li>
+<li><strong>OLI cache</strong> 是一个位于 <strong>SPM</strong> 的数组，每个条目包含一对数据：<strong>local class index</strong> 和对应的 <strong>OLI</strong>。例如，索引 0 对应 local class index 1 的 OLI，索引 1 对应 local class index 5 的 OLI。</li>
+<li>当对象从 <strong>young space</strong> 被提升到 <strong>old space</strong> 时，系统会执行 <strong>convert class index when promoted</strong> 操作，将对象头中的 <strong>local class index</strong> 替换为 <strong>global class index</strong>。</li>
+<li><strong>class table</strong> 存储在 <strong>DRAM</strong> 中，包含所有类的完整信息。<strong>old object</strong> 使用 <strong>global class index</strong> 直接指向 <strong>class table</strong>，以支持跨内核调用。</li>
+<li>下表总结了不同对象类型使用的索引及存储位置：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>对象类型</th>
+<th>索引类型</th>
+<th>存储位置</th>
+<th>用途说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>young object</td>
+<td>local class index</td>
+<td>SPM</td>
+<td>快速访问 OLI cache</td>
+</tr>
+<tr>
+<td>old object</td>
+<td>global class index</td>
+<td>DRAM</td>
+<td>支持多内核共享类信息</td>
+</tr>
+<tr>
+<td>OLI cache</td>
+<td>local class index</td>
+<td>SPM</td>
+<td>缓存当前内核可能用到的 OLI</td>
+</tr>
+<tr>
+<td>class table</td>
+<td>global class index</td>
+<td>DRAM</td>
+<td>全局类信息存储</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>虚线箭头表示索引引用路径：<strong>young object → OLI cache → OLI</strong>，以及 <strong>old object → class table → OLI</strong>。</li>
+<li>此设计通过静态确定内核所需类集，在编译时构建 <strong>OLI cache</strong>，避免运行时频繁访问 <strong>DRAM</strong>，从而优化性能。</li>
+</ul>
+<h3 id="table-1-average-promotion-ratio-and-the-number-of-major-and-minor-collections">Table 1. Average promotion ratio and the number of major and minor collections.<a class="headerlink" href="#table-1-average-promotion-ratio-and-the-number-of-major-and-minor-collections" title="Permanent link">&para;</a></h3>
+<p><img alt="c8aea527a435881ad94f6ee22c2f65a69c266568e7c8cd473a9c8f30b289058b.jpg" src="../images/c8aea527a435881ad94f6ee22c2f65a69c266568e7c8cd473a9c8f30b289058b.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 1</strong>，标题为 “Average promotion ratio and the number of major and minor collections”，用于展示在不同参数 α 下的垃圾回收行为统计。</li>
+<li>表格包含三列数据，分别对应 α = <strong>7</strong>、<strong>15</strong> 和 <strong>100</strong> 三种配置。</li>
+<li>表格内容如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>α</th>
+<th>7</th>
+<th>15</th>
+<th>100</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>average promotion ratio</td>
+<td>3.6%</td>
+<td>7.6%</td>
+<td>50.2%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>平均晋升率（average promotion ratio）</strong> 随着 α 增大显著上升：从 3.6%（α=7）到 50.2%（α=100），表明当树规模增大时，更多对象从年轻代晋升至老年代。</li>
+<li><strong>Minor Collection 次数</strong> 在 α=7 和 α=15 时均为 1508 次，在 α=100 时略增至 1510 次，说明插入总量相近时 Minor GC 触发频率基本稳定。</li>
+<li><strong>Major Collection 次数</strong> 仅在 α=100 时发生 2 次，表明老年代空间压力随对象晋升量增加而显现，触发了完整垃圾回收。</li>
+<li>该表支撑了论文中关于“晋升行为与树规模相关”的实验设计，并为后续性能分析（如图11、12）提供基础数据。</li>
+</ul>
+<h3 id="figure-11-execution-time-of-the-benchmark-program">Figure 11. Execution time of the benchmark program.<a class="headerlink" href="#figure-11-execution-time-of-the-benchmark-program" title="Permanent link">&para;</a></h3>
+<p><img alt="2d02814c665493c45bed16ae462f7ed58827357f40084d7394ec1d90204461a7.jpg" src="../images/2d02814c665493c45bed16ae462f7ed58827357f40084d7394ec1d90204461a7.jpg" /></p>
+<ul>
+<li>图表展示了不同垃圾回收器（GC）在不同参数 α（7、15、100）下的<strong>总执行时间</strong>，单位为秒。数据按 GC 类型分组，每组包含四个柱状图：GiY、YC、MC、DFS。</li>
+<li>每个柱状图由三部分堆叠组成：<ul>
+<li><strong>底部橙色部分</strong>：表示 mutator（应用逻辑）的执行时间。</li>
+<li><strong>中间白色部分</strong>：表示 minor collection 的执行时间。</li>
+<li><strong>顶部黑色部分</strong>：表示 major collection 的执行时间。</li>
+</ul>
+</li>
+<li>所有 GC 均在单线程下运行，用于比较基础性能。</li>
+<li><strong>关键观察</strong>：<ul>
+<li>对于所有 α 值，<strong>generational GCs（GiY, YC, DFS）的总 GC 时间均短于非代际 GC（MC）</strong>，证明将 young space 置于 SPM 的有效性。</li>
+<li>尽管 generational GC 需要 write barrier 开销，其 mutator 时间仍优于 MC，因对象在 SPM 中创建和初始化更快。</li>
+<li><strong>GiY 在多数情况下表现最优</strong>，尤其在 α=100 时，其总时间显著低于其他 GC。</li>
+<li><strong>YC（compaction-based）表现最差</strong>，表明在 DPU 上 compaction 开销大于减少 DRAM 访问带来的收益。</li>
+<li>随着 α 增大，mutator 时间增加，因树规模增大导致插入操作耗时更长。</li>
+</ul>
+</li>
+<li>数据概览：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>α</th>
+<th>GC 类型</th>
+<th>Mutator 时间 (sec)</th>
+<th>Minor Collection 时间 (sec)</th>
+<th>Major Collection 时间 (sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>GiY</td>
+<td>~16</td>
+<td>~1</td>
+<td>~2</td>
+</tr>
+<tr>
+<td>7</td>
+<td>YC</td>
+<td>~17</td>
+<td>~1</td>
+<td>~3</td>
+</tr>
+<tr>
+<td>7</td>
+<td>MC</td>
+<td>~18</td>
+<td>—</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>7</td>
+<td>DFS</td>
+<td>~17</td>
+<td>~1</td>
+<td>~4</td>
+</tr>
+<tr>
+<td>15</td>
+<td>GiY</td>
+<td>~19</td>
+<td>~1</td>
+<td>~2</td>
+</tr>
+<tr>
+<td>15</td>
+<td>YC</td>
+<td>~20</td>
+<td>~1</td>
+<td>~3</td>
+</tr>
+<tr>
+<td>15</td>
+<td>MC</td>
+<td>~21</td>
+<td>—</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>15</td>
+<td>DFS</td>
+<td>~20</td>
+<td>~1</td>
+<td>~4</td>
+</tr>
+<tr>
+<td>100</td>
+<td>GiY</td>
+<td>~25</td>
+<td>~1</td>
+<td>~2</td>
+</tr>
+<tr>
+<td>100</td>
+<td>YC</td>
+<td>~26</td>
+<td>~1</td>
+<td>~3</td>
+</tr>
+<tr>
+<td>100</td>
+<td>MC</td>
+<td>~28</td>
+<td>—</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>100</td>
+<td>DFS</td>
+<td>~27</td>
+<td>~1</td>
+<td>~4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>结论</strong>：GiY 是最适合 DPU 的 minor collection 算法，兼顾性能与效率；compaction 不适合当前 DPU 架构；generational GC 显著优于非代际 GC。</li>
+</ul>
+<h3 id="figure-12-total-minor-collection-time">Figure 12. Total minor collection time.<a class="headerlink" href="#figure-12-total-minor-collection-time" title="Permanent link">&para;</a></h3>
+<p><img alt="7b1dd5eb7cb73d8907ac9a5501a7e04cb05475c971cb22b20de47a00b67b99b4.jpg" src="../images/7b1dd5eb7cb73d8907ac9a5501a7e04cb05475c971cb22b20de47a00b67b99b4.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 12. Total minor collection time</strong>，展示不同垃圾回收算法在不同参数 α 下的<strong>总 Minor Collection 耗时</strong>（单位：秒）。</li>
+<li>横轴按 α 值分组（α = 7, 15, 100），每组内比较三种 GC 算法：<strong>GiY</strong>、<strong>YC</strong>、<strong>DFS</strong>。</li>
+<li>纵轴表示耗时，范围从 0 到 0.6 秒，刻度间隔为 0.1 秒。</li>
+<li>所有数据点均基于<strong>单线程执行</strong>的 Minor Collection，用于对比算法本身效率，排除并行性影响。</li>
+<li>数据趋势显示：<ul>
+<li>随着 α 增大（树规模增大），所有算法的 Minor Collection 时间显著上升。</li>
+<li>在所有 α 值下，<strong>GiY 算法耗时最短</strong>，表现最优。</li>
+<li><strong>YC 算法耗时最长</strong>，尤其在 α=100 时接近 0.65 秒，远超其他两种。</li>
+<li><strong>DFS 算法介于两者之间</strong>，但明显劣于 GiY。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>α 值</th>
+<th>GiY 耗时 (sec)</th>
+<th>YC 耗时 (sec)</th>
+<th>DFS 耗时 (sec)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>~0.03</td>
+<td>~0.14</td>
+<td>~0.05</td>
+</tr>
+<tr>
+<td>15</td>
+<td>~0.06</td>
+<td>~0.20</td>
+<td>~0.10</td>
+</tr>
+<tr>
+<td>100</td>
+<td>~0.32</td>
+<td>~0.65</td>
+<td>~0.48</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>GiY 算法在减少 Minor Collection 时间方面效果显著</strong>，而 YC 算法因引入压缩开销导致性能下降，验证了论文中“compaction was too expensive”的判断。</li>
+</ul>
+<h3 id="figure-13total-minor-collection-time-for-the-variations-of-giy-executed-in-11-threads">Figure 13.Total minor collection time for the variations of GiY executed in 11 threads.<a class="headerlink" href="#figure-13total-minor-collection-time-for-the-variations-of-giy-executed-in-11-threads" title="Permanent link">&para;</a></h3>
+<p><img alt="1d320c29685f228732a621727609882676136125cc91f3d173d4df372a730a12.jpg" src="../images/1d320c29685f228732a621727609882676136125cc91f3d173d4df372a730a12.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>11 线程</strong>环境下，不同变体的 <strong>GiY GC</strong> 在执行 <strong>minor collection</strong> 时的总耗时对比，横轴为树规模参数 <strong>α</strong>（7、15、100），纵轴为 <strong>Elapsed time (ms)</strong>。</li>
+<li>三种变体分别为：<ul>
+<li><strong>+U+C</strong>：启用指针更新（Update in SPM）和 OLI 缓存（Cache）。</li>
+<li><strong>+U-C</strong>：启用指针更新，但禁用 OLI 缓存。</li>
+<li><strong>-U-C</strong>：禁用指针更新（即 DFS 基础版本），且禁用 OLI 缓存。</li>
+</ul>
+</li>
+<li>数据趋势显示，随着 <strong>α</strong> 增大，所有变体的 minor collection 时间均显著上升，表明对象数量增加导致 GC 开销增大。</li>
+<li><strong>+U+C</strong> 在所有 α 值下均表现最优，尤其在 <strong>α = 100</strong> 时，其耗时远低于其他两种变体，验证了两项优化技术的叠加效果。</li>
+<li><strong>+U-C</strong> 耗时介于 +U+C 和 -U-C 之间，说明即使不缓存 OLI，仅在 SPM 中更新指针仍能带来性能提升。</li>
+<li><strong>-U-C</strong> 表现最差，因其在 DRAM 中进行指针扫描与更新，引发大量低效的细粒度 DRAM 访问。</li>
+<li>下表总结各变体在不同 α 下的相对性能：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>α</th>
+<th>+U+C (ms)</th>
+<th>+U-C (ms)</th>
+<th>-U-C (ms)</th>
+<th>+U+C 相对 -U-C 性能提升</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>~12</td>
+<td>~16</td>
+<td>~20</td>
+<td>~40%</td>
+</tr>
+<tr>
+<td>15</td>
+<td>~22</td>
+<td>~30</td>
+<td>~38</td>
+<td>~42%</td>
+</tr>
+<tr>
+<td>100</td>
+<td>~65</td>
+<td>~90</td>
+<td>~120</td>
+<td><strong>46.2%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>指针在 SPM 更新</strong> 和 <strong>OLI 缓存</strong> 两项技术共同作用，可将 minor collection 时间最多减少 <strong>46.2%</strong>，并大幅降低 DRAM 访问次数（最高达 <strong>85.9%</strong>）。</li>
+</ul>
+<h3 id="table-2dram-access-count-and-bytes-for-the-variants-of-giy">Table 2.DRAM access count and bytes for the variants of GiY.<a class="headerlink" href="#table-2dram-access-count-and-bytes-for-the-variants-of-giy" title="Permanent link">&para;</a></h3>
+<p><img alt="c1cc8304825fe5e2aaf21f84a2c9189ceaf1e051b54e52ffcbd72ed9a5ca98ce.jpg" src="../images/c1cc8304825fe5e2aaf21f84a2c9189ceaf1e051b54e52ffcbd72ed9a5ca98ce.jpg" /></p>
+<ul>
+<li>该表格（Table 2）记录了在不同 α 值下，三种 GiY 变体 GC 策略的 DRAM 访问行为对比，核心指标为 <strong>访问次数（count）</strong> 和 <strong>传输字节数（bytes）</strong>。</li>
+<li>数据按 α = 7、15、100 三组呈现，每组包含三个 GC 配置：<strong>+U+C</strong>（更新指针 + OLI 缓存）、<strong>+U-C</strong>（仅更新指针）、<strong>-U-C</strong>（无优化，基线 DFS）。</li>
+<li>表格进一步细分“总访问”与“排除对象拷贝（– copyobj）”后的访问量，以凸显优化技术对非拷贝类 DRAM 操作的削减效果。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>α</th>
+<th>GC</th>
+<th>count (total)</th>
+<th>count (– copyobj)</th>
+<th>bytes (total)</th>
+<th>bytes (– copyobj)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>+U+C</td>
+<td>63.3</td>
+<td>42.0</td>
+<td>1356.8</td>
+<td>336.3</td>
+</tr>
+<tr>
+<td></td>
+<td>+U-C</td>
+<td>148.5</td>
+<td>127.2</td>
+<td>2038.0</td>
+<td>1017.5</td>
+</tr>
+<tr>
+<td></td>
+<td>-U-C</td>
+<td>207.7</td>
+<td>186.4</td>
+<td>2511.9</td>
+<td>1491.3</td>
+</tr>
+<tr>
+<td>15</td>
+<td>+U+C</td>
+<td>74.3</td>
+<td>29.1</td>
+<td>2398.9</td>
+<td>233.1</td>
+</tr>
+<tr>
+<td></td>
+<td>+U-C</td>
+<td>254.9</td>
+<td>209.8</td>
+<td>3844.1</td>
+<td>1678.2</td>
+</tr>
+<tr>
+<td></td>
+<td>-U-C</td>
+<td>383.5</td>
+<td>338.3</td>
+<td>4872.6</td>
+<td>2706.7</td>
+</tr>
+<tr>
+<td>100</td>
+<td>+U+C</td>
+<td>341.9</td>
+<td>42.3</td>
+<td>14720.2</td>
+<td>338.3</td>
+</tr>
+<tr>
+<td></td>
+<td>+U-C</td>
+<td>1540.4</td>
+<td>1240.8</td>
+<td>24308.1</td>
+<td>9926.4</td>
+</tr>
+<tr>
+<td></td>
+<td>-U-C</td>
+<td>2418.6</td>
+<td>2119.0</td>
+<td>31333.8</td>
+<td>16952.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键发现</strong>：<ul>
+<li>在 α=100 时，<strong>+U+C 相比 -U-C，DRAM 访问次数减少 85.9%</strong>（从 2418.6 降至 341.9），字节传输量减少 53.0%（从 31333.8 降至 14720.2）。</li>
+<li>即使排除对象拷贝操作，<strong>+U+C 的访问次数仍比 -U-C 低 98.0%</strong>（2119.0 → 42.3），表明指针更新和 OLI 缓存对细粒度访问有压倒性优化。</li>
+<li><strong>+U-C（仅更新指针）</strong> 显著优于 -U-C，但不如 +U+C，证明 OLI 缓存在 SPM 中能有效避免大量 DRAM 读取。</li>
+<li>随着 α 增大，对象数量增多，优化收益更显著，尤其体现在 – copyobj 列中，说明优化主要作用于指针扫描与更新阶段。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-14-scalability-of-parallel-giy">Figure 14. Scalability of parallel GiY.<a class="headerlink" href="#figure-14-scalability-of-parallel-giy" title="Permanent link">&para;</a></h3>
+<p><img alt="322ed0a6e7cc18c2000516bfa1478813d3b1332fa038b61d66f71273e356b3f8.jpg" src="../images/322ed0a6e7cc18c2000516bfa1478813d3b1332fa038b61d66f71273e356b3f8.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 14. Scalability of parallel GiY</strong>，展示的是并行 GiY 算法在不同线程数下的性能扩展性。</li>
+<li>横轴为 <strong>of threads</strong>（线程数量），范围从 0 到 25；纵轴为 <strong>Elapsed time (sec)</strong>（耗时，单位秒），范围从 0.00 到 0.30。</li>
+<li>图中包含三条曲线，分别对应三个不同的 α 值：<ul>
+<li><strong>alpha=7</strong>：蓝色折线，数据点用十字标记。</li>
+<li><strong>alpha=15</strong>：橙色折线，数据点用菱形标记。</li>
+<li><strong>alpha=100</strong>：绿色折线，数据点用圆形标记。</li>
+</ul>
+</li>
+<li>所有曲线均呈现先下降后上升的“U”型趋势，表明存在最优线程数。</li>
+<li><strong>alpha=100</strong> 曲线在 8 线程处达到最低点（约 0.06 秒），之后缓慢上升，在 11 线程时仍保持较低水平（约 0.07 秒）。</li>
+<li><strong>alpha=15</strong> 曲线在 8–10 线程区间内基本持平（约 0.03–0.04 秒），在 11 线程时略有回升。</li>
+<li><strong>alpha=7</strong> 曲线在 4–6 线程即达最低点（约 0.02 秒），之后趋于平稳，11 线程时无明显性能退化。</li>
+<li>数据表明，<strong>并行 GiY 在 8 线程时吞吐量最高</strong>，相比单线程提升达 <strong>5.12×</strong>。</li>
+<li>对于较小 α 值（如 7 或 15），因对象数量少、工作负载轻，<strong>线程饱和点提前</strong>，但增加至 11 线程仍不导致性能下降。</li>
+<li>结论：<strong>并行 GiY 可有效扩展至 11 线程</strong>，符合 DPU 最小 11 线程以充分利用流水线的设计要求。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Alpha 值</th>
+<th>最优线程数</th>
+<th>最低耗时 (秒)</th>
+<th>11 线程耗时 (秒)</th>
+<th>性能趋势</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>4–6</td>
+<td>~0.02</td>
+<td>~0.02</td>
+<td>快速饱和，无退化</td>
+</tr>
+<tr>
+<td>15</td>
+<td>8–10</td>
+<td>~0.03–0.04</td>
+<td>~0.04</td>
+<td>平稳，轻微回升</td>
+</tr>
+<tr>
+<td>100</td>
+<td>8</td>
+<td>~0.06</td>
+<td>~0.07</td>
+<td>明显优化，11线程仍高效</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键发现：<strong>即使在最大负载（alpha=100）下，11 线程仍可维持高性能</strong>，证明该 GC 设计能适配 DPU 的硬件约束。</li>
+</ul>
+<h3 id="figure-15-binary-size">Figure 15. Binary size.<a class="headerlink" href="#figure-15-binary-size" title="Permanent link">&para;</a></h3>
+<p><img alt="c7c5f9cad3b323e82942af66d3a9570e758df35a5c03cf7ab6280644c45e869b.jpg" src="../images/c7c5f9cad3b323e82942af66d3a9570e758df35a5c03cf7ab6280644c45e869b.jpg" /></p>
+<ul>
+<li>图片展示了不同垃圾回收（GC）策略下计算内核的二进制文件大小对比，单位为字节（byte），图名为 <strong>Figure 15. Binary size</strong>。</li>
+<li>横轴列出了六种 GC 配置：<strong>GiY</strong>、<strong>YC</strong>、<strong>GiY+Major</strong>、<strong>DFS</strong>、<strong>MC</strong> 和 <strong>Epsilon</strong>。</li>
+<li>纵轴表示二进制大小，范围从 0 到 15,000 字节以上，刻度线标有 5,000、10,000、15,000。</li>
+<li>所有柱状图均为橙色，高度直观反映各配置的代码体积。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>GC 配置</th>
+<th>二进制大小（约值）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GiY</td>
+<td>~12,000 byte</td>
+</tr>
+<tr>
+<td>YC</td>
+<td>~13,500 byte</td>
+</tr>
+<tr>
+<td>GiY + Major</td>
+<td>~18,000 byte</td>
+</tr>
+<tr>
+<td>DFS</td>
+<td>~12,500 byte</td>
+</tr>
+<tr>
+<td>MC</td>
+<td>~16,000 byte</td>
+</tr>
+<tr>
+<td>Epsilon</td>
+<td>~8,000 byte</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Epsilon</strong> 作为无 GC 的基准，体积最小，约为 <strong>8,000 字节</strong>，用于衡量 GC 引入的开销。</li>
+<li><strong>GiY</strong>（Gray-in-Young）的 minor GC 体积约为 <strong>12,000 字节</strong>，与 <strong>DFS</strong> 相近，但显著小于 <strong>YC</strong> 和 <strong>MC</strong>。</li>
+<li><strong>YC</strong>（Compaction-based）体积略高，约为 <strong>13,500 字节</strong>，表明其算法更复杂，代码膨胀更明显。</li>
+<li><strong>GiY + Major</strong> 包含完整 major GC 例程，体积达 <strong>18,000 字节</strong>，比仅含 minor GC 的 GiY 多出约 <strong>6,000 字节</strong>。</li>
+<li><strong>MC</strong>（非分代 Lisp2 mark-compact）体积最大之一，约为 <strong>16,000 字节</strong>，说明其算法在 DPU 上实现成本较高。</li>
+<li>论文指出，分离 major GC 可使核心 GC 体积控制在 <strong>4.3 KB</strong>（即约 4,300 字节），而图中 GiY 为 12,000 字节，可能包含框架或测试代码。</li>
+<li>数据支持论文结论：<strong>分离 major GC 是必要的优化</strong>，可有效控制计算内核二进制尺寸，适应 DPU 仅 24 KB 程序内存的限制。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

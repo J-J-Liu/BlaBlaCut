@@ -1,0 +1,20 @@
+{
+  "index": "a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008",
+  "paper_title": "A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008",
+  "metadata": {
+    "authors": [
+      "Philipp Lengauer",
+      "Verena Bitto",
+      "Hanspeter Mössenböck",
+      "et al."
+    ],
+    "affiliations": [
+      "Institute for System Software, Johannes Kepler University Linz, Austria",
+      "Christian Doppler Laboratory MEVSS, Johannes Kepler University Linz, Austria"
+    ],
+    "venue": "ICPE",
+    "year": 2017,
+    "doi": "http://dx.doi.org/10.1145/3030207.3030211"
+  },
+  "description": "本文对DaCapo、DaCapo Scala和SPECjvm2008三大Java基准套件进行了全面的内存与垃圾回收（GC）行为分析。利用低开销监控工具AntTracks，在现代JVM上量化了各基准的分配强度、GC频率、暂停时间等关键指标，并对比了ParallelOld GC与G1 GC的性能差异。研究揭示了如factorie和sunflow等基准高达137GB的内存分配，以及G1在多数场景下显著降低GC时间（如factorie从41%降至1.4%）和暂停时间的优势，为研究人员选择合适基准提供了实证指南。"
+}

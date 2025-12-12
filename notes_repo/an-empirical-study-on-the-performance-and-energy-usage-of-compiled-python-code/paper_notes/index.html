@@ -1,0 +1,1226 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>An Empirical Study on the Performance and Energy Usage of Compiled Python Code 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              An Empirical Study on the Performance and Energy Usage of Compiled Python Code 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 受控实验设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 多维度效能评估指标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 跨平台验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 广泛的Python编译器对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 标准化的数据分析方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code">An Empirical Study on the Performance and Energy Usage of Compiled Python Code 论文解析<a class="headerlink" href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Vincenzo Stoico, Andrei Calin Dragomir, Patricia Lago</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: EASE</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2025</p>
+<p><strong>研究机构 (Affiliations)</strong>: Vrije Universiteit Amsterdam, The Netherlands</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>本研究旨在系统性地评估和比较多种 <strong>Python 编译器</strong>（包括 JIT 和 AOT）相较于标准解释器 <strong>CPython</strong> 在 <strong>性能</strong>（执行时间）、<strong>能量效率</strong>、<strong>内存使用</strong> 和 <strong>Last-Level Cache (LLC) miss rate</strong> 方面的实际效益。</li>
+<li>特别关注在控制关键变量（如 <strong>单线程执行</strong>、<strong>固定 CPU 频率</strong>、<strong>无第三方库依赖</strong>）的条件下，不同编译器对 Python 代码效率的影响，并为开发者选择合适的工具提供实证依据。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li><strong>实验对象</strong>: 选取了 <strong>8 种主流或新兴的 Python 编译器/实现</strong>：PyPy, Numba, Nuitka, Mypyc, Codon, Cython, Pyston-lite, 以及 Python 3.13 的实验性 JIT 编译器，并以 CPython 作为基线。</li>
+<li><strong>基准测试</strong>: 使用 <strong>7 个</strong>来自 <strong>Computer Language Benchmarks Game (CLBG)</strong> 的单线程、无第三方库依赖的基准程序。</li>
+<li><strong>实验平台</strong>: 在两种不同的硬件环境（一台 <strong>Intel NUC</strong> 和一台 <strong>服务器</strong>）上进行实验，以验证结果的稳健性。</li>
+<li><strong>控制变量</strong>: 所有实验均在 <strong>单个 CPU 核心</strong>上运行，并将 <strong>CPU 频率固定</strong>，以消除多核调度和动态频率缩放对测量结果的干扰。</li>
+<li><strong>测量指标</strong>:<ul>
+<li><strong>能量消耗</strong>（KiloJoules），通过 <strong>EnergiBridge</strong> 工具利用 Intel RAPL 接口测量。</li>
+<li><strong>执行时间</strong>（分钟），通过 <code>time</code> 模块测量。</li>
+<li><strong>内存使用</strong>（MB），以 <strong>Resident Set Size (RSS)</strong> 为指标。</li>
+<li><strong>LLC miss rate</strong>（%），通过 Linux <code>perf</code> 工具测量。</li>
+</ul>
+</li>
+<li><strong>实验设计</strong>: 采用全因子设计，每个编译器-基准程序组合在 NUC 上重复 <strong>15 次</strong>，在服务器上重复 <strong>10 次</strong>，总计 <strong>1575 次</strong>运行，并对运行顺序进行随机化。</li>
+<li><strong>数据分析</strong>: 使用 <strong>Shapiro-Wilk</strong> 检验数据正态性，非正态数据采用 <strong>Kruskal-Wallis</strong> 检验和 <strong>Cliff’s Delta</strong> 效应量分析。</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li><strong>能量效率与执行时间</strong>:<ul>
+<li><strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 表现出最显著的优化效果。在服务器上，它们平均实现了超过 <strong>90%</strong> 的 <strong>执行时间</strong> 和 <strong>能量消耗</strong> 改进。<ul>
+<li>具体而言，Codon、PyPy 和 Numba 的平均 <strong>能量改进</strong> 分别达到 <strong>94.66%</strong>、<strong>86.89%</strong> 和 <strong>86.61%</strong>。</li>
+<li>平均 <strong>执行时间改进</strong> 分别为 <strong>94.18%</strong>、<strong>86.67%</strong> 和 <strong>85.86%</strong>。</li>
+</ul>
+</li>
+<li>能量消耗与执行时间之间存在 <strong>强正相关</strong> 关系。</li>
+<li>其他编译器（如 Nuitka, Cython, Mypyc）的改进效果不一，甚至在某些基准（如 <code>n_body</code>）上表现比 CPython 更差。</li>
+</ul>
+</li>
+<li><strong>内存使用</strong>:<ul>
+<li><strong>Nuitka</strong> 在两个测试平台上均表现出最一致的 <strong>内存优化</strong> 能力，平均内存使用最低。</li>
+<li>内存使用数据 <strong>变异性高</strong>，且绝对值较低（MB 级别），使得部分结论不够稳健。</li>
+</ul>
+</li>
+<li><strong>LLC Miss Rate</strong>:<ul>
+<li>编译对 LLC miss rate 的影响 <strong>不明确且不一致</strong>。该指标在不同基准和不同编译器间波动很大。</li>
+<li><strong>Nuitka</strong> 在两个平台上都表现出异常高的 LLC miss rate（服务器上 <strong>58.73%</strong>，NUC 上 <strong>68.92%</strong>）。</li>
+<li>总体来看，没有一种编译器能稳定地降低 LLC miss rate。</li>
+</ul>
+</li>
+<li><strong>平台一致性</strong>: 除 LLC miss rate 外，<strong>能量消耗</strong> 和 <strong>执行时间</strong> 的主要趋势在 NUC 和服务器两个平台上高度一致。</li>
+</ul>
+<p><img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em>
+<img alt="" src="../images/750c0034543fec6991a1d724b01db7a8aa3f63e208d8a28e2dcff778f21492fa.jpg" /> <em>Figure 3: Speedup and Energy improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<p><strong>结论</strong></p>
+<ul>
+<li><strong>编译是提升 Python 代码效率的有效手段</strong>，但其效果 <strong>高度依赖于所选的编译器和代码的具体特征</strong>。</li>
+<li>对于追求极致 <strong>性能</strong> 和 <strong>能量效率</strong> 的场景，<strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 是最佳选择，但需权衡其 <strong>易用性</strong> 和 <strong>兼容性</strong>（例如，Numba 和 Codon 需要代码注解，Codon 兼容性有限）。</li>
+<li><strong>Nuitka</strong> 是优化 <strong>内存占用</strong> 的可靠选择。</li>
+<li><strong>LLC miss rate</strong> 作为一个潜在的性能瓶颈，其与编译器的关系尚不清晰，值得未来深入研究，特别是其与 <strong>uncore 组件</strong>（如 LLC、内存控制器） <strong>能量消耗</strong> 的关联。</li>
+<li>本研究为 Python 开发者提供了基于实证数据的决策支持，并强调了在评估软件效率时控制实验变量（如 CPU 频率、核心数）的重要性。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li><strong>Python</strong> 因其易学性和丰富的库而广受欢迎，在2024年Stack Overflow调查中位列第三，被广泛应用于人工智能、Web开发和数据分析等领域。</li>
+<li>然而，<strong>Python</strong> 的性能和<strong>能量效率</strong>一直备受诟病。其解释执行的特性以及<strong>CPython</strong>实现中的<strong>Global Interpreter Lock (GIL)</strong> 等因素导致其在执行速度、内存占用和能耗方面远逊于编译型语言（如C/C++）。</li>
+<li>为弥合易用性与效率之间的鸿沟，业界开发了多种<strong>Python编译器</strong>，包括<strong>Just-In-Time (JIT)</strong>（如PyPy, Numba）和<strong>Ahead-Of-Time (AOT)</strong>（如Nuitka, Cython）两类，旨在提升代码效率。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li>尽管现有编译器已被证明能提升<strong>Python</strong>效率，但缺乏一项<strong>全面、受控的实证研究</strong>来系统性地比较它们在<strong>性能</strong>和<strong>能量效率</strong>上的表现。</li>
+<li>许多现有研究忽略了关键的混杂变量，例如：<ul>
+<li><strong>基准测试代码的特性</strong>：如是否使用第三方库（如NumPy）、是否为多线程，这些都会极大影响结果。</li>
+<li><strong>实验平台的配置</strong>：如<strong>CPU频率</strong>和<strong>核心数量</strong>的动态变化会显著干扰能耗和性能的测量。</li>
+</ul>
+</li>
+<li>因此，亟需一个在严格控制变量（单线程、无第三方库、固定CPU频率和核心）的环境下，对主流编译器进行公平、深入的横向评测。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>设计并执行了一项<strong>受控实验</strong>，在<strong>NUC</strong>和<strong>服务器</strong>两个平台上，使用<strong>7个</strong>来自Computer Language Benchmarks Game (CLBG)的单线程、无第三方库的基准测试，系统评估了<strong>8种</strong>主流<strong>Python编译器</strong>（PyPy, Numba, Nuitka, Mypyc, Codon, Cython, Pyston-lite, Python 3.13 JIT）相对于<strong>CPython</strong>的表现。</li>
+<li>全面度量了四个关键维度：<strong>执行时间</strong>、<strong>能量消耗</strong>（KiloJoules）、<strong>内存使用</strong>（RSS, MB）和<strong>Last-Level Cache (LLC) miss rate</strong> (%)。</li>
+<li>得出关键结论：<ul>
+<li><strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 在<strong>执行时间</strong>和<strong>能量效率</strong>上实现了最显著的优化，平均改进幅度超过<strong>90%</strong>。</li>
+<li><strong>Nuitka</strong> 在<strong>内存使用</strong>方面表现最为稳定和优秀。</li>
+<li>编译对<strong>LLC miss rate</strong>的影响不明确，结果在不同基准测试和编译器间差异巨大。</li>
+</ul>
+</li>
+<li>为<strong>Python</strong>开发者提供了基于实证数据的编译器选型指南，并为未来研究指明了方向（如探索缓存效应对能耗的影响）。研究还公开了完整的<strong>复现包</strong>以确保可复现性。</li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>研究目标与核心问题</strong></p>
+<ul>
+<li>本文旨在通过一个受控的实证研究，系统性地评估和比较多种 <strong>Python 编译器</strong>（包括 JIT 和 AOT）相较于标准解释器 <strong>CPython</strong> 在 <strong>性能</strong>（执行时间）、<strong>能效</strong>（能量消耗）、<strong>内存使用</strong>（RSS）和 <strong>Last-Level Cache (LLC) miss rate</strong> 四个关键维度上的表现。</li>
+<li>核心研究问题 (RQs) 聚焦于：<ul>
+<li>RQ1: 编译对 Python 代码的<strong>能量效率</strong>有何影响？</li>
+<li>RQ2: 编译对 Python 代码的<strong>性能</strong>（执行时间、内存、LLC miss）有何影响？</li>
+</ul>
+</li>
+</ul>
+<p><strong>实验设计与控制变量</strong></p>
+<ul>
+<li><strong>基准测试集 (Benchmarks)</strong>：从 <strong>Computer Language Benchmarks Game (CLBG)</strong> 中精心挑选了 <strong>7 个</strong>单线程、不依赖任何第三方库（如 NumPy）的计算密集型函数。此举旨在消除代码特性（如并行化、外部库优化）对结果的干扰。</li>
+<li><strong>编译器/解释器 (Subjects)</strong>：对比了 <strong>8 种</strong>工具与 <strong>CPython</strong>（作为基线）：<ul>
+<li><strong>JIT 编译器</strong>: PyPy, Numba, Pyston-lite, Python 3.13 (experimental JIT)</li>
+<li><strong>AOT 编译器</strong>: Nuitka, Cython, Mypyc, Codon</li>
+</ul>
+</li>
+<li><strong>测试平台 (Testbeds)</strong>：在两种硬件配置上重复实验以验证结果一致性：<ul>
+<li><strong>Intel NUC</strong> (Core i7-1260P)</li>
+<li><strong>Server</strong> (Xeon E3-1231)</li>
+</ul>
+</li>
+<li><strong>严格控制的环境变量</strong>：<ul>
+<li>所有实验均在 <strong>单核</strong> 上运行。</li>
+<li><strong>CPU 频率被固定</strong>（通过 Linux governor），以排除动态频率缩放对能耗和性能的影响。</li>
+<li>禁用 <strong>Intel HyperThreading</strong>。</li>
+<li>清理所有非必要后台进程。</li>
+</ul>
+</li>
+</ul>
+<p><strong>数据采集与分析流程</strong></p>
+<ul>
+<li><strong>自动化执行框架</strong>：使用自研的 <strong>Experiment Runner</strong> 框架通过 SSH 协调 <strong>Orchestration Machine</strong>（笔记本电脑）与两个 <strong>Testbeds</strong> 之间的通信，实现全流程自动化。</li>
+<li><strong>测量工具</strong>：<ul>
+<li><strong>能量与内存</strong>：使用 <strong>EnergiBridge</strong>，通过 Intel <strong>RAPL</strong> 接口以 200ms 间隔采样。注意：NUC 因硬件限制无法获取 DRAM 能耗。</li>
+<li><strong>执行时间</strong>：使用 Unix <code>time</code> 命令。</li>
+<li><strong>LLC Miss Rate</strong>：使用 Linux <code>perf</code> 工具。</li>
+</ul>
+</li>
+<li><strong>实验规模</strong>：每个（编译器 x 基准）组合在 NUC 上运行 <strong>15 次</strong>，在 Server 上运行 <strong>10 次</strong>，总计 <strong>1575 次</strong>运行。</li>
+<li><strong>统计分析</strong>：<ul>
+<li>使用 <strong>Shapiro-Wilk test</strong> 检验数据正态性。</li>
+<li>对非正态数据采用 <strong>Kruskal-Wallis test</strong> 进行组间差异检验。</li>
+<li>使用 <strong>Cliff’s Delta</strong> 计算效应量 (effect size)，以量化改进的显著性。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/72911aedd5a555d0efb78c0232cce464978c5d57ccdfe54eebb455570f3c53c8.jpg" /> <em>Figure 1: Experiment Execution</em></p>
+<p><strong>关键发现总结</strong></p>
+<ul>
+<li><strong>性能与能效</strong>：<strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 表现最为突出，在大多数基准测试中实现了超过 <strong>90%</strong> 的执行时间和能耗改进。</li>
+<li><strong>内存优化</strong>：<strong>Nuitka</strong> 在两个测试平台上都表现出最一致的<strong>内存使用</strong>优化效果。</li>
+<li><strong>缓存行为</strong>：编译对 <strong>LLC miss rate</strong> 的影响<strong>不明确且不一致</strong>，不同编译器和基准测试的结果差异很大，其中 <strong>Nuitka</strong> 在两个平台上均表现出异常高的 LLC miss rate。</li>
+<li><strong>相关性</strong>：在本实验的受控条件下，<strong>执行时间</strong>与<strong>能量消耗</strong>之间存在<strong>强正相关</strong>关系。</li>
+</ul>
+<p><strong>实践意义与未来方向</strong></p>
+<ul>
+<li>为开发者选择 Python 编译器提供了基于实证数据的决策依据，并讨论了各工具的易用性和学习曲线。</li>
+<li>强调了<strong>代码特性</strong>对编译器优化效果的关键影响。</li>
+<li>提出未来研究应深入探索 <strong>uncore components</strong>（如 LLC）对 Python 程序能耗的影响，以及在更多样化的硬件和软件场景下验证结论。</li>
+</ul>
+<h3 id="1_1">1. 受控实验设计<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
+<p><strong>受控实验设计的核心目标与实现原理</strong></p>
+<p>该研究的核心目标是<strong>隔离编译器本身对Python代码效率的影响</strong>，排除硬件动态特性（如频率缩放、多核调度）和代码外部依赖（如第三方库）带来的干扰。其实现原理是通过严格控制实验环境和基准测试集的特征，构建一个“纯净”的比较场。</p>
+<ul>
+<li>
+<p><strong>基准测试集的选择与约束</strong>：</p>
+<ul>
+<li>选用 <strong>Computer Language Benchmarks Game (CLBG)</strong> 中的七个基准测试。</li>
+<li>所有基准测试均为<strong>单线程 (single-threaded)</strong> 实现，彻底规避了<strong>Global Interpreter Lock (GIL)</strong> 和多线程调度的复杂性。</li>
+<li>所有基准测试<strong>不依赖任何第三方库</strong>（例如 NumPy），确保性能差异完全源于编译器对纯Python语言特性的优化能力，而非对C扩展库的调用。</li>
+<li>选择执行时间至少为一分钟的基准，以确保能耗和性能测量具有足够的信噪比。</li>
+</ul>
+</li>
+<li>
+<p><strong>硬件与操作系统环境的固定</strong>：</p>
+<ul>
+<li><strong>CPU核心数</strong>：通过 <code>taskset -c 0</code> 命令将所有基准测试和测量工具<strong>绑定到第一个物理核心</strong>上执行，强制实验在<strong>单核</strong>环境下运行。</li>
+<li><strong>CPU频率</strong>：通过Linux内核的<strong>governor</strong>机制<strong>固定CPU频率</strong>，禁用动态频率缩放（Dynamic Voltage and Frequency Scaling, DVFS）。服务器固定为 <strong>1.6 GHz</strong>，NUC使用 <code>powersave</code> governor 固定在其最低频率 <strong>2.1 GHz</strong>。</li>
+<li><strong>超线程</strong>：在BIOS层面<strong>禁用Intel HyperThreading</strong>，防止逻辑核心干扰单物理核心的测量结果。</li>
+<li><strong>背景进程</strong>：实验前<strong>停用所有非必要后台进程</strong>（如Docker），以减少系统噪声。</li>
+</ul>
+</li>
+</ul>
+<p><strong>实验变量与数据采集流程</strong></p>
+<p><img alt="" src="../images/72911aedd5a555d0efb78c0232cce464978c5d57ccdfe54eebb455570f3c53c8.jpg" /> <em>Figure 1: Experiment Execution</em></p>
+<ul>
+<li>
+<p><strong>自变量 (Independent Variables)</strong>：</p>
+<ul>
+<li><strong>主要自变量</strong>：<strong>编译器类型</strong>，共9种执行模式（8个编译器 + CPython基线）。</li>
+<li><strong>阻塞因子 (Blocking Factor)</strong>：<strong>测试平台 (testbed)</strong>，即 <strong>Intel NUC</strong> 和 <strong>服务器</strong>，用于检验结果在不同硬件上的可复现性。</li>
+</ul>
+</li>
+<li>
+<p><strong>因变量 (Dependent Variables)</strong>：</p>
+<ul>
+<li><strong>RQ1 (能效)</strong>：<strong>能量消耗 (Energy Consumption)</strong>，单位为千焦 (KiloJoules, KJ)。</li>
+<li><strong>RQ2 (性能)</strong>：<ul>
+<li><strong>执行时间 (Execution Time)</strong>，单位为分钟 (min)。</li>
+<li><strong>内存使用 (Memory Usage)</strong>，以<strong>常驻集大小 (Resident Set Size, RSS)</strong> 衡量，单位为兆字节 (MB)。</li>
+<li><strong>末级缓存缺失率 (Last-Level Cache (LLC) miss rate)</strong>，以百分比 (%) 表示。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>数据采集工具链</strong>：</p>
+<ul>
+<li><strong>能耗与内存</strong>：使用 <strong>EnergiBridge</strong> 工具，通过Intel CPU的 <strong>RAPL (Running Average Power Limit)</strong> 接口，以200毫秒为间隔进行采样。<ul>
+<li><em>注意</em>：由于NUC的CPU（第11代以后的非服务器级）不支持RAPL的DRAM域，因此NUC的数据仅包含<strong>CPU Package</strong>（核心+uncore）的能耗。</li>
+</ul>
+</li>
+<li><strong>执行时间</strong>：使用Unix <code>time</code> 模块，在脚本中记录基准测试开始和结束的时间戳。</li>
+<li><strong>LLC缺失率</strong>：使用Linux内置的性能分析工具 <strong>perf</strong> 来监控硬件性能计数器。</li>
+</ul>
+</li>
+</ul>
+<p><strong>实验执行与统计设计</strong></p>
+<ul>
+<li>
+<p><strong>实验设计</strong>：采用<strong>全因子设计 (full factorial design)</strong>。</p>
+<ul>
+<li>组合：9 (执行模式) × 7 (基准) = 63 种处理 (treatments)。</li>
+<li>重复：每种处理在NUC上重复 <strong>15次</strong>，在服务器上重复 <strong>10次</strong>，总计 <strong>1575次</strong> 运行。</li>
+<li><strong>随机化</strong>：在每个测试平台上，所有运行顺序被<strong>随机打乱</strong>，以消除顺序效应。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据预处理与验证</strong>：</p>
+<ul>
+<li><strong>代码适配</strong>：为使基准能在所有编译器上运行，对原始CLBG代码进行了最小化修改。例如，为Numba函数添加 <code>@njit</code> 装饰器，为Codon指定静态类型。所有修改均通过<strong>输出一致性测试</strong>验证，确保逻辑正确性。</li>
+<li><strong>热身与冷却</strong>：每次运行前进行 <strong>2分钟CPU密集型热身</strong>（如计算斐波那契数列）以稳定硬件温度；运行后暂停 <strong>2分钟</strong> 以散热，保证每次测量的初始条件一致。</li>
+</ul>
+</li>
+<li>
+<p><strong>统计分析方法</strong>：</p>
+<ul>
+<li><strong>正态性检验</strong>：使用 <strong>Shapiro-Wilk test</strong> 和 Q-Q图。</li>
+<li><strong>组间差异检验</strong>：<ul>
+<li>若数据正态分布，使用 <strong>ANOVA</strong>。</li>
+<li>若数据非正态（本研究中多数情况），使用非参数的 <strong>Kruskal-Wallis test</strong>。</li>
+</ul>
+</li>
+<li><strong>效应量 (Effect Size)</strong>：<ul>
+<li>正态数据使用 <strong>Cohen’s d</strong>。</li>
+<li>非正态数据使用 <strong>Cliff’s Delta</strong>，以量化编译器相对于CPython的改进幅度（如“大”、“小”、“可忽略”）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>在整体研究中的作用</strong></p>
+<p>此受控实验设计是整篇论文结论可靠性的基石。它通过<strong>剥离混杂变量</strong>，使得研究者能够清晰地回答两个核心研究问题（RQ1和RQ2），并得出诸如“<strong>Codon, PyPy, and Numba achieve over 90% speed and energy improvements</strong>”这样强有力的、可归因于编译器本身的结论。同时，通过在<strong>两个不同硬件平台</strong>上重复实验，验证了这些结论的<strong>稳健性 (robustness)</strong>，增强了其对外部世界的参考价值。</p>
+<h3 id="2_1">2. 多维度效能评估指标<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h3>
+<p><strong>多维度效能评估指标体系</strong></p>
+<p>该研究构建了一个严谨的四维评估体系，旨在全面、客观地衡量不同Python编译器在性能与能效方面的表现。为确保结果的可靠性和可比性，实验设计严格控制了外部变量。</p>
+<ul>
+<li><strong>实验环境控制</strong>：<ul>
+<li>所有基准测试均在<strong>单核</strong>上执行，通过 <code>taskset -c 0</code> 命令绑定到CPU核心0。</li>
+<li><strong>CPU频率被固定</strong>：服务器固定为1.6 GHz，NUC使用<code>powersave</code>调节器锁定在2.1 GHz最低频率。</li>
+<li><strong>禁用超线程 (HyperThreading)</strong>，以消除并发执行对测量结果的干扰。</li>
+<li>实验前进行2分钟的<strong>预热 (warm-up)</strong>，并在每次运行后暂停2分钟以散热，确保硬件温度稳定。</li>
+</ul>
+</li>
+</ul>
+<p><strong>执行时间 (Execution Time)</strong></p>
+<ul>
+<li><strong>测量原理</strong>：使用Unix/Linux系统自带的<code>time</code>命令，通过记录程序开始和结束的时间戳来计算总耗时。</li>
+<li><strong>作用</strong>：作为最直观的<strong>性能</strong>指标，直接反映代码运行速度。研究发现，<strong>执行时间</strong>与<strong>能量消耗</strong>之间存在强正相关性，优化前者通常能直接改善后者。</li>
+<li><strong>关键发现</strong>：<strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 在此维度上表现卓越，平均提速超过85%。</li>
+</ul>
+<p><strong>能量消耗 (Energy Consumption)</strong></p>
+<ul>
+<li><strong>测量原理</strong>：利用 <strong>EnergiBridge</strong> 工具，通过Intel CPU内置的 **RAPL **(Running Average Power Limit) 接口进行采样（采样间隔200毫秒）。<ul>
+<li>RAPL提供 <strong>Package</strong>（整个CPU封装）、<strong>Core</strong>（核心）和 <strong>DRAM</strong>（内存）三个域的能量读数。</li>
+<li><strong>重要限制</strong>：由于NUC所用的第12代Intel CPU移除了非服务器级处理器的DRAM RAPL域，因此NUC上的能量数据仅包含Package（即Core + Uncore）部分。</li>
+</ul>
+</li>
+<li><strong>作用</strong>：量化程序运行的<strong>能源成本</strong>，是绿色计算和可持续软件工程的核心指标。</li>
+<li><strong>关键发现</strong>：<strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 同样在此维度领先，平均节能效果超过86%。研究还指出，大部分能耗来自<strong>Uncore组件</strong>（如LLC和内存控制器），而非CPU核心本身。</li>
+</ul>
+<p><strong>内存使用 (Memory Usage)</strong></p>
+<ul>
+<li><strong>测量原理</strong>：通过 <strong>EnergiBridge</strong> 监控 **RSS **(Resident Set Size)，即进程实际占用的物理内存量（单位：MB），不包括交换空间。</li>
+<li><strong>作用</strong>：评估编译器对<strong>内存资源</strong>的利用效率。低内存占用对于资源受限的环境至关重要。</li>
+<li><strong>挑战与发现</strong>：<ul>
+<li>内存测量值在重复运行中表现出<strong>高变异性</strong>，这归因于Python的动态内存分配策略和垃圾回收机制。</li>
+<li>尽管如此，<strong>Nuitka</strong> 在两个测试平台上均展现出<strong>最一致且最低的平均内存占用</strong>，表明其在内存优化方面具有显著优势。</li>
+</ul>
+</li>
+</ul>
+<p><strong>末级缓存缺失率 (Last-Level Cache Miss Rate)</strong></p>
+<ul>
+<li><strong>测量原理</strong>：使用Linux性能分析工具 <strong>perf</strong> 来监控硬件性能计数器，计算LLC Load Misses占总Load Requests的百分比。</li>
+<li><strong>作用</strong>：LLC缺失意味着CPU必须从更慢的主存(DRAM)中获取数据，这会引入显著的延迟，从而影响<strong>执行时间</strong>。因此，LLC缺失率是理解性能瓶颈的关键微观指标。</li>
+<li><strong>关键发现</strong>：<ul>
+<li>编译对LLC缺失率的影响<strong>极不一致</strong>，在不同基准测试和不同硬件平台（服务器 vs NUC）上结果差异巨大。</li>
+<li><strong>Nuitka</strong> 在两个平台上均表现出<strong>异常高的LLC缺失率</strong>（服务器58.73%，NUC 68.92%），这可能是其在某些基准（如<code>n_body</code>）上性能不佳的原因之一。</li>
+<li>研究观察到LLC缺失率与执行时间之间存在<strong>小到中等程度的正相关</strong>，但不足以建立明确的因果关系。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<p><strong>综合效能对比</strong></p>
+<p>下表总结了各编译器在服务器平台上的平均表现（基于Table 2数据），突显了不同编译器的优势领域。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">编译器</th>
+<th style="text-align: center;">平均执行时间 (min)</th>
+<th style="text-align: center;">平均能量消耗 (KJ)</th>
+<th style="text-align: center;">平均内存使用 (MB)</th>
+<th style="text-align: center;">平均LLC缺失率 (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>CPython</strong></td>
+<td style="text-align: center;">30.07</td>
+<td style="text-align: center;">1.51</td>
+<td style="text-align: center;">4.09</td>
+<td style="text-align: center;">23.66</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>PyPy</strong></td>
+<td style="text-align: center;">4.01</td>
+<td style="text-align: center;">0.20</td>
+<td style="text-align: center;"><strong>6.50</strong></td>
+<td style="text-align: center;"><strong>13.25</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Numba</strong></td>
+<td style="text-align: center;">4.26</td>
+<td style="text-align: center;">0.20</td>
+<td style="text-align: center;">3.90</td>
+<td style="text-align: center;">18.22</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Pyston-lite</strong></td>
+<td style="text-align: center;">28.68</td>
+<td style="text-align: center;">1.47</td>
+<td style="text-align: center;">3.99</td>
+<td style="text-align: center;">22.85</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Python 3.13 JIT</strong></td>
+<td style="text-align: center;">21.08</td>
+<td style="text-align: center;">1.01</td>
+<td style="text-align: center;">4.02</td>
+<td style="text-align: center;">18.13</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Nuitka</strong></td>
+<td style="text-align: center;">25.44</td>
+<td style="text-align: center;">1.24</td>
+<td style="text-align: center;"><strong>3.34</strong></td>
+<td style="text-align: center;">58.73</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cython</strong></td>
+<td style="text-align: center;">25.42</td>
+<td style="text-align: center;">1.24</td>
+<td style="text-align: center;">3.89</td>
+<td style="text-align: center;">23.92</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Codon</strong></td>
+<td style="text-align: center;"><strong>1.75</strong></td>
+<td style="text-align: center;"><strong>0.08</strong></td>
+<td style="text-align: center;">3.41</td>
+<td style="text-align: center;">21.09</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mypyc</strong></td>
+<td style="text-align: center;">25.38</td>
+<td style="text-align: center;">1.24</td>
+<td style="text-align: center;">3.91</td>
+<td style="text-align: center;">24.09</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>指标间的内在关联</strong></p>
+<p>研究揭示了这些指标之间复杂的相互作用：</p>
+<ul>
+<li><strong>执行时间</strong>与<strong>能量消耗</strong>高度正相关，表明在固定频率下单线程任务中，更快的执行通常意味着更低的能耗。</li>
+<li><strong>内存使用</strong>与其它指标的关联性较弱，且受测量噪声影响较大。</li>
+<li><strong>LLC缺失率</strong>与<strong>执行时间</strong>存在一定的正相关趋势，但其影响被代码特性和硬件平台的巨大差异所掩盖，无法得出普适性结论。研究特别指出，<strong>Uncore组件</strong>（包含LLC）是主要的能耗来源，这为未来研究指明了方向。</li>
+</ul>
+<h3 id="3_1">3. 跨平台验证<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<p><strong>跨平台验证的设计与执行</strong></p>
+<ul>
+<li>为确保实验结果的<strong>鲁棒性 (robustness)</strong> 和<strong>可复现性 (reproducibility)</strong>，研究者在两种截然不同的硬件平台上重复了完整的实验流程。</li>
+<li>这一设计旨在回答一个核心问题：编译器带来的性能和能效提升是特定于某类硬件的“偶然现象”，还是具有普遍适用性的“稳定特性”。</li>
+<li>通过控制关键变量并观察结果的一致性，可以有效排除因单一测试环境特性（如特定CPU微架构、内存子系统）导致的偏差。</li>
+</ul>
+<p><strong>硬件平台规格对比</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">平台</th>
+<th style="text-align: left;">CPU</th>
+<th style="text-align: left;">物理核心数</th>
+<th style="text-align: left;">内存</th>
+<th style="text-align: left;">存储</th>
+<th style="text-align: left;">操作系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>服务器 (Server)</strong></td>
+<td style="text-align: left;">Intel Xeon E3-1231</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">32 GB RAM</td>
+<td style="text-align: left;">1 TB HDD</td>
+<td style="text-align: left;">Ubuntu 24.0</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>NUC</strong></td>
+<td style="text-align: left;">Intel Core i7-1260P</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">32 GB RAM</td>
+<td style="text-align: left;">512 GB SSD</td>
+<td style="text-align: left;">Ubuntu 24.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>尽管两个平台在<strong>CPU架构</strong>（服务器级 vs. 移动/桌面级）、<strong>核心数量</strong>和<strong>存储介质</strong>上存在显著差异，但它们共享相同的<strong>操作系统</strong>和<strong>内存容量</strong>，这有助于隔离硬件差异对结果的影响。</li>
+</ul>
+<p><strong>关键控制变量与实验设置</strong></p>
+<ul>
+<li><strong>单核执行</strong>: 所有基准测试均通过 <code>taskset -c 0</code> 命令绑定到<strong>第一个物理核心</strong>上运行，彻底排除了多线程调度和核心间通信带来的干扰。</li>
+<li><strong>固定CPU频率</strong>:<ul>
+<li>在服务器上，CPU频率被固定在 <strong>1.6 GHz</strong>。</li>
+<li>在NUC上，使用Linux的 <code>powersave</code> governor 将频率锁定在其最低值 <strong>2.1 GHz</strong>。</li>
+</ul>
+</li>
+<li><strong>禁用超线程 (HyperThreading)</strong>: 从BIOS层面禁用了Intel HyperThreading技术，确保每个物理核心在同一时间只处理一个线程。</li>
+<li><strong>清理后台进程</strong>: 所有非必要的后台服务（如Docker）在实验前被终止或挂起，以保证测量环境的纯净。</li>
+<li><strong>热身与冷却</strong>: 每次运行前进行2分钟的CPU密集型热身任务以稳定芯片温度；每次运行后暂停2分钟让热量散去，避免热节流（thermal throttling）影响结果。</li>
+</ul>
+<p><strong>跨平台验证的核心发现</strong></p>
+<ul>
+<li><strong>执行时间与能耗的一致性</strong>: 实验结果显示，<strong>PyPy</strong>、<strong>Numba</strong> 和 <strong>Codon</strong> 在两个平台上均表现出<strong>超过90%</strong> 的<strong>执行时间</strong>和<strong>能量消耗</strong>改善。这种高度一致性强有力地证明了这些编译器优化的有效性并非平台特例。</li>
+<li><strong>内存使用的差异性</strong>: 虽然<strong>Nuitka</strong>在两个平台上都展现出<strong>最低的平均内存使用量</strong>，但其具体数值和改善幅度存在一定差异，这可能与不同平台的内存管理策略有关。</li>
+<li><strong>LLC Miss Rate的不一致性</strong>: <strong>Last-Level Cache (LLC) miss rate</strong> 的结果在两个平台间表现出显著差异。例如，<strong>Nuitka</strong>在两个平台上都显示出异常高的LLC失效率，但其他编译器（如PyPy、Numba）在服务器上表现较好，在NUC上却与CPython相当甚至更差。这表明缓存行为对底层硬件微架构极为敏感。</li>
+<li><strong>能效与性能的强相关性</strong>: 在两个受控平台上，<strong>能量消耗</strong>与<strong>执行时间</strong>之间均呈现出<strong>强烈的正相关性</strong>。这意味着在该实验设定下（固定频率、单核），缩短执行时间是降低能耗的最直接有效途径。</li>
+</ul>
+<p><img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<p><strong>跨平台验证的作用与意义</strong></p>
+<ul>
+<li><strong>增强结论可信度</strong>: 通过在异构硬件上复现实验，极大地增强了研究结论的外部效度（External Validity），使“PyPy, Numba, Codon能显著提升Python效率”这一论断更具说服力。</li>
+<li><strong>揭示平台依赖性</strong>: 验证过程也暴露了某些指标（如LLC miss rate）对硬件平台的强依赖性，为未来研究指明了方向——即编译器优化效果的评估必须考虑目标部署环境。</li>
+<li><strong>提供实践指导</strong>: 对于<strong>Python Practitioners</strong>而言，跨平台验证的结果意味着，选择<strong>PyPy</strong>、<strong>Numba</strong>或<strong>Codon</strong>作为性能优化工具是一个相对“安全”的决策，因为其收益在不同类型的机器上都能得到保障。</li>
+</ul>
+<h3 id="4-python">4. 广泛的Python编译器对比<a class="headerlink" href="#4-python" title="Permanent link">&para;</a></h3>
+<p><strong>广泛的Python编译器对比</strong></p>
+<p>该研究对八种主流的Python编译/解释器与标准 <strong>CPython</strong> 进行了系统性、受控的对比实验，旨在量化其在<strong>性能</strong>、<strong>能耗</strong>、<strong>内存使用</strong>和<strong>缓存行为</strong>方面的差异。</p>
+<ul>
+<li>
+<p><strong>实验设计核心</strong>：</p>
+<ul>
+<li><strong>基准</strong>：以 <strong>CPython</strong> 作为对照组。</li>
+<li><strong>被测对象</strong>：八种工具，分为 <strong>AOT (Ahead-Of-Time)</strong> 和 <strong>JIT (Just-In-Time)</strong> 两类。</li>
+<li><strong>测试平台</strong>：在两种硬件上执行（Intel NUC 和 Server），以验证结果的一致性。</li>
+<li><strong>控制变量</strong>：所有实验均在<strong>单核</strong>上运行，并<strong>固定CPU频率</strong>，以消除多核调度和动态调频对能耗与性能测量的干扰。</li>
+<li><strong>基准程序</strong>：选用 <strong>Computer Language Benchmarks Game (CLBG)</strong> 中的七个<strong>单线程</strong>、<strong>无第三方库依赖</strong>的程序，确保公平比较。</li>
+</ul>
+</li>
+<li>
+<p><strong>被测编译器分类与原理</strong>：</p>
+<ul>
+<li><strong>AOT 编译器</strong>（在运行前将代码编译为机器码）：<ul>
+<li><strong>Nuitka</strong>: 将 Python 代码转换为优化的 <strong>C++</strong> 代码，再编译成可执行文件。</li>
+<li><strong>Cython</strong>: 将带有类型注解的 Python 代码（或纯 Python）翻译成 <strong>C</strong> 代码进行编译。</li>
+<li><strong>Mypyc</strong>: 基于 <strong>mypy</strong> 的类型检查器，将带类型的 Python 模块编译为 <strong>C 扩展</strong>。</li>
+<li><strong>Codon</strong>: 采用一个 <strong>Python 的静态子集</strong>，直接编译为<strong>原生机器码</strong>，完全绕过 CPython 运行时和 GIL。</li>
+</ul>
+</li>
+<li><strong>JIT 编译器</strong>（在运行时动态编译热点代码）：<ul>
+<li><strong>PyPy</strong>: 使用 <strong>RPython</strong> 构建的替代性 Python 解释器，内置强大的 <strong>Tracing JIT</strong> 编译器。</li>
+<li><strong>Numba</strong>: 针对数值计算，通过 <strong>@jit</strong> 装饰器，利用 <strong>LLVM</strong> 在运行时将 NumPy 数组操作等编译为机器码。</li>
+<li><strong>Pyston-lite</strong>: 基于 CPython 的轻量级 JIT，通过<strong>快速化</strong>（quickening）和<strong>激进的属性缓存</strong>来提升速度。</li>
+<li><strong>Python 3.13 JIT</strong>: CPython 官方集成的实验性 JIT，采用 "<strong>copy-and-patch</strong>" 技术匹配预编译的代码模板。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/7f0745cf637066370b11fdfb19e4e31275a48638f1741d928932bf65355d9600.jpg" /> <em>Table 1: Subjects Summary</em></p>
+<ul>
+<li><strong>关键性能指标与测量方法</strong>：<ul>
+<li><strong>能耗</strong>：使用 <strong>EnergiBridge</strong> 工具，通过 Intel CPU 的 <strong>RAPL</strong> 接口测量，单位为 <strong>KiloJoules (KJ)</strong>。</li>
+<li><strong>执行时间</strong>：使用 Unix <code>time</code> 命令测量，单位为 <strong>分钟 (min)</strong>。</li>
+<li><strong>内存使用</strong>：通过 <strong>EnergiBridge</strong> 监控 <strong>Resident Set Size (RSS)</strong>，单位为 <strong>MB</strong>。</li>
+<li><strong>缓存效率</strong>：使用 Linux <code>perf</code> 工具测量 <strong>Last-Level Cache (LLC) miss rate</strong>，单位为 <strong>百分比 (%)</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/555037709359a2af7afdc2e64329f6bc4c3a2c674d5dac761cd6b7f8fc1cb7d8.jpg" /> <em>Table 2: Descriptive Statistics from Server data. The highlighted number shows the minimum average value.</em></p>
+<ul>
+<li><strong>核心发现总结</strong>：<ul>
+<li><strong>性能与能耗</strong>：<strong>Codon</strong>、<strong>PyPy</strong> 和 <strong>Numba</strong> 表现最为突出，在多数基准测试中实现了超过 <strong>90%</strong> 的<strong>执行时间缩短</strong>和<strong>能耗降低</strong>。这三者构成了性能优化的第一梯队。</li>
+<li><strong>内存优化</strong>：<strong>Nuitka</strong> 在两个测试平台上都表现出最一致的<strong>内存使用优化</strong>能力，其平均 RSS 最低。</li>
+<li><strong>缓存行为</strong>：编译对 <strong>LLC miss rate</strong> 的影响<strong>不明确且不一致</strong>。例如，<strong>Nuitka</strong> 在两个平台上都表现出异常高的 LLC 失效率，而其他编译器的表现则因基准程序而异，没有统一规律。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<ul>
+<li><strong>实践启示与权衡</strong>：<ul>
+<li><strong>易用性 vs. 性能</strong>：<ul>
+<li><strong>PyPy</strong> 提供了最佳的<strong>兼容性</strong>与<strong>性能提升</strong>的平衡，通常只需替换解释器，代码改动极小。</li>
+<li><strong>Numba</strong> 和 <strong>Codon</strong> 虽然性能顶尖，但需要开发者进行<strong>显著的代码修改</strong>（如添加装饰器、指定类型），且 <strong>Codon</strong> 作为一个独立的 Python 实现，与 CPython 生态（尤其是 NumPy 等库）的<strong>兼容性有限</strong>。</li>
+</ul>
+</li>
+<li><strong>代码特性依赖</strong>：编译器的效果<strong>高度依赖于代码特征</strong>。例如，对于重度依赖 Python 列表和动态特性的 <code>n_body</code> 基准，某些 AOT 编译器（Nuitka, Cython, Mypyc）甚至表现不如 CPython，因为它们难以高效地将动态操作映射到静态的 C/C++ 语义。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/750c0034543fec6991a1d724b01db7a8aa3f63e208d8a28e2dcff778f21492fa.jpg" /> <em>Figure 3: Speedup and Energy improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<h3 id="5">5. 标准化的数据分析方法<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<p><strong>标准化的数据分析方法</strong></p>
+<p>该研究采用了一套严谨且标准化的统计分析流程，以确保对不同Python编译器性能和能效差异的评估结果可靠且具有说服力。其核心在于结合<strong>正态性检验</strong>、<strong>非参数假设检验</strong>和<strong>效应量分析</strong>，形成一个完整的决策链。</p>
+<ul>
+<li><strong>分析流程遵循Wohlin等人提出的实验数据分析指南</strong>，确保了方法论的规范性。</li>
+<li><strong>整个流程的核心目标是</strong>：判断不同编译器（处理组）在<strong>能量消耗</strong>、<strong>执行时间</strong>、<strong>内存使用</strong>和<strong>LLC miss rate</strong>等关键指标上，与基准解释器<strong>CPython</strong>相比是否存在<strong>统计学上的显著差异</strong>，并量化这种差异的<strong>实际重要性</strong>（而不仅仅是统计显著性）。</li>
+</ul>
+<p><strong>正态性检验与检验方法选择</strong></p>
+<p>研究首先对每个处理组（即每个编译器在特定指标上的所有测量值）进行数据分布形态的检验，这是选择后续正确统计检验方法的前提。</p>
+<ul>
+<li><strong>采用Shapiro-Wilk检验</strong>来定量评估数据是否来自正态分布。</li>
+<li><strong>辅以Q-Q图进行图形化验证</strong>，直观地检查数据点与理论正态分布的拟合程度。</li>
+<li><strong>决策逻辑</strong>：<ul>
+<li>如果数据被判定为<strong>正态分布</strong>，则使用<strong>ANOVA</strong>（方差分析）来检验组间均值是否存在显著差异。</li>
+<li>如果数据被判定为<strong>非正态分布</strong>（这在本研究中是普遍情况，因为不同benchmark的指标值尺度差异巨大），则转而使用<strong>Kruskal-Wallis检验</strong>。这是一种非参数检验，用于判断多个独立样本是否来自同一分布，不依赖于数据的正态性假设。</li>
+</ul>
+</li>
+<li><strong>研究发现</strong>：由于不同benchmark（如<code>n_body</code>和<code>fasta</code>）在<strong>能量消耗</strong>和<strong>执行时间</strong>上的绝对值差异极大，导致聚合后的数据严重偏离正态分布（Shapiro-Wilk检验的p值远低于0.05）。因此，研究主要依赖<strong>Kruskal-Wallis检验</strong>来确认组间存在显著差异。</li>
+</ul>
+<p><strong>效应量分析：量化差异的实际意义</strong></p>
+<p>仅仅知道“有差异”是不够的，研究需要回答“差异有多大”。为此，研究引入了<strong>效应量</strong>（Effect Size）分析。</p>
+<ul>
+<li><strong>针对非正态分布数据</strong>，研究选用了<strong>Cliff's Delta</strong>作为效应量度量。Cliff's Delta衡量的是一个随机从A组抽取的值大于一个随机从B组抽取的值的概率，减去相反情况的概率。其取值范围为[-1, 1]。<ul>
+<li><strong>|Cliff's Delta| &gt; 0.474</strong> 被视为<strong>大效应</strong>。</li>
+<li><strong>0.33 &lt; |Cliff's Delta| ≤ 0.474</strong> 被视为<strong>中等效应</strong>。</li>
+<li><strong>|Cliff's Delta| ≤ 0.33</strong> 被视为<strong>小或可忽略的效应</strong>。</li>
+</ul>
+</li>
+<li><strong>针对正态分布数据</strong>（虽然本研究中较少），则会使用<strong>Cohen’s d</strong>。</li>
+<li><strong>具体应用</strong>：研究将<strong>CPython</strong>的数据作为一个基准组，分别与其他每一个编译器的数据组进行两两比较，计算Cliff's Delta值。这使得研究能够精确地指出哪些编译器（如<strong>PyPy</strong>, <strong>Numba</strong>, <strong>Codon</strong>）带来了<strong>巨大的、实质性的改进</strong>（Cliff's Delta接近1.0），而哪些编译器（如<strong>Nuitka</strong>, <strong>Cython</strong>在某些指标上）的改进效果是<strong>微乎其微</strong>的。</li>
+</ul>
+<p><strong>输入输出关系及在整体中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：原始的、未经处理的测量数据。这些数据来自于在两个测试平台（NUC和服务器）上，对7个benchmark使用9种执行模式（8个编译器+CPython）重复运行后收集的<strong>能量</strong>（KJ）、<strong>执行时间</strong>（min）、<strong>内存</strong>（MB）和<strong>LLC miss rate</strong>（%）的原始记录。</li>
+<li><strong>输出</strong>：<ul>
+<li><strong>统计显著性结论</strong>（p-value）：通过Kruskal-Wallis检验得出，证明了编译器的选择确实对各项指标有显著影响。</li>
+<li><strong>效应量结论</strong>（Cliff's Delta）：量化了每种编译器相对于CPython的实际优化程度，为实践者提供了清晰的优先级排序。</li>
+</ul>
+</li>
+<li><strong>在整体研究中的作用</strong>：这套标准化的分析方法是连接原始实验数据与最终科学结论的<strong>核心桥梁</strong>。它避免了仅凭平均值或图表进行主观判断的陷阱，用客观的统计证据支撑了论文的核心论点，例如“<strong>Codon, PyPy, and Numba achieve over 90% speed and energy improvements</strong>”这一关键发现。同时，该方法也揭示了结果的复杂性，例如<strong>Nuitka</strong>在<strong>内存使用</strong>上表现优异但在<strong>LLC miss rate</strong>上表现极差，这种多维度的洞察正是严谨统计分析的价值所在。<img alt="" src="../images/555037709359a2af7afdc2e64329f6bc4c3a2c674d5dac761cd6b7f8fc1cb7d8.jpg" /> <em>Table 2: Descriptive Statistics from Server data. The highlighted number shows the minimum average value.</em></li>
+</ul>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>研究目标</strong>: 本研究旨在系统性地比较八种主流 <strong>Python 编译器/解释器</strong>（PyPy, Numba, Nuitka, Mypyc, Codon, Cython, Pyston-lite, Python 3.13 JIT）与基准 <strong>CPython</strong> 在 <strong>性能</strong> 和 <strong>能源效率</strong> 方面的差异。</li>
+<li><strong>核心控制变量</strong>:<ul>
+<li><strong>代码特性</strong>: 所有基准测试均选自 <strong>Computer Language Benchmarks Game (CLBG)</strong>，确保代码为 <strong>单线程</strong> 且 <strong>不依赖任何第三方库</strong>（如 NumPy），以消除外部因素干扰。</li>
+<li><strong>硬件平台</strong>: 实验在两个不同的测试平台上进行：一台 <strong>Intel NUC</strong> 和一台 <strong>服务器</strong>，以检验结果的普适性。</li>
+<li><strong>执行环境</strong>: 所有测试均在 <strong>单个 CPU 核心</strong> 上运行，并通过 Linux <strong>CPU 频率调节器</strong> 将频率 <strong>固定</strong>（服务器 1.6 GHz，NUC 2.1 GHz），同时 <strong>禁用超线程</strong>，以排除动态频率和多核调度对能耗和性能的影响。</li>
+</ul>
+</li>
+<li><strong>测量指标</strong>:<ul>
+<li><strong>能源消耗</strong>: 使用 <strong>EnergiBridge</strong> 工具通过 Intel <strong>RAPL</strong> 接口测量，单位为 <strong>KiloJoules (KJ)</strong>。注意 NUC 因硬件限制无法测量 DRAM 能耗。</li>
+<li><strong>执行时间</strong>: 使用 <code>time</code> 模块测量，单位为 <strong>分钟 (min)</strong>。</li>
+<li><strong>内存使用</strong>: 通过 <strong>EnergiBridge</strong> 监控 <strong>Resident Set Size (RSS)</strong>，单位为 <strong>兆字节 (MB)</strong>。</li>
+<li><strong>缓存效率</strong>: 使用 <strong>perf</strong> 工具测量 <strong>Last-Level Cache (LLC) miss rate (%)</strong>。</li>
+</ul>
+</li>
+<li><strong>实验设计</strong>:<ul>
+<li>采用 <strong>全因子设计</strong>，组合 9 种执行模式（8 个编译器 + CPython）与 7 个基准测试。</li>
+<li>在 NUC 上每个组合重复 <strong>15 次</strong>，在服务器上重复 <strong>10 次</strong>，总计 <strong>1575 次</strong> 运行。</li>
+<li>使用 <strong>Experiment Runner</strong> 框架自动化整个流程，并通过 <strong>SSH</strong> 远程控制测试机。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/72911aedd5a555d0efb78c0232cce464978c5d57ccdfe54eebb455570f3c53c8.jpg" /> <em>Figure 1: Experiment Execution</em></p>
+<p><strong>结果数据分析</strong></p>
+<ul>
+<li><strong>能源效率 (RQ1)</strong>:<ul>
+<li><strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 表现出最显著的能源效率提升，在服务器上平均节能分别达到 <strong>94.66%</strong>, <strong>86.89%</strong>, 和 <strong>86.61%</strong>。</li>
+<li>其他编译器（如 Nuitka, Cython, Mypyc）的节能效果 <strong>不显著</strong>，甚至在 <code>n_body</code> 基准测试中导致能耗 <strong>增加</strong>。</li>
+<li>能源消耗主要来自 <strong>uncore components</strong>（如 LLC、内存控制器），而非 CPU 核心或 DRAM。</li>
+</ul>
+</li>
+<li><strong>性能表现 (RQ2)</strong>:<ul>
+<li><strong>执行时间</strong>: <strong>Codon</strong>, <strong>PyPy</strong>, 和 <strong>Numba</strong> 同样在执行时间上取得巨大优势，平均加速比分别达到 <strong>94.18%</strong>, <strong>86.67%</strong>, 和 <strong>85.86%</strong>。<code>n_body</code> 在 Codon 上甚至获得了 <strong>89倍</strong> 的加速。</li>
+<li><strong>内存使用</strong>: <strong>Nuitka</strong> 在两个平台上都表现出 <strong>最一致的内存优化能力</strong>，平均内存占用最低。<strong>Codon</strong> 在服务器上也显示出良好的内存效率。然而，整体内存数据 <strong>波动较大</strong>，部分原因是基准测试本身内存占用较低（MB 级别）。</li>
+<li><strong>LLC Miss Rate</strong>: 结果 <strong>高度不一致</strong>。<strong>Nuitka</strong> 在两个平台上都表现出 <strong>异常高的 LLC miss rate</strong>（服务器 58.73%，NUC 68.92%）。其他编译器的表现则因基准测试和平台而异，无法得出统一结论。LLC miss rate 与执行时间存在 <strong>微弱到中等的正相关</strong>，但不足以确立因果关系。</li>
+</ul>
+</li>
+<li><strong>跨平台一致性</strong>: <strong>能源消耗</strong> 和 <strong>执行时间</strong> 的结果在 NUC 和服务器上 <strong>高度一致</strong>，表明这些核心发现具有较好的可复现性。然而，<strong>LLC miss rate</strong> 的结果在两个平台间 <strong>差异显著</strong>。</li>
+</ul>
+<p><img alt="" src="../images/555037709359a2af7afdc2e64329f6bc4c3a2c674d5dac761cd6b7f8fc1cb7d8.jpg" /> <em>Table 2: Descriptive Statistics from Server data. The highlighted number shows the minimum average value.</em>
+<img alt="" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /> <em>Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em>
+<img alt="" src="../images/750c0034543fec6991a1d724b01db7a8aa3f63e208d8a28e2dcff778f21492fa.jpg" /> <em>Figure 3: Speedup and Energy improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em>
+<img alt="" src="../images/d9fce18701234e5e668b72565404608bc6fee1e36af7e5f583ec7a0bfb3fc3ef.jpg" /> <em>Figure 4: Memory usage improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc</em></p>
+<hr />
+<p><strong>消融实验分析</strong></p>
+<p>该研究并未进行传统意义上的“消融实验”（即系统性地移除模型组件以评估其贡献）。然而，其实验设计本身就构成了一种强大的 <strong>控制变量分析</strong>，可以视为对不同 <strong>编译策略</strong> 和 <strong>代码特性</strong> 影响的“消融”。</p>
+<ul>
+<li><strong>对编译策略的“消融”</strong>:<ul>
+<li>通过对比 <strong>AOT</strong>（如 Nuitka, Codon）和 <strong>JIT</strong>（如 PyPy, Numba）编译器，研究揭示了不同编译范式的效果。结果表明，<strong>Codon</strong>（AOT）和 <strong>Numba/PyPy</strong>（JIT）都能取得顶级性能，说明成功的关键可能在于 <strong>具体的优化技术</strong>（如类型推断、摆脱 GIL）而非单纯的 AOT/JIT 分类。</li>
+<li>对比 <strong>Pyston-lite</strong>（基于 CPython 的轻量级 JIT）和 <strong>CPython</strong>，发现 Pyston-lite <strong>未能带来显著提升</strong>，这“消融”了“任何基于 CPython 的 JIT 都能有效”的假设。</li>
+</ul>
+</li>
+<li><strong>对代码特性的“消融”</strong>:<ul>
+<li>通过观察同一编译器在不同基准测试上的表现差异，特别是 <code>n_body</code> 在多个 AOT 编译器（Nuitka, Cython, Mypyc）上性能 <strong>恶化</strong> 的现象，有效地“消融”了“编译总是有益”的观点。</li>
+<li>这一反常现象被归因于 <code>n_body</code> 大量使用 <strong>Python lists</strong> 进行数学运算，而这些 AOT 编译器在将动态的 Python list 操作高效映射到静态的 C/C++ 时遇到了困难。这凸显了 <strong>代码特性</strong>（如数据结构的使用方式）与 <strong>编译器能力</strong> 之间的关键交互作用。</li>
+</ul>
+</li>
+<li><strong>对平台特性的“消融”</strong>:<ul>
+<li>在 <strong>两个不同硬件平台</strong> 上重复实验，本身就是一种对平台依赖性的“消融”。<strong>执行时间</strong> 和 <strong>能耗</strong> 结果的一致性增强了结论的可信度，而 <strong>LLC miss rate</strong> 的不一致性则“消融”了该指标作为通用性能预测器的可能性，并指出了未来研究需要考虑 <strong>硬件微架构</strong> 的影响。</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

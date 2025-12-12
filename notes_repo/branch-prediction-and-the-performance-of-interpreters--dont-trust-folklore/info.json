@@ -1,0 +1,18 @@
+{
+  "index": "branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore",
+  "paper_title": "Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore",
+  "metadata": {
+    "authors": [
+      "Erven Rohou",
+      "Bharath Narasimha Swamy",
+      "Andre Seznec"
+    ],
+    "affiliations": [
+      "Inria, France"
+    ],
+    "venue": "CGO",
+    "year": 2015,
+    "doi": "10.1109/CGO.2015.7054191"
+  },
+  "description": "该论文挑战了“解释器中switch语句的间接跳转因高误预测率而严重损害性能”的传统观点。作者通过在Nehalem、Sandy Bridge和Haswell处理器上对Python、JavaScript和CLI解释器进行实验，发现分支预测准确率已大幅提升：全局分支误预测率（MPKI）从Nehalem上的12-20降至Haswell上的0.5-2。研究表明，在现代处理器上，间接跳转的预测开销已不再是性能瓶颈。"
+}

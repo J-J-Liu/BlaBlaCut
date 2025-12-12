@@ -1,0 +1,1966 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/flexible-reference-counting-based-hardware-acceleration-for-garbage-collection/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#flexible-reference-counting-based-hardware-acceleration-for-garbage-collection" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-garbage-collection-overheads-for-dacapo-benchmarks-with-different-heap-sizes-minheap-values-in-mb-shown-in-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Garbage collection overheads for DaCapo benchmarks with different heap sizes (minHeap values in MB shown in labels)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-overview-of-the-major-hardware-structures-provided-by-hamm-components-are-not-to-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Overview of the major hardware structures provided by HAMM (components are not to scale)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-hamm-isa-instructions-for-object-allocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: HAMM ISA instructions for object allocation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-hamm-isa-store-pointer-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: HAMM ISA store pointer instructions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-hamm-isa-instruction-for-garbage-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3: HAMM ISA instruction for garbage collection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#937954683e3b6b50528c2b16e2e7aeaaced1279eb0d41190678443fdb0ef65f7jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        937954683e3b6b50528c2b16e2e7aeaaced1279eb0d41190678443fdb0ef65f7.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-extensions-for-multiple-managed-memory-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4: Extensions for Multiple Managed Memory Regions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-5-storage-cost-of-hardware-structures-for-hamm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 5: Storage Cost of Hardware Structures for HAMM
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-6-hamm-data-structures-in-main-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 6: HAMM Data Structures in Main Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-7-baseline-processor-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 7: Baseline processor configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-estimated-garbage-collection-time-with-hamm-compared-to-the-baseline-generational-mark-sweep-collector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Estimated garbage collection time with HAMM compared to the baseline Generational Mark-Sweep collector.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-reduction-in-gc-time-for-different-heap-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Reduction in GC time for different heap sizes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-objects-newly-allocated-and-reallocated-in-the-nursery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Objects newly allocated and reallocated in the nursery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-number-of-nursery-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: Number of nursery collections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-total-surviving-space-copied-during-nursery-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Total surviving space copied during nursery collections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-objects-allocated-and-reallocated-in-the-older-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Objects allocated and reallocated in the older generation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-number-of-full-heap-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9: Number of full-heap collections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-total-surviving-space-during-full-heap-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10: Total surviving space during full-heap collections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-mutator-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11: Mutator performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-l1d-and-l2-cache-misses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12: L1D and L2 cache misses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-l2-misses-due-to-hamm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13: L2 misses due to HAMM
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="flexible-reference-counting-based-hardware-acceleration-for-garbage-collection">Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection 图表详解<a class="headerlink" href="#flexible-reference-counting-based-hardware-acceleration-for-garbage-collection" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-garbage-collection-overheads-for-dacapo-benchmarks-with-different-heap-sizes-minheap-values-in-mb-shown-in-labels">Figure 1: Garbage collection overheads for DaCapo benchmarks with different heap sizes (minHeap values in MB shown in labels)<a class="headerlink" href="#figure-1-garbage-collection-overheads-for-dacapo-benchmarks-with-different-heap-sizes-minheap-values-in-mb-shown-in-labels" title="Permanent link">&para;</a></h3>
+<p><img alt="54059dbde71b849786b2733d48462a2213d91427fcf7a3d6fe464b68fcdf9fd0.jpg" src="../images/54059dbde71b849786b2733d48462a2213d91427fcf7a3d6fe464b68fcdf9fd0.jpg" /></p>
+<ul>
+<li>图片展示了 Java DaCapo 基准测试套件在不同堆大小配置下，<strong>垃圾回收（GC）时间占总执行时间的百分比</strong>。</li>
+<li>横轴列出了 13 个 DaCapo 基准程序，每个程序名称后标注了其运行所需的最小堆大小（minHeap），单位为 MB。</li>
+<li>纵轴表示 GC 时间占比，范围从 0% 到 60%。</li>
+<li>图例显示了六种不同的堆大小配置：<strong>1x minHeap、1.5x minHeap、2x minHeap、3x minHeap、5x minHeap 和 10x minHeap</strong>。</li>
+<li>数据表明，<strong>GC 开销随堆大小增加而显著降低</strong>。例如，在 1x minHeap 配置下，多个基准程序（如 hsqldb、pmd、xalan）的 GC 开销高达 20%-55%，而在 10x minHeap 下则普遍降至 5% 以下。</li>
+<li><strong>hsqldb 171</strong> 在 1x minHeap 时 GC 开销最高，接近 55%；<strong>fop 28</strong> 在 1x minHeap 时开销也超过 50%。</li>
+<li>即使在较大的堆配置（如 3x minHeap）下，部分程序（如 hsqldb、pmd、xalan）的 GC 开销仍维持在 10%-20% 区间，说明<strong>GC 仍是性能瓶颈</strong>。</li>
+<li>对于某些程序（如 antlr、bloat、chart），即使在 1x minHeap 下，GC 开销也相对较低（\&lt;10%），表明其内存行为对 GC 更友好。</li>
+<li>整体趋势显示，<strong>堆越小，GC 越频繁，开销越大</strong>；反之，增大堆可有效缓解 GC 压力，但会牺牲内存效率。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>minHeap (MB)</th>
+<th>GC Time @ 1x minHeap (%)</th>
+<th>GC Time @ 3x minHeap (%)</th>
+<th>GC Time @ 10x minHeap (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>20</td>
+<td>~8</td>
+<td>~4</td>
+<td>~2</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>36</td>
+<td>~5</td>
+<td>~3</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>chart</td>
+<td>40</td>
+<td>~4</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>82</td>
+<td>~10</td>
+<td>~6</td>
+<td>~3</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>28</td>
+<td>~55</td>
+<td>~15</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>hsqldb</td>
+<td>171</td>
+<td>~55</td>
+<td>~20</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>32</td>
+<td>~10</td>
+<td>~6</td>
+<td>~3</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>18</td>
+<td>~8</td>
+<td>~4</td>
+<td>~2</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>45</td>
+<td>~10</td>
+<td>~6</td>
+<td>~3</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>36</td>
+<td>~25</td>
+<td>~15</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>51</td>
+<td>~45</td>
+<td>~20</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>avrora</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>注：avrora 未在图中显示数据，可能因实验环境限制未运行。</p>
+<h3 id="figure-2-overview-of-the-major-hardware-structures-provided-by-hamm-components-are-not-to-scale">Figure 2: Overview of the major hardware structures provided by HAMM (components are not to scale)<a class="headerlink" href="#figure-2-overview-of-the-major-hardware-structures-provided-by-hamm-components-are-not-to-scale" title="Permanent link">&para;</a></h3>
+<p><img alt="3f4a974812579eaa2440b2b0a09e5fdd3a6cb19fad436d17d4dcbcec8b9a5a91.jpg" src="../images/3f4a974812579eaa2440b2b0a09e5fdd3a6cb19fad436d17d4dcbcec8b9a5a91.jpg" /></p>
+<ul>
+<li>图片展示了 HAMM（Hardware-Assisted Automatic Memory Management）架构的核心硬件组件，其设计目标是通过硬件加速参考计数和内存块重用，降低软件垃圾回收（GC）的开销。</li>
+<li>整体结构分为三个层级：<strong>CPU Core 层</strong>、<strong>Chip 层</strong> 和 <strong>Main Memory 层</strong>，各层通过明确的数据流路径协同工作。</li>
+<li>在每个 CPU Core 内部，包含两个关键缓冲区：<ul>
+<li><strong>L1 RC Coalescing Buffer (L1 RCCB)</strong>：接收来自 LD/ST Unit 的 RC 更新请求（incRC/decRC），用于合并同一对象的多次引用计数更新，减少对内存的频繁访问。</li>
+<li><strong>L1 Available Block Table (L1 ABT)</strong>：存储可重用内存块地址，供分配器快速获取，避免缓存未命中或同步延迟。</li>
+</ul>
+</li>
+<li>Chip 层提供跨核心协调机制：<ul>
+<li><strong>L2 RC Coalescing Buffer (L2 RCCB)</strong>：聚合来自所有核心的 L1 RCCB 更新，进一步合并后写入主存对象头中的 RC 字段，确保多核环境下的数据一致性。</li>
+<li><strong>L2 Available Block Table (L2 ABT)</strong>：作为 L1 ABT 的上层缓存，从主存 ABT 预取可用块，支持多核并发分配请求。</li>
+</ul>
+</li>
+<li>Main Memory 层维护全局状态：<ul>
+<li><strong>Available Block Table (ABT)</strong>：以链表形式组织，按大小分类存储所有可重用内存块，是系统最终的“自由列表”来源。</li>
+<li><strong>Live objects</strong>：图中示意了对象在主存中的布局，每个对象头部包含 <strong>RC 字段</strong>，用于记录当前引用计数。</li>
+</ul>
+</li>
+<li>数据流向清晰：<ul>
+<li>引用更新路径：LD/ST Unit → L1 RCCB → L2 RCCB → Main Memory (RC field)。</li>
+<li>内存块重用路径：Main Memory (ABT) → L2 ABT → L1 ABT → Allocator (via REALLOCMEM instruction)。</li>
+</ul>
+</li>
+<li>系统支持多芯片（CPU Chip 0 到 M）扩展，各芯片间通过共享主存 ABT 协同，确保全局内存块池的一致性。</li>
+<li>关键设计原则：<ul>
+<li>所有硬件结构均<strong>不在关键路径上</strong>，不影响指令执行时序。</li>
+<li>通过<strong>两级缓冲（RCCB 和 ABT）</strong> 实现高过滤率（论文称 L1 RCCB 平均过滤 90.6% 更新），显著降低内存带宽压力。</li>
+<li>支持<strong>多应用/多区域管理</strong>，通过 Region ID 和 Application ID 避免地址别名冲突。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件层级</th>
+<th>组件名称</th>
+<th>功能描述</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td>L1 RCCB</td>
+<td>合并本地引用计数更新</td>
+<td>减少内存写入频率，提升效率</td>
+</tr>
+<tr>
+<td>Core</td>
+<td>L1 ABT</td>
+<td>缓存单个可重用块地址</td>
+<td>加速分配器获取空闲块</td>
+</tr>
+<tr>
+<td>Chip</td>
+<td>L2 RCCB</td>
+<td>聚合多核 RC 更新</td>
+<td>保证多核一致性，减少主存压力</td>
+</tr>
+<tr>
+<td>Chip</td>
+<td>L2 ABT</td>
+<td>多核共享预取缓存</td>
+<td>支持并发分配，提高吞吐量</td>
+</tr>
+<tr>
+<td>Main Memory</td>
+<td>ABT</td>
+<td>全局自由块链表</td>
+<td>提供最终的内存块来源</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该架构体现了“<strong>硬件加速，软件决策</strong>”的设计哲学：硬件负责高效检测死亡对象和提供重用块，而内存布局优化、GC 策略等高层决策仍由软件控制，保持灵活性。</li>
+</ul>
+<h3 id="table-1-hamm-isa-instructions-for-object-allocation">Table 1: HAMM ISA instructions for object allocation<a class="headerlink" href="#table-1-hamm-isa-instructions-for-object-allocation" title="Permanent link">&para;</a></h3>
+<p><img alt="5476550c77017e5a3622fc74fb3cee37a42df535ad10d3d82e1edd2e279432b5.jpg" src="../images/5476550c77017e5a3622fc74fb3cee37a42df535ad10d3d82e1edd2e279432b5.jpg" /></p>
+<ul>
+<li>图片内容为 <strong>Table 1: HAMM ISA instructions for object allocation</strong>，展示了两个新增的指令格式及其语义描述。</li>
+<li>该表包含两列：<strong>Format</strong> 和 <strong>Description</strong>，分别说明指令的语法结构和功能行为。</li>
+<li>表中列出的两条指令是 <strong>REALLOCMEM</strong> 和 <strong>ALLOCMEM</strong>，它们是 HAMM 机制与软件内存分配器交互的核心接口。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REALLOCMEM reg1, reg2</td>
+<td>请求从硬件维护的本地 <strong>Available Block Table (L1 ABT)</strong> 中获取一个大小为 <code>reg2</code> 的可用内存块。若找到，则在 <code>reg1</code> 返回起始地址；否则返回零。<code>reg2</code> 同时返回实际块大小。<strong>条件码</strong>根据 <code>reg1</code> 设置。</td>
+</tr>
+<tr>
+<td>ALLOCMEM reg1, reg2</td>
+<td>告知硬件一个新分配对象的信息：其地址为 <code>reg1</code>，大小为 <code>reg2</code>。此指令确保第一个对该对象的引用被纳入硬件参考计数机制。它会在本地 <strong>L1 RCCB</strong> 创建条目（初始引用计数为1），并将6位<strong>size class</strong>写入对象头。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>REALLOCMEM</strong> 指令允许分配器优先尝试重用已回收的内存块，避免触发默认分配路径，从而减少 GC 需求。</li>
+<li><strong>ALLOCMEM</strong> 指令用于通知硬件新对象的存在，启动其参考计数跟踪，并将其归类到合适的尺寸类别，以便后续高效重用。</li>
+<li>两条指令均设计为非阻塞、低开销操作，不干扰分配器的关键路径性能。</li>
+<li>这些指令是 HAMM 实现“硬件辅助自动内存管理”的关键组成部分，使软件分配器能灵活选择是否重用内存，同时由硬件负责底层引用计数和块管理。</li>
+</ul>
+<h3 id="table-2-hamm-isa-store-pointer-instructions">Table 2: HAMM ISA store pointer instructions<a class="headerlink" href="#table-2-hamm-isa-store-pointer-instructions" title="Permanent link">&para;</a></h3>
+<p><img alt="215c55cdc9e216900d5ec95f791bb15ffb2bfade2e91bba28f61a42bd97e8fc0.jpg" src="../images/215c55cdc9e216900d5ec95f791bb15ffb2bfade2e91bba28f61a42bd97e8fc0.jpg" /></p>
+<ul>
+<li>该图片展示了 <strong>Table 2: HAMM ISA store pointer instructions</strong>，定义了五条用于支持硬件辅助引用计数的新增指令。</li>
+<li>指令设计核心在于：在执行指针存储操作的同时，<strong>自动触发引用计数（RC）更新</strong>，避免软件同步开销。</li>
+<li>所有指令均区分“创建新引用”与“覆盖旧引用”两种语义，前者仅需 <strong>incRC</strong>，后者需同时 <strong>decRC（旧引用） + incRC（新引用）</strong>。</li>
+<li>具体指令格式与功能如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指令格式</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MOVTPR reg/mem, src_reg</strong></td>
+<td>将新引用存入寄存器或内存位置，并对 <code>src_reg</code> 指向的对象执行 <strong>incRC</strong>。</td>
+</tr>
+<tr>
+<td><strong>MOVPTROVR reg/mem, src_reg</strong></td>
+<td>覆盖寄存器或内存中的现有引用，对新引用对象 <strong>incRC</strong>，对被覆盖的旧引用对象 <strong>decRC</strong>。</td>
+</tr>
+<tr>
+<td><strong>PUSHPTR reg/mem</strong></td>
+<td>将寄存器或内存中的引用压栈，并对该引用对象执行 <strong>incRC</strong>。</td>
+</tr>
+<tr>
+<td><strong>POP PTR reg/mem</strong></td>
+<td>从栈顶弹出引用至寄存器或内存，不涉及引用覆盖，仅执行 <strong>incRC</strong>（若目标非空则隐含覆盖）。</td>
+</tr>
+<tr>
+<td><strong>POPPTROVR reg/mem</strong></td>
+<td>从栈顶弹出引用并覆盖寄存器或内存中的现有引用，对弹出引用对象 <strong>incRC</strong>，对被覆盖对象 <strong>decRC</strong>。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这些指令通过硬件机制处理指针写入时的引用计数变更，<strong>无需软件介入同步</strong>，从而大幅降低传统软件引用计数的性能开销。</li>
+<li>指令命名清晰反映其行为：<code>PTR</code> 表示操作对象为指针，<code>OVR</code> 表示覆盖语义，<code>PUSH/POP</code> 对应栈操作。</li>
+<li>此设计使引用计数更新成为指针操作的<strong>副作用</strong>，与缓存一致性协议协同工作，确保多核环境下的正确性。</li>
+</ul>
+<h3 id="table-3-hamm-isa-instruction-for-garbage-collection">Table 3: HAMM ISA instruction for garbage collection<a class="headerlink" href="#table-3-hamm-isa-instruction-for-garbage-collection" title="Permanent link">&para;</a></h3>
+<p><img alt="136e77f278e1281a53743e7754ef7d40982fa9f1da7e8d3d9860ec33f6aa9977.jpg" src="../images/136e77f278e1281a53743e7754ef7d40982fa9f1da7e8d3d9860ec33f6aa9977.jpg" /></p>
+<ul>
+<li>图片内容为 <strong>Table 3</strong>，标题为 “HAMM ISA instruction for garbage collection”，展示了一条用于垃圾回收的新增指令。</li>
+<li>该表仅包含一行数据，描述了 <strong>FLUSHRC</strong> 指令的格式与语义。</li>
+<li>指令格式为：<strong>FLUSHRC reg</strong>，其中 <code>reg</code> 是一个寄存器，用于存放待处理对象的地址。</li>
+<li>该指令的功能是：<strong>刷新所有挂起的 RC 更新</strong>（即 Reference Count updates），这些更新存储在 <strong>RCCBs</strong>（Reference Count Coalescing Buffers）中，并将最终结果写入对应对象头中的引用计数字段。</li>
+<li>此指令主要用于软件 GC 启动时，确保所有硬件缓存的引用计数更新已同步至内存对象头，避免因对象移动或内存重用导致的数据不一致。</li>
+<li>该指令属于非关键路径操作，可在 GC 进行过程中异步执行，但若需立即确认某对象的引用计数状态，则可主动调用此指令并等待其完成。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FLUSHRC reg</td>
+<td>刷新位于寄存器 <code>reg</code> 所指地址对象的所有挂起 RC 更新至其对象头中的引用计数字段。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该指令设计体现了 HAMM 的核心理念：<strong>硬件加速参考计数，软件控制回收时机</strong>，从而在保持灵活性的同时降低 GC 开销。</li>
+</ul>
+<h3 id="937954683e3b6b50528c2b16e2e7aeaaced1279eb0d41190678443fdb0ef65f7jpg">937954683e3b6b50528c2b16e2e7aeaaced1279eb0d41190678443fdb0ef65f7.jpg<a class="headerlink" href="#937954683e3b6b50528c2b16e2e7aeaaced1279eb0d41190678443fdb0ef65f7jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="937954683e3b6b50528c2b16e2e7aeaaced1279eb0d41190678443fdb0ef65f7.jpg" src="../images/937954683e3b6b50528c2b16e2e7aeaaced1279eb0d41190678443fdb0ef65f7.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Algorithm 1</strong>，即一个经过修改的 <strong>bump pointer allocator</strong> 的伪代码实现，用于与 <strong>HAMM</strong> 硬件机制协同工作。</li>
+<li>该算法的核心逻辑是：在分配新对象时，<strong>优先尝试从硬件管理的 Available Block Table (ABT)</strong> 中重用已死亡对象的内存块，若失败则回退到传统的 bump-pointer 分配策略。</li>
+<li>算法首先调用 <strong>REALLOCMEM</strong> 指令，传入所需对象大小 <code>size</code>，以查询本地 L1 ABT 是否有可用的空闲块。返回值赋给变量 <code>addr</code>。</li>
+<li>如果 <code>addr == 0</code>，表示 <strong>ABT 中无可用块</strong>，此时执行软件分配路径：<ul>
+<li>调用 <code>bump_pointer</code> 进行连续分配。</li>
+<li>更新 <code>bump_pointer</code> 指针。</li>
+<li>检查 <code>bump_pointer</code> 是否溢出当前堆块（local heap chunk）。<ul>
+<li>若溢出，则触发 <strong>Slow-path Allocator</strong>，这通常涉及同步、申请新堆块或触发垃圾回收（GC）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果 <code>addr != 0</code>，表示 <strong>ABT 成功返回了一个可重用的内存块地址</strong>，此时直接使用该地址。</li>
+<li>无论采用哪种分配方式，最终都需调用 <strong>ALLOCMEM</strong> 指令，将新分配的对象地址 <code>object_addr</code> 和其大小 <code>size</code> 通知给硬件，以便硬件维护相关元数据（如更新引用计数和 ABT）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">操作</th>
+<th style="text-align: left;">目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><code>addr ← REALLOCMEM size</code></td>
+<td style="text-align: left;">查询硬件 ABT 是否有可重用块</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><code>if (addr == 0)</code></td>
+<td style="text-align: left;">判断 ABT 是否为空</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><code>addr ← bump_pointer</code></td>
+<td style="text-align: left;">回退到软件 bump-pointer 分配</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><code>bump_pointer ← bump_pointer + size</code></td>
+<td style="text-align: left;">更新 bump-pointer</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"><code>if (overflow)</code></td>
+<td style="text-align: left;">检查是否需要慢速路径</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"><code>Use Slow-path Allocator</code></td>
+<td style="text-align: left;">处理堆块耗尽或触发 GC</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"><code>else</code></td>
+<td style="text-align: left;">ABT 提供了可重用块</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"><code>Initialize block at addr</code></td>
+<td style="text-align: left;">初始化重用的内存块</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"><code>ALLOCMEM object_addr, size</code></td>
+<td style="text-align: left;">通知硬件新对象信息</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该算法设计的关键在于 <strong>非侵入性</strong> 和 <strong>性能优先</strong>：它仅在 <code>REALLOCMEM</code> 返回非零地址时才进行重用，而 <code>REALLOCMEM</code> 仅访问本地 L1 ABT，因此不会引入显著的延迟或缓存未命中，保证了快速分配路径的效率。</li>
+<li>最终的 <code>ALLOCMEM</code> 调用是必要的，它确保了硬件能够跟踪新对象的生命周期，为后续的引用计数和潜在的再次重用做好准备。</li>
+</ul>
+<h3 id="table-4-extensions-for-multiple-managed-memory-regions">Table 4: Extensions for Multiple Managed Memory Regions<a class="headerlink" href="#table-4-extensions-for-multiple-managed-memory-regions" title="Permanent link">&para;</a></h3>
+<p><img alt="b71c09bb5fcaa6351545559c55d22b260f8dd6346bdf19a74c21693cf1236b7a.jpg" src="../images/b71c09bb5fcaa6351545559c55d22b260f8dd6346bdf19a74c21693cf1236b7a.jpg" /></p>
+<ul>
+<li>该表格（Table 4）详细说明了为支持<strong>多管理内存区域</strong>而对 HAMM 硬件结构所做的扩展，确保不同应用或同一应用内不同内存区域的引用计数和内存块重用互不干扰。</li>
+<li>所有扩展的核心目标是引入 <strong>allocation pool ID</strong>，它由 <strong>application ID</strong>（6位）和 <strong>region ID</strong>（2位）组合而成，用于在硬件层面区分不同的内存分配池。</li>
+</ul>
+<p>以下是各结构的具体扩展内容：</p>
+<table>
+<thead>
+<tr>
+<th>结构</th>
+<th>扩展描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1 and L2 RCCB</strong></td>
+<td>在标签字段中增加 <strong>allocation pool ID</strong>，与引用虚拟地址一同构成完整标签，确保引用计数更新仅作用于正确的分配池。</td>
+</tr>
+<tr>
+<td><strong>Page table and TLBs</strong></td>
+<td>每个条目扩展包含 <strong>2-bit region ID</strong>，使每次 <code>incRC</code> 或 <code>decRC</code> 操作在访问 L1 RCCB 前能确定所属区域及分配池。</td>
+</tr>
+<tr>
+<td><strong>Memory ABT</strong></td>
+<td>每个分配池拥有独立的内存 ABT，因为不同应用或区域的内存块不能混用，避免错误重用。</td>
+</tr>
+<tr>
+<td><strong>L1 ABT</strong></td>
+<td>专属于当前运行在核心上的应用及其正在分配的特定内存区域（如 nursery 或 older generation），保证本地快速访问。</td>
+</tr>
+<tr>
+<td><strong>L2 ABT</strong></td>
+<td>每个 L2 ABT 条目必须扩展包含对应的 <strong>allocation pool ID</strong>，以支持多核芯片上多个分配池的并发管理。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这些扩展使得 HAMM 能够安全、高效地处理<strong>多应用并发执行</strong>和<strong>单应用内多代/多区域内存管理</strong>场景，例如 Java 的 generational collector 中的 nursery 和 mature 区域。</li>
+<li>在进程上下文切换时，系统会将被换出进程的 RCCB 内容刷新到内存，并将未使用的 L1/L2 ABT 条目归还至对应内存 ABT，确保资源正确回收和隔离。</li>
+</ul>
+<h3 id="table-5-storage-cost-of-hardware-structures-for-hamm">Table 5: Storage Cost of Hardware Structures for HAMM<a class="headerlink" href="#table-5-storage-cost-of-hardware-structures-for-hamm" title="Permanent link">&para;</a></h3>
+<p><img alt="b167662da82859ce1f69a34605509b701e65d09518c2b145aa903a917f5e5be5.jpg" src="../images/b167662da82859ce1f69a34605509b701e65d09518c2b145aa903a917f5e5be5.jpg" /></p>
+<ul>
+<li>
+<p><strong>Table 5</strong> 详细列出了 HAMM 所需硬件结构的存储开销，基于一个 64 位架构和 4 核对称多处理器（CMP）的假设配置。该表旨在量化硬件支持带来的额外存储成本。</p>
+</li>
+<li>
+<p>表格包含三列：<strong>Structure</strong>（结构名称）、<strong>Description</strong>（结构描述）和 <strong>Cost</strong>（成本）。所有成本均以字节或比特为单位，并按每核或整个 CMP 计算。</p>
+</li>
+<li>
+<p>关键硬件组件及其存储成本如下：</p>
+</li>
+</ul>
+<p>| Structure | Description | Cost |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------</p>
+<h3 id="table-6-hamm-data-structures-in-main-memory">Table 6: HAMM Data Structures in Main Memory<a class="headerlink" href="#table-6-hamm-data-structures-in-main-memory" title="Permanent link">&para;</a></h3>
+<p><img alt="dff6eb20b0bb906e6341a3184a3d1469370e85a2cead5c91de1e5ec16fda3e54.jpg" src="../images/dff6eb20b0bb906e6341a3184a3d1469370e85a2cead5c91de1e5ec16fda3e54.jpg" /></p>
+<ul>
+<li><strong>Table 6</strong> 详细列出了 HAMM 在主存中所需的数据结构，这些结构是硬件辅助垃圾回收机制正常运作的基础。</li>
+<li>表格包含三行数据，分别描述了三种核心数据结构的用途和内存开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Memory ABT</strong></td>
+<td>每个应用和内存区域配备一个64项的可用块表（Available Block Table）。假设典型分代堆有两个区域（新生代和老年代），则每个运行中的托管应用需1KB内存。</td>
+</tr>
+<tr>
+<td><strong>Object Reference Map (ORM)</strong></td>
+<td>一个1K项的表，每项16字节，总计16KB，用于每个运行中的托管应用。该表用于快速确定对象内哪些字段是指针。</td>
+</tr>
+<tr>
+<td><strong>Configuration of each allocation pool</strong></td>
+<td>包含HAMM所需的常量配置表：1) 对象头中引用计数字段的偏移量；2) 对象头中大小类字段的偏移量；3) 对象头中类型标识字段的偏移量；4) 相对于对象引用地址的块起始地址偏移量；5) 每个大小类对应的64项对象尺寸表。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这些数据结构共同支撑了 HAMM 的核心功能：高效追踪对象引用、快速识别死亡对象并重用其内存块。</li>
+<li>内存开销相对可控，例如 ORM 仅占用16KB，而 Memory ABT 为1KB，适合在现代系统中部署。</li>
+<li>配置表的存在确保了 HAMM 能够灵活适应不同对象布局和内存分配策略，体现了其“<strong>灵活</strong>”的设计理念。</li>
+</ul>
+<h3 id="table-7-baseline-processor-configuration">Table 7: Baseline processor configuration<a class="headerlink" href="#table-7-baseline-processor-configuration" title="Permanent link">&para;</a></h3>
+<p><img alt="80b95f8c5618a9fa0c1f09f83ac2b7728233e03567a3a1c1656fcd8556499a6d.jpg" src="../images/80b95f8c5618a9fa0c1f09f83ac2b7728233e03567a3a1c1656fcd8556499a6d.jpg" /></p>
+<ul>
+<li><strong>Table 7</strong> 展示了用于评估 HAMM 机制的基线处理器配置，该配置为一个典型的现代超标量乱序执行处理器，旨在模拟真实硬件环境以进行性能对比。</li>
+<li>该配置包含前端、分支预测器、执行核心、片上缓存、总线与内存以及预取器等关键模块，各模块参数如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>配置细节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Front End</td>
+<td><strong>64KB</strong>, 2-way, 2-cycle I-cache；在第一个预测采用的分支处结束取指；最多可取3个条件分支或1个间接分支</td>
+</tr>
+<tr>
+<td>Branch Predictors</td>
+<td><strong>16KB</strong> (31-bit history, 511-entry perceptron) 分支预测器；<strong>1K-entry</strong>, 4-way BTB（带 pseudo-LRU 替换）；<strong>512-entry</strong> 标记目标缓存间接分支预测器；<strong>64-entry</strong> 返回地址栈；分支误预测惩罚为 <strong>20 cycles</strong></td>
+</tr>
+<tr>
+<td>Execution Core</td>
+<td><strong>4-wide</strong> fetch/issue/execute/retire；<strong>128-entry</strong> 重排序缓冲区；<strong>128</strong> 个物理寄存器；<strong>64-entry</strong> LD-ST 队列；<strong>4-cycle</strong> 流水线唤醒与选择逻辑；调度窗口划分为 <strong>4 个子窗口</strong>，每个 <strong>32 entries</strong></td>
+</tr>
+<tr>
+<td>On-chip Caches</td>
+<td>L1 D-cache: <strong>64KB</strong>, 4-way, 2-cycle, 2 ld/st 端口；L2 统一缓存: <strong>4MB</strong>, 8-way, 8 banks, <strong>16-cycle</strong> 延迟；所有缓存使用 <strong>LRU 替换策略</strong> 和 <strong>64B 行</strong></td>
+</tr>
+<tr>
+<td>Buses and Memory</td>
+<td><strong>150-cycle</strong> 最小内存延迟；<strong>32 DRAM banks</strong>；<strong>8B-wide</strong> core-to-memory 总线，频率比为 <strong>4:1</strong></td>
+</tr>
+<tr>
+<td>Prefetcher</td>
+<td><strong>Stream prefetcher</strong>（<strong>32 streams</strong> 和 <strong>4 cacheline</strong> 预取距离）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有缓存均采用 <strong>LRU 替换策略</strong>，且缓存行大小统一为 <strong>64B</strong>，符合主流架构设计。</li>
+<li>执行核心支持 <strong>4 路并行</strong> 的取指、发射、执行和退休，具备 <strong>128 条目</strong> 的重排序缓冲区和 <strong>64 条目</strong> 的加载/存储队列，体现高性能乱序执行能力。</li>
+<li>分支预测器结构复杂，包含感知器、BTB、返回地址栈和间接分支预测器，旨在降低分支误预测开销（<strong>20 cycles</strong>），提升指令流连续性。</li>
+<li>内存系统延迟较高（<strong>150 cycles</strong>），但通过 <strong>32 个 DRAM bank</strong> 和 <strong>8B 宽总线</strong> 提供高带宽支持，同时配备 <strong>流式预取器</strong> 优化顺序访问性能。</li>
+<li>此配置作为基准，用于对比 HAMM 引入后对 GC 时间和 mutator 性能的影响，确保实验结果具有实际参考价值。</li>
+</ul>
+<h3 id="figure-3-estimated-garbage-collection-time-with-hamm-compared-to-the-baseline-generational-mark-sweep-collector">Figure 3: Estimated garbage collection time with HAMM compared to the baseline Generational Mark-Sweep collector.<a class="headerlink" href="#figure-3-estimated-garbage-collection-time-with-hamm-compared-to-the-baseline-generational-mark-sweep-collector" title="Permanent link">&para;</a></h3>
+<p><img alt="458722b556cc20edda86b2f473c98854a981aa033f90c7a405029a5960cf7bec.jpg" src="../images/458722b556cc20edda86b2f473c98854a981aa033f90c7a405029a5960cf7bec.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 3</strong>，即在不同堆大小配置下，<strong>HAMM</strong> 机制与基线 <strong>GenMS</strong>（Generational Mark-Sweep）垃圾回收器相比的 <strong>归一化 GC 时间</strong>。</li>
+<li>每个子图对应一个 <strong>DaCapo</strong> 基准测试程序，共九个：<strong>(a) antlr</strong>, <strong>(b) bloat</strong>, <strong>(c) eclipse</strong>, <strong>(d) fop</strong>, <strong>(e) jython</strong>, <strong>(f) luindex</strong>, <strong>(g) lusearch</strong>, <strong>(h) pmd</strong>, <strong>(i) xalan</strong>。</li>
+<li>X轴为 <strong>堆大小相对于最小堆大小（minHeap）的比例</strong>，范围从1.0到4.0。</li>
+<li>Y轴为 <strong>归一化 GC 时间</strong>，表示相对于某个基准值的相对时间开销。</li>
+<li>图中包含两条曲线：<ul>
+<li>实线（带圆点）代表 <strong>baseline-GenMS</strong>（基线生成式标记清除收集器）。</li>
+<li>虚线（带叉号）代表 <strong>GenMS + HAMM</strong>（启用硬件辅助内存管理机制后的收集器）。</li>
+</ul>
+</li>
+<li><strong>核心观察</strong>：<ul>
+<li>在几乎所有基准测试和堆大小配置下，<strong>GenMS + HAMM</strong> 的归一化 GC 时间均显著低于 <strong>baseline-GenMS</strong>。</li>
+<li>随着堆大小增加，两种方案的 GC 时间都下降，但 <strong>HAMM</strong> 的下降幅度更大，尤其在较小堆（如1.5x minHeap）时优势最明显。</li>
+<li><strong>antlr</strong> 在1.5x minHeap时表现最佳，GC时间减少约61%。</li>
+<li><strong>fop</strong> 在4x minHeap时，HAMM几乎完全消除了软件GC需求（虚线趋近于0）。</li>
+<li><strong>lusearch</strong> 在1.2x minHeap时是唯一例外，HAMM略微增加了0.6%的GC时间。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Best Improvement (Heap Size)</th>
+<th>Worst Case (Heap Size)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td><strong>61%</strong> (1.5x minHeap)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~40% (1.5x minHeap)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~45% (1.5x minHeap)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>fop</td>
+<td><strong>~100%</strong> (4x minHeap)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~35% (1.5x minHeap)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~40% (1.5x minHeap)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>—</td>
+<td><strong>+0.6%</strong> (1.2x minHeap)</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~30% (1.5x minHeap)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~48% (3x minHeap)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体趋势表明，<strong>HAMM</strong> 通过硬件加速引用计数和内存块重用，有效减少了垃圾回收频率和工作量，从而显著降低GC开销，尤其在内存受限场景下效果突出。</li>
+</ul>
+<h3 id="figure-4-reduction-in-gc-time-for-different-heap-sizes">Figure 4: Reduction in GC time for different heap sizes<a class="headerlink" href="#figure-4-reduction-in-gc-time-for-different-heap-sizes" title="Permanent link">&para;</a></h3>
+<p><img alt="1ef9320c115e4ab04c7f2fe5da4d48d9b87163735433b0f42c2a9d0e94a0cb75.jpg" src="../images/1ef9320c115e4ab04c7f2fe5da4d48d9b87163735433b0f42c2a9d0e94a0cb75.jpg" /></p>
+<ul>
+<li>图片展示了在不同堆大小（1.5x minHeap 至 3x minHeap）下，HAMM 机制对 <strong>GC time reduction (%)</strong> 的影响，数据基于 Java DaCapo 基准测试。</li>
+<li>每个基准测试（如 antlr, bloat, eclipse 等）对应四组柱状图，分别代表四种堆大小配置下的 GC 时间减少百分比。</li>
+<li><strong>整体趋势</strong>：随着堆大小增加，GC 时间减少幅度趋于稳定或略有下降，但所有基准测试在 1.5x 至 3x minHeap 范围内均实现至少 <strong>10%</strong> 的 GC 时间减少。</li>
+<li><strong>最佳表现</strong>：antlr 在 1.5x minHeap 下达到 <strong>61%</strong> 的 GC 时间减少，是所有组合中的最高值。</li>
+<li><strong>最差表现</strong>：lusearch 在 1.2x minHeap 下仅减少 <strong>0.6%</strong>，但在 1.5x 及以上堆大小时表现显著改善。</li>
+<li><strong>平均性能</strong>：在 1.5x minHeap 和 2.5x minHeap 下，HAMM 平均减少 GC 时间分别为 <strong>29%</strong> 和 <strong>31%</strong>，表明其在合理堆大小范围内具有稳定优化效果。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>1.5x minHeap</th>
+<th>2x minHeap</th>
+<th>2.5x minHeap</th>
+<th>3x minHeap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~61%</td>
+<td>~48%</td>
+<td>~40%</td>
+<td>~32%</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~40%</td>
+<td>~38%</td>
+<td>~35%</td>
+<td>~32%</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~32%</td>
+<td>~30%</td>
+<td>~31%</td>
+<td>~30%</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>~22%</td>
+<td>~25%</td>
+<td>~27%</td>
+<td>~28%</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~25%</td>
+<td>~28%</td>
+<td>~30%</td>
+<td>~29%</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~55%</td>
+<td>~50%</td>
+<td>~45%</td>
+<td>~40%</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~15%</td>
+<td>~12%</td>
+<td>~10%</td>
+<td>~10%</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~35%</td>
+<td>~38%</td>
+<td>~40%</td>
+<td>~38%</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~36%</td>
+<td>~40%</td>
+<td>~45%</td>
+<td>~48%</td>
+</tr>
+<tr>
+<td>hmean</td>
+<td>~28%</td>
+<td>~29%</td>
+<td>~30%</td>
+<td>~29%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键结论</strong>：HAMM 在主流堆大小配置下能稳定降低 GC 开销，尤其在较小堆（1.5x minHeap）时效果最显著，适合内存受限场景。</li>
+</ul>
+<h3 id="figure-5-objects-newly-allocated-and-reallocated-in-the-nursery">Figure 5: Objects newly allocated and reallocated in the nursery<a class="headerlink" href="#figure-5-objects-newly-allocated-and-reallocated-in-the-nursery" title="Permanent link">&para;</a></h3>
+<p><img alt="4ab2d91f734de1893ff83a5d79d333a29753f05f84815dc87c0025d49e8a53c8.jpg" src="../images/4ab2d91f734de1893ff83a5d79d333a29753f05f84815dc87c0025d49e8a53c8.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 5: Objects newly allocated and reallocated in the nursery</strong>，展示在 <strong>1.5x minHeap</strong> 条件下，各 DaCapo 基准测试中在 <strong>nursery</strong> 区域新分配与重分配对象数量的归一化对比（相对于基线 GenMS）。</li>
+<li>纵轴左侧为 <strong>Number of Objects (norm. to GenMS)</strong>，表示对象总数相对于基线的比例；右侧为 <strong>Number of Collections (norm. to GenMS)</strong>，表示收集次数比例。</li>
+<li>每个柱状图分为两部分：深色部分代表 <strong>Reallocated</strong>（通过 HAMM 机制重用内存块的对象），浅灰色部分代表 <strong>Allocated</strong>（通过默认分配器新分配的对象）。</li>
+<li>所有基准测试中，<strong>Reallocated</strong> 对象占比均显著高于 <strong>Allocated</strong>，表明 HAMM 在 nursery 层面实现了高比例内存重用。</li>
+<li>各基准测试具体数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Reallocated (%)</th>
+<th>Allocated (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~77%</td>
+<td>~23%</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~69%</td>
+<td>~31%</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~68%</td>
+<td>~32%</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>~65%</td>
+<td>~35%</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~64%</td>
+<td>~36%</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~60%</td>
+<td>~40%</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~58%</td>
+<td>~42%</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~62%</td>
+<td>~38%</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~70%</td>
+<td>~30%</td>
+</tr>
+<tr>
+<td><strong>amean</strong></td>
+<td><strong>69%</strong></td>
+<td><strong>31%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>平均而言，69% 的新对象通过 HAMM 重用了内存块</strong>，仅 31% 需要新分配，说明 HAMM 显著减少了对传统分配器的依赖。</li>
+<li>右侧次坐标轴显示了收集次数的归一化值，但图表未提供具体数值，仅用于视觉对比。整体趋势显示，随着重分配比例上升，收集次数呈下降趋势。</li>
+<li>此图直观验证了 HAMM 的核心优势：<strong>通过硬件加速的引用计数机制，在 nursery 中高效识别并重用死亡对象内存，从而减少垃圾收集频率和开销</strong>。</li>
+</ul>
+<h3 id="figure-6-number-of-nursery-collections">Figure 6: Number of nursery collections<a class="headerlink" href="#figure-6-number-of-nursery-collections" title="Permanent link">&para;</a></h3>
+<p><img alt="032c93b438f6fd4575f827d6884e9cbd346b18c1604ce5a2e3a83a49d95c5b8e.jpg" src="../images/032c93b438f6fd4575f827d6884e9cbd346b18c1604ce5a2e3a83a49d95c5b8e.jpg" /></p>
+<ul>
+<li>图片为柱状图，标题为“Figure 6: Number of nursery collections”，展示在 <strong>1.5x minHeap</strong> 堆大小下，各 DaCapo 基准测试程序在启用 HAMM 机制后，<strong>nursery collections 数量相对于基线（GenMS）的归一化值</strong>。</li>
+<li>所有柱状图高度均低于 1.0，表明 <strong>HAMM 在所有基准测试中均减少了 nursery collections 的次数</strong>。</li>
+<li>各基准测试的具体归一化值如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Normalized Nursery Collections</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~0.24</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~0.28</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~0.56</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>~0.44</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~0.54</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~0.53</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~0.81</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~0.35</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~0.57</td>
+</tr>
+<tr>
+<td>amean</td>
+<td>~0.48</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>antlr</strong> 表现最佳，nursery collections 减少至基线的 <strong>24%</strong>，即减少了 <strong>76%</strong>。</li>
+<li><strong>lusearch</strong> 表现最弱，仅减少至基线的 <strong>81%</strong>，即仅减少 <strong>19%</strong>。</li>
+<li>平均而言，HAMM 将 nursery collections 数量减少 <strong>52%</strong>（如正文第 5.2 节所述），与图表数据趋势一致。</li>
+<li>此结果支持论文核心结论：HAMM 通过硬件辅助引用计数实现内存块重用，显著延迟了 nursery 填满触发 GC 的时机，从而大幅降低 nursery collection 频率。</li>
+</ul>
+<h3 id="figure-7-total-surviving-space-copied-during-nursery-collections">Figure 7: Total surviving space copied during nursery collections<a class="headerlink" href="#figure-7-total-surviving-space-copied-during-nursery-collections" title="Permanent link">&para;</a></h3>
+<p><img alt="8a551e78c32121d308d7945b783ba134e02922c5da3d6cc00e594eb0a5bdec67.jpg" src="../images/8a551e78c32121d308d7945b783ba134e02922c5da3d6cc00e594eb0a5bdec67.jpg" /></p>
+<ul>
+<li>图片为柱状图，标题为“Figure 7: Total surviving space copied during nursery collections”，纵轴为“Space Collected (norm. to GenMS)”，横轴为多个 Java DaCapo 基准测试程序名称。</li>
+<li>纵轴数值范围从 0.0 到 1.0，表示在 HAMM 机制下，<strong>nursery collections</strong> 中被复制到老年代的存活空间量相对于基线 <strong>GenMS</strong> 收集器的归一化比例。</li>
+<li>所有柱子高度均低于 1.0，表明在所有测试程序中，HAMM 机制都成功减少了每次 nursery collection 需要复制的存活对象空间。</li>
+<li><strong>antlr</strong> 的柱子最低，约为 0.6，意味着其存活空间复制量减少了约 40%，是 HAMM 在此指标上表现最好的基准测试。</li>
+<li><strong>lusearch</strong> 的柱子最高，接近 0.9，表明其减少幅度最小，仅约 10%。</li>
+<li>其余程序如 <strong>bloat</strong>, <strong>eclipse</strong>, <strong>fop</strong>, <strong>jython</strong>, <strong>luindex</strong>, <strong>pmd</strong>, <strong>xalan</strong>, <strong>xalan</strong> 和 <strong>xalan</strong>（重复）的值分布在 0.7 至 0.85 之间，显示了不同程度的改进。</li>
+<li>根据正文第 5.2 节，该图数据对应 1.5x minHeap 堆大小，且平均减少量为 <strong>21%</strong>，与图表视觉趋势一致。</li>
+<li>此结果支持论文核心论点：HAMM 通过重用内存块，延迟了对象晋升到老年代的时间，从而减少了每次 nursery collection 的工作量，尽管单次收集的工作量可能增加，但总体 GC 时间显著下降。</li>
+</ul>
+<h3 id="figure-8-objects-allocated-and-reallocated-in-the-older-generation">Figure 8: Objects allocated and reallocated in the older generation<a class="headerlink" href="#figure-8-objects-allocated-and-reallocated-in-the-older-generation" title="Permanent link">&para;</a></h3>
+<p><img alt="4a239c8e36c95abe3dacaaf4e6290d38f023fed9383284a5db77a951df8bbb1e.jpg" src="../images/4a239c8e36c95abe3dacaaf4e6290d38f023fed9383284a5db77a951df8bbb1e.jpg" /></p>
+<ul>
+<li>图片为 Figure 8，标题为“Objects allocated and reallocated in the older generation”，展示在 <strong>1.5x minHeap</strong> 条件下，各 DaCapo 基准测试中在 <strong>older generation</strong> 分配的对象数量（归一化至 baseline GenMS）。</li>
+<li>图表采用堆叠柱状图形式，每个柱子代表一个基准测试，分为两部分：<ul>
+<li><strong>灰色部分</strong>：表示通过软件默认分配策略新分配的对象（Allocated）。</li>
+<li><strong>黑色部分</strong>：表示通过 HAMM 机制重用内存块分配的对象（Reallocated）。</li>
+</ul>
+</li>
+<li>右侧 Y 轴标注“Number of Collections (norm. to GenMS)”，但该轴数据未在图中以任何图形元素体现，可能为误标或用于其他关联图表。</li>
+<li>各基准测试的重用比例差异显著：<ul>
+<li><strong>fop</strong>：重用比例最低，仅约 10%。</li>
+<li><strong>xalan</strong>：重用比例最高，达 70%。</li>
+<li>平均重用比例约为 <strong>38%</strong>。</li>
+</ul>
+</li>
+<li>数据表明 HAMM 在 older generation 中有效促进内存块重用，减少新对象分配压力，从而降低 full-heap collection 频率和开销。</li>
+<li>下表总结各基准测试的重用比例估算值：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Reallocated (%)</th>
+<th>Allocated (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~40</td>
+<td>~60</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~35</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~50</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>~10</td>
+<td>~90</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~30</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~40</td>
+<td>~60</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~50</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~45</td>
+<td>~55</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~70</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~70</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~70</td>
+<td>~30</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注：因图像分辨率限制，数值为视觉估算，实际数据请参考原文图表及正文描述。</p>
+</blockquote>
+<h3 id="figure-9-number-of-full-heap-collections">Figure 9: Number of full-heap collections<a class="headerlink" href="#figure-9-number-of-full-heap-collections" title="Permanent link">&para;</a></h3>
+<p><img alt="fce1155ea4faafdbe271e67c05134ee634e1b2dba77c488c44e48b975b8a6f19.jpg" src="../images/fce1155ea4faafdbe271e67c05134ee634e1b2dba77c488c44e48b975b8a6f19.jpg" /></p>
+<ul>
+<li>图片为柱状图，标题为 <strong>Figure 9: Number of full-heap collections</strong>，展示在不同 Java DaCapo 基准测试中，采用 HAMM 机制后 <strong>full-heap collections</strong> 的数量相对于基线（baseline GenMS）的归一化值。</li>
+<li>所有柱状图高度均低于 1.0，表明 <strong>HAMM 机制显著减少了 full-heap collections 的次数</strong>。</li>
+<li>各基准测试的具体归一化值如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Normalized Full-Heap Collections</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~0.58</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~0.60</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~0.45</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~0.70</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~0.58</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~0.75</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~0.55</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~0.45</td>
+</tr>
+<tr>
+<td><strong>amean</strong></td>
+<td><strong>~0.50</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>平均值（amean）约为 0.50</strong>，说明 HAMM 机制使 full-heap collections 的次数 <strong>平均减少 50%</strong>。</li>
+<li>在 <strong>eclipse</strong> 和 <strong>xalan</strong> 上效果最显著，归一化值约为 0.45，即减少约 55%。</li>
+<li>在 <strong>lusearch</strong> 上效果最弱，归一化值约为 0.75，即仅减少约 25%。</li>
+<li>此结果与论文第 5.2 节分析一致：HAMM 通过重用内存块（nursery 和 older generation），延迟堆填满，从而大幅降低 full-heap collections 频率。</li>
+</ul>
+<h3 id="figure-10-total-surviving-space-during-full-heap-collections">Figure 10: Total surviving space during full-heap collections<a class="headerlink" href="#figure-10-total-surviving-space-during-full-heap-collections" title="Permanent link">&para;</a></h3>
+<p><img alt="ae48195b2c5fd0ceb4b7807ac5db93b5657012675546228bddc996ca8ce27e42.jpg" src="../images/ae48195b2c5fd0ceb4b7807ac5db93b5657012675546228bddc996ca8ce27e42.jpg" /></p>
+<ul>
+<li>图片为柱状图，标题为“Figure 10: Total surviving space during full-heap collections”，纵轴为“Space Collected (norm. to GenMS)”，横轴为多个 Java DaCapo 基准测试程序名称。</li>
+<li>纵轴数值范围从 0.0 到 1.0，表示在 <strong>full-heap collections</strong> 中收集到的存活空间相对于基线 <strong>GenMS</strong> 收集器的归一化比例。</li>
+<li>所有柱状图高度均低于 1.0，表明在 HAMM 机制下，每次 full-heap collection 收集到的存活空间均少于基线，即 <strong>HAMM 显著减少了 full-heap collection 的工作量</strong>。</li>
+<li>各基准测试程序的具体归一化值如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Space Collected (norm. to GenMS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~0.55</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~0.60</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~0.50</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~0.70</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~0.60</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~0.75</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~0.55</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~0.45</td>
+</tr>
+<tr>
+<td>amean</td>
+<td>~0.50</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>xalan</strong> 表现最佳，其存活空间收集量仅为基线的约 45%，说明 HAMM 对该程序的内存复用效率极高。</li>
+<li><strong>lusearch</strong> 表现最弱，但仍比基线减少约 25% 的存活空间收集量。</li>
+<li>图中未标注误差条或统计显著性，但所有数据点均明确显示 HAMM 在降低 full-heap collection 负载方面的有效性。</li>
+<li>结合论文正文（第 5.2 节），此结果与“HAMM 平均减少 49% 的 full-heap collection 存活空间”相符，是 GC 时间大幅下降的关键因素之一。</li>
+</ul>
+<h3 id="figure-11-mutator-performance">Figure 11: Mutator performance<a class="headerlink" href="#figure-11-mutator-performance" title="Permanent link">&para;</a></h3>
+<p><img alt="e09f312410b76cc9c39e84df0637734b6ae9ca5050084956684f43f9423e0963.jpg" src="../images/e09f312410b76cc9c39e84df0637734b6ae9ca5050084956684f43f9423e0963.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Figure 11: Mutator performance</strong>，用于评估 HAMM 对应用程序（即 mutator）执行性能的影响。</li>
+<li>纵轴左侧为 <strong>IPC delta (%)</strong>，表示每指令周期（Instructions Per Cycle）相对于基线的百分比变化；右侧为 <strong>Cache miss delta (%)</strong>，表示缓存未命中率的变化。</li>
+<li>横轴列出多个 Java DaCapo 基准测试程序：antlr, bloat, eclipse, fop, jython, luindex, lusearch, pmd, xalan, hmean。</li>
+<li>所有柱状图均为负值或接近零，表明 HAMM 引入的硬件支持对 mutator 性能影响极小，甚至在部分基准中略有提升。</li>
+<li><strong>平均性能退化仅为 0.38%</strong>，说明 HAMM 在减少 GC 开销的同时，几乎不损害应用本身的执行效率。</li>
+<li>特别值得注意的是 <strong>jython 和 luindex</strong>，其 IPC 提升显著（分别为 +0.2% 和 +0.3%），原因是 HAMM 的内存块重用机制改善了空间局部性，使缓存利用率更高。</li>
+<li>其他基准如 <strong>antlr、bloat、eclipse、fop、pmd、xalan、hmean</strong> 均呈现轻微性能下降（-0.2% 至 -0.8%），主要源于额外的内存访问和缓存污染。</li>
+<li><strong>lusearch</strong> 表现最差，IPC 下降约 -0.8%，但仍属可接受范围，不影响整体结论。</li>
+<li>数据表明，HAMM 的设计成功实现了“<strong>GC 时间大幅减少，mutator 时间基本不变</strong>”的核心目标。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>IPC Delta (%)</th>
+<th>Cache Miss Delta (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~-0.6</td>
+<td>~-0.4</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~-0.7</td>
+<td>~-0.5</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~-0.8</td>
+<td>~-0.6</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>~-0.4</td>
+<td>~-0.3</td>
+</tr>
+<tr>
+<td>jython</td>
+<td><strong>+0.2</strong></td>
+<td><strong>+0.1</strong></td>
+</tr>
+<tr>
+<td>luindex</td>
+<td><strong>+0.3</strong></td>
+<td><strong>+0.2</strong></td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~-0.8</td>
+<td>~-0.7</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~-0.5</td>
+<td>~-0.4</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~-0.4</td>
+<td>~-0.3</td>
+</tr>
+<tr>
+<td>hmean</td>
+<td>~-0.5</td>
+<td>~-0.4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：HAMM 对 mutator 性能影响微乎其微，<strong>平均仅 0.38% 的退化</strong>，且在部分场景下反而提升性能，验证了其作为“<strong>低开销硬件加速方案</strong>”的有效性。</li>
+</ul>
+<h3 id="figure-12-l1d-and-l2-cache-misses">Figure 12: L1D and L2 cache misses<a class="headerlink" href="#figure-12-l1d-and-l2-cache-misses" title="Permanent link">&para;</a></h3>
+<p><img alt="e870805332b59c16892e862c936d8425c8679e48991e2809b52521ccc8aea114.jpg" src="../images/e870805332b59c16892e862c936d8425c8679e48991e2809b52521ccc8aea114.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Figure 12: L1D and L2 cache misses</strong>，用于评估 HAMM 对缓存缺失的影响。</li>
+<li>图表横轴为 DaCapo 基准测试程序（antlr, bloat, eclipse, fop, jython, luindex, lusearch, pmd, xalan, hmean），纵轴为缓存缺失变化百分比（%）。</li>
+<li>黑色柱状图代表 <strong>L1 Dcache misses</strong> 的变化，灰色柱状图代表 <strong>L2 cache misses</strong> 的变化。</li>
+<li>多数基准测试中，<strong>L1 Dcache misses</strong> 呈现轻微增加趋势，最大增幅约 4%，表明 HAMM 引入的额外内存访问略微降低了一级数据缓存的空间局部性。</li>
+<li><strong>L2 cache misses</strong> 在所有基准测试中均呈上升趋势，增幅最高达 3.4%，说明 HAMM 增加了二级缓存压力，但未显著影响性能，因其操作不在关键路径上。</li>
+<li>特殊案例：<ul>
+<li><strong>jython</strong> 和 <strong>luindex</strong> 中，<strong>L1 Dcache misses</strong> 分别下降 78.5% 和 58.2%，表明在这些程序中，HAMM 的内存块重用机制改善了空间局部性，更高效地利用了缓存。</li>
+<li>尽管 L1 缓存表现优异，<strong>L2 cache misses</strong> 在这两个程序中仍略有上升，说明局部性优化主要发生在 L1 层。</li>
+</ul>
+</li>
+<li>总体来看，HAMM 对缓存行为的影响是可控的，且对应用性能（mutator）影响微乎其微（平均仅 0.38% 降速），符合论文结论。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>L1 Dcache Misses (%)</th>
+<th>L2 Cache Misses (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>-0.5</td>
+<td>+1.8</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>+0.3</td>
+<td>+3.0</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>+4.0</td>
+<td>+0.6</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>+1.2</td>
+<td>+0.8</td>
+</tr>
+<tr>
+<td>jython</td>
+<td><strong>-78.5</strong></td>
+<td>+0.5</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td><strong>-58.2</strong></td>
+<td>+0.3</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>+1.0</td>
+<td>+2.2</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>+0.5</td>
+<td>+2.4</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td><strong>-39.2</strong></td>
+<td>+3.4</td>
+</tr>
+<tr>
+<td>hmean</td>
+<td>+1.2</td>
+<td>+1.1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据表明，HAMM 的缓存影响具有程序依赖性，部分程序受益于更好的局部性，而多数程序则承受轻微缓存开销，但整体性能损失可忽略。</li>
+</ul>
+<h3 id="figure-13-l2-misses-due-to-hamm">Figure 13: L2 misses due to HAMM<a class="headerlink" href="#figure-13-l2-misses-due-to-hamm" title="Permanent link">&para;</a></h3>
+<p><img alt="ebedc1931b320c3032f4df138e5416ea38f9f12624d37d8473736d5957d4f177.jpg" src="../images/ebedc1931b320c3032f4df138e5416ea38f9f12624d37d8473736d5957d4f177.jpg" /></p>
+<ul>
+<li>图片标题为 <strong>Figure 13: L2 misses due to HAMM</strong>，展示的是在启用 HAMM 机制后，由 HAMM 引起的 <strong>L2 cache misses</strong> 占总 L2 缓存未命中比例（百分比）。</li>
+<li>横轴列出 10 个 DaCapo 基准测试程序：antlr, bloat, eclipse, fop, jython, luindex, lusearch, pmd, xalan, hmean。</li>
+<li>纵轴表示 <strong>L2 cache misses 的占比 (%)</strong>，范围从 0% 到 7%。</li>
+<li>数据显示，不同基准程序中 HAMM 引发的 L2 缓存未命中比例差异显著：<ul>
+<li><strong>pmd</strong> 最高，接近 <strong>7%</strong>。</li>
+<li><strong>lusearch</strong> 和 <strong>xalan</strong> 分别约为 <strong>5%</strong> 和 <strong>2.5%</strong>。</li>
+<li><strong>antlr</strong>, <strong>eclipse</strong>, <strong>luindex</strong>, <strong>hmean</strong> 在 <strong>1% 左右</strong>。</li>
+<li><strong>fop</strong> 最低，低于 <strong>1%</strong>。</li>
+<li><strong>bloat</strong> 和 <strong>jython</strong> 分别约为 <strong>3.5%</strong> 和 <strong>1.8%</strong>。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>L2 Misses Due to HAMM (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>antlr</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>bloat</td>
+<td>~3.5</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>\&lt;1.0</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>~1.8</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>~1.0</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>~5.0</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>~7.0</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>hmean</td>
+<td>~1.5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>尽管 HAMM 引入了额外内存访问（如更新引用计数、扫描对象、维护 ABT），但这些操作<strong>不在关键路径上</strong>，因此虽造成缓存压力，<strong>对整体性能影响有限</strong>。</li>
+<li>该图佐证了论文第 5.4 节结论：HAMM 对 mutator 性能影响微乎其微（平均仅降 0.38%），因为其引发的 L2 miss 并不阻塞指令执行。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

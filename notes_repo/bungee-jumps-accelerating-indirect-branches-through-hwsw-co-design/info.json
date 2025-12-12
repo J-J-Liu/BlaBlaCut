@@ -1,0 +1,18 @@
+{
+  "index": "bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design",
+  "paper_title": "Bungee Jumps: Accelerating Indirect Branches Through HW/SW Co-Design",
+  "metadata": {
+    "authors": [
+      "Daniel S. McFarlin",
+      "Craig Zilles"
+    ],
+    "affiliations": [
+      "Carnegie Mellon University",
+      "University of Illinois at Urbana-Champaign"
+    ],
+    "venue": "MICRO",
+    "year": 2015,
+    "doi": "http://dx.doi.org/10.1145/2830772.2830781"
+  },
+  "description": "论文提出Bungee Jumps技术，通过HW/SW协同设计将间接分支的预测点与解析点分离，使顺序处理器能利用现代高准确率的间接分支预测器。该方法在SPEC、PHP和Python基准上分别实现了11%、23%和14%的平均加速，且代码体积仅增加1-3%。"
+}

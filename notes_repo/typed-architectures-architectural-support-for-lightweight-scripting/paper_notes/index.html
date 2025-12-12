@@ -1,0 +1,1250 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Typed Architectures: Architectural Support for Lightweight Scripting 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#typed-architectures-architectural-support-for-lightweight-scripting" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Typed Architectures: Architectural Support for Lightweight Scripting 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-unified-register-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 统一寄存器文件 (Unified Register File)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-polymorphic-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 多态指令 (Polymorphic Instructions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tagged-memory-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 带标签的内存指令 (Tagged Memory Instructions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-type-rule-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 类型规则表 (Type Rule Table)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 类型检查与慢速路径处理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="typed-architectures-architectural-support-for-lightweight-scripting">Typed Architectures: Architectural Support for Lightweight Scripting 论文解析<a class="headerlink" href="#typed-architectures-architectural-support-for-lightweight-scripting" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Channoh Kim, Jaehyeok Kim, Sungmin Kim, et al.</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: ASPLOS</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2017</p>
+<p><strong>研究机构 (Affiliations)</strong>: Sungkyunkwan University, Suwon, Korea, Seoul National University, Seoul, Korea</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决动态脚本语言（如 JavaScript、Lua）在资源受限的 <strong>IoT 设备</strong>上因<strong>动态类型系统</strong>导致的<strong>高开销</strong>问题。该开销体现在<strong>指令数</strong>、<strong>内存占用</strong>和<strong>能耗</strong>上，使得这些高生产力语言难以部署。</li>
+<li>提出一种<strong>低成本</strong>、<strong>高效率</strong>的硬件执行基底，以加速解释器（而非 JIT 编译器）的执行，因为 JIT 在 IoT 设备上通常不可行。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Typed Architectures</strong>，一种新型处理器架构，在 <strong>ISA 层面</strong>为每个数据变量保留<strong>高层类型信息</strong>。</li>
+<li>核心设计包括：<ul>
+<li><strong>统一寄存器文件 (Unified Register File)</strong>：每个寄存器条目扩展了 <strong>8-bit type</strong> 字段和 <strong>1-bit F/Ī</strong> 字段，以同时存储值、类型标签和子类型（整数/浮点）标志。</li>
+<li><strong>多态指令 (Polymorphic Instructions)</strong>：引入 <code>xadd</code>、<code>xsub</code>、<code>xmul</code> 等指令，它们在流水线中根据操作数类型<strong>动态绑定</strong>到正确的原生指令（如 <code>add</code> 或 <code>fadd</code>）。</li>
+<li><strong>类型规则表 (Type Rule Table)</strong>：一个小型 CAM，用于在硬件中并行执行<strong>类型检查</strong>。若查表命中，则正常执行并写回结果类型；若未命中（类型误判），则跳转到由 <strong>Handler Register (Rhdl)</strong> 指向的<strong>慢路径</strong>进行软件处理。</li>
+<li><strong>带标签的内存指令 (Tagged Memory Instructions)</strong>：<code>tld</code> (tagged load) 和 <code>tsd</code> (tagged store) 指令，配合三个<strong>特殊用途寄存器</strong> (<code>Roffset</code>, <code>Rshift</code>, <code>Rmask</code>)，提供<strong>灵活且高效</strong>的类型标签提取与插入机制，以适应不同脚本引擎（如 Lua 和 SpiderMonkey）的数据布局。</li>
+</ul>
+</li>
+<li>通过修改字节码解释器循环，将热点字节码（如 <code>ADD</code>, <code>GETTABLE</code>）替换为使用上述新 ISA 特性的代码。</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li>在基于 <strong>RISC-V Rocket Core</strong> 的 <strong>FPGA</strong> 原型上，对 <strong>Lua</strong> 和 <strong>JavaScript (SpiderMonkey)</strong> 两个生产级脚本引擎进行了评估。</li>
+<li><strong>性能提升</strong>：<ul>
+<li><strong>Lua</strong>: <strong>几何平均加速 9.9%</strong>，<strong>最高加速 43.5%</strong>。</li>
+<li><strong>JavaScript</strong>: <strong>几何平均加速 11.2%</strong>，<strong>最高加速 32.6%</strong>。</li>
+<li>性能优于现有技术 <strong>Checked Load [30]</strong>（其 Lua 和 JS 的几何平均加速分别为 7.3% 和 5.4%）。</li>
+</ul>
+</li>
+<li><strong>硬件开销与能效</strong>（基于 <strong>TSMC 40nm</strong> 工艺综合）：<ul>
+<li><strong>面积开销仅为 1.6%</strong>。</li>
+<li><strong>功耗增加 3.7%</strong>。</li>
+<li><strong>能量-延迟积 (EDP) 显著改善</strong>：Lua <strong>提升 16.5%</strong>，JavaScript <strong>提升 19.3%</strong>。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">Lua</th>
+<th style="text-align: left;">JavaScript</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>几何平均加速</strong></td>
+<td style="text-align: left;"><strong>9.9%</strong></td>
+<td style="text-align: left;"><strong>11.2%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>最高加速</strong></td>
+<td style="text-align: left;"><strong>43.5%</strong></td>
+<td style="text-align: left;"><strong>32.6%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>动态指令数减少</strong></td>
+<td style="text-align: left;"><strong>11.2%</strong></td>
+<td style="text-align: left;"><strong>4.4%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>EDP 改善</strong></td>
+<td style="text-align: left;"><strong>16.5%</strong></td>
+<td style="text-align: left;"><strong>19.3%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>面积开销</strong></td>
+<td style="text-align: left;">colspan="2"</td>
+<td style="text-align: left;"><strong>1.6%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/faf222a9648408ba3885a02642ca484bc0761821514f047c02630bdb87747b54.jpg" /> <em>Figure 5: Overall speedups for Lua and JavaScript interpreters (the higher, the better)</em>
+<img alt="" src="../images/046440db3a6b2466d009e11eb3df521c492c54057e4d7c14ad6c076d3dec6b60.jpg" /> <em>Figure 6: Reduction of dynamic instruction count (the higher, the better)</em>
+<img alt="" src="../images/0ca44b112ba78cb5d1be9777297f7c39c41f6d157132c5634074a900a5eaac64.jpg" /> <em>Table 8: Hardware overhead breakdown (area, power)</em></p>
+<p><strong>结论</strong></p>
+<ul>
+<li><strong>Typed Architectures</strong> 通过在 <strong>ISA 和微架构层面</strong>集成<strong>类型感知</strong>能力，成功地将动态类型检查的大部分开销从<strong>软件</strong>转移到<strong>硬件</strong>，实现了<strong>隐式</strong>和<strong>并行化</strong>的类型处理。</li>
+<li>该方案具有<strong>高灵活性</strong>（支持多种脚本语言）、<strong>高性能</strong>（显著加速）和<strong>低成本</strong>（极低的面积和功耗开销）的特点。</li>
+<li>实验结果证明，Typed Architectures 是一种<strong>切实可行</strong>且<strong>高效</strong>的解决方案，能够有效推动高生产力的动态脚本语言在<strong>资源受限的 IoT 平台</strong>上的应用。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li><strong>动态脚本语言</strong>（如 JavaScript、Lua）因其高生产力特性（动态类型、自动内存管理等）被广泛用于 Web 和 IoT 应用开发。</li>
+<li>然而，其<strong>动态类型系统</strong>在运行时需要为每个变量携带<strong>类型标签 (type tag)</strong> 并执行<strong>类型检查 (type checking)</strong>，这带来了巨大的性能开销（指令数、内存占用、能耗），尤其在资源受限的<strong>IoT 单板计算机</strong>（如 Raspberry Pi）上，使得基于解释器的方案效率低下。</li>
+<li>传统的软件优化技术（如 <strong>JIT 编译</strong>）因自身高昂的内存和计算成本，在 IoT 设备上往往不可行。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li>动态类型检查的开销主要体现在三个方面：<ul>
+<li><strong>Tag extraction</strong>: 从内存中提取类型标签（可能需要移位和掩码操作）。</li>
+<li><strong>Tag checking</strong>: 比较操作数类型并分发到正确的操作函数（涉及多次比较和条件分支）。</li>
+<li><strong>Tag insertion</strong>: 将新值与其类型标签一同存回内存。</li>
+</ul>
+</li>
+<li>如 <img alt="" src="../images/dded8f289b3272eb187c6d1ae4fa821356f7cad2ae74e44f0349d7fd21f14298.jpg" /> <em>Figure 1: (a) Usages of polymorphic ”+” (add) operator in Lua; (b) Bytecode ADD in C; (c) RISC-V assembly code</em> 所示，像 <code>ADD</code> 这样的多态字节码，其大部分汇编指令都用于类型检查。</li>
+<li>如 <img alt="" src="../images/293e2cbf5f5811b389cb89315acfebfdf6603211795695bae4a61ea758f93c4a.jpg" /> <em>Figure 2: (a) Breakdown of dynamic bytecodes in Lua; (b) Dynamic instruction count per bytecode for top five bytecodes</em> 所示，少数几个多态字节码（如 <code>ADD</code>, <code>GETTABLE</code>）占据了动态指令的绝大部分，且其中很大比例是类型检查开销。</li>
+<li>现有的硬件加速方案存在局限性：要么针对特定语言，要么覆盖范围窄，无法在低成本的前提下提供通用、高效的解决方案。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了 <strong>Typed Architectures</strong>，一种通过 ISA 扩展来高效支持动态脚本语言的新型处理器架构。</li>
+<li><strong>ISA 扩展设计</strong>:<ul>
+<li><strong>统一寄存器文件 (Unified register file)</strong>: 为每个寄存器条目增加 <strong>8-bit type</strong> 字段和 <strong>1-bit F/Ī</strong> 字段，以在硬件层面保留高阶类型信息。</li>
+<li><strong>多态 ALU 指令 (Polymorphic instructions)</strong>: 引入 <code>xadd</code>, <code>xsub</code>, <code>xmul</code> 等指令，它们能在流水线中根据操作数类型<strong>隐式地</strong>绑定到正确的原生指令（如 <code>add</code> 或 <code>fadd</code>），并通过 <strong>Type Rule Table</strong> 进行硬件级类型检查。</li>
+<li><strong>带标签的访存指令 (Tagged memory instructions)</strong>: 引入 <code>tld</code> (tagged load) 和 <code>tsd</code> (tagged store)，并配合三个专用寄存器 (<code>Roffset</code>, <code>Rshift</code>, <code>Rmask</code>)，以<strong>灵活高效</strong>地处理不同脚本引擎的<strong>标签-值对 (tag-value pairs)</strong> 内存布局。</li>
+</ul>
+</li>
+<li><strong>低开销实现</strong>:<ul>
+<li>在 <strong>RISC-V Rocket Core</strong> 上实现了完整的、可综合的 RTL 原型。</li>
+<li>评估显示，该方案仅带来 <strong>1.6%</strong> 的面积开销，却能为 Lua 和 JavaScript 解释器分别带来 <strong>9.9%</strong> 和 <strong>11.2%</strong> 的<strong>几何平均加速比</strong>，以及 <strong>16.5%</strong> 和 <strong>19.3%</strong> 的<strong>能量延迟积 (EDP)</strong> 改进。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>本文提出的 <strong>Typed Architectures</strong> 是一种为动态脚本语言设计的、低开销高效率的处理器架构。其核心思想是在 <strong>ISA (Instruction Set Architecture)</strong> 层面为每个数据变量保留<strong>高阶类型信息</strong>，并将动态类型检查从软件层面卸载到硬件流水线中隐式并行执行，从而大幅减少指令开销。</p>
+<ul>
+<li><strong>基础平台</strong>: 该架构基于开源的 <strong>RISC-V Rocket Core</strong> 进行扩展，目标是为资源受限的 <strong>IoT</strong> 设备提供高效的脚本执行环境。</li>
+<li><strong>核心机制</strong>: 通过引入<strong>统一寄存器文件</strong>、<strong>带类型标签的指令</strong>和<strong>可配置的内存访问路径</strong>，在硬件层面直接管理类型信息，实现对 <strong>Lua</strong> 和 <strong>JavaScript</strong> 等脚本引擎的透明加速。</li>
+</ul>
+<p><strong>ISA 扩展</strong></p>
+<p>Typed Architectures 对基础 RISC-V ISA 进行了三项关键扩展：</p>
+<ul>
+<li>
+<p><strong>统一寄存器文件 (Unified Register File)</strong>:</p>
+<ul>
+<li>每个寄存器条目被扩展为包含三个字段：<code>value</code> (值), <code>type</code> (<strong>8-bit 类型标签</strong>), 和 <code>F/Ī</code> (<strong>1-bit 浮点/整数子类型标志</strong>)。</li>
+<li>该设计允许寄存器统一存放整数和浮点值，并携带其类型信息。</li>
+</ul>
+</li>
+<li>
+<p><strong>带类型标签的 ALU 指令 (Tagged ALU Instructions)</strong>:</p>
+<ul>
+<li>引入了 <strong>xadd</strong>, <strong>xsub</strong>, <strong>xmul</strong> 三种<strong>多态指令 (polymorphic instructions)</strong>。</li>
+<li>这些指令在执行时，会利用操作数的类型标签查询一个名为 <strong>Type Rule Table</strong> 的小型硬件表。<ul>
+<li>若命中，则根据操作数类型（如整数或浮点）在流水线内绑定到对应的原生指令（如 <code>add</code> 或 <code>fadd</code>），并行完成计算和类型检查。</li>
+<li>若未命中（<strong>类型误判, type misprediction</strong>），则跳转到由 <strong>Handler Register (Rhdl)</strong> 指向的<strong>慢速路径 (slow path)</strong>，由软件处理复杂的类型转换或分发逻辑。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>带类型标签的内存指令 (Tagged Memory Instructions)</strong>:</p>
+<ul>
+<li>引入 <strong>tld</strong> (tagged load) 和 <strong>tsd</strong> (tagged store) 指令，用于一次性加载或存储<strong>值-类型对 (tag-value pair)</strong>。</li>
+<li>为了适应不同脚本引擎（如 Lua 和 SpiderMonkey）各异的<strong>值-类型对内存布局</strong>，架构提供了三个<strong>特殊用途寄存器</strong>来灵活配置标签的提取和插入逻辑：<ul>
+<li><strong>Roffset</strong>: 指定类型标签相对于数据值所在的<strong>双字 (double-word)</strong> 位置（同字、前一字或后一字）。</li>
+<li><strong>Rshift</strong>: 指定类型标签在目标双字内的<strong>起始位</strong>。</li>
+<li><strong>Rmask</strong>: 提供一个 <strong>8-bit 掩码</strong>用于精确提取类型标签。</li>
+</ul>
+</li>
+<li>此外，还提供了 <strong>thdl</strong>, <strong>tchk</strong>, <strong>tget</strong>, <strong>tset</strong> 等辅助指令，用于设置异常处理地址、执行独立类型检查以及显式读写寄存器的类型标签。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/1dc1d3f748709f2fbc158c69e80745435d67173cf74c15c26df0c1bbe79f5690.jpg" /> <em>Table 2: Description of Extended ISA (64-bit)</em></p>
+<p><strong>微架构实现 (Pipeline Organization)</strong></p>
+<p>该架构在处理器流水线中集成了新的硬件模块以支持上述 ISA 扩展。</p>
+<ul>
+<li><strong>关键新增硬件</strong>:<ul>
+<li><strong>统一寄存器文件</strong>: 替换原有的无类型寄存器文件。</li>
+<li><strong>Type Rule Table</strong>: 一个小型的<strong>内容可寻址存储器 (CAM)</strong>，以 <code>(源操作数1类型, 源操作数2类型, 操作码)</code> 为键，输出结果的类型标签。</li>
+<li><strong>标签提取/插入逻辑</strong>: 位于内存访问路径上，由 <code>Roffset</code>, <code>Rshift</code>, <code>Rmask</code> 寄存器配置，通过移位和掩码操作实现灵活的标签处理。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" /> <em>Figure 4: Pipeline structure augmented with Typed Architecture</em></p>
+<p><strong>代码转换与应用</strong></p>
+<p>为了利用 Typed Architectures，需要对现有的脚本解释器（如 <strong>Lua-5.3.0</strong> 和 <strong>SpiderMonkey-17.0.0</strong>）进行改造，将热点字节码（如 <code>ADD</code>, <code>GETTABLE</code>）替换为使用新 ISA 指令的版本。</p>
+<ul>
+<li>
+<p><strong>Lua 实现细节</strong>:</p>
+<ul>
+<li>Lua 使用 <strong>16-byte 结构体</strong>存储变量（8-byte 值 + 1-byte 标签）。</li>
+<li>特殊寄存器配置为：<code>Roffset=0b001</code> (标签在下一个双字), <code>Rmask=0xFF</code>, <code>Rshift=0b000000</code>。</li>
+<li>利用 <code>F/Ī</code> 位区分内部的 <code>Int</code> 和 <code>Float</code> 子类型。</li>
+</ul>
+</li>
+<li>
+<p><strong>SpiderMonkey (JavaScript) 实现细节</strong>:</p>
+<ul>
+<li>SpiderMonkey 采用 <strong>NaN-boxing</strong> 技术，在一个 64-bit 的 IEEE 754 双精度浮点数中编码非数字类型。</li>
+<li>对于非 FP 值，类型信息存储在特定的位段中。</li>
+<li>特殊寄存器配置为：<code>Roffset=0b100</code> (启用 NaN 检测), <code>Rshift=47</code>, <code>Rmask=0x0F</code> (提取 4-bit 类型)。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/27a67567f10ec8b1aa421b7a37983fc0d469362eb83c9646dd972f94ee1bc42f.jpg" /> <em>Table 4: Special-purpose register settings</em>
+<img alt="" src="../images/7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg" /> <em>Table 5: Type Rule Table settings for Lua and SpiderMonkey</em></p>
+<p><strong>性能与开销</strong></p>
+<p>该架构在保持极低硬件开销的同时，显著提升了脚本执行性能。</p>
+<ul>
+<li>
+<p><strong>性能提升</strong>:</p>
+<ul>
+<li>在 FPGA 上评估，相比基线，对 <strong>Lua</strong> 和 <strong>JavaScript</strong> 解释器分别实现了 <strong>9.9%</strong> 和 <strong>11.2%</strong> 的<strong>几何平均加速比</strong>，最高加速比分别达到 <strong>43.5%</strong> 和 <strong>32.6%</strong>。</li>
+<li>性能提升主要来源于<strong>动态指令数的减少</strong>、<strong>分支预测压力的降低</strong>以及<strong>指令缓存压力的缓解</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>硬件开销</strong>:</p>
+<ul>
+<li>在 <strong>40nm</strong> 工艺下综合，仅带来 <strong>1.6%</strong> 的<strong>面积开销</strong>和 <strong>3.7%</strong> 的功耗增加。</li>
+<li><strong>能量-延迟积 (EDP)</strong> 得到显著改善，<strong>Lua</strong> 和 <strong>JavaScript</strong> 分别提升了 <strong>16.5%</strong> 和 <strong>19.3%</strong>。</li>
+<li>关键路径未受影响，证明了其低开销特性。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/0ca44b112ba78cb5d1be9777297f7c39c41f6d157132c5634074a900a5eaac64.jpg" /> <em>Table 8: Hardware overhead breakdown (area, power)</em></p>
+<h3 id="1-unified-register-file">1. 统一寄存器文件 (Unified Register File)<a class="headerlink" href="#1-unified-register-file" title="Permanent link">&para;</a></h3>
+<p><strong>统一寄存器文件的设计原理与实现</strong></p>
+<ul>
+<li><strong>核心目标</strong>：在 <strong>ISA (Instruction Set Architecture)</strong> 层面为每个数据值保留<strong>高阶类型信息</strong>，从而将动态类型检查从软件层面卸载到硬件层面，以减少指令开销。</li>
+<li><strong>基础结构</strong>：在原有的 RISC-V <strong>寄存器文件 (Register File)</strong> 基础上进行扩展，为每个寄存器条目增加两个新的元数据字段：<ul>
+<li><strong>8-bit type</strong> 字段：用于存储由脚本引擎定义的<strong>类型标签 (type tag)</strong>。该设计认为 256 种类型足以覆盖大多数脚本语言的场景，必要时可通过简单的重编码适配。</li>
+<li><strong>1-bit F/Ī</strong> 字段：这是一个标志位，用于快速区分数值子类型。<code>0</code> 表示 <strong>integer subtype</strong>，<code>1</code> 表示 <strong>floating-point (FP) subtype</strong>。此位可由软件（通过扩展现有类型字段）或硬件（通过查询预设的类型值表）提供。</li>
+</ul>
+</li>
+<li><strong>寄存器条目格式</strong>：经过扩展后，一个完整的寄存器条目 <code>R</code> 包含三个部分：<ul>
+<li><code>R.v</code>：实际的数据<strong>值 (value)</strong>。</li>
+<li><code>R.t</code>：对应的<strong>类型标签 (type)</strong>。</li>
+<li><code>R.f</code>：<strong>F/Ī</strong> 标志位。</li>
+</ul>
+</li>
+<li><strong>“统一”的含义</strong>：该寄存器文件被称为“统一”，是因为它能够同时容纳 <strong>integer</strong> 和 <strong>FP</strong> 两种类型的值及其元数据，无需像传统架构那样维护分离的整数和浮点寄存器堆。</li>
+</ul>
+<p><strong>在整体架构中的作用与数据流</strong></p>
+<ul>
+<li><strong>作为类型信息的载体</strong>：统一寄存器文件是整个 <strong>Typed Architectures</strong> 方案的核心数据存储单元。所有类型相关的操作（如检查、传播、更新）都围绕此文件进行。</li>
+<li><strong>与新指令集的交互</strong>：<ul>
+<li><strong>Tagged ALU instructions</strong> (如 <code>xadd</code>, <code>xsub</code>, <code>xmul</code>) 在执行时，会直接从源寄存器的 <code>R.t</code> 和 <code>R.f</code> 字段读取类型信息，用于在流水线中进行隐式类型检查和指令绑定。</li>
+<li><strong>Tagged memory instructions</strong> (如 <code>tld</code>, <code>tsd</code>) 负责将内存中的 <strong>tag-value pair</strong> 加载到寄存器中，填充 <code>R.v</code>、<code>R.t</code> 和 <code>R.f</code>；反之亦然。</li>
+<li><strong>Miscellaneous instructions</strong> (如 <code>tget</code>, <code>tset</code>) 允许软件显式地读写寄存器的类型标签，提供了灵活性。</li>
+</ul>
+</li>
+<li><strong>输入输出关系</strong>：<ul>
+<li><strong>输入</strong>：来自内存（通过 <code>tld</code>）或由其他指令产生的带有类型信息的数据。</li>
+<li><strong>处理</strong>：在执行 <code>x</code> 系列指令时，硬件利用 <code>R.t</code> 和 <code>R.f</code> 查询 <strong>Type Rule Table</strong>，决定是走快速路径（执行原生 <code>add</code>/<code>fadd</code> 并写回结果类型）还是跳转到慢速路径（由 <code>Rhdl</code> 指向的软件处理程序）。</li>
+<li><strong>输出</strong>：计算结果连同其新的类型标签（从 <strong>Type Rule Table</strong> 中查得）一起写回到目标寄存器的 <code>R.v</code> 和 <code>R.t</code> 字段。</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与灵活性</strong></p>
+<ul>
+<li><strong>8-bit type</strong> 的宽度是一个关键设计权衡。它在<strong>灵活性</strong>（支持多种类型）和<strong>硬件成本</strong>（寄存器文件面积开销）之间取得了平衡。论文评估显示，此设计仅带来 <strong>1.6%</strong> 的总面积开销。</li>
+<li><strong>F/Ī</strong> 位的设计巧妙地解决了数值子类型分发的问题。对于像 Lua 这样内部区分 <code>Int</code> 和 <code>Float</code> 的引擎，或者像 SpiderMonkey 这样使用 <strong>NaN-boxing</strong> 技术的引擎，该位都能提供一种高效、统一的方式来引导 ALU 选择正确的计算单元（整数 ALU 或 FP ALU）。</li>
+</ul>
+<p><img alt="" src="../images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" /> <em>Figure 4: Pipeline structure augmented with Typed Architecture</em></p>
+<hr />
+<p><strong>对不同脚本引擎的适配示例</strong></p>
+<ul>
+<li>
+<p><strong>Lua</strong>：</p>
+<ul>
+<li>Lua 使用一个结构体来存储 <strong>tag-value pair</strong>，其中 8 字节的值后面紧跟 1 字节的标签。</li>
+<li>其内部 <code>Number</code> 类型有 <code>Int</code> 和 <code>Float</code> 两个子类型。</li>
+<li>为了利用 <strong>F/Ī</strong> 位，论文中提到将原始的类型标签扩展了 1 位，用其 <strong>MSB (Most Significant Bit)</strong> 来表示 <code>F/Ī</code> 状态。</li>
+</ul>
+</li>
+<li>
+<p><strong>SpiderMonkey (JavaScript)</strong>：</p>
+<ul>
+<li>SpiderMonkey 采用 <strong>NaN-boxing</strong> 技术，将非 FP 值（如整数、布尔值）编码在 IEEE 754 <strong>NaN</strong> 值的特定比特位中。</li>
+<li>对于 FP 值，<code>F/Ī</code> 位被设为 <code>1</code>。</li>
+<li>对于非 FP 值（即 NaN），硬件中的 <strong>NaN detection</strong> 逻辑会被激活（通过 <code>Roffset</code> 寄存器的 MSB 控制），并从指定位置提取 4 位类型字段。此时，<code>F/Ī</code> 位被设为 <code>0</code>，表明这是一个需要特殊处理的整数或其它类型。</li>
+</ul>
+</li>
+</ul>
+<p>下表总结了为这两个引擎配置的特殊用途寄存器，这些配置直接影响 <code>tld</code>/<code>tsd</code> 指令如何从内存中提取或插入类型标签，最终填充到统一寄存器文件中。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Engine</th>
+<th style="text-align: center;"><code>Roffset</code></th>
+<th style="text-align: center;"><code>Rshift</code></th>
+<th style="text-align: center;"><code>Rmask</code></th>
+<th style="text-align: left;">Tag Location &amp; Extraction Logic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Lua</strong></td>
+<td style="text-align: center;"><code>0b001</code></td>
+<td style="text-align: center;"><code>0b000000</code></td>
+<td style="text-align: center;"><code>0xFF</code></td>
+<td style="text-align: left;">Tag is in the <strong>next double-word</strong>, at bit offset 0, and is 8 bits wide.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SpiderMonkey</strong></td>
+<td style="text-align: center;"><code>0b100</code></td>
+<td style="text-align: center;"><code>0b101111</code> (47)</td>
+<td style="text-align: center;"><code>0x0F</code></td>
+<td style="text-align: left;">For non-FP (NaN) values, tag is in the <strong>same double-word</strong>, extracted by shifting right by 47 bits and applying a 4-bit mask.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-polymorphic-instructions">2. 多态指令 (Polymorphic Instructions)<a class="headerlink" href="#2-polymorphic-instructions" title="Permanent link">&para;</a></h3>
+<p><strong>多态指令的实现原理与核心机制</strong></p>
+<ul>
+<li><strong>多态指令</strong>（如 <code>xadd</code>, <code>xsub</code>, <code>xmul</code>）是 Typed Architectures 的核心创新，旨在通过硬件直接处理动态类型语言中操作符的重载问题。</li>
+<li>其基本思想是将软件层面复杂的<strong>类型检查</strong>（Type Checking）和<strong>方法分派</strong>（Method Dispatch）逻辑下沉到硬件流水线中执行。</li>
+<li>每条多态指令在<strong>解码阶段</strong>（Decode Stage）会根据其操作数寄存器中的<strong>F/Ī 位</strong>（Floating-point / Integer-not bit）来决定具体的计算路径：<ul>
+<li>如果两个操作数的 F/Ī 位均为 0，则绑定到整数 ALU 的 <strong><code>add</code></strong> 指令。</li>
+<li>如果两个操作数的 F/Ī 位均为 1，则绑定到浮点单元 FPU 的 <strong><code>fadd</code></strong> 指令。</li>
+<li>如果操作数类型混合（一个整数一个浮点），则无法在快速路径中处理，会触发<strong>类型误预测</strong>（Type Misprediction）。</li>
+</ul>
+</li>
+<li>类型规则的合法性由一个名为 <strong>Type Rule Table</strong> 的小型内容可寻址存储器（CAM）进行验证。该表以 <code>(源操作数1类型, 源操作数2类型, 操作码)</code> 为键进行查询。<ul>
+<li>若查询命中（Hit），则流水线正常执行，并将查表得到的<strong>输出类型标签</strong>写回目标寄存器。</li>
+<li>若查询未命中（Miss），则发生类型误预测，程序计数器 PC 被重定向到由 <strong>Handler Register (Rhdl)</strong> 指向的<strong>慢速路径</strong>（Slow Path），即原有的软件解释代码。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" /> <em>Figure 4: Pipeline structure augmented with Typed Architecture</em></p>
+<p><strong>输入输出关系及在整体架构中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>两个源操作数寄存器，每个寄存器包含三个字段：<strong>值</strong>（value）、<strong>8位类型标签</strong>（type）和 <strong>1位 F/Ī 标志</strong>（f）。</li>
+<li>当前执行的多态指令操作码（如 <code>xadd</code>）。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
+<li>目标寄存器被写入计算结果的<strong>值</strong>（value）。</li>
+<li>目标寄存器的<strong>类型标签</strong>（type）和 <strong>F/Ī 位</strong>（f）被更新为 Type Rule Table 查询返回的结果。</li>
+</ul>
+</li>
+<li><strong>在整体架构中的作用</strong>：<ul>
+<li><strong>显著减少动态指令数</strong>：通过一条 <code>xadd</code> 指令替代了软件中用于<strong>标签提取</strong>、<strong>标签比较</strong>、<strong>条件分支</strong>和<strong>值计算</strong>的多条指令序列。</li>
+<li><strong>降低分支预测压力</strong>：消除了大量因类型检查而产生的条件跳转，从而降低了<strong>分支误预测率</strong>（Branch Misprediction Rate），如图7所示。</li>
+<li><strong>提升能效比</strong>：由于指令数和分支复杂度的降低，结合微小的硬件开销（1.6%面积），实现了 <strong>16.5%-19.3% 的能量延迟积</strong>（EDP）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与配置</strong></p>
+<ul>
+<li><strong>Type Rule Table</strong> 的内容在程序启动时由软件一次性预加载，其配置取决于所运行的脚本引擎的类型系统。<ul>
+<li>例如，在 <strong>Lua</strong> 中，规则表会定义 <code>(Int, Int, ADD) -&gt; Int</code> 和 <code>(Float, Float, ADD) -&gt; Float</code> 等规则。</li>
+<li>在 <strong>SpiderMonkey</strong> (JavaScript) 中，规则表同样需要适配其基于 NaN-boxing 的内部表示。</li>
+</ul>
+</li>
+<li>**Handler Register **(Rhdl) 由 <code>thdl</code> 指令在执行字节码前显式设置，指向对应字节码（如 <code>ADD</code>）的慢速路径处理函数入口。</li>
+</ul>
+<p><img alt="" src="../images/7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg" /> <em>Table 5: Type Rule Table settings for Lua and SpiderMonkey</em></p>
+<hr />
+<p><strong>与现有技术的对比优势</strong></p>
+<ul>
+<li>相较于 <strong>Checked Load </strong>[30] 等仅优化类型检查的方案，多态指令提供了<strong>端到端</strong>（End-to-End）的加速，同时处理了<strong>类型检查</strong>和<strong>值计算</strong>。</li>
+<li>Checked Load 的快速路径在编译时固定，只能优化一种类型组合（如整数），而多态指令通过 F/Ī 位和 Type Rule Table 能<strong>自适应地</strong>（Adaptively）处理多种类型组合（整数和浮点），无需重新编译，性能更<strong>稳健</strong>（Robust）。</li>
+</ul>
+<h3 id="3-tagged-memory-instructions">3. 带标签的内存指令 (Tagged Memory Instructions)<a class="headerlink" href="#3-tagged-memory-instructions" title="Permanent link">&para;</a></h3>
+<p><strong>带标签的内存指令 (Tagged Memory Instructions) 实现原理</strong></p>
+<ul>
+<li>Typed Architectures 引入了两条核心指令 <strong>tld</strong> (tagged load) 和 <strong>tsd</strong> (tagged store) 来处理内存中<strong>标签-值对 (tag-value pairs)</strong> 的加载与存储。</li>
+<li>这两条指令的设计核心在于其<strong>灵活性</strong>，能够适应不同脚本引擎（如 Lua 和 JavaScript/SpiderMonkey）各异的内存数据布局，而无需为每种布局定制硬件。</li>
+<li>为了实现这种灵活性，硬件提供了三个<strong>特殊用途寄存器 (special-purpose registers)</strong>，用于在运行时动态配置标签的提取和插入逻辑：<ul>
+<li><strong>Roffset (Offset Register)</strong>: 一个 3-bit 寄存器，用于指定标签相对于数据值所在的 <strong>double-word</strong> 位置。<ul>
+<li>最低 2 位 (LSBs) 定义了三种选择：标签与值在<strong>同一个 double-word</strong> (<code>00</code>)、在<strong>下一个 double-word</strong> (<code>01</code>)、或在<strong>上一个 double-word</strong> (<code>11</code>)。</li>
+<li>最高 1 位 (MSB) 用于控制 <strong>NaN 检测</strong>功能的开关，这对于像 SpiderMonkey 这样利用 NaN-boxing 技术的引擎至关重要。</li>
+</ul>
+</li>
+<li><strong>Rshift (Shift Amount Register)</strong>: 一个 6-bit 寄存器，指定了在目标 double-word 中，标签字段的<strong>起始比特位</strong>。这使得硬件可以从任意位置开始提取标签。</li>
+<li><strong>Rmask (Mask Register)</strong>: 一个 8-bit 寄存器，用作掩码来精确提取出 <strong>8-bit 宽度</strong>的类型标签。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/1dc1d3f748709f2fbc158c69e80745435d67173cf74c15c26df0c1bbe79f5690.jpg" /> <em>Table 2: Description of Extended ISA (64-bit)</em></p>
+<p><strong>算法流程与输入输出关系</strong></p>
+<ul>
+<li>
+<p><strong>tld 指令流程</strong>:</p>
+<ul>
+<li><strong>输入</strong>: 内存地址（指向数据值）。</li>
+<li><strong>执行</strong>:<ol>
+<li>从指定地址加载数据值。</li>
+<li>根据 <strong>Roffset</strong> 的值，确定包含标签的 double-word 的地址（可能是同一个、前一个或后一个）。</li>
+<li>从该 double-word 中，根据 <strong>Rshift</strong> 的值进行右移操作，将标签字段对齐到最低有效位。</li>
+<li>对移位后的结果应用 <strong>Rmask</strong> 进行按位与操作，最终提取出纯净的 8-bit 类型标签。</li>
+<li>（可选）如果 Roffset 的 MSB 被置位且值为 NaN，则启用 NaN 检测逻辑来解析标签。</li>
+</ol>
+</li>
+<li><strong>输出</strong>: 将提取出的数据值、类型标签以及推断出的 <strong>F/Ī</strong> 位（指示是整数还是浮点数子类型）一并写入目标<strong>统一寄存器文件 (unified register file)</strong> 的对应字段中。</li>
+</ul>
+</li>
+<li>
+<p><strong>tsd 指令流程</strong>:</p>
+<ul>
+<li><strong>输入</strong>: 源寄存器（包含值、标签和 F/Ī 位）以及目标内存地址。</li>
+<li><strong>执行</strong>:<ol>
+<li>将源寄存器中的数据值写入指定的内存地址。</li>
+<li>执行 <strong>tld 的逆操作</strong>：使用相同的 <strong>Roffset</strong>, <strong>Rshift</strong>, 和 <strong>Rmask</strong> 配置。</li>
+<li>将 8-bit 类型标签根据 <strong>Rmask</strong> 和 <strong>Rshift</strong> 进行扩展和移位，以匹配目标内存布局。</li>
+<li>根据 <strong>Roffset</strong> 的值，将处理好的标签写入正确的相邻 double-word（或同一个 double-word）中。</li>
+</ol>
+</li>
+<li><strong>输出</strong>: 在内存中正确地存储了符合特定脚本引擎格式的<strong>标签-值对</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>在整体架构中的作用与参数设置实例</strong></p>
+<ul>
+<li>这些指令的作用是<strong>无缝桥接</strong>软件层面的动态类型系统与硬件层面的高效执行。它们消除了在软件中进行繁琐的<strong>移位 (shift)</strong> 和<strong>掩码 (mask)</strong> 操作来管理类型标签的开销，从而显著减少了动态指令计数。</li>
+<li>这些特殊寄存器通常在脚本引擎<strong>初始化时设置一次</strong>，之后在整个执行过程中保持不变，确保了运行时的高效性。</li>
+</ul>
+<p><img alt="" src="../images/27a67567f10ec8b1aa421b7a37983fc0d469362eb83c9646dd972f94ee1bc42f.jpg" /> <em>Table 4: Special-purpose register settings</em></p>
+<ul>
+<li>上表展示了针对 <strong>Lua</strong> 和 <strong>SpiderMonkey</strong> 的具体寄存器配置：<ul>
+<li><strong>Lua</strong>: 其数据结构是一个 8-byte 值后紧跟一个 1-byte 标签。因此，<strong>Roffset</strong> 设为 <code>0b001</code>（标签在<strong>下一个</strong> double-word），<strong>Rshift</strong> 为 <code>0</code>（标签在 double-word 的起始处），<strong>Rmask</strong> 为 <code>0xFF</code>（提取完整的 8-bit 标签）。</li>
+<li><strong>SpiderMonkey</strong>: 使用 NaN-boxing 技术，标签嵌入在 64-bit 浮点数的特定高位中。因此，<strong>Roffset</strong> 设为 <code>0b100</code>（启用 NaN 检测，标签与值在<strong>同一个</strong> double-word），<strong>Rshift</strong> 为 <code>47</code>（将第 47 位及之后的标签移至低位），<strong>Rmask</strong> 为 <code>0x0F</code>（只提取 4-bit 的类型字段）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-type-rule-table">4. 类型规则表 (Type Rule Table)<a class="headerlink" href="#4-type-rule-table" title="Permanent link">&para;</a></h3>
+<p><strong>类型规则表 (Type Rule Table) 的实现原理与作用</strong></p>
+<ul>
+<li><strong>类型规则表 (Type Rule Table)</strong> 被设计为一个<strong>小型内容可寻址存储器 (Content-Addressable Memory, CAM)</strong>，其核心功能是在执行 <strong>xadd</strong>, <strong>xsub</strong>, <strong>xmul</strong> 等多态指令时，根据操作数的动态类型信息即时决定操作的有效性及结果类型。</li>
+<li>该表在处理器流水线中的位置紧邻执行阶段，使得<strong>类型检查</strong>与<strong>值计算</strong>能够<strong>并行</strong>进行，从而将原本由软件显式完成的类型检查开销转移到硬件中隐式处理。</li>
+</ul>
+<p><strong>输入输出关系与查询流程</strong></p>
+<ul>
+<li><strong>输入</strong>: 类型规则表接受三个关键输入作为查询键 (Key):<ul>
+<li>第一个源操作数的 <strong>8-bit type tag</strong> (来自统一寄存器文件 <code>R.t</code>)。</li>
+<li>第二个源操作数的 <strong>8-bit type tag</strong>。</li>
+<li>当前执行的<strong>多态指令的操作码 (opcode)</strong> (例如 <code>xadd</code>)。</li>
+</ul>
+</li>
+<li><strong>查询与匹配</strong>:<ul>
+<li>硬件使用上述三元组 <code>(src1_type, src2_type, opcode)</code> 作为键，在类型规则表中进行<strong>并行查找</strong>。</li>
+<li>如果找到匹配项，则视为<strong>命中 (hit)</strong>。</li>
+<li>如果未找到任何匹配项，则视为<strong>类型误判 (type misprediction)</strong>。</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>在<strong>命中</strong>情况下，表会输出一个预定义的 <strong>8-bit output type tag</strong>。此标签随后被写入目标寄存器的类型字段 <code>R.t</code> 中。</li>
+<li>在<strong>未命中</strong>情况下，处理器不会产生异常，而是将程序计数器 <strong>(PC)</strong> 重定向到由<strong>处理器状态寄存器 <code>Rhdl</code></strong> 所指向的<strong>慢速路径 (slow path)</strong> 地址。该慢速路径是原有的、由软件实现的完整类型检查和分派逻辑。</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与初始化</strong></p>
+<ul>
+<li>类型规则表的内容并非硬编码，而是在<strong>脚本引擎启动时</strong>，根据其特定的<strong>类型系统</strong>和<strong>操作语义</strong>进行<strong>一次性预加载 (pre-loaded only once at program launch)</strong>。</li>
+<li>表的具体内容由脚本引擎的类型规则决定。例如，对于 <strong>Lua</strong> 引擎，其规则可能包括 <code>(Int, Int, ADD) -&gt; Int</code> 和 <code>(Float, Float, ADD) -&gt; Float</code>，但不包括 <code>(Int, String, ADD)</code>，后者会触发未命中。</li>
+<li><img alt="" src="../images/7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg" /> <em>Table 5: Type Rule Table settings for Lua and SpiderMonkey</em></li>
+<li>如上图所示，<strong>Lua</strong> 和 <strong>SpiderMonkey</strong> 的类型规则表设置反映了它们各自对数字子类型（整数 <code>Int</code> 与浮点数 <code>Float</code>）的不同处理方式。Lua 明确区分了 <code>Int</code> 和 <code>Float</code> 子类型，而 SpiderMonkey 则主要使用 <code>Number</code> 类型，并通过 <code>F/Ī</code> 位来区分内部表示。</li>
+</ul>
+<p><strong>在整体架构中的作用</strong></p>
+<ul>
+<li><strong>性能加速</strong>: 通过硬件并行处理类型检查，显著减少了动态脚本语言解释器中用于类型守卫 (type guards) 的<strong>动态指令数量</strong>。评估显示，这为 Lua 和 JavaScript 分别带来了 <strong>9.9%</strong> 和 <strong>11.2%</strong> 的几何平均加速比。</li>
+<li><strong>灵活性保障</strong>: 由于规则表内容可由软件配置，同一套 <strong>Typed Architecture</strong> 硬件可以支持具有不同类型系统的多种脚本语言（如 Lua 和 JavaScript），实现了<strong>高灵活性</strong>的设计目标。</li>
+<li><strong>低成本实现</strong>: 论文指出，该表仅包含 <strong>8个条目</strong>，硬件开销极小。合成结果显示，整个 Typed Architecture 仅带来 <strong>1.6%</strong> 的面积开销，证明了其<strong>低硬件成本</strong>的特性。</li>
+<li><strong>与 F/Ī 位协同</strong>: 类型规则表负责高层次的类型兼容性检查，而具体的计算路径选择（整数 ALU 或 FP ALU）则由寄存器中的 <strong>F/Ī 位</strong>在译码阶段决定。两者协同工作，共同实现了高效的多态操作。</li>
+</ul>
+<h3 id="5">5. 类型检查与慢速路径处理<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<p><strong>类型检查与慢速路径处理机制</strong></p>
+<ul>
+<li>Typed Architectures 的核心思想是将动态类型检查从软件层面卸载到硬件层面，以减少指令开销。然而，并非所有类型组合都能被硬件预知和处理，因此必须设计一个高效的<strong>慢速路径 (slow path)</strong> 作为后备方案。</li>
+<li><strong>慢速路径</strong>本质上是原有的、完整的软件实现，它能处理所有复杂的、未被硬件覆盖的类型情况（如不同类型间的隐式转换、字符串拼接等）。</li>
+</ul>
+<p><strong>硬件类型检查流程与指令协同</strong></p>
+<ul>
+<li><strong>初始化阶段</strong>：在执行可能触发类型检查的字节码（如 <code>ADD</code>）前，解释器会使用 <strong><code>thdl</code></strong> 指令显式设置一个特殊寄存器 <strong><code>Rhdl</code></strong> 的值。<ul>
+<li><code>thdl</code> 指令的操作数是一个立即数或寄存器，其值为对应字节码慢速路径处理函数（例如 <code>ADD_slow</code>）的入口地址。</li>
+<li>这一步至关重要，因为它为后续可能发生的类型检查失败提供了明确的跳转目标。</li>
+</ul>
+</li>
+<li><strong>执行阶段</strong>：当执行一条<strong>多态指令 (polymorphic instruction)</strong>（如 <code>xadd</code>, <code>xsub</code>, <code>xmul</code>）或显式的类型检查指令 <strong><code>tchk</code></strong> 时，硬件会并行执行以下操作：<ol>
+<li><strong>类型规则查询</strong>：硬件访问一个小型的 <strong>Type Rule Table</strong>，该表以两个源操作数的类型标签（<code>R.t</code>）和当前指令的操作码（opcode）作为联合键（key）进行查找。</li>
+<li><strong>命中 (Hit)</strong>：如果 Type Rule Table 中存在对应的条目，则：<ul>
+<li>硬件根据操作数的 <strong>F/Ī</strong> 位（标识整数或浮点数子类型）选择正确的 ALU 路径（整数加法器或浮点加法器）来执行计算。</li>
+<li>将 Type Rule Table 返回的输出类型标签写入目标寄存器的类型字段（<code>Rd.t</code>）。</li>
+<li>指令正常完成，流水线继续执行下一条指令。</li>
+</ul>
+</li>
+<li><strong>未命中 (Miss)</strong>：如果 Type Rule Table 中没有找到匹配的条目，则发生<strong>类型误判 (type misprediction)</strong>：<ul>
+<li>硬件<strong>不抛出异常</strong>，而是直接将程序计数器（PC）重定向到 <code>Rhdl</code> 寄存器中存储的地址。</li>
+<li>控制流跳转至由 <code>thdl</code> 指令预先设定好的<strong>慢速路径</strong>，由软件代码接管后续处理。</li>
+<li>由于慢速路径包含了完整的逻辑，它可以安全地处理任何复杂情况，并在完成后返回到主解释循环。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p><img alt="" src="../images/b8fe2d47d47125fe94b3644d395bcd7cba9d17f89a6abaeb1c142747adbbf5f6.jpg" /> <em>Figure 3: Transformed bytecode ADD</em></p>
+<p><strong>Type Rule Table 的配置与作用</strong></p>
+<ul>
+<li>Type Rule Table 是一个内容可寻址存储器（CAM），其内容在脚本引擎启动时根据所支持的语言（如 Lua 或 JavaScript）进行静态初始化。</li>
+<li>表中的条目定义了哪些输入类型组合对于特定操作是合法的，以及结果的类型是什么。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">脚本引擎</th>
+<th style="text-align: left;">输入类型A</th>
+<th style="text-align: left;">输入类型B</th>
+<th style="text-align: left;">操作码</th>
+<th style="text-align: left;">输出类型</th>
+<th style="text-align: left;">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Lua</strong></td>
+<td style="text-align: left;">Int</td>
+<td style="text-align: left;">Int</td>
+<td style="text-align: left;">ADD</td>
+<td style="text-align: left;">Int</td>
+<td style="text-align: left;">整数加法</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Lua</strong></td>
+<td style="text-align: left;">Float</td>
+<td style="text-align: left;">Float</td>
+<td style="text-align: left;">ADD</td>
+<td style="text-align: left;">Float</td>
+<td style="text-align: left;">浮点加法</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Lua</strong></td>
+<td style="text-align: left;">Int</td>
+<td style="text-align: left;">Float</td>
+<td style="text-align: left;">ADD</td>
+<td style="text-align: left;"><em>未命中</em></td>
+<td style="text-align: left;">触发慢速路径进行类型转换</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SpiderMonkey</strong></td>
+<td style="text-align: left;">Int</td>
+<td style="text-align: left;">Int</td>
+<td style="text-align: left;">ADD</td>
+<td style="text-align: left;">Int</td>
+<td style="text-align: left;">整数加法</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SpiderMonkey</strong></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ADD</td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">浮点加法</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg" /> <em>Table 5: Type Rule Table settings for Lua and SpiderMonkey</em></p>
+<p><strong>慢速路径处理的输入输出关系</strong></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>慢速路径函数接收的输入是原始的、未经硬件修改的虚拟机状态，包括操作数栈或寄存器中的完整值和类型信息。</li>
+<li>它拥有对整个解释器上下文的完全访问权限。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
+<li>慢速路径执行完毕后，会将计算结果（包括值和正确的类型标签）写回到虚拟机指定的位置（如栈顶或某个寄存器）。</li>
+<li>然后，它会直接跳转回主解释循环的下一条字节码处，<strong>不会返回到触发它的那条多态指令</strong>。这是因为硬件的快速路径和软件的慢速路径是互斥的两种执行模式。</li>
+</ul>
+</li>
+</ul>
+<p><strong>在整体架构中的作用</strong></p>
+<ul>
+<li><strong>性能与灵活性的平衡</strong>：通过将最常见的、简单的类型操作（如整数+整数）交给硬件快速处理，而将复杂的、罕见的情况交给软件慢速处理，Typed Architectures 在极低的硬件成本（<strong>1.6%</strong> 面积开销）下实现了显著的性能提升（<strong>9.9%-11.2%</strong> 几何平均加速比）。</li>
+<li><strong>简化硬件设计</strong>：硬件无需处理复杂的类型转换逻辑，只需负责高速的类型匹配和基本运算，大大降低了设计的复杂性。</li>
+<li><strong>保证语义正确性</strong>：慢速路径作为功能完备的后备方案，确保了无论硬件是否能处理，程序的最终行为都与纯软件解释器完全一致，维护了语言的语义。</li>
+</ul>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>硬件平台</strong>: 基于开源的 <strong>64-bit RISC-V Rocket Core</strong> 构建了一个完全可综合的 <strong>RTL 模型</strong>，使用 <strong>Chisel</strong> 语言编写，并编译为 Verilog。</li>
+<li><strong>FPGA 验证</strong>: 使用 <strong>Xilinx ZC706 FPGA</strong> 进行指令和周期计数。</li>
+<li><strong>ASIC 合成</strong>: 使用 <strong>Synopsys Design Compiler</strong> 和 <strong>TSMC 40nm CLN40G</strong> 工艺库（包括 SC9 标准单元库和 ARM Artisan SRAM 库）进行面积和功耗评估。</li>
+<li><strong>软件栈</strong>:<ul>
+<li>脚本引擎：<strong>Lua 5.3.0</strong> (寄存器式 VM) 和 <strong>SpiderMonkey 17.0.0</strong> (JavaScript, 栈式 VM)。</li>
+<li>编译器：<strong>RISC-V toolchain</strong> 中的 <strong>gcc 5.2.0</strong>，编译选项为 <code>-O3</code>。</li>
+<li>对比基线：实现了一个基于 FPGA 的 <strong>Checked Load [30]</strong> 方案作为当前最先进硬件方案的代表。</li>
+</ul>
+</li>
+<li><strong>基准测试</strong>: 选用并调整了来自 <strong>Computer Language Benchmarks Game</strong> 的 11 个基准测试程序。替换了在目标引擎上无法运行或主要时间花在原生库上的程序（如 <code>fasta</code>, <code>regex-dna</code>），补充了 <code>n-sieve</code>, <code>random</code>, <code>fibo</code>, <code>ackermann</code>。</li>
+<li><strong>测量方法</strong>: 所有基准测试均运行至完成，并从主解释器循环的开始到结束统计指令和周期数。</li>
+</ul>
+<p><img alt="" src="../images/08115ac5da44e54c9004c69c4e725044ecc21d43bdc87d5020cb7c3494405c60.jpg" /> <em>Table 6: Evaluation parameters</em>
+<img alt="" src="../images/e4f5f8afad834ae60f214863e2af8d845c6a8ced6795a3f2d4694ba86810bb18.jpg" /> <em>Table 7: Benchmarks</em></p>
+<p><strong>结果数据分析</strong></p>
+<ul>
+<li>
+<p><strong>整体性能提升</strong>:</p>
+<ul>
+<li><strong>Typed Architectures</strong> 在 <strong>Lua</strong> 上实现了 <strong>9.9%</strong> 的几何平均加速比，最大加速比达 <strong>43.5%</strong>。</li>
+<li>在 <strong>JavaScript (SpiderMonkey)</strong> 上实现了 <strong>11.2%</strong> 的几何平均加速比，最大加速比达 <strong>32.6%</strong>。</li>
+<li>作为对比，<strong>Checked Load [30]</strong> 的几何平均加速比仅为 <strong>7.3% (Lua)</strong> 和 <strong>5.4% (JS)</strong>。
+    <img alt="" src="../images/faf222a9648408ba3885a02642ca484bc0761821514f047c02630bdb87747b54.jpg" /> <em>Figure 5: Overall speedups for Lua and JavaScript interpreters (the higher, the better)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>性能提升来源</strong>:</p>
+<ul>
+<li><strong>动态指令数减少</strong>: Typed Architectures 显著减少了动态指令数，Lua 平均减少 <strong>11.2%</strong>，JS 平均减少 <strong>4.4%</strong>。这直接源于硬件隐式处理了类型检查、标签提取和插入。
+    <img alt="" src="../images/046440db3a6b2466d009e11eb3df521c492c54057e4d7c14ad6c076d3dec6b60.jpg" /> <em>Figure 6: Reduction of dynamic instruction count (the higher, the better)</em></li>
+<li><strong>分支预测压力降低</strong>: 通过消除软件中的类型守卫（type guards），分支误预测率（MPKI）显著下降。例如，在 Lua 的 <code>fibo</code> 和 JS 的 <code>fannkuch-redux</code> 中，性能提升很大程度上归功于此。
+    <img alt="" src="../images/b8a016ed009f998731ffd18eb4bf6ce075d7ba72774ca45b98a78af5df612019.jpg" /> <em>Figure 7: Branch miss rates in misses per kilo-instructions (MPKI) (the lower, the better)</em></li>
+<li><strong>指令缓存压力降低</strong>: 由于解释器核心循环代码变短，指令缓存未命中率（I-cache MPKI）也有所改善，尤其在 <code>binary-trees</code> 和 <code>random</code> 等基准测试中效果明显。
+    <img alt="" src="../images/2eb3643d8603e0cc2795c60844eb2bc494a36004ca7c70ae8fa17faf75d91195.jpg" /> <em>Figure 8: Instruction cache miss rates in misses per kilo-instructions (MPKI) (the lower, the better)</em></li>
+<li><strong>高类型命中率</strong>: 性能提升与 <strong>Type Rule Table</strong> 的高命中率强相关。对于频繁使用的字节码（如 <code>ADD</code>, <code>GETTABLE</code>），如果其操作数类型组合是常见的，就能高效地走快速路径。
+    <img alt="" src="../images/9e399789f7bd42938699e018bb3e5558de3587d372f0c6d750c6c581614bb549.jpg" /> <em>Figure 9: Type hit and miss rates normalized to dynamic bytecode count for (a) Lua and (b) SpiderMonkey</em></li>
+</ul>
+</li>
+<li>
+<p><strong>硬件开销与能效</strong>:</p>
+<ul>
+<li><strong>面积开销</strong>: 仅为 <strong>1.6%</strong>。</li>
+<li><strong>功耗开销</strong>: 仅为 <strong>3.7%</strong>。</li>
+<li><strong>能效提升</strong>: 结合性能提升，<strong>能量延迟积 (EDP)</strong> 得到显著改善，<strong>Lua 提升 16.5%</strong>，<strong>JavaScript 提升 19.3%</strong>。</li>
+<li><strong>关键路径</strong>: 分析表明，该设计<strong>未影响处理器的关键路径</strong>，因为关键路径仍在 FPU 模块中。
+    <img alt="" src="../images/0ca44b112ba78cb5d1be9777297f7c39c41f6d157132c5634074a900a5eaac64.jpg" /> <em>Table 8: Hardware overhead breakdown (area, power)</em></li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验与对比分析</strong></p>
+<p>论文通过与 <strong>Checked Load [30]</strong> 的详细对比，间接进行了消融分析，突显了 Typed Architectures 设计选择的优势：</p>
+<ul>
+<li>
+<p><strong>全面性 vs. 局部性</strong>:</p>
+<ul>
+<li><strong>Checked Load</strong> 仅将“加载-比较-分支”这一模式合并为一条复杂指令，但<strong>标签的计算、插入、移除仍需软件显式处理</strong>。</li>
+<li><strong>Typed Architectures</strong> 通过 <strong>统一寄存器文件 (unified register file)</strong> 和 <strong>多态指令 (polymorphic instructions)</strong>，在 ISA 层面管理类型信息，<strong>全面覆盖</strong>了标签提取、检查、插入和值计算的整个流程。</li>
+</ul>
+</li>
+<li>
+<p><strong>灵活性 vs. 固定性</strong>:</p>
+<ul>
+<li><strong>Checked Load</strong> 的快速路径在编译时针对<strong>单一类型组合</strong>进行优化。例如，为整数优化的 Lua VM 在处理大量浮点运算的 <code>mandelbrot</code> 和 <code>n-body</code> 时收益甚微甚至为负。</li>
+<li><strong>Typed Architectures</strong> 的 <strong>Type Rule Table</strong> 和 <strong>F/Ī bit</strong> 使其能够<strong>自适应</strong>不同的类型组合（整数、浮点等），无需重新编译即可在混合工作负载上保持稳健性能。</li>
+</ul>
+</li>
+<li>
+<p><strong>适用性</strong>:</p>
+<ul>
+<li><strong>Checked Load</strong> 假设了特定的标签-值内存布局（如标签在字的 MSB），<strong>适用性受限</strong>。</li>
+<li><strong>Typed Architectures</strong> 通过 <strong>Roffset</strong>, <strong>Rshift</strong>, <strong>Rmask</strong> 三个特殊寄存器，提供了<strong>灵活的标签提取/插入逻辑</strong>，成功适配了 Lua（标签在相邻双字）和 SpiderMonkey（利用 NaN-boxing）这两种截然不同的数据布局。
+    <img alt="" src="../images/27a67567f10ec8b1aa421b7a37983fc0d469362eb83c9646dd972f94ee1bc42f.jpg" /> <em>Table 4: Special-purpose register settings</em></li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

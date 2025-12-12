@@ -1,0 +1,1270 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-virtual-program-counter-vpc-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Virtual Program Counter (VPC) Prediction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-virtual-branch-and-virtual-pc-vpca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Virtual Branch and Virtual PC (VPCA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-iterative-prediction-and-training-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Iterative Prediction and Training Algorithms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-dynamic-devirtualization-without-compiler-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dynamic Devirtualization without Compiler Support
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-low-cost-hardware-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Low-Cost Hardware Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar">Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar 论文解析<a class="headerlink" href="#virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Hyesoon Kim, José A. Joao, Onur Mutlu, et al.</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: IEEE Transactions on Computers</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2009</p>
+<p><strong>研究机构 (Affiliations)</strong>: Georgia Institute of Technology, University of Texas at Austin, Carnegie Mellon University, Intel Corporation</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决现代<strong>面向对象语言</strong>（如 C++、Java）中<strong>间接分支</strong>（indirect branches）预测精度低、硬件开销大的问题。</li>
+<li>提出一种<strong>低成本</strong>的间接分支预测方案，利用处理器中已有的<strong>条件分支预测硬件</strong>（conditional branch prediction hardware），避免为间接分支预测引入额外的、复杂的专用存储结构。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Virtual Program Counter </strong>(VPC) <strong>prediction</strong> 机制，其核心思想是<strong>动态去虚拟化</strong>（dynamic devirtualization）。</li>
+<li>将一个间接分支在硬件预测层面<strong>视为多个“虚拟”条件分支</strong>（virtual conditional branches）的序列。</li>
+<li>每个虚拟分支拥有一个唯一的 **Virtual PC **(VPCA)，该地址通过将原始 PC 与一个迭代相关的随机常数进行哈希运算得到。</li>
+<li>预测过程是<strong>迭代式</strong>的：<ul>
+<li>使用 VPCA 和更新后的<strong>虚拟全局历史寄存器</strong>（VGHR）访问现有的<strong>分支目标缓冲区</strong>（BTB）和<strong>方向预测器</strong>。</li>
+<li>如果预测结果为 <strong>not-taken</strong>，则进入下一个虚拟分支的预测。</li>
+<li>如果预测结果为 <strong>taken</strong>，则使用 BTB 中对应的地址作为间接分支的目标地址，预测结束。</li>
+<li>若达到最大迭代次数（<strong>MAX_ITER</strong>）仍未预测成功，则<strong>停顿前端</strong>（stall the front-end）。</li>
+</ul>
+</li>
+<li>训练算法能根据预测是否正确，动态地在 BTB 中<strong>插入新目标</strong>或<strong>更新现有目标</strong>的预测信息，并采用 <strong>Unique-LFU</strong> 策略管理 BTB 条目。</li>
+</ul>
+<p><img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></p>
+<p><strong>结果</strong></p>
+<ul>
+<li>在 <strong>12 个 C/C++ 应用</strong>上，与基于 BTB 的基线预测器相比，VPC 预测（MAX_ITER=12）实现了 <strong>26.7%</strong> 的平均性能提升，并将平均<strong>间接分支 MPKI</strong>（每千条指令的误预测数）从 <strong>4.63</strong> 降至 <strong>0.52</strong>。</li>
+<li>在 <strong>11 个 DaCapo Java 应用</strong>上，VPC 预测实现了 <strong>21.9%</strong> 的平均性能提升，并将平均间接分支 MPKI 从 <strong>11.9</strong> 降至 <strong>5.2</strong>。</li>
+<li><strong>81%</strong> 的 C/C++ 应用和 <strong>78.7%</strong> 的 Java 应用的正确预测能在 <strong>前 3-4 次迭代内</strong>完成，表明预测延迟较低。</li>
+<li>在能效方面，VPC 预测在 C/C++ 和 Java 应用上分别实现了 <strong>19%</strong> 和 <strong>22%</strong> 的平均<strong>能耗降低</strong>，同时<strong>几乎不增加</strong>处理器的最大功耗。</li>
+<li>性能表现可与需要大量专用硬件的复杂预测器（如 **Tagged Target Cache **(TTC) 或 <strong>Cascaded Predictor</strong>）相媲美，但硬件成本极低。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">应用类型</th>
+<th style="text-align: left;">平均性能提升</th>
+<th style="text-align: left;">平均能耗降低</th>
+<th style="text-align: left;">间接分支 MPKI (基线 → VPC)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>C/C++</strong></td>
+<td style="text-align: left;"><strong>26.7%</strong></td>
+<td style="text-align: left;"><strong>19%</strong></td>
+<td style="text-align: left;"><strong>4.63 → 0.52</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Java</strong></td>
+<td style="text-align: left;"><strong>21.9%</strong></td>
+<td style="text-align: left;"><strong>22%</strong></td>
+<td style="text-align: left;"><strong>11.9 → 5.2</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/64f4f0ad7e2bb5f192e55f18402748497d9c219357ee0d0a8ee241a1f07546d9.jpg" /> <em>Fig. 6. Performance of VPC prediction: (a) IPC improvement and (b) indirect branch MPKI.</em>
+<img alt="" src="../images/4e9f65554ae2e4ab234752ed4fb5171429272ba104f657f62eed2ca6fc65b17a.jpg" /> <em>Fig. 13. Performance of VPC prediction on Java applications: (a) IPC improvement and (b) indirect branch MPKI.</em></p>
+<p><strong>结论</strong></p>
+<ul>
+<li><strong>VPC prediction</strong> 是一种<strong>高效且低成本</strong>的间接分支预测技术，它巧妙地复用了现有的条件分支预测硬件，避免了为间接分支引入复杂且耗能的专用结构。</li>
+<li>该技术在<strong>面向对象语言</strong>（尤其是 Java）密集使用间接分支的场景下，能带来<strong>显著的性能和能效提升</strong>。</li>
+<li>VPC prediction 具有<strong>良好的适应性</strong>，其效果会随着底层条件分支预测器准确率的提高而提升，并且可以与编译器的<strong>静态去虚拟化</strong>（devirtualization）优化协同工作。</li>
+<li>该工作为未来处理器设计提供了一种实用的思路，有助于<strong>弥合面向对象编程的软件工程优势与硬件性能之间的鸿沟</strong>。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li>现代 <strong>object-oriented languages</strong>（如 Java, C++）和 <strong>virtual-machine-based runtime systems</strong> 广泛使用 <strong>polymorphism</strong>，其核心实现机制是 <strong>dynamically dispatched function calls</strong>（即 <strong>virtual functions</strong>）。</li>
+<li>这些虚拟函数调用在底层指令集架构中通常被编译为 <strong>indirect branches</strong>。研究表明，面向对象程序中的间接分支数量远超传统的 C/Fortran 程序。</li>
+<li><strong>Indirect branch prediction</strong> 比 <strong>conditional branch prediction</strong> 困难得多，因为它需要预测一个 N-ary 的目标地址，而非一个二元的跳转方向（taken/not-taken）。</li>
+<li>由于缺乏高效的硬件支持，<strong>indirect branch mispredictions</strong> 已成为高性能处理器的关键性能瓶颈，并拉大了面向对象语言与传统语言间的性能差距。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li>先前提出的专用 <strong>indirect branch predictors</strong>（如 <strong>tagged target cache</strong>, <strong>cascaded predictor</strong>, <strong>PPM predictor</strong>）虽然有效，但需要<strong>大量额外的硬件存储和复杂逻辑</strong>，增加了功耗、面积和设计复杂度。</li>
+<li>大多数商用高性能处理器因此并未采用这些复杂方案，而是复用现有的 <strong>Branch Target Buffer (BTB)</strong> 来预测间接分支，但这仅能实现简单的“上次目标”预测，<strong>准确率很低</strong>（约50%）。</li>
+<li>作者观察到，现代处理器已经配备了<strong>庞大且高度优化的 conditional branch prediction hardware</strong>。研究的核心动机是：能否<strong>不增加专用硬件</strong>，直接利用这套现有设施来高效预测间接分支？</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了一种名为 <strong>Virtual Program Counter (VPC) prediction</strong> 的全新间接分支预测技术。</li>
+<li><strong>核心思想</strong>：在硬件层面，将<strong>单个间接分支</strong>动态地视为<strong>多个虚拟的 conditional branches</strong>（称为 <strong>virtual branches</strong>）。每个虚拟分支拥有唯一的 <strong>Virtual PC (VPCA)</strong>，并复用现有的 <strong>conditional branch predictor</strong> 和 <strong>BTB</strong> 进行预测。<ul>
+<li>预测过程是迭代的：依次查询每个虚拟分支，若预测为 <strong>not-taken</strong> 则继续下一个；若预测为 <strong>taken</strong>，则使用其在 BTB 中存储的目标地址作为最终预测结果。</li>
+</ul>
+</li>
+<li><strong>关键优势</strong>：<ul>
+<li><strong>零额外存储</strong>：间接分支的目标地址直接存储在现有的 BTB 中，无需为间接分支构建独立的、复杂的存储结构。</li>
+<li><strong>低成本高效益</strong>：仅需少量额外的控制逻辑（如寄存器、哈希表），就能获得与大型专用预测器相当的性能。</li>
+<li><strong>动态适应性</strong>：作为一种纯硬件机制，它能自适应地处理任何间接分支，不受编译时分析或静态 profile 的限制，并能应对 <strong>dynamic class loading</strong> 等运行时行为。</li>
+</ul>
+</li>
+<li><strong>实验结果</strong>：<ul>
+<li>在 <strong>C/C++</strong> 应用上，相比 BTB 基线，<strong>平均性能提升 26.7%</strong>，<strong>平均能耗降低 19%</strong>。</li>
+<li>在 <strong>Java DaCapo</strong> 应用上，<strong>平均性能提升 21.9%</strong>，<strong>平均能耗降低 22%</strong>。</li>
+<li>VPC 预测的准确性与底层 conditional branch predictor 的准确性正相关，可与任何现有条件分支预测机制协同工作。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/5c4248ed1d951e38d57ab7ce372d1b61dc778921c9fc4bca6ba8a19eca84b855.jpg" /> <em>Fig. 1. Indirect branch mispredictions in Windows applications: (a) MPKI and (b) percent of mispredictions due to indirect branches.</em>
+<img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></p>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>VPC (Virtual Program Counter) Prediction 的核心思想是<strong>复用现有的条件分支预测硬件</strong>来处理间接分支，从而避免为间接分支预测引入额外的、复杂的专用存储结构。其架构巧妙地将一个间接分支在硬件预测层面“动态地”视为一连串虚拟的条件分支。</p>
+<ul>
+<li>
+<p><strong>基本概念</strong>:</p>
+<ul>
+<li><strong>虚拟分支 (Virtual Branch)</strong>: 这些是仅对处理器的分支预测单元可见的、逻辑上的条件分支。它们不存在于程序二进制代码中，不影响程序的实际执行流。</li>
+<li><strong>虚拟程序计数器 (Virtual PC, VPCA)</strong>: 为每个虚拟分支分配一个唯一的、伪造的 PC 地址，用于索引现有的<strong>条件分支方向预测器 (Conditional Branch Direction Predictor)</strong> 和 <strong>BTB (Branch Target Buffer)</strong>。</li>
+<li><strong>虚拟全局历史寄存器 (Virtual GHR, VGHR)</strong>: 为每个虚拟分支提供上下文（分支历史）信息，以增强预测准确性。</li>
+</ul>
+</li>
+<li>
+<p><strong>预测流程</strong>:</p>
+<ul>
+<li>处理器在取指阶段遇到一个间接分支。</li>
+<li>预测过程开始迭代，<strong>MAX_ITER</strong> 参数限定了最大迭代次数（即最多尝试多少个虚拟分支）。</li>
+<li><strong>第一次迭代</strong>: 使用间接分支的真实 <strong>PC</strong> 作为 <strong>VPCA</strong>，使用当前的 <strong>GHR</strong> 作为 <strong>VGHR</strong>，访问 BTB 和方向预测器。<ul>
+<li>如果 BTB 命中且方向预测器预测为 <strong>taken</strong>，则使用 BTB 返回的地址作为预测目标，预测结束。</li>
+<li>如果预测为 <strong>not-taken</strong>，则进入下一次迭代。</li>
+</ul>
+</li>
+<li><strong>后续迭代 (第 N 次)</strong>:<ul>
+<li><strong>VPCA</strong> 通过将原始 PC 与一个预定义的、与迭代次数相关的<strong>随机化常数 (HASHVAL[N])</strong> 进行哈希运算得到。</li>
+<li><strong>VGHR</strong> 通过对上一次的 VGHR 进行左移一位（模拟前一个虚拟分支为 not-taken）得到。</li>
+<li>重复上述预测过程，直到某个虚拟分支被预测为 taken，或达到 <strong>MAX_ITER</strong> 次迭代仍未成功，此时处理器<strong>停顿 (stall)</strong> 直到间接分支的目标地址在执行阶段被解析出来。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></p>
+<ul>
+<li>
+<p><strong>训练流程</strong>:</p>
+<ul>
+<li>当间接分支在提交阶段被解析后，VPC 预测器会根据预测是否正确进行训练。</li>
+<li><strong>预测正确时</strong>: 所有在成功预测之前的虚拟分支都在方向预测器中被训练为 <strong>not-taken</strong>，而成功预测的那个虚拟分支则被训练为 <strong>taken</strong>，并更新其在 BTB 中条目的替换策略位。</li>
+<li><strong>预测错误时 (Wrong-target)</strong>: 如果正确的目标地址已存在于某个虚拟分支的 BTB 条目中，则将该虚拟分支的方向预测器训练为 <strong>taken</strong>，其余已检查的虚拟分支训练为 <strong>not-taken</strong>。</li>
+<li><strong>预测错误时 (No-target)</strong>: 如果正确的目标地址不在任何虚拟分支的 BTB 条目中，则需要将其插入 BTB。插入位置的选择策略（如 <strong>Unique-LFU</strong>）会影响性能，论文默认采用 LFU（Least Frequently Used）策略来替换使用频率最低的条目。</li>
+</ul>
+</li>
+<li>
+<p><strong>硬件开销</strong>:</p>
+<ul>
+<li>VPC 预测器的硬件成本极低，主要新增内容包括：<ul>
+<li>用于预测和训练的少量寄存器（存储 iter, VPCA, VGHR）。</li>
+<li>一个小型的硬编码 <strong>HASHVAL</strong> 表（大小为 MAX_ITER，通常不超过16）。</li>
+<li>在流水线中携带 <strong>predicted_iter</strong> 值。</li>
+</ul>
+</li>
+<li><strong>关键优势</strong>: <strong>无需为间接分支目标地址维护任何额外的专用存储表</strong>，所有目标地址都自然地存储在现有的 BTB 中。</li>
+</ul>
+</li>
+<li>
+<p><strong>与编译器优化的关系</strong>:</p>
+<ul>
+<li>VPC 预测可以被看作是一种<strong>硬件实现的、动态的 devirtualization (去虚拟化)</strong>。</li>
+<li>它克服了编译器静态 devirtualization 的局限性，如<strong>需要静态分析/剖析、缺乏运行时适应性、可能增加代码体积</strong>等。</li>
+<li>VPC 预测与编译器优化是<strong>正交且互补</strong>的，即使在经过编译器优化的代码上，VPC 依然能带来显著的性能提升。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-virtual-program-counter-vpc-prediction">1. Virtual Program Counter (VPC) Prediction<a class="headerlink" href="#1-virtual-program-counter-vpc-prediction" title="Permanent link">&para;</a></h3>
+<p><strong>核心观点</strong></p>
+<ul>
+<li><strong>Virtual Program Counter (VPC) Prediction</strong> 的核心思想是将一个<strong>间接分支 (indirect branch)</strong> 在硬件预测层面动态地“<strong>虚拟化</strong>”为一个由多个<strong>虚拟条件分支 (virtual conditional branches)</strong> 组成的序列。</li>
+<li>该机制巧妙地复用处理器中已有的、高度优化的<strong>条件分支预测器 (conditional branch predictor)</strong> 和 <strong>BTB (Branch Target Buffer)</strong>，无需为间接分支目标地址预测增加任何专用的、复杂的存储结构，从而实现了极低的硬件成本。</li>
+</ul>
+<p><strong>实现原理与算法流程</strong></p>
+<ul>
+<li><strong>虚拟分支的概念</strong>：每个虚拟分支在软件层面并不存在，仅对硬件的分支预测单元可见。每个虚拟分支拥有自己唯一的<strong>虚拟程序计数器 (Virtual PC, VPCA)</strong> 和关联的<strong>虚拟全局历史寄存器 (Virtual GHR, VGHR)</strong> 值，用于索引现有的预测器和BTB。</li>
+<li><strong>预测过程 (Algorithm 1)</strong>：<ul>
+<li><strong>初始化</strong>：<code>iter = 1</code>, <code>VPCA = PC</code> (原始间接分支地址), <code>VGHR = GHR</code> (当前全局历史)。</li>
+<li><strong>迭代循环</strong>：<ul>
+<li>使用 <code>(VPCA, VGHR)</code> 访问 BTB 和条件分支方向预测器。</li>
+<li>如果 BTB <strong>命中</strong> 且方向预测器预测结果为 <strong>TAKEN</strong>，则使用 BTB 返回的目标地址作为预测结果，预测成功并结束。</li>
+<li>否则（BTB <strong>未命中</strong>、预测为 <strong>NOT-TAKEN</strong> 或 <code>iter &gt; MAX_ITER</code>），更新 <code>VPCA</code> 和 <code>VGHR</code> 并进入下一次迭代。<ul>
+<li><code>VPCA</code> 更新：通过将原始 <code>PC</code> 与一个预定义的、基于 <code>iter</code> 的<strong>随机化常量 (HASHVAL[iter])</strong> 进行哈希运算得到，确保不同迭代的 <code>VPCA</code> 唯一。</li>
+<li><code>VGHR</code> 更新：简单地左移一位，模拟前一个虚拟分支被预测为 <strong>NOT-TAKEN</strong> 的历史。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>终止条件</strong>：成功预测到目标，或达到最大迭代次数 <code>MAX_ITER</code>，或发生 BTB 未命中。若未能成功预测，则前端流水线<strong>停顿 (STALL)</strong>，等待间接分支在执行阶段解析出真实目标。</li>
+</ul>
+</li>
+<li><strong>训练过程</strong>：<ul>
+<li><strong>正确预测时 (Algorithm 2)</strong>：所有在成功预测前的虚拟分支都被训练为 <strong>NOT-TAKEN</strong>，而成功预测的那个虚拟分支被训练为 <strong>TAKEN</strong>，并更新其 BTB 条目的替换策略位。</li>
+<li><strong>错误预测时 (Algorithm 3)</strong>：<ul>
+<li><strong>Wrong-target</strong>：遍历所有虚拟分支，找到存储了正确目标地址的那个，并将其方向预测器训练为 <strong>TAKEN</strong>。</li>
+<li><strong>No-target</strong>：如果所有虚拟分支的 BTB 条目中都没有正确目标，则需要将正确目标插入 BTB。插入位置的选择策略（如 <strong>Unique-LFU</strong>）会影响性能，论文默认选择<strong>最近最少使用 (LFU)</strong> 值最小的条目进行替换。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/cc59d1bb83ccc21cbefbc81dcc2b3a3cef100997897622419acc8f802c55ce2b.jpg" /> <em>Fig. 4. VPC prediction example: source, assembly, and the corresponding virtual branches.</em>
+<img alt="" src="../images/1a4cdd99737787ed5bced6c05f474866c032a4224d943643a2e3a79824c2580c.jpg" /> <em>TABLE 1 Possible VPC Predictor States and Outcomes When Branch in Fig. 4b is Predicted</em></p>
+<p><strong>关键参数设置与硬件成本</strong></p>
+<ul>
+<li><strong>MAX_ITER</strong>：这是最关键的参数，它决定了为一个间接分支最多可以维护多少个不同的目标地址（即虚拟分支的数量）。<ul>
+<li>实验表明，<code>MAX_ITER=12</code> 能在 C/C++ 和 Java 应用上取得最佳性能平衡。</li>
+<li>过大的 <code>MAX_ITER</code> 会增加 BTB 的冲突缺失，并可能导致预测延迟增加。</li>
+</ul>
+</li>
+<li><strong>硬件开销极小</strong>：<ul>
+<li>主要新增硬件包括：用于存储 <code>iter</code>、<code>VPCA</code>、<code>VGHR</code> 的少量寄存器（预测和训练各一套）。</li>
+<li>一个小型的硬编码<strong>随机化哈希表 (HASHVAL)</strong>，大小为 <code>MAX_ITER</code>。</li>
+<li>在流水线中为每个间接分支携带一个 <code>predicted_iter</code> 字段。</li>
+<li><strong>无需</strong>为间接分支目标地址增加任何新的、独立的存储表。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及在整体中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>间接分支的 <strong>PC (Program Counter)</strong> 地址。</li>
+<li>当前的 <strong>GHR (Global History Register)</strong> 状态。</li>
+<li>现有的 <strong>BTB</strong> 和 <strong>条件分支方向预测器</strong> 的状态。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
+<li>预测的<strong>目标地址 (Target Address)</strong>。</li>
+<li>或者，在无法预测时，发出一个<strong>停顿 (STALL)</strong> 信号。</li>
+</ul>
+</li>
+<li><strong>在处理器前端的作用</strong>：<ul>
+<li><strong>无缝集成</strong>：VPC 预测器完全构建在现有条件分支预测硬件之上，对指令获取和解码逻辑的改动极小。</li>
+<li><strong>提升性能</strong>：通过显著降低<strong>间接分支 MPKI (Mispredictions Per Kilo Instructions)</strong>，减少了因错误路径执行导致的流水线冲刷，从而大幅提升了 IPC (Instructions Per Cycle)。</li>
+<li><strong>降低能耗</strong>：减少了错误路径上指令的获取、解码和执行，直接降低了处理器的整体<strong>能量消耗</strong>和<strong>能量延迟积 (EDP)</strong>。</li>
+<li><strong>赋能面向对象语言</strong>：有效缓解了由<strong>虚函数调用 (virtual function calls)</strong> 和<strong>动态分派 (dynamic dispatch)</strong> 导致的性能瓶颈，使得使用 C++、Java 等现代面向对象语言编写的程序能获得接近传统语言的性能，鼓励了更高质量的软件开发实践。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>性能与能效数据摘要</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">应用类型</th>
+<th style="text-align: center;">平均性能提升 (IPC)</th>
+<th style="text-align: center;">平均能耗降低</th>
+<th style="text-align: center;">平均 EDP 降低</th>
+<th style="text-align: left;">关键指标 (MPKI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>C/C++ 应用</strong></td>
+<td style="text-align: center;"><strong>26.7%</strong></td>
+<td style="text-align: center;"><strong>19%</strong></td>
+<td style="text-align: center;"><strong>42%</strong></td>
+<td style="text-align: left;">从 4.63 降至 0.52</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Java DaCapo 应用</strong></td>
+<td style="text-align: center;"><strong>21.9%</strong></td>
+<td style="text-align: center;"><strong>22%</strong></td>
+<td style="text-align: center;"><strong>36%</strong></td>
+<td style="text-align: left;">从 11.9 降至 5.2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>预测效率</strong>：在 <code>MAX_ITER=12</code> 时，<strong>81%</strong> 的 C/C++ 正确预测在<strong>前3次迭代</strong>内完成；对于目标更多的 Java 应用，<strong>78.7%</strong> 的正确预测在<strong>前4次迭代</strong>内完成。这表明大多数预测都能快速完成，引入的停顿周期很少。</li>
+</ul>
+<p><img alt="" src="../images/6351bf18e9fcdeb84ecd799f7df0ea8ad5bcd2de90767e796b714d542f5492ae.jpg" /> <em>Fig. 7. Distribution of the number of iterations (for correct predictions) (MAX_ITER=12).</em>
+<img alt="" src="../images/50e887940b19194f86084e78d99690b01852dc2a50dac6d6d82980c699dda1fb.jpg" /> <em>Fig. 14. Distribution of the number of iterations (for correct predictions) in the Java programs (MAX_ITER¼12).</em></p>
+<h3 id="2-virtual-branch-and-virtual-pc-vpca">2. Virtual Branch and Virtual PC (VPCA)<a class="headerlink" href="#2-virtual-branch-and-virtual-pc-vpca" title="Permanent link">&para;</a></h3>
+<p><strong>Virtual Branch 与 Virtual PC (VPCA) 的核心机制</strong></p>
+<ul>
+<li><strong>Virtual Branch（虚拟分支）</strong> 并非真实存在于程序二进制中的指令，而是一种<strong>纯硬件层面的概念</strong>。它由 VPC 预测器在预测阶段动态创建，目的是将一个难以预测的<strong>间接分支 (indirect branch)</strong> 转化为一系列易于处理的<strong>条件分支 (conditional branch)</strong>。</li>
+<li>每个 Virtual Branch 在硬件看来就是一个标准的条件分支，拥有自己独立的<strong>预测方向 (taken/not-taken)</strong> 和<strong>目标地址 (target address)</strong>。</li>
+<li><strong>Virtual PC (VPCA)</strong> 是分配给每个 Virtual Branch 的唯一标识符。它的核心作用是让处理器能够使用现有的<strong>条件分支预测硬件</strong>（包括方向预测器和 BTB）来区分并预测不同的 Virtual Branch。</li>
+</ul>
+<p><strong>VPCA 的生成算法与流程</strong></p>
+<ul>
+<li>VPCA 的生成是一个<strong>迭代过程</strong>，其详细逻辑在论文的 <strong>Algorithm 1</strong> 中定义。</li>
+<li><strong>初始迭代 (iter = 1)</strong>:<ul>
+<li><code>VPCA</code> 被直接设置为原始间接分支的 <strong>PC</strong> 地址。</li>
+<li><code>VGHR</code> (Virtual Global History Register) 被设置为当前的 <strong>GHR</strong> 值。</li>
+</ul>
+</li>
+<li><strong>后续迭代 (iter &gt; 1)</strong>:<ul>
+<li><code>VPCA</code> 通过一个哈希函数计算得出：<code>VPCA = Hash(PC, iter)</code>。</li>
+<li>论文中具体实现为：<code>VPCA = PC XOR HASHVAL[iter]</code>，其中 <strong>HASHVAL</strong> 是一个<strong>硬编码的、包含随机数的硬件表</strong>，表的大小由 <strong>MAX_ITER</strong> 参数决定。</li>
+<li><code>VGHR</code> 则通过对上一轮的 <code>VGHR</code> 进行<strong>左移一位</strong>来更新，这模拟了前一个 Virtual Branch 被预测为 <strong>not-taken</strong> 的历史。</li>
+</ul>
+</li>
+<li>这个迭代过程会持续进行，直到以下任一条件满足：<ul>
+<li>某个 Virtual Branch 被预测为 <strong>taken</strong>，此时其 BTB 中存储的目标地址即为最终预测结果。</li>
+<li>迭代次数达到预设上限 <strong>MAX_ITER</strong>。</li>
+<li>在访问 BTB 时发生 <strong>miss</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/cc59d1bb83ccc21cbefbc81dcc2b3a3cef100997897622419acc8f802c55ce2b.jpg" /> <em>Fig. 4. VPC prediction example: source, assembly, and the corresponding virtual branches.</em></p>
+<p><strong>关键参数与硬件成本</strong></p>
+<ul>
+<li><strong>MAX_ITER</strong>: 这是一个至关重要的设计参数，它决定了：<ul>
+<li>一个间接分支最多可以关联多少个不同的目标地址（即 Virtual Branch 的数量）。</li>
+<li>预测过程可能消耗的最大周期数。</li>
+<li>论文实验表明，<strong>MAX_ITER=12</strong> 能在性能和开销之间取得最佳平衡。</li>
+</ul>
+</li>
+<li><strong>HASHVAL 表</strong>: 一个小型的只读存储器，存储 <strong>MAX_ITER</strong> 个随机常量。论文指出其硬件成本极低。</li>
+<li><strong>额外寄存器</strong>: 需要少量寄存器来在预测和训练过程中保存 <code>iter</code>、<code>VPCA</code> 和 <code>VGHR</code> 的当前值。</li>
+</ul>
+<p><strong>输入输出关系及在整体架构中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>:<ul>
+<li>间接分支的原始 <strong>PC</strong> 地址。</li>
+<li>当前的全局历史寄存器 <strong>GHR</strong> 值。</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li><strong>预测阶段</strong>: 一个预测的<strong>目标地址</strong>，或者一个<strong>STALL</strong>信号（表示无法预测）。</li>
+<li><strong>训练阶段</strong>: 对 BTB 和条件分支方向预测器进行更新，以反映真实的分支行为。</li>
+</ul>
+</li>
+<li><strong>在整体架构中的作用</strong>:<ul>
+<li><strong>复用现有硬件</strong>: VPC 预测的核心价值在于<strong>完全复用</strong>处理器中已有的、高度优化的<strong>条件分支预测器</strong>和 <strong>BTB</strong>，避免了为间接分支预测构建专用、复杂的存储结构（如 Target Cache）。</li>
+<li><strong>动态去虚拟化 (Dynamic Devirtualization)</strong>: 它在硬件层面动态地实现了类似编译器<strong>去虚拟化 (devirtualization)</strong> 的效果，但无需任何静态分析或配置文件信息，具有极强的<strong>适应性 (Adaptivity)</strong>。</li>
+<li><strong>降低前端复杂度</strong>: 通过将复杂的 N-ary 间接目标预测问题，转化为一系列简单的二元 (taken/not-taken) 条件分支预测问题，极大地简化了处理器前端的设计。</li>
+</ul>
+</li>
+</ul>
+<p><strong>训练机制对 VPCA 的影响</strong></p>
+<ul>
+<li>训练算法（<strong>Algorithm 2 &amp; 3</strong>）确保了预测结构的准确性。</li>
+<li>当预测错误且正确的目标地址不在 BTB 中（<strong>No-target case</strong>）时，训练逻辑需要决定将新目标插入到哪个 Virtual Branch 的槽位中。</li>
+<li>论文评估了多种策略（Naive-Insert, Unique-Random, Unique-LRU），最终选择了 <strong>Unique-LFU</strong>（替换使用频率最低的目标）。这个选择直接影响了哪个 <code>VPCA</code> 会被用来存储新的目标地址，从而影响未来预测的顺序和效率。</li>
+</ul>
+<h3 id="3-iterative-prediction-and-training-algorithms">3. Iterative Prediction and Training Algorithms<a class="headerlink" href="#3-iterative-prediction-and-training-algorithms" title="Permanent link">&para;</a></h3>
+<p><strong>VPC预测算法 (Algorithm 1)</strong></p>
+<ul>
+<li>VPC预测是一个<strong>迭代过程</strong>，每次迭代对应一个<strong>虚拟分支 (virtual branch)</strong> 的预测。</li>
+<li><strong>输入</strong>:<ul>
+<li><code>PC</code>: 间接分支的真实程序计数器地址。</li>
+<li><code>GHR</code>: 全局历史寄存器值，记录了最近分支的执行历史。</li>
+<li><code>MAX_ITER</code>: 最大迭代次数，决定了为单个间接分支最多能存储多少个目标地址。</li>
+</ul>
+</li>
+<li><strong>初始化</strong>: 第一次迭代 (<code>iter = 1</code>) 使用真实的 <code>PC</code> 作为<strong>虚拟程序计数器地址 (VPCA)</strong>，并使用当前的 <code>GHR</code> 作为<strong>虚拟全局历史寄存器 (VGHR)</strong>。</li>
+<li><strong>核心循环</strong>:<ul>
+<li>使用当前的 <code>VPCA</code> 和 <code>VGHR</code> 访问<strong>BTB</strong>和<strong>条件分支方向预测器</strong>。</li>
+<li>如果 BTB 命中 (<code>pred_target</code> 有效) 且方向预测器预测为 <strong>TAKEN</strong>，则预测成功，将 <code>pred_target</code> 作为下一条取指地址，并结束预测。</li>
+<li>否则（即 BTB 未命中、方向预测为 <strong>NOT-TAKEN</strong> 或已达到 <code>MAX_ITER</code>），进入下一次迭代或触发<strong>STALL</strong>。</li>
+</ul>
+</li>
+<li><strong>迭代更新</strong>:<ul>
+<li><code>VPCA</code> 通过哈希函数更新：<code>VPCA = Hash(PC, iter)</code>。论文中使用一个硬编码的随机数表 <code>HASHVAL[iter]</code> 来实现，确保每个虚拟分支有唯一的、可重现的地址。</li>
+<li><code>VGHR</code> 被左移一位（相当于在历史末尾添加一个 <strong>NOT-TAKEN</strong> 位），以反映上一个虚拟分支未被采用。</li>
+</ul>
+</li>
+<li><strong>终止条件</strong>: 预测成功（遇到 TAKEN）、达到 <code>MAX_ITER</code> 或 BTB 未命中。若未能成功预测，则前端流水线<strong>STALL</strong>，直到间接分支在后端被解析出真实目标。</li>
+<li><strong>作用</strong>: 该算法巧妙地复用了现有的<strong>条件分支预测硬件</strong>，将一个N路的间接分支目标预测问题，转化为一系列二元的（TAKEN/NOT-TAKEN）虚拟条件分支预测问题。</li>
+</ul>
+<p><img alt="" src="../images/cc59d1bb83ccc21cbefbc81dcc2b3a3cef100997897622419acc8f802c55ce2b.jpg" /> <em>Fig. 4. VPC prediction example: source, assembly, and the corresponding virtual branches.</em></p>
+<p><strong>VPC训练算法</strong></p>
+<ul>
+<li>训练的目标是根据间接分支的实际执行结果，更新预测器状态，使其在未来能做出更准确的预测。</li>
+<li><strong>关键区分</strong>: 训练逻辑首先需要判断预测失败的类型：<ul>
+<li><strong>Wrong-target</strong>: 正确的目标地址存在于某个虚拟分支的 BTB 条目中，但该虚拟分支的方向被错误地预测为 <strong>NOT-TAKEN</strong>。</li>
+<li><strong>No-target</strong>: 正确的目标地址根本不在任何虚拟分支的 BTB 条目中。</li>
+</ul>
+</li>
+<li><strong>正确预测时的训练 (Algorithm 2)</strong>:<ul>
+<li>对于所有在成功预测前的虚拟分支（即 <code>iter &lt; predicted_iter</code>），将其方向预测器条目训练为 <strong>NOT-TAKEN</strong>。</li>
+<li>对于成功预测的那个虚拟分支（即 <code>iter = predicted_iter</code>），将其方向预测器条目训练为 <strong>TAKEN</strong>，并更新其 BTB 条目的<strong>替换策略位</strong>（如 LRU/LFU）。</li>
+</ul>
+</li>
+<li><strong>错误预测时的训练 (Algorithm 3)</strong>:<ul>
+<li><strong>迭代检查</strong>: 按预测时的相同顺序，依次检查每个虚拟分支的 BTB 条目。</li>
+<li><strong>Wrong-target 处理</strong>: 一旦发现某个虚拟分支的 BTB 目标与实际目标匹配，立即将其方向预测器训练为 <strong>TAKEN</strong>，更新其 BTB 替换位，并停止后续检查。</li>
+<li><strong>No-target 处理</strong>: 如果遍历完所有 <code>MAX_ITER</code> 个虚拟分支都未找到正确目标，则需要将正确目标<strong>插入 BTB</strong>。<ul>
+<li><strong>插入位置选择</strong>: 优先选择在预测阶段发生 <strong>BTB miss</strong> 的那个虚拟分支位置。如果没有 miss，则选择 BTB 条目中<strong>使用频率最低 (Least-frequently-used, LFU)</strong> 的位置进行替换。论文实验表明 <strong>Unique-LFU</strong> 策略效果最佳。</li>
+<li><strong>插入后训练</strong>: 将新插入的虚拟分支的方向预测器训练为 <strong>TAKEN</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>作用</strong>: 训练算法确保了预测器能够动态学习和适应间接分支的目标模式，通过调整虚拟分支的“taken”顺序和维护 BTB 中的目标集合，来逼近最优的预测效果。</li>
+</ul>
+<p><img alt="" src="../images/1a4cdd99737787ed5bced6c05f474866c032a4224d943643a2e3a79824c2580c.jpg" /> <em>TABLE 1 Possible VPC Predictor States and Outcomes When Branch in Fig. 4b is Predicted</em></p>
+<hr />
+<p><strong>关键参数与性能影响</strong></p>
+<ul>
+<li><strong>MAX_ITER</strong>: 这是 VPC 预测机制中最关键的参数，它直接决定了：<ul>
+<li>单个间接分支可以拥有的最大目标数量。</li>
+<li>预测延迟的上限（最坏情况下需要 <code>MAX_ITER</code> 个周期）。</li>
+<li>对 BTB 资源的压力（更多的虚拟分支意味着更多的 BTB 条目占用）。</li>
+</ul>
+</li>
+<li>实验结果表明，<strong>MAX_ITER=12</strong> 在所测试的 C/C++ 和 Java 应用中提供了最佳的性能平衡点。<ul>
+<li>对于目标较少的程序（如 <code>eon</code>, <code>gap</code>），较小的 <code>MAX_ITER</code>（如2或4）就足以消除大部分误预测。</li>
+<li>对于目标极多的程序（如 <code>perlbench</code>, Java 应用），增大 <code>MAX_ITER</code> 能持续降低 MPKI，但过大的值（&gt;12）会因 BTB <strong>冲突缺失 (conflict misses)</strong> 增加而导致性能下降。</li>
+</ul>
+</li>
+<li><strong>预测效率</strong>: 绝大多数（C/C++ 约 <strong>81%</strong>，Java 约 <strong>78.7%</strong>）的正确预测在前 <strong>3-4</strong> 次迭代内完成，说明平均预测延迟很低。</li>
+</ul>
+<p><img alt="" src="../images/6351bf18e9fcdeb84ecd799f7df0ea8ad5bcd2de90767e796b714d542f5492ae.jpg" /> <em>Fig. 7. Distribution of the number of iterations (for correct predictions) (MAX_ITER=12).</em>
+<img alt="" src="../images/50e887940b19194f86084e78d99690b01852dc2a50dac6d6d82980c699dda1fb.jpg" /> <em>Fig. 14. Distribution of the number of iterations (for correct predictions) in the Java programs (MAX_ITER¼12).</em></p>
+<h3 id="4-dynamic-devirtualization-without-compiler-support">4. Dynamic Devirtualization without Compiler Support<a class="headerlink" href="#4-dynamic-devirtualization-without-compiler-support" title="Permanent link">&para;</a></h3>
+<p><strong>核心观点：VPC预测的动态去虚拟化机制</strong></p>
+<p>VPC (Virtual Program Counter) 预测的核心创新在于，它在<strong>硬件层面</strong>动态地将一个间接分支（indirect branch）模拟为多个“虚拟”的条件分支（virtual conditional branches），从而复用现有的、高度优化的<strong>条件分支预测硬件</strong>（包括方向预测器和BTB）来预测间接分支的目标地址。这一过程完全<strong>无需编译器支持</strong>，不依赖静态分析或运行时剖析（profiling），并能自适应程序行为的变化。</p>
+<ul>
+<li>
+<p><strong>基本原理</strong>：</p>
+<ul>
+<li>一个间接分支在软件中只存在一次，但在硬件预测时，VPC机制将其视为一个由多个虚拟分支组成的序列。</li>
+<li>每个虚拟分支都有一个唯一的<strong>虚拟程序计数器</strong>（VPCA），该VPCA是通过对原始间接分支的PC进行哈希变换生成的。</li>
+<li>硬件使用这个VPCA去查询现有的<strong>条件分支方向预测器</strong>（如gshare, perceptron等）和<strong>分支目标缓冲区</strong>（BTB）。</li>
+<li>如果方向预测器预测当前虚拟分支为“<strong>taken</strong>”，则使用BTB中与该VPCA关联的<strong>目标地址</strong>作为间接分支的预测目标，预测结束。</li>
+<li>如果预测为“<strong>not-taken</strong>”，则硬件自动移动到序列中的下一个虚拟分支，并用其对应的VPCA重复预测过程。</li>
+</ul>
+</li>
+<li>
+<p><strong>算法流程</strong>（基于Algorithm 1）：</p>
+<ul>
+<li><strong>初始化</strong>：<code>iter = 1</code>, <code>VPCA = PC</code> (原始间接分支地址), <code>VGHR = GHR</code> (全局历史寄存器值)。</li>
+<li><strong>迭代预测</strong>：<ul>
+<li>使用<code>VPCA</code>访问BTB，获取<code>pred_target</code>。</li>
+<li>使用<code>VPCA</code>和<code>VGHR</code>访问条件分支方向预测器，获取<code>pred_dir</code>。</li>
+<li><strong>终止条件1</strong>（成功预测）：如果<code>pred_target</code>存在（BTB命中）且<code>pred_dir</code>为<strong>TAKEN</strong>，则预测完成，下一取指地址为<code>pred_target</code>。</li>
+<li><strong>终止条件2</strong>（预测失败）：如果<code>pred_target</code>不存在（BTB miss）或<code>iter &gt; MAX_ITER</code>，则预测失败，前端<strong>STALL</strong>，等待间接分支在执行阶段解析出真实目标。</li>
+<li><strong>继续迭代</strong>：如果以上条件均不满足，则更新<code>VPCA = Hash(PC, iter)</code>，<code>VGHR = Left-Shift(VGHR)</code>（模拟前一个虚拟分支为not-taken），<code>iter++</code>，进入下一轮循环。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></p>
+<ul>
+<li><strong>关键参数设置</strong>：<ul>
+<li><strong>MAX_ITER</strong>：这是最重要的参数，它定义了为一个间接分支最多尝试预测多少个虚拟分支。它直接决定了该间接分支在BTB中可以存储多少个不同的目标地址。<ul>
+<li>论文实验表明，<strong>MAX_ITER=12</strong> 能在C/C++和Java应用上取得最佳性能平衡。</li>
+<li>过小的<code>MAX_ITER</code>无法覆盖多态性高的间接分支；过大的<code>MAX_ITER</code>会增加BTB冲突（conflict misses）并可能因迭代次数过多而引入额外延迟。</li>
+</ul>
+</li>
+<li><strong>HASHVAL</strong>：一个硬编码的、包含<code>MAX_ITER</code>个条目的随机数表。用于生成不同迭代次数对应的唯一VPCA，确保不同虚拟分支能映射到预测结构的不同位置。</li>
+</ul>
+</li>
+</ul>
+<p><strong>训练与自适应机制</strong></p>
+<p>VPC预测的自适应能力来源于其精细的训练算法，该算法在间接分支被提交（commit）后更新预测结构。</p>
+<ul>
+<li>
+<p><strong>正确预测时的训练</strong>（Algorithm 2）：</p>
+<ul>
+<li>对于序列中除最后一个（即预测正确的那个）之外的所有虚拟分支，将其在方向预测器中训练为<strong>NOT-TAKEN</strong>。</li>
+<li>对于最后一个虚拟分支，将其在方向预测器中训练为<strong>TAKEN</strong>，并更新其在BTB中的替换策略位（如LFU计数器）。</li>
+</ul>
+</li>
+<li>
+<p><strong>错误预测时的训练</strong>（Algorithm 3）：</p>
+<ul>
+<li><strong>Wrong-target情况</strong>：正确的目标地址已存在于某个虚拟分支的BTB项中，但方向预测器错误地预测其为NOT-TAKEN。训练逻辑会找到该项，并将其方向预测器更新为<strong>TAKEN</strong>。</li>
+<li><strong>No-target情况</strong>：正确的目标地址不在任何虚拟分支的BTB项中。此时需要将新目标插入BTB。<ul>
+<li>插入位置的选择至关重要。论文采用<strong>Unique-LFU</strong>策略：优先选择一个BTB miss的虚拟分支槽位；若无miss，则替换掉LFU（Least-Frequently-Used）值最小的虚拟分支槽位。这保证了BTB空间的有效利用，保留高频目标。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及整体作用</strong></p>
+<ul>
+<li>
+<p><strong>输入</strong>：</p>
+<ul>
+<li><strong>PC</strong>：间接分支指令的程序计数器地址。</li>
+<li><strong>GHR</strong>：当前的全局分支历史。</li>
+<li><strong>BTB和条件分支预测器的状态</strong>：这是VPC机制复用的核心硬件资源。</li>
+</ul>
+</li>
+<li>
+<p><strong>输出</strong>：</p>
+<ul>
+<li><strong>预测目标地址</strong>（<code>next_PC</code>）：如果在<code>MAX_ITER</code>次迭代内成功预测。</li>
+<li><strong>STALL信号</strong>：如果预测失败，通知前端暂停取指。</li>
+</ul>
+</li>
+<li>
+<p><strong>在处理器流水线中的作用</strong>：</p>
+<ul>
+<li>VPC预测发生在<strong>取指</strong>（Fetch）阶段，与常规分支预测并行。</li>
+<li>它通过将复杂的N路间接目标预测问题，巧妙地转化为一系列简单的二元（taken/not-taken）条件分支预测问题。</li>
+<li>其最大优势在于<strong>零额外存储开销</strong>：所有间接分支的目标地址都存储在原有的BTB中，无需像TTC（Tagged Target Cache）等方案那样引入专用的、庞大的间接目标存储结构。</li>
+<li>实验数据显示，在C/C++应用上平均提升<strong>26.7%</strong>性能，在Java DaCapo应用上平均提升<strong>21.9%</strong>性能，同时显著降低能耗。这证明了其作为一种<strong>低成本、高效益</strong>的间接分支处理方案的巨大价值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-low-cost-hardware-implementation">5. Low-Cost Hardware Implementation<a class="headerlink" href="#5-low-cost-hardware-implementation" title="Permanent link">&para;</a></h3>
+<p><strong>VPC预测的低成本硬件实现原理</strong></p>
+<p>VPC (Virtual Program Counter) 预测的核心思想是将一个间接分支在硬件层面动态地“虚拟化”为多个<strong>conditional branch</strong>，从而复用处理器中已经存在的、高度优化的<strong>conditional branch prediction hardware</strong>（包括方向预测器和BTB），避免了为间接分支目标地址构建专用存储结构的巨大开销。</p>
+<ul>
+<li>
+<p><strong>虚拟分支 (Virtual Branch) 的概念</strong>：</p>
+<ul>
+<li>虚拟分支并非真实存在于程序二进制中的指令，而是VPC预测机制在硬件内部创建的逻辑实体。</li>
+<li>每个虚拟分支都拥有自己唯一的<strong>Virtual PC Address (VPCA)</strong> 和关联的<strong>Virtual Global History Register (VGHR)</strong> 值，用于索引现有的分支预测结构。</li>
+<li>硬件依次预测这些虚拟分支：如果预测为 <strong>not-taken</strong>，则继续预测序列中的下一个；如果预测为 <strong>taken</strong>，则使用该虚拟分支在BTB中对应的<strong>target address</strong>作为间接分支的预测目标。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键硬件组件与成本</strong>：</p>
+<ul>
+<li><strong>寄存器开销极小</strong>：仅需少量额外寄存器来存储预测和训练过程中的迭代计数器 (<code>iter</code>)、当前VPCA和VGHR值。</li>
+<li><strong>小型硬编码哈希表</strong>：一个名为 <code>HASHVAL</code> 的硬编码表，包含 <code>MAX_ITER</code> 个（实验表明不超过16）32位随机数。该表用于在每次迭代中生成新的、唯一的VPCA，以区分不同的虚拟分支。</li>
+<li><strong>复用现有BTB</strong>：所有间接分支的目标地址都直接存储在现有的<strong>Branch Target Buffer (BTB)</strong> 中，每个目标地址通过其对应的VPCA进行索引。这完全消除了对专用间接分支目标缓存的需求。</li>
+<li><strong>简单组合逻辑</strong>：用于计算VPCA（<code>PC XOR HASHVAL[iter]</code>）和更新VGHR（左移一位，模拟前一个虚拟分支为not-taken）。这些计算不在关键路径上，因此不会影响预测延迟。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></p>
+<p><strong>VPC预测与训练算法流程</strong></p>
+<p>VPC的运作分为<strong>预测 (Prediction)</strong> 和 <strong>训练 (Training)</strong> 两个阶段。</p>
+<ul>
+<li>
+<p><strong>预测算法 (Algorithm 1)</strong>：</p>
+<ul>
+<li><strong>初始化</strong>：<code>iter = 1</code>, <code>VPCA = PC</code> (间接分支的真实PC), <code>VGHR = GHR</code> (全局历史寄存器的当前值)。</li>
+<li><strong>迭代循环</strong>：<ul>
+<li>使用 <code>VPCA</code> 访问BTB获取预测目标 (<code>pred_target</code>)。</li>
+<li>使用 <code>VPCA</code> 和 <code>VGHR</code> 访问条件分支方向预测器获取预测方向 (<code>pred_dir</code>)。</li>
+<li><strong>成功条件</strong>：如果 <code>pred_target</code> 存在（BTB命中）且 <code>pred_dir</code> 为 <strong>TAKEN</strong>，则预测成功，使用 <code>pred_target</code> 作为下一条取指地址。</li>
+<li><strong>继续条件</strong>：如果 <code>pred_dir</code> 为 <strong>NOT-TAKEN</strong>，则更新 <code>VPCA = Hash(PC, iter)</code> 和 <code>VGHR = Left-Shift(VGHR)</code>，<code>iter++</code>，进入下一次迭代。</li>
+<li><strong>失败/停顿条件</strong>：如果 <code>iter &gt; MAX_ITER</code> 或发生BTB miss，则预测失败，前端停顿直到间接分支在执行阶段被解析。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>训练算法</strong>：</p>
+<ul>
+<li><strong>正确预测时 (Algorithm 2)</strong>：对于预测序列中除最后一个（正确）虚拟分支外的所有分支，将其方向预测器条目训练为 <strong>NOT-TAKEN</strong>；将最后一个分支的方向预测器训练为 <strong>TAKEN</strong>，并更新其BTB条目的替换策略位（如LFU）。</li>
+<li><strong>错误预测时 (Algorithm 3)</strong>：<ul>
+<li><strong>Wrong-target</strong>：遍历所有虚拟分支，找到存储了正确目标地址的那个，并将其方向预测器训练为 <strong>TAKEN</strong>。</li>
+<li><strong>No-target</strong>：如果正确目标未在任何虚拟分支的BTB条目中找到，则需要将其插入BTB。插入位置的选择策略（如 <strong>Unique-LFU</strong>）对性能有影响，它决定了新目标在虚拟分支序列中的“优先级”。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与性能权衡</strong></p>
+<ul>
+<li>
+<p><strong>核心参数 <code>MAX_ITER</code></strong>：</p>
+<ul>
+<li>它定义了为单个间接分支最多可以创建多少个虚拟分支，也即BTB中最多能为该分支缓存多少个不同目标。</li>
+<li>实验表明，<code>MAX_ITER=12</code> 在C/C++和Java基准测试中均能提供最佳性能。</li>
+<li><strong>权衡</strong>：增大 <code>MAX_ITER</code> 可以捕获更多目标，减少misprediction，但会增加BTB的<strong>conflict misses</strong>（尤其在Java等高间接分支密度的应用中），并且会增加预测所需的平均迭代次数（即前端停顿周期）。</li>
+</ul>
+</li>
+<li>
+<p><strong>输入输出关系</strong>：</p>
+<ul>
+<li><strong>输入</strong>：间接分支的 <strong>PC</strong> 地址和当前的 <strong>GHR</strong> 值。</li>
+<li><strong>输出</strong>：预测的 <strong>target address</strong> 或一个 <strong>STALL</strong> 信号。</li>
+<li><strong>在整体中的作用</strong>：VPC预测器作为一个低开销的前端模块，无缝集成到现有的取指和分支预测流水线中。它显著降低了<strong>Indirect Branch MPKI</strong>（从4.63降至0.52），从而减少了由错误路径取指和执行引起的<strong>pipeline flushes</strong>，最终提升了<strong>IPC</strong>并降低了<strong>energy consumption</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>与其他方案的硬件成本对比</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方案</th>
+<th style="text-align: left;">目标地址存储</th>
+<th style="text-align: left;">额外硬件复杂度</th>
+<th style="text-align: left;">能量效率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Baseline (BTB-only)</strong></td>
+<td style="text-align: left;">BTB (Last-target)</td>
+<td style="text-align: left;">无</td>
+<td style="text-align: left;">低 (高MPKI)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tagged Target Cache (TTC)</strong></td>
+<td style="text-align: left;">专用目标缓存 (KB级)</td>
+<td style="text-align: left;">高 (需独立结构、标签、多路选择器)</td>
+<td style="text-align: left;">低 (随缓存增大而恶化)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>VPC Prediction</strong></td>
+<td style="text-align: left;"><strong>复用现有BTB</strong></td>
+<td style="text-align: left;"><strong>极低</strong> (仅寄存器、小哈希表、简单逻辑)</td>
+<td style="text-align: left;"><strong>高</strong> (减少flushes，自身开销小)</td>
+</tr>
+</tbody>
+</table>
+<p>如图所示，VPC预测在几乎不增加硬件复杂度的前提下，其性能可媲美数KB大小的专用预测器，同时在<strong>energy-delay product (EDP)</strong> 上优势巨大。</p>
+<p><img alt="" src="../images/4e7109adf756e7d1dccf9fb56c894a95561953a802e3e0d2c9508307927aef77.jpg" /> <em>Fig. 10. Effect of VPC on energy/power consumption.</em></p>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li>评估平台为基于 <strong>Pin</strong> 和 <strong>iDNA</strong> 的周期精确 x86 模拟器，分别用于 C/C++ 和 Java 应用。</li>
+<li>基线处理器配置如 <img alt="" src="../images/bf584d7888db14d690f79fc8aa022f6535bfea4f4abe7c5e5fafa741679b7558.jpg" /> <em>TABLE 2 Baseline Processor Configuration</em> 所示，是一个高性能的乱序执行核心，具有 32KB <strong>BTB</strong>、16KB <strong>gshare</strong> 条件分支预测器、32-entry <strong>RAS</strong> 等。</li>
+<li><strong>C/C++ 基准测试集</strong>：包含 5 个 SPEC CPU2000 INT、5 个 SPEC CPU2006 INT/C++ 基准测试，以及 2 个额外的 C 基准测试（GAP, NAMD），共 12 个。所有程序均使用 <strong>ICC -O3</strong> 编译。</li>
+<li><strong>Java 基准测试集</strong>：完整的 <strong>DaCapo</strong> 基准测试套件（11 个应用），在 <strong>Sun J2SE 1.4.2_15 JRE</strong> 上运行。</li>
+<li>所有实验均使用 <strong>reference/small</strong> 输入集，并通过 <strong>Pinpoints</strong> 选择具有代表性的 2 亿条 x86 指令进行模拟。</li>
+<li><strong>基线间接分支预测器</strong>：采用传统的 <strong>BTB-based last-target predictor</strong>，即假设下一次跳转目标与上一次相同。</li>
+<li><strong>VPC 预测器关键参数</strong>：<code>MAX_ITER</code>（最大虚拟分支尝试次数）是主要变量，在实验中从 2 到 16 进行调整。</li>
+</ul>
+<p><strong>结果数据</strong></p>
+<ul>
+<li><strong>性能提升</strong>：<ul>
+<li>在 12 个 C/C++ 应用上，VPC 预测（<code>MAX_ITER=12</code>）平均 <strong>IPC</strong> 提升 <strong>26.7%</strong>。</li>
+<li>在 11 个 Java DaCapo 应用上，VPC 预测（<code>MAX_ITER=12</code>）平均 <strong>IPC</strong> 提升 <strong>21.9%</strong>。</li>
+</ul>
+</li>
+<li><strong>错误预测率降低</strong>：<ul>
+<li>C/C++ 应用的平均间接分支 <strong>MPKI</strong>（每千条指令的错误预测数）从基线的 <strong>4.63</strong> 降至 <strong>0.52</strong>。</li>
+<li>Java 应用的平均间接分支 <strong>MPKI</strong> 从基线的 <strong>11.9</strong> 降至 <strong>5.2</strong>。</li>
+</ul>
+</li>
+<li><strong>能效提升</strong>：<ul>
+<li>C/C++ 应用的平均 <strong>整体能耗</strong> 降低 <strong>19%</strong>，<strong>能量延迟积 (EDP)</strong> 降低 <strong>42%</strong>。</li>
+<li>Java 应用的平均 <strong>整体能耗</strong> 降低 <strong>22%</strong>，<strong>EDP</strong> 降低 <strong>36%</strong>。</li>
+<li>VPC 预测几乎不增加 <strong>最大功耗</strong>（\&lt;0.1%），而专用预测器（如 12KB TTC）则会显著增加功耗（&gt;2%）。</li>
+</ul>
+</li>
+<li><strong>预测效率</strong>：<ul>
+<li>在 C/C++ 应用中，<strong>44.6%</strong> 的正确预测在第一次迭代完成，<strong>81%</strong> 在三次迭代内完成 (<img alt="" src="../images/6351bf18e9fcdeb84ecd799f7df0ea8ad5bcd2de90767e796b714d542f5492ae.jpg" /> <em>Fig. 7. Distribution of the number of iterations (for correct predictions) (MAX_ITER=12).</em>)。</li>
+<li>在 Java 应用中，<strong>44.8%</strong> 的正确预测在第一次迭代完成，<strong>78.7%</strong> 在四次迭代内完成 (<img alt="" src="../images/50e887940b19194f86084e78d99690b01852dc2a50dac6d6d82980c699dda1fb.jpg" /> <em>Fig. 14. Distribution of the number of iterations (for correct predictions) in the Java programs (MAX_ITER¼12).</em>)。</li>
+</ul>
+</li>
+<li><strong>与其他预测器的对比</strong>：<ul>
+<li>VPC 预测的性能等同于一个 <strong>3-6 KB</strong> 的 <strong>Tagged Target Cache (TTC)</strong> 或 <strong>5.5-11 KB</strong> 的 <strong>Cascaded Predictor</strong>，但无需任何额外的专用存储结构 (<img alt="" src="../images/31a5ce21dd89438c98d93e87b18dde609ee4e29913504e8e08b1e80f64cb1170.jpg" /> <em>Fig. 15. Performance of VPC prediction versus tagged target cache.</em>, <img alt="" src="../images/e808428c3e0dd89790200fee48a6991d0230d5637e2862972156112ed6f877f4.jpg" /> <em>Fig. 16. Performance of VPC prediction versus cascaded predictor.</em>)。</li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验</strong></p>
+<ul>
+<li><strong><code>MAX_ITER</code> 参数敏感性分析</strong>：<ul>
+<li>对于目标较少的程序（如 eon, gap），较小的 <code>MAX_ITER</code>（如 2 或 4）即可消除大部分错误预测 (<img alt="" src="../images/64f4f0ad7e2bb5f192e55f18402748497d9c219357ee0d0a8ee241a1f07546d9.jpg" /> <em>Fig. 6. Performance of VPC prediction: (a) IPC improvement and (b) indirect branch MPKI.</em>)。</li>
+<li>对于目标极多的程序（如 perlbmk, perlbench, sjeng），性能随 <code>MAX_ITER</code> 增大而持续提升，但过大的 <code>MAX_ITER</code>（&gt;12）会导致 <strong>BTB 冲突缺失</strong> 增加和 <strong>预测延迟</strong> 变长，反而使性能下降。</li>
+<li><strong>最优 <code>MAX_ITER</code> 值为 12</strong>，在此值下，VPC 在所有基准测试上取得了最佳的性能平衡。</li>
+</ul>
+</li>
+<li><strong>VPC 训练策略对比</strong>：<ul>
+<li>实验比较了四种将正确目标地址插入 BTB 的策略 (<img alt="" src="../images/558e3cc0256b4f00d06e8db076b3217fb08f4b758a712ae6e19fa33e3391e980.jpg" /> <em>Fig. 9. Performance impact of different VPC training schemes.</em>)：<ul>
+<li><strong>Naive-Insert-MAXITER</strong>: 实现简单，但会导致 BTB 中目标地址冗余，降低空间效率。</li>
+<li><strong>Unique-Random</strong>: 随机替换。</li>
+<li><strong>Unique-LRU</strong>: 替换最近最少使用的条目。</li>
+<li><strong>Unique-LFU</strong>: 替换最不频繁使用的条目（默认策略）。</li>
+</ul>
+</li>
+<li>结果表明，<strong>Unique-LFU</strong> 策略性能最佳，因为它保留了更可能在未来被使用的高频目标。</li>
+</ul>
+</li>
+<li><strong>微架构参数影响</strong>：<ul>
+<li><strong>BTB 大小</strong>：VPC 的性能增益随 BTB 容量增大而提高。在 Java 应用这种高冲突场景下，小 BTB（如 512-entry）会严重限制 VPC 的效果 (<img alt="" src="../images/ba632667a52bde7e2f47bf477c5a29df324c8e1c40bd20750fdce84752ca3a2c.jpg" /> <em>TABLE 6 Effect of Different BTB Sizes in Java Applications</em>)。</li>
+<li><strong>处理器激进程度</strong>：在流水线更短、惩罚更小的“非激进”处理器上，VPC 依然能带来 <strong>11.1%</strong> 的平均性能提升，证明其收益具有普适性 (<img alt="" src="../images/e8aaab809d396d1878f46752fe0f4ee154089d24d83ebe2ce46c832e773cefe1.jpg" /> <em>Fig. 17. VPC prediction versus TTC on a less aggressive processor.</em>)。</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>
