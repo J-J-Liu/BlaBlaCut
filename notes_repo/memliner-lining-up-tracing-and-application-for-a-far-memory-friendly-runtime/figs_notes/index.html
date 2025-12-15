@@ -1,0 +1,1519 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-our-main-idea-the-working-sets-of-gc-threads-in-blue-and-application-threads-in-red-during-a-time-window-a-without-or-b-with-the-access-alignment-from-memliner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Our main idea: the working sets of GC threads, in blue, and application threads, in red, during a time window (a) without or (b) with the access alignment from MemLiner.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-prefetching-effectiveness-for-spark-lr-executed-atop-openjdk-12-with-its-default-g1-gc-a-trace-of-faulty-page-index-for-application-threads-only-b-trace-of-faulty-page-index-when-concurrent-tracing-ct-is-enabled-c-disabling-ct-significantly-improves-the-effectiveness-of-linux-default-swap-prefetcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Prefetching effectiveness for Spark LR executed atop OpenJDK 12 (with its default G1 GC): (a) trace of faulty page index for application threads only; (b) trace of faulty page index when concurrent tracing (CT) is enabled; (c) disabling CT significantly improves the effectiveness of Linux’ default swap prefetcher.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-end-to-end-execution-time-b-gc-pause-time-figure-3-concurrent-tracing-improves-overall-performance-data-is-from-10-runs-of-each-program-dots-are-outliers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (a) End-to-end execution time. (b) GC pause time. Figure 3: Concurrent tracing improves overall performance. (Data is from 10 runs of each program; dots are outliers.)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-classification-of-reachable-objects-in-the-heap-red-objects-are-being-accessed-by-the-application-and-shaded-objects-are-what-memliner-intends-to-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Classification of reachable objects in the heap: red objects are being accessed by the application and shaded objects are what MemLiner intends to trace.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-applications-and-datesets-used-for-g1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: Applications and datesets used for G1.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-performance-comparisons-between-g1-gc-yellow-bars-and-memliner-green-bars-under-two-local-memory-ratios-25-and-13-each-bar-is-split-into-application-bottom-with-light-colors-and-gc-top-with-dark-colors-time-in-seconds-the-two-dashed-lines-show-application-time-and-total-time-with-unmodified-jvm-and-100-local-memory-no-swaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: Performance comparisons between G1 GC (yellow bars) and MemLiner (green bars) under two local memory ratios: 25% and 13%; each bar is split into application (bottom with light colors) and GC (top with dark colors) time in seconds. The two dashed lines show application time and total time with unmodified JVM and 100% local memory (no swaps).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-speedups-provided-by-memliner-for-g1-and-shenandoah-speedup-the-average-time-under-each-configuration-using-the-unmodified-jvm-divided-by-that-using-memliner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Speedups provided by MemLiner for G1 and Shenandoah. (speedup: the average time under each configuration using the unmodified JVM divided by that using MemLiner)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-performance-comparisons-for-skm-and-stc-between-the-unmodified-jvm-and-memliner-under-different-local-memory-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Performance comparisons for SKM and STC between the unmodified JVM and MemLiner under different local memory configurations.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-performance-comparison-with-shenandoah-gc-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Performance comparison with Shenandoah GC [25].
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-benchmarks-and-datasets-for-shenandoah" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3: Benchmarks and datasets for Shenandoah.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-performance-comparisons-with-leap-and-semeru-semeru-crashed-on-npr-ntr-and-ndc-ie-neo4j-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9: Performance comparisons with Leap and Semeru; Semeru crashed on NPR, NTR, and NDC (i.e., Neo4j applications).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-memory-footprints-for-skm-stc-and-slr-between-unmodified-jvm-and-memliner-under-25-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10: Memory footprints for SKM, STC, and SLR, between unmodified JVM and MemLiner under 25% rate.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dd82001e2cb012c7ce92ffdf93b1d9d23670cf4ecc7d480b3d7857c63e5de323jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dd82001e2cb012c7ce92ffdf93b1d9d23670cf4ecc7d480b3d7857c63e5de323.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime">MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime 图表详解<a class="headerlink" href="#memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-our-main-idea-the-working-sets-of-gc-threads-in-blue-and-application-threads-in-red-during-a-time-window-a-without-or-b-with-the-access-alignment-from-memliner">Figure 1: Our main idea: the working sets of GC threads, in blue, and application threads, in red, during a time window (a) without or (b) with the access alignment from MemLiner.<a class="headerlink" href="#figure-1-our-main-idea-the-working-sets-of-gc-threads-in-blue-and-application-threads-in-red-during-a-time-window-a-without-or-b-with-the-access-alignment-from-memliner" title="Permanent link">&para;</a></h3>
+<p><img alt="4e4aed0788310a52867da893250402bec646cd5652c4cc83f043745200e66c93.jpg" src="../images/4e4aed0788310a52867da893250402bec646cd5652c4cc83f043745200e66c93.jpg" /></p>
+<ul>
+<li>图片展示了 MemLiner 的核心设计理念，通过对比两种运行时场景来说明其如何优化 GC 与应用线程的内存访问模式。</li>
+<li>左侧子图 (a) “Current runtime” 描绘了传统运行时中 <strong>GC Tracing Thread</strong>（蓝色节点）和 <strong>App Thread</strong>（红色节点）各自独立访问堆对象的情形。两者的工作集（Working Set）在图中表现为两个分离的、不重叠的子图，表明它们访问的对象集合几乎没有交集，导致资源竞争和缓存失效。</li>
+<li>右侧子图 (b) “MemLiner runtime” 展示了引入 MemLiner 后的效果。此时，GC 线程的访问路径被调整，使其与应用线程的访问路径对齐。图中可见，许多原本只属于 GC 工作集的蓝色节点，现在也出现在应用线程的访问路径上（表现为红蓝混合节点），形成了一个 <strong>Aligned Working Set</strong>。这表示两者的访问模式趋于一致，工作集高度重合。</li>
+<li>这种对齐带来了两大关键收益：一是<strong>减少本地内存工作集</strong>，因为 GC 不再需要为自身维护一套独立的缓存；二是<strong>提升远程内存预取效率</strong>，因为 OS 预取器看到的是更连贯、可预测的访问模式。</li>
+<li>该图直观地解释了论文摘要中提到的“lining up”概念，即通过协调 GC 和应用线程的访问顺序，解决因访问模式不一致导致的性能瓶颈。</li>
+</ul>
+<h3 id="figure-2-prefetching-effectiveness-for-spark-lr-executed-atop-openjdk-12-with-its-default-g1-gc-a-trace-of-faulty-page-index-for-application-threads-only-b-trace-of-faulty-page-index-when-concurrent-tracing-ct-is-enabled-c-disabling-ct-significantly-improves-the-effectiveness-of-linux-default-swap-prefetcher">Figure 2: Prefetching effectiveness for Spark LR executed atop OpenJDK 12 (with its default G1 GC): (a) trace of faulty page index for application threads only; (b) trace of faulty page index when concurrent tracing (CT) is enabled; (c) disabling CT significantly improves the effectiveness of Linux’ default swap prefetcher.<a class="headerlink" href="#figure-2-prefetching-effectiveness-for-spark-lr-executed-atop-openjdk-12-with-its-default-g1-gc-a-trace-of-faulty-page-index-for-application-threads-only-b-trace-of-faulty-page-index-when-concurrent-tracing-ct-is-enabled-c-disabling-ct-significantly-improves-the-effectiveness-of-linux-default-swap-prefetcher" title="Permanent link">&para;</a></h3>
+<p><img alt="8227d14ee7ea3fe15c2fa11703e87c2b944617798aa205d76e5bdc91ae6a1666.jpg" src="../images/8227d14ee7ea3fe15c2fa11703e87c2b944617798aa205d76e5bdc91ae6a1666.jpg" /></p>
+<ul>
+<li>图片展示了在 OpenJDK 12（默认 G1 GC）上运行 Spark Logistic Regression（LR）时，<strong>并发追踪（Concurrent Tracing, CT）对预取有效性的影响</strong>。</li>
+<li>图 (a) 显示仅应用线程触发页错误时的页面索引轨迹：访问模式高度<strong>局部化、流式化</strong>，表现为多个水平线段，表明数据按顺序或步进方式被访问，有利于预取器识别并提前加载。</li>
+<li>图 (b) 显示启用 CT 后的页错误轨迹：点分布<strong>高度离散、随机化</strong>，打破了原有的访问模式。这是因为 GC 线程从根对象开始图遍历，其访问路径与应用线程不一致，导致整体内存访问行为变得不可预测。</li>
+<li>图 (c) 以堆叠柱状图量化预取效果：<ul>
+<li><strong>CT Disabled（禁用并发追踪）</strong>：65% 的页错误由预取解决（绿色），35% 为按需交换（红色）。</li>
+<li><strong>CT Enabled（启用并发追踪）</strong>：仅 39% 由预取解决，61% 为按需交换。</li>
+</ul>
+</li>
+<li>数据对比表明，<strong>启用 CT 使预取效率下降约 40%</strong>（从 65% 降至 39%），导致更多昂贵的远程内存访问。</li>
+<li>此实验使用的是 Linux 默认交换预取器，若换用更先进的预取器如 Leap，干扰影响会更大，因为其依赖更清晰的访问模式。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>预取解决比例</th>
+<th>按需交换比例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CT Disabled</td>
+<td><strong>65%</strong></td>
+<td>35%</td>
+</tr>
+<tr>
+<td>CT Enabled</td>
+<td>39%</td>
+<td><strong>61%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>核心结论：<strong>GC 并发追踪严重破坏了应用的内存访问局部性，导致预取失效，显著增加远程内存访问开销</strong>。这正是 MemLiner 设计要解决的核心问题——通过协调 GC 与应用线程的访问路径来恢复局部性和预取效率。</li>
+</ul>
+<h3 id="a-end-to-end-execution-time-b-gc-pause-time-figure-3-concurrent-tracing-improves-overall-performance-data-is-from-10-runs-of-each-program-dots-are-outliers">(a) End-to-end execution time. (b) GC pause time. Figure 3: Concurrent tracing improves overall performance. (Data is from 10 runs of each program; dots are outliers.)<a class="headerlink" href="#a-end-to-end-execution-time-b-gc-pause-time-figure-3-concurrent-tracing-improves-overall-performance-data-is-from-10-runs-of-each-program-dots-are-outliers" title="Permanent link">&para;</a></h3>
+<p><img alt="a2d640b5828540a82920b345ba7d3d84eaf68ec94e857fe263d6dd5d266df4bc.jpg" src="../images/a2d640b5828540a82920b345ba7d3d84eaf68ec94e857fe263d6dd5d266df4bc.jpg" /></p>
+<ul>
+<li>图片包含两个子图，分别展示在不同 GC 配置下 Spark LR 的 <strong>端到端执行时间</strong> 与 <strong>GC 暂停时间</strong>，数据基于 10 次运行，点状标记为异常值。</li>
+<li>子图 (a) 显示 <strong>CT Disabled</strong>（并发追踪关闭）时，执行时间中位数约为 400 秒；<strong>CT Enabled</strong>（并发追踪开启）时，中位数约为 380 秒，表明启用并发追踪可缩短整体执行时间。</li>
+<li>子图 (b) 显示 <strong>CT Disabled</strong> 时，GC 暂停时间中位数约为 130 秒；<strong>CT Enabled</strong> 时，中位数约为 40 秒，说明并发追踪显著降低单次 GC 暂停开销。</li>
+<li>数据对比显示，尽管并发追踪会引入额外的内存访问干扰（如第 3 节所述），但其带来的 <strong>暂停时间减少</strong> 和 <strong>更频繁的垃圾回收</strong> 可避免触发代价高昂的 Full GC，从而提升整体性能。</li>
+<li>下表总结关键数据：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>端到端执行时间（中位数）</th>
+<th>GC 暂停时间（中位数）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CT Disabled</td>
+<td>~400 秒</td>
+<td>~130 秒</td>
+</tr>
+<tr>
+<td>CT Enabled</td>
+<td>~380 秒</td>
+<td>~40 秒</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>并发追踪虽增加局部内存干扰，但通过减少 Full GC 触发频率和缩短暂停时间，最终提升整体吞吐量</strong>，因此简单禁用并发追踪并非可行方案。</li>
+</ul>
+<h3 id="figure-4-classification-of-reachable-objects-in-the-heap-red-objects-are-being-accessed-by-the-application-and-shaded-objects-are-what-memliner-intends-to-trace">Figure 4: Classification of reachable objects in the heap: red objects are being accessed by the application and shaded objects are what MemLiner intends to trace.<a class="headerlink" href="#figure-4-classification-of-reachable-objects-in-the-heap-red-objects-are-being-accessed-by-the-application-and-shaded-objects-are-what-memliner-intends-to-trace" title="Permanent link">&para;</a></h3>
+<p><img alt="d2882792f33c8dfaa8acedefd832e654df60873e6853b12647417b91697b7598.jpg" src="../images/d2882792f33c8dfaa8acedefd832e654df60873e6853b12647417b91697b7598.jpg" /></p>
+<ul>
+<li>图片展示了 MemLiner 对堆中可达对象的分类策略，核心目标是<strong>协调 GC 与应用线程的内存访问路径</strong>，以减少本地内存工作集并提升远程内存预取效率。</li>
+<li>图中左侧为对象图结构，从 <strong>Roots</strong> 开始向下遍历，所有节点代表 <strong>Live Objects</strong>，通过指针连接形成图。</li>
+<li>右侧图例将对象分为三类，每类对应不同的 GC 处理策略：<ul>
+<li><strong>(1) In local memory (GC should touch)</strong>：位于本地内存的对象，GC 应立即追踪。图中用<strong>红色实心圆</strong>表示，这些对象通常由应用线程访问并通过 <strong>PC queue</strong>（Producer-Consumer Queue）通知 GC。</li>
+<li><strong>(2) In remote memory used by applications soon (GC should touch)</strong>：虽在远程内存但即将被应用访问的对象，GC 应主动追踪以“预付”远程交换成本。图中用<strong>波浪纹圆圈</strong>表示，这类对象通常位于红色对象的引用链下游（如 3 跳内）。</li>
+<li><strong>(3) In remote memory not used by applications soon (GC should wait)</strong>：在远程内存且近期不会被应用访问的对象，GC 应推迟追踪以避免无谓的页面错误和交换。图中用<strong>空心圆</strong>表示。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>位置</th>
+<th>应用访问预期</th>
+<th>GC 策略</th>
+<th>图形标识</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(1)</td>
+<td>本地内存</td>
+<td>已被或正被访问</td>
+<td><strong>立即追踪</strong></td>
+<td>红色实心圆</td>
+</tr>
+<tr>
+<td>(2)</td>
+<td>远程内存</td>
+<td>即将被访问</td>
+<td><strong>主动追踪</strong></td>
+<td>波浪纹圆圈</td>
+</tr>
+<tr>
+<td>(3)</td>
+<td>远程内存</td>
+<td>近期不会被访问</td>
+<td><strong>推迟追踪</strong></td>
+<td>空心圆</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图中还标注了 <strong>Not in PC queue</strong> 的对象（斜线填充圆），表示它们虽可能属于第 (1) 类，但因 <strong>PC queue</strong> 是环形缓冲区，部分对象指针可能被覆盖而未及时通知 GC，需依赖后续常规图遍历处理。</li>
+<li>整体设计体现了 MemLiner 的核心思想：<strong>优先处理与应用访问路径重叠的对象</strong>，从而最小化干扰、优化预取，并确保 GC 最终能完成完整的可达性分析。</li>
+</ul>
+<h3 id="426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1jpg">426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1.jpg<a class="headerlink" href="#426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1.jpg" src="../images/426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1.jpg" /></p>
+<ul>
+<li>该图片展示的是 <strong>Algorithm 2: Object read and write semantics in application threads</strong>，用于描述 MemLiner 在应用线程中如何处理对象读写操作的语义。</li>
+<li>算法输入为对象读写访问语句，如 <code>a = b.f</code>（读取）或 <code>b.f = a</code>（写入），其核心目标是通过 <strong>read/write barrier</strong> 机制协调 GC 与应用线程的内存访问路径。</li>
+<li>算法执行流程如下：<ul>
+<li>第一步：调用 <code>ENQUEUE(PQ, b)</code>，将当前访问的对象引用 <code>b</code> 推入线程本地的 <strong>Producer-Consumer Queue (PQ)</strong>，供 GC 线程消费。</li>
+<li>第二步：调用 <code>UPDATEPOINTER(b, CURRENTEPOCH())</code>，更新对象 <code>b</code> 的指针，将其 <strong>timestamp</strong> 字段设置为当前 epoch 值，以标记该对象最近被访问的时间。</li>
+<li>第三步：判断 <code>a</code> 是否为对象引用（<code>IsReference(a)</code>），若是，则进一步更新 <code>a</code> 的指针时间戳，确保后续通过 <code>a</code> 访问的对象也能被正确追踪。</li>
+</ul>
+</li>
+<li>此算法的关键在于利用 <strong>epoch-based timestamping</strong> 机制，使 GC 能够估算对象是否仍在本地内存中，从而决定是否优先追踪该对象，实现“工作集对齐”。</li>
+<li>该算法在实现上通过插入汇编指令优化性能，避免因频繁屏障操作引入过高开销，同时保证指针的虚拟地址访问不受影响（仅使用低42位进行寻址）。</li>
+<li>该设计体现了 MemLiner 的核心思想：<strong>不改变应用语义，仅调整 GC 的访问顺序</strong>，使其与应用线程的访问路径保持一致，从而减少本地内存冲突和提升远程内存预取效率。</li>
+</ul>
+<h3 id="883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609jpg">883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg<a class="headerlink" href="#883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg" src="../images/883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg" /></p>
+<ul>
+<li>该图片展示的是 <strong>Algorithm 3: Main tracing logic in MemLiner’s GC</strong>，即 MemLiner 垃圾回收器中的主追踪算法伪代码。</li>
+<li>算法输入为两个队列：<strong>Producer-consumer queue PQ</strong>（由应用线程填充的红色对象队列）和 <strong>tracing queue TQ</strong>（传统图遍历队列，初始化为根对象）。</li>
+<li>输出目标是：<strong>Fully marked live bitmap for all live objects</strong>，即完成所有存活对象的标记位图。</li>
+<li>核心逻辑是 <strong>交替处理模式</strong>：<ul>
+<li>当 <strong>PQ 不为空</strong>时，优先调用 <code>TRACE RED AND CATEGORY2(TQ, PQ)</code> 处理来自应用访问路径的“红色”对象及其邻近的“类别2”对象。</li>
+<li>否则，进入默认图遍历模式，从 <strong>TQ</strong> 中取出对象进行处理。</li>
+</ul>
+</li>
+<li>在默认模式中，算法对每个对象 <code>o</code> 进行 <strong>本地性估计</strong>：<ul>
+<li>通过比较对象指针中的时间戳 <code>TS(o)</code> 与当前纪元 <code>CURRENT EPOCH()</code> 的差值 <code>DIFF</code>。</li>
+<li>如果 <code>DIFF &gt; δ</code> 且延迟计数 <code>dl &lt; MAX_DL</code>，则将对象重新入队 <code>TQ</code> 并增加延迟计数 <code>dl + 1</code>，以推迟其处理。</li>
+<li>此机制旨在避免过早触发远程内存页错误，从而减少干扰。</li>
+</ul>
+</li>
+<li>对于未被标记的对象（<code>CHECK LIVE BITMAP(o) = 0</code>），执行标准标记操作：<ul>
+<li>调用 <code>MARK LIVE BIT MAP(o)</code> 将其标记为存活。</li>
+<li>遍历其所有非空引用字段 <code>f</code>，提取对象引用 <code>p</code>，并将其以 <code>(p, 0)</code> 的形式入队 <code>TQ</code>，延迟限制初始化为0。</li>
+</ul>
+</li>
+<li>该算法体现了 MemLiner 的核心设计思想：<strong>动态调整 GC 追踪顺序</strong>，使其与应用访问模式对齐，同时通过延迟处理远程对象来优化性能。</li>
+</ul>
+<h3 id="6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6jpg">6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6.jpg<a class="headerlink" href="#6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6.jpg" src="../images/6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6.jpg" /></p>
+<ul>
+<li>该图片展示了 MemLiner 系统中用于处理“红色对象”（即被应用线程访问的对象）和“第二类对象”（即将被应用访问的邻近对象）的核心算法，名为 <code>TRACE_RED_AND_CATEGORY2</code>。</li>
+<li>算法输入包含两个队列：<strong>Producer-consumer queue (PQ)</strong> 和 <strong>regular tracing queue (TQ)</strong>。前者由应用线程填充，后者是 GC 常规图遍历使用的队列。</li>
+<li>主函数 <code>TRACE_RED_AND_CATEGORY2</code> 的逻辑是：只要 PQ 不为空，就持续从 PQ 中取出一个对象 <code>o</code>，然后调用递归函数 <code>EXPLORE(o, TQ, 0)</code> 对其进行标记和深度探索。</li>
+<li>递归函数 <code>EXPLORE</code> 接收三个参数：当前对象 <code>o</code>、常规追踪队列 <code>TQ</code> 和当前探索深度 <code>depth</code>。</li>
+<li>在 <code>EXPLORE</code> 函数内部，首先通过 <code>MARKLIVEBITMAP(o)</code> 将对象 <code>o</code> 标记为存活，这是 GC 的核心操作。</li>
+<li>接着，函数会遍历对象 <code>o</code> 中所有非空的引用类型字段 <code>f</code>，获取其指向的对象引用 <code>p</code>。</li>
+<li>如果当前探索深度 <code>depth</code> 小于预设的最大深度 <code>MAX_Depth</code>（默认值为3），则递归调用 <code>EXPLORE(p, TQ, depth + 1)</code>，继续深入探索该对象的引用链。</li>
+<li>如果深度已达到或超过 <code>MAX_Depth</code>，则不再递归，而是将该对象引用 <code>p</code> 及其延迟限制 <code>0</code> 组成一个元组 <code>&lt;p, 0&gt;</code>，放入常规追踪队列 <code>TQ</code> 中，等待后续在正常图遍历阶段处理。</li>
+<li>此设计旨在平衡“及时性”与“效率”：优先处理应用刚访问过的对象及其直接关联对象（红色和第二类），避免过深的递归导致不必要的远程内存交换；同时，将深层对象交由常规遍历处理，确保最终所有可达对象都能被标记。</li>
+<li>该算法是 MemLiner 实现“工作集对齐”的关键机制，它使得 GC 的内存访问路径能紧跟应用线程，从而减少本地内存竞争和提升远程内存预取效率。</li>
+</ul>
+<h3 id="table-1-applications-and-datesets-used-for-g1">Table 1: Applications and datesets used for G1.<a class="headerlink" href="#table-1-applications-and-datesets-used-for-g1" title="Permanent link">&para;</a></h3>
+<p><img alt="cf0604e66ccbedec141c8a790328c32cd8538cf6184bcf099e73911cc3eadaec.jpg" src="../images/cf0604e66ccbedec141c8a790328c32cd8538cf6184bcf099e73911cc3eadaec.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 1</strong>，标题为 “Applications and datasets used for G1”，用于说明在评估 MemLiner 时所使用的应用程序及其对应的数据集或工作负载配置。</li>
+<li>表格内容按应用分类，共包含 <strong>5 类主流云应用</strong>：Spark、Cassandra、Neo4j、QuickCached 和 DayTrader。</li>
+<li>每类应用下进一步细分具体任务/工作负载，并列出其对应的 <strong>数据集名称</strong> 或 <strong>操作模式</strong> 及 <strong>规模参数</strong>。</li>
+</ul>
+<p>以下是表格内容的结构化整理：</p>
+<table>
+<thead>
+<tr>
+<th>Application</th>
+<th>Workload / Dataset</th>
+<th>Size / Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Spark [74]</strong></td>
+<td>MLlib KMeans (SKM)</td>
+<td>Wikipedia France [4] — <strong>1.1GB</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Spark Linear Regression (SLR)</td>
+<td>Wikipedia English [4] — <strong>3GB</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Spark Transitive Closure (STC)</td>
+<td>Synthetic graph — <strong>1.5M edges, 384K vertices</strong></td>
+</tr>
+<tr>
+<td><strong>Cassandra [12]</strong></td>
+<td>Update Intensive (CUI)</td>
+<td>Update 50%, Insert 50% — <strong>10M ops</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Read Intensive (CRI)</td>
+<td>Read 50%, Insert 50% — <strong>10M ops</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Insert Intensive (CII)</td>
+<td>Insert 50%, Update 25%, Read 25% — <strong>10M ops</strong></td>
+</tr>
+<tr>
+<td><strong>Neo4j [52]</strong></td>
+<td>PageRank (NPR)</td>
+<td>Wikipedia Turkish [4] — <strong>14M edges, 544K vertices</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Triangle Counting (NTR)</td>
+<td>Wikipedia Turkish [4] — <strong>14M edges, 544K vertices</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Degree Centrality (NDC)</td>
+<td>Dogster Friends [4] — <strong>8.5M edges, 451K vertices</strong></td>
+</tr>
+<tr>
+<td><strong>QuickCached [3]</strong></td>
+<td>Write Dominant (QWD)</td>
+<td>Insert 60%, Read 40% — <strong>9M ops</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Read Dominant (QRD)</td>
+<td>Insert 20%, Read 80% — <strong>9M ops</strong></td>
+</tr>
+<tr>
+<td><strong>DayTrader [34]</strong></td>
+<td>Tradesoap (DTS)</td>
+<td>Synthetic set of stocks — <strong>12288 users, 8192 sessions</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有应用均覆盖典型云场景：<strong>大数据分析（Spark）</strong>、<strong>分布式数据库（Cassandra）</strong>、<strong>图数据库（Neo4j）</strong>、<strong>缓存服务（QuickCached）</strong> 和 <strong>交易模拟（DayTrader）</strong>。</li>
+<li>数据集来源标注清晰，如 Wikipedia、Dogster Friends 等，部分为合成数据（Synthetic graph/set）。</li>
+<li>操作规模以 <strong>ops（操作次数）</strong> 或 <strong>数据量（GB/边数/顶点数）</strong> 衡量，体现不同负载强度与访问模式。</li>
+<li>此表为后续性能对比（如 Figure 6、Table 2）提供基准，确保实验覆盖多样化的内存访问行为（顺序、随机、混合）。</li>
+</ul>
+<h3 id="figure-6-performance-comparisons-between-g1-gc-yellow-bars-and-memliner-green-bars-under-two-local-memory-ratios-25-and-13-each-bar-is-split-into-application-bottom-with-light-colors-and-gc-top-with-dark-colors-time-in-seconds-the-two-dashed-lines-show-application-time-and-total-time-with-unmodified-jvm-and-100-local-memory-no-swaps">Figure 6: Performance comparisons between G1 GC (yellow bars) and MemLiner (green bars) under two local memory ratios: 25% and 13%; each bar is split into application (bottom with light colors) and GC (top with dark colors) time in seconds. The two dashed lines show application time and total time with unmodified JVM and 100% local memory (no swaps).<a class="headerlink" href="#figure-6-performance-comparisons-between-g1-gc-yellow-bars-and-memliner-green-bars-under-two-local-memory-ratios-25-and-13-each-bar-is-split-into-application-bottom-with-light-colors-and-gc-top-with-dark-colors-time-in-seconds-the-two-dashed-lines-show-application-time-and-total-time-with-unmodified-jvm-and-100-local-memory-no-swaps" title="Permanent link">&para;</a></h3>
+<p><img alt="55073cf894edb9bce9285b239bb38cddbbf6a84e8424ce301b2f2bd085adb569.jpg" src="../images/55073cf894edb9bce9285b239bb38cddbbf6a84e8424ce301b2f2bd085adb569.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>G1 GC</strong> 和 <strong>MemLiner</strong> 两种运行时下，12个不同应用在 <strong>25%</strong> 和 <strong>13%</strong> 本地内存配置下的性能对比。</li>
+<li>每个柱状图分为两部分：底部浅色代表 <strong>Application Time</strong>（应用执行时间），顶部深色代表 <strong>GC Time</strong>（垃圾回收时间），单位为秒。</li>
+<li>两条虚线分别表示在 <strong>100% 本地内存</strong>（无交换）条件下，未修改 JVM 的 <strong>纯应用时间</strong>（蓝色虚线）和 <strong>总时间</strong>（橙色虚线），作为性能基准。</li>
+<li><strong>MemLiner</strong> 在所有测试场景中均优于默认 <strong>G1 GC</strong>，尤其在 <strong>13% 本地内存</strong> 配置下提升更为显著。</li>
+<li>多数应用的 <strong>GC 时间</strong> 在 MemLiner 下大幅缩短，表明其有效减少了因 GC 干扰导致的远程内存访问和页面置换开销。</li>
+<li>应用如 <strong>CUI、CRI、CII、QWD、QRD、DTS</strong> 等在低内存配置下，MemLiner 的总执行时间接近甚至低于 100% 本地内存基准，说明其优化效果可抵消远端内存延迟。</li>
+<li>对于 <strong>STC、NTR</strong> 等随机访问模式应用，MemLiner 提升相对较小，因其访问模式本身难以被预取机制优化。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>本地内存比例</th>
+<th>G1 GC 总时间 (s)</th>
+<th>MemLiner 总时间 (s)</th>
+<th>速度提升倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKM</td>
+<td>25%</td>
+<td>~150</td>
+<td>~100</td>
+<td>~1.5x</td>
+</tr>
+<tr>
+<td>SKM</td>
+<td>13%</td>
+<td>~200</td>
+<td>~130</td>
+<td>~1.5x</td>
+</tr>
+<tr>
+<td>SLR</td>
+<td>25%</td>
+<td>~380</td>
+<td>~280</td>
+<td>~1.4x</td>
+</tr>
+<tr>
+<td>SLR</td>
+<td>13%</td>
+<td>~480</td>
+<td>~320</td>
+<td>~1.5x</td>
+</tr>
+<tr>
+<td>STC</td>
+<td>25%</td>
+<td>~250</td>
+<td>~200</td>
+<td>~1.25x</td>
+</tr>
+<tr>
+<td>STC</td>
+<td>13%</td>
+<td>~300</td>
+<td>~220</td>
+<td>~1.4x</td>
+</tr>
+<tr>
+<td>CUI</td>
+<td>25%</td>
+<td>~300</td>
+<td>~180</td>
+<td>~1.7x</td>
+</tr>
+<tr>
+<td>CUI</td>
+<td>13%</td>
+<td>~800</td>
+<td>~450</td>
+<td>~1.8x</td>
+</tr>
+<tr>
+<td>CRI</td>
+<td>25%</td>
+<td>~300</td>
+<td>~200</td>
+<td>~1.5x</td>
+</tr>
+<tr>
+<td>CRI</td>
+<td>13%</td>
+<td>~650</td>
+<td>~500</td>
+<td>~1.3x</td>
+</tr>
+<tr>
+<td>CII</td>
+<td>25%</td>
+<td>~350</td>
+<td>~220</td>
+<td>~1.6x</td>
+</tr>
+<tr>
+<td>CII</td>
+<td>13%</td>
+<td>~800</td>
+<td>~550</td>
+<td>~1.5x</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>MemLiner</strong> 通过协调应用与 GC 的内存访问路径，显著降低了 <strong>本地内存工作集</strong> 和 <strong>页面置换次数</strong>，从而提升了整体性能。</li>
+<li>该图验证了论文核心观点：<strong>对齐应用与 GC 的访问模式</strong> 是优化远端内存系统的关键。</li>
+</ul>
+<h3 id="table-2-speedups-provided-by-memliner-for-g1-and-shenandoah-speedup-the-average-time-under-each-configuration-using-the-unmodified-jvm-divided-by-that-using-memliner">Table 2: Speedups provided by MemLiner for G1 and Shenandoah. (speedup: the average time under each configuration using the unmodified JVM divided by that using MemLiner)<a class="headerlink" href="#table-2-speedups-provided-by-memliner-for-g1-and-shenandoah-speedup-the-average-time-under-each-configuration-using-the-unmodified-jvm-divided-by-that-using-memliner" title="Permanent link">&para;</a></h3>
+<p><img alt="69ce5f8751fd4ffc6a4e72e79ad7656d8419bc813d00e94e5b40949f9c87050f.jpg" src="../images/69ce5f8751fd4ffc6a4e72e79ad7656d8419bc813d00e94e5b40949f9c87050f.jpg" /></p>
+<ul>
+<li>
+<p><strong>图片内容概述</strong>：该图是论文 Table 2，标题为“MemLiner 为 G1 和 Shenandoah 提供的加速比”，数据定义为“未修改 JVM 的平均执行时间除以 MemLiner 的平均执行时间”。</p>
+</li>
+<li>
+<p><strong>表格结构解析</strong>：</p>
+<ul>
+<li>行维度：本地内存配置（Local Memory Configuration），包含 <strong>25% Local</strong> 和 <strong>13% Local</strong> 两种。</li>
+<li>列维度：分为 <strong>G1 GC</strong> 和 <strong>Shenandoah GC</strong> 两大组，每组下再细分为三列：<strong>App</strong>（应用执行时间）、<strong>GC</strong>（垃圾回收时间）、<strong>All</strong>（端到端总时间）。</li>
+</ul>
+</li>
+<li>
+<p><strong>具体数据呈现</strong>：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Local Memory Configuration</th>
+<th>G1 GC</th>
+<th></th>
+<th></th>
+<th>Shenandoah GC</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>App</td>
+<td>GC</td>
+<td>All</td>
+<td>App</td>
+<td>GC</td>
+<td>All</td>
+</tr>
+<tr>
+<td><strong>25% Local</strong></td>
+<td><strong>1.45×</strong></td>
+<td><strong>1.65×</strong></td>
+<td><strong>1.48×</strong></td>
+<td><strong>1.88×</strong></td>
+<td><strong>15.33×</strong></td>
+<td><strong>2.16×</strong></td>
+</tr>
+<tr>
+<td><strong>13% Local</strong></td>
+<td><strong>1.46×</strong></td>
+<td><strong>1.79×</strong></td>
+<td><strong>1.51×</strong></td>
+<td><strong>1.60×</strong></td>
+<td><strong>6.20×</strong></td>
+<td><strong>1.80×</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>关键观察点</strong>：</p>
+<ul>
+<li>在 <strong>G1 GC</strong> 下，MemLiner 对 <strong>GC 时间</strong> 的优化效果最显著（1.65× 至 1.79×），其次是 <strong>总时间</strong>（1.48× 至 1.51×），<strong>应用时间</strong>提升相对较小（1.45× 至 1.46×）。</li>
+<li>在 <strong>Shenandoah GC</strong> 下，<strong>GC 时间</strong>的加速比极其突出（15.33× @25% Local, 6.20× @13% Local），表明原生 Shenandoah 在远内存场景下 GC 性能极差，MemLiner 有效缓解了其并发追踪与应用访问的干扰。</li>
+<li><strong>Shenandoah</strong> 的 <strong>总时间加速比</strong>（2.16× / 1.80×）高于 <strong>G1</strong>（1.48× / 1.51×），说明 MemLiner 对高度并发的 GC 更具价值。</li>
+<li>当本地内存从 25% 降至 13%，所有加速比均略有提升，印证了 MemLiner 在资源紧张时效果更明显。</li>
+</ul>
+</li>
+<li>
+<p><strong>结论性陈述</strong>：</p>
+<ul>
+<li>MemLiner 能显著提升 <strong>G1</strong> 和 <strong>Shenandoah</strong> 在远内存环境下的性能，尤其对 <strong>Shenandoah GC</strong> 的优化幅度巨大。</li>
+<li>加速主要来源于减少 <strong>GC 开销</strong> 和降低 <strong>局部内存缺失</strong>，从而改善整体吞吐量。</li>
+<li>数据验证了 MemLiner 的核心设计目标——通过协调应用与 GC 的内存访问路径，实现工作集对齐和预取效率提升。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-7-performance-comparisons-for-skm-and-stc-between-the-unmodified-jvm-and-memliner-under-different-local-memory-configurations">Figure 7: Performance comparisons for SKM and STC between the unmodified JVM and MemLiner under different local memory configurations.<a class="headerlink" href="#figure-7-performance-comparisons-for-skm-and-stc-between-the-unmodified-jvm-and-memliner-under-different-local-memory-configurations" title="Permanent link">&para;</a></h3>
+<p><img alt="0be4836eee6796ebf973ad82e1be98b6c12810b27cce42d63d8fa3fc231514c7.jpg" src="../images/0be4836eee6796ebf973ad82e1be98b6c12810b27cce42d63d8fa3fc231514c7.jpg" /></p>
+<ul>
+<li>图表展示了在不同本地内存比例配置下，<strong>SKM</strong> 和 <strong>STC</strong> 两个 Spark 应用在 <strong>Unmodified JVM</strong>（未修改的 JVM）与 <strong>MemLiner</strong> 之间的性能对比，纵轴为归一化执行时间（Normalized Time），横轴为本地内存比例（Local Memory Ratio %）。</li>
+<li><strong>MemLiner 在低内存比例下优势显著</strong>：当本地内存比例低于 50% 时，MemLiner 的归一化执行时间明显低于 Unmodified JVM。例如，在 10% 本地内存比例下，SKM 的 MemLiner 执行时间约为 1.5，而 Unmodified JVM 高达 4.0；STC 的 MemLiner 约为 1.2，Unmodified JVM 约为 3.6。</li>
+<li><strong>随着本地内存比例增加，性能差距缩小</strong>：当本地内存比例达到 50% 及以上时，MemLiner 与 Unmodified JVM 的归一化执行时间趋于一致，均接近 1.0，表明此时 MemLiner 的优化效果不再显著。</li>
+<li><strong>SKM 与 STC 表现略有差异</strong>：在相同本地内存比例下，STC 的 MemLiner 性能优于 SKM，说明不同应用对 MemLiner 的响应程度存在差异，可能与其内存访问模式有关。</li>
+<li><strong>关键转折点在 50% 本地内存比例</strong>：图表显示，当本地内存比例超过 50% 时，MemLiner 与 Unmodified JVM 的性能基本持平，这与论文中提到的“当本地内存比例超过 50% 时，MemLiner 的有效性降低”相吻合。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>本地内存比例 (%)</th>
+<th>SKM (Unmodified JVM)</th>
+<th>SKM (MemLiner)</th>
+<th>STC (Unmodified JVM)</th>
+<th>STC (MemLiner)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>~4.0</td>
+<td>~1.5</td>
+<td>~3.6</td>
+<td>~1.2</td>
+</tr>
+<tr>
+<td>20</td>
+<td>~3.0</td>
+<td>~1.8</td>
+<td>~2.5</td>
+<td>~1.3</td>
+</tr>
+<tr>
+<td>30</td>
+<td>~2.2</td>
+<td>~1.6</td>
+<td>~2.0</td>
+<td>~1.2</td>
+</tr>
+<tr>
+<td>40</td>
+<td>~1.8</td>
+<td>~1.4</td>
+<td>~1.6</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>50</td>
+<td>~1.4</td>
+<td>~1.2</td>
+<td>~1.3</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>60+</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>~1.0</td>
+<td>~1.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>结论</strong>：MemLiner 在本地内存资源紧张（\&lt;50%）时能显著提升应用性能，尤其适用于远内存场景；而在本地内存充足时，其优化效果有限，系统表现与原生 JVM 相当。</li>
+</ul>
+<h3 id="figure-8-performance-comparison-with-shenandoah-gc-25">Figure 8: Performance comparison with Shenandoah GC [25].<a class="headerlink" href="#figure-8-performance-comparison-with-shenandoah-gc-25" title="Permanent link">&para;</a></h3>
+<p><img alt="d0137e718e875c4a0ad853b181e1e372f4948cd23b35ee9f290f4cf5fd520a38.jpg" src="../images/d0137e718e875c4a0ad853b181e1e372f4948cd23b35ee9f290f4cf5fd520a38.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>Shenandoah GC</strong> 下，<strong>MemLiner</strong> 与 <strong>Unmodified JVM</strong> 在不同本地内存比例（25% 和 13%）下的性能对比，测试应用包括 <strong>Spark</strong> 和 <strong>Neo4j</strong>。</li>
+<li>图表分为左右两部分：左侧为 Spark 应用（SKM、SLR、STC），右侧为 Neo4j 应用（NPR、NTR、NDC）。</li>
+<li>纵轴表示执行时间（秒），横轴表示不同应用及本地内存配置。</li>
+<li><strong>All Local</strong>（虚线）代表无远程内存交换的基准性能，作为理想情况参考。</li>
+<li><strong>Unmodified JVM</strong>（黄色柱状图）显示未优化 JVM 在远内存环境下的性能退化。</li>
+<li><strong>MemLiner</strong>（绿色柱状图）显示经过优化后的性能提升，显著优于未修改版本。</li>
+<li>所有测试场景中，MemLiner 均大幅缩短执行时间，尤其在 13% 本地内存配置下效果更明显。</li>
+<li>Spark 应用中，<strong>STC</strong> 在 13% 配置下性能提升最显著，从约 4000 秒降至约 2000 秒。</li>
+<li>Neo4j 应用中，<strong>NDC</strong> 在 13% 配置下从约 600 秒降至约 400 秒，提升幅度最大。</li>
+<li>数据表明，<strong>MemLiner 在 Shenandoah GC 下平均加速 2.16×（25% 本地内存）和 1.80×（13% 本地内存）</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>本地内存比例</th>
+<th>Unmodified JVM (s)</th>
+<th>MemLiner (s)</th>
+<th>加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKM</td>
+<td>25%</td>
+<td>~1000</td>
+<td>~600</td>
+<td>~1.7x</td>
+</tr>
+<tr>
+<td>SKM</td>
+<td>13%</td>
+<td>~1500</td>
+<td>~900</td>
+<td>~1.7x</td>
+</tr>
+<tr>
+<td>SLR</td>
+<td>25%</td>
+<td>~2000</td>
+<td>~1200</td>
+<td>~1.7x</td>
+</tr>
+<tr>
+<td>SLR</td>
+<td>13%</td>
+<td>~2500</td>
+<td>~1500</td>
+<td>~1.7x</td>
+</tr>
+<tr>
+<td>STC</td>
+<td>25%</td>
+<td>~3000</td>
+<td>~1800</td>
+<td>~1.7x</td>
+</tr>
+<tr>
+<td>STC</td>
+<td>13%</td>
+<td>~4000</td>
+<td>~2000</td>
+<td><strong>2.0x</strong></td>
+</tr>
+<tr>
+<td>NPR</td>
+<td>25%</td>
+<td>~450</td>
+<td>~350</td>
+<td>~1.3x</td>
+</tr>
+<tr>
+<td>NPR</td>
+<td>13%</td>
+<td>~500</td>
+<td>~400</td>
+<td>~1.3x</td>
+</tr>
+<tr>
+<td>NTR</td>
+<td>25%</td>
+<td>~400</td>
+<td>~300</td>
+<td>~1.3x</td>
+</tr>
+<tr>
+<td>NTR</td>
+<td>13%</td>
+<td>~500</td>
+<td>~400</td>
+<td>~1.3x</td>
+</tr>
+<tr>
+<td>NDC</td>
+<td>25%</td>
+<td>~500</td>
+<td>~400</td>
+<td>~1.3x</td>
+</tr>
+<tr>
+<td>NDC</td>
+<td>13%</td>
+<td>~600</td>
+<td>~400</td>
+<td><strong>1.5x</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>性能提升源于 MemLiner 对 GC 与应用线程访问路径的对齐，减少本地内存缺失和无效预取。</li>
+<li>结果验证了 MemLiner 在高并发 GC 场景（如 Shenandoah）中的有效性，尤其在资源受限环境下。</li>
+</ul>
+<h3 id="table-3-benchmarks-and-datasets-for-shenandoah">Table 3: Benchmarks and datasets for Shenandoah.<a class="headerlink" href="#table-3-benchmarks-and-datasets-for-shenandoah" title="Permanent link">&para;</a></h3>
+<p><img alt="1a2ee976bac4118e614f9040e41f848ecacfb1666f02e3e3b86aa7f63ea1cec5.jpg" src="../images/1a2ee976bac4118e614f9040e41f848ecacfb1666f02e3e3b86aa7f63ea1cec5.jpg" /></p>
+<ul>
+<li>该图片为 <strong>Table 3</strong>，标题为 “Benchmarks and datasets for Shenandoah”，用于展示在 <strong>Shenandoah GC</strong> 下进行性能评估所使用的基准测试程序及其对应数据集。</li>
+<li>表格内容分为两部分：<strong>Spark Programs</strong> 和 <strong>Neo4J Programs</strong>，分别列出不同应用及其数据集规模。</li>
+<li>所有数据集均来源于 <strong>Wikipedia</strong> 或合成图，用于模拟真实工作负载。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>程序名称</th>
+<th>数据集</th>
+<th>规模</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spark Programs</td>
+<td>MLlib KMeans (SKM)</td>
+<td>Wikipedia Polish [4]</td>
+<td>1GB</td>
+</tr>
+<tr>
+<td>Spark Programs</td>
+<td>Spark Linear Regression (SLR)</td>
+<td>Wikipedia Polish [4]</td>
+<td>1GB</td>
+</tr>
+<tr>
+<td>Spark Programs</td>
+<td>Spark Transitive Closure (STC)</td>
+<td>Synthetic Graph</td>
+<td>1.5M edges, 384K vertices</td>
+</tr>
+<tr>
+<td>Neo4J Programs</td>
+<td>PageRank (NPR)</td>
+<td>Wikipedia Slovak [4]</td>
+<td>7.6M edges, 291K vertices</td>
+</tr>
+<tr>
+<td>Neo4J Programs</td>
+<td>Triangle Counting (NTR)</td>
+<td>Wikipedia Slovak [4]</td>
+<td>7.6M edges, 291K vertices</td>
+</tr>
+<tr>
+<td>Neo4J Programs</td>
+<td>Degree Centrality (NDC)</td>
+<td>Wikipedia min-nan [4]</td>
+<td>4.4M edges, 429K vertices</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Spark Programs</strong> 包含三个典型机器学习和图计算任务：<strong>KMeans</strong>、<strong>Linear Regression</strong> 和 <strong>Transitive Closure</strong>，其中前两者使用相同大小（1GB）的 <strong>Wikipedia Polish</strong> 数据集，后者使用合成图。</li>
+<li><strong>Neo4J Programs</strong> 包含三个图算法：<strong>PageRank</strong>、<strong>Triangle Counting</strong> 和 <strong>Degree Centrality</strong>，前两个使用相同的 <strong>Wikipedia Slovak</strong> 数据集（7.6M 边，291K 顶点），最后一个使用较小的 <strong>Wikipedia min-nan</strong> 数据集（4.4M 边，429K 顶点）。</li>
+<li>数据集引用标记 <strong>[4]</strong> 指向论文参考文献中的 <strong>Konect network datasets</strong>，表明其来源为公开网络数据集平台。</li>
+<li>此表格用于支撑论文第 7.3 节对 <strong>Shenandoah GC</strong> 的评估，说明实验覆盖了不同规模和类型的图处理与机器学习任务。</li>
+</ul>
+<h3 id="figure-9-performance-comparisons-with-leap-and-semeru-semeru-crashed-on-npr-ntr-and-ndc-ie-neo4j-applications">Figure 9: Performance comparisons with Leap and Semeru; Semeru crashed on NPR, NTR, and NDC (i.e., Neo4j applications).<a class="headerlink" href="#figure-9-performance-comparisons-with-leap-and-semeru-semeru-crashed-on-npr-ntr-and-ndc-ie-neo4j-applications" title="Permanent link">&para;</a></h3>
+<p><img alt="ba3ad26b004d3b6ca7c5501683c7eacc22f2173b1a3ad86f3046a3672c914616.jpg" src="../images/ba3ad26b004d3b6ca7c5501683c7eacc22f2173b1a3ad86f3046a3672c914616.jpg" /></p>
+<ul>
+<li>
+<p>图片包含三个子图，分别标记为 (a)、(b) 和 (c)，用于比较 MemLiner 与 Leap 和 Semeru 在不同配置下的性能表现。</p>
+</li>
+<li>
+<p>子图 (a) 展示了在 <strong>Leap</strong> 预取器下，MemLiner 与未修改 JVM 的运行时间对比。横轴列出了六个应用：SLR、SKM、STC、NPR、NTR、NDC；纵轴为运行时间（秒）。每个柱状图分为两部分：底部为应用执行时间（App），顶部为 GC 时间（GC）。颜色编码如下：</p>
+<ul>
+<li>橙色：未修改 JVM 的 GC 时间</li>
+<li>黄色：未修改 JVM 的应用时间</li>
+<li>深绿：MemLiner 的 GC 时间</li>
+<li>浅绿：MemLiner 的应用时间</li>
+<li><strong>MemLiner 在所有应用中均显著降低总运行时间，平均提速约 1.6×</strong>。</li>
+</ul>
+</li>
+<li>
+<p>子图 (b) 展示了 <strong>Leap</strong> 的预取准确率（Accuracy, A）和覆盖率（Coverage, C）对比。横轴为相同六个应用，纵轴为百分比。每组包含两个柱状图，分别代表 Accuracy 和 Coverage。颜色编码如下：</p>
+<ul>
+<li>黄色：未修改 JVM</li>
+<li>浅绿：MemLiner</li>
+<li><strong>MemLiner 显著提升 Leap 的预取准确率和覆盖率，平均分别提高 1.7× 和 1.5×</strong>。</li>
+</ul>
+</li>
+<li>
+<p>子图 (c) 展示了在 <strong>Semeru</strong> 系统上的运行时间对比。横轴为三个 Spark 应用：SLR、STC、SKM；纵轴为运行时间（秒）。每个柱状图分为四部分，颜色编码如下：</p>
+<ul>
+<li>深蓝：Semeru GC</li>
+<li>深绿：MemLiner GC</li>
+<li>浅蓝：Semeru App</li>
+<li>浅绿：MemLiner App</li>
+<li>橙色：MemLiner on Semeru Swap GC</li>
+<li>黄色：MemLiner on Semeru Swap App</li>
+<li><strong>MemLiner 在 Semeru Swap 系统上表现优于原生 Semeru，尤其在应用时间上优势明显</strong>。</li>
+</ul>
+</li>
+<li>
+<p>关键观察：</p>
+<ul>
+<li><strong>MemLiner 能有效缓解 GC 干扰，提升预取效率，从而大幅缩短端到端执行时间</strong>。</li>
+<li>对于 Neo4j 应用（NPR、NTR、NDC），<strong>Semeru 系统崩溃，无法运行</strong>，而 MemLiner 可正常工作。</li>
+<li>MemLiner 与 Semeru 相比，在不引入额外计算开销或系统重构的前提下，达到相近甚至更优的性能。</li>
+</ul>
+</li>
+<li>
+<p>数据汇总表：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>Leap 下 MemLiner 总时间 vs 未修改 JVM</th>
+<th>Leap 准确率提升</th>
+<th>Leap 覆盖率提升</th>
+<th>Semeru 上 MemLiner vs Semeru</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLR</td>
+<td>显著降低</td>
+<td>提升</td>
+<td>提升</td>
+<td>更优</td>
+</tr>
+<tr>
+<td>SKM</td>
+<td>显著降低</td>
+<td>提升</td>
+<td>提升</td>
+<td>更优</td>
+</tr>
+<tr>
+<td>STC</td>
+<td>显著降低</td>
+<td>提升有限</td>
+<td>提升有限</td>
+<td>更优</td>
+</tr>
+<tr>
+<td>NPR</td>
+<td>显著降低</td>
+<td>提升</td>
+<td>提升</td>
+<td>Semeru 崩溃</td>
+</tr>
+<tr>
+<td>NTR</td>
+<td>显著降低</td>
+<td>提升有限</td>
+<td>提升有限</td>
+<td>Semeru 崩溃</td>
+</tr>
+<tr>
+<td>NDC</td>
+<td>显著降低</td>
+<td>提升</td>
+<td>提升</td>
+<td>Semeru 崩溃</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>MemLiner 是一种轻量级、兼容性强的优化方案，无需修改应用或重构运行时，即可在远内存场景下大幅提升性能，并优于现有系统如 Semeru</strong>。</li>
+</ul>
+<h3 id="figure-10-memory-footprints-for-skm-stc-and-slr-between-unmodified-jvm-and-memliner-under-25-rate">Figure 10: Memory footprints for SKM, STC, and SLR, between unmodified JVM and MemLiner under 25% rate.<a class="headerlink" href="#figure-10-memory-footprints-for-skm-stc-and-slr-between-unmodified-jvm-and-memliner-under-25-rate" title="Permanent link">&para;</a></h3>
+<p><img alt="b45c4d04ac2ee4ab47cfed00aa8b2c40152e34f4dceb5c0ccc37775b6ea5e774.jpg" src="../images/b45c4d04ac2ee4ab47cfed00aa8b2c40152e34f4dceb5c0ccc37775b6ea5e774.jpg" /></p>
+<ul>
+<li>图片展示了在 <strong>25% 本地内存</strong> 配置下，三个 Spark 应用（SKM、STC、SLR）在 <strong>Unmodified JVM</strong> 和 <strong>MemLiner</strong> 两种运行时下的内存占用（Memory Footprint）随时间变化的对比。</li>
+<li>每个子图包含四条曲线，分别代表：<ul>
+<li><strong>Unmodified JVM Pre-GC</strong>：未修改 JVM 在 GC 前的内存占用（橙色虚线）</li>
+<li><strong>Unmodified JVM Post-GC</strong>：未修改 JVM 在 GC 后的内存占用（橙色实线）</li>
+<li><strong>MemLiner Pre-GC</strong>：MemLiner 在 GC 前的内存占用（青色虚线）</li>
+<li><strong>MemLiner Post-GC</strong>：MemLiner 在 GC 后的内存占用（青色实线）</li>
+</ul>
+</li>
+<li>从图中可观察到以下关键趋势：<ul>
+<li><strong>SKM</strong>：MemLiner 的 GC 效果与未修改 JVM 相近，GC 前后内存下降幅度相似，峰值略高但稳定。</li>
+<li><strong>STC</strong>：MemLiner 的 GC 前后内存波动更平缓，峰值略低于未修改 JVM，表明其内存回收更及时或更高效。</li>
+<li><strong>SLR</strong>：MemLiner 的 GC 前后内存曲线几乎重合，说明其内存回收非常及时，几乎没有堆积；而未修改 JVM 则有明显锯齿状波动，表明 GC 回收滞后。</li>
+</ul>
+</li>
+<li>总体而言，MemLiner 并未显著延迟内存回收，其 <strong>Post-GC 内存 footprint</strong> 与未修改 JVM 相当甚至更低，证明其“延迟追踪”策略并未导致内存泄漏或严重堆积。</li>
+<li>下表总结了各应用在 MemLiner 下的内存行为特征：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Application</th>
+<th>MemLiner vs. Unmodified JVM (Pre-GC)</th>
+<th>MemLiner vs. Unmodified JVM (Post-GC)</th>
+<th>Overall Memory Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKM</td>
+<td>略高但稳定</td>
+<td>相近</td>
+<td>稳定，无显著延迟</td>
+</tr>
+<tr>
+<td>STC</td>
+<td>波动更小</td>
+<td>略低</td>
+<td>更平滑，回收更及时</td>
+</tr>
+<tr>
+<td>SLR</td>
+<td>显著更低且平稳</td>
+<td>显著更低</td>
+<td>极佳，回收近乎实时</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：MemLiner 的设计有效平衡了 <strong>减少 GC 干扰</strong> 与 <strong>及时内存回收</strong> 之间的矛盾，在保持高性能的同时，未造成内存管理上的负面影响。</li>
+</ul>
+<h3 id="dd82001e2cb012c7ce92ffdf93b1d9d23670cf4ecc7d480b3d7857c63e5de323jpg">dd82001e2cb012c7ce92ffdf93b1d9d23670cf4ecc7d480b3d7857c63e5de323.jpg<a class="headerlink" href="#dd82001e2cb012c7ce92ffdf93b1d9d23670cf4ecc7d480b3d7857c63e5de323jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="dd82001e2cb012c7ce92ffdf93b1d9d23670cf4ecc7d480b3d7857c63e5de323.jpg" src="../images/dd82001e2cb012c7ce92ffdf93b1d9d23670cf4ecc7d480b3d7857c63e5de323.jpg" /></p>
+<ul>
+<li>图片内容为一条 <strong>Git</strong> 命令，用于从远程仓库克隆代码。</li>
+<li>命令文本为：<code>git clone git@github.com:uclasystem/MemLiner.git</code>。</li>
+<li>该命令使用 <strong>SSH 协议</strong>（<code>git@github.com</code>）而非 HTTPS 进行克隆，要求本地已配置 SSH 密钥。</li>
+<li>目标仓库地址为 <code>uclasystem/MemLiner</code>，表明该项目由 <strong>UCLA 系统组</strong> 维护。</li>
+<li>克隆后将在本地创建名为 <code>MemLiner</code> 的目录，包含论文中描述的运行时系统源码。</li>
+<li>此命令是部署 MemLiner 的第一步，后续需按文档编译内核、JVM 及 RDMA 模块。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

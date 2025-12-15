@@ -1,0 +1,1208 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-zippads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Zippads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-coco-cross-object-compression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. COCO (Cross-Object COmpression)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-hotpads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hotpads 集成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 指针内嵌压缩元数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 大对象分块处理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy">Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy 论文解析<a class="headerlink" href="#compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Po-An Tsai, Daniel Sanchez</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: ASPLOS</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2019</p>
+<p><strong>研究机构 (Affiliations)</strong>: MIT CSAIL</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>现有的内存压缩技术以<strong>cache lines</strong>（缓存行）为单位进行压缩，这在处理以<strong>arrays</strong>（数组）为主的科学计算程序时效果良好，但在处理以<strong>objects</strong>（对象）为主的现代应用程序时效率低下。</li>
+<li>本文旨在解决这一问题，其核心目标是设计一种针对<strong>object-based applications</strong>（基于对象的应用程序）的新型压缩内存层次结构，以显著提升这类应用的<strong>compression ratio</strong>（压缩比）和<strong>performance</strong>（性能）。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>Zippads</strong>，这是首个<strong>object-based compressed memory hierarchy</strong>（基于对象的压缩内存层次结构）。它构建于 <strong>Hotpads</strong>（一个现有的基于对象的内存层次结构）之上，将<strong>objects</strong>而非<strong>cache lines</strong>作为压缩的基本单元。</li>
+<li>提出 <strong>COCO </strong>(Cross-Object COmpression)，一种新颖的<strong>cross-object-compression algorithm</strong>（跨对象压缩算法），通过利用<strong>同一类型对象之间</strong>的冗余性来实现高压缩比。</li>
+<li>Zippads 的关键机制包括：<ul>
+<li><strong>直接重写指针</strong>：当对象在层次结构中移动并被压缩时，硬件直接重写所有指向该对象的指针，使其直接指向压缩后的对象，从而<strong>避免了传统压缩内存中所需的额外地址翻译层</strong>。</li>
+<li><strong>集成 COCO</strong>：Zippads 使用 <strong>COCO</strong> 压缩对象，并使用传统的 <strong>BDI+FPC</strong> 算法压缩数组，通过指针中的元数据位来区分不同的压缩格式。</li>
+<li><strong>处理大对象</strong>：对于大于128B的对象，Zippads 将其分割成64B的<strong>subobjects</strong>（子对象）进行独立压缩，以避免不必要的高延迟解压。</li>
+</ul>
+</li>
+<li><img alt="" src="../images/8f92beefb065583cbba85410317968837cae46f00dcae0f93dcb1de1c683bf39.jpg" /> <em>Figure 8. Example Zippads hierarchy with a compressed last-level pad and main memory.</em></li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li>在包含数组和对象混合的工作负载上，与当前最先进的**compressed memory hierarchy **(CMH) 相比：<ul>
+<li><strong>Zippads+COCO</strong> 实现了平均 <strong>1.63×</strong> 的更高压缩比，最高可达 <strong>2×</strong>。</li>
+<li><strong>Zippads+COCO</strong> 将主内存流量减少了 <strong>56%</strong>，并将系统性能平均提升了 <strong>17%</strong>。</li>
+<li>即使不使用 COCO（仅使用 Zippads-BF），其压缩比也比 CMH 高出 <strong>1.37×</strong>，证明了基于对象的布局本身的优势。</li>
+</ul>
+</li>
+<li>关键性能指标对比如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方案</th>
+<th style="text-align: left;">平均压缩比</th>
+<th style="text-align: left;">相对于 CMH 的压缩比提升</th>
+<th style="text-align: left;">主内存流量 (相对于未压缩基线)</th>
+<th style="text-align: left;">性能 (相对于未压缩基线)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">CMH</td>
+<td style="text-align: left;">1.24×</td>
+<td style="text-align: left;">1.00×</td>
+<td style="text-align: left;">-15%</td>
+<td style="text-align: left;">+5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Hotpads</td>
+<td style="text-align: left;">N/A</td>
+<td style="text-align: left;">N/A</td>
+<td style="text-align: left;">-66%</td>
+<td style="text-align: left;">+24%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Zippads-BF</strong></td>
+<td style="text-align: left;"><strong>1.70×</strong></td>
+<td style="text-align: left;"><strong>1.37×</strong></td>
+<td style="text-align: left;"><strong>-78%</strong></td>
+<td style="text-align: left;"><strong>+25%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Zippads+COCO</strong></td>
+<td style="text-align: left;"><strong>2.01×</strong></td>
+<td style="text-align: left;"><strong>1.63×</strong></td>
+<td style="text-align: left;"><strong>-80%</strong></td>
+<td style="text-align: left;"><strong>+30%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>硬件开销分析表明，Zippads 仅引入了 <strong>3.2%</strong> 的额外片上存储开销，主要包括一个 <strong>8KB base object cache</strong> 和加倍的<strong>canonical tag array</strong>。</li>
+<li><img alt="" src="../images/0691da417af58c59a7ff60d94501d98bc2f038438e8c0af57df668642dc731c6.jpg" /> <em>Figure 15. Compression ratio of different schemes.</em></li>
+<li><img alt="" src="../images/e95fd49ce8a52f9b09d49fd1e689bd8a0f64202ce0c032f7e9d8c791bd9f2f82.jpg" /> <em>Figure 17. Performance of different schemes.</em></li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li>传统的以<strong>cache lines</strong>为单位的压缩方法不适合<strong>object-based programs</strong>，因为对象的不规则布局和有限的内部冗余限制了其效果。</li>
+<li><strong>Zippads</strong> 通过将压缩单元从<strong>cache lines</strong>转变为<strong>objects</strong>，并利用<strong>Hotpads</strong>的指针重写机制，成功消除了地址翻译开销，实现了更紧凑的内存布局。</li>
+<li><strong>COCO</strong> 算法通过挖掘<strong>跨对象</strong>的冗余性，进一步大幅提升了压缩比。</li>
+<li><strong>Zippads+COCO</strong> 的结合被证明是一种高效且实用的方案，它不仅能显著提升<strong>object-dominated workloads</strong>的性能和效率，同时对<strong>array-based workloads</strong>也保持了良好的兼容性和性能。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景与动机</strong></p>
+<ul>
+<li>现有的硬件内存压缩技术（如 <strong>BDI</strong>, <strong>FPC</strong>, <strong>LCP</strong>）主要针对<strong>固定大小的缓存行</strong>（cache lines）进行压缩。</li>
+<li>这些技术通过利用<strong>单个缓存行内部</strong>的数据冗余（如相似的数值或重复模式）来工作，对<strong>数组主导</strong>（array-dominated）的科学计算程序效果显著。</li>
+<li>然而，对于<strong>对象主导</strong>（object-based）的应用程序（如数据库、图分析、Java应用），这些技术效果不佳，原因如下：<ul>
+<li><strong>不规则的内存布局</strong>：对象包含不同类型和可压缩性的字段，且不同类型的对象在内存中交错存放。</li>
+<li><strong>与缓存行边界不匹配</strong>：对象的大小和起始地址通常不与固定的缓存行对齐，导致一个对象可能跨越多个缓存行，而一个缓存行也可能包含多个不相关的对象片段。</li>
+<li><strong>有限的内部冗余</strong>：单个对象内部的字节间相似性很低，使得基于缓存行的压缩算法难以找到有效的压缩模式。</li>
+</ul>
+</li>
+<li>此外，传统压缩方案需要在<strong>压缩地址空间</strong>和<strong>未压缩地址空间</strong>之间进行转换，这引入了额外的元数据开销（如翻译表）或内部碎片，进一步限制了压缩效率。</li>
+</ul>
+<p><img alt="" src="../images/8fe3e06e64dccc0c6fef36d78c31a4e726aec2ab53b534e5cb1bece555553ec6.jpg" /> <em>Figure 1. Fraction of the heap consumed by objects and arrays for several Java benchmarks.</em></p>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了 <strong>Zippads</strong>，这是首个专为<strong>对象导向应用</strong>设计的<strong>基于对象的压缩内存层次结构</strong>（object-based compressed memory hierarchy）。<ul>
+<li><strong>以对象为压缩单元</strong>：Zippads 直接压缩和传输<strong>可变大小的对象</strong>，而非固定大小的缓存行。</li>
+<li><strong>消除地址转换开销</strong>：通过利用其底层架构 <strong>Hotpads</strong> 的特性，在对象跨层级移动时<strong>直接重写指针</strong>，使指针直接指向压缩后的对象，从而完全避免了传统方案中压缩/未压缩地址空间之间的间接寻址层。</li>
+<li><strong>紧凑存储</strong>：压缩后的对象被连续存放，不留空隙，最大化利用了压缩带来的空间节省。</li>
+</ul>
+</li>
+<li>提出了 <strong>COCO </strong>(Cross-Object COmpression)，一种新颖的<strong>跨对象压缩算法</strong>。<ul>
+<li><strong>利用跨对象冗余</strong>：COCO 观察到<strong>同类型对象</strong>之间存在大量相似性（value locality），并利用这一点进行压缩。</li>
+<li><strong>差分编码</strong>：对于一个对象，COCO 只存储其与一个<strong>基对象</strong>（base object）不同的字节。其压缩格式包含：基对象ID、一个标记差异位置的位图（diff bitmap）和实际的差异字节串（byte diffs）。</li>
+<li><strong>高效实现</strong>：COCO 的压缩/解压电路简单，RTL原型显示其面积开销远小于现有方案（如BPC），且频率远高于典型的uncore频率。</li>
+</ul>
+</li>
+<li><strong>协同工作</strong>：Zippads 能够根据数据类型智能选择压缩算法：对<strong>对象</strong>使用 <strong>COCO</strong>，对<strong>数组</strong>则使用传统的 <strong>BDI+FPC</strong> 混合算法，从而在混合工作负载上均能取得优异表现。</li>
+</ul>
+<p><img alt="" src="../images/bcbc562f8ea691e62747a38ce7860a07b1679a1eb31128210c344d2c0badb3a3.jpg" /></p>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>本文提出了一种名为 <strong>Zippads</strong> 的新型压缩内存层次结构，其核心思想是将 <strong>对象 (objects)</strong> 而非传统的 <strong>缓存行 (cache lines)</strong> 作为压缩的基本单元。该架构建立在名为 <strong>Hotpads</strong> 的现有对象基内存层次结构之上，并引入了一种名为 <strong>COCO (Cross-Object COmpression)</strong> 的新压缩算法来利用同类对象间的冗余。</p>
+<ul>
+<li>
+<p><strong>基础平台: Hotpads</strong></p>
+<ul>
+<li>Hotpads 是一个硬件管理的、基于 <strong>pads</strong>（类似暂存器的内存）的层次化内存系统，它以可变大小的对象为单位进行数据传输和管理。</li>
+<li>它通过 <strong>指针重写 (pointer rewriting)</strong> 机制，在对象于不同层级 pads 间移动时，直接更新所有指向该对象的指针。</li>
+<li>其 <strong>Collection-Eviction (CE)</strong> 过程在回收垃圾的同时，将不常访问的存活对象逐级向上驱逐，并在此过程中紧凑地重新排列对象并更新指针。</li>
+<li><img alt="" src="../images/f01a07dcbf839ae1c317dc648d5b90e120cc892cf049c0d865ab048c330c0841.jpg" /> <em>Figure 5. Hotpads is a hierarchical memory system with multiple levels of pads.</em></li>
+<li><img alt="" src="../images/76d41b0458bd3b194263bf8b5cbd698982ddad34e583cfccc6e7fa117b89db59.jpg" /> <em>Figure 6. Pad organization.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Zippads 的核心创新</strong></p>
+<ul>
+<li><strong>对象级压缩</strong>: Zippads 利用 Hotpads 的对象流特性，在对象被驱逐到较冷的层级（如最后一级 pad 或主存）时对其进行压缩。</li>
+<li><strong>无间接寻址</strong>: 通过 Hotpads 的指针重写机制，Zippads 将指针直接指向压缩后的对象，从而<strong>完全避免了</strong>传统压缩内存中所需的 <strong>uncompressed-to-compressed 地址翻译表</strong>，消除了由此带来的元数据开销和内部碎片。</li>
+<li><strong>压缩信息编码</strong>: Zippads 将压缩相关的元数据（如压缩后大小、使用的算法标识）直接编码在 <strong>指针格式</strong> 中，使得每次访问都能立即获知如何解压数据。<ul>
+<li><img alt="" src="../images/4fe784bb23414488022335e306dd60fbf8d8658bf4467c9516532f4d4c391320.jpg" /> <em>Figure 11. Zippads pointer format. Compression information is encoded in the pointer.</em></li>
+</ul>
+</li>
+<li><strong>处理大对象</strong>: 对于大于 128B 的大对象，Zippads 将其分割为多个 <strong>subobjects</strong>（子对象），并通过一个微架构级的 <strong>index array</strong>（索引数组）进行管理，实现了按需分配和压缩，避免了不必要的数据移动和高延迟。<ul>
+<li><img alt="" src="../images/746182b37942c3612c6be6964b2fee50109c568eff8169a9e37a87520c5d7614.jpg" /> <em>Figure 12. Zippads breaks large objects into subobjects.</em></li>
+</ul>
+</li>
+<li><strong>脏写回处理</strong>: 当一个已被压缩的对象被修改后写回，若其新压缩尺寸变大（<strong>overflow</strong>），Zippads 会为其分配新位置，并在原位置放置一个 <strong>forwarding thunk</strong>（转发桩）以维持指针有效性。这些低效情况会在后续的 CE 周期性 <strong>compaction</strong>（压缩整理）中被清理。<ul>
+<li><img alt="" src="../images/ba976f517325f825831d5c8a4585eeaef5e316635003d1338cfcd35a928e53fd.jpg" /> <em>Figure 10. Compressing objects on dirty writebacks.</em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>COCO 压缩算法集成</strong></p>
+<ul>
+<li><strong>跨对象压缩</strong>: COCO 是一种差分压缩算法，它为每个对象类型维护一个 <strong>base object</strong>（基准对象）。压缩时，仅存储与基准对象不同的字节（<strong>diff bitmap</strong> 和 <strong>byte diffs</strong>）。<ul>
+<li><img alt="" src="../images/7199ca0abce3881253e530119b292aa1db859ae978561cd45146200105760527.jpg" /> <em>Figure 13. Example COCO-compressed object.</em></li>
+</ul>
+</li>
+<li><strong>高效实现</strong>: COCO 的硬件电路（压缩/解压）非常简单，面积开销远小于现有方案。</li>
+<li><strong>基准对象缓存</strong>: 为了加速对基准对象的访问，Zippads 配备了一个小容量（8KB）但高效的 <strong>base object cache</strong>，利用对象类型访问的高度倾斜性，实现了极低的缓存未命中率。<ul>
+<li><img alt="" src="../images/460c193def15b6ede128f7e8f92b1c562eae99929a12f560eb7e289076f8e98e.jpg" /> <em>Figure 14. CDF of accesses to most popular object ids.</em></li>
+</ul>
+</li>
+<li><strong>混合压缩策略</strong>: Zippads 能够区分 <strong>objects</strong> 和 <strong>arrays</strong>（通过扩展 ISA 的 <code>alloc</code> 和 <code>alloc_array</code> 指令），并对它们采用不同的压缩算法：对对象使用 <strong>COCO</strong>，对数组使用传统的 <strong>BDI+FPC</strong> 混合算法。<ul>
+<li><img alt="" src="../images/e85db4e1872fcf433a8daf220cfae789a724f8d1a9ab24d9c60335790b4e8466.jpg" /> <em>Table 3. Zippads+COCO in-pointer compression information. X denotes the bit does not matter, and Cs denote the bits used by hybrid BDI+FPC encoding.</em></li>
+<li><img alt="" src="../images/69e038bd5e3a77df4a6870a2333324b17d3853b29e842bef69f2adaca79c719d.jpg" /></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>最终架构效果</strong></p>
+<p>通过将对象作为压缩单元并利用跨对象冗余，Zippads+COCO 架构在包含数组和对象的混合工作负载上，相比现有的<strong>压缩内存层次 (CMH)</strong> 方案，实现了 <strong>1.63倍</strong> 的平均压缩比提升，并带来了 <strong>17%</strong> 的平均性能提升和 <strong>56%</strong> 的主存流量减少。</p>
+<h3 id="1-zippads">1. Zippads<a class="headerlink" href="#1-zippads" title="Permanent link">&para;</a></h3>
+<p><strong>核心实现原理</strong></p>
+<ul>
+<li><strong>Zippads</strong> 并非一个孤立的设计，而是构建在名为 <strong>Hotpads</strong> 的对象级内存层次结构之上。它继承了 Hotpads 的核心思想：将内存系统视为一个由多级 <strong>pad</strong>（类似于硬件管理的 scratchpad）组成的层次结构，并以<strong>可变大小的对象</strong>为基本单位进行数据传输和管理。</li>
+<li>其核心创新在于，当对象从高速、小容量的 pad（如 L1/L2）被驱逐（evicted）到低速、大容量的压缩层级（如最后一级 pad 或主存）时，<strong>Zippads 会透明地压缩该对象</strong>。</li>
+<li><strong>关键机制：指针重写 (Pointer Rewriting)</strong>。与传统压缩内存需要一个额外的地址翻译表（如 TLB-like structure）不同，Zippads 利用 Hotpads 在 <strong>Collection-Eviction (CE)</strong> 过程中必须更新所有指向被移动对象的指针这一特性。当一个对象被压缩并存入新的物理位置后，Zippads 会直接将所有指向它的指针<strong>重写为指向其新的、压缩后的地址</strong>。这使得后续访问可以直接定位到压缩数据，完全<strong>避免了额外的地址转换开销和内部碎片</strong>。</li>
+</ul>
+<p><img alt="" src="../images/8f92beefb065583cbba85410317968837cae46f00dcae0f93dcb1de1c683bf39.jpg" /> <em>Figure 8. Example Zippads hierarchy with a compressed last-level pad and main memory.</em></p>
+<p><strong>算法流程与关键处理场景</strong></p>
+<ul>
+<li>
+<p><strong>新对象迁移 (Newly Moved Objects)</strong>:</p>
+<ul>
+<li>当一个冷对象首次从非压缩层级（如 L2 pad）被驱逐到压缩层级（如 L3 pad）时，Zippads 使用选定的压缩算法（如 BDI 或 COCO）对其进行压缩。</li>
+<li>压缩后的对象通过 <strong>bump-pointer allocation</strong> 紧凑地存放在压缩层级的空闲空间末尾。</li>
+<li>该对象的<strong>新规范地址 (canonical address)</strong> 即为其在压缩层级中的地址，所有指向它的指针在 CE 过程中被更新为此新地址。</li>
+</ul>
+</li>
+<li>
+<p><strong>脏数据回写 (Dirty Writebacks)</strong>:</p>
+<ul>
+<li>如果一个已在压缩层级的对象被加载到上层 pad 并被修改（变“脏”），在回写时其压缩后的大小可能发生变化。</li>
+<li><strong>尺寸不变或变小</strong>：对象被写回原位置，若变小则留下少量未使用空间。</li>
+<li><strong>尺寸变大 (Overflow)</strong>：对象无法放回原位置。Zippads 会在空闲区分配一个新位置存放压缩对象，并在<strong>原位置创建一个 forwarding thunk</strong>（转发桩），其中存储指向新位置的指针。后续访问旧地址会通过此桩跳转到新地址。</li>
+<li><strong>周期性压缩 (Periodic Compaction)</strong>：在压缩层级的 CE 过程中，系统会执行压缩操作，将所有存活对象重新紧凑排列。此过程会<strong>回收因尺寸变小而产生的碎片</strong>，并<strong>移除 forwarding thunks</strong>，将对象移至连续空间，从而消除溢出带来的长期存储效率损失。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/ba976f517325f825831d5c8a4585eeaef5e316635003d1338cfcd35a928e53fd.jpg" /> <em>Figure 10. Compressing objects on dirty writebacks.</em></p>
+<ul>
+<li><strong>大对象处理 (Large Objects)</strong>:<ul>
+<li>对于超过阈值（如 128B）的大对象，Zippads 会将其<strong>分解为多个 64B 的子对象 (subobjects)</strong>。</li>
+<li>分配时，首先创建一个<strong>索引数组 (index array)</strong>，其元素是指向各个子对象的指针。</li>
+<li>子对象采用 <strong>allocate-on-access</strong> 策略，即只有在被访问时才分配和压缩对应的子对象。这避免了为访问单个字段而解压整个大对象的高延迟。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/746182b37942c3612c6be6964b2fee50109c568eff8169a9e37a87520c5d7614.jpg" /> <em>Figure 12. Zippads breaks large objects into subobjects.</em></p>
+<p><strong>参数设置与元数据编码</strong></p>
+<ul>
+<li><strong>压缩信息嵌入指针</strong>: Zippads 将压缩所需的元数据直接编码在<strong>指针格式</strong>中，而非依赖缓存标签。这是其实现高效访问的关键。<ul>
+<li>指针的 <strong>size 字段</strong>被重定义为存储对象的<strong>压缩后大小</strong>。</li>
+<li>额外的几位用于存储<strong>算法特定的压缩信息</strong>（例如，对于 BDI+FPC 混合方案需要 4 位，对于 COCO 也需要特定标识）。</li>
+<li>这种设计使得每次通过指针发起的内存访问，硬件都能立即知道需要获取多少字节的数据以及使用哪种算法进行解压。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/4fe784bb23414488022335e306dd60fbf8d8658bf4467c9516532f4d4c391320.jpg" /> <em>Figure 11. Zippads pointer format. Compression information is encoded in the pointer.</em></p>
+<ul>
+<li><strong>压缩算法选择</strong>:<ul>
+<li><strong>Zippads</strong> 本身是压缩算法无关的，但论文中主要集成了两种：<ul>
+<li><strong>COCO (Cross-Object COmpression)</strong>: 专为<strong>对象 (objects)</strong> 设计，利用同类型对象间的冗余进行差分压缩。</li>
+<li><strong>BDI+FPC (Hybrid)</strong>: 专为<strong>数组 (arrays)</strong> 设计，利用数组内部数据的局部性进行压缩。</li>
+</ul>
+</li>
+<li>为了区分对象和数组，ISA 被扩展，增加了 <code>alloc_array</code> 指令。<code>alloc</code> 用于分配对象，<code>alloc_array</code> 用于分配数组，它们生成的指针中包含相应的类型位。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及在整体中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>: 来自上层 pad（如 L2）的、需要被驱逐到压缩层级的对象数据及其元数据（如类型、大小）。</li>
+<li><strong>处理</strong>:<ul>
+<li>根据对象类型（通过指针中的元数据判断）选择合适的压缩算法（COCO 或 BDI+FPC）。</li>
+<li>执行压缩，并将压缩后的数据块紧凑地存入压缩层级（L3 pad 或主存）。</li>
+<li>更新对象的规范地址，并在 CE 过程中重写所有相关指针。</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>一个在物理上更紧凑的内存布局，显著<strong>提高了有效内存容量</strong>。</li>
+<li>一组直接指向压缩数据的、已更新的指针，确保了后续访问的<strong>低延迟</strong>。</li>
+<li>减少了跨层级（尤其是到主存）的数据传输量，从而<strong>降低了带宽需求</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>在整体架构中的作用</strong></p>
+<ul>
+<li><strong>作为基础载体</strong>: Zippads 提供了一个<strong>对象感知的、支持透明压缩的内存层次结构</strong>。它解决了传统基于缓存行的压缩方案在处理不规则对象布局时的根本性缺陷。</li>
+<li><strong>赋能 COCO</strong>: Zippads 的对象级管理和指针控制能力，为 <strong>COCO</strong> 这种跨对象压缩算法提供了必要的硬件支持。没有 Zippads 提供的对象边界和指针操作能力，COCO 很难在通用硬件中高效实现。</li>
+<li><strong>性能与效率的平衡者</strong>: 通过将压缩操作与 Hotpads 固有的 CE 过程相结合，Zippads 将压缩/解压的开销分摊到了内存管理操作中，避免了在关键访问路径上引入显著延迟，从而实现了<strong>高压缩比</strong>与<strong>高性能</strong>的统一。评估显示，Zippads+COCO 相比于最先进的传统压缩方案，平均压缩比提升 <strong>1.63×</strong>，性能提升 <strong>17%</strong>。</li>
+</ul>
+<h3 id="2-coco-cross-object-compression">2. COCO (Cross-Object COmpression)<a class="headerlink" href="#2-coco-cross-object-compression" title="Permanent link">&para;</a></h3>
+<p><strong>COCO压缩算法的核心原理</strong></p>
+<ul>
+<li>COCO (Cross-Object COmpression) 是一种<strong>差分压缩 (differential compression)</strong> 算法，其核心思想是利用<strong>同类型对象间存在的大量冗余</strong>。</li>
+<li>该算法为每种<strong>object type</strong>维护一个<strong>base object (基础对象)</strong>。</li>
+<li>对于任何一个需要被压缩的同类型对象，COCO不存储其完整内容，而是仅存储它与<strong>base object</strong>之间的<strong>字节级差异 (byte diffs)</strong>。</li>
+</ul>
+<p><strong>COCO压缩格式与数据结构</strong></p>
+<ul>
+<li>每个经过COCO压缩的对象由以下三个部分组成：<ul>
+<li><strong>Base Object ID</strong>: 一个<strong>32位</strong>的整数，用于唯一标识该对象所参照的<strong>base object</strong>。</li>
+<li><strong>Diff Bitmap (差异位图)</strong>: 一个位图，其中每一位对应原对象的一个字节。如果第<code>i</code>位被置为1，则表示该对象的第<code>i</code>个字节与<strong>base object</strong>不同。</li>
+<li><strong>Byte Diffs (字节差异串)</strong>: 一个连续的字节序列，包含了所有在<strong>Diff Bitmap</strong>中标记为不同的实际字节值。</li>
+</ul>
+</li>
+<li><img alt="" src="../images/7199ca0abce3881253e530119b292aa1db859ae978561cd45146200105760527.jpg" /> <em>Figure 13. Example COCO-compressed object.</em> 展示了一个具体的COCO压缩示例，清晰地说明了如何从一个完整的对象生成其压缩后的三元组表示。</li>
+</ul>
+<p><strong>Base Object的构建与管理</strong></p>
+<ul>
+<li><strong>选择策略</strong>: 系统为每个<strong>object type id</strong>静态分配一个<strong>base object</strong>。实现中采用了一种简单高效的策略：将<strong>evicted到压缩层级的第一个该类型对象</strong>直接用作<strong>base object</strong>。</li>
+<li><strong>存储位置</strong>: <strong>Base objects</strong>被存储在主内存的一个专用区域。</li>
+<li><strong>缓存机制</strong>: 为了加速压缩和解压缩过程，Zippads引入了一个<strong>8 KB</strong>的<strong>base object cache</strong>。该缓存利用了<strong>object type</strong>访问高度倾斜的特性（少数类型占据大部分访问），使得缓存命中率极高。<ul>
+<li><img alt="" src="../images/460c193def15b6ede128f7e8f92b1c562eae99929a12f560eb7e289076f8e98e.jpg" /> <em>Figure 14. CDF of accesses to most popular object ids.</em> 的CDF图证实了这一点，显示绝大多数访问都集中在极少数的object type上。</li>
+<li>评估显示，<strong>base object cache</strong>的失效率极低（通常低于0.01 MPKC），对性能影响微乎其微。</li>
+</ul>
+</li>
+</ul>
+<p><strong>硬件实现与开销</strong></p>
+<ul>
+<li><strong>电路设计</strong>: COCO的压缩/解压缩电路设计简单，主要由窄位宽的<strong>comparators</strong>和<strong>multiplexers</strong>构成。</li>
+<li><strong>RTL实现</strong>: 作者使用RTL实现了该电路，并在<strong>45nm</strong>工艺下进行了综合。<ul>
+<li><strong>压缩电路</strong>: 面积等效于<strong>810 NAND2 gates</strong>，运行频率可达<strong>2.8 GHz</strong>。</li>
+<li><strong>解压缩电路</strong>: 面积等效于<strong>592 NAND2 gates</strong>，运行频率可达<strong>3.4 GHz</strong>。</li>
+</ul>
+</li>
+<li><strong>面积优势</strong>: 与先前的压缩技术（如BPC的68K NAND2 gates）相比，COCO的硬件开销<strong>非常小</strong>，证明了其在硬件中实现的可行性。</li>
+</ul>
+<p><strong>在Zippads系统中的集成与作用</strong></p>
+<ul>
+<li><strong>算法协同</strong>: Zippads并非对所有数据都使用COCO。它采用了一种混合策略：<ul>
+<li>对<strong>objects</strong>使用<strong>COCO</strong>压缩。</li>
+<li>对<strong>arrays</strong>则使用传统的<strong>BDI+FPC</strong>混合压缩算法。</li>
+</ul>
+</li>
+<li><strong>指针元数据</strong>: 为了支持这种混合策略，Zippads扩展了指针格式，在其中嵌入了<strong>4 bits</strong>的压缩元数据，用于标识数据的类型（object/array）以及所使用的具体压缩算法。<ul>
+<li><img alt="" src="../images/e85db4e1872fcf433a8daf220cfae789a724f8d1a9ab24d9c60335790b4e8466.jpg" /> <em>Table 3. Zippads+COCO in-pointer compression information. X denotes the bit does not matter, and Cs denote the bits used by hybrid BDI+FPC encoding.</em> 详细列出了这4 bits的编码方案。</li>
+</ul>
+</li>
+<li><strong>ISA扩展</strong>: 为了在分配时区分对象和数组，ISA新增了<strong>alloc_array</strong>指令，而原有的<strong>alloc</strong>指令用于分配对象。这使得硬件能在数据生命周期的最初就获知其类型。</li>
+<li><strong>整体作用</strong>: COCO是Zippads实现<strong>高压缩比</strong>的关键。评估显示，相比于仅使用BDI+FPC的Zippads-BF变体，引入COCO后，系统平均压缩比从<strong>1.70</strong>提升至<strong>2.01</strong>，性能平均提升了<strong>5%</strong>。这充分证明了跨对象压缩对于<strong>object-dominated workloads</strong>的有效性。</li>
+</ul>
+<h3 id="3-hotpads">3. Hotpads 集成<a class="headerlink" href="#3-hotpads" title="Permanent link">&para;</a></h3>
+<p><strong>Hotpads 集成原理</strong></p>
+<p>Zippads 并非从零开始设计，而是将压缩功能无缝集成到 <strong>Hotpads</strong> 这一现有的 <strong>object-based memory hierarchy</strong> 之上。这种集成策略是 Zippads 成功的关键，因为它直接利用了 Hotpads 为管理对象而设计的核心机制。</p>
+<ul>
+<li><strong>核心依赖</strong>：Zippads 的所有压缩操作都围绕 <strong>objects</strong> 而非 <strong>cache lines</strong> 展开，这与 Hotpads 的基本抽象完全一致。</li>
+<li><strong>硬件支持</strong>：Hotpads 提供了硬件层面的对象生命周期管理、指针控制和内存布局优化，Zippads 在此基础上增加了压缩/解压缩逻辑。</li>
+</ul>
+<p><strong>利用 Hotpads 的对象流 (Object Flow)</strong></p>
+<p>Hotpads 定义了一个独特的对象在内存层次结构中的流动方式，Zippads 巧妙地利用此流程来决定何时以及如何压缩对象。</p>
+<ul>
+<li><strong>初始状态</strong>：所有新分配的对象首先存在于 <strong>core-private L1/L2 pads</strong> 中，并且是 <strong>uncompressed</strong> 状态。</li>
+<li><strong>冷数据迁移</strong>：当对象在 L1/L2 中变得不活跃（cold）时，Hotpads 的 <strong>collection-eviction (CE)</strong> 过程会将其驱逐（evict）到更大的下一级存储（如 last-level pad 或 main memory）。</li>
+<li><strong>压缩触发点</strong>：Zippads 将对象首次被驱逐到 <strong>compressed level</strong>（例如 last-level pad）的时刻，作为其 <strong>compression trigger</strong>。此时，对象被压缩并存入目标层级。</li>
+<li><strong>优势</strong>：这种“先 uncompressed，后 compressed”的策略避免了传统压缩内存中必须维护 <strong>uncompressed-to-compressed address translation</strong> 的复杂性和开销。</li>
+</ul>
+<p><strong>指针重写 (Pointer Rewriting) 机制</strong></p>
+<p>Hotpads 的一个关键特性是它能完全控制和修改程序中的指针。Zippads 利用此特性来直接指向压缩后的对象，从而消除了地址翻译层。</p>
+<ul>
+<li><strong>透明性</strong>：对软件而言，指针是不透明的（opaque）。硬件可以在后台自由修改其内容。</li>
+<li><strong>过程</strong>：<ul>
+<li>当一个对象 <code>A</code> 被复制到 L1 pad 时，指向 <code>A</code> 的寄存器或指针会被 <strong>rewritten</strong> 以指向 L1 中的新副本。</li>
+<li>同样，当 <code>A</code> 被驱逐到压缩的 last-level pad 时，所有指向 <code>A</code> 的指针都会被更新，直接指向其 <strong>compressed canonical address</strong>。</li>
+</ul>
+</li>
+<li><strong>结果</strong>：后续对该对象的任何访问都直接命中其压缩形式，无需额外的元数据查找或地址计算。</li>
+</ul>
+<p><img alt="" src="../images/38a37e2d7f1c4de83780e94df44f3db956893cfa0366b407c1db7dbf647c2429.jpg" /> <em>Figure 4. Example showing Hotpads’s main features.</em></p>
+<p><strong>集合-驱逐 (Collection-Eviction, CE) 过程的复用</strong></p>
+<p>CE 是 Hotpads 中用于回收空间和管理对象迁移的核心硬件过程。Zippads 将其作为执行压缩相关操作的理想时机。</p>
+<ul>
+<li><strong>批量处理</strong>：CE 过程会扫描整个 pad 的数据区域，识别 <strong>live</strong> 和 <strong>dead</strong> 对象。这是一个天然的、高效的批量处理窗口。</li>
+<li><strong>指针更新</strong>：在 CE 期间，所有需要被驱逐的 live 对象都会被移动到下一级。Zippads <strong>piggybacks</strong> 在这个过程中，一次性更新所有指向这些被驱逐对象的指针，使其指向新的（压缩的）位置。</li>
+<li><strong>处理脏写回 (Dirty Writebacks)</strong>：如果一个已被压缩的对象被加载到 L1 修改后再写回，其压缩大小可能改变。<ul>
+<li>若新大小 ≤ 旧大小，则原地更新。</li>
+<li>若新大小 &gt; 旧大小（<strong>overflow</strong>），则在新位置分配空间，并在旧位置创建一个 <strong>forwarding thunk</strong> 指向新位置。</li>
+</ul>
+</li>
+<li><strong>周期性压缩 (Periodic Compaction)</strong>：后续的 CE 过程会执行 <strong>compaction</strong>，将所有 live 对象紧凑地排列在一起。在此过程中，Zippads 会清理因 overflow 产生的 <strong>forwarding thunks</strong> 和因缩小而产生的 <strong>internal fragmentation</strong>，恢复存储效率。</li>
+</ul>
+<p><strong>指针格式扩展</strong></p>
+<p>为了支持压缩，Zippads 扩展了 Hotpads 的指针格式，将压缩所需的元数据直接嵌入指针本身。</p>
+<ul>
+<li><strong>原始格式</strong>：Hotpads 指针包含对象地址（48位）和对象大小（14位）。</li>
+<li><strong>Zippads 扩展</strong>：Zippads 将 <strong>size field</strong> 重新解释为 <strong>compressed size</strong>，并利用部分高位来存储 <strong>algorithm-specific compression information</strong>（例如，使用哪种压缩算法）。</li>
+<li><strong>优势</strong>：由于所有内存访问都始于一个指针，硬件在访问对象前就能立即知道其压缩格式和大小，无需查询额外的 tag 或 metadata cache。</li>
+</ul>
+<p><img alt="" src="../images/4fe784bb23414488022335e306dd60fbf8d8658bf4467c9516532f4d4c391320.jpg" /> <em>Figure 11. Zippads pointer format. Compression information is encoded in the pointer.</em></p>
+<hr />
+<p><strong>在整体架构中的作用</strong></p>
+<p>Hotpads 的集成为 Zippads 提供了不可或缺的基础能力，使其能够高效、透明地实现基于对象的压缩。</p>
+<ul>
+<li><strong>提供正确的抽象</strong>：Hotpads 的 <strong>object-granularity</strong> 抽象是 Zippads 能够以对象为单位进行压缩的前提。</li>
+<li><strong>解决地址翻译难题</strong>：通过 <strong>pointer rewriting</strong> 和 <strong>canonical addressing</strong>，彻底规避了传统压缩方案中复杂的地址映射问题。</li>
+<li><strong>提供高效的执行上下文</strong>：<strong>CE process</strong> 为压缩、指针更新和存储整理等开销较大的操作提供了理想的、批量化的执行时机，极大地摊薄了成本。</li>
+<li><strong>简化硬件设计</strong>：将压缩元数据嵌入指针，减少了对额外高速缓存（如 metadata cache）的依赖，降低了硬件复杂度和访问延迟。</li>
+</ul>
+<p>总而言之，没有 Hotpads 提供的底层对象管理和指针控制能力，Zippads 的设计理念——“Compress Objects, Not Cache Lines”——将难以在硬件中高效实现。两者紧密结合，共同构成了一个针对现代 <strong>object-heavy applications</strong> 优化的新型内存层次结构。</p>
+<h3 id="4">4. 指针内嵌压缩元数据<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p><strong>实现原理与动机</strong></p>
+<ul>
+<li>传统压缩缓存架构（如 VSC、LCP）通常将压缩元数据（例如压缩后的大小、使用的算法类型）存储在 <strong>cache tag</strong> 中。这种方式高效，因为标签查找是访问流程的第一步。</li>
+<li>Zippads 的设计基于 <strong>Hotpads</strong> 对象内存层次结构，其核心数据单元是 <strong>variable-sized objects</strong> 而非固定大小的 cache lines。更重要的是，Zippads 的压缩可以应用于 <strong>main memory</strong>，而主存本身没有类似 cache tag 的结构。</li>
+<li>为了解决这个根本性问题，Zippads 利用了 Hotpads 的一个关键特性：<strong>pointers are opaque to software</strong>（指针对软件不透明）。这意味着硬件可以完全控制指针的内部格式，而无需改变 ISA 或影响上层软件。</li>
+<li>因此，Zippads 选择将压缩元数据 <strong>直接编码在指针内部</strong>。这样，任何内存访问都始于一个指针，硬件在解引用该指针时就能立即获取所有必要的解压信息，从而避免了额外的元数据查找开销。</li>
+</ul>
+<p><img alt="" src="../images/4e5d669dce8379eb2f4d91d9687aef0a0b6fb3fd4e38e081ea3932fbd53f27a5.jpg" /> <em>Figure 7. Hotpads pointer format.</em>
+<img alt="" src="../images/4fe784bb23414488022335e306dd60fbf8d8658bf4467c9516532f4d4c391320.jpg" /> <em>Figure 11. Zippads pointer format. Compression information is encoded in the pointer.</em></p>
+<p><strong>指针格式的演进与细节</strong></p>
+<ul>
+<li><strong>Hotpads 基础指针格式</strong>（图7）：<ul>
+<li><strong>低48位</strong>：存储对象的 <strong>word-aligned address</strong>（字对齐地址），指向对象的第一个字。</li>
+<li><strong>高14位</strong>：存储对象的 <strong>size in words</strong>（以字为单位的大小）。</li>
+<li><strong>剩余2位</strong>：用于其他元数据。</li>
+</ul>
+</li>
+<li><strong>Zippads 扩展指针格式</strong>（图11）：<ul>
+<li><strong>压缩后大小</strong>：原有的 <strong>size field</strong> 被重新解释为对象的 <strong>compressed size</strong>（压缩后大小），这对于使用 bump-pointer allocation 紧凑地存储压缩对象至关重要。</li>
+<li><strong>算法标识</strong>：从地址或大小字段中划出 <strong>a few extra bits</strong>（几个额外比特）来存储 <strong>algorithm-specific compression information</strong>（特定于算法的压缩信息）。例如，当使用 BDI 算法时，需要 4 个比特来标识具体的 BDI 编码格式。</li>
+<li><strong>地址空间权衡</strong>：这种设计略微减少了可用的地址宽度。但通过使用 <strong>word addressing</strong>（字寻址，8字节粒度）而非 byte addressing（字节寻址），Zippads 在牺牲少量地址空间的情况下，换取了高效的元数据内嵌能力。例如，44 位的字地址几乎等同于 x86-64 的 48 位字节地址空间。</li>
+</ul>
+</li>
+</ul>
+<p><strong>在 Zippads+COCO 集成中的具体应用</strong></p>
+<ul>
+<li>Zippads 并非只支持一种压缩算法，而是能根据数据类型（对象或数组）动态选择最优算法。</li>
+<li><strong>集成方案</strong>（表3）：<ul>
+<li>指针中预留 <strong>4 bits of compression metadata</strong>。</li>
+<li><strong>Bit 0</strong>: 标识是否为使用 <strong>BDI+FPC</strong> 压缩的 <strong>array</strong>。</li>
+<li><strong>Bit 1</strong>: 如果 Bit 0 为 0，则此位标识是否为使用 <strong>COCO</strong> 压缩的 <strong>object</strong>。</li>
+<li><strong>Bit 2</strong>: 如果前两位均为 0，则此位用于区分未压缩的 <strong>object</strong> 或 <strong>array</strong>，以便在 Collection-Eviction (CE) 过程中正确应用压缩。</li>
+<li><strong>Bits [2:0] or [3:1]</strong>: 剩余的比特用于 BDI+FPC 算法的具体格式编码。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Bit(s)</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1 = Array (BDI+FPC compressed), X = otherwise</td>
+</tr>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1 = Object (COCO compressed), X = otherwise</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1 = Object, 0 = Array (for uncompressed data)</td>
+</tr>
+<tr>
+<td style="text-align: left;">C[2:0]</td>
+<td style="text-align: left;">BDI+FPC specific encoding format</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>ISA 扩展</strong>（表4）：<ul>
+<li>为了在分配时就区分开对象和数组，Zippads 扩展了 ISA，引入了新的 <strong>alloc_array</strong> 指令。</li>
+<li><strong>alloc</strong> 指令用于分配对象，并在指针中设置相应的类型位。</li>
+<li><strong>alloc_array</strong> 指令用于分配数组，并在指针中设置数组类型位。</li>
+<li>这使得硬件在对象生命周期的最初阶段就能为其选择正确的压缩策略。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及在整体系统中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：一个由软件持有的、指向内存中某个对象或数组的 <strong>opaque pointer</strong>。</li>
+<li><strong>处理</strong>：当硬件需要访问该指针指向的数据时（例如，在 L1/L2 pad miss 后需要从压缩的 L3 pad 或 main memory 中获取数据），它会解析该指针的内部格式。</li>
+<li><strong>输出/作用</strong>：<ul>
+<li><strong>即时解压决策</strong>：硬件能立即得知目标数据块是 <strong>compressed</strong> 还是 <strong>uncompressed</strong>。</li>
+<li><strong>精准数据获取</strong>：如果已压缩，硬件能精确知道需要从内存中读取多少字节（<strong>compressed size</strong>）。</li>
+<li><strong>正确解压执行</strong>：硬件能立刻确定应调用哪个解压模块（<strong>BDI+FPC</strong> for arrays, <strong>COCO</strong> for objects）。</li>
+<li><strong>消除间接层</strong>：这是 Zippads 相对于传统压缩主存（如 LCP、RMC）的关键优势。传统方案需要一个独立的 <strong>translation table</strong>（如 TLB-like structure）来将逻辑地址映射到可变大小的压缩块物理地址，这会引入延迟和元数据开销。Zippads 通过 <strong>pointer rewriting</strong>（在 CE 过程中更新所有指向被移动/压缩对象的指针）和 <strong>in-pointer metadata</strong>，完全消除了这一间接层，实现了 <strong>direct access to compressed objects</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5">5. 大对象分块处理<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<p><strong>大对象分块处理的实现原理与流程</strong></p>
+<ul>
+<li>Zippads 将 <strong>大于128B</strong> 的对象定义为“大对象”，其处理策略的核心是 <strong>按需分配 (allocate-on-access)</strong> 和 <strong>独立压缩</strong>，以解决传统方案中因访问单个元素而必须解压整个大对象所带来的 <strong>高延迟</strong> 问题。</li>
+<li>具体实现流程如下：<ul>
+<li>当程序通过 <code>alloc</code> 指令请求一个大对象时，Zippads <strong>不会立即分配完整的物理空间</strong>。</li>
+<li>相反，它会先在内存中创建一个 <strong>索引数组 (index array)</strong>。该数组的大小由对象总尺寸决定，每个元素是一个指针，用于指向一个 <strong>64B 的子对象 (subobject)</strong>。</li>
+<li>所有索引数组中的指针初始值均为 <strong>null</strong>，表示对应的子对象尚未被分配物理内存。</li>
+<li>当程序首次访问大对象中某个特定偏移量的数据时，硬件会：<ol>
+<li>根据偏移量计算出所属的子对象索引。</li>
+<li>检查索引数组中对应位置的指针是否为 null。</li>
+<li>如果为 null，则触发 <strong>按需分配</strong>：为该 64B 子对象分配物理空间，并将新地址写回索引数组。</li>
+<li>然后，硬件通过索引数组中的指针，完成对目标子对象的实际数据访问。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>这一过程对软件完全透明，是一种 <strong>微架构优化 (microarchitecture optimization)</strong>。</li>
+</ul>
+<p><img alt="" src="../images/746182b37942c3612c6be6964b2fee50109c568eff8169a9e37a87520c5d7614.jpg" /> <em>Figure 12. Zippads breaks large objects into subobjects.</em></p>
+<p><strong>参数设置与设计权衡</strong></p>
+<ul>
+<li><strong>分块大小</strong>: 固定为 <strong>64B</strong>。这个尺寸与传统的 <strong>cache line</strong> 大小一致，便于利用现有的内存子系统进行高效传输，同时也能有效限制单次解压操作的数据量。</li>
+<li><strong>大对象阈值</strong>: 设定为 <strong>128B</strong>。这是一个经验值，旨在区分普通小对象（可整体压缩）和需要特殊处理的大对象。</li>
+<li><strong>主要优势</strong>:<ul>
+<li><strong>低延迟</strong>: 访问大对象内部任意部分时，只需解压对应的 64B 子对象，而非整个可能达到 KB 甚至 MB 级别的大对象。</li>
+<li><strong>紧凑布局</strong>: 避免了为未使用的对象部分预留内存，提高了内存空间利用率。</li>
+<li><strong>避免大对象溢出</strong>: 在发生 dirty writeback 导致压缩后尺寸变大的情况下，只需移动单个 64B 子对象，而不是庞大的整体对象，大大降低了处理开销。</li>
+</ul>
+</li>
+<li><strong>引入的开销</strong>:<ul>
+<li><strong>额外元数据</strong>: 需要为每个大对象维护一个索引数组，这会增加约 <strong>1%</strong> 的内存足迹。</li>
+<li><strong>间接访问</strong>: 每次访问都需要一次额外的指针解引用（从索引数组到子对象），增加了少量访问路径的复杂性。</li>
+</ul>
+</li>
+</ul>
+<p><strong>在 Zippads 整体架构中的作用</strong></p>
+<ul>
+<li><strong>无缝集成</strong>: 子对象本身也被视为普通的 <strong>Hotpads 对象</strong>。这意味着它们可以像其他小对象一样，参与 <strong>Collection-Eviction (CE)</strong> 过程、被 <strong>压缩</strong>、其指针也会被 <strong>重写</strong>。</li>
+<li><strong>统一压缩策略</strong>: 每个 64B 子对象会被独立地应用 Zippads 的压缩算法（如 <strong>COCO</strong> 或 <strong>BDI+FPC</strong>）。这使得大对象的不同部分可以根据其内容特性采用最合适的压缩方式。</li>
+<li><strong>关键作用</strong>: 该机制是 Zippads 能够高效、通用地处理 <strong>所有类型</strong> 内存分配（包括大型数组和复杂对象图）的关键，确保了其在面对混合工作负载时依然能保持高性能和高压缩比，从而 <strong>抵消了索引数组带来的微小开销</strong>。</li>
+</ul>
+<hr />
+<h2 id="4_1">4. 实验方法与实验结果<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li>
+<p><strong>基线系统与对比方案</strong>：实验在 MaxSim 平台上进行，对比了五种内存层次结构：</p>
+<ul>
+<li><strong>Uncompressed</strong>：传统的三级缓存，无压缩。</li>
+<li><strong>Compressed memory hierarchy (CMH)</strong>：代表当前最先进水平，对 LLC 和主存均采用 <strong>HyComp-style hybrid BDI+FPC</strong> 压缩。LLC 采用 <strong>VSC</strong> 设计，主存采用 <strong>LCP</strong> 设计，并假设元数据缓存是理想的（always hits）。</li>
+<li><strong>Hotpads</strong>：作为 Zippads 的基础，是一个未压缩的、基于对象的内存层次结构。</li>
+<li><strong>Zippads-BF</strong>：Zippads 的一个变体，对所有数据（对象和数组）都使用 <strong>BDI+FPC</strong> 压缩，用于评估仅靠对象级布局带来的收益。</li>
+<li><strong>Zippads (+COCO)</strong>：完整的提案，对<strong>对象</strong>使用 <strong>COCO</strong> 压缩，对<strong>数组</strong>使用 <strong>BDI+FPC</strong> 压缩。</li>
+</ul>
+</li>
+<li>
+<p><strong>硬件配置</strong>：详细的模拟器参数见下表。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cores</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr>
+<td style="text-align: left;">L1/L2</td>
+<td style="text-align: left;">32/256 KB, 8-way, 4-cycle hit latency</td>
+</tr>
+<tr>
+<td style="text-align: left;">LLC / Last-level Pad</td>
+<td style="text-align: left;">8 MB, 16-way</td>
+</tr>
+<tr>
+<td style="text-align: left;">Main Memory</td>
+<td style="text-align: left;">8 GB DDR3-1600</td>
+</tr>
+<tr>
+<td style="text-align: left;">Base Object Cache</td>
+<td style="text-align: left;">8 KB</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>软件与工作负载</strong>：</p>
+<ul>
+<li>主要使用 <strong>Java</strong> 工作负载，涵盖科学计算（<code>fft</code>, <code>spmv</code>）、数据库（<code>h2</code>, <code>SPECjbb2005</code>）、图处理（<code>PageRank</code>, <code>Coloring</code>）和键值存储（<code>GuavaCache</code>, <code>BTree</code>）。</li>
+<li>为证明通用性，额外测试了两个 <strong>C/C++</strong> 工作负载：<code>GCBench</code>（二叉树操作）和 <code>Silo</code>（内存数据库）。</li>
+<li>所有工作负载的堆大小均设为其最小稳定运行堆大小的 <strong>2倍</strong>，以确保能充分访问主存。</li>
+</ul>
+</li>
+<li>
+<p><strong>评估指标</strong>：主要关注 <strong>平均压缩比</strong>、<strong>主存流量</strong>（字节）和<strong>性能</strong>（执行时间的倒数），所有指标均相对于 <strong>Uncompressed</strong> 基线进行归一化。</p>
+</li>
+</ul>
+<p><strong>结果数据分析</strong></p>
+<ul>
+<li>
+<p><strong>压缩比</strong>：<img alt="" src="../images/0691da417af58c59a7ff60d94501d98bc2f038438e8c0af57df668642dc731c6.jpg" /> <em>Figure 15. Compression ratio of different schemes.</em></p>
+<ul>
+<li>在<strong>数组主导</strong>的工作负载（<code>fft</code>, <code>spmv</code>）上，<strong>CMH</strong> 表现良好（压缩比 ~1.6），而 <strong>Zippads</strong> 略优（~1.8），因为其能更好地压缩非堆数据。</li>
+<li>在<strong>对象主导</strong>的工作负载上，<strong>CMH</strong> 几乎无效（压缩比仅 1.06-1.27），而 <strong>Zippads</strong> 取得了巨大成功。<ul>
+<li><strong>Zippads-BF</strong>（仅用 BDI+FPC）的压缩比已达 <strong>1.56-1.78</strong>，显著优于 CMH，这证明了<strong>以对象为单位进行压缩和紧凑布局</strong>的有效性。</li>
+<li>完整的 <strong>Zippads (+COCO)</strong> 将压缩比进一步提升至 <strong>1.82-2.24</strong>，证明了 <strong>COCO</strong> 跨对象压缩算法的巨大威力。</li>
+</ul>
+</li>
+<li><strong>平均压缩比</strong>：CMH 为 <strong>1.24</strong>，Zippads-BF 为 <strong>1.70</strong>（<strong>1.37×</strong> 于 CMH），Zippads 为 <strong>2.01</strong>（<strong>1.63×</strong> 于 CMH）。</li>
+</ul>
+</li>
+<li>
+<p><strong>主存流量</strong>：<img alt="" src="../images/e0dca03cf347fa65f5a0e5e211bedfd4667ffad2023570fff2890e0162972155.jpg" /> <em>Figure 16. Normalized main memory traffic of different schemes.</em></p>
+<ul>
+<li><strong>CMH</strong> 平均减少 <strong>15%</strong> 流量，主要得益于 LLC 容量增大和主存突发传输。</li>
+<li><strong>Hotpads</strong> 通过对象级移动和片上垃圾回收，平均减少 <strong>66%</strong> 流量。</li>
+<li><strong>Zippads</strong> 在 Hotpads 的基础上，利用高压缩比进一步将平均主存流量减少了 <strong>56%</strong>（相比 CMH+S）。</li>
+</ul>
+</li>
+<li>
+<p><strong>系统性能</strong>：<img alt="" src="../images/e95fd49ce8a52f9b09d49fd1e689bd8a0f64202ce0c032f7e9d8c791bd9f2f82.jpg" /> <em>Figure 17. Performance of different schemes.</em></p>
+<ul>
+<li>性能提升与主存流量减少高度相关。</li>
+<li><strong>CMH+S</strong>（CMH + cache scrubbing）平均提升 <strong>11%</strong> 性能。</li>
+<li><strong>Hotpads</strong> 平均提升 <strong>24%</strong> 性能。</li>
+<li><strong>Zippads</strong> 平均提升 <strong>30%</strong> 性能，相比 <strong>CMH+S</strong> 有 <strong>17%</strong> 的优势，证明其压缩开销很小，收益远大于成本。</li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验与深入分析</strong></p>
+<ul>
+<li>
+<p><strong>Zippads-BF vs. Zippads</strong>：这是核心的消融实验，用于分离 <strong>对象级布局</strong> 和 <strong>COCO 算法</strong> 的贡献。</p>
+<ul>
+<li><strong>Zippads-BF</strong> 相比 <strong>CMH</strong> 的巨大优势（1.37× 压缩比）清晰地表明，<strong>将压缩单元从 cache line 改为 object</strong> 是解决对象程序压缩难题的关键第一步。</li>
+<li><strong>Zippads</strong> 相比 <strong>Zippads-BF</strong> 的进一步提升（1.63× vs 1.37×）则完全归功于 <strong>COCO</strong> 算法，证明了<strong>利用同类型对象间的冗余</strong>是实现更高压缩比的有效途径。</li>
+</ul>
+</li>
+<li>
+<p><strong>COCO 开销分析</strong>：</p>
+<ul>
+<li><strong>Base Object Cache Misses</strong>：<img alt="" src="../images/2fcddf14c63f7fd268b028d3f8421248db29cd78a53de527f3ebe60d5aa722d4.jpg" /> <em>Figure 19. Rate of base object cache misses (in misses per Kcycle, log scale).</em> 大部分工作负载的未命中率极低（&lt; 0.001 MPKC），对性能影响微乎其微（&lt; 0.1%），证明一个小的（8KB）缓存足以满足需求。</li>
+<li><strong>Overflow Frequency</strong>：<img alt="" src="../images/3e5e6cc42ed9140ec5043b9e58fe7afdabeb2aee1e38c45922ae142a5738a289.jpg" /> <em>Figure 20. Rate of dirty writeback overflows (in overflows per Kcycle, log scale).</em> 由于对象修改后尺寸变大的“溢出”情况非常罕见（最高仅 0.4/Kcycle），说明 Zippads 处理脏写回的机制高效且开销可控。</li>
+</ul>
+</li>
+<li>
+<p><strong>硬件开销</strong>：<img alt="" src="../images/2a28fa03d9819cd940cddd0a0ed9577c75d2fb870eb8427c48e4f03001c6c682.jpg" /></p>
+<ul>
+<li><strong>Zippads</strong> 相比基线增加了 <strong>16.3%</strong> 的片上存储（主要用于双倍 c-tag 和 8KB base object cache）。</li>
+<li>这个开销与 <strong>CMH</strong>（+12.7%）相当，并且被其带来的 <strong>2×</strong> 主存流量削减和 <strong>30%</strong> 性能提升所完全抵消。</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

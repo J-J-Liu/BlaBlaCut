@@ -1,0 +1,19 @@
+{
+  "index": "short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors",
+  "paper_title": "Short-Circuit Dispatch: Accelerating Virtual Machine Interpreters on Embedded Processors",
+  "metadata": {
+    "authors": [
+      "Channoh Kim",
+      "Sungmin Kim",
+      "Hyeon Gyu Cho",
+      "et al."
+    ],
+    "affiliations": [
+      "Sungkyunkwan University, Suwon, Korea"
+    ],
+    "venue": "ISCA",
+    "year": 2016,
+    "doi": "10.1109/ISCA.2016.34"
+  },
+  "description": "提出Short-Circuit Dispatch (SCD)，一种低成本硬件扩展，通过将字节码跳转表叠加到BTB上，消除解释器分派循环中的冗余计算。在RISC-V嵌入式处理器上，SCD为Lua和JavaScript解释器分别带来19.9%和14.1%的平均加速，并提升24.2%的能量延迟积(EDP)，仅增加0.72%芯片面积。"
+}

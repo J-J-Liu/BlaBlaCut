@@ -1,0 +1,2036 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Short-Circuit Dispatch: Accelerating Virtual Machine Interpreters on Embedded Processors 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Short-Circuit Dispatch: Accelerating Virtual Machine Interpreters on Embedded Processors 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-a-canonical-dispatch-loop-in-c-b-alpha-assembly-code-c-jump-threaded-dispatch-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: (a) Canonical dispatch loop in C; (b) Alpha assembly code; (c) Jump-threaded dispatch loop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-branch-mpki-breakdown-for-lua-interpreter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Branch MPKI breakdown for Lua interpreter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#f45a3e3245d6a369aa60d35ed27a605164963e3a25173b3f588b1d7cde051f53jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        f45a3e3245d6a369aa60d35ed27a605164963e3a25173b3f588b1d7cde051f53.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#76c24bf233a9caf70c073e5b4ab9734b120a83e599acf15a01d40ea344fbef33jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        76c24bf233a9caf70c073e5b4ab9734b120a83e599acf15a01d40ea344fbef33.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-fraction-of-dispatch-instructions-for-lua" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Fraction of dispatch instructions for Lua
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-i-isa-extension-with-scd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table I: ISA extension with SCD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-transformed-dispatch-loop-original-code-taken-from-figure-1b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Transformed dispatch loop (original code taken from Figure 1(b))
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-pipeline-structure-augmented-with-scd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Pipeline structure augmented with SCD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-running-example-of-scd-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: Running example of SCD operations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-ii-architectural-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table II: Architectural parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iii-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table III: Benchmarks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-overall-speedups-for-lua-and-javascript-interpreters-the-higher-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Overall speedups for Lua and JavaScript interpreters (the higher, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-normalized-dynamic-instruction-count-the-lower-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Normalized dynamic instruction count (the lower, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-branch-misprediction-rate-in-misses-per-kilo-instructions-mpki-the-lower-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9: Branch misprediction rate in misses per kilo-instructions (MPKI) (the lower, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-instruction-cache-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10: Instruction cache miss rates in misses per kilo-instructions (MPKI) (the lower, the better)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iv-cycle-count-and-instruction-count-of-lua-interpreter-using-risc-v-rocket-core-on-fpga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table IV: Cycle count and instruction count of Lua interpreter using RISC-V Rocket Core on FPGA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-v-hardware-overhead-breakdown-area-power" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table V: Hardware overhead breakdown (area, power)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-sensitivity-of-overall-speedups-to-varying-btb-size-a-for-lua-and-b-spidermonkey-sensitivity-to-the-the-maximum-cap-imposed-on-the-number-of-jtes-c-for-lua-and-d-spidermonkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11: Sensitivity of overall speedups to varying BTB size (a) for Lua and (b) SpiderMonkey. Sensitivity to the the maximum cap imposed on the number of JTEs (c) for Lua and (d) SpiderMonkey
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors">Short-Circuit Dispatch: Accelerating Virtual Machine Interpreters on Embedded Processors 图表详解<a class="headerlink" href="#short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-a-canonical-dispatch-loop-in-c-b-alpha-assembly-code-c-jump-threaded-dispatch-loop">Figure 1: (a) Canonical dispatch loop in C; (b) Alpha assembly code; (c) Jump-threaded dispatch loop<a class="headerlink" href="#figure-1-a-canonical-dispatch-loop-in-c-b-alpha-assembly-code-c-jump-threaded-dispatch-loop" title="Permanent link">&para;</a></h3>
+<p><img alt="d0ff831d2ff46eed6107ba1473a8596123382cc5e076925f67ec0c7bd750e0d7.jpg" src="../images/d0ff831d2ff46eed6107ba1473a8596123382cc5e076925f67ec0c7bd750e0d7.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了三种不同形式的虚拟机解释器调度循环，分别标记为 (a)、(b) 和 (c)，用于说明传统调度机制及其优化方案。</p>
+</li>
+<li>
+<p><strong>(a) Canonical dispatch loop in C</strong>：这是用 C 语言编写的典型调度循环。其结构包括：</p>
+<ul>
+<li>无限循环中逐条获取字节码（<code>bc = *(VM.pc++)</code>）。</li>
+<li>解码字节码以提取操作码（<code>opcode = bc &amp; mask</code>）。</li>
+<li>使用 <code>switch</code> 语句跳转到对应处理函数（如 <code>case: LOAD</code>, <code>case: ADD</code>）。</li>
+<li>这种方式简洁直观，但每次执行都需重复解码、边界检查和目标地址计算。</li>
+</ul>
+</li>
+<li>
+<p><strong>(b) Alpha assembly code</strong>：这是由 GCC 编译器生成的 Alpha 架构汇编代码，对应 (a) 中的 C 代码（第2–6行）。关键部分被灰色背景高亮：</p>
+<ul>
+<li><strong>Fetch 阶段</strong>（第2–5行）：从内存加载字节码并更新虚拟 PC。</li>
+<li><strong>Decode and Jump 阶段</strong>（第8–18行）：<ul>
+<li><strong>Decode</strong>（第8行）：使用 <code>and</code> 指令提取操作码。</li>
+<li><strong>Bound check</strong>（第9–10行）：通过 <code>cmpule</code> 和 <code>beq</code> 检查操作码是否在合法范围内。</li>
+<li><strong>Target address calculation and jump</strong>（第13–18行）：通过查表（<code>ldah</code>, <code>lda</code>, <code>s4addq</code>, <code>ldl</code>, <code>addq</code>）计算目标地址，并最终执行间接跳转 <code>jmp r31,(r1),Load</code>。</li>
+</ul>
+</li>
+<li>此汇编代码清晰揭示了调度开销：即使简单操作也需多条指令完成，且间接跳转难以预测。</li>
+</ul>
+</li>
+<li>
+<p><strong>(c) Jump-threaded dispatch loop</strong>：这是一种软件优化技术，通过将每个处理函数的入口地址存入静态数组 <code>labels</code>，并在每个处理函数末尾复制调度逻辑，从而避免在主调度循环中进行查表。</p>
+<ul>
+<li>核心思想是：每个字节码处理完成后，直接跳转回调度点，而非返回主循环。</li>
+<li>示例中，<code>goto *labels[opcode]</code> 替代了 <code>switch</code> 语句。</li>
+<li>优点是减少分支预测错误，因为每个跳转点有独立 BTB 条目。</li>
+<li>缺点是代码膨胀，可能导致指令缓存缺失增加。</li>
+</ul>
+</li>
+<li>
+<p>三者对比总结：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Canonical Dispatch (C)</th>
+<th>Alpha Assembly</th>
+<th>Jump-threaded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>代码结构</strong></td>
+<td>简洁，易读</td>
+<td>复杂，低级</td>
+<td>复制调度逻辑</td>
+</tr>
+<tr>
+<td><strong>性能瓶颈</strong></td>
+<td>解码+查表+跳转开销大</td>
+<td>间接跳转难预测</td>
+<td>代码膨胀导致 I-cache miss</td>
+</tr>
+<tr>
+<td><strong>优化目标</strong></td>
+<td>基础实现</td>
+<td>展示底层开销</td>
+<td>减少分支预测错误</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>教学/原型</td>
+<td>性能分析</td>
+<td>生产环境优化</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图旨在引出论文核心观点：传统调度机制存在大量冗余计算（解码、边界检查、地址计算），而现有优化（如 jump threading）虽改善预测，却未消除冗余。SCD 的创新在于利用硬件 BTB 缓存跳转表，直接跳过这些冗余步骤，实现“短路”调度。</li>
+</ul>
+<h3 id="figure-2-branch-mpki-breakdown-for-lua-interpreter">Figure 2: Branch MPKI breakdown for Lua interpreter<a class="headerlink" href="#figure-2-branch-mpki-breakdown-for-lua-interpreter" title="Permanent link">&para;</a></h3>
+<p><img alt="43a1e4656fffbf0f982efdba8f324a1b3f08cb95ca29b329119e74138dd339fd.jpg" src="../images/43a1e4656fffbf0f982efdba8f324a1b3f08cb95ca29b329119e74138dd339fd.jpg" /></p>
+<ul>
+<li>图片标题为 <strong>Figure 2: Branch MPKI breakdown for Lua interpreter</strong>，展示的是 Lua 解释器在不同基准测试中的分支错误预测率（MPKI）分解图。</li>
+<li>横轴列出 11 个基准测试程序名称，包括 binary-trees、fannkuch-redux、k-nucleotide 等，末尾为 <strong>GEOMEAN</strong> 表示几何平均值。</li>
+<li>纵轴表示每千条指令的分支错误预测次数（Mispredictions per Kilo Instructions），范围从 0 到 30。</li>
+<li>图中采用堆叠柱状图形式，按分支类型分为三类：<ul>
+<li><strong>direct</strong>：直接分支，用深灰色表示。</li>
+<li><strong>indirect (dispatch)</strong>：间接分支（调度相关），用中灰色表示。</li>
+<li><strong>indirect (non-dispatch)</strong>：间接分支（非调度相关），用浅灰色表示。</li>
+</ul>
+</li>
+<li>数据显示，在多数基准测试中，<strong>indirect (dispatch)</strong> 分支是主要的错误预测来源，尤其在 n-sieve 和 pidigits 中占比极高。</li>
+<li>在 <strong>n-sieve</strong> 基准测试中，总 MPKI 超过 25，其中 <strong>indirect (dispatch)</strong> 占比接近 80%，表明调度循环中的间接跳转是性能瓶颈。</li>
+<li><strong>GEOMEAN</strong> 显示整体平均 MPKI 约为 19，其中 <strong>indirect (dispatch)</strong> 占主导地位，说明解释器的 dispatch loop 是分支预测失效的核心区域。</li>
+<li>此图支持论文观点：传统 BTB 对 dispatch loop 的间接跳转预测效果差，是嵌入式平台上解释器效率低下的关键因素。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>基准测试</th>
+<th>总 MPKI</th>
+<th>indirect (dispatch) 占比</th>
+<th>主要贡献者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>binary-trees</td>
+<td>~11</td>
+<td>中等</td>
+<td>direct + indirect(dispatch)</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>~16</td>
+<td>高</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>~17</td>
+<td>高</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>~18</td>
+<td>高</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>~12</td>
+<td>中等</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>~11</td>
+<td>中等</td>
+<td>direct</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>&gt;25</td>
+<td>极高（~80%）</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>random</td>
+<td>~10</td>
+<td>中等</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>~13</td>
+<td>高</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>ackermann</td>
+<td>~11</td>
+<td>中等</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>~20</td>
+<td>高</td>
+<td>indirect(dispatch)</td>
+</tr>
+<tr>
+<td><strong>GEOMEAN</strong></td>
+<td>~19</td>
+<td>主导</td>
+<td>indirect(dispatch)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观揭示了 <strong>dispatch loop 中的间接跳转是 Lua 解释器分支预测失败的主要来源</strong>，为 SCD 提出“绕过冗余计算+硬件加速跳转”的设计提供了数据支撑。</li>
+</ul>
+<h3 id="f45a3e3245d6a369aa60d35ed27a605164963e3a25173b3f588b1d7cde051f53jpg">f45a3e3245d6a369aa60d35ed27a605164963e3a25173b3f588b1d7cde051f53.jpg<a class="headerlink" href="#f45a3e3245d6a369aa60d35ed27a605164963e3a25173b3f588b1d7cde051f53jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="f45a3e3245d6a369aa60d35ed27a605164963e3a25173b3f588b1d7cde051f53.jpg" src="../images/f45a3e3245d6a369aa60d35ed27a605164963e3a25173b3f588b1d7cde051f53.jpg" /></p>
+<ul>
+<li>该图片展示了一个用于量化处理器性能提升的数学公式，其核心是计算 <strong>CPI（Cycles Per Instruction）</strong> 的改进比例。</li>
+<li>公式定义为：<strong>α = CPIBase / CPINew</strong>，其中 α 表示性能提升因子。该值越大，代表新架构或优化方案带来的性能增益越显著。</li>
+<li>公式进一步展开为：<strong>α = 1 / (1 - β)</strong>，其中 <strong>β = ΔCPI / CPIBase</strong>。</li>
+<li>这里的 <strong>ΔCPI</strong> 指的是由于采用新预测器或优化技术后，每条指令所减少的平均周期数。</li>
+<li>该公式揭示了性能提升与基础CPI和CPI改善量之间的非线性关系：当 <strong>β</strong> 接近1时，<strong>α</strong> 将急剧增大，意味着即使微小的CPI降低也能带来巨大的性能飞跃。</li>
+<li>在论文上下文中，此公式被用来分析为何在嵌入式处理器上，先进的间接分支预测器（如VBBI）效果有限。因为嵌入式处理器通常具有 <strong>较高的CPIBase</strong> 和 <strong>较低的分支误预测惩罚</strong>，导致 <strong>β</strong> 值较小，从而使得 <strong>α</strong> 增长不明显。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>α</td>
+<td>性能提升因子</td>
+<td><strong>α &gt; 1</strong> 表示性能提升，值越大越好</td>
+</tr>
+<tr>
+<td>CPIBase</td>
+<td>基础CPI</td>
+<td>未采用新预测器前的每条指令周期数</td>
+</tr>
+<tr>
+<td>CPINew</td>
+<td>新CPI</td>
+<td>采用新预测器后的每条指令周期数</td>
+</tr>
+<tr>
+<td>β</td>
+<td>CPI改善率</td>
+<td><strong>β = ΔCPI / CPIBase</strong>，衡量CPI的相对改善程度</td>
+</tr>
+<tr>
+<td>ΔCPI</td>
+<td>CPI减少量</td>
+<td><strong>ΔCPI = CPIBase - CPINew</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>论文作者利用此公式论证了现有预测技术在嵌入式平台上的局限性，并以此引出他们提出的 <strong>Short-Circuit Dispatch (SCD)</strong> 方案，该方案通过消除冗余计算而非单纯提高预测精度来实现更有效的性能提升。</li>
+</ul>
+<h3 id="76c24bf233a9caf70c073e5b4ab9734b120a83e599acf15a01d40ea344fbef33jpg">76c24bf233a9caf70c073e5b4ab9734b120a83e599acf15a01d40ea344fbef33.jpg<a class="headerlink" href="#76c24bf233a9caf70c073e5b4ab9734b120a83e599acf15a01d40ea344fbef33jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="76c24bf233a9caf70c073e5b4ab9734b120a83e599acf15a01d40ea344fbef33.jpg" src="../images/76c24bf233a9caf70c073e5b4ab9734b120a83e599acf15a01d40ea344fbef33.jpg" /></p>
+<ul>
+<li>该图片展示了一个用于分析处理器性能提升的数学公式，其核心是计算 <strong>CPI（Cycles Per Instruction）</strong> 的改进比例 β。</li>
+<li>公式定义为：β = ΔCPI / CPIBase，其中 ΔCPI 是因优化带来的 CPI 减少量，CPIBase 是基准 CPI。</li>
+<li>公式进一步展开为一个复合表达式，包含四个关键因子：<ul>
+<li><strong>(1) #bytecodes / Total inst. count</strong>：表示在解释器循环中，字节码指令占总指令数的比例。这反映了调度开销在整个执行中的比重。</li>
+<li><strong>(2) Δmispred_rate</strong>：表示间接跳转预测错误率的降低量。这是衡量分支预测优化效果的核心指标。</li>
+<li><strong>(3) miss_penalty</strong>：表示分支预测失败时的惩罚周期数。它与处理器流水线深度直接相关，浅流水线处理器的此值较低。</li>
+<li><strong>(4) CPIBase</strong>：基准 CPI，代表未优化前每条指令所需的平均周期数。嵌入式处理器通常具有较高的 CPIBase。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>因子编号</th>
+<th>含义</th>
+<th>对 β 的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(1)</td>
+<td>字节码指令占比</td>
+<td>占比越高，优化潜力越大，β 越大。</td>
+</tr>
+<tr>
+<td>(2)</td>
+<td>预测错误率降低量</td>
+<td>降低越多，β 越大。但嵌入式处理器上，即使预测准确率大幅提升，收益也有限。</td>
+</tr>
+<tr>
+<td>(3)</td>
+<td>预测失败惩罚</td>
+<td>嵌入式处理器流水线浅，此值小，导致 β 整体偏小。</td>
+</tr>
+<tr>
+<td>(4)</td>
+<td>基准 CPI</td>
+<td>嵌入式处理器 IPC 低，CPIBase 高，分母变大，导致 β 变小。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该公式揭示了为什么传统的硬件分支预测技术（如 VBBI）在嵌入式处理器上效果不佳：尽管它们能显著降低 <strong>Δmispred_rate</strong>，但由于 <strong>miss_penalty</strong> 和 <strong>CPIBase</strong> 的固有特性，最终的 <strong>CPI 改进比例 β</strong> 很小。</li>
+<li>论文作者利用此公式论证了现有优化方案的局限性，并引出他们提出的 <strong>Short-Circuit Dispatch (SCD)</strong> 方案，该方案旨在通过消除冗余计算来减少总指令数，从而绕过对分支预测的依赖，实现更有效的加速。</li>
+</ul>
+<h3 id="figure-3-fraction-of-dispatch-instructions-for-lua">Figure 3: Fraction of dispatch instructions for Lua<a class="headerlink" href="#figure-3-fraction-of-dispatch-instructions-for-lua" title="Permanent link">&para;</a></h3>
+<p><img alt="521f1ab0321cd25952dda6f7e7057473859c9e6d7f95e7b346334db090e90c67.jpg" src="../images/521f1ab0321cd25952dda6f7e7057473859c9e6d7f95e7b346334db090e90c67.jpg" /></p>
+<ul>
+<li>图片标题为 <strong>Figure 3: Fraction of dispatch instructions for Lua</strong>，展示的是在 Lua 解释器中，<strong>dispatch instructions</strong>（调度指令）占整个解释器循环总指令数的百分比。</li>
+<li>横轴列出 11 个基准测试程序：binary-trees、fannkuch-redux、k-nucleotide、mandelbrot、n-body、spectral-norm、n-sieve、random、fibo、ackermann、pidigits，以及一个 <strong>GEOMEAN</strong>（几何平均值）。</li>
+<li>纵轴表示 <strong>Percentage of Instructions (%)</strong>，范围从 0% 到 50%，以 10% 为间隔。</li>
+<li>所有柱状图高度均超过 15%，表明在所有测试用例中，调度指令占比显著。</li>
+<li><strong>最高值出现在 mandelbrot 和 random</strong>，均接近 <strong>42%</strong>，说明这两个程序在解释执行时，调度开销尤为突出。</li>
+<li><strong>最低值出现在 k-nucleotide</strong>，约为 <strong>17%</strong>，但仍远高于一般程序的分支或控制流开销。</li>
+<li><strong>GEOMEAN 值约为 26%</strong>，意味着在 Lua 解释器中，平均有超过四分之一的动态指令用于调度操作。</li>
+<li>此数据支持论文核心论点：<strong>dispatcher code 中存在大量冗余计算</strong>，是性能瓶颈，尤其在嵌入式处理器上更需优化。</li>
+<li>表格化数据如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Dispatch Instruction %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>binary-trees</td>
+<td>~19%</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>~28%</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>~17%</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>~42%</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>~28%</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>~27%</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>~26%</td>
+</tr>
+<tr>
+<td>random</td>
+<td>~42%</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>~23%</td>
+</tr>
+<tr>
+<td>ackermann</td>
+<td>~22%</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>~25%</td>
+</tr>
+<tr>
+<td><strong>GEOMEAN</strong></td>
+<td><strong>~26%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观揭示了传统解释器调度机制的低效性，为提出 <strong>Short-Circuit Dispatch (SCD)</strong> 提供了充分动机。</li>
+</ul>
+<h3 id="table-i-isa-extension-with-scd">Table I: ISA extension with SCD<a class="headerlink" href="#table-i-isa-extension-with-scd" title="Permanent link">&para;</a></h3>
+<p><img alt="013a9dc8731955558fe776ef119d7826e891baaf014544d2b3c7151b782125fe.jpg" src="../images/013a9dc8731955558fe776ef119d7826e891baaf014544d2b3c7151b782125fe.jpg" /></p>
+<ul>
+<li><strong>Table I</strong> 详细列出了为实现 <strong>Short-Circuit Dispatch (SCD)</strong> 而新增的五条指令及其语义，旨在通过硬件加速字节码分派过程。</li>
+<li>指令设计围绕三个核心寄存器：<strong>Rop</strong>（Opcode Register）、<strong>Rmask</strong>（Mask Register）和 <strong>Rbop-pc</strong>（BOP-PC Register），以支持对 <strong>BTB</strong> 的高效重用。</li>
+<li>新增指令包括 <strong>setmask</strong>、带 <code>.op</code> 后缀的通用指令、<strong>bop</strong>、<strong>jru</strong> 和 <strong>jte flush</strong>，共同构成一套完整的硬件加速分派机制。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>setmask Rn</strong><br>(Set-mask)</td>
+<td>将寄存器 <code>Rn</code> 的值写入 <strong>Rmask</strong> 寄存器，用于后续字节码解码时提取操作码。</td>
+</tr>
+<tr>
+<td><strong><inst>.op</strong><br>(Suffix-for-Rop-update)</td>
+<td>执行原指令 <code>&lt;inst&gt;</code> 后，将结果与 <strong>Rmask</strong> 掩码运算，结果存入 <strong>Rop.d</strong>，并置位 <strong>Rop.v</strong> 标志。</td>
+</tr>
+<tr>
+<td><strong>bop</strong><br>(Branch-on-opcode)</td>
+<td>若当前 PC 等于 <strong>Rbop-pc</strong> 且 <strong>Rop.v</strong> 有效，则用 <strong>Rop.d</strong> 查找 BTB；若命中，跳转至目标地址并清零 <strong>Rop.v</strong>；否则顺序执行下一条指令，并更新 <strong>Rbop-pc</strong> 为当前 bop 地址。</td>
+</tr>
+<tr>
+<td><strong>jru Rn</strong><br>(Jump-register-with-jte-update)</td>
+<td>跳转至寄存器 <code>Rn</code> 指定的目标地址；若 <strong>Rop.v</strong> 有效，则将 (<strong>Rop.d</strong>, <code>Rn</code>) 对插入 BTB 中作为 JTE，并清零 <strong>Rop.v</strong>。</td>
+</tr>
+<tr>
+<td><strong>jte flush</strong><br>(Flush-all-jte)</td>
+<td>清除 BTB 中所有 <strong>JTE</strong> 条目（不触及普通 BTB 条目），并将 <strong>Rop.v</strong> 置零，用于上下文切换或退出解释器循环。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键机制</strong>：<ul>
+<li><strong>.op 后缀</strong> 实现了“自动解码”，在加载字节码的同时完成操作码提取，省去独立解码指令。</li>
+<li><strong>bop</strong> 是核心加速指令，它利用 <strong>Rop.d</strong> 作为键值查询 BTB，实现“短路”跳转，绕过传统分派路径。</li>
+<li><strong>jru</strong> 在慢路径中负责填充 BTB，建立新的 JTE 映射，是缓存机制的写入点。</li>
+<li><strong>jte flush</strong> 确保多任务环境下 BTB 中的 JTE 不会污染其他进程，保障正确性。</li>
+</ul>
+</li>
+<li>整体设计强调<strong>低开销</strong>与<strong>高兼容性</strong>，仅需少量新寄存器和微架构改动，即可显著减少动态指令数和分支预测失误。</li>
+</ul>
+<h3 id="figure-4-transformed-dispatch-loop-original-code-taken-from-figure-1b">Figure 4: Transformed dispatch loop (original code taken from Figure 1(b))<a class="headerlink" href="#figure-4-transformed-dispatch-loop-original-code-taken-from-figure-1b" title="Permanent link">&para;</a></h3>
+<p><img alt="0dee5f735f83da9327d3a84413cecf33bcd7ce7b27aa682d26e25f200b4e5048.jpg" src="../images/0dee5f735f83da9327d3a84413cecf33bcd7ce7b27aa682d26e25f200b4e5048.jpg" /></p>
+<ul>
+<li>图片展示了经过 <strong>Short-Circuit Dispatch (SCD)</strong> 改造后的虚拟机解释器调度循环汇编代码，原始代码源自 Figure 1(b)。</li>
+<li>该代码基于 Alpha 架构，但为演示 SCD 的工作原理进行了修改，重点在于引入三个新指令：<strong><code>.op</code> 后缀、<code>bop</code> 和 <code>jru</code></strong>。</li>
+<li>代码结构分为三部分：<strong>Fetch（取指）、Branch-on-opcode（基于操作码的分支）和 Decode-and-Jump（解码与跳转，即慢路径）</strong>。</li>
+<li>第3行 <code>ldl.op r9,0(r5)</code> 是关键改造点，它不仅将字节码加载到寄存器 <code>r9</code>，同时根据 <code>Rmask</code> 寄存器的掩码值提取操作码并写入 <strong>Opcode Register (Rop)</strong>，从而省去后续显式解码步骤。</li>
+<li>第7行 <code>bop</code> 指令是 SCD 的核心。它使用 Rop 中的操作码作为键，在 <strong>Branch Target Buffer (BTB)</strong> 中查找对应的跳转目标地址。若命中，则直接跳转至目标；若未命中，则落入慢路径继续执行。</li>
+<li>第20行 <code>jru r31,(r1),Load</code> 替代了传统的间接跳转指令 <code>jmp</code>。它在完成跳转的同时，将当前操作码（来自 Rop）和目标地址（来自 <code>r1</code>）作为一对 <strong>Jump Table Entry (JTE)</strong> 插入 BTB，为后续相同操作码的快速调度做准备。</li>
+<li>灰色高亮部分标示了被 SCD 修改或新增的指令，清晰地对比了原始调度循环与 SCD 增强版本的区别。</li>
+<li>通过这种设计，SCD 将原本需要多条指令完成的“取指-解码-边界检查-地址计算”流程，压缩为一次 BTB 查找，显著减少了动态指令数。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>行号</th>
+<th>指令</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td><code>ldl.op r9,0(r5)</code></td>
+<td>加载字节码并自动提取操作码至 Rop，实现硬件辅助解码。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>bop</code></td>
+<td>使用 Rop 中的操作码查询 BTB，实现短路跳转。命中则直接跳转，否则进入慢路径。</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>jru r31,(r1),Load</code></td>
+<td>执行跳转，并将 (操作码, 目标地址) 对插入 BTB，用于缓存。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观地体现了 SCD 的核心思想：<strong>利用 BTB 作为硬件缓存来存储字节码跳转表，从而绕过冗余的软件计算过程</strong>，最终达到加速解释器的目的。</li>
+</ul>
+<h3 id="figure-5-pipeline-structure-augmented-with-scd">Figure 5: Pipeline structure augmented with SCD<a class="headerlink" href="#figure-5-pipeline-structure-augmented-with-scd" title="Permanent link">&para;</a></h3>
+<p><img alt="a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg" src="../images/a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg" /></p>
+<ul>
+<li>图片展示了集成 <strong>Short-Circuit Dispatch (SCD)</strong> 的处理器流水线结构，核心目标是通过硬件加速字节码分派，减少冗余计算。</li>
+<li>流水线分为五个阶段：<strong>Fetch</strong>、<strong>IF/ID</strong>、<strong>Decode</strong>、<strong>ID/EX</strong> 和 <strong>Execute</strong>，与传统 RISC-V 流水线兼容，仅在关键路径上增加 SCD 逻辑。</li>
+<li><strong>Rbop-pc 寄存器</strong>存储关键间接跳转指令的 PC 地址。在 Fetch 阶段，当前 PC 与 Rbop-pc 比较，若匹配则触发 <strong>bop?</strong> 信号，进入 SCD 快速路径。</li>
+<li><strong>Stall Logic</strong> 负责处理数据依赖：当 bop 指令执行时，若 Rop 寄存器尚未就绪（即 <inst>.op 尚未完成），则插入气泡（stall）等待，确保正确性。</li>
+<li><strong>Branch Target Buffer (BTB)</strong> 被扩展以支持两种条目类型：<ul>
+<li><strong>BTB entry</strong>：常规分支预测条目，J/B¯ 位为 0。</li>
+<li><strong>JT entry</strong>：字节码跳转表条目，J/B¯ 位为 1，用于 SCD 快速查找。</li>
+</ul>
+</li>
+<li>BTB 查找键值根据上下文动态切换：<ul>
+<li>正常情况：使用 PC 作为索引。</li>
+<li>当 bop? 为真且 Rop.v 有效时：使用 <strong>Rop.d</strong>（即字节码操作码）作为索引。</li>
+</ul>
+</li>
+<li><strong>Rop 寄存器</strong>包含两个字段：<strong>Rop.v</strong>（有效位）和 <strong>Rop.d</strong>（32 位数据）。在执行 <inst>.op 指令后，结果经 Rmask 掩码后写入 Rop.d。</li>
+<li><strong>Rmask 寄存器</strong>存储掩码值，用于从字节码中提取操作码字段，避免软件中额外的解码指令。</li>
+<li><strong>jru 指令</strong>在 Execute 阶段将 (Rop.d, 目标地址) 对写入 BTB，创建新的 JT entry，并重置 Rop.v 为 0。</li>
+<li><strong>多路选择器</strong>控制 PC 更新路径：<ul>
+<li>若 BTB hit 且为 JT entry，则直接跳转至目标地址。</li>
+<li>否则，PC 自增 4，进入慢路径。</li>
+</ul>
+</li>
+<li>下表总结了 BTB 条目格式：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>位宽</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V</td>
+<td>1</td>
+<td>有效位，指示条目是否有效</td>
+</tr>
+<tr>
+<td>J/B¯</td>
+<td>1</td>
+<td>类型标志：0=BTB entry，1=JT entry</td>
+</tr>
+<tr>
+<td>Tag</td>
+<td>N</td>
+<td>标签字段，用于匹配</td>
+</tr>
+<tr>
+<td>Target Address</td>
+<td>M</td>
+<td>目标地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体设计强调<strong>低开销</strong>：复用现有 BTB 结构，仅增加少量寄存器和控制逻辑，硬件成本极小（论文称面积增加仅 0.72%）。</li>
+<li>关键创新在于将软件跳转表“缓存”到硬件 BTB 中，实现<strong>硬件级 memoization</strong>，绕过解码、边界检查和地址计算等冗余步骤。</li>
+<li>该架构特别适合嵌入式处理器，因其浅流水线和低 IPC 特性使传统分支预测优化收益有限，而 SCD 通过减少指令数直接提升性能。</li>
+</ul>
+<h3 id="figure-6-running-example-of-scd-operations">Figure 6: Running example of SCD operations<a class="headerlink" href="#figure-6-running-example-of-scd-operations" title="Permanent link">&para;</a></h3>
+<p><img alt="b596e5e26462dcbaff4cb17d61f9a973432544d7b09595a0208a2c06ca0db2d1.jpg" src="../images/b596e5e26462dcbaff4cb17d61f9a973432544d7b09595a0208a2c06ca0db2d1.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Short-Circuit Dispatch (SCD)</strong> 的运行示例，通过四个阶段（a-d）演示了 <strong>BTB</strong> 如何被复用为 <strong>Jump Table Entry (JTE)</strong> 缓存，从而加速解释器调度循环。</li>
+<li>每个 BTB 条目包含三个字段：<strong>V (Valid bit)</strong>、<strong>J/B̄ (Jump/Branch flag)</strong> 和 <strong>Target address</strong>。其中 J/B̄ 位决定该条目是普通分支预测条目（B̄=0）还是跳转表条目（J=1）。</li>
+<li><strong>图 (a) 初始状态</strong>：BTB 中仅有两个有效且为普通分支预测的条目（V=1, J/B̄=0），无任何 JTE。此时 Rop.d 尚未载入有效操作码。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>V</th>
+<th>J/B̄</th>
+<th>Target address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>图 (b) 慢路径 - bop miss</strong>：当加载一个新字节码（如 OP_LOAD）时，其操作码经掩码后写入 <strong>Rop.d</strong>。执行 <strong>bop</strong> 指令时，以 Rop.d 为键在 BTB 中查找，因无匹配 JTE 而未命中（①）。随后进入慢路径，由 <strong>jru</strong> 指令将 (OP_LOAD, Target(OP_LOAD)) 插入 BTB，形成新的 JTE（②），此时该条目 V=1, J/B̄=1。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>V</th>
+<th>J/B̄</th>
+<th>Target address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td><strong>Target(OP_LOAD)</strong></td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>图 (c) 快路径 - bop hit</strong>：再次遇到相同操作码 OP_LOAD 时，<strong>bop</strong> 指令在 BTB 中命中对应的 JTE（①），直接将 PC 重定向至目标地址（②），绕过解码、边界检查和地址计算等冗余指令，实现“短路”调度。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>V</th>
+<th>J/B̄</th>
+<th>Target address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td><strong>Target(OP_LOAD)</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>Target(OP_MOVE)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>Target(OP_ADD)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>图 (d) jte_flush</strong>：当解释器退出调度循环时，执行 <strong>jte_flush</strong> 指令，仅将所有 JTE 条目的 <strong>V 位清零</strong>（灰色区域），而保留普通 BTB 条目不变，确保系统上下文切换后行为正确。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>V</th>
+<th>J/B̄</th>
+<th>Target address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>BTB entry</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整个流程体现了 SCD 的核心思想：<strong>利用现有 BTB 硬件资源缓存高频字节码的目标地址，通过硬件查找替代软件计算，显著减少动态指令数和分支误预测，尤其适用于嵌入式处理器</strong>。</li>
+</ul>
+<h3 id="table-ii-architectural-parameters">Table II: Architectural parameters<a class="headerlink" href="#table-ii-architectural-parameters" title="Permanent link">&para;</a></h3>
+<p><img alt="6f49babf8d910388f576bc7000c47ee5f9adbccd9301e6be6ef8cc330eb86788.jpg" src="../images/6f49babf8d910388f576bc7000c47ee5f9adbccd9301e6be6ef8cc330eb86788.jpg" /></p>
+<ul>
+<li>该表格（Table II: Architectural parameters）对比了用于评估 Short-Circuit Dispatch (SCD) 的两种平台：<strong>gem5模拟器</strong>与<strong>FPGA实现</strong>，其核心架构参数存在显著差异，以反映真实嵌入式场景。</li>
+<li><strong>ISA层面</strong>：<ul>
+<li>模拟器采用 <strong>64-bit Alpha</strong> 架构，而 FPGA 实现基于 <strong>64-bit RISC-V v2</strong>，体现 SCD 的 ISA 独立性。</li>
+</ul>
+</li>
+<li><strong>微架构层面</strong>：<ul>
+<li>两者均为 <strong>Single-Issue In-Order</strong> 设计，但主频不同：模拟器为 <strong>1GHz</strong>，FPGA 为 <strong>50MHz</strong>（综合后），更贴近资源受限的嵌入式设备。</li>
+<li>流水线深度不同：模拟器为 <strong>4级</strong>（Fetch1/Fetch2/Decode/Execute），FPGA 为 <strong>5级</strong>（Fetch/Decode/Execute/Memory/Writeback），后者更复杂。</li>
+</ul>
+</li>
+<li><strong>分支预测器（Branch Predictor）</strong>：<ul>
+<li>模拟器配置复杂：包含 <strong>Tournament predictor</strong>、<strong>256-entry BTB</strong>、<strong>8-entry return address stack</strong> 及 <strong>3-cycle penalty</strong>。</li>
+<li>FPGA 配置精简：仅含 <strong>32B predictor</strong>、<strong>62-entry fully-associative BTB</strong>、<strong>2-entry return address stack</strong> 及 <strong>2-cycle penalty</strong>，符合嵌入式低开销需求。</li>
+</ul>
+</li>
+<li><strong>缓存系统（Caches）</strong>：<ul>
+<li>模拟器缓存更大、延迟更高：L1 I-cache 为 <strong>16KB, 2-way, 2-cycle</strong>；L1 D-cache 为 <strong>32KB, 4-way, 2-cycle</strong>。</li>
+<li>FPGA 缓存更小、延迟更低：L1 I-cache 为 <strong>16KB, 4-way, 1-cycle</strong>；L1 D-cache 为 <strong>16KB, 4-way, 1-cycle</strong>，优化访存效率。</li>
+<li>TLB 和块大小一致：均为 <strong>10-entry I-TLB / D-TLB</strong> 和 <strong>64B block size</strong>。</li>
+</ul>
+</li>
+<li><strong>内存子系统（Memory）</strong>：<ul>
+<li>模拟器使用 <strong>512MB DDR3-1600, 2 rank</strong>，时序为 <strong>tCL/tRCD/tRP = 11/11/11</strong>。</li>
+<li>FPGA 使用 <strong>1GB DDR3-1066, 1 rank</strong>，时序为 <strong>tCL/tRCD/tRP = 7/7/7</strong>，带宽和延迟均更低。</li>
+</ul>
+</li>
+<li><strong>工作负载（Workloads）</strong>：<ul>
+<li>模拟器测试 <strong>Lua-5.3.0</strong> 和 <strong>JavaScript (SpiderMonkey-17)</strong>。</li>
+<li>FPGA 仅测试 <strong>Lua-5.3.0</strong>，因 SpiderMonkey 在 RISC-V/Newlib 上构建失败。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数类别</th>
+<th>Simulator (gem5)</th>
+<th>FPGA (RISC-V Rocket Core)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ISA</strong></td>
+<td>64-bit Alpha</td>
+<td>64-bit RISC-V v2</td>
+</tr>
+<tr>
+<td><strong>Architecture</strong></td>
+<td>Single-Issue In-Order, 1GHz</td>
+<td>Single-Issue In-Order, 50MHz (Synthesized)</td>
+</tr>
+<tr>
+<td><strong>Pipeline</strong></td>
+<td>Fetch1/Fetch2/Decode/Execute (4 stages)</td>
+<td>Fetch/Decode/Execute/Memory/Writeback (5 stages)</td>
+</tr>
+<tr>
+<td><strong>Branch Predictor</strong></td>
+<td>Tournament predictor (512 global + 128 local)<br>256-entry BTB<br>8-entry RAS<br>3-cycle penalty</td>
+<td>32B predictor<br>62-entry BTB (fully-assoc)<br>2-entry RAS<br>2-cycle penalty</td>
+</tr>
+<tr>
+<td><strong>Caches</strong></td>
+<td>L1 I-cache: 16KB, 2-way, 2-cycle<br>L1 D-cache: 32KB, 4-way, 2-cycle<br>10-entry I/D-TLB<br>64B block</td>
+<td>L1 I-cache: 16KB, 4-way, 1-cycle<br>L1 D-cache: 16KB, 4-way, 1-cycle<br>8-entry I/D-TLB<br>64B block</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>512MB, DDR3-1600, 2 rank, tCL/tRCD/tRP=11/11/11</td>
+<td>1GB, DDR3-1066, 1 rank, tCL/tRCD/tRP=7/7/7</td>
+</tr>
+<tr>
+<td><strong>Workloads</strong></td>
+<td>Lua-5.3.0, JavaScript (SpiderMonkey-17)</td>
+<td>Lua-5.3.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，该表清晰展示了从高性能模拟环境到资源受限嵌入式硬件平台的过渡，验证了 SCD 在真实嵌入式条件下的有效性。</li>
+</ul>
+<h3 id="table-iii-benchmarks">Table III: Benchmarks<a class="headerlink" href="#table-iii-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="b21fa233bea9b839261851f79a928e2a093aaf234d040ed2b11647c1640fd201.jpg" src="../images/b21fa233bea9b839261851f79a928e2a093aaf234d040ed2b11647c1640fd201.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table III: Benchmarks</strong>，详细列出了用于评估 Short-Circuit Dispatch (SCD) 性能的测试脚本及其输入参数。</li>
+<li>表格包含三列：<strong>Input script</strong>、<strong>Input parameter</strong>（细分为 Simulator 和 FPGA）、以及 <strong>Description</strong>。</li>
+<li>所有脚本均来自 <strong>Computer Language Benchmarks Game</strong>，用于衡量 Lua 和 SpiderMonkey 解释器在不同调度机制下的性能表现。</li>
+<li>输入参数根据运行平台（模拟器或 FPGA）进行了调整，以适应不同硬件环境的执行需求。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Input script</th>
+<th>Simulator</th>
+<th>FPGA</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>binary-trees²</td>
+<td>12</td>
+<td>—</td>
+<td>Allocate and deallocate many binary trees</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>9</td>
+<td>11</td>
+<td>Indexed-access to tiny integer-sequence</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>250,000</td>
+<td>2,500,000</td>
+<td>Repeatedly update hashtables and k-nucleotide strings</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>250</td>
+<td>4,000</td>
+<td>Generate Mandelbrot set portable bitmap file</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>500,000</td>
+<td>5,000,000</td>
+<td>Double-precision N-body simulation</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>500</td>
+<td>3,000</td>
+<td>Eigenvalue using the power method</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>7</td>
+<td>8</td>
+<td>Count the prime numbers from 2 to M (Sieve of Eratosthenes algorithm)</td>
+</tr>
+<tr>
+<td>random</td>
+<td>300,000</td>
+<td>600,000</td>
+<td>Generate random number</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>12</td>
+<td>32</td>
+<td>Calculate Fibonacci number</td>
+</tr>
+<tr>
+<td>ackermann</td>
+<td>7</td>
+<td>10</td>
+<td>Use of the Ackermann function to provide a benchmark for computer performance</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>500</td>
+<td>6,000</td>
+<td>Streaming arbitrary-precision arithmetic</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>binary-trees²</strong> 脚本仅在模拟器上运行，未在 FPGA 上测试。</li>
+<li>多数脚本在 FPGA 上的输入参数显著大于模拟器，例如 <strong>k-nucleotide</strong> 从 250,000 增至 2,500,000，表明 FPGA 测试更注重大规模数据处理能力。</li>
+<li>描述列清晰说明了每个脚本的功能，如 <strong>n-sieve</strong> 使用埃拉托斯特尼筛法计算素数，<strong>ackermann</strong> 则用于评估计算机性能基准。</li>
+<li>此表格是实验设计的关键部分，确保了在不同平台上对 SCD 的有效性进行公平且全面的评估。</li>
+</ul>
+<h3 id="figure-7-overall-speedups-for-lua-and-javascript-interpreters-the-higher-the-better">Figure 7: Overall speedups for Lua and JavaScript interpreters (the higher, the better)<a class="headerlink" href="#figure-7-overall-speedups-for-lua-and-javascript-interpreters-the-higher-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="59c8290a804fa6bc00694a1947d72917d5506e9545d1ba3b769cdd30c426a974.jpg" src="../images/59c8290a804fa6bc00694a1947d72917d5506e9545d1ba3b769cdd30c426a974.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 7</strong>，标题为“Overall speedups for Lua and JavaScript interpreters (the higher, the better)”，用于比较三种技术在 Lua 和 JavaScript 解释器上的性能加速效果。</li>
+<li>横轴分为两部分：左侧为 <strong>Lua</strong> 的 11 个基准测试程序，右侧为 <strong>JavaScript</strong> 的 11 个基准测试程序；纵轴表示相对于基线（Baseline）的加速比（Speedup over Baseline），数值越高代表性能越好。</li>
+<li>图例中包含三种技术：<ul>
+<li><strong>Jump Threading</strong>（白色柱状图）</li>
+<li><strong>VBBI</strong>（灰色柱状图）</li>
+<li><strong>SCD</strong>（黑色柱状图）</li>
+</ul>
+</li>
+<li>在 <strong>Lua</strong> 部分：<ul>
+<li><strong>SCD</strong> 在所有基准测试中均优于其他两种技术，其中 <strong>mandelbrot</strong> 达到最高加速比 <strong>1.384</strong>（即 38.4% 加速）。</li>
+<li><strong>VBBI</strong> 表现次之，但多数情况下仍优于 Jump Threading。</li>
+<li><strong>Jump Threading</strong> 在多个测试中表现不佳，甚至在某些程序（如 n-sieve）中出现负加速。</li>
+<li>几何平均（GEOMEAN）显示 <strong>SCD</strong> 达到 <strong>1.199</strong>（即 19.9% 加速），显著优于 VBBI（1.088）和 Jump Threading（0.984）。</li>
+</ul>
+</li>
+<li>在 <strong>JavaScript</strong> 部分：<ul>
+<li><strong>SCD</strong> 同样表现最佳，<strong>fannkuch-redux</strong> 达到最高加速比 <strong>1.372</strong>（即 37.2% 加速）。</li>
+<li><strong>VBBI</strong> 表现一般，仅在少数测试中略优于 Jump Threading。</li>
+<li><strong>Jump Threading</strong> 在部分测试中表现尚可，但在整体上仍落后于 SCD。</li>
+<li>几何平均（GEOMEAN）显示 <strong>SCD</strong> 达到 <strong>1.141</strong>（即 14.1% 加速），优于 VBBI（1.053）和 Jump Threading（1.073）。</li>
+</ul>
+</li>
+<li>总体来看，<strong>SCD</strong> 在两个解释器上均实现了显著的性能提升，且在大多数基准测试中表现稳定，而 <strong>VBBI</strong> 和 <strong>Jump Threading</strong> 则存在较大的波动性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>Lua GEOMEAN</th>
+<th>JavaScript GEOMEAN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SCD</strong></td>
+<td><strong>1.199</strong></td>
+<td><strong>1.141</strong></td>
+</tr>
+<tr>
+<td>VBBI</td>
+<td>1.088</td>
+<td>1.053</td>
+</tr>
+<tr>
+<td>Jump Threading</td>
+<td>0.984</td>
+<td>1.073</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>SCD</strong> 是一种高效的硬件加速方案，尤其适用于嵌入式平台上的脚本解释器，其性能优势主要来源于减少冗余计算和降低指令数，而非单纯依赖分支预测优化。</li>
+</ul>
+<h3 id="figure-8-normalized-dynamic-instruction-count-the-lower-the-better">Figure 8: Normalized dynamic instruction count (the lower, the better)<a class="headerlink" href="#figure-8-normalized-dynamic-instruction-count-the-lower-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="9571006923da6578b8972eeb321f58c3f0f1302117b7771a61d3ac075b780e22.jpg" src="../images/9571006923da6578b8972eeb321f58c3f0f1302117b7771a61d3ac075b780e22.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 8: Normalized dynamic instruction count (the lower, the better)</strong>，用于比较三种调度优化技术（Jump Threading、VBBI、SCD）在 Lua 和 JavaScript 解释器上的动态指令数表现。</li>
+<li>横轴按基准程序分组，左侧为 <strong>Lua</strong>，右侧为 <strong>JavaScript</strong>，每个程序下有三个柱状图分别对应三种技术。</li>
+<li>纵轴为归一化指令数（相对于基线），数值越低表示优化效果越好。</li>
+<li><strong>SCD（黑色柱）</strong> 在绝大多数基准测试中显著优于其他两种技术，尤其在 Lua 的 <code>n-sieve</code>、<code>random</code>、<code>fibo</code> 和 JavaScript 的 <code>fannkuch-redux</code>、<code>n-body</code> 等程序上表现突出。</li>
+<li><strong>VBBI（灰色柱）</strong> 表现次之，多数情况下优于 Jump Threading，但在部分程序如 Lua 的 <code>mandelbrot</code> 和 JavaScript 的 <code>binary-trees</code> 上略逊于 SCD。</li>
+<li><strong>Jump Threading（白色柱）</strong> 在多个程序中表现最差，甚至在某些程序（如 Lua 的 <code>n-sieve</code>、JavaScript 的 <code>fannkuch-redux</code>）中高于基线，说明其代码膨胀导致指令数增加。</li>
+<li>下表总结了各技术在 Lua 和 JavaScript 上的平均归一化指令数：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>Lua 平均归一化指令数</th>
+<th>JavaScript 平均归一化指令数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jump Threading</td>
+<td>~1.02</td>
+<td>~0.98</td>
+</tr>
+<tr>
+<td>VBBI</td>
+<td>~0.95</td>
+<td>~0.94</td>
+</tr>
+<tr>
+<td>SCD</td>
+<td><strong>~0.90</strong></td>
+<td><strong>~0.90</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体来看，<strong>SCD 能有效减少冗余计算，降低动态指令数约 10%</strong>，是提升解释器性能的关键因素。</li>
+</ul>
+<h3 id="figure-9-branch-misprediction-rate-in-misses-per-kilo-instructions-mpki-the-lower-the-better">Figure 9: Branch misprediction rate in misses per kilo-instructions (MPKI) (the lower, the better)<a class="headerlink" href="#figure-9-branch-misprediction-rate-in-misses-per-kilo-instructions-mpki-the-lower-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="ac011318a4164a56475f85c8a9a5b74bb3fdf80a75afb9bc440e3c844e67008d.jpg" src="../images/ac011318a4164a56475f85c8a9a5b74bb3fdf80a75afb9bc440e3c844e67008d.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了 <strong>Lua</strong> 和 <strong>JavaScript</strong> 两种脚本语言解释器在不同优化技术下的 <strong>分支预测失误率 (Branch Miss Rate, MPKI)</strong>，单位为每千条指令的失误次数，数值越低越好。</p>
+</li>
+<li>
+<p>图表横轴分为两组：左侧为 <strong>Lua</strong> 的11个基准测试，右侧为 <strong>JavaScript</strong> 的11个基准测试。纵轴表示 MPKI 值，范围从0到40。</p>
+</li>
+<li>
+<p>图例包含四种技术：</p>
+<ul>
+<li><strong>Baseline</strong>（白色）：未优化的原始解释器。</li>
+<li><strong>Jump Threading</strong>（灰色）：软件层面的跳转线程化优化。</li>
+<li><strong>VBBI</strong>（斜线填充）：基于值的 BTB 索引预测器，代表硬件级间接分支预测优化。</li>
+<li><strong>SCD</strong>（黑色）：本文提出的 <strong>Short-Circuit Dispatch</strong> 技术。</li>
+</ul>
+</li>
+<li>
+<p><strong>Lua 解释器表现</strong>：</p>
+<ul>
+<li>多数基准测试中，<strong>SCD</strong> 显著降低 MPKI，例如 <code>mandelbrot</code>、<code>n-sieve</code>、<code>fibo</code>、<code>ackermann</code> 等，其黑色柱状图明显低于其他三种方案。</li>
+<li><strong>VBBI</strong> 在部分测试中表现接近 SCD，但在 <code>binary-trees</code>、<code>k-nucleotide</code> 等测试中仍高于 SCD。</li>
+<li><strong>Jump Threading</strong> 在多数测试中优于 Baseline，但不如 SCD 和 VBBI。</li>
+<li><strong>Geomean</strong>（几何平均）显示 SCD 达到最低 MPKI，约为 5.5 MPKI，而 Baseline 约为 18 MPKI，<strong>SCD 降低约 70%</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>JavaScript 解释器表现</strong>：</p>
+<ul>
+<li><strong>SCD</strong> 同样在大多数测试中表现最佳，如 <code>fannkuch-redux</code>、<code>mandelbrot</code>、<code>pidigits</code> 等。</li>
+<li><strong>VBBI</strong> 在部分测试中接近 SCD，但在 <code>binary-trees</code>、<code>spectral-norm</code> 中仍较高。</li>
+<li><strong>Jump Threading</strong> 表现不稳定，在某些测试中甚至劣于 Baseline（如 <code>random</code>）。</li>
+<li><strong>Geomean</strong> 显示 SCD MPKI 约为 12 MPKI，Baseline 约为 16 MPKI，<strong>SCD 降低约 28%</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键结论</strong>：</p>
+<ul>
+<li><strong>SCD 不仅减少指令数，还显著降低分支预测失误率</strong>，尤其在 Lua 上效果更突出。</li>
+<li>相较于传统硬件预测器 <strong>VBBI</strong>，SCD 因直接缓存跳转目标地址，避免了冗余计算和预测失败，从而获得更低的 MPKI。</li>
+<li><strong>Jump Threading</strong> 虽能降低部分 MPKI，但因代码膨胀导致缓存失效增加，整体效果受限。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据对比摘要</strong>：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>Lua Geomean MPKI</th>
+<th>JavaScript Geomean MPKI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Baseline</strong></td>
+<td>~18</td>
+<td>~16</td>
+</tr>
+<tr>
+<td><strong>Jump Threading</strong></td>
+<td>~13</td>
+<td>~14</td>
+</tr>
+<tr>
+<td><strong>VBBI</strong></td>
+<td>~6</td>
+<td>~13</td>
+</tr>
+<tr>
+<td><strong>SCD</strong></td>
+<td><strong>~5.5</strong></td>
+<td><strong>~12</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，<strong>SCD 在降低分支预测失误率方面优于现有主流技术</strong>，尤其适用于嵌入式处理器环境，是提升解释器性能的有效手段。</li>
+</ul>
+<h3 id="figure-10-instruction-cache-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better">Figure 10: Instruction cache miss rates in misses per kilo-instructions (MPKI) (the lower, the better)<a class="headerlink" href="#figure-10-instruction-cache-miss-rates-in-misses-per-kilo-instructions-mpki-the-lower-the-better" title="Permanent link">&para;</a></h3>
+<p><img alt="c3a5f079985de2fb06fd954950328776979cc3982335dc5df06896820fecf11c.jpg" src="../images/c3a5f079985de2fb06fd954950328776979cc3982335dc5df06896820fecf11c.jpg" /></p>
+<ul>
+<li>图片展示了在 Lua 和 JavaScript 解释器上，不同调度技术（Baseline、Jump Threading、VBBI、SCD）的 <strong>指令缓存未命中率 (I-Cache Miss Rate)</strong>，单位为每千条指令未命中次数 (MPKI)，数值越低越好。</li>
+<li>数据按基准测试程序分组，左侧为 Lua，右侧为 JavaScript，底部有 <strong>GEOMEAN</strong> 表示几何平均值。</li>
+<li>从图中可观察到：<ul>
+<li><strong>Jump Threading</strong> 在多个基准测试中显著增加了 I-Cache Miss Rate，尤其在 Lua 的 <code>mandelbrot</code> 和 JavaScript 的 <code>mandelbrot</code> 上达到峰值，远高于其他方案。这与其代码膨胀特性一致。</li>
+<li><strong>SCD</strong> 在绝大多数基准测试中表现优于或接近 Baseline，且在部分程序（如 Lua 的 <code>n-sieve</code>, <code>random</code>, <code>fibo</code>；JavaScript 的 <code>binary-trees</code>, <code>fannkuch-redux</code>）上明显降低未命中率。</li>
+<li><strong>VBBI</strong> 整体表现与 Baseline 接近，未带来显著改善。</li>
+<li><strong>GEOMEAN</strong> 值显示：Lua 上 SCD 最优，Jump Threading 最差；JavaScript 上 SCD 与 VBBI 相当，均优于 Jump Threading。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>Lua GEOMEAN (MPKI)</th>
+<th>JavaScript GEOMEAN (MPKI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>~0.28</td>
+<td>~0.35</td>
+</tr>
+<tr>
+<td>Jump Threading</td>
+<td>~4.80</td>
+<td>~0.45</td>
+</tr>
+<tr>
+<td>VBBI</td>
+<td>~0.29</td>
+<td>~0.36</td>
+</tr>
+<tr>
+<td>SCD</td>
+<td><strong>~0.27</strong></td>
+<td><strong>~0.34</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>SCD 不仅减少动态指令数，还有效控制了指令缓存压力，避免了 Jump Threading 引发的严重缓存失效问题</strong>，是嵌入式场景下更均衡的优化方案。</li>
+</ul>
+<h3 id="table-iv-cycle-count-and-instruction-count-of-lua-interpreter-using-risc-v-rocket-core-on-fpga">Table IV: Cycle count and instruction count of Lua interpreter using RISC-V Rocket Core on FPGA<a class="headerlink" href="#table-iv-cycle-count-and-instruction-count-of-lua-interpreter-using-risc-v-rocket-core-on-fpga" title="Permanent link">&para;</a></h3>
+<p><img alt="bec6add32402d86d0ee4d490f30f7ad4ba2788a63c157a91d10e335bf7757e1b.jpg" src="../images/bec6add32402d86d0ee4d490f30f7ad4ba2788a63c157a91d10e335bf7757e1b.jpg" /></p>
+<ul>
+<li>
+<p>该表格（Table IV）详细记录了在 <strong>RISC-V Rocket Core</strong> 上通过 <strong>FPGA</strong> 运行 <strong>Lua 解释器</strong> 时，三种不同调度方案（Baseline、Jump Threading、SCD）的性能数据，包括指令数（Inst. Count）和周期数（Cycle Count），并计算了相对基线的指令节省率与加速比。</p>
+</li>
+<li>
+<p>表格包含以下关键列：</p>
+<ul>
+<li><strong>Benchmark</strong>: 测试脚本名称，共11个。</li>
+<li><strong>Baseline / Jump Threading / SCD</strong>: 分别列出三种方案下的指令数与周期数。</li>
+<li><strong>Jump Thr./Baseline &amp; SCD/Baseline</strong>: 计算两种优化方案相对于基线的指令节省百分比（Inst. Savings）和加速比（Speedup）。</li>
+<li><strong>GEOMEAN</strong>: 所有基准测试的几何平均值。</li>
+</ul>
+</li>
+<li>
+<p>关键数据摘要如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Inst. Savings (Jump Thr.)</th>
+<th>Speedup (Jump Thr.)</th>
+<th>Inst. Savings (SCD)</th>
+<th>Speedup (SCD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>binary-trees</td>
+<td>5.39%</td>
+<td>4.33%</td>
+<td>9.06%</td>
+<td>10.43%</td>
+</tr>
+<tr>
+<td>fannkuch-redux</td>
+<td>5.22%</td>
+<td>-7.38%</td>
+<td>11.48%</td>
+<td>16.78%</td>
+</tr>
+<tr>
+<td>k-nucleotide</td>
+<td>3.92%</td>
+<td>-2.30%</td>
+<td>7.69%</td>
+<td>8.67%</td>
+</tr>
+<tr>
+<td>mandelbrot</td>
+<td>3.69%</td>
+<td>5.37%</td>
+<td>17.95%</td>
+<td>22.67%</td>
+</tr>
+<tr>
+<td>n-body</td>
+<td>2.77%</td>
+<td>-1.21%</td>
+<td>8.65%</td>
+<td>8.97%</td>
+</tr>
+<tr>
+<td>spectral-norm</td>
+<td>3.91%</td>
+<td>1.27%</td>
+<td>10.00%</td>
+<td>13.87%</td>
+</tr>
+<tr>
+<td>n-sieve</td>
+<td>6.27%</td>
+<td>-11.13%</td>
+<td>10.95%</td>
+<td>12.03%</td>
+</tr>
+<tr>
+<td>random</td>
+<td>7.21%</td>
+<td>3.97%</td>
+<td>11.92%</td>
+<td>13.01%</td>
+</tr>
+<tr>
+<td>fibo</td>
+<td>7.49%</td>
+<td>5.93%</td>
+<td>10.56%</td>
+<td>11.48%</td>
+</tr>
+<tr>
+<td>ackermann</td>
+<td>5.02%</td>
+<td>5.32%</td>
+<td>10.09%</td>
+<td>9.30%</td>
+</tr>
+<tr>
+<td>pidigits</td>
+<td>2.46%</td>
+<td>-2.45%</td>
+<td>6.83%</td>
+<td>6.14%</td>
+</tr>
+<tr>
+<td><strong>GEOMEAN</strong></td>
+<td><strong>4.84%</strong></td>
+<td><strong>0.01%</strong></td>
+<td><strong>10.44%</strong></td>
+<td><strong>12.04%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>核心发现</strong>：</p>
+<ul>
+<li><strong>SCD</strong> 在所有基准测试中均显著优于基线，<strong>几何平均指令节省率达 10.44%</strong>，<strong>几何平均加速比达 12.04%</strong>，最高加速比出现在 <strong>mandelbrot</strong> 达到 <strong>22.67%</strong>。</li>
+<li><strong>Jump Threading</strong> 虽然在部分测试中减少指令数（如 random 达 7.21%），但因代码膨胀导致 <strong>指令缓存缺失增加</strong>，最终 <strong>几何平均加速比仅为 0.01%</strong>，甚至在多个测试中出现负加速（如 fannkuch-redux、n-sieve）。</li>
+<li>数据验证了论文主张：<strong>SCD 通过硬件加速跳转表查找，有效消除冗余计算，显著降低指令数与周期数，尤其适合嵌入式环境</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>结论</strong>：</p>
+<ul>
+<li>FPGA 实测结果与仿真一致，证明 <strong>SCD 的有效性与可实现性</strong>。</li>
+<li>相较于软件优化（Jump Threading），<strong>SCD 提供更稳定且显著的性能提升</strong>，是嵌入式 VM 解释器加速的理想选择。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-v-hardware-overhead-breakdown-area-power">Table V: Hardware overhead breakdown (area, power)<a class="headerlink" href="#table-v-hardware-overhead-breakdown-area-power" title="Permanent link">&para;</a></h3>
+<p><img alt="5f6d799d09477c89cbac4721b1a4d233e509d9d6808d91d9428b6e440a0b35ab.jpg" src="../images/5f6d799d09477c89cbac4721b1a4d233e509d9d6808d91d9428b6e440a0b35ab.jpg" /></p>
+<ul>
+<li>
+<p><strong>Table V</strong> 详细展示了在 RISC-V Rocket Core 上集成 SCD 后，各模块的面积与功耗开销对比。整体来看，SCD 引入的硬件开销极小，仅带来 <strong>0.72% 的面积增加</strong> 和 <strong>1.09% 的功耗上升</strong>，符合其“低开销”设计目标。</p>
+</li>
+<li>
+<p><strong>顶层（Top）数据概览</strong>：</p>
+<ul>
+<li>基线（Baseline）总面积为 0.690 mm²，总功耗为 18.46 mW。</li>
+<li>SCD 版本总面积为 0.695 mm²，总功耗为 18.66 mW。</li>
+<li>面积和功耗的绝对增量分别为 0.005 mm² 和 0.20 mW，相对增幅微乎其微。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键模块分析</strong>：</p>
+<ul>
+<li><strong>BTB（Branch Target Buffer）</strong> 是受 SCD 影响最显著的模块：<ul>
+<li>面积从 0.019 mm² 增至 0.023 mm²，增幅达 <strong>21.6%</strong>。</li>
+<li>功耗从 1.40 mW 增至 1.56 mW，增幅为 <strong>11.7%</strong>。</li>
+<li>尽管相对增幅较高，但因其在芯片中占比小（基线面积占 2.7%，功耗占 7.6%），对整体影响可控。</li>
+</ul>
+</li>
+<li><strong>ICache</strong> 也略有增加，面积从 0.251 mm² 增至 0.255 mm²，功耗从 3.58 mW 增至 3.75 mW，增幅分别约为 1.6% 和 4.7%。</li>
+<li>其他模块如 Core、FPU、DCache 等基本保持不变，表明 SCD 修改高度局部化。</li>
+</ul>
+</li>
+<li>
+<p><strong>开销归因</strong>：</p>
+<ul>
+<li>SCD 的主要开销集中在 BTB 模块，用于存储 JTE（Jump Table Entry）并扩展其功能。</li>
+<li>根据论文正文，BTB 模块的面积和功耗分别占芯片总量的约 3% 和 7%，而 SCD 使其增加 0.59% 和 0.90%，进一步验证了其轻量级特性。</li>
+</ul>
+</li>
+<li>
+<p><strong>性能与开销平衡</strong>：</p>
+<ul>
+<li>结合第 VI-B 节数据，SCD 在带来 <strong>24.2% 的 EDP 改善</strong>的同时，仅付出 <strong>0.72% 的面积代价</strong>，证明其在嵌入式场景下具有极高的性价比。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模块层级</th>
+<th>Baseline 面积 (mm²)</th>
+<th>SCD 面积 (mm²)</th>
+<th>Baseline 功耗 (mW)</th>
+<th>SCD 功耗 (mW)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Top</td>
+<td>0.690</td>
+<td>0.695</td>
+<td>18.46</td>
+<td>18.66</td>
+</tr>
+<tr>
+<td>- Tile</td>
+<td>0.649</td>
+<td>0.654</td>
+<td>14.66</td>
+<td>14.86</td>
+</tr>
+<tr>
+<td>- Core</td>
+<td>0.044</td>
+<td>0.044</td>
+<td>2.86</td>
+<td>2.87</td>
+</tr>
+<tr>
+<td>- FPU</td>
+<td>0.087</td>
+<td>0.088</td>
+<td>3.19</td>
+<td>3.21</td>
+</tr>
+<tr>
+<td>- ICache</td>
+<td>0.251</td>
+<td>0.255</td>
+<td>3.58</td>
+<td>3.75</td>
+</tr>
+<tr>
+<td>- BTB</td>
+<td>0.019</td>
+<td>0.023</td>
+<td>1.40</td>
+<td>1.56</td>
+</tr>
+<tr>
+<td>- DCache</td>
+<td>0.248</td>
+<td>0.248</td>
+<td>3.70</td>
+<td>3.70</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>结论</strong>：SCD 的硬件实现高度优化，其开销集中于 BTB，且绝对值极小，完全满足嵌入式处理器对面积和功耗的严苛要求，是加速 VM 解释器的理想方案。</li>
+</ul>
+<h3 id="figure-11-sensitivity-of-overall-speedups-to-varying-btb-size-a-for-lua-and-b-spidermonkey-sensitivity-to-the-the-maximum-cap-imposed-on-the-number-of-jtes-c-for-lua-and-d-spidermonkey">Figure 11: Sensitivity of overall speedups to varying BTB size (a) for Lua and (b) SpiderMonkey. Sensitivity to the the maximum cap imposed on the number of JTEs (c) for Lua and (d) SpiderMonkey<a class="headerlink" href="#figure-11-sensitivity-of-overall-speedups-to-varying-btb-size-a-for-lua-and-b-spidermonkey-sensitivity-to-the-the-maximum-cap-imposed-on-the-number-of-jtes-c-for-lua-and-d-spidermonkey" title="Permanent link">&para;</a></h3>
+<p><img alt="c5f14766cbd66b2c955fd9d2a696c5bf9038671b00bbf1abcd865c9715d9249d.jpg" src="../images/c5f14766cbd66b2c955fd9d2a696c5bf9038671b00bbf1abcd865c9715d9249d.jpg" /></p>
+<ul>
+<li>图 11 包含四个子图，分别展示 SCD 在不同 BTB 配置下的性能敏感性，涵盖 Lua 和 SpiderMonkey 解释器。</li>
+<li>子图 (a) 和 (b) 显示 <strong>BTB 大小</strong> 对速度提升的影响：横轴为 BTB 条目数（64 至 512），纵轴为相对于基线的速度提升倍数。<ul>
+<li>Lua（图 a）：随着 BTB 增大，多数基准程序速度提升上升，如 mandelbrot 在 BTB=256 时达峰值约 1.35x；geomean 在 BTB=256 时最高（约 1.2x）。</li>
+<li>SpiderMonkey（图 b）：趋势类似，但整体提升幅度略低，fannkuch-redux 在 BTB=256 时达 1.35x，geomean 最高约 1.15x。</li>
+</ul>
+</li>
+<li>子图 (c) 和 (d) 展示 <strong>JTE 最大容量限制</strong> 的影响：横轴为最大 JTE 数量（8、16、∞），纵轴同上。<ul>
+<li>Lua（图 c）：当限制为 8 或 16 时，部分程序如 n-sieve 性能显著下降（\&lt;1.0），但 ackermann 等保持稳定；无限容量下 geomean 约 1.1x。</li>
+<li>SpiderMonkey（图 d）：限制对性能影响较小，多数程序在 8~16 间波动不大，geomean 维持在 1.08x 左右。</li>
+</ul>
+</li>
+<li>关键观察：<ul>
+<li><strong>BTB 越大，SCD 效果越明显</strong>，尤其对高频字节码的缓存命中率提升显著。</li>
+<li><strong>JTE 限制过严会损害性能</strong>，尤其对使用多字节码的程序（如 n-sieve），但适度限制可避免 BTB 被 JTE 占满导致直接分支预测失效。</li>
+<li><strong>SpiderMonkey 因多路径调度结构，整体收益低于 Lua</strong>，但趋势一致。</li>
+</ul>
+</li>
+<li>数据摘要表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>Lua (Geomean)</th>
+<th>SpiderMonkey (Geomean)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BTB=64</td>
+<td>~1.1x</td>
+<td>~1.05x</td>
+</tr>
+<tr>
+<td>BTB=256</td>
+<td><strong>~1.2x</strong></td>
+<td><strong>~1.15x</strong></td>
+</tr>
+<tr>
+<td>BTB=512</td>
+<td>~1.15x</td>
+<td>~1.1x</td>
+</tr>
+<tr>
+<td>JTE cap=8</td>
+<td>~1.05x</td>
+<td>~1.08x</td>
+</tr>
+<tr>
+<td>JTE cap=∞</td>
+<td>~1.1x</td>
+<td>~1.08x</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：SCD 在小 BTB 下仍有效，但最优配置需权衡 JTE 容量与 BTB 空间，避免过度占用影响常规分支预测。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

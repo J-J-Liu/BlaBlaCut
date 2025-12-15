@@ -2,430 +2,514 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://example.com/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/collections/Recent/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/collections/awesome-data-prefetchers/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/collections/dyn-lang-acc/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/collections/micro-2025/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/apt-get-profile-guided-timely-software-prefetching/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/apt-get-profile-guided-timely-software-prefetching/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/apt-get-profile-guided-timely-software-prefetching/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/atr-out-of-order-register-release-exploiting-atomic-regions/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/atr-out-of-order-register-release-exploiting-atomic-regions/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/atr-out-of-order-register-release-exploiting-atomic-regions/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/berti-an-accurate-local-delta-data-prefetcher/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/berti-an-accurate-local-delta-data-prefetcher/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/berti-an-accurate-local-delta-data-prefetcher/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/bolt-a-practical-binary-optimizer-for-data-centers-and-beyond/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/bolt-a-practical-binary-optimizer-for-data-centers-and-beyond/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/bolt-a-practical-binary-optimizer-for-data-centers-and-beyond/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/ELI5_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/figs_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/paper_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/ELI5_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/figs_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/paper_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/drishti-do-not-forget-slicing-while-designing-last-level-cache-replacement-policies-for-many-core-systems/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/feedback-directed-prefetching-improving-the-performance-and-bandwidth-efficiency-of-hardware-prefetchers/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/flexible-reference-counting-based-hardware-acceleration-for-garbage-collection/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/flexible-reference-counting-based-hardware-acceleration-for-garbage-collection/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/flexible-reference-counting-based-hardware-acceleration-for-garbage-collection/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/ELI5_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/figs_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/paper_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/integrating-prefetcher-selection-with-dynamic-request-allocation-improves-prefetching-efficiency/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/learning-to-walk-architecting-learned-virtual-memory-translation/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/learning-to-walk-architecting-learned-virtual-memory-translation/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/learning-to-walk-architecting-learned-virtual-memory-translation/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/limoncello-prefetchers-for-scale/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/limoncello-prefetchers-for-scale/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/limoncello-prefetchers-for-scale/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/ELI5_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/figs_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/paper_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/ocolos-online-code-layout-optimizations/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/ocolos-online-code-layout-optimizations/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/ocolos-online-code-layout-optimizations/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/prodigy-improving-the-memory-latency-of-data-indirect-irregular-workloads-using-hardware-software-co-design/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/profile-guided-temporal-prefetching/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/profile-guided-temporal-prefetching/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/profile-guided-temporal-prefetching/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/pythia-a-customizable-hardware-prefetching-framework-using-online-reinforcement-learning/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rethinking-java-performance-analysis/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rethinking-java-performance-analysis/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rethinking-java-performance-analysis/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/rethinking-the-memory-hierarchy-for-modern-languages/ELI5_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/rethinking-the-memory-hierarchy-for-modern-languages/figs_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/rethinking-the-memory-hierarchy-for-modern-languages/paper_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rich-prefetcher-storing-rich-information-in-memory-to-trade-capacity-and-bandwidth-for-latency-hiding/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rnr-a-software-assisted-record-and-replay-hardware-prefetcher/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rnr-a-software-assisted-record-and-replay-hardware-prefetcher/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rnr-a-software-assisted-record-and-replay-hardware-prefetcher/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/rpg2-robust-profile-guided-runtime-prefetch-generation/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/shadow-simultaneous-multi-threading-architecture-with-asymmetric-threads/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors/ELI5_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors/figs_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors/paper_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/shortcut-architectural-support-for-fast-object-access-in-scripting-languages/ELI5_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/shortcut-architectural-support-for-fast-object-access-in-scripting-languages/figs_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/notes_repo/shortcut-architectural-support-for-fast-object-access-in-scripting-languages/paper_notes/</loc>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tea-time-proportional-event-analysis/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tea-time-proportional-event-analysis/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tea-time-proportional-event-analysis/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tip-time-proportional-instruction-profiling/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tip-time-proportional-instruction-profiling/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tip-time-proportional-instruction-profiling/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/titan-i-an-open-source-high-performance-risc-v-vector-core/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/titan-i-an-open-source-high-performance-risc-v-vector-core/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/titan-i-an-open-source-high-performance-risc-v-vector-core/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/tolerate-it-if-you-cannot-reduce-it-handling-latency-in-tiered-memory/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware/ELI5_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware/figs_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
     <url>
          <loc>https://example.com/notes_repo/virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware/paper_notes/</loc>
-         <lastmod>2025-12-12</lastmod>
+         <lastmod>2025-12-15</lastmod>
     </url>
 </urlset>

@@ -1,0 +1,1951 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-overview-of-parallelscavenge-gc-in-hotspot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Overview of ParallelScavenge GC in HotSpot
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-gc-overhead-normalized-to-mutator-time-for-useful-work-in-big-data-processing-workloads-over-varying-heap-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: GC overhead normalized to mutator time (for useful work) in big data processing workloads over varying heap size
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-simplified-execution-flow-of-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Simplified execution flow of GC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-runtime-breakdown-of-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Runtime breakdown of GC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22a682835fcca0dea4ad6bc03118b7c37b77bfeac656433772690ed4a5d44290jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22a682835fcca0dea4ad6bc03118b7c37b77bfeac656433772690ed4a5d44290.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-charon-overview-figure-6-hardware-block-diagram-of-each-processing-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-pseudocode-of-copy-and-search-primitives-figure-8-pseudocode-of-bitmap-count-primitive-figure-9-bitmap-count-primitive-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Pseudocode of Copy and Search primitives Figure 8: Pseudocode of Bitmap Count primitive Figure 9: Bitmap Count primitive example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-example-of-object-traversal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10: Example of object traversal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-11-pseudocode-of-scanpush-primitive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 11: Pseudocode of Scan&amp;Push primitive
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-architectural-parameters-for-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Architectural parameters for evaluation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3: Workloads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-12-normalized-gc-performance-of-charon-compared-with-the-host-cpu-only-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 12: Normalized GC performance of Charon compared with the host CPU-only execution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-13-utilized-bandwidth-during-gc-and-ratio-of-local-accesses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 13: Utilized bandwidth during GC and ratio of local accesses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-14-per-primitive-speedup-analysis-s-search-sp-scanpush-c-copy-bc-bitmap-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 14: Per-primitive speedup analysis (S: Search, SP: Scan&amp;Push, C: Copy, BC: Bitmap Count)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-15-gc-throughput-scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 15: GC throughput scalability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-16-memory-side-implementation-speedup-over-cpuside-on-chip-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 16: Memory-side implementation speedup over CPUside on-chip implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-17-energy-consumption-of-charon-on-gc-compared-with-the-host-cpu-only-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 17: Energy consumption of Charon on GC compared with the host CPU-only execution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-total-area-usage-of-charon-for-whole-cubes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4: Total area usage of Charon for whole cubes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory">Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory 图表详解<a class="headerlink" href="#charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-overview-of-parallelscavenge-gc-in-hotspot">Figure 1: Overview of ParallelScavenge GC in HotSpot<a class="headerlink" href="#figure-1-overview-of-parallelscavenge-gc-in-hotspot" title="Permanent link">&para;</a></h3>
+<p><img alt="d955de6458f453c03e25c7161cd2f60b604e3020321fa5fd58efb1297c327cbe.jpg" src="../images/d955de6458f453c03e25c7161cd2f60b604e3020321fa5fd58efb1297c327cbe.jpg" /></p>
+<ul>
+<li>图片展示了 HotSpot JVM 中 <strong>ParallelScavenge GC</strong> 的工作流程概览，聚焦于对象在不同代（Generation）之间的移动与回收。</li>
+<li>整个流程分为四个主要阶段，分别用数字 1 至 4 标注：<ul>
+<li><strong>1. Traverse（遍历）</strong>: 从 Root Set 出发，遍历 Eden 区域中的对象图，识别所有可达的 Live Object（白色圆圈），并标记不可达的 Dead Object（灰色圆圈）。</li>
+<li><strong>2. Copying（复制）</strong>: 将 Eden 和 Survivor-From 空间中的 Live Object 复制到空闲的 Survivor-To 空间。此过程同时清理原空间。</li>
+<li><strong>3. Promotion（晋升）</strong>: 对于在 Young Generation 中存活超过一定次数的对象，将其晋升至 Old Generation。</li>
+<li><strong>4. Compaction（压缩）</strong>: 在 MajorGC 阶段，对 Old Generation 进行压缩，将所有 Live Object 移动到连续内存区域，消除碎片。</li>
+</ul>
+</li>
+<li>图中使用箭头区分两种操作：<ul>
+<li>实线箭头表示 <strong>Referencing Live object</strong>，即对象间的引用关系。</li>
+<li>虚线箭头表示 <strong>Moving Dead object</strong>，即垃圾对象被清除或移动的过程。</li>
+</ul>
+</li>
+<li>内存区域划分清晰：<ul>
+<li><strong>Young Generation</strong> 包含 Eden、Survivor-From 和 Survivor-To 三个子区域。</li>
+<li><strong>Old Generation</strong> 位于下方，用于存放长期存活的对象。</li>
+</ul>
+</li>
+<li>此图直观体现了 <strong>Generational Hypothesis</strong>：大多数对象生命周期短，仅少量对象长期存活，因此通过分代收集可提升效率。</li>
+<li>该流程是论文中分析 GC 开销的基础，后续章节基于此分解出 Copy、Scan&amp;Push、Search 等关键原语进行硬件加速。</li>
+</ul>
+<h3 id="figure-2-gc-overhead-normalized-to-mutator-time-for-useful-work-in-big-data-processing-workloads-over-varying-heap-size">Figure 2: GC overhead normalized to mutator time (for useful work) in big data processing workloads over varying heap size<a class="headerlink" href="#figure-2-gc-overhead-normalized-to-mutator-time-for-useful-work-in-big-data-processing-workloads-over-varying-heap-size" title="Permanent link">&para;</a></h3>
+<p><img alt="935bcf1d09bfabf8ff91c1365c9dcb3f915b2ccaf4ea23788ff683db674ff61f.jpg" src="../images/935bcf1d09bfabf8ff91c1365c9dcb3f915b2ccaf4ea23788ff683db674ff61f.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 2</strong>，展示的是在不同堆内存配置下，<strong>GC overhead</strong> 相对于 <strong>mutator time</strong>（即有用工作时间）的归一化比例。</li>
+<li>横轴分为两组：<strong>Spark</strong> 和 <strong>GraphChi</strong>，每组包含多个具体工作负载：<ul>
+<li>Spark：<strong>BS</strong>（Naive Bayes）、<strong>KM</strong>（K-Means）、<strong>LR</strong>（Logistic Regression）</li>
+<li>GraphChi：<strong>CC</strong>（Connected Components）、<strong>PR</strong>（PageRank）、<strong>ALS</strong>（Alternating Least Squares）</li>
+<li>最右侧为 <strong>Geomean</strong>，表示几何平均值</li>
+</ul>
+</li>
+<li>纵轴为 <strong>GC Time over Mutator</strong>，范围从 0 到 1.5，表示 GC 时间占 mutator 时间的比例。</li>
+<li>图例说明四种堆内存配置：<ul>
+<li><strong>Overprovision (100%)</strong>：堆内存为最小需求的 2 倍</li>
+<li><strong>Overprovision (50%)</strong>：堆内存为最小需求的 1.5 倍</li>
+<li><strong>Overprovision (25%)</strong>：堆内存为最小需求的 1.25 倍</li>
+<li><strong>No Overprovision</strong>：堆内存刚好满足最小需求，无冗余</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>No Overprovision</th>
+<th>Overprovision (25%)</th>
+<th>Overprovision (50%)</th>
+<th>Overprovision (100%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BS</td>
+<td>~0.3</td>
+<td>~0.2</td>
+<td>~0.15</td>
+<td>~0.1</td>
+</tr>
+<tr>
+<td>KM</td>
+<td>~0.6</td>
+<td>~0.4</td>
+<td>~0.3</td>
+<td>~0.2</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>~0.8</td>
+<td>~0.5</td>
+<td>~0.4</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>~1.2</td>
+<td>~0.9</td>
+<td>~0.7</td>
+<td>~0.5</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>~0.7</td>
+<td>~0.5</td>
+<td>~0.4</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>ALS</td>
+<td>~1.4</td>
+<td>~1.0</td>
+<td>~0.8</td>
+<td>~0.6</td>
+</tr>
+<tr>
+<td>Geomean</td>
+<td><strong>~3.65</strong></td>
+<td>~1.0</td>
+<td>~0.7</td>
+<td>~0.5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键观察：<ul>
+<li>所有工作负载在 <strong>No Overprovision</strong> 条件下，GC 开销显著上升，尤其 <strong>ALS</strong> 和 <strong>CC</strong> 超过 1.0，意味着 GC 时间超过有用工作时间。</li>
+<li><strong>Geomean</strong> 在无冗余堆内存时高达 <strong>3.65</strong>，表明整体上 GC 时间是 mutator 时间的 3.65 倍，性能严重受阻。</li>
+<li>随着堆内存冗余增加（25% → 50% → 100%），GC 开销持续下降，证明堆内存充足可有效缓解 GC 压力。</li>
+<li><strong>ALS</strong> 在所有配置下均表现出最高 GC 开销，因其处理大型矩阵对象，复制成本高。</li>
+<li><strong>BS</strong> 是最轻量级的工作负载，即使在无冗余堆内存下，GC 开销也相对较低。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-3-simplified-execution-flow-of-gc">Figure 3: Simplified execution flow of GC<a class="headerlink" href="#figure-3-simplified-execution-flow-of-gc" title="Permanent link">&para;</a></h3>
+<p><img alt="2e0fedcbd7ace50d88c11df1e893b887bea72e1152f3c1faca03b87fb43670c6.jpg" src="../images/2e0fedcbd7ace50d88c11df1e893b887bea72e1152f3c1faca03b87fb43670c6.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Garbage Collection (GC)</strong> 的简化执行流程，分为两个主要部分：<strong>(a) MinorGC 流程</strong> 和 <strong>(b) MajorGC 流程</strong>，均以流程图形式呈现。</li>
+<li>在 <strong>MinorGC 流程</strong> 中：<ul>
+<li>起始操作为 <strong>Pop object</strong>，即从对象栈中弹出一个对象进行处理。</li>
+<li>若该对象未被标记（<strong>Unmarked</strong>），则进入 <strong>Scan &amp; Push</strong> 阶段，遍历其可达对象并推入栈中。</li>
+<li>接着执行 <strong>Copy or promote</strong> 操作，将对象复制到 Survivor 空间或提升至 Old generation。</li>
+<li>同时，系统会 <strong>Search card table</strong>，用于查找由 Old generation 引用的 Young generation 对象，确保这些对象也被正确处理。</li>
+<li>所有已标记对象（<strong>Marked</strong>）直接跳过后续处理，避免重复操作。</li>
+</ul>
+</li>
+<li>在 <strong>MajorGC 流程</strong> 中：<ul>
+<li>同样从 <strong>Pop object</strong> 开始，弹出对象后检查是否已标记。</li>
+<li>若未标记，则进入 <strong>Scan &amp; Push</strong> 阶段，递归遍历所有可达对象并标记。</li>
+<li>标记完成后，进入 <strong>Compacting</strong> 阶段，首先通过 <strong>Bitmap count</strong> 计算指定范围内存活对象所占字数，以确定新位置。</li>
+<li>最后执行 <strong>Copy</strong> 操作，将存活对象移动至连续内存区域，减少碎片。</li>
+</ul>
+</li>
+<li>两个流程的核心操作包括：<ul>
+<li><strong>Pop object</strong>：从栈中取出待处理对象。</li>
+<li><strong>Scan &amp; Push</strong>：遍历对象引用并推入栈中，实现图遍历。</li>
+<li><strong>Copy / Promote</strong>：对象迁移或晋升。</li>
+<li><strong>Search card table</strong>：仅在 MinorGC 中出现，用于跨代引用追踪。</li>
+<li><strong>Bitmap count</strong>：仅在 MajorGC 中出现，用于计算对象大小和定位。</li>
+</ul>
+</li>
+<li>关键术语保留英文原名，如 <strong>MinorGC</strong>, <strong>MajorGC</strong>, <strong>card table</strong>, <strong>bitmap count</strong>, <strong>Scan &amp; Push</strong> 等。</li>
+<li>整体流程强调 <strong>对象标记、遍历、迁移与压缩</strong>，是 GC 算法的核心步骤，尤其适用于 <strong>HotSpot JVM</strong> 的 ParallelScavenge 收集器。</li>
+</ul>
+<h3 id="figure-4-runtime-breakdown-of-gc">Figure 4: Runtime breakdown of GC<a class="headerlink" href="#figure-4-runtime-breakdown-of-gc" title="Permanent link">&para;</a></h3>
+<p><img alt="579c96fb48fc3f7e6147b6ef7cdbf1d23293ea402691c33012ed49aa536de0d6.jpg" src="../images/579c96fb48fc3f7e6147b6ef7cdbf1d23293ea402691c33012ed49aa536de0d6.jpg" /></p>
+<ul>
+<li>图片展示了 Figure 4，即 GC 运行时分解图，分为 (a) MinorGC breakdown 和 (b) MajorGC breakdown 两部分，用于说明在不同工作负载下，GC 各操作所占时间比例。</li>
+<li><strong>MinorGC 分解图 (a)</strong> 显示了 Spark 和 GraphChi 框架中六个应用（BS, KM, LR, CC, PR, ALS）的 MinorGC 时间分布，主要操作包括 Search、Scan&amp;Push、Copy 和 Others。</li>
+<li><strong>MajorGC 分解图 (b)</strong> 展示了相同六个应用在 MajorGC 阶段的时间分布，主要操作为 Bitmap Count、Scan&amp;Push、Copy 和 Others。</li>
+<li>从图中可观察到，在 MinorGC 中，<strong>Copy</strong> 操作在大多数应用中占据主导地位，尤其在 Spark 的 LR 和 GraphChi 的 ALS 中占比极高；而 <strong>Search</strong> 在 Spark 的 BS 和 KM 中较为显著。</li>
+<li>在 MajorGC 中，<strong>Copy</strong> 依然是主要耗时操作，但在 GraphChi 的 CC 和 PR 中，<strong>Scan&amp;Push</strong> 占比明显上升，表明这些应用涉及更多对象引用遍历。</li>
+<li><strong>Bitmap Count</strong> 在 MajorGC 中对 LR 和 ALS 应用贡献较大，这与论文中提到的这些应用需要频繁计算对象大小和位置相符。</li>
+<li>下表总结了各应用在 MinorGC 和 MajorGC 中关键操作的占比趋势：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>MinorGC 主要操作</th>
+<th>MajorGC 主要操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BS</td>
+<td>Search + Copy</td>
+<td>Copy</td>
+</tr>
+<tr>
+<td>KM</td>
+<td>Search + Copy</td>
+<td>Copy</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>Copy</td>
+<td>Bitmap Count + Copy</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>Copy</td>
+<td>Scan&amp;Push + Copy</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>Copy</td>
+<td>Scan&amp;Push + Copy</td>
+</tr>
+<tr>
+<td>ALS</td>
+<td>Copy</td>
+<td>Copy</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图中数据支持论文观点：GC 时间主要由少数几个原语（primitives）主导，如 Copy、Search、Scan&amp;Push 和 Bitmap Count，这些正是 Charon 加速器重点优化的对象。</li>
+<li>通过对比不同应用的行为差异，可看出 Charon 的设计需兼顾不同工作负载特性，例如对 Scan&amp;Push 的优化在 GraphChi 的图算法中尤为重要。</li>
+</ul>
+<h3 id="22a682835fcca0dea4ad6bc03118b7c37b77bfeac656433772690ed4a5d44290jpg">22a682835fcca0dea4ad6bc03118b7c37b77bfeac656433772690ed4a5d44290.jpg<a class="headerlink" href="#22a682835fcca0dea4ad6bc03118b7c37b77bfeac656433772690ed4a5d44290jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="22a682835fcca0dea4ad6bc03118b7c37b77bfeac656433772690ed4a5d44290.jpg" src="../images/22a682835fcca0dea4ad6bc03118b7c37b77bfeac656433772690ed4a5d44290.jpg" /></p>
+<ul>
+<li>该图展示了 <strong>Charon</strong> 架构的系统级视图与单个 HMC 逻辑层内部结构，分为 (a) 和 (b) 两个部分。</li>
+<li>图 (a) 描绘了整体系统架构：<strong>Host processor</strong> 通过串行链路连接至 <strong>HMC 0</strong>，其余 HMC（1、2、3）以星型拓扑互联，形成多立方体内存系统。</li>
+<li>每个 HMC 的底部为 <strong>Logic layer</strong>，其中嵌入 <strong>Charon</strong> 加速单元，实现近内存计算，直接访问其上方堆叠的 <strong>DRAM layers</strong>。</li>
+<li>图 (b) 是单个 HMC 逻辑层内 <strong>Charon</strong> 的详细块图，包含三个核心处理单元：<strong>Copy/Search Units</strong>、<strong>BitMap Count Units</strong>、<strong>Scan&amp;Push Units</strong>，每个单元前设有独立的 <strong>CMD Queue</strong> 用于接收主机下发的卸载请求。</li>
+<li>所有处理单元共享一个 <strong>Memory Access Interface (MAI)</strong>，负责将内存访问请求路由至本地或远程 DRAM，并管理请求元数据和单元 ID。</li>
+<li><strong>MAI</strong> 连接 <strong>TLB</strong>（Translation Lookaside Buffer）进行虚拟地址到物理地址的转换，确保内存访问正确性。</li>
+<li>系统中还包含一个共享的 <strong>Bitmap Cache</strong>，专用于缓存位图数据，提升 <strong>BitMap Count</strong> 和 <strong>Scan&amp;Push</strong> 单元的访问效率。</li>
+<li>数据流方向清晰：主机通过 <strong>Offload Request Packet</strong> 向 Charon 发送任务，完成后通过 <strong>Return Packet</strong> 返回结果。</li>
+<li>整体设计强调 <strong>低延迟、高带宽、并行化</strong>，利用 HMC 内部 TSV 带宽优势，最大化 <strong>MLP (Memory-Level Parallelism)</strong>。</li>
+<li>关键组件如 <strong>CMD Queue</strong>、<strong>MAI</strong>、<strong>TLB</strong>、<strong>Bitmap Cache</strong> 均位于逻辑层，不占用主机资源，实现真正的近内存加速。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件名称</th>
+<th>功能描述</th>
+<th>关联单元</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CMD Queue</strong></td>
+<td>接收并缓冲来自主机的卸载请求包</td>
+<td>Copy/Search, BitMap Count, Scan&amp;Push Units</td>
+</tr>
+<tr>
+<td><strong>Copy/Search Units</strong></td>
+<td>执行对象复制与旧代到新代对象搜索</td>
+<td>MinorGC &amp; MajorGC</td>
+</tr>
+<tr>
+<td><strong>BitMap Count Units</strong></td>
+<td>计算指定范围内存活对象总大小，用于压缩阶段</td>
+<td>MajorGC</td>
+</tr>
+<tr>
+<td><strong>Scan&amp;Push Units</strong></td>
+<td>遍历对象图，扫描引用并推入栈，用于标记阶段</td>
+<td>MinorGC &amp; MajorGC</td>
+</tr>
+<tr>
+<td><strong>Memory Access Interface (MAI)</strong></td>
+<td>管理内存请求，支持本地/远程访问，维护请求元数据</td>
+<td>所有处理单元</td>
+</tr>
+<tr>
+<td><strong>TLB</strong></td>
+<td>虚拟地址到物理地址转换，支持大页与 NUMA 分配</td>
+<td>MAI</td>
+</tr>
+<tr>
+<td><strong>Bitmap Cache</strong></td>
+<td>缓存位图数据，提升读取命中率，减少远程访问</td>
+<td>BitMap Count &amp; Scan&amp;Push Units</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该架构设计允许 <strong>Charon</strong> 在不修改主机处理器的前提下，高效卸载 GC 中最耗时的原语操作，显著提升吞吐量并降低能耗。</li>
+</ul>
+<h3 id="figure-5-charon-overview-figure-6-hardware-block-diagram-of-each-processing-unit">Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit<a class="headerlink" href="#figure-5-charon-overview-figure-6-hardware-block-diagram-of-each-processing-unit" title="Permanent link">&para;</a></h3>
+<p><img alt="7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" src="../images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" /></p>
+<ul>
+<li>图片展示了 Charon 架构中三个核心处理单元的硬件块图，分别为 <strong>Copy/Search unit</strong>、<strong>Bitmap Count unit</strong> 和 <strong>Scan&amp;Push unit</strong>，对应 Figure 6 的 (a)、(b)、(c) 子图。</li>
+<li>每个单元均围绕特定 GC 原语设计，旨在通过近内存处理最大化 MLP（Memory-Level Parallelism）并利用 HMC 内部高带宽。</li>
+<li><strong>Copy/Search unit</strong>：<ul>
+<li>核心组件包括 Request Generator、Offset、copy/search 判断模块和响应路径。</li>
+<li>Request Generator 以 block_size 步长递增 src 地址，生成 Load Request。</li>
+<li>Offset 与加法器配合计算目标地址，触发 Store Request（用于 Copy）或比较操作（用于 Search）。</li>
+<li>支持两种模式：Copy 时执行内存复制；Search 时检查指定范围内是否存在非 -1 值，返回布尔结果。</li>
+</ul>
+</li>
+<li><strong>Bitmap Count unit</strong>：<ul>
+<li>包含 Request Generator、begMap/endMap 数据结构、Count Set Bits 模块、Bitmap Cache 和计数逻辑。</li>
+<li>Request Generator 以 block_size 步进 begIdx 和 endIdx，从 begMap 和 endMap 读取位图数据。</li>
+<li>Count Set Bits 模块执行优化算法：<strong>CountSetBits(begMap - endMap) + CountSetBits(begMap)</strong>，替代传统逐位扫描。</li>
+<li>Bitmap Cache 缓存频繁访问的小范围位图，命中率约 90%，显著降低延迟。</li>
+<li>最终输出为指定范围内 live objects 占用的 word 数量。</li>
+</ul>
+</li>
+<li><strong>Scan&amp;Push unit</strong>：<ul>
+<li>组件包括 Object Iterator、Request Generator、Mark Object、Push Stack、Update Metadata 和 is_unmarked 判断模块。</li>
+<li>Object Iterator 遍历对象字段，Request Generator 以 obj_ptr += 8 步长生成 Load Request 获取引用对象。</li>
+<li>is_unmarked 判断对象是否已标记，若未标记则触发 Mark Object（写入 bitmap）和 Push Stack（压入对象栈）。</li>
+<li>若已标记，则执行 Update Metadata（如更新 card table），不压栈。</li>
+<li>支持 MinorGC 和 MajorGC 两种场景，根据 GC 类型选择不同操作路径。</li>
+</ul>
+</li>
+<li>三者共同特点：<ul>
+<li>均采用流水线式请求生成机制，每周期发出新请求，最大化 MLP。</li>
+<li>依赖 MAI（Memory Access Interface）进行内存访问，并支持远程立方体通信。</li>
+<li>通过专用硬件加速低计算、高访存的 GC 原语，避免通用 CPU 的指令窗口和缓存局限。</li>
+</ul>
+</li>
+<li>性能影响：<ul>
+<li>Copy/Search 单元在 Copy 上实现最高 <strong>26.15×</strong> 加速，在 Search 上达 <strong>4.09×</strong>。</li>
+<li>Bitmap Count 单元因算法优化和缓存，平均加速 <strong>5.63×</strong>。</li>
+<li>Scan&amp;Push 单元因间接访问特性，加速较弱，平均仅 <strong>1.20×</strong>，但在高引用密度场景（如 GraphChi-CC）表现更佳。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>单元名称</th>
+<th>主要功能</th>
+<th>关键优化点</th>
+<th>平均加速比</th>
+<th>最大加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Copy/Search</td>
+<td>对象复制 / 范围搜索</td>
+<td>大粒度（256B）并行访问</td>
+<td>10.17×</td>
+<td>26.15×</td>
+</tr>
+<tr>
+<td>Bitmap Count</td>
+<td>计算位图区间内 live object 大小</td>
+<td>算法优化 + Bitmap Cache</td>
+<td>5.63×</td>
+<td>6.11×</td>
+</tr>
+<tr>
+<td>Scan&amp;Push</td>
+<td>对象图遍历与栈推送</td>
+<td>MLP 优化 + 分支预测</td>
+<td>1.20×</td>
+<td>1.86×</td>
+</tr>
+</tbody>
+</table>
+<h3 id="figure-7-pseudocode-of-copy-and-search-primitives-figure-8-pseudocode-of-bitmap-count-primitive-figure-9-bitmap-count-primitive-example">Figure 7: Pseudocode of Copy and Search primitives Figure 8: Pseudocode of Bitmap Count primitive Figure 9: Bitmap Count primitive example<a class="headerlink" href="#figure-7-pseudocode-of-copy-and-search-primitives-figure-8-pseudocode-of-bitmap-count-primitive-figure-9-bitmap-count-primitive-example" title="Permanent link">&para;</a></h3>
+<p><img alt="730ec07dec248f32df5ff4f5d848e466a8682c7e01c724026a02cafeb6cbba74.jpg" src="../images/730ec07dec248f32df5ff4f5d848e466a8682c7e01c724026a02cafeb6cbba74.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了 <strong>Bitmap Count</strong> 原语的两个示例，分别标记为 (a) 和 (b)，用于说明其在 HotSpot JVM 中如何计算指定内存范围内活跃对象所占字数。</p>
+</li>
+<li>
+<p>在图 (a) “Base example for Bitmap Count” 中：</p>
+<ul>
+<li><strong>begMap</strong> 和 <strong>endMap</strong> 是两个位图，每个位代表 64 位（8 字节）堆空间。</li>
+<li><strong>begMap</strong> 中置位（1）表示一个活跃对象的起始地址，<strong>endMap</strong> 中置位（1）表示该对象的结束地址。</li>
+<li>例如，第一个对象从第 2 位开始，到第 3 位结束，占据 2 个 8 字节块（即 16 字节），对应 <strong>count</strong> 区域中两个灰色方块。</li>
+<li>第二个对象从第 7 位开始，到第 10 位结束，占据 4 个 8 字节块（即 32 字节），对应 <strong>count</strong> 区域中四个灰色方块。</li>
+<li>第三个对象从第 14 位开始，到第 16 位结束，占据 3 个 8 字节块（即 24 字节），对应 <strong>count</strong> 区域中三个灰色方块。</li>
+<li>总计：2 + 4 + 3 = 9 个 8 字节块，即 <strong>count = 9</strong>。</li>
+</ul>
+</li>
+<li>
+<p>在图 (b) “Example run of the proposed algorithm” 中：</p>
+<ul>
+<li>展示了 Charon 优化后的算法执行过程。</li>
+<li>算法核心表达式为：<strong>CountSetBits(begMap - endMap) + CountSetBits(begMap)</strong>。</li>
+<li>首先，将 <strong>endMap</strong> 从 <strong>begMap</strong> 中按位相减（二进制减法），得到中间结果。</li>
+<li>然后，统计该中间结果中置位（1）的数量，即 <strong>CountSetBits(begMap - endMap)</strong>。</li>
+<li>接着，统计原始 <strong>begMap</strong> 中置位（1）的数量，即 <strong>CountSetBits(begMap)</strong>。</li>
+<li>最后，将两者相加得到最终结果。</li>
+<li>示例中，<strong>begMap - endMap</strong> 的结果为 <code>0 0 1 0 0 1 1 1 0 0 1 1</code>，其中置位数量为 6。</li>
+<li><strong>begMap</strong> 中置位数量为 3。</li>
+<li>总计：6 + 3 = 9，与图 (a) 结果一致。</li>
+<li>该优化算法通过一次减法和两次位计数操作，避免了原软件版本中逐位遍历的低效循环，显著提升性能。</li>
+</ul>
+</li>
+<li>
+<p>该图旨在直观解释 Charon 如何通过硬件优化实现高效的 <strong>Bitmap Count</strong> 原语，从而加速 MajorGC 中的压缩阶段。</p>
+</li>
+</ul>
+<h3 id="figure-10-example-of-object-traversal">Figure 10: Example of object traversal<a class="headerlink" href="#figure-10-example-of-object-traversal" title="Permanent link">&para;</a></h3>
+<p><img alt="3c03d991c4bbaf661baa604e77bd9ccda0b31270985a7ceb24faad6e775e6276.jpg" src="../images/3c03d991c4bbaf661baa604e77bd9ccda0b31270985a7ceb24faad6e775e6276.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Object Traversal</strong> 的示例流程，用于说明垃圾回收（GC）中对象图遍历的核心操作。</li>
+<li>该过程涉及三个主要对象：<strong>Object A</strong>、<strong>Object B</strong> 和 <strong>Object C</strong>，以及一个名为 <strong>Object Stack</strong> 的数据结构。</li>
+<li>流程分为四个步骤：<ul>
+<li>步骤①：从 <strong>Object Stack</strong> 中弹出 <strong>Object A</strong>。</li>
+<li>步骤②：迭代 <strong>Object A</strong> 的字段，包括其 <strong>Header</strong> 和多个字段（灰色为引用字段，白色为非引用字段）。</li>
+<li>步骤③：扫描引用字段，发现 <strong>Object A</strong> 引用了 <strong>Object B</strong> 和 <strong>Object C</strong>。</li>
+<li>步骤④：将 <strong>Object B</strong> 和 <strong>Object C</strong> 推入 <strong>Object Stack</strong>，以便后续处理。</li>
+</ul>
+</li>
+<li>图例说明：<ul>
+<li>灰色方块代表 <strong>Reference field</strong>（引用字段）。</li>
+<li>白色方块代表 <strong>Non-reference field</strong>（非引用字段）。</li>
+<li>虚线箭头表示 <strong>Reference</strong>（引用关系）。</li>
+</ul>
+</li>
+<li>该图直观解释了 <strong>Scan&amp;Push</strong> 原语的工作机制，即通过递归遍历对象图来识别所有可达对象。</li>
+<li>在 <strong>MinorGC</strong> 和 <strong>MajorGC</strong> 中，此原语均被用于标记存活对象，是 GC 性能的关键瓶颈之一。</li>
+</ul>
+<h3 id="figure-11-pseudocode-of-scanpush-primitive">Figure 11: Pseudocode of Scan&amp;Push primitive<a class="headerlink" href="#figure-11-pseudocode-of-scanpush-primitive" title="Permanent link">&para;</a></h3>
+<p><img alt="e0922932e041c00249eb893d47e106151651496d0eb6406dd2bed187c084e1aa.jpg" src="../images/e0922932e041c00249eb893d47e106151651496d0eb6406dd2bed187c084e1aa.jpg" /></p>
+<ul>
+<li>图片 e0922932e041c00249eb893d47e106151651496d0eb6406dd2bed187c084e1aa.jpg 展示的是 <strong>Figure 11: Pseudocode of Scan&amp;Push primitive</strong>，即 Scan&amp;Push 原语的伪代码。</li>
+<li>该伪代码描述了在 <strong>MinorGC</strong> 和 <strong>MajorGC</strong> 中如何处理对象图遍历的核心逻辑，是 Charon 加速器中 Scan&amp;Push 单元的主要功能实现。</li>
+<li>伪代码分为三个主要函数：<code>iterate_object</code>、<code>push_contents</code> 和 <code>follow_contents</code>。</li>
+<li><code>iterate_object</code> 函数作为入口点，根据当前 GC 类型（MinorGC 或 MajorGC）调用不同的处理函数。它接收一个对象指针数组 <code>references</code>，并逐个处理每个引用。</li>
+<li>在 MinorGC 场景下，调用 <code>push_contents</code> 函数：<ul>
+<li>首先获取对象 <code>obj</code>。</li>
+<li>检查对象是否未被标记 (<code>is_unmarked(obj)</code>)。</li>
+<li>如果未标记，则将其推入 <code>minor_stack</code> 以供后续处理。</li>
+<li>否则，更新对象的元数据 (<code>update_metadata(obj)</code>)，例如更新 card table。</li>
+</ul>
+</li>
+<li>在 MajorGC 场景下，调用 <code>follow_contents</code> 函数：<ul>
+<li>同样获取对象 <code>obj</code>。</li>
+<li>检查对象是否未被标记 (<code>is_unmarked(obj)</code>)。</li>
+<li>如果未标记，则执行原子读-改-写操作标记对象 (<code>mark_obj(obj)</code>)，然后将其推入 <code>major_stack</code>。</li>
+</ul>
+</li>
+<li>伪代码中的关键操作包括：<ul>
+<li><strong>对象标记 (marking)</strong>：通过 <code>is_unmarked</code> 和 <code>mark_obj</code> 实现，用于识别和记录存活对象。</li>
+<li><strong>栈操作 (stack operations)</strong>：通过 <code>push</code> 操作将待处理对象加入 <code>minor_stack</code> 或 <code>major_stack</code>，这是图遍历的基础。</li>
+<li><strong>元数据更新 (metadata update)</strong>：在 MinorGC 中，对已标记对象更新 card table 等元数据。</li>
+</ul>
+</li>
+<li>下表总结了伪代码中各函数的功能和应用场景：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">函数名</th>
+<th style="text-align: left;">功能描述</th>
+<th style="text-align: left;">应用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>iterate_object</code></td>
+<td style="text-align: left;">根据 GC 类型分发处理任务</td>
+<td style="text-align: left;">MinorGC &amp; MajorGC</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>push_contents</code></td>
+<td style="text-align: left;">处理 MinorGC 中的对象，标记并推入栈或更新元数据</td>
+<td style="text-align: left;">MinorGC</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>follow_contents</code></td>
+<td style="text-align: left;">处理 MajorGC 中的对象，标记并推入栈</td>
+<td style="text-align: left;">MajorGC</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该伪代码体现了 GC 中对象图遍历的基本模式：从根集开始，递归访问所有可达对象，并对其进行标记或移动。</li>
+<li>Charon 的 Scan&amp;Push 单元正是为了加速这一过程而设计，通过利用近内存计算的优势，提高内存级并行度，从而提升 GC 效率。</li>
+</ul>
+<h3 id="6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2jpg">6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2.jpg<a class="headerlink" href="#6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2.jpg" src="../images/6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2.jpg" /></p>
+<ul>
+<li>该图片为一张表格，标题为“Table 1: Applicability of Charon Primitives”，用于展示 Charon 提出的三个关键 GC 原语在 HotSpot JVM 中几种主流垃圾回收器上的适用性。</li>
+<li>表格包含四列：第一列为 <strong>GC 算法名称</strong>，第二至第四列分别为三个原语：<strong>Copy/Search</strong>、<strong>Scan&amp;Push</strong> 和 <strong>Bitmap Count</strong>，最后一列为 <strong>Remarks</strong>（备注）。</li>
+<li>表格内容如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>GC Algorithm</th>
+<th>Copy/Search</th>
+<th>Scan&amp;Push</th>
+<th>Bitmap Count</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ParallelScavenge</td>
+<td>✓✓</td>
+<td>✓✓</td>
+<td>✓✓</td>
+<td>High throughput</td>
+</tr>
+<tr>
+<td>G1</td>
+<td>✓✓</td>
+<td>✓✓</td>
+<td>✓</td>
+<td>Low latency</td>
+</tr>
+<tr>
+<td>CMS</td>
+<td>✓✓</td>
+<td>✓✓</td>
+<td>×</td>
+<td>No compaction</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>表格下方有图例说明：</p>
+<ul>
+<li><strong>✓✓</strong>: applicable as is（可直接适用）</li>
+<li><strong>✓</strong>: applicable with minor fix（需少量修改后适用）</li>
+<li><strong>×</strong>: not applicable（不适用）</li>
+</ul>
+</li>
+<li>
+<p>分析表明，Charon 的 <strong>Copy/Search</strong> 和 <strong>Scan&amp;Push</strong> 原语对所有三种 GC 算法均高度适用（标记为 ✓✓），而 <strong>Bitmap Count</strong> 原语仅适用于 <strong>ParallelScavenge</strong> 和 <strong>G1</strong>，不适用于 <strong>CMS</strong>，因为 CMS 不执行内存压缩（No compaction），而 Bitmap Count 主要服务于压缩阶段。</p>
+</li>
+<li>
+<p>备注栏进一步说明了各 GC 算法的设计目标：</p>
+<ul>
+<li><strong>ParallelScavenge</strong>：追求高吞吐量（High throughput）</li>
+<li><strong>G1</strong>：兼顾低延迟与吞吐量（Low latency）</li>
+<li><strong>CMS</strong>：专注于低暂停时间，但不进行压缩（No compaction）</li>
+</ul>
+</li>
+<li>
+<p>此表旨在强调 Charon 设计的通用性——其核心原语覆盖了主流 GC 算法的关键操作，尤其在吞吐导向和低延迟导向的收集器中均有良好适配性，仅在无压缩需求的 CMS 上受限。</p>
+</li>
+</ul>
+<h3 id="table-2-architectural-parameters-for-evaluation">Table 2: Architectural parameters for evaluation<a class="headerlink" href="#table-2-architectural-parameters-for-evaluation" title="Permanent link">&para;</a></h3>
+<p><img alt="288f345b300f8d8424a5f1ac6f5e101bf14c4870086a062123199a8c5842ae1d.jpg" src="../images/288f345b300f8d8424a5f1ac6f5e101bf14c4870086a062123199a8c5842ae1d.jpg" /></p>
+<ul>
+<li>
+<p>该图片为论文中的 <strong>Table 2: Architectural parameters for evaluation</strong>，详细列出了用于评估 Charon 架构的仿真系统配置，涵盖 Host Processor、DDR4 Main Memory System、HMC Main Memory System 和 Charon Configuration 四大模块。</p>
+</li>
+<li>
+<p><strong>Host Processor</strong> 配置如下：</p>
+<ul>
+<li>核心：8 × <strong>2.67 GHz Westmere OoO core</strong></li>
+<li>指令窗口/重排序缓冲区：36-entry IW / 128-entry ROB / 4-way issue</li>
+<li>TLB：L1I/D 64-entry per core；Shared L2 1024-entry</li>
+<li>L1/D Cache：32KB, 4-way, 3-cycle / 32KB, 8-way, 4-cycle</li>
+<li>L2 Cache：256KB, 8-way, 12-cycle</li>
+<li>L3 Cache：8MB, 16-way, 28-cycle</li>
+</ul>
+</li>
+<li>
+<p><strong>DDR4 Main Memory System</strong> 参数：</p>
+<ul>
+<li>组织结构：32GB, 2 channels, 4 ranks per channel, 4GB 8 banks per rank</li>
+<li>时序参数：<ul>
+<li>tCK=0.937ns, tRAS=35ns, tRCD=13.50ns</li>
+<li>tCAS=13.50ns, tWR=15ns, tRP=13.50ns</li>
+</ul>
+</li>
+<li>带宽与能耗：<ul>
+<li>总带宽 <strong>34GB/s</strong>（每通道 17GB/s）</li>
+<li>能耗 <strong>35pJ/bit</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>HMC Main Memory System</strong> 参数：</p>
+<ul>
+<li>组织结构：32GB, 4 cubes, 32 vaults per cube</li>
+<li>时序参数：<ul>
+<li>tCK = 1.6ns, tRAS = 22.4ns, tRCD = 11.2ns</li>
+<li>tCAS = 11.2ns, tWR = 14.4ns, tRP = 11.2ns</li>
+</ul>
+</li>
+<li>带宽与能耗：<ul>
+<li>单立方体带宽 <strong>320GB/s</strong></li>
+<li>能耗 <strong>21pJ/bit</strong></li>
+</ul>
+</li>
+<li>串行链路：<ul>
+<li>总带宽 <strong>80GB/s per link</strong></li>
+<li>延迟 <strong>3ns</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Charon Configuration</strong> 各处理单元配置：</p>
+<ul>
+<li>Copy/Search Unit：共 <strong>8 units</strong>（每立方体 2 units）</li>
+<li>Bitmap Count Unit：共 <strong>8 units</strong>（每立方体 2 units）</li>
+<li>Scan&amp;Push Unit：共 <strong>8 units</strong>（全部位于单个立方体）</li>
+<li>Bitmap Cache：<strong>8KB</strong>, 8-way, 32B block size</li>
+<li>MAI / TLB：<strong>8KB</strong>, 32B block size / 32 entries per cube</li>
+</ul>
+</li>
+<li>
+<p>所有配置均服务于 zsim 仿真器，用于对比 Charon 在 HMC 平台上的性能与能效提升，尤其突出其利用 <strong>3D stacked DRAM 内部高带宽</strong> 的设计优势。</p>
+</li>
+</ul>
+<h3 id="table-3-workloads">Table 3: Workloads<a class="headerlink" href="#table-3-workloads" title="Permanent link">&para;</a></h3>
+<p><img alt="bee580b35129232fb24770859d13687e7ad501890fb10c55c518d6b3f6e3d3fc.jpg" src="../images/bee580b35129232fb24770859d13687e7ad501890fb10c55c518d6b3f6e3d3fc.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 3: Workloads</strong>，用于列出实验所使用的基准测试工作负载及其相关配置。</li>
+<li>表格包含四列：<strong>Workload</strong>、<strong>Input</strong>、<strong>Heap</strong>，以及一个隐含的框架分类（Spark 或 GraphChi）。</li>
+<li>所有工作负载均运行于 <strong>Spark 2.1.0</strong> 或 <strong>GraphChi 0.2.2</strong> 框架之上，并搭配 <strong>HotSpot JVM (OpenJDK 1.7.0)</strong>。</li>
+<li>实验设定聚焦于 <strong>GC事件</strong> 的性能与能耗，因此所有测试均在特定堆内存大小下运行，以避免 OOM 错误并观察 GC 开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Input</th>
+<th>Heap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Spark</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Bayesian Classifier (BS)</td>
+<td>KDD 2010 [28, 29]</td>
+<td>10GB</td>
+</tr>
+<tr>
+<td>k-means Clustering (KM)</td>
+<td>KDD 2010 [28, 29]</td>
+<td>8GB</td>
+</tr>
+<tr>
+<td>Logistic Regression (LR)</td>
+<td>URL Reputation [36]</td>
+<td>12GB</td>
+</tr>
+<tr>
+<td><strong>GraphChi</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Connected Components (CC)</td>
+<td>R-MAT Scale 22 [44]</td>
+<td>4GB</td>
+</tr>
+<tr>
+<td>PageRank (PR)</td>
+<td>R-MAT Scale 22 [44]</td>
+<td>4GB</td>
+</tr>
+<tr>
+<td>Alternating Least Squares (ALS)</td>
+<td>Matrix Market Format (15000x15000) [55]</td>
+<td>4GB</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>Spark 工作负载</strong>：</p>
+<ul>
+<li>均为机器学习算法，输入数据集来自 <strong>KDD Cup 2010</strong> 或 <strong>URL Reputation</strong> 数据集。</li>
+<li>堆内存配置从 <strong>8GB 到 12GB</strong> 不等，反映不同算法对内存的需求差异。</li>
+<li>特别是 <strong>Logistic Regression (LR)</strong> 使用了最大的堆空间（12GB），表明其对象规模或引用复杂度更高。</li>
+</ul>
+</li>
+<li>
+<p><strong>GraphChi 工作负载</strong>：</p>
+<ul>
+<li>包含图算法（<strong>Connected Components</strong>, <strong>PageRank</strong>）和矩阵分解算法（<strong>Alternating Least Squares</strong>）。</li>
+<li>输入数据统一使用 <strong>R-MAT Scale 22</strong> 或 <strong>Matrix Market Format</strong>，均为大规模稀疏图或矩阵结构。</li>
+<li>所有 GraphChi 工作负载均配置 <strong>4GB 堆内存</strong>，说明其对象数量虽多但单个对象体积较小，或算法本身更注重遍历而非复制。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键术语保留</strong>：</p>
+<ul>
+<li><strong>Workload</strong>、<strong>Input</strong>、<strong>Heap</strong> 等字段名称保持英文原样。</li>
+<li>数据集如 <strong>KDD 2010</strong>、<strong>R-MAT Scale 22</strong>、<strong>Matrix Market Format</strong> 均为标准学术数据集，保留原始命名。</li>
+<li>算法缩写如 <strong>BS</strong>、<strong>KM</strong>、<strong>LR</strong>、<strong>CC</strong>、<strong>PR</strong>、<strong>ALS</strong> 亦保留，便于对照论文正文。</li>
+</ul>
+</li>
+<li>
+<p><strong>实验设计意图</strong>：</p>
+<ul>
+<li>选择的工作负载具有<strong>显著不同的对象特性</strong>，从而体现 Charon 在不同 GC 行为下的加速效果。</li>
+<li>例如，<strong>ALS</strong> 因处理大型矩阵对象而产生大量 Copy 操作，成为 Charon 加速最显著的案例。</li>
+<li><strong>CC</strong> 和 <strong>PR</strong> 则因频繁图遍历而依赖 Scan&amp;Push，用于评估该原语的加速能力。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-12-normalized-gc-performance-of-charon-compared-with-the-host-cpu-only-execution">Figure 12: Normalized GC performance of Charon compared with the host CPU-only execution<a class="headerlink" href="#figure-12-normalized-gc-performance-of-charon-compared-with-the-host-cpu-only-execution" title="Permanent link">&para;</a></h3>
+<p><img alt="983e928c349054265ac814661744de815645db7118a33c72e7ced1ba57920b30.jpg" src="../images/983e928c349054265ac814661744de815645db7118a33c72e7ced1ba57920b30.jpg" /></p>
+<ul>
+<li>图表标题为“Figure 12: Normalized GC performance of Charon compared with the host CPU-only execution”，展示的是不同平台下垃圾回收（GC）性能的归一化加速比。</li>
+<li>横轴包含六个具体工作负载：BS、KM、LR（属于 Spark 框架），CC、PR、ALS（属于 GraphChi 框架），以及一个综合指标“Geomean”。</li>
+<li>纵轴为“Normalized Speedup”，表示相对于基线（DDR4 + CPU）的加速倍数，刻度从0到8。</li>
+<li>图例包含四种配置：<ul>
+<li><strong>DDR4</strong>：白色柱状，代表传统 DDR4 内存系统 + CPU。</li>
+<li><strong>HMC</strong>：浅灰色柱状，代表 HMC 内存系统 + CPU。</li>
+<li><strong>Charon</strong>：黑色柱状，代表 HMC + Charon 近内存加速器。</li>
+<li><strong>Ideal</strong>：深灰色柱状，代表理想情况下的零周期卸载。</li>
+</ul>
+</li>
+<li>各工作负载表现如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>DDR4 加速比</th>
+<th>HMC 加速比</th>
+<th>Charon 加速比</th>
+<th>Ideal 加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BS</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~4.5</td>
+<td>~6.5</td>
+</tr>
+<tr>
+<td>KM</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~2.2</td>
+<td>~2.8</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~3.5</td>
+<td>~4.0</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~2.8</td>
+<td>~3.5</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~2.0</td>
+<td>~3.0</td>
+</tr>
+<tr>
+<td>ALS</td>
+<td>~1.0</td>
+<td>~1.2</td>
+<td>~3.5</td>
+<td><strong>~16.36</strong></td>
+</tr>
+<tr>
+<td>Geomean</td>
+<td>1.0</td>
+<td>1.21</td>
+<td><strong>3.29</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键观察</strong>：<ul>
+<li>所有工作负载在 HMC 平台上均获得约 1.21× 的平均加速，主要源于更高的外部带宽。</li>
+<li><strong>Charon</strong> 在所有工作负载上均显著优于 HMC，平均加速比达 <strong>3.29×</strong>，最高可达 4.5×（BS）。</li>
+<li><strong>ALS</strong> 工作负载在 Ideal 情况下达到 <strong>16.36×</strong> 加速，表明其对 Copy 原语高度依赖，而 Charon 对该原语优化效果极佳。</li>
+<li>Charon 性能接近 Ideal 情况，说明其硬件设计高效，卸载延迟极低。</li>
+<li>不同工作负载间加速比差异显著，反映其对象特征和 GC 行为不同（如 ALS 复制大对象，Scan&amp;Push 并行度低）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-13-utilized-bandwidth-during-gc-and-ratio-of-local-accesses">Figure 13: Utilized bandwidth during GC and ratio of local accesses<a class="headerlink" href="#figure-13-utilized-bandwidth-during-gc-and-ratio-of-local-accesses" title="Permanent link">&para;</a></h3>
+<p><img alt="dc6c2f5ae3421d4a63b84e8def6ec13989b64b3087fbebaaa34c473e440f03c8.jpg" src="../images/dc6c2f5ae3421d4a63b84e8def6ec13989b64b3087fbebaaa34c473e440f03c8.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了在垃圾回收（GC）期间，不同系统配置下所利用的带宽以及本地访问比例。横轴列出了多个工作负载，包括 Spark 框架下的 BS、KM、LR，以及 GraphChi 框架下的 CC、PR、ALS，最后是所有工作负载的平均值。</p>
+</li>
+<li>
+<p>纵轴左侧表示带宽使用量，单位为 GB/s；右侧表示本地访问比例，范围从 0 到 1。</p>
+</li>
+<li>
+<p>图中包含四种数据系列：</p>
+<ul>
+<li><strong>DDR4</strong>：白色柱状图，代表基于传统 DDR4 内存系统的主机处理器。</li>
+<li><strong>HMC</strong>：灰色柱状图，代表主机处理器搭配 Hybrid Memory Cube（HMC）内存系统。</li>
+<li><strong>Charon</strong>：黑色柱状图，代表主机处理器搭配位于 HMC 逻辑层的 Charon 加速器。</li>
+<li><strong>Ratio of local access</strong>：带有“×”标记的虚线，表示 Charon 系统中本地访问的比例。</li>
+</ul>
+</li>
+<li>
+<p>各工作负载下的带宽使用情况如下表所示：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>DDR4 (GB/s)</th>
+<th>HMC (GB/s)</th>
+<th>Charon (GB/s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BS</td>
+<td>~20</td>
+<td>~40</td>
+<td>~280</td>
+</tr>
+<tr>
+<td>KM</td>
+<td>~20</td>
+<td>~40</td>
+<td>~200</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>~20</td>
+<td>~40</td>
+<td>~150</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>~20</td>
+<td>~40</td>
+<td>~130</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>~20</td>
+<td>~40</td>
+<td>~120</td>
+</tr>
+<tr>
+<td>ALS</td>
+<td>~20</td>
+<td>~40</td>
+<td>~300</td>
+</tr>
+<tr>
+<td>Average</td>
+<td>~20</td>
+<td>~40</td>
+<td>~190</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>本地访问比例（Ratio of local access）在各工作负载下均保持较高水平，除 CC 和 PR 外，其余工作负载的本地访问比例均超过 70%。CC 和 PR 的本地访问比例约为 50%，但仍显著高于其他系统配置所能提供的带宽。</p>
+</li>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
+<li>Charon 在所有工作负载下均实现了远超 DDR4 和 HMC 系统的带宽利用率，平均达到约 190 GB/s，最高可达 300 GB/s（ALS）。</li>
+<li>这种高带宽利用率得益于 Charon 利用 HMC 内部的高带宽 TSV（Through-Silicon Via）进行内存访问，而非依赖传统的片外链路。</li>
+<li>尽管部分工作负载（如 CC 和 PR）有约一半的内存请求指向远程节点，但由于这些应用本身带宽需求较低，因此并未造成显著瓶颈。</li>
+<li><strong>本地访问比例高</strong>表明 Charon 能有效利用 HMC 内部的高带宽资源，减少对片外带宽的依赖，从而提升整体 GC 性能。</li>
+</ul>
+</li>
+<li>
+<p>综上，该图清晰地展示了 Charon 如何通过近内存处理架构充分利用 HMC 的内部带宽，实现远超传统内存系统的带宽利用率，并维持较高的本地访问比例，从而显著加速垃圾回收过程。</p>
+</li>
+</ul>
+<h3 id="figure-14-per-primitive-speedup-analysis-s-search-sp-scanpush-c-copy-bc-bitmap-count">Figure 14: Per-primitive speedup analysis (S: Search, SP: Scan&amp;Push, C: Copy, BC: Bitmap Count)<a class="headerlink" href="#figure-14-per-primitive-speedup-analysis-s-search-sp-scanpush-c-copy-bc-bitmap-count" title="Permanent link">&para;</a></h3>
+<p><img alt="a0bc475329e064c0c195cff9158cfdd719a5475dddab947cf9bbec03a62b5095.jpg" src="../images/a0bc475329e064c0c195cff9158cfdd719a5475dddab947cf9bbec03a62b5095.jpg" /></p>
+<ul>
+<li>图片展示了 Charon 架构在不同工作负载和 GC 类型下，对三个关键 GC 原语（Search、Scan&amp;Push、Copy）以及 Bitmap Count 的性能加速比分析。</li>
+<li><strong>横轴</strong>按工作负载分组，包括 BS、KM、LR、CC、PR 和 ALS，每组内又细分为 MinorGC 和 MajorGC 两种场景。</li>
+<li><strong>纵轴</strong>为归一化加速比（Normalized speedup），基准为 DDR4 内存系统的 CPU 执行性能。</li>
+<li>每组柱状图中，白色柱代表 DDR4 系统，黑色柱代表 Charon 加速器，直观对比加速效果。</li>
+<li><strong>S (Search)</strong>、<strong>SP (Scan&amp;Push)</strong>、<strong>C (Copy)</strong>、<strong>BC (Bitmap Count)</strong> 分别对应四种原语的加速表现，其中 Copy 原语在多数情况下贡献最大加速比。</li>
+<li>在 ALS 工作负载的 MajorGC 场景中，<strong>Copy 原语达到最高加速比 26.15×</strong>，显著优于其他原语和工作负载。</li>
+<li>Scan&amp;Push 原语在部分工作负载（如 BS、KM、LR、ALS）中加速比偏低甚至接近 1×，原因在于这些应用对象引用少、并行度低，难以发挥 Charon 的 MLP 优势。</li>
+<li>Bitmap Count 原语在所有工作负载中均表现出稳定且显著的加速，平均达 <strong>5.63×</strong>，得益于其优化算法与硬件设计结合。</li>
+<li>多数工作负载中，<strong>Copy 原语是主要性能瓶颈</strong>，Charon 对其高效加速直接推动了整体 GC 性能提升。</li>
+<li>图中虚线标注了各原语在特定场景下的具体加速数值，便于量化比较。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>GC 类型</th>
+<th>Search (S)</th>
+<th>Scan&amp;Push (SP)</th>
+<th>Copy (C)</th>
+<th>Bitmap Count (BC)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BS</td>
+<td>MinorGC</td>
+<td>~1.5</td>
+<td>~1.0</td>
+<td>~7.0</td>
+<td>~5.0</td>
+</tr>
+<tr>
+<td></td>
+<td>MajorGC</td>
+<td>~2.0</td>
+<td>~1.2</td>
+<td>~17.8</td>
+<td>~5.5</td>
+</tr>
+<tr>
+<td>KM</td>
+<td>MinorGC</td>
+<td>~1.8</td>
+<td>~1.1</td>
+<td>~11.6</td>
+<td>~5.2</td>
+</tr>
+<tr>
+<td></td>
+<td>MajorGC</td>
+<td>~2.2</td>
+<td>~1.3</td>
+<td>~15.1</td>
+<td>~5.8</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>MinorGC</td>
+<td>~2.1</td>
+<td>~1.0</td>
+<td>~21.3</td>
+<td>~5.6</td>
+</tr>
+<tr>
+<td></td>
+<td>MajorGC</td>
+<td>~2.5</td>
+<td>~1.4</td>
+<td>~21.8</td>
+<td>~6.0</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>MinorGC</td>
+<td>~1.6</td>
+<td>~1.5</td>
+<td>~8.0</td>
+<td>~5.3</td>
+</tr>
+<tr>
+<td></td>
+<td>MajorGC</td>
+<td>~1.9</td>
+<td>~1.7</td>
+<td>~10.0</td>
+<td>~5.7</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>MinorGC</td>
+<td>~1.7</td>
+<td>~1.6</td>
+<td>~9.0</td>
+<td>~5.4</td>
+</tr>
+<tr>
+<td></td>
+<td>MajorGC</td>
+<td>~2.0</td>
+<td>~1.8</td>
+<td>~12.0</td>
+<td>~5.9</td>
+</tr>
+<tr>
+<td>ALS</td>
+<td>MinorGC</td>
+<td>~2.0</td>
+<td>~1.2</td>
+<td>~19.2</td>
+<td>~6.1</td>
+</tr>
+<tr>
+<td></td>
+<td>MajorGC</td>
+<td>~2.3</td>
+<td>~1.3</td>
+<td><strong>26.15</strong></td>
+<td>~6.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体来看，Charon 在 Copy 和 Bitmap Count 原语上表现最优，Scan&amp;Push 受限于数据访问模式，并非所有场景都受益。</li>
+<li>该图验证了论文核心观点：通过识别并加速少数关键原语，即可实现整体 GC 性能的大幅提升，无需全量卸载。</li>
+</ul>
+<h3 id="figure-15-gc-throughput-scalability">Figure 15: GC throughput scalability<a class="headerlink" href="#figure-15-gc-throughput-scalability" title="Permanent link">&para;</a></h3>
+<p><img alt="e3882e2e72a6ca3ffa8ab9d0d94c98a55073ad47b057387130c079139224c5c6.jpg" src="../images/e3882e2e72a6ca3ffa8ab9d0d94c98a55073ad47b057387130c079139224c5c6.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Charon</strong> 架构在不同 GC 线程数下的吞吐量可扩展性，对比了三种配置：<strong>DDR4</strong>、<strong>Charon (Unified)</strong> 和 <strong>Charon (Distributed)</strong>。</li>
+<li>四个子图分别对应不同工作负载和 GC 类型：<ul>
+<li>(a) MinorGC: Spark-BS</li>
+<li>(b) MinorGC: GraphChi-CC</li>
+<li>(c) MajorGC: Spark-BS</li>
+<li>(d) MajorGC: GraphChi-CC</li>
+</ul>
+</li>
+<li>所有子图的 Y 轴为“Normalized Speedup”，X 轴为“Number of GC Threads”，取值为 8、16、32。</li>
+<li><strong>Charon (Unified)</strong> 设计中，所有处理单元共享中心立方体上的单个 bitmap cache 和 TLB；<strong>Charon (Distributed)</strong> 则将这些结构分布到各个立方体上。</li>
+<li>数据表明，随着 GC 线程数增加，<strong>Charon</strong> 的性能提升显著优于 <strong>DDR4</strong>，后者因内存带宽受限（最大 34GB/s）几乎无法扩展。</li>
+<li>在大多数情况下，<strong>Charon (Distributed)</strong> 比 <strong>Charon (Unified)</strong> 表现更好，因为减少了中心立方体的争用。</li>
+<li>唯一例外是 <strong>GraphChi-CC</strong> 的 MajorGC，由于内存压力较低，<strong>Charon (Unified)</strong> 反而表现更优，分布式设计因远程 TLB 访问带来开销。</li>
+<li>性能可扩展性还可通过采用带宽可扩展的 HMC 拓扑和改进的页面交错策略进一步优化。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>子图</th>
+<th>工作负载</th>
+<th>GC 类型</th>
+<th>最佳配置</th>
+<th>关键观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a)</td>
+<td>Spark-BS</td>
+<td>MinorGC</td>
+<td>Charon (Distributed)</td>
+<td>随线程数增加，Charon 显著优于 DDR4，分布式优于统一设计</td>
+</tr>
+<tr>
+<td>(b)</td>
+<td>GraphChi-CC</td>
+<td>MinorGC</td>
+<td>Charon (Distributed)</td>
+<td>分布式设计在高线程数下表现最佳，DDR4 几乎无扩展性</td>
+</tr>
+<tr>
+<td>(c)</td>
+<td>Spark-BS</td>
+<td>MajorGC</td>
+<td>Charon (Distributed)</td>
+<td>分布式设计在 32 线程时达到约 3.5x 加速，远超 DDR4</td>
+</tr>
+<tr>
+<td>(d)</td>
+<td>GraphChi-CC</td>
+<td>MajorGC</td>
+<td>Charon (Unified)</td>
+<td>统一设计在低内存压力下表现更优，分布式因远程访问开销略逊</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>Charon</strong> 架构通过利用 3D 堆叠内存的内部带宽，在多线程 GC 场景下展现出优异的可扩展性，尤其在分布式设计下表现更佳。</li>
+</ul>
+<h3 id="figure-16-memory-side-implementation-speedup-over-cpuside-on-chip-implementation">Figure 16: Memory-side implementation speedup over CPUside on-chip implementation<a class="headerlink" href="#figure-16-memory-side-implementation-speedup-over-cpuside-on-chip-implementation" title="Permanent link">&para;</a></h3>
+<p><img alt="833e4f9eaaf9c2f581553d867fc7e6d35737a491d198c49ae5585fd39d3d7ae8.jpg" src="../images/833e4f9eaaf9c2f581553d867fc7e6d35737a491d198c49ae5585fd39d3d7ae8.jpg" /></p>
+<ul>
+<li>图片展示了三种不同架构配置在多个工作负载下的归一化加速比，旨在比较 <strong>Charon</strong> 作为 <strong>CPU-side accelerator</strong> 与 <strong>DRAM-side accelerator</strong> 的性能差异。</li>
+<li>横轴列出了七个具体工作负载：<strong>BS</strong>、<strong>KM</strong>、<strong>LR</strong>（均来自 Spark）、<strong>CC</strong>、<strong>PR</strong>、<strong>ALS</strong>（均来自 GraphChi），以及一个综合指标 <strong>Geomean</strong>。</li>
+<li>纵轴为 <strong>Normalized Speedup</strong>，表示相对于基准（CPU+DDR4）的性能提升倍数。</li>
+<li>图例清晰区分了三种配置：<ul>
+<li>白色柱状图：<strong>CPU+DDR4</strong>，作为性能基准。</li>
+<li>浅灰色柱状图：<strong>Charon (CPU-side)+HMC</strong>，即 Charon 作为 CPU 侧加速器，搭配 HMC 内存。</li>
+<li>黑色柱状图：<strong>Charon (DRAM-side)+HMC</strong>，即 Charon 作为 DRAM 侧加速器，搭配 HMC 内存。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>CPU+DDR4</th>
+<th>Charon (CPU-side)+HMC</th>
+<th>Charon (DRAM-side)+HMC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BS</td>
+<td>~1.0</td>
+<td>~2.0</td>
+<td>~2.5</td>
+</tr>
+<tr>
+<td>KM</td>
+<td>~1.0</td>
+<td>~1.8</td>
+<td>~2.3</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>~1.0</td>
+<td>~2.2</td>
+<td>~3.0</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>~1.0</td>
+<td>~1.7</td>
+<td>~2.0</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>~1.0</td>
+<td>~1.6</td>
+<td>~1.9</td>
+</tr>
+<tr>
+<td>ALS</td>
+<td>~1.0</td>
+<td>~2.5</td>
+<td>~4.5</td>
+</tr>
+<tr>
+<td>Geomean</td>
+<td>~1.0</td>
+<td>~2.0</td>
+<td>~3.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>数据表明，<strong>Charon (DRAM-side)+HMC</strong> 在所有工作负载上均显著优于 <strong>Charon (CPU-side)+HMC</strong>。</li>
+<li><strong>ALS</strong> 工作负载表现最为突出，<strong>DRAM-side</strong> 实现了约 <strong>4.5x</strong> 的加速比，而 <strong>CPU-side</strong> 仅为 <strong>2.5x</strong>，差距接近 <strong>80%</strong>。</li>
+<li>综合来看，<strong>Geomean</strong> 加速比显示，<strong>DRAM-side</strong> 配置比 <strong>CPU-side</strong> 配置平均高出约 <strong>50%</strong>。</li>
+<li>这种性能差异主要源于 <strong>DRAM-side</strong> 能够充分利用 <strong>HMC</strong> 内部的高带宽 <strong>TSV</strong>，而 <strong>CPU-side</strong> 则受限于外部内存总线带宽。</li>
+<li>尽管 <strong>CPU-side</strong> 配置仍能带来可观的性能提升（平均 <strong>2.0x</strong>），但 <strong>DRAM-side</strong> 配置在性能上更具优势，验证了近内存计算架构的有效性。</li>
+</ul>
+<h3 id="figure-17-energy-consumption-of-charon-on-gc-compared-with-the-host-cpu-only-execution">Figure 17: Energy consumption of Charon on GC compared with the host CPU-only execution<a class="headerlink" href="#figure-17-energy-consumption-of-charon-on-gc-compared-with-the-host-cpu-only-execution" title="Permanent link">&para;</a></h3>
+<p><img alt="96df6afa56c2d7515bd0dfd914d34459bcbed83dce204c223c19122d75e9bbd1.jpg" src="../images/96df6afa56c2d7515bd0dfd914d34459bcbed83dce204c223c19122d75e9bbd1.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 17: Energy consumption of Charon on GC compared with the host CPU-only execution</strong>，展示的是在不同工作负载下，<strong>Charon</strong> 相较于纯 <strong>CPU</strong> 执行的垃圾回收（GC）能耗对比。</li>
+<li>纵轴为 <strong>Normalized Energy Consumption</strong>，表示归一化后的能耗值，基准为 DDR4 + CPU 配置下的能耗。</li>
+<li>横轴按工作负载分组，包括 Spark 的三个子任务（BS, KM, LR）和 GraphChi 的三个子任务（CC, PR, ALS），每个任务下比较三种配置：<strong>DDR4 + CPU</strong>、<strong>HMC + CPU</strong>、<strong>Charon</strong>。</li>
+<li>图例说明：<ul>
+<li>白色柱体代表 <strong>CPU</strong> 能耗部分；</li>
+<li>灰色柱体代表 <strong>DRAM</strong> 能耗部分；</li>
+<li>黑色柱体代表 <strong>Components of Charon</strong>（即 Charon 自身硬件组件的能耗）。</li>
+</ul>
+</li>
+<li><strong>Charon</strong> 在所有工作负载中均显著降低总能耗。例如，在 <strong>ALS</strong> 上，Charon 总能耗仅为 DDR4+CPU 的约 <strong>20%</strong>，节能效果最突出。</li>
+<li><strong>Charon</strong> 的自身能耗（黑色部分）占比极小，最高不超过总能耗的 <strong>5%</strong>，表明其硬件设计高效且低功耗。</li>
+<li>对比 <strong>HMC + CPU</strong> 与 <strong>DDR4 + CPU</strong>，HMC 内存系统本身已带来一定节能（灰色部分减少），但加入 <strong>Charon</strong> 后进一步大幅降低 CPU 负担（白色部分锐减），从而实现整体能耗优化。</li>
+<li>数据汇总如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Platform</th>
+<th>Normalized Energy Consumption</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BS</td>
+<td>DDR4 + CPU</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td></td>
+<td>HMC + CPU</td>
+<td>~0.80</td>
+</tr>
+<tr>
+<td></td>
+<td>Charon</td>
+<td>~0.35</td>
+</tr>
+<tr>
+<td>KM</td>
+<td>DDR4 + CPU</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td></td>
+<td>HMC + CPU</td>
+<td>~0.75</td>
+</tr>
+<tr>
+<td></td>
+<td>Charon</td>
+<td>~0.30</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>DDR4 + CPU</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td></td>
+<td>HMC + CPU</td>
+<td>~0.70</td>
+</tr>
+<tr>
+<td></td>
+<td>Charon</td>
+<td>~0.25</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>DDR4 + CPU</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td></td>
+<td>HMC + CPU</td>
+<td>~0.65</td>
+</tr>
+<tr>
+<td></td>
+<td>Charon</td>
+<td>~0.30</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>DDR4 + CPU</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td></td>
+<td>HMC + CPU</td>
+<td>~0.60</td>
+</tr>
+<tr>
+<td></td>
+<td>Charon</td>
+<td>~0.25</td>
+</tr>
+<tr>
+<td>ALS</td>
+<td>DDR4 + CPU</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td></td>
+<td>HMC + CPU</td>
+<td>~0.55</td>
+</tr>
+<tr>
+<td></td>
+<td>Charon</td>
+<td>~0.20</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>结论</strong>：<strong>Charon</strong> 通过将 GC 关键原语卸载至近内存处理单元，有效减少 CPU 和 DRAM 的能耗，尤其在对象复制密集型任务（如 ALS）中节能效果最为显著，平均节能达 <strong>60.7%</strong>（如论文摘要所述）。其自身硬件开销可忽略，符合“低面积/低功耗”设计目标。</li>
+</ul>
+<h3 id="table-4-total-area-usage-of-charon-for-whole-cubes">Table 4: Total area usage of Charon for whole cubes<a class="headerlink" href="#table-4-total-area-usage-of-charon-for-whole-cubes" title="Permanent link">&para;</a></h3>
+<p><img alt="78fc6608bc6f9a4fb1d4b64c5db78faa5ea40d54d831e600fe59866b8232761a.jpg" src="../images/78fc6608bc6f9a4fb1d4b64c5db78faa5ea40d54d831e600fe59866b8232761a.jpg" /></p>
+<ul>
+<li>图片内容为 <strong>Table 4: Total area usage of Charon for whole cubes</strong>，展示 Charon 架构在多个 HMC 立方体上部署时各组件的面积开销。</li>
+<li>表格分为两大类：<strong>General Components</strong> 和 <strong>Processing Units</strong>，分别统计通用结构与专用处理单元的面积消耗。</li>
+<li><strong>总芯片面积为 1.9470 mm²</strong>，平均每个 HMC 立方体承担约 <strong>0.4868 mm²</strong> 的额外逻辑面积。</li>
+<li>各组件具体面积分布如下：</li>
+</ul>
+<p>|-------------------|---------------------|----------|----------------------------|
+| Command Queue | 0.0049 | 4 | 0.0196 |
+| Request Queue(R) | 0.0015 | 4 | 0.0060 |
+| Request Queue(W) | 0.0162 | 4 | 0.0648 |
+| Metadata Array | 0.0805 | 4 | 0.3220 |
+| Bitmap Cache | 0.1562 | 1 | 0.1562 |
+| TLB | 0.0706 | 4 | 0.2824 |
+| Copy/Search | 0.0223 | 8 | 0.1784 |
+| Bitmap Count | 0.0427 | 8 | 0.3416 |
+| Scan&amp;Push | 0.0720 | 8 | 0.5760 |</p>
+<ul>
+<li><strong>Bitmap Cache</strong> 占用单个实例但面积较大（0.1562 mm²），因其为集中式缓存，服务于所有立方体。</li>
+<li><strong>Scan&amp;Push Unit</strong> 是面积最大的处理单元，共 8 个实例，总计 <strong>0.5760 mm²</strong>，反映其复杂度和并行需求。</li>
+<li><strong>TLB</strong> 与 <strong>Metadata Array</strong> 作为关键系统支持结构，合计占总面积约 <strong>0.6044 mm²</strong>，体现地址翻译与元数据管理的重要性。</li>
+<li>整体来看，Charon 在 HMC 逻辑层引入的面积开销极小——假设 HMC 逻辑层总面积为 100 mm²，则 Charon 仅占用 <strong>0.49%</strong>，证明其设计高度轻量、可扩展。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

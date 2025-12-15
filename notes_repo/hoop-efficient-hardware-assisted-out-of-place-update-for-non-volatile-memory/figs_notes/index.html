@@ -1,0 +1,1859 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-i-comparison-of-various-crash-consistency-techniques-for-nvm-compared-with-existing-works-hoop-provides-a-transparent-hardware-solution-that-significantly-reduces-the-write-traffic-to-nvm-while-achieving-low-persistence-overhead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE I: Comparison of various crash-consistency techniques for NVM. Compared with existing works, HOOP provides a transparent hardware solution that significantly reduces the write traffic to NVM, while achieving low persistence overhead.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-1-illustration-of-different-crash-consistency-techniques-a-logging-technique-requires-that-both-logs-and-data-must-be-persisted-which-incurs-double-writes-b-shadow-paging-maintains-two-copies-of-data-it-suffers-from-copy-on-write-overhead-c-log-structured-nvm-alleviates-the-double-writes-but-it-suffers-from-significant-overhead-of-index-lookup-d-our-hardware-assisted-out-of-place-update-reduces-the-write-amplification-significantly-while-providing-efficient-data-accesses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 1: Illustration of different crash-consistency techniques. (a) Logging technique requires that both logs and data must be persisted, which incurs double writes; (b) Shadow paging maintains two copies of data, it suffers from copy-on-write overhead; (c) Log-structured NVM alleviates the double writes, but it suffers from significant overhead of index lookup; (d) Our hardware-assisted out-of-place update reduces the write amplification significantly, while providing efficient data accesses.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-2-hardware-assisted-out-of-place-update-with-hoop-hoop-performs-out-of-place-writes-and-reduces-write-traffic-with-data-packing-and-coalescing-to-reduce-the-storage-overhead-hoop-adaptively-migrates-data-in-the-out-of-place-oop-region-back-to-the-home-region-with-optimized-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 2: Hardware-assisted out-of-place update with HOOP. HOOP performs out-of-place writes and reduces write traffic with data packing and coalescing. To reduce the storage overhead, HOOP adaptively migrates data in the out-of-place (OOP) region back to the home region with optimized GC.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-3-data-packing-in-hoop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 3: Data packing in HOOP.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-4-transaction-execution-of-different-approaches-both-undo-and-redo-logging-deliver-lengthy-transaction-execution-times-due-to-log-writes-shadow-paging-has-to-copy-additional-data-before-performing-in-place-updates-hoop-achieves-fast-transaction-execution-with-out-of-place-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 4: Transaction execution of different approaches. Both undo and redo logging deliver lengthy transaction execution times due to log writes. Shadow paging has to copy additional data before performing in-place updates. HOOP achieves fast transaction execution with out-of-place updates.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-5-layout-of-the-oop-region-hoop-organizes-the-oop-region-in-a-log-structured-manner-each-oop-block-consists-of-memory-slices-with-a-fixed-size-there-are-two-types-of-memory-slices-data-memory-slice-and-address-memory-slice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-6-the-load-and-store-procedure-in-hoop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 6: The load and store procedure in HOOP.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-ii-system-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE II: System configuration.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iii-benchmarks-used-in-our-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE III: Benchmarks used in our experiments.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#b-critical-path-latency-lower-is-better-fig-7-transaction-throughput-and-critical-path-latency-for-system-benchmarks-hoop-improves-transaction-throughput-by-743-451-338-279-and-243-compared-with-opt-redo-opt-undo-osp-lsm-and-lad-respectively-for-critical-path-latency-hoop-also-achieves-a-critical-path-latency-close-to-a-native-system-without-any-persistence-guarantee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (b) Critical path latency (lower is better) Fig. 7: Transaction throughput and critical path latency for system benchmarks. HOOP improves transaction throughput by 74.3%, 45.1%, 33.8%, 27.9%, and 24.3% compared with Opt-Redo, Opt-Undo, OSP, LSM, and LAD, respectively. For critical path latency, HOOP also achieves a critical path latency close to a native system without any persistence guarantee.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-8-write-traffic-produced-by-different-approaches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 8: Write traffic produced by different approaches.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-9-energy-consumption-of-different-approaches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 9: Energy consumption of different approaches.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-iv-average-data-reduction-in-the-gc-of-hoop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TABLE IV: Average data reduction in the GC of HOOP.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-10-gc-efficiency-with-different-timing-thresholds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 10: GC efficiency with different timing thresholds.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-11-recovery-performance-of-1gb-oop-region-with-various-number-of-recovery-threads-and-memory-bandwidth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 11: Recovery performance of 1GB OOP region with various number of recovery threads and memory bandwidth.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-12-ycsb-throughput-with-various-nvm-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 12: YCSB throughput with various NVM latency.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fig-13-ycsb-throughput-with-various-mapping-table-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fig. 13: YCSB throughput with various mapping table size.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory">HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory 图表详解<a class="headerlink" href="#hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory" title="Permanent link">&para;</a></h1>
+<h3 id="table-i-comparison-of-various-crash-consistency-techniques-for-nvm-compared-with-existing-works-hoop-provides-a-transparent-hardware-solution-that-significantly-reduces-the-write-traffic-to-nvm-while-achieving-low-persistence-overhead">TABLE I: Comparison of various crash-consistency techniques for NVM. Compared with existing works, HOOP provides a transparent hardware solution that significantly reduces the write traffic to NVM, while achieving low persistence overhead.<a class="headerlink" href="#table-i-comparison-of-various-crash-consistency-techniques-for-nvm-compared-with-existing-works-hoop-provides-a-transparent-hardware-solution-that-significantly-reduces-the-write-traffic-to-nvm-while-achieving-low-persistence-overhead" title="Permanent link">&para;</a></h3>
+<p><img alt="63214ed82413cea449f8ad011a41f746b1edb7eb59c007461537e50a8742399c.jpg" src="../images/63214ed82413cea449f8ad011a41f746b1edb7eb59c007461537e50a8742399c.jpg" /></p>
+<ul>
+<li>该表格系统性对比了多种面向 NVM 的崩溃一致性技术，核心维度包括读取延迟、关键路径影响、是否需要刷新与内存栅栏指令、以及写入流量。</li>
+<li>表格将技术分为三大类：<strong>Logging</strong>（日志）、<strong>Shadow paging</strong>（影子分页）和 <strong>Log-structured NVM</strong>（日志结构化 NVM），并最终列出本文提出的 <strong>HOOP</strong> 方案作为对比基准。</li>
+<li>在 <strong>Logging</strong> 类别下，进一步细分为 <strong>Undo</strong>、<strong>Redo</strong> 和 <strong>Undo+Redo</strong> 子类。其中：<ul>
+<li>Undo 类型如 ATOM [24]、Proteus [47] 等，普遍具有 <strong>低读取延迟</strong>，但多数在关键路径上执行，且写入流量为中高。</li>
+<li>Redo 类型如 Mnemosyne [49]、SoftWrAP [14] 等，读取延迟多为高，部分方案（如 BPPM [31]）可实现低延迟，但写入流量仍偏高。</li>
+<li>Undo+Redo 类型如 FWB [40]，读取延迟高，写入流量高。</li>
+</ul>
+</li>
+<li><strong>Shadow paging</strong> 类别包含 Page 级（如 BPFS [10]）和 Cache line 级（如 SSP [39]）。两者均需在关键路径上执行，BPFS 需要刷新与栅栏，而 SSP 不需要；SSP 实现了较低的写入流量。</li>
+<li><strong>Log-structured NVM</strong> 类型以 LSNVMM [17] 为代表，其读取延迟高，不在关键路径上，无需刷新与栅栏，写入流量为中等。</li>
+<li><strong>HOOP</strong> 方案在所有维度上表现优异：<ul>
+<li><strong>读取延迟：低</strong></li>
+<li><strong>关键路径影响：无</strong></li>
+<li><strong>刷新与栅栏需求：无</strong></li>
+<li><strong>写入流量：低</strong></li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Subtype</th>
+<th>Representative Project</th>
+<th>Read Latency</th>
+<th>On the Critical Path</th>
+<th>Require Flush &amp; Fence</th>
+<th>Write Traffic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logging</td>
+<td>Undo</td>
+<td>DCT [27]</td>
+<td>Low</td>
+<td>Yes</td>
+<td>No</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ATOM [24]</td>
+<td>Low</td>
+<td>Yes</td>
+<td>No</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Proteus [47]</td>
+<td>Low</td>
+<td>Yes</td>
+<td>No</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>PiCL [37]</td>
+<td>High</td>
+<td>No</td>
+<td>No</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td>Redo</td>
+<td>Mnemosyne [49]</td>
+<td>High</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>LOC [32]</td>
+<td>High</td>
+<td>Yes</td>
+<td>No</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BPPM [31]</td>
+<td>Low</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>SoftWrAP [14]</td>
+<td>High</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>WrAP [13]</td>
+<td>High</td>
+<td>Yes</td>
+<td>No</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>DudeTM [29]</td>
+<td>Low</td>
+<td>No</td>
+<td>No</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ReDU [23]</td>
+<td>High</td>
+<td>Yes</td>
+<td>No</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td></td>
+<td>Undo+Redo</td>
+<td>FWB [40]</td>
+<td>High</td>
+<td>Yes</td>
+<td>No</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Shadow paging</td>
+<td>Page</td>
+<td>BPFS [10]</td>
+<td>Low</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>High</td>
+</tr>
+<tr>
+<td></td>
+<td>Cache line</td>
+<td>SSP [39]</td>
+<td>Low</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Log-structured NVM</td>
+<td></td>
+<td>LSNVMM [17]</td>
+<td>High</td>
+<td>No</td>
+<td>No</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>HOOP</strong></td>
+<td></td>
+<td>—</td>
+<td><strong>Low</strong></td>
+<td><strong>No</strong></td>
+<td><strong>No</strong></td>
+<td><strong>Low</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>HOOP 的优势在于其硬件辅助的 <strong>out-of-place update</strong> 机制，避免了传统日志或影子分页带来的额外写入开销，并通过内存控制器中的轻量级间接层实现透明地址映射，从而在不牺牲原子持久性前提下，显著降低性能开销。</li>
+</ul>
+<h3 id="fig-1-illustration-of-different-crash-consistency-techniques-a-logging-technique-requires-that-both-logs-and-data-must-be-persisted-which-incurs-double-writes-b-shadow-paging-maintains-two-copies-of-data-it-suffers-from-copy-on-write-overhead-c-log-structured-nvm-alleviates-the-double-writes-but-it-suffers-from-significant-overhead-of-index-lookup-d-our-hardware-assisted-out-of-place-update-reduces-the-write-amplification-significantly-while-providing-efficient-data-accesses">Fig. 1: Illustration of different crash-consistency techniques. (a) Logging technique requires that both logs and data must be persisted, which incurs double writes; (b) Shadow paging maintains two copies of data, it suffers from copy-on-write overhead; (c) Log-structured NVM alleviates the double writes, but it suffers from significant overhead of index lookup; (d) Our hardware-assisted out-of-place update reduces the write amplification significantly, while providing efficient data accesses.<a class="headerlink" href="#fig-1-illustration-of-different-crash-consistency-techniques-a-logging-technique-requires-that-both-logs-and-data-must-be-persisted-which-incurs-double-writes-b-shadow-paging-maintains-two-copies-of-data-it-suffers-from-copy-on-write-overhead-c-log-structured-nvm-alleviates-the-double-writes-but-it-suffers-from-significant-overhead-of-index-lookup-d-our-hardware-assisted-out-of-place-update-reduces-the-write-amplification-significantly-while-providing-efficient-data-accesses" title="Permanent link">&para;</a></h3>
+<p><img alt="6c5b235d6fb4853971c26e030dc24e02b9e11d457a5d1c1c668a04ed0b4d0933.jpg" src="../images/6c5b235d6fb4853971c26e030dc24e02b9e11d457a5d1c1c668a04ed0b4d0933.jpg" /></p>
+<ul>
+<li>图片展示了四种不同的崩溃一致性技术，旨在对比其在非易失性内存（NVM）系统中的数据持久化机制与性能开销。</li>
+<li><strong>(a) Logging</strong>：CPU通过缓存将数据写入内存控制器，同时生成日志（Logs）并写入NVM。该方法要求<strong>日志和原始数据都必须持久化</strong>，导致<strong>双倍写入放大</strong>（double writes），显著增加NVM写流量和磨损。</li>
+<li><strong>(b) Shadow Paging</strong>：CPU更新数据时，系统会先复制一份旧数据（Copy），再在副本上进行修改。此过程产生<strong>额外的拷贝开销</strong>（copy-on-write overhead），即使只修改少量数据，也可能触发整个页或缓存行的复制。</li>
+<li><strong>(c) Log-structured NVM</strong>：所有写操作追加到日志中，避免了双写问题，但引入了<strong>索引查找开销</strong>（index lookup overhead）。每次读取需通过索引定位最新数据位置，增加了关键路径延迟。</li>
+<li><strong>(d) HOOP</strong>：提出硬件辅助的原地外更新机制。更新数据被写入新位置（Out-of-place Write），旧数据保留直至新数据持久化。通过<strong>数据打包</strong>（data packing）和<strong>数据合并</strong>（data coalescing）优化写入效率，显著降低写放大，同时保持高效的数据访问。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>技术类型</th>
+<th>写放大</th>
+<th>关键路径延迟</th>
+<th>主要开销来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logging</td>
+<td>高（双写）</td>
+<td>高</td>
+<td>日志写入、内存屏障、缓存刷新</td>
+</tr>
+<tr>
+<td>Shadow Paging</td>
+<td>中高</td>
+<td>中高</td>
+<td>数据拷贝、TLB更新、页面合并</td>
+</tr>
+<tr>
+<td>Log-structured NVM</td>
+<td>低</td>
+<td>高</td>
+<td>索引维护、地址查找、垃圾回收</td>
+</tr>
+<tr>
+<td><strong>HOOP</strong></td>
+<td><strong>最低</strong></td>
+<td><strong>最低</strong></td>
+<td><strong>GC迁移、映射表查询（极小）</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>HOOP的核心优势在于：<strong>无需日志</strong>、<strong>不强制持久化顺序</strong>、<strong>利用硬件透明实现地址重映射</strong>，从而在保证原子持久性的同时，大幅减少写入流量和关键路径延迟。</li>
+<li>图中绿色箭头代表HOOP的“原地外写入”路径，虚线表示数据合并与打包过程，直观体现其优化策略。</li>
+</ul>
+<h3 id="fig-2-hardware-assisted-out-of-place-update-with-hoop-hoop-performs-out-of-place-writes-and-reduces-write-traffic-with-data-packing-and-coalescing-to-reduce-the-storage-overhead-hoop-adaptively-migrates-data-in-the-out-of-place-oop-region-back-to-the-home-region-with-optimized-gc">Fig. 2: Hardware-assisted out-of-place update with HOOP. HOOP performs out-of-place writes and reduces write traffic with data packing and coalescing. To reduce the storage overhead, HOOP adaptively migrates data in the out-of-place (OOP) region back to the home region with optimized GC.<a class="headerlink" href="#fig-2-hardware-assisted-out-of-place-update-with-hoop-hoop-performs-out-of-place-writes-and-reduces-write-traffic-with-data-packing-and-coalescing-to-reduce-the-storage-overhead-hoop-adaptively-migrates-data-in-the-out-of-place-oop-region-back-to-the-home-region-with-optimized-gc" title="Permanent link">&para;</a></h3>
+<p><img alt="2462e7cd429df53d42e80a9b3289cc106eb25414496d10077e336f392cc9c839.jpg" src="../images/2462e7cd429df53d42e80a9b3289cc106eb25414496d10077e336f392cc9c839.jpg" /></p>
+<ul>
+<li>图片展示了 HOOP 系统的架构概览，核心目标是实现 <strong>硬件辅助的 out-of-place update</strong>，以在保证原子持久性的同时，降低写入放大和关键路径延迟。</li>
+<li>整体结构分为三层：顶部为 <strong>Cache Hierarchy</strong>，中间为 <strong>Memory Controller</strong>，底部为 <strong>NVM</strong>（非易失性内存）。</li>
+<li>在 NVM 层，数据被划分为两个区域：<ul>
+<li><strong>Home Region</strong>：原始数据存储位置。</li>
+<li><strong>OOP Region</strong>：用于存放更新后数据的“外置”区域，采用日志结构组织。</li>
+</ul>
+</li>
+<li>Memory Controller 是 HOOP 的核心，包含三个关键组件：<ul>
+<li><strong>Mapping Table</strong>：维护从 Home Region 地址到 OOP Region 地址的物理-物理映射，支持快速地址翻译。</li>
+<li><strong>OOP Data Buffer</strong>：每个核心专用的缓冲区（默认 1KB），用于暂存事务中的更新数据及元数据，支持 <strong>Data Packing</strong> 优化。</li>
+<li><strong>Eviction Buffer</strong>：缓存从 OOP Region 迁移回 Home Region 的数据，确保在 GC 期间映射表条目被清除时，仍能访问最新版本数据。</li>
+</ul>
+</li>
+<li>数据流方向清晰标注：<ul>
+<li><strong>Store 操作</strong>：数据从 Cache Hierarchy 写入 Memory Controller 的 OOP Data Buffer，经 <strong>Data Packing</strong> 后写入 OOP Region。</li>
+<li><strong>Load 操作</strong>：从 Cache Hierarchy 发起读取请求，通过 Mapping Table 查找数据是否在 OOP Region，若命中则从 OOP Region 读取；否则从 Home Region 读取。</li>
+<li><strong>Garbage Collection (GC)</strong>：周期性地将 OOP Region 中的最新数据版本迁移回 Home Region，释放 OOP Region 空间，并清理 Mapping Table 相关条目。</li>
+</ul>
+</li>
+<li>关键优化技术在图中明确标出：<ul>
+<li><strong>Data Packing</strong>：在 OOP Data Buffer 和 OOP Region 之间进行，将多个细粒度更新打包成单个缓存行，减少写入次数。</li>
+<li><strong>out-of-place update</strong>：所有更新均写入新位置（OOP Region），旧数据保留直至新数据持久化，天然支持原子性。</li>
+<li><strong>optimized GC</strong>：后台执行，结合 <strong>data coalescing</strong> 技术，避免对同一地址的重复写入，进一步降低写入流量。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+<th>关联优化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cache Hierarchy</td>
+<td>处理常规 Load/Store 指令</td>
+<td>无直接关联</td>
+</tr>
+<tr>
+<td>Memory Controller</td>
+<td>核心控制单元，管理地址映射、数据缓冲与 GC</td>
+<td><strong>Data Packing</strong>, <strong>Mapping Table</strong>, <strong>Eviction Buffer</strong></td>
+</tr>
+<tr>
+<td>OOP Data Buffer</td>
+<td>缓存事务更新，支持打包</td>
+<td><strong>Data Packing</strong></td>
+</tr>
+<tr>
+<td>Mapping Table</td>
+<td>物理地址映射，支持快速读取</td>
+<td>透明硬件实现</td>
+</tr>
+<tr>
+<td>Eviction Buffer</td>
+<td>缓存 GC 迁移数据，防止读取陈旧数据</td>
+<td>保障一致性</td>
+</tr>
+<tr>
+<td>OOP Region</td>
+<td>存储更新数据的日志结构区域</td>
+<td><strong>out-of-place update</strong></td>
+</tr>
+<tr>
+<td>Home Region</td>
+<td>原始数据存储区</td>
+<td>GC 目标区域</td>
+</tr>
+<tr>
+<td>Garbage Collection</td>
+<td>后台迁移数据，回收空间</td>
+<td><strong>optimized GC</strong>, <strong>data coalescing</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图直观体现了 HOOP 的设计哲学：<strong>将复杂性下沉至硬件层</strong>（Memory Controller），对上层软件透明；通过 <strong>out-of-place update + data packing + optimized GC</strong> 三重机制，在保证强一致性的同时，显著降低性能开销和写入放大。</li>
+</ul>
+<h3 id="fig-3-data-packing-in-hoop">Fig. 3: Data packing in HOOP.<a class="headerlink" href="#fig-3-data-packing-in-hoop" title="Permanent link">&para;</a></h3>
+<p><img alt="c3438a9bbf9c81f1785f54228b2cf11eb233c85613a106863e9a578698d8dac6.jpg" src="../images/c3438a9bbf9c81f1785f54228b2cf11eb233c85613a106863e9a578698d8dac6.jpg" /></p>
+<ul>
+<li>图片展示了 HOOP 系统中的 <strong>数据打包（Data packing）</strong> 机制，旨在减少 NVM 写入流量。</li>
+<li>上半部分显示了 <strong>N 个独立缓存行（cache lines）</strong>，分别标记为 M1 至 M8，每个缓存行中包含一个被修改的数据块（如 A、B、C、E），其余部分为空白。</li>
+<li>下半部分是经过 <strong>数据打包后形成的 Memory Slice</strong>，它将来自不同缓存行的更新数据（A、B、C、…、E）紧凑地排列在一个连续的内存单元中。</li>
+<li>打包后的 Memory Slice 占用 <strong>两个缓存行的空间</strong>，实现了空间利用率的最大化。</li>
+<li>数据打包的核心优势在于：<strong>将多个分散的小粒度更新合并为一次大块写入</strong>，从而显著降低 NVM 的写入次数和带宽消耗。</li>
+<li>此机制与 HOOP 的 <strong>字粒度（word granularity）跟踪</strong> 相结合，允许在事务提交时高效持久化多个更新，而不必为每个缓存行单独写入。</li>
+<li>图中未显示但文中提及的是：<strong>元数据（metadata）也会被打包</strong>，通常与数据一起存储在同一个 Memory Slice 中，用于记录原始地址、事务 ID 等信息。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>原始状态</th>
+<th>打包后状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N 个缓存行，每个含少量更新数据</td>
+<td>1 个 Memory Slice，占用 2 个缓存行</td>
+</tr>
+<tr>
+<td>分散写入，高写放大</td>
+<td>集中写入，低写放大</td>
+</tr>
+<tr>
+<td>每个缓存行需单独持久化</td>
+<td>多个更新合并为一次持久化操作</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该设计体现了 HOOP 在硬件层面优化写入效率的关键思想：<strong>通过数据压缩和聚合，最小化对 NVM 的访问次数</strong>，同时保持原子性和崩溃一致性。</li>
+</ul>
+<h3 id="fig-4-transaction-execution-of-different-approaches-both-undo-and-redo-logging-deliver-lengthy-transaction-execution-times-due-to-log-writes-shadow-paging-has-to-copy-additional-data-before-performing-in-place-updates-hoop-achieves-fast-transaction-execution-with-out-of-place-updates">Fig. 4: Transaction execution of different approaches. Both undo and redo logging deliver lengthy transaction execution times due to log writes. Shadow paging has to copy additional data before performing in-place updates. HOOP achieves fast transaction execution with out-of-place updates.<a class="headerlink" href="#fig-4-transaction-execution-of-different-approaches-both-undo-and-redo-logging-deliver-lengthy-transaction-execution-times-due-to-log-writes-shadow-paging-has-to-copy-additional-data-before-performing-in-place-updates-hoop-achieves-fast-transaction-execution-with-out-of-place-updates" title="Permanent link">&para;</a></h3>
+<p><img alt="16a8d7e212c2aa5b6dda87381989bbb1dbc37c5b63a8d9168d064340e3512073.jpg" src="../images/16a8d7e212c2aa5b6dda87381989bbb1dbc37c5b63a8d9168d064340e3512073.jpg" /></p>
+<ul>
+<li>图片展示了四种不同 crash-consistency 技术在事务执行过程中的时间线对比，包括 <strong>Undo logging</strong>、<strong>Redo logging</strong>、<strong>Shadow paging</strong> 和 <strong>Hardware-assisted out-of-place update (HOOP)</strong>。</li>
+<li>每个子图的横轴代表时间，纵轴表示事务中数据更新和日志操作的顺序。图中用不同颜色方块标记不同类型的操作：红色为数据写入（store），蓝色为 undo log，黄色为 redo log，灰色为 flush 操作。</li>
+<li>在 <strong>(a) Undo logging</strong> 中，每个数据更新前必须先写入对应的 undo log，且需在事务结束前执行 flush 以确保日志持久化，导致事务路径长、延迟高。</li>
+<li>在 <strong>(b) Redo logging</strong> 中，数据更新可先执行，但必须在事务结束前将 redo log 写入并 flush，虽比 undo logging 灵活，但仍需额外写入和同步操作。</li>
+<li>在 <strong>(c) Shadow paging</strong> 中，系统在更新前复制整个页面或缓存行，然后在新位置进行修改，避免了日志开销，但引入了“copy-on-write”带来的额外写入和 TLB 更新开销。</li>
+<li>在 <strong>(d) Hardware-assisted out-of-place update (HOOP)</strong> 中，所有更新直接写入 OOP region，无需预先写日志或复制页面，也不强制 flush，仅在 Tx_end 时批量持久化打包后的数据，显著缩短关键路径。</li>
+<li>对比可见，HOOP 的事务执行时间最短，因其消除了日志写入和页面复制的开销，同时利用硬件缓冲与打包机制优化写入效率。</li>
+<li>下表总结各方法在关键路径上的主要开销：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>关键路径开销</th>
+<th>是否需要 Flush</th>
+<th>是否需要额外写入</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Undo logging</td>
+<td>高（log + data + flush）</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>Redo logging</td>
+<td>中（data + log + flush）</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>Shadow paging</td>
+<td>中高（copy + update + flush）</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>HOOP</td>
+<td>低（仅打包后写入）</td>
+<td>否（由硬件管理）</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图中明确标注 <strong>Tx_begin</strong> 和 <strong>Tx_end</strong> 作为事务边界，HOOP 在 Tx_end 时才触发持久化，而其他方法在事务过程中即需多次同步。</li>
+<li>该图直观说明 HOOP 如何通过硬件辅助的 out-of-place 更新机制，在保证原子持久性的同时，实现接近原生系统的低延迟事务执行。</li>
+</ul>
+<h3 id="fig-5-layout-of-the-oop-region-hoop-organizes-the-oop-region-in-a-log-structured-manner-each-oop-block-consists-of-memory-slices-with-a-fixed-size-there-are-two-types-of-memory-slices-data-memory-slice-and-address-memory-slice">Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.<a class="headerlink" href="#fig-5-layout-of-the-oop-region-hoop-organizes-the-oop-region-in-a-log-structured-manner-each-oop-block-consists-of-memory-slices-with-a-fixed-size-there-are-two-types-of-memory-slices-data-memory-slice-and-address-memory-slice" title="Permanent link">&para;</a></h3>
+<p><img alt="7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg" src="../images/7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg" /></p>
+<ul>
+<li><strong>图5展示了HOOP系统中OOP区域的布局设计</strong>，其核心是采用日志结构化（log-structured）方式组织数据，以优化写入吞吐并减少碎片。</li>
+<li>OOP区域由多个固定大小的OOP块（2MB）组成，每个块包含一个头部（Head）和若干内存切片（Memory Slice），并通过<strong>Block Index Table</strong>进行索引管理。</li>
+<li>内存切片分为两类：<strong>Data Memory Slice</strong> 和 <strong>Address Memory Slice</strong>。前者存储实际更新的数据及元数据，后者用于记录事务的起始地址，便于GC快速定位已提交事务。</li>
+<li>图(a)显示了OOP区域的整体组织结构：<ul>
+<li>每个OOP块内含多个内存切片，按顺序排列。</li>
+<li>Address Memory Slice中包含指向下一个切片的指针（Next Slice），形成链式结构，支持跨块链接。</li>
+<li>Data Memory Slice中包含事务ID（TxID）、数据内容、以及指向下一数据切片的指针，确保事务数据可被完整回溯。</li>
+</ul>
+</li>
+<li>图(b)详细描述了<strong>Data Memory Slice的内部布局</strong>：<ul>
+<li>总大小为128字节，其中前104字节用于存储8个8字节的数据项（Data 0至Data 7）。</li>
+<li>剩余24字节为Metadata区域，具体字段如下：</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>位宽</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home Addrs</td>
+<td>320 bit</td>
+<td>数据原始位置的物理地址（支持1TB寻址）</td>
+</tr>
+<tr>
+<td>TxID</td>
+<td>32 bit</td>
+<td>事务唯一标识符</td>
+</tr>
+<tr>
+<td>Start</td>
+<td>1 bit</td>
+<td>标识是否为该事务的第一个切片</td>
+</tr>
+<tr>
+<td>Cnt</td>
+<td>3 bit</td>
+<td>当前切片中实际更新的数据项数量</td>
+</tr>
+<tr>
+<td>Flag</td>
+<td>4 bit</td>
+<td>切片状态标志（用于GC和恢复）</td>
+</tr>
+<tr>
+<td>Next Slice</td>
+<td>24 bit</td>
+<td>指向同一事务中下一个数据切片的偏移地址</td>
+</tr>
+<tr>
+<td>Pad</td>
+<td>8 bit</td>
+<td>填充位，确保对齐</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该设计允许HOOP在写入时将多个细粒度更新打包进单个缓存行，显著降低写放大；同时通过<strong>地址映射表</strong>和<strong>GC机制</strong>实现高效的空间回收与数据一致性保障。</li>
+<li>整体架构强调硬件透明性，所有地址重映射和持久化操作均由内存控制器完成，无需软件干预或TLB修改。</li>
+</ul>
+<h3 id="fig-6-the-load-and-store-procedure-in-hoop">Fig. 6: The load and store procedure in HOOP.<a class="headerlink" href="#fig-6-the-load-and-store-procedure-in-hoop" title="Permanent link">&para;</a></h3>
+<p><img alt="8071590215bf4899da92162ed14a0fe1d34dffbcc5676b3d247b31cfc4e98a0d.jpg" src="../images/8071590215bf4899da92162ed14a0fe1d34dffbcc5676b3d247b31cfc4e98a0d.jpg" /></p>
+<ul>
+<li>图片展示了 HOOP 系统中 <strong>Load</strong> 和 <strong>Store</strong> 操作的完整流程，核心是通过 <strong>Indirection Layer</strong> 实现硬件辅助的 <strong>Out-of-Place (OOP) Update</strong>。</li>
+<li>流程分为两个主要路径：左侧为 <strong>Load</strong> 操作，右侧为 <strong>Store</strong> 操作，两者均与 <strong>Memory Controller</strong> 中的 <strong>Indirection Layer</strong> 交互。</li>
+<li><strong>Load 操作流程</strong>：<ul>
+<li>步骤 1：处理器核心发起 Load 请求，若命中 L1 Cache，则直接返回数据。</li>
+<li>步骤 2：若 L1 Cache 未命中，请求向下传递至 Lower Level Caches。</li>
+<li>步骤 3：若 Lower Level Caches 均未命中，系统访问 <strong>Mapping Table</strong>，根据 Home Address 查找对应的 OOP Address。</li>
+<li>步骤 4：若 Mapping Table 命中，系统并行从 <strong>OOP Region</strong>（非易失性）和 <strong>Home Region</strong>（非易失性）读取数据。HOOP 利用 <strong>Data Packing</strong> 将多个更新打包在 OOP Region 的 Memory Slice 中，因此需解包以重建完整缓存行。</li>
+<li>步骤 5：若 Mapping Table 未命中，则检查 <strong>Eviction Buffer</strong>；若仍无，则直接从 <strong>Home Region</strong> 读取原始数据。</li>
+</ul>
+</li>
+<li><strong>Store 操作流程</strong>：<ul>
+<li>步骤 1：处理器核心发起 Store 请求，若命中 L1 Cache，则更新数据并设置 <strong>Persistent Bit</strong>。</li>
+<li>步骤 2：若 L1 Cache 未命中，系统首先从 Lower Level Caches 或 NVM 获取最新版本的数据到 L1 Cache。</li>
+<li>步骤 3：更新后的数据及其 <strong>Home Address</strong> 被发送至 <strong>Indirection Layer</strong>。</li>
+<li>步骤 4：数据被写入对应核心的 <strong>OOP Data Buffer</strong>，并记录相关元数据（如 TxID）。当缓冲区满或事务结束时，数据被持久化到 <strong>OOP Region</strong>。</li>
+</ul>
+</li>
+<li><strong>Indirection Layer 组件</strong>：<ul>
+<li><strong>Mapping Table</strong>：存储 Home Address 到 OOP Address 的映射，用于快速定位最新数据版本。</li>
+<li><strong>Eviction Buffer</strong>：缓存最近从 OOP Region 迁移回 Home Region 的数据，防止在 GC 期间因 Mapping Table 条目被清除而读取到过时数据。</li>
+<li><strong>OOP Data Buffer</strong>：每个核心拥有独立的缓冲区，用于暂存事务中的更新数据，支持 <strong>Data Packing</strong> 以减少写入流量。</li>
+</ul>
+</li>
+<li><strong>关键设计优势</strong>：<ul>
+<li><strong>原子性保障</strong>：通过将新数据写入 OOP Region，旧数据保留在 Home Region，天然实现原子更新。</li>
+<li><strong>低开销</strong>：地址翻译在硬件层完成，避免软件开销和 TLB shootdown。</li>
+<li><strong>性能优化</strong>：利用 <strong>Data Packing</strong> 和 <strong>Parallel Reads</strong> 减少 NVM 写入和读取延迟。</li>
+<li><strong>透明性</strong>：对上层软件完全透明，无需修改应用程序或操作系统。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+<th>关键特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mapping Table</strong></td>
+<td>地址映射</td>
+<td>物理到物理地址转换，支持快速查找最新数据</td>
+</tr>
+<tr>
+<td><strong>Eviction Buffer</strong></td>
+<td>数据缓存</td>
+<td>防止 GC 期间读取过时数据，提升一致性</td>
+</tr>
+<tr>
+<td><strong>OOP Data Buffer</strong></td>
+<td>数据暂存</td>
+<td>每核独立，支持 Data Packing，减少写入流量</td>
+</tr>
+<tr>
+<td><strong>OOP Region</strong></td>
+<td>数据持久化</td>
+<td>日志结构化存储，支持高效 GC 和恢复</td>
+</tr>
+<tr>
+<td><strong>Home Region</strong></td>
+<td>原始数据存储</td>
+<td>保留旧数据版本，确保原子性</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整个流程体现了 HOOP 的核心思想：<strong>Write to a new place, read from the latest version</strong>，通过硬件辅助实现高效、低开销的持久性保证。</li>
+</ul>
+<h3 id="table-ii-system-configuration">TABLE II: System configuration.<a class="headerlink" href="#table-ii-system-configuration" title="Permanent link">&para;</a></h3>
+<p><img alt="bcf472263f3487d06d6448304a37787b7b6745a515651b87b87cde4187923c77.jpg" src="../images/bcf472263f3487d06d6448304a37787b7b6745a515651b87b87cde4187923c77.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>TABLE II: System configuration</strong>，详细列出了用于评估 HOOP 的模拟系统硬件参数。</li>
+<li>系统核心处理器为 <strong>2.5 GHz, out-of-order, x86, 16 cores</strong>，表明其基于现代多核架构进行仿真。</li>
+<li>缓存层级配置如下：<ul>
+<li><strong>L1 I/D Cache</strong>: 32KB, 4-way, inclusive</li>
+<li><strong>L2 Cache</strong>: 256KB, 8-way, inclusive</li>
+<li><strong>LLC (Last Level Cache)</strong>: 2 MB, 16-way, inclusive</li>
+</ul>
+</li>
+<li>内存控制器时序参数（tRCD-tCL-tBL-tWR-tRAS-tRP-tRC-tRRD-tRTP-tWTR-tFAW）为 <strong>10-10-8-10-24-10-34-4-5-5-20(ns)</strong>，反映了内存访问延迟特性。</li>
+<li>NVM 参数设定为：<ul>
+<li><strong>Read/Write Latency</strong>: 50ns / 150ns</li>
+<li><strong>Capacity</strong>: 512 GB</li>
+<li><strong>Row buffer read/write energy</strong>: 0.93 / 1.02 pJ/bit</li>
+<li><strong>Array read/write energy</strong>: 2.47 / 16.82 pJ/bit（引用文献 [28], [40]）</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Processor</td>
+<td>2.5 GHz, out-of-order, x86, 16 cores</td>
+</tr>
+<tr>
+<td>L1 I/D Cache</td>
+<td>32KB, 4-way, inclusive</td>
+</tr>
+<tr>
+<td>L2 Cache</td>
+<td>256KB, 8-way, inclusive</td>
+</tr>
+<tr>
+<td>LLC</td>
+<td>2 MB, 16-way, inclusive</td>
+</tr>
+<tr>
+<td>Memory Timing</td>
+<td>tRCD-tCL-tBL-tWR-tRAS-tRP-tRC-tRRD-tRTP-tWTR-tFAW = 10-10-8-10-24-10-34-4-5-5-20(ns)</td>
+</tr>
+<tr>
+<td>NVM Read Latency</td>
+<td>50ns</td>
+</tr>
+<tr>
+<td>NVM Write Latency</td>
+<td>150ns</td>
+</tr>
+<tr>
+<td>NVM Capacity</td>
+<td>512 GB</td>
+</tr>
+<tr>
+<td>NVM Energy (Row Buffer)</td>
+<td>Read: 0.93 pJ/bit, Write: 1.02 pJ/bit</td>
+</tr>
+<tr>
+<td>NVM Energy (Array)</td>
+<td>Read: 2.47 pJ/bit, Write: 16.82 pJ/bit</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有参数均用于 <strong>McSimA+</strong> 模拟器中，以确保实验环境的一致性和可复现性。</li>
+<li>NVM 的读写延迟与能耗数据直接用于后续的性能与能效分析，是衡量 HOOP 相较于其他方案优势的关键基准。</li>
+</ul>
+<h3 id="table-iii-benchmarks-used-in-our-experiments">TABLE III: Benchmarks used in our experiments.<a class="headerlink" href="#table-iii-benchmarks-used-in-our-experiments" title="Permanent link">&para;</a></h3>
+<p><img alt="7020b14ff6483dd2f4c2c69dfdf9de48cb102b342d81df7efe73fa341ae2da69.jpg" src="../images/7020b14ff6483dd2f4c2c69dfdf9de48cb102b342d81df7efe73fa341ae2da69.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>TABLE III</strong>，标题为“Benchmarks used in our experiments”，用于说明实验中所使用的基准测试工作负载。</li>
+<li>表格内容分为两大类：<strong>Synthetic</strong>（合成工作负载）和 <strong>Real World</strong>（真实世界工作负载），每类下包含具体的工作负载名称、描述、每事务存储操作数（Stores/TX）以及读写比例（Write/Read）。</li>
+<li><strong>Synthetic 工作负载</strong> 包含五种数据结构相关的操作：<ul>
+<li>Vector [23]：插入/更新条目，每事务 8 次存储操作，<strong>100% 写 / 0% 读</strong>。</li>
+<li>Hashmap [24]：插入/更新条目，每事务 8 次存储操作，<strong>100% 写 / 0% 读</strong>。</li>
+<li>Queue [47]：插入/更新条目，每事务 4 次存储操作，<strong>100% 写 / 0% 读</strong>。</li>
+<li>RB-tree [40]：插入/更新条目，每事务 2–10 次存储操作，<strong>100% 写 / 0% 读</strong>。</li>
+<li>B-tree [40]：插入/更新条目，每事务 8–12 次存储操作，<strong>100% 写 / 0% 读</strong>。</li>
+</ul>
+</li>
+<li><strong>Real World 工作负载</strong> 包含两个典型应用：<ul>
+<li>YCSB [23]：云基准测试，每事务 8–32 次存储操作，<strong>80% 写 / 20% 读</strong>。</li>
+<li>TPCC [36]：OLTP 工作负载，每事务 10–35 次存储操作，<strong>40% 写 / 60% 读</strong>。</li>
+</ul>
+</li>
+<li>所有工作负载均以事务形式执行，用于评估 HOOP 在不同数据结构和实际应用场景下的性能表现。</li>
+<li>表格中引用的文献编号（如 [23], [24] 等）指向论文参考文献部分，表明这些工作负载或其变体在先前研究中已被广泛使用。</li>
+</ul>
+<h3 id="b-critical-path-latency-lower-is-better-fig-7-transaction-throughput-and-critical-path-latency-for-system-benchmarks-hoop-improves-transaction-throughput-by-743-451-338-279-and-243-compared-with-opt-redo-opt-undo-osp-lsm-and-lad-respectively-for-critical-path-latency-hoop-also-achieves-a-critical-path-latency-close-to-a-native-system-without-any-persistence-guarantee">(b) Critical path latency (lower is better) Fig. 7: Transaction throughput and critical path latency for system benchmarks. HOOP improves transaction throughput by 74.3%, 45.1%, 33.8%, 27.9%, and 24.3% compared with Opt-Redo, Opt-Undo, OSP, LSM, and LAD, respectively. For critical path latency, HOOP also achieves a critical path latency close to a native system without any persistence guarantee.<a class="headerlink" href="#b-critical-path-latency-lower-is-better-fig-7-transaction-throughput-and-critical-path-latency-for-system-benchmarks-hoop-improves-transaction-throughput-by-743-451-338-279-and-243-compared-with-opt-redo-opt-undo-osp-lsm-and-lad-respectively-for-critical-path-latency-hoop-also-achieves-a-critical-path-latency-close-to-a-native-system-without-any-persistence-guarantee" title="Permanent link">&para;</a></h3>
+<p><img alt="4344f1b7a35052af885912f28409af07835db05d0aa2992e404db764b1460617.jpg" src="../images/4344f1b7a35052af885912f28409af07835db05d0aa2992e404db764b1460617.jpg" /></p>
+<ul>
+<li>图片包含两个子图，分别展示不同 crash-consistency 技术在多种基准测试下的 <strong>Transaction throughput</strong> 和 <strong>Critical path latency</strong>。</li>
+<li>子图 (a) 为吞吐量对比，纵轴为归一化吞吐量（越高越好），横轴为不同数据结构和应用负载，包括 Vector(S/L), Queue(S/L), RBtree(S/L), Btree(S/L), HMap(S/L), YCSB(S/L), TPC-C, 以及 Geo-mean。</li>
+<li>子图 (b) 为关键路径延迟对比，纵轴为归一化关键路径延迟（越低越好），横轴与 (a) 相同。</li>
+<li>所有柱状图按技术分类：Ideal（无持久性保证的原生系统）、Opt-Redo、Opt-Undo、OSP、LSM、LAD、HOOP。</li>
+<li><strong>HOOP 在所有测试中均表现出最优或接近最优的性能</strong>，尤其在吞吐量上显著优于其他方案。</li>
+<li>根据图注，HOOP 相比 Opt-Redo、Opt-Undo、OSP、LSM、LAD 分别提升吞吐量 <strong>74.3%、45.1%、33.8%、27.9%、24.3%</strong>。</li>
+<li>在关键路径延迟方面，HOOP 的表现最接近 Ideal 系统，平均仅比 Ideal 高 <strong>24.1%</strong>，远优于其他方案。</li>
+<li>各技术在不同负载下的表现存在差异，但 HOOP 始终保持稳定领先。</li>
+</ul>
+<p>以下是各技术在 Geo-mean 上的性能对比摘要：</p>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>Normalized Throughput</th>
+<th>Normalized Critical Path Latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ideal</td>
+<td>1.00</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Opt-Redo</td>
+<td>~0.57</td>
+<td>~1.45</td>
+</tr>
+<tr>
+<td>Opt-Undo</td>
+<td>~0.69</td>
+<td>~1.53</td>
+</tr>
+<tr>
+<td>OSP</td>
+<td>~0.75</td>
+<td>~1.44</td>
+</tr>
+<tr>
+<td>LSM</td>
+<td>~0.78</td>
+<td>~1.61</td>
+</tr>
+<tr>
+<td>LAD</td>
+<td>~0.80</td>
+<td>~1.22</td>
+</tr>
+<tr>
+<td><strong>HOOP</strong></td>
+<td><strong>~0.99</strong></td>
+<td><strong>~1.24</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>HOOP 的吞吐量几乎达到 Ideal 系统的水平（99%）</strong>，而其他技术普遍在 57%-80% 之间。</li>
+<li><strong>HOOP 的关键路径延迟仅为 Ideal 的 1.24 倍</strong>，而其他技术在 1.22-1.61 倍之间，其中 LSM 最差。</li>
+<li>数据表明，HOOP 在保证原子持久性的同时，实现了接近原生系统的性能，有效解决了传统方法的写放大和关键路径延迟问题。</li>
+</ul>
+<h3 id="fig-8-write-traffic-produced-by-different-approaches">Fig. 8: Write traffic produced by different approaches.<a class="headerlink" href="#fig-8-write-traffic-produced-by-different-approaches" title="Permanent link">&para;</a></h3>
+<p><img alt="c68196e643257977f61c9cf4821354c4ac4c8425755d7aa3e8a6d72b7b1e5f78.jpg" src="../images/c68196e643257977f61c9cf4821354c4ac4c8425755d7aa3e8a6d72b7b1e5f78.jpg" /></p>
+<ul>
+<li>图片展示了不同崩溃一致性技术在多种工作负载下产生的<strong>归一化写入流量</strong>，用于评估其对 NVM 寿命的影响。</li>
+<li><strong>HOOP</strong> 在所有测试场景中均表现出最低的写入流量，显著优于其他方案，验证了其通过<strong>数据打包</strong>和<strong>数据合并</strong>有效减少冗余写入的设计目标。</li>
+<li>对比基准“<strong>Ideal</strong>”（无持久性支持），HOOP 的写入放大接近理想状态，说明其开销极小。</li>
+<li>与主流优化方案相比：<ul>
+<li><strong>Opt-Redo</strong> 和 <strong>Opt-Undo</strong> 因日志机制引入双倍写入，写入流量约为 HOOP 的 <strong>2.1×</strong> 和 <strong>1.9×</strong>。</li>
+<li><strong>OSP</strong>（优化影子分页）因细粒度复制仍产生较高写入，平均比 HOOP 高 <strong>21.2%</strong>。</li>
+<li><strong>LSM</strong>（日志结构化 NVM）因索引开销导致写入增加，平均比 HOOP 高 <strong>12.5%</strong>。</li>
+<li><strong>LAD</strong>（无日志原子耐久性）虽避免日志，但以缓存行粒度持久化，写入比 HOOP 高 <strong>11.6%</strong>。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>Ideal</th>
+<th>Opt-Redo</th>
+<th>Opt-Undo</th>
+<th>OSP</th>
+<th>LSM</th>
+<th>LAD</th>
+<th>HOOP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vector</td>
+<td>1.0</td>
+<td>~2.5</td>
+<td>~2.3</td>
+<td>~1.8</td>
+<td>~1.7</td>
+<td>~1.5</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td>1.0</td>
+<td>~2.4</td>
+<td>~2.2</td>
+<td>~1.7</td>
+<td>~1.6</td>
+<td>~1.4</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>RBtree</td>
+<td>1.0</td>
+<td>~2.6</td>
+<td>~2.4</td>
+<td>~1.9</td>
+<td>~1.8</td>
+<td>~1.5</td>
+<td>~1.2</td>
+</tr>
+<tr>
+<td>Btree</td>
+<td>1.0</td>
+<td>~2.5</td>
+<td>~2.3</td>
+<td>~1.8</td>
+<td>~1.7</td>
+<td>~1.5</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>Hashmap</td>
+<td>1.0</td>
+<td>~2.4</td>
+<td>~2.2</td>
+<td>~1.7</td>
+<td>~1.6</td>
+<td>~1.4</td>
+<td>~1.1</td>
+</tr>
+<tr>
+<td>YCSB</td>
+<td>1.0</td>
+<td>~2.5</td>
+<td>~2.3</td>
+<td>~1.8</td>
+<td>~1.7</td>
+<td>~1.5</td>
+<td>~1.2</td>
+</tr>
+<tr>
+<td>TPC-C</td>
+<td>1.0</td>
+<td>~2.6</td>
+<td>~2.4</td>
+<td>~1.9</td>
+<td>~1.8</td>
+<td>~1.5</td>
+<td>~1.2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>所有柱状图高度表明：<strong>HOOP 是唯一一个在所有工作负载下写入流量均低于 1.3 的方案</strong>，且多数情况下接近 1.1，证明其写入效率极高。</li>
+<li>数据进一步支持论文结论：HOOP 通过硬件辅助的原地更新机制，在保证原子耐久性的同时，将写入放大降至最低，从而延长 NVM 寿命并提升系统整体能效。</li>
+</ul>
+<h3 id="fig-9-energy-consumption-of-different-approaches">Fig. 9: Energy consumption of different approaches.<a class="headerlink" href="#fig-9-energy-consumption-of-different-approaches" title="Permanent link">&para;</a></h3>
+<p><img alt="2a730c01a05539a4141b87ffba9435432ad9d866848d0a8481f0cdf1d87d35e7.jpg" src="../images/2a730c01a05539a4141b87ffba9435432ad9d866848d0a8481f0cdf1d87d35e7.jpg" /></p>
+<ul>
+<li>图片 2a730c01a05539a4141b87ffba9435432ad9d866848d0a8481f0cdf1d87d35e7.jpg 是论文 Fig. 9，标题为 “Energy consumption of different approaches”，展示不同持久性机制在多种工作负载下的归一化能耗对比。</li>
+<li><strong>横轴</strong> 包含七类工作负载：Vector、Queue、RBtree、Btree、Hashmap、YCSB 和 TPC-C，覆盖合成数据结构与真实数据库场景。</li>
+<li><strong>纵轴</strong> 为归一化能耗（Normalized Energy Consumption），以 Ideal（无持久性支持的原生系统）为基准值 1.0。</li>
+<li>图中包含六种持久性方案的柱状图，颜色与图例对应：<ul>
+<li><strong>Ideal</strong>（红色）：理想基线，无持久性开销。</li>
+<li><strong>Opt-Redo</strong>（蓝色）：优化的 redo logging。</li>
+<li><strong>Opt-Undo</strong>（绿色）：优化的 undo logging。</li>
+<li><strong>OSP</strong>（粉色）：优化的 shadow paging。</li>
+<li><strong>LSM</strong>（灰色斜纹）：log-structured NVM。</li>
+<li><strong>LAD</strong>（浅蓝）：logless atomic durability。</li>
+<li><strong>HOOP</strong>（白色）：本文提出的硬件辅助原位更新机制。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>Ideal</th>
+<th>Opt-Redo</th>
+<th>Opt-Undo</th>
+<th>OSP</th>
+<th>LSM</th>
+<th>LAD</th>
+<th>HOOP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vector</td>
+<td>1.0</td>
+<td>~2.5</td>
+<td>~2.3</td>
+<td>~2.0</td>
+<td>~1.8</td>
+<td>~1.6</td>
+<td><strong>~1.3</strong></td>
+</tr>
+<tr>
+<td>Queue</td>
+<td>1.0</td>
+<td>~2.4</td>
+<td>~2.2</td>
+<td>~1.9</td>
+<td>~1.7</td>
+<td>~1.5</td>
+<td><strong>~1.2</strong></td>
+</tr>
+<tr>
+<td>RBtree</td>
+<td>1.0</td>
+<td>~2.6</td>
+<td>~2.4</td>
+<td>~2.1</td>
+<td>~1.9</td>
+<td>~1.7</td>
+<td><strong>~1.4</strong></td>
+</tr>
+<tr>
+<td>Btree</td>
+<td>1.0</td>
+<td>~2.7</td>
+<td>~2.5</td>
+<td>~2.2</td>
+<td>~2.0</td>
+<td>~1.8</td>
+<td><strong>~1.5</strong></td>
+</tr>
+<tr>
+<td>Hashmap</td>
+<td>1.0</td>
+<td>~2.8</td>
+<td>~2.6</td>
+<td>~2.3</td>
+<td>~2.1</td>
+<td>~1.9</td>
+<td><strong>~1.6</strong></td>
+</tr>
+<tr>
+<td>YCSB</td>
+<td>1.0</td>
+<td>~2.9</td>
+<td>~2.7</td>
+<td>~2.4</td>
+<td>~2.2</td>
+<td>~2.0</td>
+<td><strong>~1.7</strong></td>
+</tr>
+<tr>
+<td>TPC-C</td>
+<td>1.0</td>
+<td>~3.0</td>
+<td>~2.8</td>
+<td>~2.5</td>
+<td>~2.3</td>
+<td>~2.1</td>
+<td><strong>~1.8</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键发现</strong>：<ul>
+<li>在所有工作负载下，<strong>HOOP 的能耗均显著低于其他五种持久性方案</strong>，且最接近 Ideal 基线。</li>
+<li>相较于能耗最高的 Opt-Redo，HOOP 平均节能约 <strong>37.6%</strong>（如文中 §IV-E 所述）。</li>
+<li>HOOP 能耗优势源于其避免了日志写入和频繁缓存刷新，结合数据打包与合并减少 NVM 写入量。</li>
+<li>随着工作负载复杂度增加（如从 Vector 到 TPC-C），各方案能耗差距扩大，HOOP 优势更明显。</li>
+<li><strong>LAD</strong> 表现次优，因其虽无日志但仍按缓存行粒度持久化；<strong>LSM</strong> 因软件索引开销导致能耗较高。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-iv-average-data-reduction-in-the-gc-of-hoop">TABLE IV: Average data reduction in the GC of HOOP.<a class="headerlink" href="#table-iv-average-data-reduction-in-the-gc-of-hoop" title="Permanent link">&para;</a></h3>
+<p><img alt="005c04de283a61409d0cf42bcf0a9fdda32c650975c500863ce072fdbc67c54e.jpg" src="../images/005c04de283a61409d0cf42bcf0a9fdda32c650975c500863ce072fdbc67c54e.jpg" /></p>
+<ul>
+<li><strong>TABLE IV</strong> 展示了 HOOP 在垃圾回收（GC）过程中，针对不同数据结构和工作负载的<strong>平均数据缩减比例</strong>。该比例定义为：因数据合并（data coalescing）而无需写回主区域（home region）的字节数占事务修改总字节数的百分比。</li>
+<li>数据表明，随着事务数量（Tx Num.）增加，HOOP 的数据缩减效率显著提升，这得益于更充分的数据局部性利用和更有效的合并操作。</li>
+<li>以下是不同工作负载在不同事务数量下的数据缩减比例：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tx Num.</th>
+<th style="text-align: left;">Vector</th>
+<th style="text-align: left;">Queue</th>
+<th style="text-align: left;">RBTree</th>
+<th style="text-align: left;">Btree</th>
+<th style="text-align: left;">Hash map</th>
+<th style="text-align: left;">YCSB</th>
+<th style="text-align: left;">TPCC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">10¹</td>
+<td style="text-align: left;">29.1%</td>
+<td style="text-align: left;">24.3%</td>
+<td style="text-align: left;">23.5%</td>
+<td style="text-align: left;">26.3%</td>
+<td style="text-align: left;">27.7%</td>
+<td style="text-align: left;">23.2%</td>
+<td style="text-align: left;">24.3%</td>
+</tr>
+<tr>
+<td style="text-align: left;">10²</td>
+<td style="text-align: left;">50.2%</td>
+<td style="text-align: left;">51.8%</td>
+<td style="text-align: left;">53.4%</td>
+<td style="text-align: left;">48.2%</td>
+<td style="text-align: left;">52.4%</td>
+<td style="text-align: left;">49.6%</td>
+<td style="text-align: left;">50.1%</td>
+</tr>
+<tr>
+<td style="text-align: left;">10³</td>
+<td style="text-align: left;">74.1%</td>
+<td style="text-align: left;">76.4%</td>
+<td style="text-align: left;">73.5%</td>
+<td style="text-align: left;">70.6%</td>
+<td style="text-align: left;">71.2%</td>
+<td style="text-align: left;">70.1%</td>
+<td style="text-align: left;">72.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">10⁴</td>
+<td style="text-align: left;">85.3%</td>
+<td style="text-align: left;">82.2%</td>
+<td style="text-align: left;">81.1%</td>
+<td style="text-align: left;">83.2%</td>
+<td style="text-align: left;">82.5%</td>
+<td style="text-align: left;">81.3%</td>
+<td style="text-align: left;">83.2%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>当事务数达到 <strong>10⁴</strong> 时，所有工作负载的数据缩减比例均超过 <strong>80%</strong>，意味着仅有不到 <strong>20%</strong> 的更新数据需要被写回主区域，极大降低了 NVM 的写入流量。</li>
+<li><strong>TPCC</strong> 和 <strong>Btree</strong> 在高并发场景下表现尤为突出，其数据缩减比例分别达到 <strong>83.2%</strong> 和 <strong>83.2%</strong>，显示出 HOOP 对复杂、高写入负载的良好适应性。</li>
+<li>此结果验证了 HOOP 的 <strong>data coalescing</strong> 机制的有效性，是其实现低写放大（write amplification）的关键技术之一。</li>
+</ul>
+<h3 id="fig-10-gc-efficiency-with-different-timing-thresholds">Fig. 10: GC efficiency with different timing thresholds.<a class="headerlink" href="#fig-10-gc-efficiency-with-different-timing-thresholds" title="Permanent link">&para;</a></h3>
+<p><img alt="dae2b5da4f756ef6c75022c6f4abf27ce063504fff78130106e76147ee59bdc5.jpg" src="../images/dae2b5da4f756ef6c75022c6f4abf27ce063504fff78130106e76147ee59bdc5.jpg" /></p>
+<ul>
+<li>图表标题为“Fig. 10: GC efficiency with different timing thresholds”，展示的是 <strong>HOOP</strong> 系统中 <strong>Garbage Collection (GC)</strong> 的效率随触发阈值（以毫秒为单位）变化的情况。</li>
+<li>横轴表示 <strong>GC 执行阈值（Threshold of executing GC）</strong>，范围从 2 毫秒到 14 毫秒；纵轴表示 <strong>吞吐量（Throughput）</strong>，单位为 x10K TPS（每秒事务数）。</li>
+<li>图中共有五条曲线，分别代表五种不同的数据结构：<strong>Vector</strong>（蓝色实线）、<strong>Queue</strong>（橙色虚线）、<strong>RBtree</strong>（浅蓝点划线）、<strong>Btree</strong>（紫色点线）、<strong>Hashmap</strong>（绿色点划线）。</li>
+<li><strong>整体趋势</strong>：随着 GC 触发阈值的增加，所有数据结构的吞吐量均呈现先上升后趋于平稳或略微下降的趋势。这表明 <strong>较长的 GC 周期有助于提升性能</strong>，因为能积累更多更新数据进行 <strong>data coalescing</strong>，从而减少写回次数和 NVM 写入流量。</li>
+<li>在 <strong>2ms 阈值</strong>时，所有数据结构吞吐量均较低，例如 Vector 约为 5.2 x10K TPS，Hashmap 约为 3.0 x10K TPS，说明频繁 GC 会消耗过多带宽，影响事务执行。</li>
+<li>当阈值增至 <strong>8–10ms</strong> 时，各数据结构吞吐量达到峰值，如 Vector 达到约 6.5 x10K TPS，Hashmap 达到约 4.7 x10K TPS，此时 <strong>GC 效率最优</strong>。</li>
+<li>超过 <strong>11ms</strong> 后，部分曲线（如 Btree 和 Hashmap）开始轻微下滑，说明 OOP 区域空间可能不足，导致 <strong>on-demand GC 被迫在关键路径上执行</strong>，反而拖累性能。</li>
+<li>数据结构表现差异：<ul>
+<li><strong>Vector</strong> 和 <strong>Queue</strong> 表现最佳，吞吐量最高且波动最小，说明其访问模式更利于数据打包与合并。</li>
+<li><strong>Btree</strong> 和 <strong>Hashmap</strong> 相对较低，尤其在低阈值下表现更差，可能因其更新分布更分散，<strong>data coalescing 效果受限</strong>。</li>
+</ul>
+</li>
+<li>该图验证了论文第 IV-F 节结论：<strong>GC 频率需权衡空间利用率与性能</strong>，默认设置 10ms 是合理折中。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>数据结构</th>
+<th>2ms 吞吐量 (x10K TPS)</th>
+<th>8–10ms 峰值吞吐量 (x10K TPS)</th>
+<th>14ms 吞吐量 (x10K TPS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vector</td>
+<td>~5.2</td>
+<td>~6.5</td>
+<td>~6.3</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td>~5.0</td>
+<td>~6.0</td>
+<td>~5.9</td>
+</tr>
+<tr>
+<td>RBtree</td>
+<td>~4.0</td>
+<td>~5.0</td>
+<td>~4.8</td>
+</tr>
+<tr>
+<td>Btree</td>
+<td>~3.0</td>
+<td>~4.0</td>
+<td>~3.8</td>
+</tr>
+<tr>
+<td>Hashmap</td>
+<td>~3.0</td>
+<td>~4.7</td>
+<td>~4.5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>HOOP 的 GC 设计通过自适应延迟与数据合并机制，在 8–10ms 阈值下实现吞吐量最大化，同时避免因空间不足引发的性能退化</strong>。</li>
+</ul>
+<h3 id="fig-11-recovery-performance-of-1gb-oop-region-with-various-number-of-recovery-threads-and-memory-bandwidth">Fig. 11: Recovery performance of 1GB OOP region with various number of recovery threads and memory bandwidth.<a class="headerlink" href="#fig-11-recovery-performance-of-1gb-oop-region-with-various-number-of-recovery-threads-and-memory-bandwidth" title="Permanent link">&para;</a></h3>
+<p><img alt="fb6ee0cebe93c8d3416d4e74476e0a3afe6ee85a757239288c73246219b0a32e.jpg" src="../images/fb6ee0cebe93c8d3416d4e74476e0a3afe6ee85a757239288c73246219b0a32e.jpg" /></p>
+<ul>
+<li>图表展示了 HOOP 在不同内存带宽（10 GB/s, 15 GB/s, 20 GB/s, 25 GB/s）和不同恢复线程数（1, 2, 4, 8, 16）下，对 <strong>1GB OOP region</strong> 的数据恢复性能。</li>
+<li>恢复时间以毫秒为单位，横轴为线程数，纵轴为恢复耗时。所有曲线均呈下降趋势，表明增加线程数可加速恢复过程。</li>
+<li><strong>关键观察点</strong>：<ul>
+<li>在 <strong>25 GB/s 带宽</strong> 下，使用 <strong>16 个线程</strong> 可将恢复时间压缩至 <strong>约 47 毫秒</strong>，相比 10 GB/s 带宽下的相同线程数，速度提升 <strong>2.3×</strong>。</li>
+<li>当带宽较低（如 10 GB/s）时，增加线程数带来的收益在达到 8 线程后趋于饱和，说明此时 <strong>内存控制器成为瓶颈</strong>。</li>
+<li>高带宽（25 GB/s）下，恢复时间随线程数增加持续下降，表明系统能有效利用多核并行性。</li>
+</ul>
+</li>
+<li>数据摘要如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>内存带宽</th>
+<th>最佳恢复时间 (ms)</th>
+<th>对应线程数</th>
+<th>相比 10 GB/s 提升倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 GB/s</td>
+<td>~108</td>
+<td>16</td>
+<td>—</td>
+</tr>
+<tr>
+<td>15 GB/s</td>
+<td>~75</td>
+<td>16</td>
+<td>~1.4×</td>
+</tr>
+<tr>
+<td>20 GB/s</td>
+<td>~55</td>
+<td>16</td>
+<td>~2.0×</td>
+</tr>
+<tr>
+<td>25 GB/s</td>
+<td><strong>~47</strong></td>
+<td><strong>16</strong></td>
+<td><strong>2.3×</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：HOOP 的恢复机制高度依赖内存带宽与并行线程数，<strong>高带宽 + 多线程</strong> 是实现快速恢复的关键组合。</li>
+</ul>
+<h3 id="fig-12-ycsb-throughput-with-various-nvm-latency">Fig. 12: YCSB throughput with various NVM latency.<a class="headerlink" href="#fig-12-ycsb-throughput-with-various-nvm-latency" title="Permanent link">&para;</a></h3>
+<p><img alt="2393dd634bc37aa91883e3aa5d78b8260772337cf43296815230683f25eb1160.jpg" src="../images/2393dd634bc37aa91883e3aa5d78b8260772337cf43296815230683f25eb1160.jpg" /></p>
+<ul>
+<li>图片展示了 HOOP 在不同 NVM 延迟下的 YCSB 吞吐量表现，分为读延迟和写延迟两个子图。</li>
+<li><strong>左图 (a) NVM 读延迟 (ns)</strong>：横轴为读延迟（250ns 至 50ns），纵轴为吞吐量（K TPS）。随着读延迟降低，吞吐量显著提升。当读延迟从 250ns 降至 50ns 时，吞吐量从约 4.5 K TPS 上升至 <strong>15 K TPS</strong>，表明读性能对系统整体吞吐量影响巨大。</li>
+<li><strong>右图 (b) NVM 写延迟 (ns)</strong>：横轴为写延迟（250ns 至 50ns），纵轴为吞吐量（K TPS）。写延迟降低同样带来吞吐量增长，但增幅略小于读延迟场景。当写延迟从 250ns 降至 50ns 时，吞吐量从约 8 K TPS 提升至 <strong>32 K TPS</strong>，显示写路径优化对高写负载应用（如 YCSB）至关重要。</li>
+<li>两图共同说明：HOOP 的性能高度依赖底层 NVM 的访问延迟，<strong>降低读写延迟可大幅提升系统吞吐量</strong>，尤其在写密集型工作负载中效果更明显。</li>
+<li>数据对比表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>NVM 延迟 (ns)</th>
+<th>读延迟下吞吐量 (K TPS)</th>
+<th>写延迟下吞吐量 (K TPS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>250</td>
+<td>~4.5</td>
+<td>~8</td>
+</tr>
+<tr>
+<td>200</td>
+<td>~6</td>
+<td>~12</td>
+</tr>
+<tr>
+<td>150</td>
+<td>~9</td>
+<td>~18</td>
+</tr>
+<tr>
+<td>100</td>
+<td>~12</td>
+<td>~24</td>
+</tr>
+<tr>
+<td>50</td>
+<td><strong>~15</strong></td>
+<td><strong>~32</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：HOOP 设计能有效利用低延迟 NVM 的潜力，其吞吐量随 NVM 性能提升而线性增长，验证了其在高性能持久内存系统中的适用性。</li>
+</ul>
+<h3 id="fig-13-ycsb-throughput-with-various-mapping-table-size">Fig. 13: YCSB throughput with various mapping table size.<a class="headerlink" href="#fig-13-ycsb-throughput-with-various-mapping-table-size" title="Permanent link">&para;</a></h3>
+<p><img alt="943eb9da7dc85205867100b3c43959f4baa82babbff562e9d351becbdd40157d.jpg" src="../images/943eb9da7dc85205867100b3c43959f4baa82babbff562e9d351becbdd40157d.jpg" /></p>
+<ul>
+<li>图片展示了在不同 <strong>mapping table size</strong> 下，<strong>YCSB</strong> 工作负载的吞吐量表现，用于评估 <strong>HOOP</strong> 系统对映射表大小的敏感性。</li>
+<li>实验对比了两种 <strong>GC Threshold</strong> 设置：<strong>10 milliseconds</strong>（红色实心柱）和 <strong>20 milliseconds</strong>（蓝色斜线柱），以观察垃圾回收频率对性能的影响。</li>
+<li>横轴表示 <strong>mapping table size</strong>，从 <strong>0.5MB</strong> 到 <strong>4MB</strong>，纵轴为吞吐量单位 <strong>K TPS</strong>（千事务每秒）。</li>
+<li>数据表明，随着 <strong>mapping table size</strong> 增大，吞吐量整体呈上升趋势，说明更大的映射表能缓存更多地址映射，减少 <strong>GC</strong> 触发频率，从而提升性能。</li>
+<li>在相同映射表大小下，<strong>GC Threshold = 20 milliseconds</strong> 的吞吐量略高于 <strong>10 milliseconds</strong>，表明延长 GC 周期可进一步优化性能，但需权衡空间占用与延迟。</li>
+<li>当映射表达到 <strong>2MB</strong> 时，性能提升趋于平缓；<strong>4MB</strong> 时吞吐量接近饱和，说明 <strong>2MB</strong> 是 HOOP 的合理默认配置，兼顾性能与资源开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Mapping Table Size</th>
+<th>GC Threshold = 10ms (K TPS)</th>
+<th>GC Threshold = 20ms (K TPS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5MB</td>
+<td>~6</td>
+<td>~7</td>
+</tr>
+<tr>
+<td>1MB</td>
+<td>~9</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>2MB</td>
+<td>~15</td>
+<td>~16</td>
+</tr>
+<tr>
+<td>3MB</td>
+<td>~16</td>
+<td>~17</td>
+</tr>
+<tr>
+<td>4MB</td>
+<td>~17</td>
+<td>~18</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键结论</strong>：HOOP 在 <strong>2MB mapping table</strong> 和 <strong>10ms GC threshold</strong> 下已能提供良好性能，继续增大映射表或延长 GC 周期带来的收益有限，符合论文中“<strong>2MB mapping table provides reasonable performance</strong>”的表述。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

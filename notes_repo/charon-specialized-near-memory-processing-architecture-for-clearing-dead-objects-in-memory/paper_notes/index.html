@@ -1,0 +1,1224 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 关键GC原语识别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 近内存专用处理单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-bitmap-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 位图缓存（Bitmap Cache）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 位图计数优化算法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-charon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 主机-Charon接口与系统集成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory">Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory 论文解析<a class="headerlink" href="#charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Jaeyoung Jang, Jun Heo, Yejin Lee, et al.</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: MICRO</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2019</p>
+<p><strong>研究机构 (Affiliations)</strong>: Sungkyunkwan University, Suwon, Korea, Seoul National University, Seoul, Korea</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决垃圾回收（Garbage Collection, GC）在大数据应用中造成的严重性能瓶颈和高能耗问题。传统通用处理器（CPU）在处理GC时效率低下，受限于有限的内存级并行度（Memory-Level Parallelism, MLP）和内存带宽。</li>
+<li>探索利用新兴的3D堆叠DRAM（如HMC）技术提供的高内部带宽和近内存计算能力，为GC中的关键耗时操作设计专用硬件加速器，以提升吞吐量并降低能耗。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li><strong>关键原语识别</strong>：通过对生产级HotSpot JVM的ParallelScavenge GC进行详细性能剖析，识别出在Minor GC和Major GC中占据绝大部分执行时间的<strong>关键算法原语</strong>。<ul>
+<li>Minor GC: <strong>Search</strong>, <strong>Scan&amp;Push</strong>, <strong>Copy</strong></li>
+<li>Major GC: <strong>Scan&amp;Push</strong>, <strong>Bitmap Count</strong>, <strong>Copy</strong></li>
+</ul>
+</li>
+<li><strong>专用近内存架构设计</strong>：提出名为<strong>Charon</strong>的架构，将上述关键原语的处理单元（Processing Units）部署在3D堆叠DRAM（以HMC为基线）的逻辑层中。<ul>
+<li><strong>Copy/Search Unit</strong>: 利用HMC的高内部带宽，以256B的大粒度并行发起读写请求，最大化MLP。</li>
+<li><strong>Bitmap Count Unit</strong>: 采用一种基于<code>CountSetBits(begMap-endMap) + CountSetBits(begMap)</code>的<strong>优化算法</strong>替代原始的逐位扫描，并配备专用的<strong>bitmap cache</strong>以利用其良好的时间局部性。</li>
+<li><strong>Scan&amp;Push Unit</strong>: 预先批量发出所有间接内存加载请求，通过高MLP来掩盖长延迟的随机内存访问。</li>
+</ul>
+</li>
+<li><strong>系统集成</strong>：通过简单的<strong>intrinsic调用</strong>（仅需修改37行JVM代码）将这些原语从主机CPU卸载到Charon，最小化对现有软件栈的侵入性。</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li>在由8核乱序CPU和4个HMC组成的系统上，使用Apache Spark和GraphChi两大框架进行评估。</li>
+<li><strong>性能提升</strong>：Charon相比基于传统DDR4内存的基线系统，实现了<strong>3.29倍</strong>的GC吞吐量平均加速比。</li>
+<li><strong>能效提升</strong>：在GC过程中，平均节省了<strong>60.7%</strong> 的能量消耗。</li>
+<li><strong>各原语加速效果</strong>：
+    | 原语 (Primitive) | 平均加速比 | 最大加速比 |
+    | :--------------- | :--------- | :--------- |
+    | <strong>Copy</strong>         | 10.17×     | 26.15×     |
+    | <strong>Bitmap Count</strong> | 5.63×      | 6.11×      |
+    | <strong>Search</strong>       | 2.90×      | 4.09×      |
+    | <strong>Scan&amp;Push</strong>    | 1.20×      | 1.86×      |</li>
+<li><strong>可扩展性</strong>：通过增加HMC数量和对应的处理单元，Charon的GC吞吐量能够有效扩展，克服了传统DDR4系统因内存带宽限制而无法扩展的问题。
+    <img alt="" src="../images/983e928c349054265ac814661744de815645db7118a33c72e7ced1ba57920b30.jpg" /> <em>Figure 12: Normalized GC performance of Charon compared with the host CPU-only execution</em>
+    <img alt="" src="../images/a0bc475329e064c0c195cff9158cfdd719a5475dddab947cf9bbec03a62b5095.jpg" /> <em>Figure 14: Per-primitive speedup analysis (S: Search, SP: Scan&amp;Push, C: Copy, BC: Bitmap Count)</em></li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li>将GC的关键原语卸载到3D堆叠DRAM的近内存逻辑层是一种高效且可行的方案。Charon通过<strong>专用硬件</strong>和<strong>高内部带宽</strong>的结合，显著提升了GC的性能和能效。</li>
+<li>相比于完全硬连线的GC加速器，Charon采用的<strong>原语级卸载</strong>策略具有更好的<strong>灵活性</strong>和<strong>通用性</strong>，能够适配多种GC算法（如CMS, G1），并且对软件的改动极小，易于部署。</li>
+<li>该工作证明了近内存处理（Near-Memory Processing）在解决特定领域（如自动内存管理）的长期性能瓶颈方面具有巨大潜力。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li><strong>垃圾回收 (Garbage Collection, GC)</strong> 是 Java 等高级语言的核心特性，能自动管理内存、防止内存泄漏，但会带来显著的 <strong>性能开销</strong>、<strong>高延迟</strong> 和 <strong>高能耗</strong>。</li>
+<li>在 <strong>大数据分析</strong> 等内存密集型应用中，GC 开销尤为严重，可占到总执行时间的 <strong>50% 以上</strong>，成为系统瓶颈。</li>
+<li>传统 <strong>通用处理器 (General-purpose processor)</strong> 在处理 GC 时效率低下，主要受限于：<ul>
+<li><strong>有限的内存级并行度 (Memory-Level Parallelism, MLP)</strong>。</li>
+<li><strong>片外内存带宽瓶颈</strong>。</li>
+</ul>
+</li>
+<li>历史上，硬件加速 GC 的尝试因 <strong>覆盖范围窄</strong>、<strong>缺乏灵活性</strong>、<strong>侵入式系统修改</strong> 和 <strong>高昂硬件成本</strong> 而未能广泛应用。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li><strong>3D 堆叠 DRAM 技术</strong>（如 HBM, HMC）的出现为解决 GC 瓶颈提供了新机遇，其 <strong>近内存逻辑层 (near-memory logic layer)</strong> 提供了 <strong>巨大的内部带宽</strong>。</li>
+<li>作者观察到，在生产级 JVM（如 HotSpot）中，GC 的总时间主要由 <strong>少数几个关键算法原语 (key algorithmic primitives)</strong> 主导。</li>
+<li>因此，与其设计一个复杂且不灵活的全功能 GC 硬件加速器，不如将这些 <strong>计算简单但内存密集的关键原语</strong> 卸载到近内存硬件上执行，以 <strong>最小的改动</strong> 获得 <strong>最大的收益</strong>。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li><strong>深入的性能剖析</strong>: 对 <strong>HotSpot JVM</strong> 中的 <strong>ParallelScavenge GC</strong> 进行了详细分析，识别出在 <strong>MinorGC</strong> 和 <strong>MajorGC</strong> 中分别占据主导地位的三个关键原语。<ul>
+<li>MinorGC: <strong>Copy</strong>, <strong>Search</strong>, <strong>Scan&amp;Push</strong>。</li>
+<li>MajorGC: <strong>Copy</strong>, <strong>Bitmap Count</strong>, <strong>Scan&amp;Push</strong>。
+    <img alt="" src="../images/579c96fb48fc3f7e6147b6ef7cdbf1d23293ea402691c33012ed49aa536de0d6.jpg" /> <em>Figure 4: Runtime breakdown of GC</em></li>
+</ul>
+</li>
+<li><strong>专用近内存架构 Charon</strong>: 设计并实现了一个名为 <strong>Charon</strong> 的专用近内存处理架构，该架构位于 <strong>3D 堆叠 DRAM</strong>（如 HMC）的逻辑层中，包含针对上述原语优化的专用处理单元。<ul>
+<li><strong>Copy/Search Unit</strong>: 通过 <strong>最大化 MLP</strong> 和 <strong>大粒度内存访问</strong> 来加速数据移动和搜索。</li>
+<li><strong>Bitmap Count Unit</strong>: 采用 <strong>新颖的位图计数算法</strong> 并结合 <strong>专用位图缓存</strong> 来高效计算存活对象大小。</li>
+<li><strong>Scan&amp;Push Unit</strong>: 通过 <strong>批量预取</strong> 来隐藏间接内存访问的延迟，提升对象图遍历效率。
+    <img alt="" src="../images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" /> <em>Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit</em></li>
+</ul>
+</li>
+<li><strong>低侵入性与高兼容性</strong>: 仅需对 <strong>HotSpot JVM</strong> 源码进行 <strong>37 行</strong> 的微小修改即可集成 Charon，使其易于部署，并且其核心原语对其他 GC 算法（如 CMS, G1）也具有广泛的适用性。
+    <img alt="" src="../images/6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2.jpg" /></li>
+<li><strong>显著的性能与能效提升</strong>: 在 <strong>Spark</strong> 和 <strong>GraphChi</strong> 两大主流大数据分析框架上的评估表明，Charon 相比基线 <strong>8 核乱序处理器</strong>，在 GC 上实现了 <strong>3.29×</strong> 的 <strong>几何平均加速比</strong> 和 <strong>60.7%</strong> 的 <strong>能耗节省</strong>。
+    <img alt="" src="../images/983e928c349054265ac814661744de815645db7118a33c72e7ced1ba57920b30.jpg" /> <em>Figure 12: Normalized GC performance of Charon compared with the host CPU-only execution</em></li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>Charon 是一种<strong>近内存处理 (Near-Memory Processing, NMP)</strong> 架构，旨在通过在 <strong>3D 堆叠 DRAM</strong>（如 HMC）的逻辑层中部署专用硬件单元，来加速垃圾回收 (GC) 中的关键算法原语。</p>
+<ul>
+<li><strong>基础平台</strong>: 以 <strong>Hybrid Memory Cube (HMC)</strong> 作为基线平台，利用其高内部带宽和能效。Charon 的硬件单元被实现于每个 HMC 立方体的逻辑层中。</li>
+<li><strong>系统拓扑</strong>: 采用多 HMC 立方体互连的星型拓扑结构，其中主机处理器直接连接到一个中心立方体，其他立方体围绕中心立方体连接，立方体间可直接通信。</li>
+<li><strong>核心设计理念</strong>: 不对整个 GC 过程进行完全卸载，而是识别并卸载 <strong>HotSpot JVM</strong> 中耗时占比最高的少数几个<strong>关键原语 (key primitives)</strong>，以最小的软硬件改动获得最大的性能收益。</li>
+</ul>
+<p><img alt="" src="../images/579c96fb48fc3f7e6147b6ef7cdbf1d23293ea402691c33012ed49aa536de0d6.jpg" /> <em>Figure 4: Runtime breakdown of GC</em></p>
+<p><strong>卸载的关键原语与专用处理单元</strong></p>
+<p>基于对 ParallelScavenge GC 的详细剖析，Charon 针对以下原语设计了专用的处理单元：</p>
+<ul>
+<li><strong>MinorGC 和 MajorGC 共同的关键原语</strong>:<ul>
+<li><strong>Copy/Search Unit</strong>: 处理对象复制 (Copy) 和卡表搜索 (Search) 操作。<ul>
+<li>利用 HMC 的高内部带宽，以 <strong>256B</strong> 的最大粒度发起并行内存读取请求，最大化<strong>内存级并行度 (Memory-Level Parallelism, MLP)</strong>。</li>
+</ul>
+</li>
+<li><strong>Scan&amp;Push Unit</strong>: 执行对象图遍历，扫描对象引用并将其推入栈中。<ul>
+<li>通过预知引用数量，批量发起内存加载请求，以隐藏间接内存访问的延迟。</li>
+<li>该单元被调度到<strong>中心立方体 (HMC 0)</strong> 执行，以优化随机访问模式下的延迟和带宽使用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>MajorGC 特有的关键原语</strong>:<ul>
+<li><strong>Bitmap Count Unit</strong>: 在压缩阶段计算指定内存范围内存活对象的总大小。<ul>
+<li>采用了一种<strong>优化的硬件算法</strong>，通过 <code>CountSetBits(begMap-endMap) + CountSetBits(begMap)</code> 来高效计算，替代了软件中逐位迭代的低效方式。</li>
+<li>配备了一个专用的 <strong>8KB 位图缓存 (bitmap cache)</strong>，用于缓存频繁访问的位图数据，命中率高达 <strong>90%</strong>，显著降低了内存访问延迟。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" /> <em>Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit</em></p>
+<p><strong>系统级接口与支持机制</strong></p>
+<ul>
+<li><strong>主机-Charon 接口</strong>: 提供两个内联函数 (intrinsics)：<ul>
+<li><code>initialize()</code>: 在程序启动时配置全局参数（如堆和位图的起始地址）。</li>
+<li><code>offload()</code>: 用于发起卸载请求，包含原语类型、源/目标地址和额外操作数。</li>
+</ul>
+</li>
+<li><strong>内存访问接口 (MAI)</strong>: 处理单元通过 MAI 访问本地或远程内存。MAI 负责管理请求、处理虚拟到物理地址转换（通过<strong>加速器侧 TLB</strong>），并在响应返回时将数据送回请求单元。</li>
+<li><strong>虚拟内存支持</strong>: 利用 <strong>1GB 大页 (huge pages)</strong>、<strong>NUMA 支持</strong>和 <strong>mlock()</strong> 系统调用来锁定整个 Java 堆，确保地址映射稳定，避免 TLB 未命中和页面错误。</li>
+<li><strong>缓存一致性</strong>: 在 GC 开始前，通过 <code>clflush</code> 指令刷新主机缓存，确保近内存处理单元从主存获取最新数据。</li>
+</ul>
+<p><strong>可扩展性与适用性</strong></p>
+<ul>
+<li><strong>可扩展性</strong>: 随着 HMC 数量的增加，可以部署更多的处理单元以提升吞吐量。对于位图缓存和 TLB 等潜在瓶颈，提出了<strong>分布式切片 (distributed slices)</strong> 的设计方案以缓解中心节点的争用。</li>
+<li><strong>适用性</strong>: 虽然基于 HotSpot JVM 的 ParallelScavenge 设计，但其原语（如 Copy, Scan&amp;Push）是 GC 的通用操作，也适用于 <strong>CMS</strong> 和 <strong>G1</strong> 等其他主流收集器。</li>
+</ul>
+<p><img alt="" src="../images/6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2.jpg" /></p>
+<h3 id="1-gc">1. 关键GC原语识别<a class="headerlink" href="#1-gc" title="Permanent link">&para;</a></h3>
+<p><strong>关键GC原语识别与分析</strong></p>
+<ul>
+<li>通过对 <strong>HotSpot JVM</strong> 中 <strong>ParallelScavenge</strong> 垃圾收集器的详细性能剖析，研究发现 <strong>MinorGC</strong> 和 <strong>MajorGC</strong> 的执行时间高度集中于少数几个计算密集且内存访问模式不佳的操作上。</li>
+<li>这些操作被抽象为可卸载的 <strong>关键算法原语 (Key Algorithmic Primitives)</strong>，它们共同占据了绝大部分的GC开销，是硬件加速的理想目标。</li>
+</ul>
+<p><strong>MinorGC中的主导原语</strong></p>
+<ul>
+<li><strong>Copy</strong>: 负责将 <strong>Young Generation</strong>（Eden和Survivor From空间）中的存活对象复制到Survivor To空间或晋升到Old Generation。在处理大数据应用（如Spark）时，由于对象体积大，此操作成为瓶颈。</li>
+<li><strong>Search</strong>: 在MinorGC开始时，用于扫描 <strong>Card Table</strong>，以找出从 <strong>Old Generation</strong> 指向 <strong>Young Generation</strong> 的引用（即Old-to-Young引用），确保这些存活对象不被错误回收。</li>
+<li><strong>Scan&amp;Push</strong>: 遍历一个对象的所有字段，识别出其中的非静态引用（即可达对象），并将这些新发现的存活对象推入待处理栈（minor_stack）中，以进行递归标记和复制。</li>
+<li>根据图4(a)的运行时分解，这三个原语在 <strong>Spark</strong> 和 <strong>GraphChi</strong> 上分别占据了 <strong>71.42%</strong> 和 <strong>78.23%</strong> 以上的MinorGC总时间。</li>
+</ul>
+<p><img alt="" src="../images/579c96fb48fc3f7e6147b6ef7cdbf1d23293ea402691c33012ed49aa536de0d6.jpg" /> <em>Figure 4: Runtime breakdown of GC</em></p>
+<p><strong>MajorGC中的主导原语</strong></p>
+<ul>
+<li><strong>Copy</strong>: 在 <strong>Compaction</strong>（压缩）阶段，将散落在堆中的存活对象移动到连续的内存区域，以消除内存碎片。与MinorGC中的Copy类似，但操作范围是整个堆。</li>
+<li><strong>Bitmap Count</strong>: 在Compaction阶段，用于计算一个给定内存范围内所有存活对象的总大小。它通过查询 <strong>begin bitmap</strong> 和 <strong>end bitmap</strong> 来确定每个存活对象的边界，从而累加其大小，为对象迁移计算目标地址。</li>
+<li><strong>Scan&amp;Push</strong>: 在 <strong>Marking</strong>（标记）阶段，功能与MinorGC中类似，但其目标是遍历整个堆以标记所有存活对象，并将它们推入major_stack。对于引用关系复杂的对象（如GraphChi中的图节点），此操作开销巨大。</li>
+<li>如图4(b)所示，这三个原语在MajorGC中同样占据主导地位，合计超过 <strong>74%</strong> 的执行时间。</li>
+</ul>
+<p><strong>原语卸载的筛选标准与依据</strong></p>
+<ul>
+<li><strong>高时间覆盖率</strong>: 被选中的原语必须在MinorGC和MajorGC中均占据显著的CPU时间比例。</li>
+<li><strong>低计算复杂度</strong>: 这些原语主要执行内存读写和简单的逻辑判断，计算逻辑相对简单，易于在专用硬件单元中实现。</li>
+<li><strong>高内存带宽需求与低局部性</strong>: 这些操作通常涉及对大块内存的顺序或间接访问，缺乏时间和空间局部性，导致传统CPU缓存效率低下，并极易受制于 <strong>off-chip memory bandwidth bottleneck</strong>。</li>
+<li><strong>高内存级并行性 (MLP) 潜力</strong>: 尽管软件层面的串行执行限制了性能，但这些原语的内在操作（如批量内存拷贝、位图扫描）具有天然的并行性，可以通过专用硬件单元充分挖掘。</li>
+<li><strong>排除不适合卸载的操作</strong>: 例如，链表遍历等操作因并行度低、延迟敏感，卸载收益小；而单条原子指令（如check mark）则因卸载粒度过小，通信开销会抵消其收益。</li>
+</ul>
+<p><strong>各原语的输入输出关系及系统作用</strong></p>
+<ul>
+<li><strong>Copy</strong><ul>
+<li><em>输入</em>: 源地址 (<code>src</code>)、目标地址 (<code>dst</code>)、数据大小 (<code>size</code>)。</li>
+<li><em>输出</em>: 无显式返回值，副作用是完成内存块的迁移。</li>
+<li><em>作用</em>: 实现对象的移动和堆的整理，是Generational GC和Compaction的核心。</li>
+</ul>
+</li>
+<li><strong>Search</strong><ul>
+<li><em>输入</em>: 搜索范围的起始地址 (<code>start</code>) 和结束地址 (<code>end</code>)。</li>
+<li><em>输出</em>: 布尔值，指示在指定范围内是否存在有效的Old-to-Young引用。</li>
+<li><em>作用</em>: 确保MinorGC的正确性，防止因跨代引用而漏标存活对象。</li>
+</ul>
+</li>
+<li><strong>Scan&amp;Push</strong><ul>
+<li><em>输入</em>: 待扫描对象的元数据类型、对象内存布局的起止地址。</li>
+<li><em>输出</em>: 无显式返回值，副作用是将新发现的存活对象引用推入全局对象栈。</li>
+<li><em>作用</em>: 驱动GC的可达性分析过程，是标记所有存活对象的关键步骤。</li>
+</ul>
+</li>
+<li><strong>Bitmap Count</strong><ul>
+<li><em>输入</em>: 需要计算存活对象总大小的内存范围（起始和结束地址）。</li>
+<li><em>输出</em>: 该范围内存活对象占用的总字数（<code>live_words</code>）。</li>
+<li><em>作用</em>: 为MajorGC的Compaction阶段提供精确的对象迁移地址计算依据。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2_1">2. 近内存专用处理单元<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h3>
+<p><strong>Charon近内存专用处理单元深度剖析</strong></p>
+<p>Charon的核心创新在于将垃圾回收（GC）中最耗时的几个关键原语卸载到3D堆叠DRAM（如HMC）的逻辑层中，通过高度定制化的硬件单元来克服传统CPU在处理这些内存密集型任务时的瓶颈。其设计哲学是“<strong>精准卸载</strong>”，而非全盘接管，从而在性能、灵活性和硬件成本之间取得平衡。</p>
+<p><strong>Copy/Search单元</strong></p>
+<ul>
+<li><strong>实现原理与优化</strong>：该单元共享同一套硬件，用于执行内存块复制（Copy）和范围搜索（Search）。其核心优化在于<strong>最大化内存级并行度（MLP）</strong>。一旦接收到卸载请求，单元会立即以HMC支持的最大粒度（<strong>256B</strong>）连续发出读请求，充分利用HMC内部巨大的带宽。</li>
+<li><strong>算法流程</strong>：<ul>
+<li><strong>Copy</strong>: 从源地址<code>src</code>开始，按256B块读取数据，并行地写入到目标地址<code>dst</code>，直到完成指定<code>size</code>字节的传输。</li>
+<li><strong>Search</strong>: 在指定地址范围<code>[start, end)</code>内，以固定块大小（<code>block_size</code>）扫描内存。如果发现任何非<code>-1</code>的值，即刻返回<code>true</code>；若遍历完整个范围都未找到，则返回<code>false</code>。</li>
+</ul>
+</li>
+<li><strong>输入输出关系</strong>：<ul>
+<li><strong>输入</strong>: 对于Copy，输入为源地址、目标地址和大小；对于Search，输入为起始和结束地址。</li>
+<li><strong>输出</strong>: Copy无显式返回值；Search返回一个布尔值，指示范围内是否存在有效对象。</li>
+</ul>
+</li>
+<li><strong>在整体中的作用</strong>：此单元直接加速了MinorGC中的对象迁移（Eden/Survivor到Survivor/Old）和MajorGC中的**内存压缩（compaction）**阶段，这两个阶段在大数据应用中占据了GC总时间的绝大部分。</li>
+</ul>
+<p><img alt="" src="../images/730ec07dec248f32df5ff4f5d848e466a8682c7e01c724026a02cafeb6cbba74.jpg" /> <em>Figure 7: Pseudocode of Copy and Search primitives Figure 8: Pseudocode of Bitmap Count primitive Figure 9: Bitmap Count primitive example</em></p>
+<p><strong>Bitmap Count单元</strong></p>
+<ul>
+<li><strong>实现原理与优化</strong>：该单元用于在MajorGC的压缩阶段快速计算指定内存范围内所有存活对象的总大小。软件实现逐位扫描效率极低。Charon采用了一种<strong>基于位计数的优化算法</strong>，并辅以一个专用的<strong>bitmap cache</strong>（8KB, 8-way, 32B block size）来利用访问的时空局部性，命中率高达<strong>90%</strong>。</li>
+<li><strong>算法流程</strong>：<ul>
+<li><strong>原始软件算法</strong>: 顺序遍历<code>begMap</code>和<code>endMap</code>，寻找成对的起始/结束位，并累加其间距离。</li>
+<li><strong>Charon优化算法</strong>: 利用公式 <code>CountSetBits(begMap - endMap) + CountSetBits(begMap)</code>。通过一次减法和两次位计数操作，即可高效得出结果，避免了逐位循环。</li>
+</ul>
+</li>
+<li><strong>输入输出关系</strong>：<ul>
+<li><strong>输入</strong>: 指定内存范围的起始和结束地址。单元通过一个预设的<code>OFFSET</code>常量自动推导出<code>endMap</code>的地址。</li>
+<li><strong>输出</strong>: 返回该范围内所有存活对象占用的<strong>8-byte word总数</strong>。</li>
+</ul>
+</li>
+<li><strong>在整体中的作用</strong>：此单元为压缩阶段的每个存活对象快速计算其在新内存布局中的目标地址，是实现高效内存压缩的关键前置步骤。</li>
+</ul>
+<p><img alt="" src="../images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" /> <em>Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit</em></p>
+<p><strong>Scan&amp;Push单元</strong></p>
+<ul>
+<li><strong>实现原理与优化</strong>：该单元负责GC中的<strong>对象图遍历</strong>。它扫描一个对象的所有引用字段，并将未被标记的可达对象推入工作栈。其主要挑战是处理<strong>间接内存访问</strong>（indirect memory accesses），这在CPU上会导致严重的流水线停顿。Charon通过<strong>批量预取</strong>来解决：单元根据对象元数据（如<code>instanceKlass</code>）预先知道需要加载多少个引用，从而一次性发出所有加载请求，隐藏了内存延迟。</li>
+<li><strong>算法流程</strong>：<ul>
+<li><strong>MinorGC模式</strong>: 扫描对象引用，若目标对象未被标记，则将其推入<code>minor_stack</code>；否则，仅更新card table元数据。</li>
+<li><strong>MajorGC模式</strong>: 扫描对象引用，若目标对象未被标记，则先在bitmap中标记它，再将其推入<code>major_stack</code>。</li>
+</ul>
+</li>
+<li><strong>输入输出关系</strong>：<ul>
+<li><strong>输入</strong>: 对象的类型、对象元数据区域的起始/结束地址。</li>
+<li><strong>输出</strong>: 无显式返回值，但会修改全局的工作栈（<code>minor_stack</code>/<code>major_stack</code>）和元数据（card table或bitmap）。</li>
+</ul>
+</li>
+<li><strong>在整体中的作用</strong>：这是GC中“标记”阶段的核心，确保所有从根集可达的对象都被正确识别为存活对象。其效率直接影响整个GC过程的吞吐量。</li>
+</ul>
+<p><img alt="" src="../images/e0922932e041c00249eb893d47e106151651496d0eb6406dd2bed187c084e1aa.jpg" /> <em>Figure 11: Pseudocode of Scan&amp;Push primitive</em></p>
+<p><strong>系统级协同与调度策略</strong></p>
+<ul>
+<li><strong>调度位置</strong>:<ul>
+<li><strong>Copy/Search</strong> 和 <strong>Bitmap Count</strong> 单元被调度到<strong>数据所在的HMC Cube</strong>上执行，以最大化利用本地TSV（Through-Silicon Via）的超高内部带宽。</li>
+<li><strong>Scan&amp;Push</strong> 单元由于其访问模式随机且可能跨Cube，被固定调度到<strong>中心Cube</strong>（HMC 0），以最小化全局通信开销。</li>
+</ul>
+</li>
+<li><strong>内存访问接口 (MAI)</strong>: 所有处理单元通过一个统一的MAI与内存交互。MAI负责虚拟地址到物理地址的转换（通过<strong>accelerator-side TLB</strong>）、请求缓冲和响应路由，其功能类似于CPU中的MSHR（Miss Status Handling Register）。</li>
+<li><strong>缓存一致性</strong>: 为确保与主机CPU缓存的一致性，Charon在执行前会向主机缓存发送<code>clflush</code>指令。但对于只读的bitmap操作（如Bitmap Count），则无需此操作。</li>
+</ul>
+<p><strong>性能与能效指标</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">数值</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>平均GC速度提升</strong></td>
+<td style="text-align: left;"><strong>3.29×</strong></td>
+<td style="text-align: left;">相比基线8核CPU+DDR4</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>平均能耗节省</strong></td>
+<td style="text-align: left;"><strong>60.7%</strong></td>
+<td style="text-align: left;">相比基线8核CPU+DDR4</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>总硬件面积</strong></td>
+<td style="text-align: left;"><strong>1.95 mm²</strong></td>
+<td style="text-align: left;">整个4-Cube系统，仅占HMC逻辑层总面积的<strong>0.49%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>平均功耗</strong></td>
+<td style="text-align: left;"><strong>2.98 W</strong></td>
+<td style="text-align: left;">远低于其他PIM方案，热约束影响可忽略</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/983e928c349054265ac814661744de815645db7118a33c72e7ced1ba57920b30.jpg" /> <em>Figure 12: Normalized GC performance of Charon compared with the host CPU-only execution</em>
+<img alt="" src="../images/96df6afa56c2d7515bd0dfd914d34459bcbed83dce204c223c19122d75e9bbd1.jpg" /> <em>Figure 17: Energy consumption of Charon on GC compared with the host CPU-only execution</em></p>
+<h3 id="3-bitmap-cache">3. 位图缓存（Bitmap Cache）<a class="headerlink" href="#3-bitmap-cache" title="Permanent link">&para;</a></h3>
+<p><strong>位图缓存（Bitmap Cache）的设计动机与核心作用</strong></p>
+<ul>
+<li><strong>位图缓存</strong>被引入以解决两个关键单元（<strong>Bitmap Count</strong> 和 <strong>Scan&amp;Push</strong>）在访问<strong>bitmap</strong>数据结构时面临的性能瓶颈。</li>
+<li>其主要目标是利用<strong>时间局部性 (temporal locality)</strong> 来<strong>隐藏内存延迟</strong>，并解决因最小内存访问粒度（16B）大于实际所需数据（单个8B块）而导致的<strong>过度取数据 (overfetching)</strong> 问题。</li>
+<li>该缓存是一个<strong>专用</strong>的、<strong>小型</strong>的<strong>写回 (writeback) 缓存</strong>，确保了对位图数据的高效访问，而不会干扰其他内存操作。</li>
+</ul>
+<p><strong>缓存规格与实现细节</strong></p>
+<ul>
+<li><strong>容量与配置</strong>: 缓存大小为 <strong>8KB</strong>，采用 <strong>8路组相联 (8-way)</strong> 设计，<strong>块大小 (block size)</strong> 为 <strong>32B</strong>。</li>
+<li><strong>专用性</strong>: 此缓存专供 <strong>Bitmap Count</strong> 单元和 <strong>Scan&amp;Push</strong> 单元使用，不与其他处理单元共享。</li>
+<li><strong>一致性管理</strong>: 由于 <strong>Bitmap Count</strong>（发生在 <strong>MajorGC</strong> 的 <strong>compacting phase</strong>）和 <strong>Scan&amp;Push</strong>（发生在 <strong>MajorGC</strong> 的 <strong>marking phase</strong>）在时间上是互斥的，因此两者不会同时访问缓存。在任一 <strong>MajorGC</strong> 阶段完成后，缓存会被<strong>立即刷新 (flushed)</strong> 以保证与主存的一致性。</li>
+<li><strong>命中率</strong>: 根据评估，该缓存的<strong>命中率约为 90%</strong>，证明了其设计的有效性。</li>
+</ul>
+<p><strong>在各单元中的具体应用</strong></p>
+<ul>
+<li>
+<p><strong>对于 Bitmap Count 单元</strong>:</p>
+<ul>
+<li><strong>输入</strong>: 一个内存范围 <code>[range_start, range_end)</code>。</li>
+<li><strong>操作</strong>: 该单元需要频繁读取 <code>begMap</code> 和 <code>endMap</code> 这两个位图。由于这些范围通常较小且在循环中多次调用，具有极佳的<strong>时间局部性</strong>。</li>
+<li><strong>缓存作用</strong>: 将频繁访问的位图块缓存在本地，避免了重复的、高延迟的 DRAM 访问，从而<strong>显著降低了 Bitmap Count 原语的整体延迟</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>对于 Scan&amp;Push 单元</strong>:</p>
+<ul>
+<li><strong>输入</strong>: 一个待标记的对象地址。</li>
+<li><strong>操作</strong>: 在 <strong>MajorGC</strong> 的标记阶段，该单元需要执行 <code>mark_obj</code> 操作，即对位图中对应于该对象的一个<strong>单 8B 块</strong>执行<strong>原子的读-修改-写 (atomic read-modify-write, RMW)</strong> 操作。</li>
+<li><strong>缓存作用</strong>: 由于 HMC 的最小访问粒度是 <strong>16B</strong>，直接访问会导致<strong>过度取数据</strong>。通过缓存，<code>mark_obj</code> 操作可以直接在缓存行内完成，仅在必要时才将整个 32B 的缓存块写回主存，极大地提升了效率。</li>
+</ul>
+</li>
+</ul>
+<p><strong>系统级考量与扩展性</strong></p>
+<ul>
+<li><strong>可扩展性</strong>: 在论文的<strong>统一设计 (unified design)</strong> 中，该缓存位于中心立方体（HMC 0）。为了支持更大规模的系统，论文提出了<strong>分布式设计 (distributed design)</strong>，即采用 <strong>owner cache</strong> 策略，让每个立方体都拥有自己本地的缓存切片，以缓解中心节点的争用。</li>
+<li><strong>虚拟内存支持</strong>: 位图数据所在的堆空间使用 <strong>1GB 大页 (huge pages)</strong> 并被<strong>锁定 (pinned down)</strong> 在物理内存中，这使得在 DRAM 侧维护一个精简的 <strong>TLB</strong> 来支持缓存的虚拟地址转换成为可能，避免了 TLB 未命中和页错误。</li>
+</ul>
+<p><img alt="" src="../images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" /> <em>Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit</em></p>
+<p><strong>位图缓存的关键参数总结</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">规格</th>
+<th style="text-align: left;">目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>类型</strong></td>
+<td style="text-align: left;"><strong>写回 (Writeback)</strong></td>
+<td style="text-align: left;">减少不必要的写流量</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>容量</strong></td>
+<td style="text-align: left;"><strong>8KB</strong></td>
+<td style="text-align: left;">在面积开销和性能收益间取得平衡</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>关联度</strong></td>
+<td style="text-align: left;"><strong>8路组相联</strong></td>
+<td style="text-align: left;">降低冲突未命中</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>块大小</strong></td>
+<td style="text-align: left;"><strong>32B</strong></td>
+<td style="text-align: left;">匹配内存子系统的访问特性</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>专用性</strong></td>
+<td style="text-align: left;"><strong>仅用于 Bitmap Count 和 Scan&amp;Push</strong></td>
+<td style="text-align: left;">确保高命中率和简化设计</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>一致性</strong></td>
+<td style="text-align: left;"><strong>阶段结束后刷新</strong></td>
+<td style="text-align: left;">保证正确性，利用阶段互斥性</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4">4. 位图计数优化算法<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p><strong>位图计数（Bitmap Count）原语的优化原理</strong></p>
+<ul>
+<li>在 <strong>MajorGC</strong> 的 <strong>compacting phase</strong> 中，垃圾回收器需要将散落在堆中的存活对象移动到连续的内存区域。为了计算每个对象的新目标地址，系统必须知道其左侧所有存活对象的总大小。</li>
+<li><strong>HotSpot JVM</strong> 使用两个 <strong>bitmap</strong> 数据结构来辅助此计算：<strong>begMap</strong> 和 <strong>endMap</strong>。在这两个位图中，每一位对应 <strong>64-bit</strong> 的堆空间。<ul>
+<li><strong>begMap</strong> 中的一个置位（set bit）表示一个存活对象的<strong>起始地址</strong>。</li>
+<li><strong>endMap</strong> 中的一个置位表示一个存活对象的<strong>结束地址</strong>。</li>
+</ul>
+</li>
+<li>原始的软件实现（如图8所示）采用<strong>逐位迭代</strong>的方式：遍历 <strong>begMap</strong> 找到一个起始位后，再在 <strong>endMap</strong> 中向后搜索对应的结束位，两者之间的距离即为对象大小。这种方式效率极低，因为位图操作被分解为大量的、串行的位检查。</li>
+</ul>
+<p><img alt="" src="../images/730ec07dec248f32df5ff4f5d848e466a8682c7e01c724026a02cafeb6cbba74.jpg" /> <em>Figure 7: Pseudocode of Copy and Search primitives Figure 8: Pseudocode of Bitmap Count primitive Figure 9: Bitmap Count primitive example</em>
+<img alt="" src="../images/3c03d991c4bbaf661baa604e77bd9ccda0b31270985a7ceb24faad6e775e6276.jpg" /> <em>Figure 10: Example of object traversal</em></p>
+<p><strong>硬件优化算法的核心思想</strong></p>
+<ul>
+<li><strong>Charon</strong> 提出了一种全新的、基于<strong>位运算</strong>和<strong>总体计数</strong>的并行友好算法，其核心公式为：<strong>CountSetBits(begMap - endMap) + CountSetBits(begMap)</strong>。</li>
+<li>该算法的关键洞察在于，通过一次性的<strong>大整数减法</strong>和两次<strong>总体置位计数（Population Count, PopCount）</strong> 操作，即可高效地得出指定范围内所有存活对象的总字数（live words），完全避免了串行的位对位匹配过程。</li>
+<li><strong>算法流程详解</strong>：<ul>
+<li><strong>步骤一：执行减法</strong>。将 <strong>begMap</strong> 和 <strong>endMap</strong> 视为两个巨大的二进制数，并计算 <strong>begMap - endMap</strong>。<ul>
+<li>直观理解：由于 <strong>begMap</strong> 的每个起始位都在其对应的 <strong>endMap</strong> 结束位的左侧（更低的地址），减法操作会在每一对起始-结束位之间产生一连串的 <code>1</code>。</li>
+<li>例如，在图9(b)的简化示例中，<code>begMap = 1010</code>，<code>endMap = 0101</code>，相减后得到 <code>0101</code>。</li>
+</ul>
+</li>
+<li><strong>步骤二：第一次计数</strong>。对减法结果 <strong>(begMap - endMap)</strong> 执行 <strong>CountSetBits</strong> 操作，得到中间结果。<ul>
+<li>在上述示例中，<code>CountSetBits(0101) = 2</code>。</li>
+</ul>
+</li>
+<li><strong>步骤三：第二次计数并求和</strong>。对原始的 <strong>begMap</strong> 执行 <strong>CountSetBits</strong> 操作，并将其结果加到上一步的中间结果上。<ul>
+<li>在上述示例中，<code>CountSetBits(begMap) = CountSetBits(1010) = 2</code>。</li>
+<li>最终结果为 <code>2 + 2 = 4</code>，这与图9(a)中手动计算的存活字数（2+2）一致。</li>
+</ul>
+</li>
+<li><strong>补偿机制</strong>：减法操作产生的 <code>1</code> 的数量，恰好等于“对象大小 - 1”。因此，需要为每个对象额外加上 <code>1</code>，而 <strong>begMap</strong> 中置位的数量正好等于存活对象的数量，从而完美实现了补偿。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及在整体架构中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>两个虚拟地址：<strong>range_start</strong> 和 <strong>range_end</strong>，定义了需要计算存活对象总大小的堆内存范围。</li>
+<li>一个预设的常量 <strong>OFFSET</strong>，用于从 <strong>begMap</strong> 的地址推导出对应 <strong>endMap</strong> 的地址（<code>endMap_addr = begMap_addr + OFFSET</code>）。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
+<li>一个整数，表示在 <code>[range_start, range_end)</code> 范围内所有存活对象占用的 <strong>8-byte word</strong> 的总数。</li>
+</ul>
+</li>
+<li><strong>在 Charon 架构中的作用</strong>：<ul>
+<li>该原语是 <strong>MajorGC</strong> <strong>compacting phase</strong> 的性能瓶颈之一。通过在 <strong>near-memory logic layer</strong> 中部署专用的 <strong>Bitmap Count Unit</strong>，Charon 能够利用 <strong>3D-stacked DRAM</strong> 的高内部带宽，并行地读取大块位图数据。</li>
+<li>结合 <strong>bitmap cache</strong>（命中率约 <strong>90%</strong>），该单元能有效隐藏内存访问延迟。</li>
+<li>评估结果显示，此优化使 <strong>Bitmap Count</strong> 原语的吞吐量平均提升了 <strong>5.63倍</strong>，最高可达 <strong>6.11倍</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/a0bc475329e064c0c195cff9158cfdd719a5475dddab947cf9bbec03a62b5095.jpg" /> <em>Figure 14: Per-primitive speedup analysis (S: Search, SP: Scan&amp;Push, C: Copy, BC: Bitmap Count)</em></p>
+<hr />
+<p><strong>关键硬件支持与优化</strong></p>
+<ul>
+<li><strong>专用处理单元</strong>：<strong>Bitmap Count Unit</strong>（图6(b)）被设计为能够一次性发起对所需位图数据范围的批量内存请求，最大化 <strong>MLP (Memory-Level Parallelism)</strong>。</li>
+<li><strong>Bitmap Cache</strong>：一个 <strong>8KB</strong> 的专用 <strong>writeback cache</strong>，用于缓存频繁访问的位图块。这不仅加速了 <strong>Bitmap Count</strong> 的读取，也优化了 <strong>Scan&amp;Push</strong> 单元在 <strong>marking phase</strong> 所需的原子 <strong>read-modify-write</strong> 操作，解决了 <strong>overfetching</strong> 问题。</li>
+<li><strong>算法与硬件协同</strong>：新的位运算算法天然适合硬件实现，因为它将复杂的控制流（循环、条件分支）转换为简单的、可高度并行的数据流操作（减法、PopCount），充分发挥了专用硬件的优势。</li>
+</ul>
+<h3 id="5-charon">5. 主机-Charon接口与系统集成<a class="headerlink" href="#5-charon" title="Permanent link">&para;</a></h3>
+<p><strong>主机-Charon接口与系统集成</strong></p>
+<p>Charon通过一个极简的接口设计，实现了与主机CPU的高效、低侵入式交互。其核心在于将复杂的垃圾回收（GC）工作负载分解，并仅将最关键的计算密集型和内存带宽密集型<strong>算法原语</strong>（algorithmic primitives）卸载到近内存硬件上执行。</p>
+<ul>
+<li>
+<p><strong>接口函数设计</strong>：</p>
+<ul>
+<li><strong><code>initialize()</code></strong>：该函数在程序启动时被调用一次。其主要作用是向Charon的各个处理单元配置全局常量和关键数据结构的地址，例如堆（heap）的起始地址、位图（bitmap）的地址等。这些配置值通过<strong>内存映射寄存器</strong>（memory mapped registers）传递给Charon。</li>
+<li><strong><code>offload(val type, addr src, addr dst, val arg)</code></strong>：这是主机向Charon发起卸载请求的核心接口。它封装了所有需要卸载的原语操作。<ul>
+<li><code>type</code> 参数指定了要执行的原语类型（如Copy, Search, Scan&amp;Push, Bitmap Count）。</li>
+<li><code>src</code> 和 <code>dst</code> 是源地址和目标地址。</li>
+<li><code>arg</code> 是一个可变参数，用于传递额外的操作数（例如Copy操作的大小）。</li>
+<li>调用此函数后，主机线程会<strong>阻塞</strong>，直到Charon完成操作并返回结果包。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>通信协议与数据包格式</strong>：</p>
+<ul>
+<li>当<code>offload</code>被调用时，HMC控制器会生成一个<strong>48字节</strong>的请求包。<ul>
+<li>包含<strong>16字节</strong>的标准HMC头/尾（含目标Cube ID）。</li>
+<li><strong>4比特</strong>用于标识原语类型。</li>
+<li><strong>16字节</strong>用于存放两个地址。</li>
+<li>剩余<strong>124比特</strong>用于存放额外的操作数。</li>
+</ul>
+</li>
+<li>该数据包通过现有的HMC内部路由逻辑被转发到目标Cube，并进入命令队列，最终被分配给对应的专用处理单元。</li>
+<li>Charon处理完成后，会返回一个<strong>16或32字节</strong>的响应包，以唤醒阻塞的主机线程。</li>
+</ul>
+</li>
+<li>
+<p><strong>对现有系统的侵入性</strong>：</p>
+<ul>
+<li>为了集成Charon，仅需对<strong>HotSpot JVM</strong>的源代码进行<strong>37行</strong>的修改。</li>
+<li>这些修改主要是将软件中识别出的关键原语（如图7、8、11中的伪代码）替换为对上述<code>offload</code>内联函数的调用。</li>
+<li>这种<strong>原语级卸载</strong>（primitive-based offloading）策略避免了对整个GC算法进行硬件重构，极大地降低了软件移植、验证和部署的复杂度，使其具有很强的<strong>未来适应性</strong>（future-proof）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>虚拟内存与多进程支持机制</strong></p>
+<p>为了使位于DRAM侧的Charon能够高效、安全地访问虚拟地址空间，系统采用了一系列成熟的虚拟内存管理技术。</p>
+<ul>
+<li>
+<p><strong>大页（Huge Pages）与内存锁定（Memory Locking）</strong>：</p>
+<ul>
+<li>在应用启动时，JVM会通过<code>mlock()</code>系统调用，为整个堆空间分配并<strong>锁定</strong>（pin down）<strong>1GB的大页</strong>。</li>
+<li>这一过程利用了HotSpot JVM已有的选项，如<code>-XX:+UseLargePage</code>和<code>-XX:+AlwaysPretouch</code>。</li>
+<li>锁定物理页可以确保在整个程序执行期间，堆的虚拟地址到物理地址的映射关系保持不变，从而<strong>完全避免了TLB缺失和页错误</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>NUMA感知的数据放置</strong>：</p>
+<ul>
+<li>为了配合多Cube的HMC架构，系统使用<code>numa_alloc_onnode()</code> API将大页<strong>交错分配</strong>（interleaved）到不同的HMC Cube上。</li>
+<li>这使得操作系统可以根据虚拟地址直接确定其所在的物理Cube，为Charon的本地化处理提供了便利。</li>
+</ul>
+</li>
+<li>
+<p><strong>地址转换与保护</strong>：</p>
+<ul>
+<li>Charon的处理单元通过一个<strong>加速器侧的TLB</strong>（accelerator-side TLB）来执行虚拟地址到物理地址的转换。</li>
+<li>由于堆空间已被锁定为大页，该TLB只需缓存少量的、静态的映射条目即可覆盖整个堆，效率极高。</li>
+<li>对于<strong>多JVM进程</strong>的支持，系统依赖于x86架构的<strong>PCID</strong>（Process Context Identifier）机制，为不同进程的TLB条目提供隔离，确保内存访问的安全性。</li>
+<li>系统<strong>不支持物理内存超售</strong>（oversubscription），因为尝试分配超出物理容量的大页会失败，这本身构成了一种准入控制机制。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/6a0444500bced66a25da1b2172fb146b7a7183150e7b16a1c3511ca2af4d2ef2.jpg" /></p>
+<hr />
+<p><strong>对主机缓存的影响与一致性维护</strong></p>
+<p>Charon的设计必须解决与主机CPU缓存的一致性问题，以确保数据的正确性。</p>
+<ul>
+<li>
+<p><strong>缓存刷新策略</strong>：</p>
+<ul>
+<li>在GC开始前，系统会执行一次<strong>批量缓存刷新</strong>（bulk flush），向主机缓存层次结构发送<code>clflush</code>指令。</li>
+<li>这样做是为了确保Charon从主存中读取的是最新数据，而不是可能已过期的缓存副本；同时，在Charon写回数据后，主机也能从主存中读取到更新后的值。</li>
+<li>尽管这看起来会污染缓存，但对于GC这类<strong>大数据量、低局部性</strong>的工作负载而言，GC操作触及的内存区域通常远超缓存容量，因此GC结束后缓存中本就不太可能保留对应用线程有用的缓存行。</li>
+</ul>
+</li>
+<li>
+<p><strong>例外情况</strong>：</p>
+<ul>
+<li>对于<strong>Bitmap Count</strong>原语，由于它只对位图进行<strong>只读</strong>访问，且主机端的GC代码不会更新位图，因此在执行此原语时无需触发<code>clflush</code>，进一步优化了性能。</li>
+</ul>
+</li>
+<li>
+<p><strong>带宽开销分析</strong>：</p>
+<ul>
+<li>批量刷新的开销相对较小。例如，在80GB/s带宽的HMC上，刷新24MB的LLC（最后一级缓存）仅需约<strong>300微秒</strong>，而实验中平均GC持续时间长达数百毫秒，因此该开销可以忽略不计。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="4_1">4. 实验方法与实验结果<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>评估平台与模型</strong>：<ul>
+<li>使用 <strong>zsim</strong> 模拟器进行性能建模，并集成了 <strong>McPAT</strong> 用于主机处理器的功耗评估。</li>
+<li>Charon 的硬件结构使用 <strong>Chisel3</strong> 实现并通过功能验证，再用 <strong>Synopsys Design Compiler</strong> (TSMC 40nm) 进行综合以获取功耗、面积数据。</li>
+<li>缓冲区/队列等结构（如命令队列、bitmap cache）的功耗和面积使用 <strong>CACTI</strong> (45nm) 估算。</li>
+</ul>
+</li>
+<li><strong>硬件配置</strong>：<ul>
+<li>主机为 <strong>8-core out-of-order processor</strong>。</li>
+<li>内存系统对比了 <strong>DDR4</strong> 和 <strong>Hybrid Memory Cube (HMC)</strong>。</li>
+<li>Charon 被部署在 HMC 的逻辑层中。</li>
+</ul>
+</li>
+<li><strong>工作负载</strong>：<ul>
+<li>在 <strong>HotSpot JVM (OpenJDK 1.7.0)</strong> 上运行两大框架：<strong>Spark 2.1.0</strong> 和 <strong>GraphChi 0.2.2</strong>。</li>
+<li>选取了6个具有不同对象特性和 GC 行为的应用：<ul>
+<li>Spark: naive-bayes (NB), k-means (KM), logistic regression (LR)。</li>
+<li>GraphChi: connected components (CC), PageRank (PR), alternating least square (ALS)。</li>
+</ul>
+</li>
+<li>堆大小设置为应用最小所需堆大小的 <strong>1.25-2倍</strong>，以避免 OOM 错误。</li>
+<li>重点关注 <strong>GC 事件</strong> 本身的性能和能耗，通过设置 <strong>Region of Interest (ROI)</strong> 来隔离分析。</li>
+</ul>
+</li>
+<li><strong>基线对比</strong>：<ul>
+<li><strong>DDR4</strong>: 主机 + 传统 DDR4 内存。</li>
+<li><strong>HMC</strong>: 主机 + HMC 内存（无 Charon）。</li>
+<li><strong>Charon</strong>: 主机 + 部署了 Charon 的 HMC。</li>
+<li><strong>Ideal</strong>: 理想情况，假设被卸载的原语执行时间为零。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结果数据</strong></p>
+<ul>
+<li><strong>整体性能提升</strong>：<ul>
+<li>相比 <strong>DDR4</strong> 基线，仅将内存替换为 <strong>HMC</strong> 可带来 <strong>1.21×</strong> 的 GC 吞吐量提升，表明主机 CPU 无法充分利用 HMC 的高带宽。</li>
+<li><strong>Charon</strong> 相比 <strong>DDR4</strong> 基线实现了 <strong>3.29×</strong> 的 <strong>geomean speedup</strong>，相比 <strong>HMC</strong> 基线也有 <strong>2.70×</strong> 的提升。</li>
+<li>不同工作负载的加速比差异很大，例如 <strong>ALS</strong> 受益最大，因为其 Copy 原语占主导地位。
+    <img alt="" src="../images/983e928c349054265ac814661744de815645db7118a33c72e7ced1ba57920b30.jpg" /> <em>Figure 12: Normalized GC performance of Charon compared with the host CPU-only execution</em></li>
+</ul>
+</li>
+<li><strong>带宽利用率</strong>：<ul>
+<li>Charon 能有效利用 HMC 内部的高带宽 <strong>TSV</strong>，其总带宽利用率远超 <strong>80GB/s</strong> 的 HMC 外部链路带宽。</li>
+<li>大部分（&gt;70%）的内存请求在本地 HMC Cube 内完成，减少了对主机-内存链路的争用。
+    <img alt="" src="../images/dc6c2f5ae3421d4a63b84e8def6ec13989b64b3087fbebaaa34c473e440f03c8.jpg" /> <em>Figure 13: Utilized bandwidth during GC and ratio of local accesses</em></li>
+</ul>
+</li>
+<li><strong>各原语性能分析</strong>：<ul>
+<li><strong>Copy</strong> 原语受益最大，平均加速比达 <strong>10.17×</strong>，最高 <strong>26.15×</strong>，主要得益于高 MLP 和大粒度内存访问。</li>
+<li><strong>Bitmap Count</strong> 平均加速 <strong>5.63×</strong>，源于新颖的硬件优化算法和专用设计。</li>
+<li><strong>Scan&amp;Push</strong> 平均加速 <strong>1.20×</strong>，提升相对较小。对于对象引用少的工作负载（如 KM, LR），甚至可能轻微下降；而对于图算法（如 CC, PR），则有明显收益。
+    <img alt="" src="../images/a0bc475329e064c0c195cff9158cfdd719a5475dddab947cf9bbec03a62b5095.jpg" /> <em>Figure 14: Per-primitive speedup analysis (S: Search, SP: Scan&amp;Push, C: Copy, BC: Bitmap Count)</em></li>
+</ul>
+</li>
+<li><strong>可扩展性</strong>：<ul>
+<li>随着 GC 线程数增加，<strong>Charon</strong> 的吞吐量扩展性远优于 <strong>DDR4</strong>（后者受内存带宽限制）。</li>
+<li>采用分布式结构（每个 Cube 有自己的 TLB slice 和 bitmap cache slice）通常比统一结构（所有资源集中在中心 Cube）扩展性更好，能缓解中心节点的争用。
+    <img alt="" src="../images/e3882e2e72a6ca3ffa8ab9d0d94c98a55073ad47b057387130c079139224c5c6.jpg" /> <em>Figure 15: GC throughput scalability</em></li>
+</ul>
+</li>
+<li><strong>能耗与面积</strong>：<ul>
+<li><strong>能耗</strong>：Charon 在 GC 期间平均节省 <strong>60.7%</strong> 的能量（相比 DDR4 基线）。</li>
+<li><strong>面积</strong>：Charon 总面积仅 <strong>1.95mm²</strong>，平均每 Cube <strong>0.49mm²</strong>，仅占 HMC 逻辑层总面积（~100mm²）的 <strong>0.49%</strong>，开销极低。
+    <img alt="" src="../images/96df6afa56c2d7515bd0dfd914d34459bcbed83dce204c223c19122d75e9bbd1.jpg" /> <em>Figure 17: Energy consumption of Charon on GC compared with the host CPU-only execution</em>
+    <img alt="" src="../images/78fc6608bc6f9a4fb1d4b64c5db78faa5ea40d54d831e600fe59866b8232761a.jpg" /> <em>Table 4: Total area usage of Charon for whole cubes</em></li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验</strong></p>
+<p>该论文通过精心设计的对比实验，有效地进行了消融分析，以证明其核心设计决策的有效性。</p>
+<ul>
+<li><strong>Charon vs. HMC (无加速器)</strong>：<ul>
+<li>对比 <strong>HMC</strong> 和 <strong>Charon</strong> 的结果直接证明了<strong>专用近内存处理单元</strong>的价值。尽管 HMC 提供了更高的外部带宽，但通用 CPU 无法有效利用其内部带宽和 MLP。Charon 通过专用硬件填补了这一鸿沟。</li>
+</ul>
+</li>
+<li><strong>Charon vs. CPU-side Accelerator</strong>：<ul>
+<li>论文评估了将 Charon 作为 <strong>CPU-side accelerator</strong>（而非 DRAM-side）的方案。结果显示，内存端实现的性能比 CPU 端实现高出约 <strong>37%</strong>。</li>
+<li>这一消融实验有力地证明了 <strong>3D stacked DRAM 的内部高带宽</strong>是 Charon 性能优势的关键来源，而不仅仅是算法或 MLP 优化本身。
+    <img alt="" src="../images/833e4f9eaaf9c2f581553d867fc7e6d35737a491d198c49ae5585fd39d3d7ae8.jpg" /> <em>Figure 16: Memory-side implementation speedup over CPUside on-chip implementation</em></li>
+</ul>
+</li>
+<li><strong>Unified vs. Distributed Structures</strong>：<ul>
+<li>通过比较 <strong>统一结构</strong>（中心化资源）和 <strong>分布式结构</strong>（去中心化资源）的可扩展性，论文验证了其关于系统瓶颈（中心 Cube 的 bitmap cache 和 TLB）的分析。</li>
+<li>分布式设计在大多数情况下表现更好，这为 Charon 在更大规模系统中的部署提供了设计指导。</li>
+</ul>
+</li>
+<li><strong>Per-Primitive Speedup Analysis</strong>：<ul>
+<li>对每个原语（Copy, Search, Scan&amp;Push, Bitmap Count）的单独加速比分析，可以看作是对 Charon <strong>模块化设计</strong>的消融。它清晰地展示了每个专用单元的贡献，并解释了为何在不同工作负载上性能表现各异。例如，Scan&amp;Push 在引用稀疏的工作负载上收益甚微，这反向证明了其设计是针对特定访存模式优化的。</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

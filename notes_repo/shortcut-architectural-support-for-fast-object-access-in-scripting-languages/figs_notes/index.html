@@ -1,0 +1,1316 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/shortcut-architectural-support-for-fast-object-access-in-scripting-languages/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>ShortCut: Architectural Support for Fast Object Access in Scripting Languages 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#shortcut-architectural-support-for-fast-object-access-in-scripting-languages" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ShortCut: Architectural Support for Fast Object Access in Scripting Languages 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-code-generation-example-with-different-inline-cache-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Code generation example with different inline cache implementations.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-operations-of-a-conventional-ic-a-plain-shortcut-b-and-aggressive-shortcut-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Operations of a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-structures-used-in-a-conventional-ic-a-plain-shortcut-b-and-aggressive-shortcut-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Structures used in a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-interaction-between-the-btb-and-the-ictable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: Interaction between the BTB and the ICTable.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-instructions-added-by-shortcut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Instructions added by ShortCut.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-processor-architecture-rr-means-round-robin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3: Processor architecture. RR means round robin.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-architecture-and-compiler-configurations-evaluated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4: Architecture and compiler configurations evaluated.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-breakdown-of-dynamic-instruction-count-in-octane-with-left-and-without-right-the-optimizing-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Breakdown of dynamic instruction count in Octane with (left) and without (right) the optimizing tier.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-breakdown-of-dynamic-instruction-count-in-sunspider-with-top-and-without-bottom-the-optimizing-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5: Breakdown of dynamic instruction count in SunSpider with (top) and without (bottom) the optimizing tier.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-branch-mpki-in-octane-left-and-sunspider-right-for-b-and-ps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6: Branch MPKI in Octane (left) and SunSpider (right) for B and PS.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-normalized-execution-time-of-octane-with-left-and-without-right-the-optimizing-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7: Normalized execution time of Octane with (left) and without (right) the optimizing tier.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-normalized-execution-time-of-sunspider-with-top-and-without-bottom-the-optimizing-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Normalized execution time of SunSpider with (top) and without (bottom) the optimizing tier.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-9-sensitivity-of-the-execution-time-of-ps-to-varying-ictable-size-the-execution-time-is-normalized-to-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 9: Sensitivity of the execution time of PS to varying ICTable size. The execution time is normalized to B.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="shortcut-architectural-support-for-fast-object-access-in-scripting-languages">ShortCut: Architectural Support for Fast Object Access in Scripting Languages 图表详解<a class="headerlink" href="#shortcut-architectural-support-for-fast-object-access-in-scripting-languages" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-code-generation-example-with-different-inline-cache-implementations">Figure 1: Code generation example with different inline cache implementations.<a class="headerlink" href="#figure-1-code-generation-example-with-different-inline-cache-implementations" title="Permanent link">&para;</a></h3>
+<p><img alt="61fde201e80fd11f5684455795a826ee0cf070c7771f1d0fea4ee80995e39a85.jpg" src="../images/61fde201e80fd11f5684455795a826ee0cf070c7771f1d0fea4ee80995e39a85.jpg" /></p>
+<ul>
+<li>图片展示了 JavaScript 中属性访问 <code>obj.x</code> 在不同 <strong>Inline Cache (IC)</strong> 实现下的代码生成示例，旨在说明动态类型语言中对象属性访问的性能开销及优化路径。</li>
+<li>图 (a) 是原始 JavaScript 代码示例，定义了一个函数 <code>get_x(obj)</code> 返回 <code>obj.x</code>，并创建了两个不同类型的对象 <code>a</code> 和 <code>b</code>，用于演示 IC 的命中与未命中行为。</li>
+<li>图 (b) 描述 <strong>Inlined Dispatcher</strong>：将调度器逻辑直接内联到访问点。代码包含一系列 <code>if-elif-else</code> 判断对象类型，匹配后调用对应 Handler。首次访问 <code>a</code> 或 <code>b</code> 时为 IC miss，需执行完整判断；第二次访问则为 IC hit，直接跳转 Handler。</li>
+<li>图 (c) 展示 <strong>Custom Dispatcher</strong>：访问点仅调用一个特定于该站点的调度器函数 <code>Custom_Dispatcher</code>。该调度器内部同样包含类型判断和跳转逻辑。当新类型出现时，需生成新的调度器并更新调用地址。</li>
+<li>图 (d) 呈现 <strong>Shared Read Dispatcher</strong>：所有读取访问点共享一个调度器 <code>Shared_Read_Dispatcher</code>。该调度器通过遍历对应访问点的 <strong>IC Vector</strong>（图 e）来查找匹配类型，并跳转至相应 Handler。这种方式避免了代码重编译，但增加了内存访问开销。</li>
+<li>图 (e) 是 <strong>IC Vector of site S</strong> 的数据结构示例，以表格形式列出每个已知对象类型及其对应的 Handler 地址，如 <code>Type_a → Handler_a</code>、<code>Type_b → Handler_b</code>。</li>
+<li>图 (f) 显示了 <strong>Handlers</strong> 的典型实现，通常为简单的内存加载指令，如 <code>ld Rdst, [Robj+offset]</code>，其中 <code>offset</code> 是属性在对象内存布局中的偏移量，由运行时根据类型确定。</li>
+<li>整体来看，从 Inlined 到 Shared Dispatcher，设计趋势是牺牲部分执行效率换取更低的代码修改频率和更小的内存占用，而 ShortCut 架构的目标正是优化这些调度器带来的性能瓶颈。</li>
+</ul>
+<h3 id="figure-2-operations-of-a-conventional-ic-a-plain-shortcut-b-and-aggressive-shortcut-c">Figure 2: Operations of a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).<a class="headerlink" href="#figure-2-operations-of-a-conventional-ic-a-plain-shortcut-b-and-aggressive-shortcut-c" title="Permanent link">&para;</a></h3>
+<p><img alt="6436a3a332849c71cb68c1085c91e251b6d0423ec11779f9ad2c41d45457d9af.jpg" src="../images/6436a3a332849c71cb68c1085c91e251b6d0423ec11779f9ad2c41d45457d9af.jpg" /></p>
+<ul>
+<li>图片展示了三种不同架构下对象属性访问的控制流，分别是 <strong>Conventional IC</strong>、<strong>Plain ShortCut</strong> 和 <strong>Aggressive ShortCut</strong>，用于对比传统与优化后的执行路径。</li>
+<li>在 <strong>(a) Conventional IC</strong> 中，函数通过 <code>Call Dispatcher</code> 调用调度器，调度器内部包含多个检查和跳转逻辑（以省略号表示），最终通过 <code>jmp Handler</code> 跳转到具体处理程序，处理程序执行如 <code>ld Rdst, [Robj + offset]</code> 的内存操作后返回。整个流程涉及多次控制转移，开销较大。</li>
+<li>在 <strong>(b) Plain ShortCut</strong> 中，函数调用被替换为 <code>IC_Call Dispatcher, Type</code>，该指令结合对象类型信息直接预测并跳转至正确的 Handler，从而<strong>绕过整个 Dispatcher 执行过程</strong>。若预测失败，则回退至传统路径。此设计显著减少中间跳转层级。</li>
+<li>在 <strong>(c) Aggressive ShortCut</strong> 中，函数调用进一步简化为 <code>IC_Load Dispatcher, Type, Base, Destination</code>，在预测成功且 Handler 为简单加载操作时，硬件直接执行 <code>ld Rdst, [Robj + offset]</code>，<strong>完全跳过 Dispatcher 和 Handler 的执行</strong>，实现最高效访问。</li>
+<li>三者控制流复杂度递减，性能优化逐级增强：
+    | 架构类型            | 是否绕过 Dispatcher | 是否绕过 Handler | 关键指令           |
+    | ------------------- | ------------------- | ---------------- | ------------------ |
+    | Conventional IC     | 否                  | 否               | Call Dispatcher    |
+    | Plain ShortCut      | 是                  | 否               | IC_Call            |
+    | Aggressive ShortCut | 是                  | 是               | IC_Load / IC_Store |</li>
+<li>图中箭头清晰标示了执行路径：从函数入口开始，经由不同指令导向 Handler 或直接完成数据操作，最终返回。<strong>Aggressive ShortCut</strong> 的路径最短，体现了其“激进”优化的本质。</li>
+<li>所有路径均以 <code>return</code> 结束，表明无论是否优化，最终语义保持一致，确保程序正确性。优化仅发生在执行效率层面，不改变功能行为。</li>
+</ul>
+<h3 id="figure-3-structures-used-in-a-conventional-ic-a-plain-shortcut-b-and-aggressive-shortcut-c">Figure 3: Structures used in a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).<a class="headerlink" href="#figure-3-structures-used-in-a-conventional-ic-a-plain-shortcut-b-and-aggressive-shortcut-c" title="Permanent link">&para;</a></h3>
+<p><img alt="17a0ec9d9714e372b3a227f63b3c94cf0a256493abec54dd6ef62a4fb4e85eca.jpg" src="../images/17a0ec9d9714e372b3a227f63b3c94cf0a256493abec54dd6ef62a4fb4e85eca.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了三种不同架构下处理内联缓存（IC）的结构：常规 IC、Plain ShortCut 和 Aggressive ShortCut，分别对应图 (a)、(b) 和 (c)。</p>
+</li>
+<li>
+<p><strong>常规 IC 结构 (a)</strong>：</p>
+<ul>
+<li>执行流程始于取指阶段，程序计数器（PC）访问分支目标缓冲区（BTB），获取预测的目标地址。</li>
+<li>解码阶段使用立即数操作数（Dispatcher 地址）进行验证。</li>
+<li>若预测错误，则更新 BTB 并刷新流水线，重新从正确目标地址取指。</li>
+<li>此结构依赖传统调用指令 <code>Call Addr_Dispatcher</code>，无额外硬件支持。</li>
+</ul>
+</li>
+<li>
+<p><strong>Plain ShortCut 结构 (b)</strong>：</p>
+<ul>
+<li>引入新指令 <code>IC_Call Addr_Dispatcher, R_Type</code>，其中 <code>R_Type</code> 是对象类型寄存器。</li>
+<li>在取指阶段仍通过 BTB 预测目标地址。</li>
+<li>当 <code>R_Type</code> 就绪后，结合 PC 地址哈希索引 <strong>ICTable</strong>。</li>
+<li>ICTable 包含三字段：PC、Type、Handler，命中时提供正确 Handler 地址。</li>
+<li>若 BTB 预测错误，刷新流水线并更新 BTB；若 ICTable 未命中，则执行 Dispatcher。</li>
+<li><strong>关键优化</strong>：通过硬件表提前定位 Handler，绕过 Dispatcher 的条件判断逻辑。</li>
+</ul>
+</li>
+<li>
+<p><strong>Aggressive ShortCut 结构 (c)</strong>：</p>
+<ul>
+<li>在 Plain 基础上扩展 ICTable，新增 <strong>Simple</strong> 位和 <strong>Handler/Offset</strong> 字段。</li>
+<li>若 Simple = 0，Handler/Offset 存储 Handler 地址；若 Simple = 1，则存储属性偏移量（Offset）。</li>
+<li>指令如 <code>IC_Load</code> 或 <code>IC_Store</code> 可直接执行内存加载或存储，无需跳转至 Handler。</li>
+<li><strong>性能提升点</strong>：将复杂函数调用简化为单条 Load/Store 指令，极大减少控制流开销。</li>
+</ul>
+</li>
+<li>
+<p>三种结构对比：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>常规 IC</th>
+<th>Plain ShortCut</th>
+<th>Aggressive ShortCut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心指令</td>
+<td>Call Addr_Dispatcher</td>
+<td>IC_Call Addr_Dispatcher, R_Type</td>
+<td>IC_Load / IC_Store</td>
+</tr>
+<tr>
+<td>硬件支持</td>
+<td>无</td>
+<td>ICTable（PC, Type, Handler）</td>
+<td>ICTable + Simple 位 + Offset</td>
+</tr>
+<tr>
+<td>控制流开销</td>
+<td>高（Dispatcher 多分支）</td>
+<td>中（跳转至 Handler）</td>
+<td>低（直接 Load/Store）</td>
+</tr>
+<tr>
+<td>预测机制</td>
+<td>BTB</td>
+<td>BTB + ICTable 验证</td>
+<td>BTB + ICTable 验证 + 简化执行</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>设计意图</strong>：</p>
+<ul>
+<li>Plain ShortCut 目标是<strong>跳过 Dispatcher</strong>，直接调用 Handler。</li>
+<li>Aggressive ShortCut 进一步<strong>消除 Handler 调用</strong>，在硬件层面完成 Load/Store。</li>
+<li>两者均依赖 BTB 与 ICTable 协同工作，前者负责前端预测，后者负责后端验证与修正。</li>
+</ul>
+</li>
+<li>
+<p><strong>潜在缺陷</strong>：</p>
+<ul>
+<li>ICTable 与 BTB 条目可独立驱逐，可能导致 BTB 保留无效预测，需额外机制同步。</li>
+<li>Aggressive ShortCut 仅适用于“简单 Handler”（即纯 Load/Store），复杂语义仍需回退至 Handler。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-1-interaction-between-the-btb-and-the-ictable">Table 1: Interaction between the BTB and the ICTable.<a class="headerlink" href="#table-1-interaction-between-the-btb-and-the-ictable" title="Permanent link">&para;</a></h3>
+<p><img alt="1af805b184082795c7be2eecc4cb370775f97332a0892dfde0883a0be2019118.jpg" src="../images/1af805b184082795c7be2eecc4cb370775f97332a0892dfde0883a0be2019118.jpg" /></p>
+<ul>
+<li>该表格详细描述了 <strong>BTB</strong>（Branch Target Buffer）与 <strong>ICTable</strong>（Inline Cache Table）在不同执行场景下的交互行为，共涵盖六种典型情况。</li>
+<li>表格结构清晰，包含六个核心列：<strong>#</strong>（案例编号）、<strong>When the Case Happens</strong>（触发条件）、<strong>BTB Outcome</strong>（BTB预测结果）、<strong>ICTable Outcome</strong>（ICTable命中/未命中）、<strong>Pipeline Flush?</strong>（是否引发流水线冲刷）、<strong>What is Executed</strong>（实际执行的代码路径）、<strong>Other Actions Taken</strong>（伴随操作）。</li>
+</ul>
+<p>|---|------------------------|-------------|------------------|------------------|------------------|----------------------|
+| 1 | First execution of access site | Miss | Miss | Yes | Dispatcher + Handler | Add entry to BTB w/ PC + handler<br>Add entry to ICTable w/ PC + type + handler |
+| 2 | Encounter same type again | Hit. Correct handler | Hit | No | Handler | — |
+| 3 | Encounter diff. type (not yet seen before) | Hit. Incorrect handler | Miss | Yes | Dispatcher + Handler | Update BTB entry w/ handler<br>Add entry to ICTable w/ PC + type + handler |
+| 4 | Encounter diff. type (already seen before) | Hit. Incorrect handler | Hit | Yes | Handler | Update BTB entry w/ handler |
+| 5 | After ICTable eviction: same type accessed | Hit. Correct handler | Miss | Yes | Dispatcher + Handler | Update BTB entry w/ handler<br>Add entry to ICTable w/ PC + type + handler |
+| 6 | After BTB eviction: same type accessed | Miss | Hit | Yes | Handler | Add entry to BTB w/ PC + handler |</p>
+<ul>
+<li><strong>Case 1</strong> 是首次访问站点，BTB 和 ICTable 均未命中，必须执行完整的 <strong>Dispatcher + Handler</strong> 流程，并在之后向两个表中添加新条目。</li>
+<li><strong>Case 2</strong> 是理想状态：类型重复出现，BTB 预测正确且 ICTable 命中，<strong>无流水线冲刷</strong>，直接执行 Handler，效率最高。</li>
+<li><strong>Case 3</strong> 和 <strong>Case 4</strong> 描述遇到新类型或已知但非当前预测类型的场景。两者均因 BTB 预测错误导致流水线冲刷；区别在于 Case 3 的 ICTable 未命中需重新生成条目，而 Case 4 已存在条目可直接使用。</li>
+<li><strong>Case 5</strong> 模拟 ICTable 条目被驱逐后再次访问相同类型的情况。尽管 BTB 仍保留正确预测，但因 ICTable 未命中，仍需执行 Dispatcher 并重建条目。</li>
+<li><strong>Case 6</strong> 模拟 BTB 条目被驱逐后再次访问相同类型的情况。此时 BTB 未命中，但 ICTable 命中，仍能跳过 Dispatcher 直接执行 Handler，仅需重建 BTB 条目。</li>
+<li>总体而言，该表揭示了 ShortCut 架构下硬件预测与缓存协同工作的机制，以及在各种失效场景下的恢复策略，是理解其性能表现和开销的关键。</li>
+</ul>
+<h3 id="table-2-instructions-added-by-shortcut">Table 2: Instructions added by ShortCut.<a class="headerlink" href="#table-2-instructions-added-by-shortcut" title="Permanent link">&para;</a></h3>
+<p><img alt="fc5e336a6fc832570fa1a6e003cf29adb17663518ee4396bd36f9f1855fa59b3.jpg" src="../images/fc5e336a6fc832570fa1a6e003cf29adb17663518ee4396bd36f9f1855fa59b3.jpg" /></p>
+<ul>
+<li>
+<p><strong>ShortCut 架构新增了五条 ISA 指令</strong>，旨在通过硬件支持优化动态脚本语言中的内联缓存（Inline Caching, IC）操作。这些指令的核心目标是绕过或简化传统的调度器（dispatcher）调用流程，从而减少指令执行数和分支预测失误。</p>
+</li>
+<li>
+<p><strong>指令功能概览</strong>：</p>
+<ul>
+<li><strong>IC_Call (Plain)</strong>：在 Plain ShortCut 设计中使用。它根据对象类型（RType）查询 <strong>ICTable</strong>。若命中，则直接跳转到对应的 handler；若未命中，则回退至 dispatcher。</li>
+<li><strong>IC_Load (Aggressive)</strong>：在 Aggressive ShortCut 设计中用于读取访问点。若 ICTable 命中且标记为 Simple，则直接执行 load 操作；否则，调用 handler 或 dispatcher。</li>
+<li><strong>IC_Store (Aggressive)</strong>：在 Aggressive ShortCut 设计中用于写入访问点。逻辑与 IC_Load 类似，但执行 store 操作。</li>
+<li><strong>IC_Update (Plain/Aggr.)</strong>：由软件（如 dispatcher 或 IC miss handler）调用，用于将新的类型-处理器对（或类型-偏移量对）写入 ICTable，并同步更新 BTB 中的预测目标。</li>
+<li><strong>IC_Flush (Plain/Aggr.)</strong>：用于清空整个 ICTable，通常在垃圾回收或上下文切换后执行，以避免使用陈旧数据。</li>
+</ul>
+</li>
+<li>
+<p><strong>指令行为对比表</strong>：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>所属设计</th>
+<th>主要功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IC_Call</strong></td>
+<td>Plain</td>
+<td>查询 ICTable，命中则跳转 handler，未命中则调用 dispatcher</td>
+</tr>
+<tr>
+<td><strong>IC_Load</strong></td>
+<td>Aggressive</td>
+<td>查询 ICTable，命中且 Simple=1 则执行 load，否则调用 handler/dispatcher</td>
+</tr>
+<tr>
+<td><strong>IC_Store</strong></td>
+<td>Aggressive</td>
+<td>查询 ICTable，命中且 Simple=1 则执行 store，否则调用 handler/dispatcher</td>
+</tr>
+<tr>
+<td><strong>IC_Update</strong></td>
+<td>Plain / Aggr.</td>
+<td>向 ICTable 写入新条目，并更新 BTB 的预测目标</td>
+</tr>
+<tr>
+<td><strong>IC_Flush</strong></td>
+<td>Plain / Aggr.</td>
+<td>清空整个 ICTable</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>关键设计要点</strong>：</p>
+<ul>
+<li><strong>IC_Call、IC_Load 和 IC_Store</strong> 都依赖于 <strong>ICTable</strong> 进行运行时预测和验证，其性能提升的关键在于高命中率。</li>
+<li><strong>IC_Update</strong> 是软件与硬件协同工作的桥梁，确保 ICTable 能够动态反映最新的类型信息。</li>
+<li><strong>IC_Flush</strong> 是保证系统正确性的必要机制，尤其在内存管理（如 GC）或进程切换时。</li>
+<li>在 Aggressive 设计中，<strong>Simple 标志位</strong>决定了是否能将 handler 简化为直接的 load/store 操作，这是性能飞跃的关键。</li>
+</ul>
+</li>
+<li>
+<p><strong>性能影响</strong>：</p>
+<ul>
+<li>这些指令的设计初衷是<strong>大幅减少调度器执行次数</strong>，从而降低指令总数和分支错误预测率。</li>
+<li>实验表明，<strong>Plain ShortCut</strong> 可使基准编译器下的平均执行时间减少 30%，即使在最高优化级别下也能减少 11%。</li>
+<li><strong>Aggressive ShortCut</strong> 的改进幅度较小，主要受限于当前实现仅优化了部分 handler（如仅支持 IC_Load，且仅 15% 的 load handler 是简单的）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-3-processor-architecture-rr-means-round-robin">Table 3: Processor architecture. RR means round robin.<a class="headerlink" href="#table-3-processor-architecture-rr-means-round-robin" title="Permanent link">&para;</a></h3>
+<p><img alt="a281a536445e9684b5ac4379c0def0291dea02762f86cd46ade8f1f240cd868c.jpg" src="../images/a281a536445e9684b5ac4379c0def0291dea02762f86cd46ade8f1f240cd868c.jpg" /></p>
+<ul>
+<li><strong>核心架构</strong>：采用 <strong>4-wide out-of-order</strong> 执行引擎，配备 <strong>128-entry ROB</strong>（重排序缓冲区），运行频率为 <strong>2.66GHz</strong>。</li>
+<li><strong>分支预测器</strong>：<ul>
+<li>使用 <strong>Hybrid predictor</strong>（混合预测器）。</li>
+<li><strong>BTB</strong>（Branch Target Buffer）配置为 <strong>4K entries</strong>，<strong>4-way</strong> 关联，替换策略为 <strong>RR</strong>（Round Robin），每项占用 <strong>96b</strong>，分支误预测惩罚为 <strong>15 cycles</strong>。</li>
+</ul>
+</li>
+<li><strong>ICTable</strong>（Inline Cache Table）：<ul>
+<li>容量为 <strong>512 entries</strong>，<strong>4-way</strong> 关联，替换策略为 <strong>RR</strong>，每项大小为 <strong>145b</strong>。</li>
+</ul>
+</li>
+<li><strong>缓存层级</strong>：<ul>
+<li><strong>L1-I</strong>：32KB，4-way，延迟 <strong>4-cycle</strong>。</li>
+<li><strong>L1-D</strong>：32KB，4-way，延迟 <strong>4-cycle</strong>。</li>
+<li><strong>L2</strong>：256KB，4-way，延迟 <strong>12-cycle</strong>。</li>
+<li><strong>L3</strong>：8MB，16-way，延迟 <strong>30-cycle</strong>，块大小 <strong>64B</strong>，替换策略为 <strong>LRU</strong>。</li>
+</ul>
+</li>
+<li><strong>内存子系统</strong>：<ul>
+<li>最小访问延迟为 <strong>120-cycle</strong>。</li>
+<li>配备 <strong>16 DRAM banks</strong>。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td>4-wide out-of-order, 128-entry ROB, 2.66GHz</td>
+</tr>
+<tr>
+<td>Branch Predictor</td>
+<td>Hybrid predictor, BTB: 4K entries, 4-way, RR, 96b/entry, 15 cycles penalty</td>
+</tr>
+<tr>
+<td>ICTable</td>
+<td>512 entries, 4-way, RR, 145b/entry</td>
+</tr>
+<tr>
+<td>L1-I</td>
+<td>32KB, 4-way, 4-cycle latency</td>
+</tr>
+<tr>
+<td>L1-D</td>
+<td>32KB, 4-way, 4-cycle latency</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>256KB, 4-way, 12-cycle latency</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>8MB, 16-way, 30-cycle latency, 64B block, LRU</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>120-cycle min latency, 16 DRAM banks</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键术语保留</strong>：ROB、BTB、ICTable、RR、LRU、L1-I、L1-D、L2、L3 均按原文保留英文形式。</li>
+<li><strong>设计目标</strong>：该架构专为评估 <strong>ShortCut</strong> 优化方案而设计，重点强化对 <strong>inline caching</strong> 相关指令的处理效率，尤其关注 <strong>branch prediction</strong> 和 <strong>cache hierarchy</strong> 对性能的影响。</li>
+</ul>
+<h3 id="table-4-architecture-and-compiler-configurations-evaluated">Table 4: Architecture and compiler configurations evaluated.<a class="headerlink" href="#table-4-architecture-and-compiler-configurations-evaluated" title="Permanent link">&para;</a></h3>
+<p><img alt="2e13fc8605df5911899ef29f41e4c01bcf3b3b27b730840ef001b3c6ba611b1b.jpg" src="../images/2e13fc8605df5911899ef29f41e4c01bcf3b3b27b730840ef001b3c6ba611b1b.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 4</strong>，标题为 “Architecture and compiler configurations evaluated”，用于展示实验中评估的四种架构与编译器配置组合。</li>
+<li>表格结构清晰，包含两列：<strong>Name</strong> 和 <strong>Configuration</strong>，共四行，分别对应四种实验配置。</li>
+<li>所有配置均基于 <strong>Google V8 JavaScript JIT compiler</strong>，并结合不同硬件支持（如 BTB、ShortCut）进行性能对比。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BO, B</strong></td>
+<td>Baseline: Conventional processor using the unmodified V8</td>
+</tr>
+<tr>
+<td><strong>IO, I</strong></td>
+<td>Ideal: Baseline enhanced with a perfect BTB for the IC</td>
+</tr>
+<tr>
+<td><strong>PSO, PS</strong></td>
+<td>Plain ShortCut using the modified V8</td>
+</tr>
+<tr>
+<td><strong>ASO, AS</strong></td>
+<td>Aggressive ShortCut using the modified V8</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>BO, B</strong> 是基准配置，代表未修改的 V8 编译器在传统处理器上的运行状态，作为性能比较的起点。</li>
+<li><strong>IO, I</strong> 是理想化配置，假设 BTB（Branch Target Buffer）对 IC 相关分支预测完全准确，用作性能上限参考。</li>
+<li><strong>PSO, PS</strong> 是 <strong>Plain ShortCut</strong> 配置，使用修改后的 V8 编译器，通过硬件支持跳过 dispatcher，直接调用 handler。</li>
+<li><strong>ASO, AS</strong> 是 <strong>Aggressive ShortCut</strong> 配置，进一步优化，在可能的情况下将调用转换为直接的 load/store 操作，绕过 handler 执行。</li>
+<li>实验设计中，每个配置都分为两种子情况：启用或禁用 V8 的优化编译器层（optimizing tier），以评估 ShortCut 在不同编译层级下的效果。</li>
+</ul>
+<h3 id="figure-4-breakdown-of-dynamic-instruction-count-in-octane-with-left-and-without-right-the-optimizing-tier">Figure 4: Breakdown of dynamic instruction count in Octane with (left) and without (right) the optimizing tier.<a class="headerlink" href="#figure-4-breakdown-of-dynamic-instruction-count-in-octane-with-left-and-without-right-the-optimizing-tier" title="Permanent link">&para;</a></h3>
+<p><img alt="27ff078295f0b9741963076a50c6bacbc65d26e500d13cb341316dcc6e6c123d.jpg" src="../images/27ff078295f0b9741963076a50c6bacbc65d26e500d13cb341316dcc6e6c123d.jpg" /></p>
+<ul>
+<li>
+<p>图片展示了 Figure 4，即 Octane 基准测试套件在启用和未启用优化编译器层级（optimizing tier）时的动态指令计数分解。</p>
+</li>
+<li>
+<p>左侧图表对应 <strong>启用优化层级</strong> 的配置（BO, IO, PSO, ASO），右侧图表对应 <strong>未启用优化层级</strong> 的配置（B, I, PS, AS）。</p>
+</li>
+<li>
+<p>每个应用（如 box2d, crypto, richards 等）及平均值（Average）均以堆叠柱状图呈现，分为三类指令：</p>
+<ul>
+<li><strong>Code</strong>：应用程序代码生成的指令。</li>
+<li><strong>Runtime</strong>：语言运行时系统执行的指令（如字符串、正则表达式等）。</li>
+<li><strong>IC</strong>：Inline Cache 共享调度器执行的指令。</li>
+</ul>
+</li>
+<li>
+<p>各配置说明：</p>
+<ul>
+<li><strong>BO / B</strong>：基准配置，使用原始 V8 编译器。</li>
+<li><strong>IO / I</strong>：理想配置，假设 BTB 总能正确预测 IC 分支目标。</li>
+<li><strong>PSO / PS</strong>：Plain ShortCut 配置。</li>
+<li><strong>ASO / AS</strong>：Aggressive ShortCut 配置。</li>
+</ul>
+</li>
+<li>
+<p>数据对比（以“Average”为例）：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>Code (%)</th>
+<th>Runtime (%)</th>
+<th>IC (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BO</td>
+<td>~85</td>
+<td>~10</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>PSO</td>
+<td>~90</td>
+<td>~10</td>
+<td>~0</td>
+</tr>
+<tr>
+<td>B</td>
+<td>~60</td>
+<td>~20</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>PS</td>
+<td>~75</td>
+<td>~20</td>
+<td>~5</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>关键观察：</p>
+<ul>
+<li>在 <strong>未启用优化层级</strong> 时（右图），<strong>IC 指令占比高达约 20%</strong>，是性能瓶颈。<strong>PS 显著降低 IC 指令至约 5%</strong>，主要通过避免调度器执行实现。</li>
+<li>在 <strong>启用优化层级</strong> 时（左图），IC 占比已降至约 5%，但 <strong>PSO 仍可进一步压缩 IC 至接近 0%</strong>，表明 ShortCut 在高度优化场景下仍有价值。</li>
+<li><strong>Aggressive ShortCut (AS/ASO)</strong> 相比 Plain ShortCut 提升有限，因当前实现仅支持部分简单加载操作。</li>
+<li>“code-load” 应用异常：其 IC 指令占比极低，因该应用主要测量编译开销，属于 Runtime 范畴。</li>
+</ul>
+</li>
+<li>
+<p>总结：</p>
+<ul>
+<li><strong>ShortCut 有效减少 IC 指令执行</strong>，尤其在未启用优化层级时效果显著。</li>
+<li><strong>Plain ShortCut 是核心优化手段</strong>，Aggressive ShortCut 当前受限于实现范围。</li>
+<li><strong>IC 指令是动态脚本语言性能关键瓶颈</strong>，架构级优化（如 ShortCut）可带来显著收益。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-5-breakdown-of-dynamic-instruction-count-in-sunspider-with-top-and-without-bottom-the-optimizing-tier">Figure 5: Breakdown of dynamic instruction count in SunSpider with (top) and without (bottom) the optimizing tier.<a class="headerlink" href="#figure-5-breakdown-of-dynamic-instruction-count-in-sunspider-with-top-and-without-bottom-the-optimizing-tier" title="Permanent link">&para;</a></h3>
+<p><img alt="4ab86bc8450d4f798318d4ac0166821c72134a21f96d6423f3fbdebcf0312024.jpg" src="../images/4ab86bc8450d4f798318d4ac0166821c72134a21f96d6423f3fbdebcf0312024.jpg" /></p>
+<ul>
+<li>图片展示了 SunSpider 基准测试套件在不同配置下动态指令计数的分解，分为<strong>启用优化器</strong>（上图）和<strong>禁用优化器</strong>（下图）两种情况。</li>
+<li>指令被划分为三类：<strong>Code</strong>（黑色）、<strong>Runtime</strong>（白色）和 <strong>IC</strong>（灰色），分别代表应用代码、语言运行时和内联缓存调度器执行的指令。</li>
+<li>上图中，所有配置（BO, IO, PSO, ASO）均以 BO 为基准归一化。<strong>IC</strong> 指令占比平均约为 <strong>7%</strong>，表明在优化器开启时，内联缓存开销相对较低。</li>
+<li>下图中，配置 B, I, PS, AS 以 B 为基准归一化。<strong>IC</strong> 指令占比平均高达 <strong>19%</strong>，说明在无优化器情况下，内联缓存成为主要性能瓶颈。</li>
+<li>对比上下两图可见，<strong>优化器显著降低了 IC 的指令占比</strong>，从 19% 降至 7%，但即便如此，IC 仍占不可忽视的比例。</li>
+<li>在禁用优化器的情况下，<strong>PS 和 AS 配置有效减少了 IC 指令占比</strong>，部分应用如 <code>string-unpack</code> 和 <code>string-validate-input</code> 中 IC 占比下降明显。</li>
+<li>尽管 Aggressive ShortCut（AS）理论上应优于 Plain ShortCut（PS），但在实际数据中，两者在指令计数上的差异极小，<strong>AS 仅带来微弱改进</strong>，与论文结论一致。</li>
+<li>各应用表现不一：例如 <code>3d-cube</code> 和 <code>3d-morph</code> 中 IC 占比极低，而 <code>string-base64</code> 和 <code>string-fasta</code> 中 IC 占比较高，反映不同工作负载对内联缓存的依赖程度不同。</li>
+<li>平均来看，<strong>Plain ShortCut 在无优化器情况下将 IC 指令占比从 19% 降低至约 15%</strong>，对应指令总数减少 15%，验证了其有效性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>优化器状态</th>
+<th>平均 IC 指令占比</th>
+<th>相对基线改进</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BO</td>
+<td>开启</td>
+<td>~7%</td>
+<td>基线</td>
+</tr>
+<tr>
+<td>PSO</td>
+<td>开启</td>
+<td>~6%</td>
+<td>略降</td>
+</tr>
+<tr>
+<td>B</td>
+<td>关闭</td>
+<td>~19%</td>
+<td>基线</td>
+</tr>
+<tr>
+<td>PS</td>
+<td>关闭</td>
+<td>~15%</td>
+<td><strong>减少 4%</strong></td>
+</tr>
+<tr>
+<td>AS</td>
+<td>关闭</td>
+<td>~14.8%</td>
+<td><strong>略优于 PS</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，该图直观呈现了 ShortCut 架构在不同编译层级下的优化效果，尤其在<strong>无优化器场景下收益显著</strong>，而在优化器开启后收益受限但仍具价值。</li>
+</ul>
+<h3 id="figure-6-branch-mpki-in-octane-left-and-sunspider-right-for-b-and-ps">Figure 6: Branch MPKI in Octane (left) and SunSpider (right) for B and PS.<a class="headerlink" href="#figure-6-branch-mpki-in-octane-left-and-sunspider-right-for-b-and-ps" title="Permanent link">&para;</a></h3>
+<p><img alt="0b70d1c2ab308db52106232310378fafce05ca057a731a8c10204bfeed3858fa.jpg" src="../images/0b70d1c2ab308db52106232310378fafce05ca057a731a8c10204bfeed3858fa.jpg" /></p>
+<ul>
+<li>图片展示了在 Octane（左）和 SunSpider（右）基准测试套件中，<strong>Baseline (B)</strong> 与 <strong>Plain ShortCut (PS)</strong> 配置下的分支错误预测率（Branch MPKI），用于评估 ShortCut 对分支预测性能的影响。</li>
+<li>图表按应用分组，每个应用对应一组堆叠柱状图，分别表示四类分支的 MPKI：<strong>Direct</strong>、<strong>Indirect</strong>、<strong>Dispatcher</strong> 和 <strong>IC_Call</strong>。</li>
+<li><strong>Dispatcher</strong> 分支是传统 IC 共享调度器中的间接跳转，其预测准确率极低（Octane 42%，SunSpider 52%），是主要性能瓶颈。</li>
+<li>在 PS 配置下，<strong>Dispatcher</strong> 分支的 MPKI 显著下降，因为 ICTable 大部分命中，避免了执行调度器代码，从而大幅减少该类分支的误预测。</li>
+<li><strong>IC_Call</strong> 是 ShortCut 引入的新指令，在 PS 中替代了原 dispatcher 调用。尽管它可能因多态访问而误预测，但平均预测准确率达 <strong>98%</strong>，其引入的额外误预测远小于 Dispatcher 分支的消除收益。</li>
+<li><strong>Direct</strong> 和 <strong>Indirect</strong> 分支的 MPKI 在 PS 中看似略有上升，实为归一化效应——总指令数减少导致相同绝对误预测数在 MPKI 中占比升高，实际误预测次数未变。</li>
+<li>BTB 整体命中率在所有配置中保持稳定，表明 ShortCut 未增加 BTB 压力。</li>
+<li>下表总结关键数据：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>应用类别</th>
+<th>B 配置 Dispatcher MPKI</th>
+<th>PS 配置 Dispatcher MPKI</th>
+<th>PS 配置 IC_Call MPKI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Octane 平均</td>
+<td>14.4</td>
+<td>8.5</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>SunSpider 平均</td>
+<td>8.8</td>
+<td>6.0</td>
+<td>~0.2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体而言，PS 通过 ICTable 有效规避了高开销的 Dispatcher 分支，显著降低整体 MPKI，同时 IC_Call 的高预测精度确保了性能增益。</li>
+</ul>
+<h3 id="figure-7-normalized-execution-time-of-octane-with-left-and-without-right-the-optimizing-tier">Figure 7: Normalized execution time of Octane with (left) and without (right) the optimizing tier.<a class="headerlink" href="#figure-7-normalized-execution-time-of-octane-with-left-and-without-right-the-optimizing-tier" title="Permanent link">&para;</a></h3>
+<p><img alt="89cf3361c10232364c6f2fa5588a6bab6b2e206eb3c7f87d315a75e3b335f3e2.jpg" src="../images/89cf3361c10232364c6f2fa5588a6bab6b2e206eb3c7f87d315a75e3b335f3e2.jpg" /></p>
+<ul>
+<li>图片包含两个并列的柱状图，分别展示在启用和禁用 V8 优化编译器（optimizing tier）的情况下，不同配置对 Octane 基准测试套件各子测试及平均执行时间的影响。</li>
+<li>左侧图表对应<strong>启用优化编译器</strong>（with optimizing tier），右侧对应<strong>禁用优化编译器</strong>（without optimizing tier）。</li>
+<li>所有执行时间均以 <strong>Baseline (B)</strong> 配置为基准归一化至 100%。其他配置包括：Ideal (I)、Plain ShortCut (PS)、Aggressive ShortCut (AS)，以及它们在启用优化编译器时的版本（BO, IO, PSO, ASO）。</li>
+<li>在左侧图表中，<strong>PSO</strong> 和 <strong>ASO</strong> 的柱状高度普遍低于 <strong>BO</strong>，表明 ShortCut 架构在优化编译器开启时仍能带来性能提升，但幅度小于无优化编译器的情况。</li>
+<li>在右侧图表中，<strong>PS</strong> 和 <strong>AS</strong> 的柱状高度显著低于 <strong>B</strong>，尤其在 <code>crypto</code>、<code>gbemu</code>、<code>navier-stokes</code> 等测试中降幅明显，说明 ShortCut 在基线编译器下效果更突出。</li>
+<li>平均值（Average）显示，在禁用优化编译器时，<strong>PS</strong> 将执行时间降低约 <strong>37%</strong>，而 <strong>AS</strong> 进一步小幅降低；在启用优化编译器时，<strong>PSO</strong> 降低约 <strong>13%</strong>。</li>
+<li>各子测试表现不一，例如 <code>code-load</code> 测试因主要测量编译开销，ShortCut 优化效果微弱；而 <code>richards</code>、<code>splay</code> 等测试受益显著。</li>
+<li>Aggressive ShortCut 相比 Plain ShortCut 提升有限，这与论文中提到当前实现仅支持部分加载操作（IC_Load）且简单处理程序占比不高相符。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>启用优化编译器 (PSO)</th>
+<th>禁用优化编译器 (PS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均执行时间 (%)</td>
+<td>~87%</td>
+<td>~63%</td>
+</tr>
+<tr>
+<td>性能提升幅度</td>
+<td>~13%</td>
+<td>~37%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图表直观验证了论文核心结论：<strong>Plain ShortCut 在基线编译器下可大幅减少执行时间，而在高度优化的编译器下仍有可观收益</strong>。Aggressive ShortCut 当前实现受限，增益较小。</li>
+</ul>
+<h3 id="figure-8-normalized-execution-time-of-sunspider-with-top-and-without-bottom-the-optimizing-tier">Figure 8: Normalized execution time of SunSpider with (top) and without (bottom) the optimizing tier.<a class="headerlink" href="#figure-8-normalized-execution-time-of-sunspider-with-top-and-without-bottom-the-optimizing-tier" title="Permanent link">&para;</a></h3>
+<p><img alt="ec9c7f3a0f96d9f1c75bf65daf6d169f9a33ede1f2381c6c6915a9e53ecb3542.jpg" src="../images/ec9c7f3a0f96d9f1c75bf65daf6d169f9a33ede1f2381c6c6915a9e53ecb3542.jpg" /></p>
+<ul>
+<li>
+<p>图片包含两个子图，分别展示 SunSpider 基准测试在**启用优化器（top）<strong>和</strong>禁用优化器（bottom）**情况下的归一化执行时间。</p>
+</li>
+<li>
+<p>所有数据均以 <strong>Baseline (B)</strong> 配置为基准（100%），其他配置（IO, PSO, ASO / I, PS, AS）的执行时间相对于 B 进行归一化。</p>
+</li>
+<li>
+<p><strong>顶部子图（启用优化器）</strong>：</p>
+<ul>
+<li>横轴列出 SunSpider 的各个测试项，如 <code>3d:cube</code>, <code>3d:morph</code>, <code>access:binary-trees</code> 等，最后是 <strong>Average</strong>。</li>
+<li>四种配置：<strong>BO</strong>（Baseline Optimized）、<strong>IO</strong>（Ideal Optimized）、<strong>PSO</strong>（Plain ShortCut Optimized）、<strong>ASO</strong>（Aggressive ShortCut Optimized）。</li>
+<li>多数测试项中，<strong>PSO 和 ASO 明显低于 BO</strong>，表明 ShortCut 有效加速。</li>
+<li><strong>PSO 平均执行时间约为 87%</strong>，即比 BO 快约 13%；<strong>ASO 与 PSO 几乎重合</strong>，说明 Aggressive 优化在此场景下提升有限。</li>
+<li><strong>IO 配置略优于 BO</strong>，但远不如 PSO，证明仅靠完美 BTB 不足以匹敌 ShortCut。</li>
+</ul>
+</li>
+<li>
+<p><strong>底部子图（禁用优化器）</strong>：</p>
+<ul>
+<li>配置为 <strong>B</strong>、<strong>I</strong>、<strong>PS</strong>、<strong>AS</strong>。</li>
+<li><strong>PS 平均执行时间约为 74%</strong>，即比 B 快约 26%，性能提升显著。</li>
+<li><strong>AS 相比 PS 仅有微小改进</strong>，部分测试项如 <code>crypto-md5</code>、<code>string-tagcloud</code> 有轻微下降，但整体平均提升不足 1%。</li>
+<li><strong>I 配置表现接近 B</strong>，再次验证单纯优化分支预测效果有限。</li>
+</ul>
+</li>
+<li>
+<p>关键结论表格：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>优化器状态</th>
+<th>平均归一化执行时间</th>
+<th>相对 Baseline 加速</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BO</td>
+<td>启用</td>
+<td>100%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>PSO</td>
+<td>启用</td>
+<td>~87%</td>
+<td><strong>+13%</strong></td>
+</tr>
+<tr>
+<td>ASO</td>
+<td>启用</td>
+<td>~87%</td>
+<td><strong>+13%</strong></td>
+</tr>
+<tr>
+<td>B</td>
+<td>禁用</td>
+<td>100%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>PS</td>
+<td>禁用</td>
+<td>~74%</td>
+<td><strong>+26%</strong></td>
+</tr>
+<tr>
+<td>AS</td>
+<td>禁用</td>
+<td>~73%</td>
+<td><strong>+27%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>总体趋势：<strong>ShortCut 在禁用优化器时收益更大</strong>，因为此时程序更多依赖共享调度器，而 ShortCut 正是针对此结构优化。启用优化器后，部分代码已高度优化，ShortCut 收益相对缩小。</li>
+<li><strong>Aggressive ShortCut 当前实现受限</strong>（仅支持 IC_Load，且仅优化 15% 的 load handler），故其性能增益未达预期。未来扩展后有望进一步提升。</li>
+</ul>
+<h3 id="figure-9-sensitivity-of-the-execution-time-of-ps-to-varying-ictable-size-the-execution-time-is-normalized-to-b">Figure 9: Sensitivity of the execution time of PS to varying ICTable size. The execution time is normalized to B.<a class="headerlink" href="#figure-9-sensitivity-of-the-execution-time-of-ps-to-varying-ictable-size-the-execution-time-is-normalized-to-b" title="Permanent link">&para;</a></h3>
+<p><img alt="d1451a038d3746f39f0f7396c7aead94cc7e4b83afd26459e3355f6d8dfb94b9.jpg" src="../images/d1451a038d3746f39f0f7396c7aead94cc7e4b83afd26459e3355f6d8dfb94b9.jpg" /></p>
+<ul>
+<li>图表展示了 <strong>Plain ShortCut (PS)</strong> 在不同 <strong>ICTable</strong> 大小下的执行时间敏感性，所有数据均以 <strong>Baseline (B)</strong> 配置为基准进行归一化。</li>
+<li>横轴表示 <strong>ICTable</strong> 的条目数量，从 <strong>16</strong> 到 <strong>1024</strong>，并包含 <strong>Infinite</strong>（无限容量）作为理论上限；纵轴为归一化的执行时间百分比。</li>
+<li>两条曲线分别代表 <strong>Octane</strong>（实线方块标记）和 <strong>SunSpider</strong>（虚线三角标记）两个基准测试套件的性能表现。</li>
+<li>随着 <strong>ICTable</strong> 条目数增加，执行时间持续下降，表明更大的缓存能更有效地避免调度器执行，从而提升性能。</li>
+<li>即使在最小的 <strong>16</strong> 条目配置下，<strong>PS</strong> 仍优于 <strong>Baseline</strong>，证明该架构在资源受限设备上也具备实用价值。</li>
+<li>当 <strong>ICTable</strong> 达到 <strong>512</strong> 条目时，性能已接近 <strong>Infinite</strong> 容量的极限，说明 <strong>512</strong> 是一个性价比极高的设计选择。</li>
+<li><strong>Octane</strong> 的性能提升幅度大于 <strong>SunSpider</strong>，尤其在小容量时差异更明显，反映其对 <strong>IC</strong> 调度开销更敏感。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ICTable Entries</th>
+<th>Octane Normalized Time (%)</th>
+<th>SunSpider Normalized Time (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>16</td>
+<td>~85</td>
+<td>~90</td>
+</tr>
+<tr>
+<td>32</td>
+<td>~80</td>
+<td>~85</td>
+</tr>
+<tr>
+<td>64</td>
+<td>~75</td>
+<td>~80</td>
+</tr>
+<tr>
+<td>128</td>
+<td>~70</td>
+<td>~75</td>
+</tr>
+<tr>
+<td>256</td>
+<td>~65</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>512</td>
+<td>~60</td>
+<td>~65</td>
+</tr>
+<tr>
+<td>1024</td>
+<td>~58</td>
+<td>~63</td>
+</tr>
+<tr>
+<td>Infinite</td>
+<td>~55</td>
+<td>~60</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>图表验证了论文中关于 <strong>ICTable</strong> 设计的合理性：<strong>512</strong> 条目在面积开销与性能收益间取得良好平衡。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

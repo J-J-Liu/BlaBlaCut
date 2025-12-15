@@ -1,6 +1,6 @@
 {
     "title": "动态语言加速",
-    "description": "动态语言加速相关的论文笔记",
+    "description": "本文主要针对动态语言的负载特征进行分析。受限于解释器模式下的低指令级并行度（ILP），以及动态类型分派和垃圾回收（GC）引入的大量间接跳转与不规则访存，动态语言在微架构层面面临严峻的性能瓶颈。此外，随着现代静态语言越来越多地引入自动内存管理与运行时多态机制，它们在底层行为上也表现出一定程度的特征趋同。",
     "categories": [
         {
             "title": "负载分析",
@@ -14,9 +14,10 @@
             ]
         },
         {
-            "title": "动态类型",
-            "description": "动态类型检查与分派：由于变量类型在运行时可变，解释器或JIT编译器必须在每次操作前检查操作数的类型标签（Tag），并根据类型动态分派（Dispatch）到相应的处理函数。这一过程引入了大量的数据依赖性条件跳转和间接跳转指令。",
+            "title": "动态类型检查与分派",
+            "description": "**动态类型检查与分派**：由于变量类型在运行时可变，解释器或JIT编译器必须在每次操作前检查操作数的类型标签（Tag），并根据类型动态分派（Dispatch）到相应的处理函数。这一过程引入了大量的数据依赖性条件跳转和间接跳转指令。",
             "papers": [
+                "shortcut-architectural-support-for-fast-object-access-in-scripting-languages",
                 "checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors",
                 "typed-architectures-architectural-support-for-lightweight-scripting"
             ]
@@ -25,6 +26,7 @@
             "title": "解释器开销",
             "description": "**解释器开销**：在未被JIT编译之前，代码运行在解释器模式下，存在大量的解码-分派循环，导致极低的指令级并行度（ILP）。",
             "papers": [
+                "short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors",
                 "branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore",
                 "virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware",
                 "bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design"
@@ -34,9 +36,19 @@
             "title": "垃圾回收开销",
             "description": "**自动内存管理与硬件加速**：垃圾回收（GC）产生的‘全停顿’（Stop-The-World）和高内存带宽占用是制约系统响应能力的主要因素，尤其在多核环境下，原子操作和锁竞争进一步加剧了开销。本部分探讨如何利用硬件事务内存（HTM）、近数据处理（PIM）或专用加速器来卸载对象扫描、引用计数更新等操作，以实现低延迟、高吞吐的并发垃圾回收。",
             "papers": [
-                "concurrent-copying-garbage-collection-with-hardware-transactional-memory",
+                "charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory",
+                "hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory",
+                "memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime",
                 "flexible-reference-counting-based-hardware-acceleration-for-garbage-collection",
                 "gray-in-young-a-generational-garbage-collection-for-processing-in-memory"
+            ]
+        },
+        {
+            "title": "存储层次设计",
+            "description": "**存储层次设计**：传统 CPU 的缓存层次结构是以“缓存行”（Cache Line，通常 64 字节）为单位管理的，而托管语言是以“对象”为单位的。这种粒度失配导致了严重的碎片化和带宽浪费。",
+            "papers": [
+                "rethinking-the-memory-hierarchy-for-modern-languages",
+                "compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy"
             ]
         }
     ]
