@@ -1,8 +1,8 @@
 # 动态语言加速
 
-动态语言加速相关的论文笔记
+本文主要针对动态语言的负载特征进行分析。受限于解释器模式下的低指令级并行度（ILP），以及动态类型分派和垃圾回收（GC）引入的大量间接跳转与不规则访存，动态语言在微架构层面面临严峻的性能瓶颈。此外，随着现代静态语言越来越多地引入自动内存管理与运行时多态机制，它们在底层行为上也表现出一定程度的特征趋同。
 
-本页面共收录了 13 篇论文笔记，分为 4 个分类。
+本页面共收录了 19 篇论文笔记，分为 5 个分类。
 
 ## 负载分析
 
@@ -10,7 +10,7 @@
 
 *本分类包含 5 篇论文*
 
-## An Empirical Study on the Performance and Energy Usage of Compiled Python Code
+### An Empirical Study on the Performance and Energy Usage of Compiled Python Code
 > **Authors:** Vincenzo Stoico, Andrei Calin Dragomir, Patricia Lago  
 > **Affiliations:** Vrije Universiteit Amsterdam, The Netherlands  
 > **Venue:** EASE 2025
@@ -21,7 +21,7 @@
 
 ---
 
-## Rethinking Java Performance Analysis
+### Rethinking Java Performance Analysis
 > **Authors:** Stephen M. Blackburn, Zixian Cai, Rui Chen, et al.  
 > **Affiliations:** Google, Australian National University, ByteDance, IOP Systems, Canva, The University of Sydney  
 > **Venue:** ASPLOS 2025
@@ -32,7 +32,7 @@
 
 ---
 
-## Investigating Managed Language Runtime Performance: Why JavaScript and Python are 8x and 29x slower than C++, yet Java and Go can be Faster?
+### Investigating Managed Language Runtime Performance: Why JavaScript and Python are 8x and 29x slower than C++, yet Java and Go can be Faster?
 > **Authors:** David Lion, Adrian Chiu, Michael Stumm, et al.  
 > **Affiliations:** University of Toronto, YScope Inc.  
 > **Venue:** USENIX ATC 2022
@@ -43,7 +43,7 @@
 
 ---
 
-## Porting a JIT Compiler to RISC-V: Challenges and Opportunities
+### Porting a JIT Compiler to RISC-V: Challenges and Opportunities
 > **Authors:** Quentin Ducasse, Guillermo Polito, Pablo Tesone, et al.  
 > **Affiliations:** Laboratoire Lab-STICC - ENSTA Bretagne, France, CNRS, INRIA - Centrale Lille, UMR 9189 CRIStAL, France  
 > **Venue:** MPLR 2022
@@ -54,7 +54,7 @@
 
 ---
 
-## A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008
+### A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008
 > **Authors:** Philipp Lengauer, Verena Bitto, Hanspeter Mössenböck, et al.  
 > **Affiliations:** Institute for System Software, Johannes Kepler University Linz, Austria, Christian Doppler Laboratory MEVSS, Johannes Kepler University Linz, Austria  
 > **Venue:** ICPE 2017
@@ -65,13 +65,24 @@
 
 ---
 
-## 动态类型
+## 动态类型检查与分派
 
-动态类型检查与分派：由于变量类型在运行时可变，解释器或JIT编译器必须在每次操作前检查操作数的类型标签（Tag），并根据类型动态分派（Dispatch）到相应的处理函数。这一过程引入了大量的数据依赖性条件跳转和间接跳转指令。
+**动态类型检查与分派**：由于变量类型在运行时可变，解释器或JIT编译器必须在每次操作前检查操作数的类型标签（Tag），并根据类型动态分派（Dispatch）到相应的处理函数。这一过程引入了大量的数据依赖性条件跳转和间接跳转指令。
 
-*本分类包含 2 篇论文*
+*本分类包含 3 篇论文*
 
-## Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors
+### ShortCut: Architectural Support for Fast Object Access in Scripting Languages
+> **Authors:** Jiho Choi, Thomas Shull, Maria J. Garzaran, et al.  
+> **Affiliations:** University of Illinois at Urbana-Champaign  
+> **Venue:** ISCA 2017
+
+论文提出ShortCut架构，通过硬件支持加速动态脚本语言中的对象访问。其Plain设计绕过分发器直接调用处理器，Aggressive设计进一步将调用转化为简单load/store操作。在V8 JIT编译器和模拟器上评估，Plain ShortCut在基线编译器下平均减少30%执行时间，在最高优化级别下仍提升11%。
+
+[📄 论文笔记](../../notes_repo/shortcut-architectural-support-for-fast-object-access-in-scripting-languages/paper_notes.md) | [📊 图表解析](../../notes_repo/shortcut-architectural-support-for-fast-object-access-in-scripting-languages/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/shortcut-architectural-support-for-fast-object-access-in-scripting-languages/ELI5_notes.md) | <a href="https://doi.org/10.1145/3079856.3080237" target="_blank" rel="noopener noreferrer">🔗 直达原文</a>
+
+---
+
+### Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors
 > **Authors:** Owen Anderson, Emily Fortuna, Luis Ceze, et al.  
 > **Affiliations:** Computer Science and Engineering, University of Washington  
 > **Venue:** HPCA 2011
@@ -82,7 +93,7 @@
 
 ---
 
-## Typed Architectures: Architectural Support for Lightweight Scripting
+### Typed Architectures: Architectural Support for Lightweight Scripting
 > **Authors:** Channoh Kim, Jaehyeok Kim, Sungmin Kim, et al.  
 > **Affiliations:** Sungkyunkwan University, Suwon, Korea, Seoul National University, Seoul, Korea  
 > **Venue:** ASPLOS 2017
@@ -97,9 +108,20 @@
 
 **解释器开销**：在未被JIT编译之前，代码运行在解释器模式下，存在大量的解码-分派循环，导致极低的指令级并行度（ILP）。
 
-*本分类包含 3 篇论文*
+*本分类包含 4 篇论文*
 
-## Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore
+### Short-Circuit Dispatch: Accelerating Virtual Machine Interpreters on Embedded Processors
+> **Authors:** Channoh Kim, Sungmin Kim, Hyeon Gyu Cho, et al.  
+> **Affiliations:** Sungkyunkwan University, Suwon, Korea  
+> **Venue:** ISCA 2016
+
+提出Short-Circuit Dispatch (SCD)，一种低成本硬件扩展，通过将字节码跳转表叠加到BTB上，消除解释器分派循环中的冗余计算。在RISC-V嵌入式处理器上，SCD为Lua和JavaScript解释器分别带来19.9%和14.1%的平均加速，并提升24.2%的能量延迟积(EDP)，仅增加0.72%芯片面积。
+
+[📄 论文笔记](../../notes_repo/short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors/paper_notes.md) | [📊 图表解析](../../notes_repo/short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/short-circuit-dispatch-accelerating-virtual-machine-interpreters-on-embedded-processors/ELI5_notes.md) | <a href="https://doi.org/10.1109/ISCA.2016.34" target="_blank" rel="noopener noreferrer">🔗 直达原文</a>
+
+---
+
+### Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore
 > **Authors:** Erven Rohou, Bharath Narasimha Swamy, Andre Seznec  
 > **Affiliations:** Inria, France  
 > **Venue:** CGO 2015
@@ -110,7 +132,7 @@
 
 ---
 
-## Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar
+### Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar
 > **Authors:** Hyesoon Kim, José A. Joao, Onur Mutlu, et al.  
 > **Affiliations:** Georgia Institute of Technology, University of Texas at Austin, Carnegie Mellon University, Intel Corporation  
 > **Venue:** IEEE Transactions on Computers 2009
@@ -121,7 +143,7 @@
 
 ---
 
-## Bungee Jumps: Accelerating Indirect Branches Through HW/SW Co-Design
+### Bungee Jumps: Accelerating Indirect Branches Through HW/SW Co-Design
 > **Authors:** Daniel S. McFarlin, Craig Zilles  
 > **Affiliations:** Carnegie Mellon University, University of Illinois at Urbana-Champaign  
 > **Venue:** MICRO 2015
@@ -136,20 +158,42 @@
 
 **自动内存管理与硬件加速**：垃圾回收（GC）产生的‘全停顿’（Stop-The-World）和高内存带宽占用是制约系统响应能力的主要因素，尤其在多核环境下，原子操作和锁竞争进一步加剧了开销。本部分探讨如何利用硬件事务内存（HTM）、近数据处理（PIM）或专用加速器来卸载对象扫描、引用计数更新等操作，以实现低延迟、高吞吐的并发垃圾回收。
 
-*本分类包含 3 篇论文*
+*本分类包含 5 篇论文*
 
-## Concurrent Copying Garbage Collection with Hardware Transactional Memory
-> **Authors:** Zixian Cai  
-> **Affiliations:** The Australian National University  
-> **Venue:** unknown 2020
+### Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory
+> **Authors:** Jaeyoung Jang, Jun Heo, Yejin Lee, et al.  
+> **Affiliations:** Sungkyunkwan University, Suwon, Korea, Seoul National University, Seoul, Korea  
+> **Venue:** MICRO 2019
 
-该论文提出了一种利用硬件事务内存（HTM）来降低并发复制垃圾回收（GC）中mutator开销的新算法。通过让mutator在事务中短暂执行，确保了堆视图的一致性，避免了传统读屏障或页保护的高开销。作者深入分析了Intel TSX的事务容量特性，并基于此设计了乐观复制和缓存预热等优化。实验结果表明，该HTM-based GC方案是可行的。
+论文提出Charon，首个基于3D堆叠内存的垃圾回收（GC）加速器。通过分析HotSpot JVM，识别出Copy、Search、Scan&Push和Bitmap Count等关键GC原语，并在近内存逻辑层设计专用处理单元进行卸载。在Spark和GraphChi上的评估表明，相比8核乱序CPU基线，Charon实现了3.29倍的GC平均加速比和60.7%的能耗节省。
 
-[📄 论文笔记](../../notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/paper_notes.md) | [📊 图表解析](../../notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/ELI5_notes.md)
+[📄 论文笔记](../../notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/paper_notes.md) | [📊 图表解析](../../notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory/ELI5_notes.md) | <a href="https://doi.org/10.1145/3352460.3358297" target="_blank" rel="noopener noreferrer">🔗 直达原文</a>
 
 ---
 
-## Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection
+### HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory
+> **Authors:** Miao Cai, Chance C. Coats, Jian Huang  
+> **Affiliations:** Nanjing University, University of Illinois at Urbana-Champaign  
+> **Venue:** unknown 2020
+
+论文提出HOOP，一种透明的硬件辅助异地更新机制，用于非易失内存（NVM）以实现原子持久性。其核心是通过内存控制器中的轻量级间接层进行地址重映射和自适应垃圾回收，避免了日志等方案的额外写入和关键路径开销。实验表明，相比SOTA技术，HOOP性能提升最高1.7倍，写放大降低最高2.1倍。
+
+[📄 论文笔记](../../notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/paper_notes.md) | [📊 图表解析](../../notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/ELI5_notes.md)
+
+---
+
+### MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime
+> **Authors:** Chenxi Wang, Haoran Ma, Shi Liu, et al.  
+> **Affiliations:** University of California, Los Angeles, University of Chicago  
+> **Venue:** OSDI 2022
+
+MemLiner通过“对齐”应用程序与垃圾回收（GC）的内存访问路径，解决远内存系统中GC干扰导致的本地内存工作集膨胀和预取失效问题。其核心是优先追踪应用近期访问的对象，并基于对象指针中的时间戳估计位置以减少远程页错误。在G1和Shenandoah GC上实现，端到端性能最高提升2.5倍，并显著提高预取准确率。
+
+[📄 论文笔记](../../notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/paper_notes.md) | [📊 图表解析](../../notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/ELI5_notes.md)
+
+---
+
+### Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection
 > **Authors:** José A. Joao, Onur Mutlu, Yale N. Patt  
 > **Affiliations:** ECE Department, The University of Texas at Austin, Computer Architecture Laboratory, Carnegie Mellon University  
 > **Venue:** ISCA 2009
@@ -160,7 +204,7 @@
 
 ---
 
-## Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory
+### Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory
 > **Authors:** Ryu Morimoto, Kazuki Ichinose, Tomoharu Ugawa  
 > **Affiliations:** The University of Tokyo  
 > **Venue:** ISMM 2025
@@ -168,5 +212,33 @@
 针对UPMEM PIM架构的DPU设计了一种并行分代垃圾回收器（GC）。其创新点包括：将新生代置于快速SPM中，通过Gray-in-Young算法在对象晋升前于SPM内更新指针，并静态缓存对象布局信息。这些技术减少了85.9%的DRAM访问，性能提升46.2%，且GC代码仅占4.3KB，可扩展至11个线程。
 
 [📄 论文笔记](../../notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/paper_notes.md) | [📊 图表解析](../../notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/ELI5_notes.md) | <a href="https://doi.org/10.1145/3735950.3735961" target="_blank" rel="noopener noreferrer">🔗 直达原文</a>
+
+---
+
+## 存储层次设计
+
+**存储层次设计**：传统 CPU 的缓存层次结构是以“缓存行”（Cache Line，通常 64 字节）为单位管理的，而托管语言是以“对象”为单位的。这种粒度失配导致了严重的碎片化和带宽浪费。
+
+*本分类包含 2 篇论文*
+
+### Rethinking the Memory Hierarchy for Modern Languages
+> **Authors:** Po-An Tsai, Yee Ling Gan, Daniel Sanchez  
+> **Affiliations:** Massachusetts Institute of Technology  
+> **Venue:** MICRO 2018
+
+论文提出Hotpads，一种为内存安全语言（如Java、Go）设计的新型内存层次结构。它摒弃传统扁平地址空间，通过硬件管理的直接寻址存储（pads）和指针重写技术，避免了关联缓存查找。Hotpads将垃圾回收与数据放置统一，显著提升了性能和能效。实验表明，相比传统缓存，Hotpads平均性能提升34%，内存层次能耗降低2.6倍，并将GC开销减少8倍。
+
+[📄 论文笔记](../../notes_repo/rethinking-the-memory-hierarchy-for-modern-languages/paper_notes.md) | [📊 图表解析](../../notes_repo/rethinking-the-memory-hierarchy-for-modern-languages/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/rethinking-the-memory-hierarchy-for-modern-languages/ELI5_notes.md) | <a href="https://doi.org/10.1109/micro.2018.00025" target="_blank" rel="noopener noreferrer">🔗 直达原文</a>
+
+---
+
+### Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy
+> **Authors:** Po-An Tsai, Daniel Sanchez  
+> **Affiliations:** MIT CSAIL  
+> **Venue:** ASPLOS 2019
+
+针对传统缓存行压缩在面向对象程序中效果不佳的问题，提出Zippads——首个面向对象的压缩内存层次结构，以对象为压缩单元，并设计COCO跨对象压缩算法。在混合工作负载上，相比现有技术，平均压缩率提升1.63倍，内存流量减少56%，性能提升17%。
+
+[📄 论文笔记](../../notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/paper_notes.md) | [📊 图表解析](../../notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/figs_notes.md) | [👶 ELI5 解释](../../notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/ELI5_notes.md) | <a href="https://doi.org/10.1145/3297858.3304006" target="_blank" rel="noopener noreferrer">🔗 直达原文</a>
 
 ---

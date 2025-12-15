@@ -1,0 +1,20 @@
+{
+  "index": "memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime",
+  "paper_title": "MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime",
+  "metadata": {
+    "authors": [
+      "Chenxi Wang",
+      "Haoran Ma",
+      "Shi Liu",
+      "et al."
+    ],
+    "affiliations": [
+      "University of California, Los Angeles",
+      "University of Chicago"
+    ],
+    "venue": "OSDI",
+    "year": 2022,
+    "doi": null
+  },
+  "description": "MemLiner通过“对齐”应用程序与垃圾回收（GC）的内存访问路径，解决远内存系统中GC干扰导致的本地内存工作集膨胀和预取失效问题。其核心是优先追踪应用近期访问的对象，并基于对象指针中的时间戳估计位置以减少远程页错误。在G1和Shenandoah GC上实现，端到端性能最高提升2.5倍，并显著提高预取准确率。"
+}

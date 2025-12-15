@@ -1,0 +1,1035 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Porting a JIT Compiler to RISC-V: Challenges and Opportunities 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#porting-a-jit-compiler-to-risc-v-challenges-and-opportunities" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Porting a JIT Compiler to RISC-V: Challenges and Opportunities 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-slang-vm-transpilation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Slang VM transpilation.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-cogit-compilation-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Cogit compilation phases.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9a08b27be50372f3a6ae6a6fa72ebdd1e30abc4693a6ce41086a653a28a9bfb8jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9a08b27be50372f3a6ae6a6fa72ebdd1e30abc4693a6ce41086a653a28a9bfb8.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#988a85933dbf9e32d0a401304b81615aa7ae2862f1eb32096eeb0d866d07825cjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        988a85933dbf9e32d0a401304b81615aa7ae2862f1eb32096eeb0d866d07825c.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#475a4001aab7301a4beeae96db5252a6aa8e77127d30fe368aa85b8acc650584jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        475a4001aab7301a4beeae96db5252a6aa8e77127d30fe368aa85b8acc650584.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2510b3040a23551d3f63aacf485cbf0d54c80111473b6b41a9cb854d3a648462jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2510b3040a23551d3f63aacf485cbf0d54c80111473b6b41a9cb854d3a648462.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-inline-and-out-of-line-literals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Inline and out-of-line literals.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="porting-a-jit-compiler-to-risc-v-challenges-and-opportunities">Porting a JIT Compiler to RISC-V: Challenges and Opportunities 图表详解<a class="headerlink" href="#porting-a-jit-compiler-to-risc-v-challenges-and-opportunities" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-slang-vm-transpilation">Figure 1: Slang VM transpilation.<a class="headerlink" href="#figure-1-slang-vm-transpilation" title="Permanent link">&para;</a></h3>
+<p><img alt="4c8c41705b2dc65c707a4c804018a009910e9ec19b8b9a29832884d68f49dbcc.jpg" src="../images/4c8c41705b2dc65c707a4c804018a009910e9ec19b8b9a29832884d68f49dbcc.jpg" /></p>
+<ul>
+<li>图片展示了 Pharo VM 的 <strong>Slang transpilation</strong> 流程，核心是将用受限 Smalltalk 编写的 VM 源码转换为 C 语言代码。</li>
+<li>整个流程分为左右两部分：左侧为 <strong>Smalltalk 环境中的 VM 组件</strong>，右侧为 <strong>C 语言编译与执行流程</strong>。</li>
+<li>左侧组件自上而下包括：<ul>
+<li><strong>JIT Compiler</strong></li>
+<li><strong>Bytecode Compiler</strong></li>
+<li><strong>Garbage Collector</strong></li>
+<li><strong>Interpreter</strong>（包含 Dispatch、Load/Store、Arithmetic、Function Call 四个子模块）</li>
+</ul>
+</li>
+<li>右侧流程从左到右依次为：<ul>
+<li><strong>Production VM in C</strong>（由 Slang 转换而来）</li>
+<li><strong>Routines + Plugins</strong>（作为附加模块链接）</li>
+<li>最终通过 <strong>GCC 或 Clang 编译</strong>生成可执行文件（<strong>Executable</strong>）</li>
+</ul>
+</li>
+<li>关键连接箭头表明：左侧的整个 VM 架构通过 <strong>Slang</strong> 工具被“转译”（Transpiled）为 C 语言代码，进入右侧的编译链。</li>
+<li>此设计允许开发者在 <strong>Pharo Smalltalk 环境中直接调试和模拟 VM 行为</strong>，无需频繁切换到 C 语言环境，极大提升开发效率。</li>
+<li>该架构体现了 <strong>元循环虚拟机（metacircular VM）</strong> 的设计理念：VM 自身用高级语言编写，并能自我模拟和调试。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>输入</th>
+<th>处理工具</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开发阶段</td>
+<td>Smalltalk VM 源码</td>
+<td>Slang</td>
+<td>C 语言源码</td>
+</tr>
+<tr>
+<td>编译阶段</td>
+<td>C 语言源码 + 插件</td>
+<td>GCC / Clang</td>
+<td>可执行程序</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Slang 的作用</strong>是限制 Smalltalk 特性（如多态、异常），确保其能正确映射到 C 语言结构，同时保留 VM 的可调试性和可扩展性。</li>
+<li>此图强调了 <strong>开发便利性与生产性能之间的平衡</strong>：开发时在 Smalltalk 中高效迭代，发布时通过 C 编译获得高性能。</li>
+</ul>
+<h3 id="figure-2-cogit-compilation-phases">Figure 2: Cogit compilation phases.<a class="headerlink" href="#figure-2-cogit-compilation-phases" title="Permanent link">&para;</a></h3>
+<p><img alt="a8b8ceccd848134461d84846a0c42e76c35c3f90d0980dafa8f4337fc1cd5679.jpg" src="../images/a8b8ceccd848134461d84846a0c42e76c35c3f90d0980dafa8f4337fc1cd5679.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Cogit</strong> JIT 编译器的三阶段编译流程，整体结构清晰，分为 <strong>ISA agnostic</strong>（与指令集无关）和 <strong>Code Generation</strong>（代码生成）两大区域。</li>
+<li>第一阶段为 <strong>Bytecode Scanning</strong>，目标是从字节码中提取元数据（如方法是否需要栈帧），该阶段不涉及具体架构，属于 <strong>ISA agnostic</strong>。</li>
+<li>第二阶段为 <strong>Bytecode Parsing</strong>，将字节码转换为中间表示 <strong>CogRTL IR</strong>，同样属于 <strong>ISA agnostic</strong>，确保前端逻辑独立于目标平台。</li>
+<li>第三阶段为 <strong>Code Generation</strong>，负责将 <strong>CogRTL IR</strong> “具体化”为对应架构的机器码（Concretize IR in Machine Code），这是唯一依赖目标 ISA 的部分，需为每个新架构重写。</li>
+<li>三个阶段通过箭头串联，形成线性流程：<strong>Bytecodes → Bytecode Scanning → Bytecode Parsing → Code Generation → Machine Code</strong>。</li>
+<li>图中虚线框标注了各阶段的目标（Step Objectives），强调每一步的功能边界。</li>
+<li>整体设计体现了 <strong>解耦思想</strong>：前两阶段保持通用，仅第三阶段适配不同架构，极大简化了跨平台移植工作。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>名称</th>
+<th>是否 ISA 无关</th>
+<th>主要任务</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Bytecode Scanning</td>
+<td>是</td>
+<td>提取元数据（如栈帧需求）</td>
+<td>元数据</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bytecode Parsing</td>
+<td>是</td>
+<td>转换字节码为 CogRTL IR</td>
+<td>CogRTL IR</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Code Generation</td>
+<td>否</td>
+<td>将 IR 转换为机器码</td>
+<td>Machine Code</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图是理解 <strong>Pharo VM</strong> 如何支持多架构的关键，尤其在移植到 <strong>RISC-V</strong> 时，只需重写第三阶段，前两阶段可复用。</li>
+<li>图中“<strong>Concretize IR in Machine Code</strong>”明确指出该阶段是“具体化”，即从抽象 IR 到具体机器指令的映射，是架构差异的核心处理点。</li>
+</ul>
+<h3 id="9a08b27be50372f3a6ae6a6fa72ebdd1e30abc4693a6ce41086a653a28a9bfb8jpg">9a08b27be50372f3a6ae6a6fa72ebdd1e30abc4693a6ce41086a653a28a9bfb8.jpg<a class="headerlink" href="#9a08b27be50372f3a6ae6a6fa72ebdd1e30abc4693a6ce41086a653a28a9bfb8jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="9a08b27be50372f3a6ae6a6fa72ebdd1e30abc4693a6ce41086a653a28a9bfb8.jpg" src="../images/9a08b27be50372f3a6ae6a6fa72ebdd1e30abc4693a6ce41086a653a28a9bfb8.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>CogRTL</strong> 中间表示（IR）指令及其在 <strong>ARMv8</strong> 架构下的机器码生成结果，用于说明条件跳转的编译过程。</li>
+<li>代码分为两部分：上半部分为 <strong>CogRTL IR 指令</strong>，下半部分为对应的 <strong>ARMv8 输出</strong>。</li>
+<li><strong>CogRTL 指令</strong> 包含两条：<ul>
+<li><code>cogit CmpR: ClassReg R: TempReg</code>：比较类寄存器与临时寄存器。</li>
+<li><code>cogit JumpNonZero: (Label 2).</code>：若比较结果非零，则跳转到标签 2。</li>
+</ul>
+</li>
+<li><strong>ARMv8 输出</strong> 对应两条汇编指令：<ul>
+<li><code>cmp r1, r22</code>：比较寄存器 r1 与 r22，其中注释说明 r1 和 r22 分别对应 ARMv8 的 class/temp 寄存器。</li>
+<li><code>b.ne 48</code>：若不相等则跳转，偏移量为 48，注释指出标签 2 的偏移为 48。</li>
+</ul>
+</li>
+<li>此示例体现 <strong>一比一映射</strong> 特性：CogRTL 的每条 IR 指令直接对应一条 ARMv8 机器指令，无需额外处理或重写。</li>
+<li>该映射依赖于 ARMv8 支持 <strong>条件码标志位</strong>，即 <code>cmp</code> 指令隐式设置状态标志，后续 <code>b.ne</code> 根据标志位决定是否跳转。</li>
+<li>与 RISC-V 的对比中，此映射方式无法直接复用，因 RISC-V 不提供条件码，需通过组合指令实现类似逻辑。</li>
+<li>下表总结关键指令映射关系：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>CogRTL IR 指令</th>
+<th>ARMv8 机器码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CmpR: ClassReg R: TempReg</code></td>
+<td><code>cmp r1, r22</code></td>
+<td>比较两个寄存器，设置条件标志</td>
+</tr>
+<tr>
+<td><code>JumpNonZero: (Label 2)</code></td>
+<td><code>b.ne 48</code></td>
+<td>根据标志位跳转，偏移 48</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图作为论文第 3.1 节“中间表示不匹配”的例证，突出 RISC-V 与 x86/ARM 在条件分支处理上的根本差异。</li>
+</ul>
+<h3 id="2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6jpg">2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6.jpg<a class="headerlink" href="#2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6.jpg" src="../images/2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6.jpg" /></p>
+<ul>
+<li>
+<p>该图片展示了一段 Smalltalk 代码，属于 Pharo VM 的 Cogit JIT 编译器，具体为 <code>CogCompiler &gt;&gt; noteFollowingConditionalBranch:</code> 方法的实现。</p>
+</li>
+<li>
+<p>此方法的核心功能是<strong>处理 RISC-V 架构下无条件码的分支指令生成问题</strong>。它通过“向后看”（look-ahead）的方式，将原本依赖隐式标志位的 IR 指令序列（如 <code>CmpRR</code> + <code>JumpZero</code>）重写为 RISC-V 原生支持的显式比较跳转指令（如 <code>BrEqualRR</code>）。</p>
+</li>
+<li>
+<p>代码逻辑分为三个主要部分：</p>
+<ul>
+<li><strong>提取下一个指令的操作码</strong>：根据 <code>nextInstruction</code> 的操作码（如 <code>JumpZero</code>, <code>JumpNonZero</code>），映射到对应的 RISC-V 分支操作码（如 <code>BrEqualRR</code>, <code>BrNotEqualRR</code>）。</li>
+<li><strong>提取当前指令的操作数</strong>：根据当前指令的操作码（如 <code>CmpRR</code>, <code>CmpCqR</code>），提取用于比较的源操作数，并可能引入临时寄存器（<code>TempReg</code>）来处理立即数。</li>
+<li><strong>重写指令序列</strong>：将原指令序列替换为新的、符合 RISC-V 规范的指令，并返回修改后的 <code>nextInstruction</code>。</li>
+</ul>
+</li>
+<li>
+<p>关键变量与操作说明：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">变量/操作</th>
+<th style="text-align: left;">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>newBranchOpcode</code></td>
+<td style="text-align: left;">根据后续跳转指令确定最终要生成的 RISC-V 分支操作码。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>newBranchLeft</code>, <code>newBranchRight</code></td>
+<td style="text-align: left;">存储用于比较的左、右操作数。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>opcode := Label</code></td>
+<td style="text-align: left;">将原 <code>CmpRR</code> 指令标记为 <code>Label</code>，使其在后续阶段被忽略或移除。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>MoveCqR</code></td>
+<td style="text-align: left;">当遇到 <code>CmpCqR</code> 时，先将立即数移动到临时寄存器 <code>TempReg</code> 中。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>rewriteOpcode:with:with:</code></td>
+<td style="text-align: left;">执行核心的指令重写操作，将 <code>nextInstruction</code> 替换为新的分支指令。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>代码中使用了 Smalltalk 的 <code>caseOf:</code> 语法进行模式匹配，体现了其面向对象和消息传递的特性。</li>
+<li>注释 <code>"Opcode extraction from the next instruction"</code> 和 <code>"Operands extraction from the current instruction"</code> 清晰地标明了代码的两个关键步骤。</li>
+<li>最后一行 <code>^ nextInstruction</code> 表示方法返回被重写后的指令对象，供后续的机器码生成阶段使用。</li>
+<li>此设计避免了为 RISC-V 重新定义整个 CogRTL IR，而是通过在<strong>汇编阶段增加一个预处理步骤</strong>来解决架构差异，是一种典型的“适配层”解决方案。</li>
+</ul>
+<h3 id="988a85933dbf9e32d0a401304b81615aa7ae2862f1eb32096eeb0d866d07825cjpg">988a85933dbf9e32d0a401304b81615aa7ae2862f1eb32096eeb0d866d07825c.jpg<a class="headerlink" href="#988a85933dbf9e32d0a401304b81615aa7ae2862f1eb32096eeb0d866d07825cjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="988a85933dbf9e32d0a401304b81615aa7ae2862f1eb32096eeb0d866d07825c.jpg" src="../images/988a85933dbf9e32d0a401304b81615aa7ae2862f1eb32096eeb0d866d07825c.jpg" /></p>
+<ul>
+<li>图片展示了 RISC-V 架构下两个典型操作的<strong>软件模拟实现</strong>：左移旋转（<code>rol</code>）和加法溢出检查（<code>addoverflow</code>），体现了 RISC-V 通过简单指令组合替代复杂指令的设计哲学。</li>
+<li><strong>左移旋转 <code>rol</code> 实现</strong>：<ul>
+<li>使用四条 RISC-V 指令完成，无专用 <code>rol</code> 指令。</li>
+<li>第一步 <code>sll rd, rs1, rshamt</code>：将源寄存器 <code>rs1</code> 左移 <code>rshamt</code> 位，结果存入目标寄存器 <code>rd</code>。</li>
+<li>第二步 <code>sub temp, zero, rshamt</code>：计算负的移位量，用于后续右移。</li>
+<li>第三步 <code>srl temp, rs1, temp</code>：将 <code>rs1</code> 右移 <code>(xlen - rshamt)</code> 位，结果存入临时寄存器 <code>temp</code>。</li>
+<li>第四步 <code>or rd, rd, temp</code>：将前两步结果进行按位或运算，完成旋转。</li>
+</ul>
+</li>
+<li><strong>软件溢出检查 <code>addoverflow</code> 实现</strong>：<ul>
+<li>通过比较操作数与结果的符号位变化来判断溢出。</li>
+<li>第一步 <code>add t0, t1, t2</code>：执行实际加法，结果存入 <code>t0</code>。</li>
+<li>第二步 <code>slti t3, t2, 0</code>：获取第二个操作数 <code>t2</code> 的符号位（0 或 1）。</li>
+<li>第三步 <code>slt t4, t0, t1</code>：比较结果 <code>t0</code> 是否小于第一个操作数 <code>t1</code>。</li>
+<li>第四步 <code>bne t3, t4, overflow</code>：若符号位与大小关系不一致，则跳转至 <code>overflow</code> 标签，表示发生溢出。</li>
+</ul>
+</li>
+<li>该图示例说明了 RISC-V 的设计权衡：<strong>牺牲单指令效率换取硬件简化</strong>，将复杂性转移至编译器或运行时。</li>
+<li>下表总结了两个操作的指令序列及其功能：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>指令序列</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rol</code></td>
+<td><code>sll</code>, <code>sub</code>, <code>srl</code>, <code>or</code></td>
+<td>通过移位和逻辑或组合实现左旋</td>
+</tr>
+<tr>
+<td><code>addoverflow</code></td>
+<td><code>add</code>, <code>slti</code>, <code>slt</code>, <code>bne</code></td>
+<td>通过符号位与大小比较检测有符号整数加法溢出</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这些实现方式在 RISC-V 中是常见模式，尤其在未启用 B 扩展（含 <code>rol</code> 指令）或未提供硬件溢出标志的情况下。</li>
+</ul>
+<h3 id="475a4001aab7301a4beeae96db5252a6aa8e77127d30fe368aa85b8acc650584jpg">475a4001aab7301a4beeae96db5252a6aa8e77127d30fe368aa85b8acc650584.jpg<a class="headerlink" href="#475a4001aab7301a4beeae96db5252a6aa8e77127d30fe368aa85b8acc650584jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="475a4001aab7301a4beeae96db5252a6aa8e77127d30fe368aa85b8acc650584.jpg" src="../images/475a4001aab7301a4beeae96db5252a6aa8e77127d30fe368aa85b8acc650584.jpg" /></p>
+<ul>
+<li>
+<p>该图片展示了 Pharo VM 中 <code>CogRISCV64Compiler</code> 类的 <code>concretizeCall</code> 方法实现，用于将中间表示（IR）中的“调用”指令转换为 RISC-V 64 位机器码。</p>
+</li>
+<li>
+<p>此方法的核心挑战在于处理 <strong>RISC-V 的 PC 相对寻址</strong>和<strong>符号扩展</strong>机制，因为直接跳转目标地址可能超出单条指令的立即数范围。</p>
+</li>
+<li>
+<p>方法逻辑分为三个主要阶段：计算偏移量、修正符号扩展、发射机器指令。</p>
+</li>
+<li>
+<p><strong>计算偏移量阶段</strong>：</p>
+<ul>
+<li>首先提取目标地址与当前程序计数器（PC）之间的差值（即 <code>offset</code>）。</li>
+<li>将该差值拆分为两部分：<ul>
+<li><strong>低12位 (<code>offsetLow</code>)</strong>：通过 <code>bitAnd: 16rFFF</code> 获取，用于 <code>jalr</code> 指令的立即数字段。</li>
+<li><strong>高20位 (<code>offsetHigh</code>)</strong>：通过右移12位并进行符号扩展修正后获取，用于 <code>auipc</code> 指令。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>符号扩展修正阶段</strong>：</p>
+<ul>
+<li>关键步骤是 <strong>“11th bit correction for sign extension”</strong>。</li>
+<li>由于 <code>jalr</code> 指令的12位立即数字段在使用时会进行符号扩展，如果原始偏移量的第11位为1，则会导致错误的符号扩展。</li>
+<li>修正方法是：在右移前向 <code>offset</code> 加上 <code>16r800</code>（即 2048），确保当第11位为1时，右移后的高位能正确反映符号。</li>
+<li>最终结果再通过 <code>bitAnd: 16rFFFFF</code> 截取为20位。</li>
+</ul>
+</li>
+<li>
+<p><strong>发射机器指令阶段</strong>：</p>
+<ul>
+<li>使用 <code>auipc</code> 指令加载高20位到寄存器 <code>ConcreteIPReg</code>（通常是 <code>x1</code>，即 <code>ra</code> 寄存器）。</li>
+<li>紧接着使用 <code>jalr</code> 指令，以 <code>ConcreteIPReg</code> 为基址，加上低12位偏移量，并将返回地址存入 <code>LR</code>（链接寄存器）。</li>
+<li>整个过程生成两条指令，总长度为8字节（<code>machineCodeSize := 8</code>）。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键数据表</strong>：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">步骤</th>
+<th style="text-align: left;">操作</th>
+<th style="text-align: left;">目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;"><code>offsetLow := self computeSignedValue64Bits: (offset bitAnd: 16rFFF)</code></td>
+<td style="text-align: left;">提取低12位，用于 <code>jalr</code> 的立即数。</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><code>offsetHigh := (((self computeSignedValue64Bits: offset) + 16r800) &gt;&gt; 12) bitAnd: 16rFFFFF</code></td>
+<td style="text-align: left;">修正第11位符号扩展问题，提取高20位，用于 <code>auipc</code>。</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><code>self machineCodeAt: 0 put: (self addUpperImmediateToPC: offsetHigh toRegister: ConcreteIPReg)</code></td>
+<td style="text-align: left;">发射 <code>auipc</code> 指令，加载高20位。</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><code>self machineCodeAt: 4 put: (self jumpTo: ConcreteIPReg withOffset: offsetLow andStorePreviousPCPlus4in: LR)</code></td>
+<td style="text-align: left;">发射 <code>jalr</code> 指令，完成跳转并保存返回地址。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此实现体现了 RISC-V 架构设计哲学：<strong>通过简单指令组合实现复杂功能</strong>，而非提供单一复杂指令。</li>
+<li>该方法是 <strong>JIT 编译器</strong>中处理跨模块或动态调用的关键环节，其正确性直接影响程序执行流。</li>
+<li>符号扩展修正逻辑是 RISC-V 特有的工程细节，凸显了从 x86/ARM 移植 JIT 编译器时面临的底层架构差异。</li>
+</ul>
+<h3 id="2510b3040a23551d3f63aacf485cbf0d54c80111473b6b41a9cb854d3a648462jpg">2510b3040a23551d3f63aacf485cbf0d54c80111473b6b41a9cb854d3a648462.jpg<a class="headerlink" href="#2510b3040a23551d3f63aacf485cbf0d54c80111473b6b41a9cb854d3a648462jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="2510b3040a23551d3f63aacf485cbf0d54c80111473b6b41a9cb854d3a648462.jpg" src="../images/2510b3040a23551d3f63aacf485cbf0d54c80111473b6b41a9cb854d3a648462.jpg" /></p>
+<ul>
+<li>图片展示了 RISC-V 汇编中 <code>li</code>（load immediate）伪指令在不同场景下的实际展开过程，体现了 RISC-V 在处理大立即数时的复杂性。</li>
+<li><strong>核心问题</strong>：RISC-V 为简化硬件设计，不提供直接加载 64 位立即数的单条指令，而是通过组合 <code>lui</code>、<code>addi</code>、<code>slli</code> 等基础指令来实现。</li>
+<li>第一个例子是加载一个<strong>密集型大立即数</strong> <code>0x7FFF800800800800</code> 到寄存器 <code>t0</code>。该值无法用一条指令表示，因此被分解为一系列操作：<ul>
+<li>首先使用 <code>lui</code> 加载最高 20 位（<code>32768</code> 对应 <code>0x8000</code>）。</li>
+<li>接着通过多次 <code>addiw</code> 和 <code>slli</code> 组合，逐步填充低位并修正符号扩展带来的偏差（如 <code>-2047</code>、<code>-2048</code>）。</li>
+<li>最终通过 8 条指令完成加载，体现了“从高位到低位”递归构建的策略。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>lui t0, 32768</code></td>
+<td>加载高 20 位 (<code>0x8000</code>)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>addiw t0, t0, -2047</code></td>
+<td>修正低 12 位并移位</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>slli t0, t0, 12</code></td>
+<td>左移 12 位</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>addi t0, t0, -2047</code></td>
+<td>再次修正并移位</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>slli t0, t0, 12</code></td>
+<td>左移 12 位</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>addi t0, t0, -2047</code></td>
+<td>再次修正并移位</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>slli t0, t0, 12</code></td>
+<td>左移 12 位</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>addi t0, t0, -2048</code></td>
+<td>最终修正得到目标值</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>第二个例子是加载一个<strong>稀疏型立即数</strong> <code>0x70000000000007FF</code>，其有效位集中在高位和低位。</p>
+<ul>
+<li>编译器优化后仅需 3 条指令：<code>addi</code> 初始化为 <code>7</code>，<code>slli</code> 左移 60 位，再 <code>addi</code> 加上 <code>2047</code>（即 <code>0x7FF</code>）。</li>
+<li>这种情况显著减少了指令数量，说明 RISC-V 的立即数加载逻辑会根据数值的“稀疏性”进行优化。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键术语保留</strong>：<code>li</code>, <code>lui</code>, <code>addi</code>, <code>slli</code>, <code>addiw</code> 均为 RISC-V 标准指令或伪指令。</p>
+</li>
+<li>
+<p><strong>设计哲学体现</strong>：这种展开机制反映了 RISC-V “硬件极简、软件补偿”的设计理念，将复杂性转移至编译器层面。</p>
+</li>
+<li>
+<p><strong>对 JIT 编译器的影响</strong>：在 Cogit 这类 JIT 编译器中，此类展开意味着一个简单的 <code>li</code> 操作可能膨胀为多达 8 条机器指令，增加了代码体积和 patching 复杂度。</p>
+</li>
+<li>
+<p><strong>解决方案提示</strong>：论文中提到的“out-of-line literals”策略可规避此问题——将大常量存入内存，通过 <code>auipc</code> + <code>ld</code> 两条指令访问，从而避免复杂的立即数展开。</p>
+</li>
+</ul>
+<h3 id="figure-3-inline-and-out-of-line-literals">Figure 3: Inline and out-of-line literals.<a class="headerlink" href="#figure-3-inline-and-out-of-line-literals" title="Permanent link">&para;</a></h3>
+<p><img alt="da839bcd69382fb91f639e498b64eafad34cae3f928c8d0bb4de5a2334590de3.jpg" src="../images/da839bcd69382fb91f639e498b64eafad34cae3f928c8d0bb4de5a2334590de3.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Pharo VM</strong> 中两种处理字面量（Literals）的策略：<strong>Inline literals</strong> 与 <strong>Out-of-line literals</strong>，用于解决 RISC-V 架构下立即数加载的复杂性。</li>
+<li>左侧为 <strong>Inline literals</strong> 模式：<ul>
+<li>字面量直接嵌入生成的机器码中。</li>
+<li>适用于小数值（如 ≤12位），可被单条指令容纳。</li>
+<li>对于大数值，需拆分为多条指令（如 <code>lui</code> + <code>addi</code> + <code>slli</code> 等），可能导致代码膨胀。</li>
+</ul>
+</li>
+<li>右侧为 <strong>Out-of-line literals</strong> 模式：<ul>
+<li>字面量被集中存储在独立区域（类似 <code>.data</code> 段），机器码中仅保留指向它们的引用。</li>
+<li>引用通过固定长度指令序列（如 <code>auipc</code> + <code>ld</code>）访问，始终占用 <strong>两条指令</strong>。</li>
+<li>由 <strong>Literals Manager</strong> 统一管理字面量位置与引用更新。</li>
+</ul>
+</li>
+<li>两种模式对比：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Inline Literals</th>
+<th>Out-of-line Literals</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储位置</td>
+<td>嵌入机器码中</td>
+<td>独立内存区域</td>
+</tr>
+<tr>
+<td>访问方式</td>
+<td>直接使用立即数</td>
+<td>通过 PC-relative 地址加载</td>
+</tr>
+<tr>
+<td>指令开销</td>
+<td>小数值：1条；大数值：最多8条</td>
+<td>固定2条（auipc + ld）</td>
+</tr>
+<tr>
+<td>代码膨胀风险</td>
+<td>高（尤其大立即数）</td>
+<td>低（字面量集中存储）</td>
+</tr>
+<tr>
+<td>补丁/重定位支持</td>
+<td>复杂（需重新生成多条指令序列）</td>
+<td>简单（只需更新字面量内容或引用）</td>
+</tr>
+<tr>
+<td>Pharo 实现名称</td>
+<td>InlineLiteralsCompiler</td>
+<td>OutOfLineLiteralsCompiler</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在 Pharo 的 Cogit 编译器中，当字面量超过 <strong>12位</strong> 时，自动切换至 <strong>Out-of-line literals</strong> 模式，以规避 RISC-V 立即数扩展的复杂逻辑。</li>
+<li>此设计显著简化了 <strong>代码修补（Code patching）</strong> 流程，尤其在 JIT 运行时动态更新调用目标或内联缓存时，避免因立即数重编码导致的指令序列重构。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

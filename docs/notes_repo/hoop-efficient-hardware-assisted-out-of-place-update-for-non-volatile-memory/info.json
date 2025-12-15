@@ -1,0 +1,19 @@
+{
+  "index": "hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory",
+  "paper_title": "HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory",
+  "metadata": {
+    "authors": [
+      "Miao Cai",
+      "Chance C. Coats",
+      "Jian Huang"
+    ],
+    "affiliations": [
+      "Nanjing University",
+      "University of Illinois at Urbana-Champaign"
+    ],
+    "venue": "unknown",
+    "year": 2020,
+    "doi": null
+  },
+  "description": "论文提出HOOP，一种透明的硬件辅助异地更新机制，用于非易失内存（NVM）以实现原子持久性。其核心是通过内存控制器中的轻量级间接层进行地址重映射和自适应垃圾回收，避免了日志等方案的额外写入和关键路径开销。实验表明，相比SOTA技术，HOOP性能提升最高1.7倍，写放大降低最高2.1倍。"
+}

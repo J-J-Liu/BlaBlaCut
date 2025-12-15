@@ -1,0 +1,18 @@
+{
+  "index": "rethinking-the-memory-hierarchy-for-modern-languages",
+  "paper_title": "Rethinking the Memory Hierarchy for Modern Languages",
+  "metadata": {
+    "authors": [
+      "Po-An Tsai",
+      "Yee Ling Gan",
+      "Daniel Sanchez"
+    ],
+    "affiliations": [
+      "Massachusetts Institute of Technology"
+    ],
+    "venue": "MICRO",
+    "year": 2018,
+    "doi": "10.1109/micro.2018.00025"
+  },
+  "description": "论文提出Hotpads，一种为内存安全语言（如Java、Go）设计的新型内存层次结构。它摒弃传统扁平地址空间，通过硬件管理的直接寻址存储（pads）和指针重写技术，避免了关联缓存查找。Hotpads将垃圾回收与数据放置统一，显著提升了性能和能效。实验表明，相比传统缓存，Hotpads平均性能提升34%，内存层次能耗降低2.6倍，并将GC开销减少8倍。"
+}

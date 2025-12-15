@@ -1,0 +1,24 @@
+{
+  "index": "rethinking-java-performance-analysis",
+  "paper_title": "Rethinking Java Performance Analysis",
+  "metadata": {
+    "authors": [
+      "Stephen M. Blackburn",
+      "Zixian Cai",
+      "Rui Chen",
+      "et al."
+    ],
+    "affiliations": [
+      "Google",
+      "Australian National University",
+      "ByteDance",
+      "IOP Systems",
+      "Canva",
+      "The University of Sydney"
+    ],
+    "venue": "ASPLOS",
+    "year": 2025,
+    "doi": "10.1145/3669940.3707217"
+  },
+  "description": "论文提出DaCapo Chopin基准套件，包含22个新/更新的工作负载，并引入新方法论评估Java性能。通过主成分分析验证工作负载多样性，揭示现代生产级垃圾回收器即使在最优情况下仍消耗15% CPU周期，在小堆内存下开销高达17倍。论文强调需持续改进性能分析方法以避免研究方向偏差。"
+}

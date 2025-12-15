@@ -1,0 +1,751 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gray-in-young-a-generational-garbage-collection-for-processing-in-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-gray-in-young-giy-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Gray-in-Young (GiY) 算法 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-spmoli-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SPM中的对象布局信息（OLI）静态缓存 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 分代式堆内存布局 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-major-gc-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 分离式Major GC二进制 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-minor-gcgc-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 并行Minor GC与混合GC栈 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="gray-in-young-a-generational-garbage-collection-for-processing-in-memory">Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory 通俗讲解<a class="headerlink" href="#gray-in-young-a-generational-garbage-collection-for-processing-in-memory" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<p>这篇论文要解决的根本问题，是在 <strong>UPMEM PIM</strong> 这种新型硬件上，如何为 <strong>managed language</strong>（比如 Java）设计一个高效的 **Garbage Collector **(GC)。难点在于 DPU 的硬件特性非常“别扭”：</p>
+<ul>
+<li><strong>内存墙的另一面</strong>：DPU 有超快的 **Scratch Pad Memory **(SPM)，但主存 <strong>DRAM</strong> 只能通过 <strong>DMA</strong> 访问，速度极慢（一次小读写就要 ~70+ 周期）。传统 GC 频繁地、以指针大小为单位访问堆内存，在这里就成了灾难。</li>
+<li><strong>程序内存极度受限</strong>：DPU 的指令内存只有 <strong>24 KB</strong>。一个完整的 GC（尤其是 <strong>major GC</strong>）代码量很容易就超标，根本塞不进计算内核里。</li>
+<li><strong>必须并行</strong>：DPU 有 24 个硬件线程，但为了填满流水线，至少需要 <strong>11 个活跃线程</strong>。单线程 GC 会严重拖累性能。</li>
+</ul>
+<p>之前的通用 GC 设计完全没考虑这些约束，直接搬过来会因为海量的 <strong>细粒度 DRAM 访问</strong> 而慢得无法接受，或者因为 <strong>代码太大</strong> 而根本无法运行。</p>
+<hr />
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<p>想象你要搬家（做一次 GC）。你的新家（old space）在很远的郊区（DRAM），而你现在住在一个小但超级方便的市中心公寓（young space in SPM）。</p>
+<ul>
+<li>
+<p>**传统做法 **(Cheney's Algorithm) 就像你先把所有家具（对象 A）一股脑搬到郊区新家，然后再一件件检查，发现“哎呀，这张桌子（A）的抽屉里还有一把钥匙（指针）指向我公寓里的保险箱（对象 B）！”。于是你又得开车回市区（访问 DRAM），把保险箱（B）搬出来，再开回郊区更新桌子的记录。来回折腾，油费（DRAM 访问）贵死了。</p>
+</li>
+<li>
+<p><strong>这篇论文的做法 </strong>(Gray-in-Young) 则聪明得多。在你还在市中心公寓打包的时候，就先把所有要搬的东西列好清单，并且<strong>提前把所有“指向关系”都更新好</strong>。比如，你看到桌子（A）的钥匙指向保险箱（B），你就先在郊区给保险箱（B'）找个地方，然后<strong>立刻</strong>把桌子（A）上的钥匙换成新地址。等一切准备就绪，你一次性叫个大货车（DMA），把整张桌子（A）直接拉到郊区。整个过程，你只需要去郊区 <strong>N 次</strong>（N 是家具数量），而不是 <strong>N + 2NR 次</strong>（R 是每件家具平均有多少个指向其他家具的部件）。</p>
+</li>
+</ul>
+<p><img alt="" src="../images/62ef87aed55028804b62630b50812dd4b3b75544b35886940ed2293d6a254338.jpg" /> <em>Figure 4. Copy with Cheney's copying algorithm; light gray objects may have pointers to young space, and dark gray objects do not have pointers to young space.</em>
+<img alt="" src="../images/c25e9a01d208db5ce7269fadc7aea15c8a848947ac08ae8e8fc21f41314519a4.jpg" /> <em>Figure 5.Copy with GiY algorithm; white objects in old space are empty shells.</em></p>
+<hr />
+<p><strong>关键一招 (The "How")</strong></p>
+<p>作者的核心思路是 <strong>“分而治之” + “预处理”</strong>，具体体现在三个精妙的设计上：</p>
+<ul>
+<li>
+<p><strong>将 young space 放在 SPM，old space 放在 DRAM</strong>：</p>
+<ul>
+<li>这利用了“大部分对象朝生暮死”的 <strong>generational hypothesis</strong>。新对象在超快的 SPM 里分配和初始化，极大加速了 mutator（用户程序）。</li>
+<li>Minor GC 只负责清理 SPM，目标明确。</li>
+</ul>
+</li>
+<li>
+<p>**在 SPM 中完成所有指针更新 **(Gray-in-Young Algorithm)：</p>
+<ul>
+<li><strong>关键扭转</strong>：作者没有在对象被复制到 DRAM 后才去扫描和更新其内部指针，而是<strong>在对象还在 SPM 时就完成了所有指针的重写</strong>。</li>
+<li>具体流程是：访问一个对象 -&gt; 为其子对象在 DRAM 预分配空间 -&gt; <strong>立即</strong>用新地址更新当前对象的指针 -&gt; 最后才用一次 DMA 把当前对象本身拷走。</li>
+<li>这一招将 DRAM 访问次数从 O(NR) 降到了 O(N)，效果立竿见影。</li>
+</ul>
+</li>
+<li>
+<p>**静态缓存对象布局信息 **(OLI Cache)：</p>
+<ul>
+<li>GC 扫描对象时需要知道哪些字段是指针，这通常需要查一个在 DRAM 里的 <strong>class table</strong>，又是一次 DRAM 访问。</li>
+<li><strong>巧妙之处</strong>：因为每次 minor GC 后 SPM 都是空的，所以一次 kernel 运行期间在 SPM 里创建的对象，其类型是<strong>完全可以在编译时确定的</strong>。</li>
+<li>因此，作者在编译时就生成了一个只包含本次 kernel 所需类信息的 <strong>OLI cache</strong>，并把它加载到 SPM。GC 扫描时直接查这个本地缓存，彻底避免了这部分 DRAM 访问。</li>
+</ul>
+</li>
+<li>
+<p><strong>分离 major GC 二进制</strong>：</p>
+<ul>
+<li>为了满足 <strong>24 KB</strong> 的代码限制，作者只把轻量级的 <strong>minor GC</strong> 代码链接到每个计算内核中。</li>
+<li>当需要做 <strong>major GC</strong> 时，由 host CPU 动态加载一个独立的、包含完整 major GC 逻辑的二进制文件。这本质上是一种 <strong>program overlay</strong> 技术，用一点动态加载的开销，换来了宝贵的代码空间。</li>
+</ul>
+</li>
+</ul>
+<p>最终，这套组合拳打下来，成功地将 DRAM 访问减少了 <strong>85.9%</strong>，性能提升了 <strong>46.2%</strong>，并且代码占用仅 <strong>4.3 KB</strong>，完美适配了 DPU 的严苛环境。</p>
+<h3 id="1-gray-in-young-giy-eli5">1. Gray-in-Young (GiY) 算法 (ELI5)<a class="headerlink" href="#1-gray-in-young-giy-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>传统的 <strong>Cheney's copying</strong> 这类垃圾回收算法，在将年轻代（Young Space）对象复制到老年代（Old Space）时，会先把对象拷贝到 DRAM，然后再去扫描这个新拷贝来更新它内部的指针。这在 UPMEM DPU 上是个灾难。</li>
+<li>因为 DPU 访问 DRAM 必须通过 <strong>DMA</strong>，而 DMA 的启动开销巨大（一次读操作就有约 <strong>77 个周期</strong>的固定延迟）。如果每次只更新一个指针（比如 8 字节），就相当于用“快递”寄一张纸条，效率极低。</li>
+<li>更糟的是，这种算法会导致 <strong>N + 2NR 次</strong>细粒度的 DRAM 访问（N 是存活对象数，R 是平均指针数）。对于一个有几百个对象的回收，这会产生成千上万次昂贵的、小颗粒的 DMA 操作，严重拖慢 GC 速度。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象你要搬家（从 SPM 搬到 DRAM）。传统做法是：你先把所有箱子（对象）一股脑搬到新家（DRAM），然后站在新家里，挨个打开每个箱子，把里面写着旧地址的便签（指向其他对象的指针）一张张拿出来，查新地址，再写回去。</li>
+<li><strong>Gray-in-Young (GiY)</strong> 的聪明之处在于：它在<strong>老房子（SPM）里就把所有事情都准备好了</strong>。它先给新家（DRAM）里的每个箱子预留好位置（分配内存），然后在老房子里，直接把箱子里的便签全部换成新地址。等一切就绪，它才一次性、整箱地把内容搬过去。这样，你只需要跑一趟（一次 DMA）就能搬完一个箱子，而且在新家完全不用再翻箱倒柜。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>GiY 算法的核心扭转点在于 <strong>“指针更新”和“对象拷贝”的执行顺序与地点</strong>。</li>
+<li>它没有像传统算法那样，把“灰色对象”（已发现但未扫描的对象）放在目标空间（DRAM）里，而是<strong>刻意让灰色对象留在源空间（SPM）中</strong>。</li>
+<li>具体流程被拆解为两个清晰的阶段：<ul>
+<li><strong>准备与遍历阶段</strong>：算法以 <strong>DFS</strong> 方式遍历 SPM 中的对象图。当访问到一个对象 O 时，它会立即为 O 在 DRAM 中的副本 O' <strong>分配内存</strong>，但<strong>不拷贝内容</strong>。接着，它扫描 O 的每一个指针字段，为指针所指向的子对象也预先分配好 DRAM 内存，并<strong>立即将 O 中的指针更新为指向这些新的 DRAM 地址</strong>。此时，O' 在 DRAM 中只是一个“空壳”，但 O 在 SPM 中的所有指针已经是正确的了。</li>
+<li><strong>批量拷贝阶段</strong>：一旦对象 O 的所有指针都被更新完毕，它就变成了“黑色对象”（已扫描完毕）。这时，算法才发起<strong>一次</strong> DMA 操作，将 O 的整个内容<strong>完整地</strong>拷贝到它在 DRAM 中早已准备好的位置 O' 上。</li>
+</ul>
+</li>
+<li>通过这个逻辑转换，GiY 将每个对象的 DRAM 访问次数从多次（扫描+多次指针更新）锐减到<strong>仅一次</strong>（最终的整体拷贝），从而极大地减少了昂贵的 DMA 操作总数。</li>
+</ul>
+<p><img alt="" src="../images/c25e9a01d208db5ce7269fadc7aea15c8a848947ac08ae8e8fc21f41314519a4.jpg" /> <em>Figure 5.Copy with GiY algorithm; white objects in old space are empty shells.</em></p>
+<p><img alt="" src="../images/602b2ea8d0832c9aa93e71dacd776c0cb8b297bb2fbaea83a1e921687ab744e5.jpg" /> <em>Figure 7. GC stack</em></p>
+<h3 id="2-spmoli-eli5">2. SPM中的对象布局信息（OLI）静态缓存 (ELI5)<a class="headerlink" href="#2-spmoli-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>在 UPMEM DPU 上做 GC 时，一个隐藏的性能杀手是 <strong>对象扫描（object scanning）</strong>。当 GC 遍历一个对象以找出其中的指针时，它必须知道这个对象的“布局”——哪些字段是指针，哪些不是。</li>
+<li>这个布局信息，即 <strong>对象布局信息（OLI）</strong>，通常存储在一个全局的 <strong>类表（class table）</strong> 中。而这个类表因为太大，只能放在 <strong>DRAM</strong> 里。</li>
+<li>问题来了：每次扫描一个在 SPM 里的年轻代对象，GC 都要发起一次 <strong>小粒度的 DRAM 访问</strong> 去取 OLI。根据论文数据，一次 DRAM 访问有高达 <strong>70+</strong> 的固定延迟开销。如果一次 Minor GC 要扫描成百上千个对象，这些微小的、频繁的 DRAM 访问会累积成巨大的性能瓶颈。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个图书管理员（GC），需要快速检查一批新到的书籍（年轻代对象）里是否夹带了借书卡（指针）。每本书的借书卡可能在不同的位置（比如第一页、最后一页或书脊里）。</li>
+<li>以前的做法是，每拿到一本书，你就得跑回几公里外的中央档案馆（DRAM中的类表），查一下这本书的型号，才知道借书卡在哪。来回奔波，效率极低。</li>
+<li>这篇论文的做法是：<strong>在开始整理这批新书之前，你就已经知道这批书只可能是《Java编程思想》和《算法导论》这两种</strong>。于是，你提前把这两本书的“借书卡位置说明书”（OLI）打印出来，就放在手边的办公桌上（SPM缓存）。这样，你检查每一本书时，只需要低头看一眼桌上的说明书，完全不用再跑档案馆了。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者利用了 PIM 编程模型的一个关键特性：<strong>计算内核（computation kernel）是静态编译、独立加载的</strong>。这意味着，在编译某个内核时，编译器可以<strong>精确地、静态地分析出</strong>这个内核在其生命周期内<strong>可能创建的所有对象类型</strong>。</li>
+<li>基于这个洞察，作者在编译期就为每个内核<strong>构建了一个专属的、精简的 OLI 缓存映像</strong>。这个映像只包含该内核会用到的那几个类的布局信息。</li>
+<li>在运行时，当内核被加载到 DPU 上执行时，这个预构建的 OLI 缓存会被<strong>一次性加载到高速的 SPM</strong> 中。</li>
+<li>同时，内核中 <code>new</code> 指令创建的对象，其头部存储的不再是全局类索引，而是一个<strong>本地类索引（local class index）</strong>，这个索引直接指向 SPM 中的缓存条目。</li>
+<li>因此，在 Minor GC 扫描 SPM 中的对象时，GC 可以通过本地索引<strong>直接、零延迟地访问 SPM 中的 OLI</strong>，彻底绕开了对 DRAM 类表的访问。</li>
+</ul>
+<p><img alt="" src="../images/8a0ed4165fe2b4debb213024d5bd89f4cec998967560eba0f8d41daafab5ea54.jpg" /> <em>Figure 9.class table; dashed line indicates where the index refers to.</em>
+<img alt="" src="../images/b4ccbc9ed3922d5c2f3e1a3bce2dc31eb1018bfbeabbfed35ec698385db47b03.jpg" /> <em>Figure 10.OLI cache; dashed line indicates where the index refers to.</em></p>
+<ul>
+<li>这个设计还有一个精妙的细节：当对象从 SPM <strong>晋升（promote）</strong> 到 DRAM 的老年代时，GC 会将其头部的 <strong>本地类索引替换回全局类索引</strong>。这保证了老年代对象的通用性，使其能被任何后续的内核或 Major GC 正确处理，完美地兼顾了性能与通用性。</li>
+</ul>
+<h3 id="3-eli5">3. 分代式堆内存布局 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的垃圾回收（GC）设计假设内存是统一的，但在 <strong>UPMEM PIM</strong> 这类新型硬件上，这个假设完全崩塌了。DPU 拥有两块截然不同的内存：<strong>64KB 的 SPM</strong>（单周期访问）和 <strong>64MB 的 DRAM</strong>（通过 <strong>DMA</strong> 访问，延迟高达 <strong>70+ 周期</strong>）。</li>
+<li>如果把整个堆都放在 DRAM 里，那么即使是分配一个新对象、初始化它的字段这种最基础的操作，都会变成昂贵的 <strong>DRAM 写操作</strong>，性能会非常差。</li>
+<li>更糟糕的是，在 GC 过程中，尤其是 <strong>Minor GC</strong>（清理年轻代），需要频繁地扫描对象、更新指针。如果这些操作都在 DRAM 上进行，会产生海量的 <strong>细粒度、指针大小的 DRAM 访问</strong>，这正是 DMA 最不擅长处理的模式，效率极低。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个工匠（Mutator），你的工作台（SPM）很小但就在手边，取放工具（数据）瞬间完成；而你的仓库（DRAM）很大但离得很远，每次去仓库拿或放东西（DMA）都要花很长时间，而且一次最好多拿点/多放点才划算。</li>
+<li><strong>分代式堆内存布局</strong>的核心思想就是：<strong>把正在加工的半成品和常用小工具都放在工作台上</strong>（年轻代 in SPM）。因为根据“<strong>分代假说</strong>”（Generational Hypothesis），大部分对象都是朝生暮死的，它们根本活不到进仓库的那天。</li>
+<li>只有那些经过几轮加工后依然存活的“精品”（老年代对象），才值得花时间一趟趟地搬进大仓库（DRAM）里长期保存。这样，你绝大部分的日常工作都在高效的工作台上完成，只有偶尔才需要去一趟仓库。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有采用传统的、将整个堆视为一体的 GC 设计，而是<strong>巧妙地利用了 DPU 的异构内存特性，对堆进行了物理上的分代</strong>。</li>
+<li><strong>具体来说，他们把整个年轻代（young space）直接挪到了 SPM 里</strong>。这意味着：<ul>
+<li>所有新创建的对象都在 <strong>SPM</strong> 中分配和初始化，速度极快。</li>
+<li>Minor GC 的扫描和指针更新等核心操作也主要在 <strong>SPM</strong> 中进行，避免了昂贵的 DRAM 访问。</li>
+</ul>
+</li>
+<li>为了最大化这个设计的优势，他们还配套了两个精妙的优化：<ul>
+<li><strong>Gray-in-Young (GiY) 算法</strong>：在将年轻代的存活对象“晋升”到老年代（DRAM）之前，<strong>先在 SPM 里就把对象内部的所有指针更新好</strong>，指向它们在 DRAM 中的新家。这样，对象本身只需要 <strong>一次 DMA 操作</strong> 就能完整地搬进 DRAM，而不是像传统算法那样，搬进去之后还要多次读回 DRAM 来修正指针。</li>
+<li><strong>静态 OLI 缓存</strong>：对象的元数据（Object Layout Information, OLI）通常存在 DRAM 的类表里。为了扫描对象时不用去 DRAM 查，他们在编译时就<strong>分析出当前计算内核（kernel）可能用到的所有类，并将这些 OLI 预先打包成一个“本地缓存”放在 SPM 里</strong>。这样，Minor GC 扫描对象时，所有元数据查询都在高速的 SPM 中完成。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/062f75c491cfdf611fad3a35c71acec74b556bdb356b1a86622024e80f4605f3.jpg" /> <em>Figure 3. Overview</em></p>
+<p>这个设计的最终效果是惊人的：通过将热点数据和计算密集型操作限制在 SPM 内，<strong>DRAM 访问次数最高减少了 85.9%</strong>，从而带来了 <strong>46.2%</strong> 的性能提升。这完美地诠释了“<strong>让计算靠近数据</strong>”这一 PIM 核心理念在内存管理层面的具体实践。</p>
+<h3 id="4-major-gc-eli5">4. 分离式Major GC二进制 (ELI5)<a class="headerlink" href="#4-major-gc-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>UPMEM DPU 的 <strong>指令内存只有 24KB</strong>，这是一个极其严苛的硬性限制。</li>
+<li>一个完整的 Generational GC（包含 Minor 和 Major）的代码体积很容易就超过这个限制，特别是功能完备的 Major GC（如 mark-compact）通常比较复杂。</li>
+<li>如果强行把所有 GC 代码都塞进每个计算内核（Kernel）的二进制里，会导致两个严重后果：<ul>
+<li>要么内核本身的逻辑被极度压缩，无法实现复杂功能。</li>
+<li>要么根本无法编译出能放进 24KB 的二进制文件。</li>
+</ul>
+</li>
+<li>这就像你有一个只能装 <strong>24页纸</strong> 的公文包，但你的工作手册有 <strong>50页</strong>。每次出门办事，你不可能把整本手册都带上，否则连门都出不去。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>这个设计思路非常像 <strong>“急救包”和“医院”</strong> 的关系。<ul>
+<li><strong>Minor GC</strong> 就是你的随身 <strong>急救包</strong>：它很小、很轻（只有 <strong>4.3KB</strong>），处理的是日常小伤（回收年轻代的临时对象）。你去任何地方（执行任何 Kernel）都会带着它，因为它够小，不占地方。</li>
+<li><strong>Major GC</strong> 则是 <strong>大型医院</strong>：它功能齐全但非常庞大（<strong>6.9KB</strong>），只有在遇到重伤（老年代快满了）时才需要。你不会把整个医院背在身上，而是在需要时，打电话叫救护车（由 Host 主机程序）把它动态加载过来。</li>
+</ul>
+</li>
+<li>这种分离策略，本质上是一种 <strong>按需加载 (On-Demand Loading)</strong> 的资源管理哲学，用一点调度开销（加载新二进制的时间）换取了宝贵的常驻空间。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有试图把一个臃肿的 GC 塞进狭小的空间，而是巧妙地利用了 <strong>Generational GC 本身的特性</strong> 和 <strong>UPMEM 的编程模型</strong> 来做切割。</li>
+<li><strong>核心逻辑转换</strong>在于：将 <strong>不频繁但庞大的 Major GC</strong> 从 <strong>频繁调用且空间受限的 Kernel 二进制</strong> 中剥离出去。</li>
+<li>具体操作如下：<ul>
+<li><strong>编译时分离</strong>：在构建阶段，就将 GC 代码明确拆分成两个独立的二进制文件：<code>kernel_with_minor_gc.bin</code> 和 <code>standalone_major_gc.bin</code>。</li>
+<li><strong>运行时协作</strong>：<ul>
+<li>计算内核正常运行，只包含轻量级的 Minor GC。当 Minor GC 结束后，如果发现老年代空间不足，它不会自己处理，而是向 Host 发出一个信号。</li>
+<li><strong>Host 程序</strong> 接收到信号后，负责执行一个 <strong>Overlay（覆盖）</strong> 操作：先保存当前 Kernel 的状态（如 Java 栈），然后将 <code>standalone_major_gc.bin</code> 加载到 DPU 的指令内存中并启动它。</li>
+<li>Major GC 执行完毕后，Host 再将原来的 Kernel 二进制重新加载回来，并恢复其状态，让计算继续。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>这一招的精妙之处在于，它利用了 <strong>Host CPU 作为协调者</strong> 的角色，将 DPU 有限的本地资源压力转移了出去。论文中的评估也证明了这一点：加载 Major GC 二进制的开销（<strong>11毫秒</strong>）仅占其总执行时间的 <strong>1.4%</strong>，代价极小，收益巨大。最终，为 Kernel 本身和 Minor GC 留下了宝贵的 <strong>4.3KB</strong> 空间，这在 24KB 的总预算下是决定性的。</li>
+</ul>
+<p><img alt="" src="../images/c7c5f9cad3b323e82942af66d3a9570e758df35a5c03cf7ab6280644c45e869b.jpg" /> <em>Figure 15. Binary size.</em></p>
+<h3 id="5-minor-gcgc-eli5">5. 并行Minor GC与混合GC栈 (ELI5)<a class="headerlink" href="#5-minor-gcgc-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>在DPU上做Minor GC，最大的难受点在于<strong>硬件特性与传统GC模型的错配</strong>。DPU有<strong>11个硬件线程</strong>，但它的Pipeline要求必须有这么多活跃线程才能吃饱。如果GC是单线程的，那Mutator（用户程序）在GC期间就只能干瞪眼，浪费了巨大的并行潜力。</li>
+<li>更麻烦的是，DPU的内存层次很特殊：<strong>SPM</strong>（Scratch Pad Memory）。传统的并行GC工作队列（Work Queue）如果直接放在DRAM里，每个线程去“偷”任务时都会产生大量细粒度的、昂贵的DMA操作，这完全抵消了并行带来的好处。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>想象一个快递分拣中心（Minor GC过程），有11个分拣员（硬件线程）。待处理的包裹（待扫描的对象）最初都堆在一个小而快的本地分拣台（Young Space in SPM）上。</li>
+<li>如果只有一个中央大仓库（DRAM里的全局队列）来存放待处理包裹列表，那么每个分拣员每次拿新包裹都要跑很远（高延迟DMA），效率极低。</li>
+<li>作者的做法是：给每个分拣员配一个<strong>超小的个人手推车</strong>（本地GC栈），同时在他们身边放一个<strong>中等大小的共享周转箱</strong>（SPM中的共享栈顶），只有当周转箱也满了，才把一半包裹挪到远处的大仓库（DRAM中的共享栈底）。这样，99%的“拿活儿”操作都在几步之内完成，只有偶尔才需要跑远路。</li>
+</ul>
+<p><img alt="" src="../images/7fca03338e6393636b604969976529da84cd1501d905e60d6db91d1d1d5ba3e0.jpg" /> <em>Figure 8.Batch copy of the compaction-based algorithm.</em></p>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者没有采用传统的单一全局队列，而是设计了一个<strong>三层混合的GC工作栈</strong>，核心思想是<strong>将工作负载的共享和窃取尽可能限制在高速的SPM内</strong>。</li>
+<li>具体来说，这个栈的结构被巧妙地“扭转”了：<ul>
+<li><strong>第一层：每个线程一个极小的本地栈</strong>（仅4个条目）<ul>
+<li>线程在扫描对象时，发现新的子对象（灰色对象），不是直接扔进全局队列，而是先压入自己的本地栈。</li>
+<li>这个栈非常小，目的是<strong>强制频繁地向外“倾倒”工作</strong>，避免一个线程独占太多任务，促进负载均衡。</li>
+</ul>
+</li>
+<li><strong>第二层：一个位于SPM的共享栈顶</strong>（256个条目）<ul>
+<li>当任意一个本地栈满了，它会把<strong>一半内容</strong>批量移动到这个共享栈顶。</li>
+<li>其他空闲线程会优先从这个<strong>SPM内的共享栈顶</strong>里“偷”任务。因为是在SPM里，这个操作是<strong>单周期</strong>的，代价极低。</li>
+</ul>
+</li>
+<li><strong>第三层：一个位于DRAM的共享栈底</strong><ul>
+<li>只有当SPM里的共享栈顶也溢出了，才会把一半内容用一次<strong>大块DMA</strong>（比如64字节）搬到DRAM的栈底。</li>
+<li>这个设计确保了<strong>细粒度的任务窃取永远不会发生在DRAM上</strong>，DRAM访问只以大块、低频的方式出现，完美规避了DMA的高延迟陷阱。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>这个设计的精妙之处在于，它没有追求理论上的完美并行，而是<strong>极度贴合DPU的硬件现实</strong>：用最小的SPM空间开销（本地栈+共享栈顶总共不到1KB），换取了几乎无代价的线程间协作，从而让Minor GC的吞吐量能随着线程数近乎线性地扩展到11个线程的上限。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,695 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Porting a JIT Compiler to RISC-V: Challenges and Opportunities 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#porting-a-jit-compiler-to-risc-v-challenges-and-opportunities" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Porting a JIT Compiler to RISC-V: Challenges and Opportunities 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-cogrtl-ir-to-risc-v-concretization-with-conditional-code-handling-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CogRTL IR to RISC-V Concretization with Conditional Code Handling (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-out-of-line-literals-management-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Out-of-Line Literals Management (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-isa-agnostic-test-harness-and-vm-simulation-framework-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. ISA-Agnostic Test Harness and VM Simulation Framework (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-custom-instruction-prototyping-via-simulator-hooks-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Custom Instruction Prototyping via Simulator Hooks (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="porting-a-jit-compiler-to-risc-v-challenges-and-opportunities">Porting a JIT Compiler to RISC-V: Challenges and Opportunities 通俗讲解<a class="headerlink" href="#porting-a-jit-compiler-to-risc-v-challenges-and-opportunities" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>这篇论文的核心问题，不是要造一个新的 JIT 编译器，而是要<strong>把一个为 x86 量身定做的、已经很成熟的 JIT 编译器（Cogit）移植到 RISC-V 上</strong>。这听起来简单，但实际非常“难受”，因为这两个架构的设计哲学几乎是<strong>背道而驰</strong>的。</li>
+<li><strong>x86 是 CISC 的代表</strong>：它有很多“高级”指令，比如一条指令就能完成比较和条件跳转（<code>cmp</code> + <code>jz</code>），还有丰富的寻址模式和隐式的状态寄存器（flag register）。JIT 编译器可以利用这些特性，生成非常紧凑高效的代码。</li>
+<li><strong>RISC-V 是精简主义的信徒</strong>：它刻意去掉了 flag register，所有分支指令都必须显式地比较两个寄存器；它没有复杂的寻址模式；加载一个大常数可能需要好几条指令拼凑。这意味着，原来在 x86 上“理所当然”的编译逻辑，在 RISC-V 上直接就“断片”了。</li>
+<li>如果强行硬搬，要么生成的代码效率极低，要么根本无法工作。所以，作者面临的挑战是：<strong>如何在不彻底重写整个编译器的前提下，弥合这种由底层 ISA 设计差异带来的巨大鸿沟</strong>？</li>
+</ul>
+<hr />
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你是一个习惯了用<strong>多功能瑞士军刀</strong>（x86）的厨师。你的菜谱（JIT IR）里写满了“用小刀切”、“用开瓶器开”这样的指令，因为你手里的工具能完美执行它们。</li>
+<li>现在，有人让你去一个只提供<strong>最基础厨具</strong>（RISC-V）的厨房：只有菜刀、砧板和锅。这里没有开瓶器，也没有削皮刀。</li>
+<li>你有两个选择：<ol>
+<li><strong>重写所有菜谱</strong>：把“用开瓶器开”改成“找块布垫着，用菜刀撬”。但这工作量巨大，而且你原来的菜谱在其他厨房（ARM）还能用，全改了太亏。</li>
+<li><strong>在执行时动态翻译</strong>：当你看到菜谱上写着“用开瓶器开”时，你<strong>临时</strong>把它替换成一连串基础操作：“拿布 -&gt; 包住瓶盖 -&gt; 用菜刀撬”。这样，你的原始菜谱不用动，只是在执行前多了一步“智能翻译”。</li>
+</ol>
+</li>
+<li>这篇论文干的就是第二件事。他们没有推翻原有的“菜谱”（CogRTL IR），而是在“做菜”（concretization，即机器码生成）这个环节，增加了一个聪明的“现场翻译官”。</li>
+</ul>
+<hr />
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>
+<p>作者的核心思路是<strong>保持中间表示（IR）不变，但在后端生成阶段进行巧妙的“指令融合”和“策略切换”</strong>。具体来说，他们做了几件关键的事：</p>
+</li>
+<li>
+<p><strong>解决无 Flag Register 的问题</strong>：</p>
+<ul>
+<li>原来的 IR 是 <code>CmpCqR</code> (比较常数和寄存器) + <code>JumpZero</code> (如果为零就跳) 这样的两步走。</li>
+<li>在 RISC-V 后端，编译器会<strong>向前看（look-ahead）</strong>。当它发现 <code>CmpCqR</code> 后面紧跟着一个条件跳转时，它不会真的生成一个比较指令，而是<strong>直接融合成一条 RISC-V 的分支指令</strong>（如 <code>beq</code>）。</li>
+<li>如果是比较常数，它会先用一两条指令把常数加载到一个临时寄存器，然后再用 <code>beq</code> 比较两个寄存器。这本质上是把 x86 的“隐式状态传递”转换成了 RISC-V 的“显式寄存器操作”。</li>
+</ul>
+</li>
+<li>
+<p><strong>解决大常数加载和代码膨胀的问题</strong>：</p>
+<ul>
+<li>直接在指令里嵌入大常数（inline literals）在 RISC-V 上代价太高，可能需要多达 8 条指令。</li>
+<li>作者引入了 <strong>OutOfLineLiteralsCompiler</strong> 策略。对于超过 12 位的常数，编译器不再尝试塞进指令流，而是<strong>把这些常数统一放到代码附近的“数据池”里</strong>。</li>
+<li>访问时，只需要固定的两条指令：<code>auipc</code> (获取数据池的基地址) + <code>ld</code> (从基地址加载常数)。这极大地简化了代码生成和后续的**代码修补（code patching）**逻辑。</li>
+</ul>
+</li>
+<li>
+<p><strong>构建强大的仿真与测试环境</strong>：</p>
+<ul>
+<li>为了高效开发，他们充分利用了 Pharo 语言本身的<strong>元循环（meta-circular）</strong> 特性。整个 VM 可以在 Pharo 环境中被完整模拟。</li>
+<li>他们建立了一个 <strong>ISA-agnostic 的测试套件</strong>，可以在没有真实 RISC-V 硬件的情况下，通过 Unicorn 模拟器验证 JIT 生成的每一条指令是否正确。</li>
+<li>更妙的是，这个框架还支持<strong>自定义指令的仿真</strong>。开发者可以先在 Pharo 里用高级代码模拟新指令的行为，快速验证硬件加速的想法，而无需等待真实的芯片流片。<img alt="" src="../images/da839bcd69382fb91f639e498b64eafad34cae3f928c8d0bb4de5a2334590de3.jpg" /> <em>Figure 3: Inline and out-of-line literals.</em></li>
+</ul>
+</li>
+</ul>
+<p>总而言之，这篇论文的精髓在于展示了一种<strong>务实且高效的移植策略</strong>：通过在编译器后端引入智能的指令融合、灵活的常量管理以及强大的仿真工具链，成功地将一个为复杂 ISA 设计的 JIT 编译器，“嫁接”到了一个设计哲学截然不同的精简 ISA 上，同时为未来的硬件/软件协同设计打开了大门。</p>
+<h3 id="1-cogrtl-ir-to-risc-v-concretization-with-conditional-code-handling-eli5">1. CogRTL IR to RISC-V Concretization with Conditional Code Handling (ELI5)<a class="headerlink" href="#1-cogrtl-ir-to-risc-v-concretization-with-conditional-code-handling-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 <strong>CogRTL IR</strong> 是围绕 <strong>x86</strong> 这类有<strong>条件码（condition codes）</strong> 的架构设计的。它的典型模式是：先发一条 <code>Cmp</code> 指令，这条指令偷偷把结果（比如是否为零、是否溢出）记在一个叫 <strong>flag register</strong> 的地方；下一条 <code>JumpZero</code> 指令就直接去读这个 flag register 来决定跳不跳。</li>
+<li>这套逻辑在 x86 上跑得飞起，因为硬件天生就这么干。但到了 <strong>RISC-V</strong> 这里就“水土不服”了。RISC-V <strong>根本没有 flag register</strong>，它的分支指令（如 <code>bne</code>）要求你<strong>当场</strong>把两个寄存器拿来比较，然后立刻决定跳不跳。</li>
+<li>如果强行把 CogRTL 的两步走（<code>Cmp</code> + <code>Jump</code>）翻译成 RISC-V，你会发现根本找不到对应的单条指令，整个 IR 到机器码的 <strong>one-to-one 映射</strong> 就崩了。这就像你拿着一份菜谱（IR），上面写着“尝一下咸淡”，但你的厨房（RISC-V）里压根没有舌头（flag register），你只能把“尝”和“判断”这两步合并成一个动作。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>这就好比以前你有个<strong>秘书</strong>（flag register）。你跟他说：“去查一下A和B谁大（<code>Cmp A, B</code>）”，秘书默默记下结果。过一会儿你再吩咐：“如果A大，就发邮件（<code>JumpIfAGreater</code>）”。秘书会根据刚才的记录执行。</li>
+<li>现在你被派到一个新公司，这里<strong>不配秘书</strong>（RISC-V no flags）。老板（CPU）要求你必须<strong>一次性</strong>把指令说清楚：“<strong>如果A大于B，就立刻发邮件</strong>”。你不能再分两步走了。</li>
+<li>所以，聪明的做法不是抱怨没秘书，而是在下达指令前，自己先把“比较”和“行动”这两件事<strong>揉成一句话</strong>再说出去。论文里的解决方案，本质上就是让编译器扮演了这个“揉指令”的角色。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有去重写整个历史悠久的 CogRTL IR（那会牵一发动全身，成本太高），而是巧妙地在 <strong>concretization</strong>（具体化，即 IR 到机器码的最后一步）阶段动了手脚。</li>
+<li>具体来说，当编译器在遍历 IR 指令流时，它不再是“看一条翻一条”。一旦它看到一条 <code>Jump&lt;Condition&gt;</code> 指令，它会<strong>立刻回头看</strong>上一条是不是 <code>Cmp</code> 指令。</li>
+<li>如果是，它就把这两条 IR 指令<strong>吃掉</strong>，然后<strong>吐出</strong>一条全新的、符合 RISC-V 风格的<strong>复合分支指令</strong>。<ul>
+<li>例如，<code>CmpRR R1, R2</code> + <code>JumpZero L</code> 这对 IR，在 x86 后端会变成两条指令。</li>
+<li>但在 RISC-V 后端，编译器会识别出这个模式，直接生成一条 <code>beq R1, R2, L</code>。</li>
+<li>对于涉及立即数的情况，比如 <code>CmpCqR #42, R1</code>，编译器会先插入一条 <code>li T0, #42</code> 把常量加载到临时寄存器，然后再生成 <code>beq T0, R1, L</code>。</li>
+</ul>
+</li>
+<li>这个扭转的关键在于，将原本由<strong>硬件隐式维护的状态</strong>（flag），转变成了由<strong>编译器显式传递的操作数</strong>。通过在 concretization 阶段引入这种<strong>窥孔优化</strong>（peephole optimization）式的重写逻辑，完美地弥合了 IR 的抽象与 RISC-V 硬件现实之间的鸿沟。</li>
+</ul>
+<p><img alt="" src="../images/2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6.jpg" /></p>
+<h3 id="2-out-of-line-literals-management-eli5">2. Out-of-Line Literals Management (ELI5)<a class="headerlink" href="#2-out-of-line-literals-management-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>在 <strong>RISC-V</strong> 这种精简指令集架构上，加载一个 <strong>64位立即数（literal）</strong> 是个“脏活累活”。不像 x86 那样一条指令搞定，RISC-V 需要组合 <code>lui</code>、<code>addi</code>、<code>slli</code> 等指令，最坏情况下能膨胀到 <strong>8条指令</strong>。</li>
+<li>这带来两个致命问题：<ul>
+<li><strong>代码膨胀</strong>：原本一行逻辑，现在占了八行机器码，严重浪费宝贵的 <strong>I-Cache</strong> 空间。</li>
+<li><strong>动态更新噩梦</strong>：JIT 编译器经常需要 <strong>patch</strong>（打补丁）这些立即数（比如更新方法地址）。如果一个值占了8条指令，你不仅要预留足够空间，还得在每次更新时重新跑一遍复杂的 <strong>immediate encoding logic</strong>，效率极低且极易出错。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要在一张便签纸上写一个超长的电话号码。RISC-V 的规则是：每行只能写12个数字。于是你不得不把一个号码拆成好几行，还得分清哪些是区号、哪些是分机号，写起来麻烦，改起来更麻烦。</li>
+<li>“Out-of-Line Literals” 的思路就聪明多了：它不再执着于把号码写在便签（代码段）里，而是拿出一张专门的 <strong>小卡片（数据段）</strong>，把完整的号码写在上面。然后在便签上只写一句：“去我桌上的小卡片看号码”。这样，便签内容变得简洁统一（永远只需要两行指令），而修改号码也只需换掉那张小卡片即可。</li>
+</ul>
+<p><img alt="" src="../images/da839bcd69382fb91f639e498b64eafad34cae3f928c8d0bb4de5a2334590de3.jpg" /> <em>Figure 3: Inline and out-of-line literals.</em></p>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有硬着头皮去优化那个复杂的 <strong>立即数编码逻辑</strong>，而是巧妙地 <strong>改变了存储策略</strong>。</li>
+<li>具体来说，他们在 JIT 编译流程中引入了一个 <strong>LiteralsManager</strong> 组件，并设定了一个简单的阈值：<strong>任何超过12位的字面量，一律不尝试内联（inline）到指令流中</strong>。</li>
+<li>取而代之的是：<ul>
+<li>将这些大字面量统一收集起来，存放在生成的机器码附近的 <strong>专用内存区域</strong>（模拟了 <code>.data</code> 段）。</li>
+<li>在需要使用该字面量的地方，用一个 <strong>固定长度（总是两条）的指令序列</strong> 来访问它：<ul>
+<li>第一条是 <code>auipc</code>，用于获取字面量所在内存区域的 <strong>基地址</strong>。</li>
+<li>第二条是 <code>ld</code>（或 <code>lw</code>），从该基地址加上一个偏移量处 <strong>加载</strong> 出完整的字面量。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>这个设计将一个 <strong>可变长度、逻辑复杂</strong> 的问题，转换成了一个 <strong>固定长度、逻辑简单</strong> 的问题。无论是生成代码还是后续的 <strong>code patching</strong>，都变得极其可靠和高效。</li>
+</ul>
+<h3 id="3-isa-agnostic-test-harness-and-vm-simulation-framework-eli5">3. ISA-Agnostic Test Harness and VM Simulation Framework (ELI5)<a class="headerlink" href="#3-isa-agnostic-test-harness-and-vm-simulation-framework-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前给一个新的 <strong>ISA</strong>（比如 RISC-V）移植一个 <strong>JIT compiler</strong>，最难受的地方在于：你得在真机上反复调试生成的 <strong>machine code</strong>。但 RISC-V 硬件要么没有，要么很贵、很慢，调试体验极差。</li>
+<li>更要命的是，JIT 编译器和 VM 的逻辑是深度耦合的。一个错误可能源于编译器生成了错的指令，也可能源于 VM 的运行时状态不对。在硬件上 debug 这种问题，就像在黑夜里用望远镜找一根针。</li>
+<li>如果每次修改都要交叉编译、部署到目标机、再跑测试，开发迭代速度会慢到让人崩溃。这本质上是一个 <strong>开发环境与目标环境严重脱节</strong> 的问题。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>这套方法就像是给你的 JIT 编译器和 VM 搭建了一个 <strong>“数字孪生”沙盒</strong>。</li>
+<li>想象你要设计一辆新车的引擎（JIT compiler），但不用真的造出一台车开上路去测试。你可以在一个高保真的赛车游戏（<strong>VM Simulation Framework</strong>）里，用完全相同的物理规则（<strong>Unicorn emulator</strong>）来模拟引擎的每一个细节。</li>
+<li>而那个 <strong>ISA-Agnostic Test Harness</strong>，就是一套标准化的、可编程的“驾驶考试”。无论你的引擎是为 F1 赛车（x86）、越野车（ARM）还是未来的概念车（RISC-V）设计的，这套考试都能用同样的标准（1400+个测试用例）来检验它是否合格。你只需要在游戏里换一辆车的模型，就能立刻开始测试。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有把开发流程硬塞进传统的“写代码 -&gt; 交叉编译 -&gt; 真机调试”的死循环里，而是巧妙地利用了 Pharo 语言本身的 <strong>meta-circular</strong> 特性（VM 用自身语言编写）。</li>
+<li><strong>核心创新点在于将整个开发和验证闭环都拉回到了高级的 Pharo 环境中</strong>：<ul>
+<li><strong>第一步，构建架构无关的验证标准</strong>：他们围绕 Cogit JIT 的核心功能（从单字节码编译到复杂的 <strong>Polymorphic Inline Cache</strong> 生成），建立了一个包含 <strong>1400+</strong> 个可配置测试的 <strong>ISA-Agnostic Test Harness</strong>。这些测试只关心“输入字节码应该产生什么样的语义行为”，完全不关心底层是 x86 还是 RISC-V 指令。</li>
+<li><strong>第二步，创建一个可交互的虚拟硬件</strong>：他们使用 <strong>Unicorn</strong> CPU 模拟器作为后端，构建了一个 <strong>VM Simulation Framework</strong>。这个框架不仅能执行生成的机器码，还能通过 <strong>hook</strong> 机制（如 <code>UC_MEM_UNMAPPED</code> 和 <code>UC_INSN_INVALID</code>）将控制流无缝地交还给 Pharo 环境。这意味着，当 JIT 代码需要调用 VM 的 runtime 服务（比如分配内存或触发 GC）时，模拟器能精准地捕获并重定向到 Pharo 中对应的模拟方法。</li>
+<li><strong>第三步，实现无缝的开发体验</strong>：开发者可以在 Pharo 强大的 IDE 里直接编写、修改 JIT 后端代码，然后立刻用测试套件在模拟器上运行和调试。他们甚至可以使用 Pharo 内置的 <strong>machine code debugger</strong> 来可视化地查看 IR、生成的汇编和寄存器状态，就像在调试普通的 Smalltalk 对象一样。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/a8b8ceccd848134461d84846a0c42e76c35c3f90d0980dafa8f4337fc1cd5679.jpg" /> <em>Figure 2: Cogit compilation phases.</em></p>
+<ul>
+<li>这个框架的威力在于，它把对 <strong>真实硬件</strong> 的依赖，转化成了对 <strong>模拟器正确性</strong> 的依赖。而 Unicorn 作为一个成熟的、支持多架构的模拟器，其可靠性远高于自己从头搭建的硬件测试平台。这使得团队在没有 RISC-V 硬件的情况下，就完成了整个 JIT 后端的开发和验证，极大地加速了移植过程。</li>
+</ul>
+<h3 id="4-custom-instruction-prototyping-via-simulator-hooks-eli5">4. Custom Instruction Prototyping via Simulator Hooks (ELI5)<a class="headerlink" href="#4-custom-instruction-prototyping-via-simulator-hooks-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统硬件开发流程里，想验证一个 <strong>RISC-V custom instruction</strong> 的想法，得先改 RTL（寄存器传输级）代码，然后用 FPGA 综合、上板测试。这个过程动辄几小时甚至几天，<strong>迭代成本极高</strong>。</li>
+<li>对于 VM 开发者来说，他们关心的是“这条新指令能否加速 GC 或 JIT 编译”，而不是底层电路细节。他们需要一个能像写普通 Pharo 代码一样快速试错的环境。</li>
+<li>如果没有这种能力，VM 和硬件的协同设计就变成了空谈，因为<strong>反馈回路太长</strong>，根本没法敏捷地探索设计空间。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>这就像你在玩一个沙盒游戏（比如《我的世界》），你想添加一个全新的“魔法方块”。正常情况下，你需要修改游戏引擎的源代码并重新编译整个游戏。</li>
+<li>但作者的做法是：利用游戏已有的“错误处理”机制。当游戏引擎遇到一个它不认识的方块 ID 时，通常会崩溃。作者却说：“别崩溃，把这个未知方块的 ID 和参数传给我，我用一段现成的脚本（Pharo 方法）来定义它的行为。”</li>
+<li>这样，你就可以在不碰游戏核心引擎的情况下，<strong>动态地、安全地</strong>为游戏注入全新的功能。这本质上是一种 <strong>"Just-in-Time Hardware"</strong> 的思想。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有去魔改 RISC-V 模拟器（如 Spike）或自己从头造一个，而是巧妙地利用了现有通用模拟器 <strong>Unicorn</strong> 提供的一个强大钩子（hook）：<code>UC_INSN_INVALID</code>。</li>
+<li>具体流程如下：<ul>
+<li>在 Pharo 的 <strong>Cogit JIT compiler</strong> 中，当需要生成一条自定义指令的机器码时，就直接输出一个在标准 RISC-V ISA 中<strong>未定义的 opcode</strong>。</li>
+<li>当 <strong>Unicorn</strong> 模拟执行到这条“非法”指令时，它不会直接报错退出，而是触发 <code>UC_INSN_INVALID</code> 事件。</li>
+<li>作者预先注册了一个<strong>错误处理回调函数</strong>。这个函数会：<ul>
+<li>从当前的程序计数器（PC）位置<strong>读取这条非法指令的原始字节码</strong>。</li>
+<li><strong>解析出 opcode 和操作数</strong>（例如，寄存器编号、立即数等）。</li>
+<li><strong>动态查找</strong> Pharo 环境中一个与该 opcode 同名的方法（例如，<code>customInstruction_0x55</code>）。</li>
+<li><strong>调用这个 Pharo 方法</strong>，并将解析出的操作数作为参数传入，从而在高级语言层面<strong>模拟</strong>了这条硬件指令的功能。</li>
+</ul>
+</li>
+<li>执行完这个 Pharo 方法后，回调函数将 PC 指针推进到下一条指令，<strong>Unicorn</strong> 继续模拟执行。</li>
+</ul>
+</li>
+<li>这个设计最精妙的地方在于，它把<strong>硬件指令的语义定义</strong>完全交给了<strong>高级语言环境</strong>。VM 开发者只需要在熟悉的 Pharo IDE 里写一个方法，就能立刻拥有一个“虚拟”的新硬件指令，并在完整的 VM 上下文中进行端到端的测试和性能评估。<img alt="" src="../images/da839bcd69382fb91f639e498b64eafad34cae3f928c8d0bb4de5a2334590de3.jpg" /> <em>Figure 3: Inline and out-of-line literals.</em></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

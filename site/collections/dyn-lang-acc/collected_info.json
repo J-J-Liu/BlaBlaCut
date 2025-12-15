@@ -1,0 +1,295 @@
+{
+    "title": "动态语言加速",
+    "description": "动态语言加速相关的论文笔记",
+    "categories": [
+        {
+            "title": "负载分析",
+            "description": "**负载特征化与性能差距归因**：深入分析 Python、JavaScript、Java 等托管语言在真实应用场景下的运行时行为。重点考察其与静态编译语言（Native Code）在指令级并行度（ILP）、缓存局部性以及能效比上的量化差异，旨在揭示导致动态语言‘性能税’（Performance Tax）的关键瓶颈，为后续优化提供数据支撑。",
+            "papers": [
+                {
+                    "index": "an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code",
+                    "paper_title": "An Empirical Study on the Performance and Energy Usage of Compiled Python Code",
+                    "metadata": {
+                        "authors": [
+                            "Vincenzo Stoico",
+                            "Andrei Calin Dragomir",
+                            "Patricia Lago"
+                        ],
+                        "affiliations": [
+                            "Vrije Universiteit Amsterdam, The Netherlands"
+                        ],
+                        "venue": "EASE",
+                        "year": 2025,
+                        "doi": "10.1145/nnnnnnn.nnnnnnn"
+                    },
+                    "description": "该研究实证评估了8种Python编译器（如Codon、PyPy、Numba）相比CPython在性能与能耗上的提升。在7个基准测试中，Codon、PyPy和Numba平均实现超90%的执行时间和能耗优化，Nuitka显著降低内存使用。实验在固定频率和单核条件下进行，控制了代码特征与平台变量。",
+                    "_source_folder": "an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code"
+                },
+                {
+                    "index": "rethinking-java-performance-analysis",
+                    "paper_title": "Rethinking Java Performance Analysis",
+                    "metadata": {
+                        "authors": [
+                            "Stephen M. Blackburn",
+                            "Zixian Cai",
+                            "Rui Chen",
+                            "et al."
+                        ],
+                        "affiliations": [
+                            "Google",
+                            "Australian National University",
+                            "ByteDance",
+                            "IOP Systems",
+                            "Canva",
+                            "The University of Sydney"
+                        ],
+                        "venue": "ASPLOS",
+                        "year": 2025,
+                        "doi": "10.1145/3669940.3707217"
+                    },
+                    "description": "论文提出DaCapo Chopin基准套件，包含22个新/更新的工作负载，并引入新方法论评估Java性能。通过主成分分析验证工作负载多样性，揭示现代生产级垃圾回收器即使在最优情况下仍消耗15% CPU周期，在小堆内存下开销高达17倍。论文强调需持续改进性能分析方法以避免研究方向偏差。",
+                    "_source_folder": "rethinking-java-performance-analysis"
+                },
+                {
+                    "index": "investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster",
+                    "paper_title": "Investigating Managed Language Runtime Performance: Why JavaScript and Python are 8x and 29x slower than C++, yet Java and Go can be Faster?",
+                    "metadata": {
+                        "authors": [
+                            "David Lion",
+                            "Adrian Chiu",
+                            "Michael Stumm",
+                            "et al."
+                        ],
+                        "affiliations": [
+                            "University of Toronto",
+                            "YScope Inc."
+                        ],
+                        "venue": "USENIX ATC",
+                        "year": 2022,
+                        "doi": null
+                    },
+                    "description": "该论文对Java、Go、JavaScript和Python的运行时性能进行了深入分析，以C++为基线。通过自研的LangBench基准测试套件和对OpenJDK、V8、CPython运行时的深度插桩，量化了各语言的开销来源。研究发现CPython和V8/Node.js分别比C++慢29.5倍和8倍且难以并行扩展，而OpenJDK和Go仅慢1.43倍和1.3倍，并在部分场景下因GC改善缓存局部性或优化I/O而超越C++。",
+                    "_source_folder": "investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster"
+                },
+                {
+                    "index": "porting-a-jit-compiler-to-risc-v-challenges-and-opportunities",
+                    "paper_title": "Porting a JIT Compiler to RISC-V: Challenges and Opportunities",
+                    "metadata": {
+                        "authors": [
+                            "Quentin Ducasse",
+                            "Guillermo Polito",
+                            "Pablo Tesone",
+                            "et al."
+                        ],
+                        "affiliations": [
+                            "Laboratoire Lab-STICC - ENSTA Bretagne, France",
+                            "CNRS, INRIA - Centrale Lille, UMR 9189 CRIStAL, France"
+                        ],
+                        "venue": "MPLR",
+                        "year": 2022,
+                        "doi": null
+                    },
+                    "description": "本文研究将Pharo的x86架构JIT编译器Cogit移植到RISC-V所面临的挑战与机遇。针对RISC-V缺乏条件码、立即数加载复杂等特性，提出了IR重构、使用离线字面量管理及开发仿真调试工具等解决方案。实现了开源的RISC-V后端，并构建了ISA无关的测试框架和自定义指令仿真机制，为在RISC-V上探索VM硬件加速（如GC、安全）奠定基础。",
+                    "_source_folder": "porting-a-jit-compiler-to-risc-v-challenges-and-opportunities"
+                },
+                {
+                    "index": "a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008",
+                    "paper_title": "A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008",
+                    "metadata": {
+                        "authors": [
+                            "Philipp Lengauer",
+                            "Verena Bitto",
+                            "Hanspeter Mössenböck",
+                            "et al."
+                        ],
+                        "affiliations": [
+                            "Institute for System Software, Johannes Kepler University Linz, Austria",
+                            "Christian Doppler Laboratory MEVSS, Johannes Kepler University Linz, Austria"
+                        ],
+                        "venue": "ICPE",
+                        "year": 2017,
+                        "doi": "http://dx.doi.org/10.1145/3030207.3030211"
+                    },
+                    "description": "本文对DaCapo、DaCapo Scala和SPECjvm2008三大Java基准套件进行了全面的内存与垃圾回收（GC）行为分析。利用低开销监控工具AntTracks，在现代JVM上量化了各基准的分配强度、GC频率、暂停时间等关键指标，并对比了ParallelOld GC与G1 GC的性能差异。研究揭示了如factorie和sunflow等基准高达137GB的内存分配，以及G1在多数场景下显著降低GC时间（如factorie从41%降至1.4%）和暂停时间的优势，为研究人员选择合适基准提供了实证指南。",
+                    "_source_folder": "a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008"
+                }
+            ]
+        },
+        {
+            "title": "动态类型",
+            "description": "动态类型检查与分派：由于变量类型在运行时可变，解释器或JIT编译器必须在每次操作前检查操作数的类型标签（Tag），并根据类型动态分派（Dispatch）到相应的处理函数。这一过程引入了大量的数据依赖性条件跳转和间接跳转指令。",
+            "papers": [
+                {
+                    "index": "checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors",
+                    "paper_title": "Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors",
+                    "metadata": {
+                        "authors": [
+                            "Owen Anderson",
+                            "Emily Fortuna",
+                            "Luis Ceze",
+                            "et al."
+                        ],
+                        "affiliations": [
+                            "Computer Science and Engineering, University of Washington"
+                        ],
+                        "venue": "HPCA",
+                        "year": 2011,
+                        "doi": null
+                    },
+                    "description": "提出Checked Load架构扩展，通过4条新ISA指令将动态类型检查从软件移至硬件，结合动态类型预测，在移动处理器上JavaScript基准测试平均加速11.2%，最高达44.6%。",
+                    "_source_folder": "checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors"
+                },
+                {
+                    "index": "typed-architectures-architectural-support-for-lightweight-scripting",
+                    "paper_title": "Typed Architectures: Architectural Support for Lightweight Scripting",
+                    "metadata": {
+                        "authors": [
+                            "Channoh Kim",
+                            "Jaehyeok Kim",
+                            "Sungmin Kim",
+                            "et al."
+                        ],
+                        "affiliations": [
+                            "Sungkyunkwan University, Suwon, Korea",
+                            "Seoul National University, Seoul, Korea"
+                        ],
+                        "venue": "ASPLOS",
+                        "year": 2017,
+                        "doi": "http://dx.doi.org/10.1145/3037697.3037726"
+                    },
+                    "description": "论文提出Typed Architectures，通过ISA级硬件支持动态类型检查，引入多态指令和灵活的类型标签提取/插入机制。在RISC-V上实现，对JavaScript和Lua解释器分别取得11.2%和9.9%的平均加速，EDP提升19.3%和16.5%，面积开销仅1.6%。",
+                    "_source_folder": "typed-architectures-architectural-support-for-lightweight-scripting"
+                }
+            ]
+        },
+        {
+            "title": "解释器开销",
+            "description": "**解释器开销**：在未被JIT编译之前，代码运行在解释器模式下，存在大量的解码-分派循环，导致极低的指令级并行度（ILP）。",
+            "papers": [
+                {
+                    "index": "branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore",
+                    "paper_title": "Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore",
+                    "metadata": {
+                        "authors": [
+                            "Erven Rohou",
+                            "Bharath Narasimha Swamy",
+                            "Andre Seznec"
+                        ],
+                        "affiliations": [
+                            "Inria, France"
+                        ],
+                        "venue": "CGO",
+                        "year": 2015,
+                        "doi": "10.1109/CGO.2015.7054191"
+                    },
+                    "description": "该论文挑战了“解释器中switch语句的间接跳转因高误预测率而严重损害性能”的传统观点。作者通过在Nehalem、Sandy Bridge和Haswell处理器上对Python、JavaScript和CLI解释器进行实验，发现分支预测准确率已大幅提升：全局分支误预测率（MPKI）从Nehalem上的12-20降至Haswell上的0.5-2。研究表明，在现代处理器上，间接跳转的预测开销已不再是性能瓶颈。",
+                    "_source_folder": "branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore"
+                },
+                {
+                    "index": "virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar",
+                    "paper_title": "Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar",
+                    "metadata": {
+                        "authors": [
+                            "Hyesoon Kim",
+                            "José A. Joao",
+                            "Onur Mutlu",
+                            "et al."
+                        ],
+                        "affiliations": [
+                            "Georgia Institute of Technology",
+                            "University of Texas at Austin",
+                            "Carnegie Mellon University",
+                            "Intel Corporation"
+                        ],
+                        "venue": "IEEE Transactions on Computers",
+                        "year": 2009,
+                        "doi": "10.1109/TC.2008.227"
+                    },
+                    "description": "论文提出虚拟程序计数器（VPC）预测技术，利用现有条件分支预测硬件低成本地预测间接分支目标，避免了专用存储结构。该方法在C/C++和Java应用上分别平均提升性能26.7%和21.9%，并显著降低能耗，且可与任意条件分支预测器协同工作。",
+                    "_source_folder": "virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware"
+                },
+                {
+                    "index": "bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design",
+                    "paper_title": "Bungee Jumps: Accelerating Indirect Branches Through HW/SW Co-Design",
+                    "metadata": {
+                        "authors": [
+                            "Daniel S. McFarlin",
+                            "Craig Zilles"
+                        ],
+                        "affiliations": [
+                            "Carnegie Mellon University",
+                            "University of Illinois at Urbana-Champaign"
+                        ],
+                        "venue": "MICRO",
+                        "year": 2015,
+                        "doi": "http://dx.doi.org/10.1145/2830772.2830781"
+                    },
+                    "description": "论文提出Bungee Jumps技术，通过HW/SW协同设计将间接分支的预测点与解析点分离，使顺序处理器能利用现代高准确率的间接分支预测器。该方法在SPEC、PHP和Python基准上分别实现了11%、23%和14%的平均加速，且代码体积仅增加1-3%。",
+                    "_source_folder": "bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design"
+                }
+            ]
+        },
+        {
+            "title": "垃圾回收开销",
+            "description": "**自动内存管理与硬件加速**：垃圾回收（GC）产生的‘全停顿’（Stop-The-World）和高内存带宽占用是制约系统响应能力的主要因素，尤其在多核环境下，原子操作和锁竞争进一步加剧了开销。本部分探讨如何利用硬件事务内存（HTM）、近数据处理（PIM）或专用加速器来卸载对象扫描、引用计数更新等操作，以实现低延迟、高吞吐的并发垃圾回收。",
+            "papers": [
+                {
+                    "index": "concurrent-copying-garbage-collection-with-hardware-transactional-memory",
+                    "paper_title": "Concurrent Copying Garbage Collection with Hardware Transactional Memory",
+                    "metadata": {
+                        "authors": [
+                            "Zixian Cai"
+                        ],
+                        "affiliations": [
+                            "The Australian National University"
+                        ],
+                        "venue": "unknown",
+                        "year": 2020,
+                        "doi": null
+                    },
+                    "description": "该论文提出了一种利用硬件事务内存（HTM）来降低并发复制垃圾回收（GC）中mutator开销的新算法。通过让mutator在事务中短暂执行，确保了堆视图的一致性，避免了传统读屏障或页保护的高开销。作者深入分析了Intel TSX的事务容量特性，并基于此设计了乐观复制和缓存预热等优化。实验结果表明，该HTM-based GC方案是可行的。",
+                    "_source_folder": "concurrent-copying-garbage-collection-with-hardware-transactional-memory"
+                },
+                {
+                    "index": "flexible-reference-counting-based-hardware-acceleration-for-garbage-collection",
+                    "paper_title": "Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection",
+                    "metadata": {
+                        "authors": [
+                            "José A. Joao",
+                            "Onur Mutlu",
+                            "Yale N. Patt"
+                        ],
+                        "affiliations": [
+                            "ECE Department, The University of Texas at Austin",
+                            "Computer Architecture Laboratory, Carnegie Mellon University"
+                        ],
+                        "venue": "ISCA",
+                        "year": 2009,
+                        "doi": null
+                    },
+                    "description": "提出HAMM，一种软硬件协同的垃圾回收加速机制。通过硬件实现的引用计数（带RCCB缓冲）高效检测死亡对象，并通过ABT快速重用内存块，从而减少软件GC频率。在DaCapo基准测试中，平均减少31%的GC时间，对应用性能（mutator）影响可忽略（仅0.38%开销）。",
+                    "_source_folder": "flexible-reference-counting-based-hardware-acceleration-for-garbage-collection"
+                },
+                {
+                    "index": "gray-in-young-a-generational-garbage-collection-for-processing-in-memory",
+                    "paper_title": "Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory",
+                    "metadata": {
+                        "authors": [
+                            "Ryu Morimoto",
+                            "Kazuki Ichinose",
+                            "Tomoharu Ugawa"
+                        ],
+                        "affiliations": [
+                            "The University of Tokyo"
+                        ],
+                        "venue": "ISMM",
+                        "year": 2025,
+                        "doi": "10.1145/3735950.3735961"
+                    },
+                    "description": "针对UPMEM PIM架构的DPU设计了一种并行分代垃圾回收器（GC）。其创新点包括：将新生代置于快速SPM中，通过Gray-in-Young算法在对象晋升前于SPM内更新指针，并静态缓存对象布局信息。这些技术减少了85.9%的DRAM访问，性能提升46.2%，且GC代码仅占4.3KB，可扩展至11个线程。",
+                    "_source_folder": "gray-in-young-a-generational-garbage-collection-for-processing-in-memory"
+                }
+            ]
+        }
+    ]
+}

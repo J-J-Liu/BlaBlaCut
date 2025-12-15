@@ -1,0 +1,19 @@
+{
+  "index": "checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors",
+  "paper_title": "Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors",
+  "metadata": {
+    "authors": [
+      "Owen Anderson",
+      "Emily Fortuna",
+      "Luis Ceze",
+      "et al."
+    ],
+    "affiliations": [
+      "Computer Science and Engineering, University of Washington"
+    ],
+    "venue": "HPCA",
+    "year": 2011,
+    "doi": null
+  },
+  "description": "提出Checked Load架构扩展，通过4条新ISA指令将动态类型检查从软件移至硬件，结合动态类型预测，在移动处理器上JavaScript基准测试平均加速11.2%，最高达44.6%。"
+}

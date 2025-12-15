@@ -1,0 +1,20 @@
+{
+  "index": "porting-a-jit-compiler-to-risc-v-challenges-and-opportunities",
+  "paper_title": "Porting a JIT Compiler to RISC-V: Challenges and Opportunities",
+  "metadata": {
+    "authors": [
+      "Quentin Ducasse",
+      "Guillermo Polito",
+      "Pablo Tesone",
+      "et al."
+    ],
+    "affiliations": [
+      "Laboratoire Lab-STICC - ENSTA Bretagne, France",
+      "CNRS, INRIA - Centrale Lille, UMR 9189 CRIStAL, France"
+    ],
+    "venue": "MPLR",
+    "year": 2022,
+    "doi": null
+  },
+  "description": "本文研究将Pharo的x86架构JIT编译器Cogit移植到RISC-V所面临的挑战与机遇。针对RISC-V缺乏条件码、立即数加载复杂等特性，提出了IR重构、使用离线字面量管理及开发仿真调试工具等解决方案。实现了开源的RISC-V后端，并构建了ISA无关的测试框架和自定义指令仿真机制，为在RISC-V上探索VM硬件加速（如GC、安全）奠定基础。"
+}

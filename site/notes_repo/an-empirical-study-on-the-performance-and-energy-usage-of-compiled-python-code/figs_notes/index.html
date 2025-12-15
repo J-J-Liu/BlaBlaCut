@@ -1,0 +1,1031 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>An Empirical Study on the Performance and Energy Usage of Compiled Python Code 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              An Empirical Study on the Performance and Energy Usage of Compiled Python Code 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-subjects-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: Subjects Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-experiment-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1: Experiment Execution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-descriptive-statistics-from-server-data-the-highlighted-number-shows-the-minimum-average-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Descriptive Statistics from Server data. The highlighted number shows the minimum average value.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-average-energy-usage-execution-time-and-memory-usage-for-each-benchmark-by-compiler-the-dashed-red-line-represents-the-threshold-of-the-cpython-implementation-for-a-given-benchmark-legend-cpython-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-speedup-and-energy-improvement-on-the-server-across-benchmarks-compared-to-cpython-legend-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Speedup and Energy improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-memory-usage-improvement-on-the-server-across-benchmarks-compared-to-cpython-legend-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4: Memory usage improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#64-considerations-on-lcc-miss-percentage-figure-5-correlation-between-execution-time-and-last-level-cache-misses-darker-areas-show-higher-frequency-with-the-red-dashed-line-indicating-a-strong-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Considerations on LCC miss percentage Figure 5: Correlation between execution time and Last-Level Cache misses. Darker areas show higher frequency, with the red dashed line indicating a strong correlation.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code">An Empirical Study on the Performance and Energy Usage of Compiled Python Code 图表详解<a class="headerlink" href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" title="Permanent link">&para;</a></h1>
+<h3 id="table-1-subjects-summary">Table 1: Subjects Summary<a class="headerlink" href="#table-1-subjects-summary" title="Permanent link">&para;</a></h3>
+<p><img alt="7f0745cf637066370b11fdfb19e4e31275a48638f1741d928932bf65355d9600.jpg" src="../images/7f0745cf637066370b11fdfb19e4e31275a48638f1741d928932bf65355d9600.jpg" /></p>
+<ul>
+<li>该图片为 <strong>Table 1: Subjects Summary</strong>，总结了本研究中使用的八个 Python 编译器及参考解释器 CPython 的基本信息。</li>
+<li>表格包含三列：<strong>Subject</strong>（主体）、<strong>Type</strong>（类型）、<strong>Description</strong>（描述）。</li>
+<li>所有编译器按其编译方式分为 <strong>AOT</strong>（Ahead-Of-Time）或 <strong>JIT</strong>（Just-In-Time），CPython 作为解释器单独列出。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nuitka</td>
+<td>AOT</td>
+<td>Translates full Python code to optimized C++</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>AOT</td>
+<td>Converts Python to C/C++</td>
+</tr>
+<tr>
+<td>MyPyC</td>
+<td>AOT</td>
+<td>Compiles Python to C extensions</td>
+</tr>
+<tr>
+<td>Codon</td>
+<td>AOT</td>
+<td>Compiles a subset of Python to native machine code</td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>JIT</td>
+<td>Uses a JIT compiler based on a subset of Python (RPython)</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>JIT</td>
+<td>Compiles Python into optimized machine code at runtime</td>
+</tr>
+<tr>
+<td>Pyston-lite</td>
+<td>JIT</td>
+<td>Adds lightweight JIT optimizations to the standard CPython interpreter</td>
+</tr>
+<tr>
+<td>Python 3.13</td>
+<td>JIT</td>
+<td>Experimental JIT for CPython, introduced in Python 3.13</td>
+</tr>
+<tr>
+<td>CPython</td>
+<td>Interpreter</td>
+<td>The reference Python implementation</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Numba</strong> 和 <strong>PyPy</strong> 是典型的 JIT 编译器，分别针对数值计算和通用 Python 代码优化。</li>
+<li><strong>Codon</strong> 作为 AOT 编译器，仅支持 Python 子集，但能直接生成原生机器码，性能提升显著。</li>
+<li><strong>Pyston-lite</strong> 和 <strong>Python 3.13 JIT</strong> 均基于 CPython，提供轻量级或实验性 JIT 优化。</li>
+<li><strong>CPython</strong> 作为基准，是所有比较的参照对象，不进行任何编译优化。</li>
+<li>该表清晰区分了不同编译器的技术路径，为后续性能与能耗对比提供了分类基础。</li>
+</ul>
+<h3 id="figure-1-experiment-execution">Figure 1: Experiment Execution<a class="headerlink" href="#figure-1-experiment-execution" title="Permanent link">&para;</a></h3>
+<p><img alt="72911aedd5a555d0efb78c0232cce464978c5d57ccdfe54eebb455570f3c53c8.jpg" src="../images/72911aedd5a555d0efb78c0232cce464978c5d57ccdfe54eebb455570f3c53c8.jpg" /></p>
+<ul>
+<li><strong>实验执行架构</strong>：图示清晰划分了<strong>Orchestration Machine (Laptop)</strong> 与 <strong>Testbeds (SERVER, NUC)</strong> 两大核心组件，通过 <strong>SSH</strong> 连接实现远程控制与数据回传。</li>
+<li><strong>实验流程自动化</strong>：整个实验由 <strong>ExperimentRunner</strong> 框架驱动，其内部循环逻辑（Loop for each compiler and benchmark）确保了对每个编译器和基准测试组合的标准化、重复性执行。</li>
+<li><strong>关键执行步骤</strong>：<ul>
+<li><strong>预热阶段</strong>：在正式运行前，通过执行 <code>warmup.py</code> 脚本对测试机进行2分钟预热，以稳定硬件温度，减少环境变量对能耗测量的干扰。</li>
+<li><strong>并行监控</strong>：在执行基准测试的同时，<strong>EnergiBridge</strong> 和 <strong>Perf</strong> 工具被启动，分别用于实时采集 <strong>CPU/DRAM/Package 能耗 (J)</strong>、<strong>内存使用量 (KB)</strong> 以及 <strong>LLC Load Misses (%)</strong> 等关键性能指标。</li>
+<li><strong>数据收集与传输</strong>：基准测试完成后，系统会等待其结束，然后通过 <strong>SCP</strong> 协议将生成的原始数据文件（<code>energi.csv</code>, <code>output.txt</code>, <code>perf.csv</code>）从测试床安全复制回协调机，并解析存入 <code>run_table.csv</code>。</li>
+<li><strong>冷却阶段</strong>：每次运行结束后，系统会强制暂停2分钟，以便让测试机充分散热，为下一次独立运行提供一个稳定的起始状态。</li>
+</ul>
+</li>
+<li><strong>测量工具分工明确</strong>：<ul>
+<li><strong>EnergiBridge</strong>：负责能耗与内存占用的量化，其输出包含三个维度：<strong>Energy Usage CPU (J)</strong>, <strong>Energy Usage DRAM (J)</strong>, <strong>Energy Usage Package (J)</strong>。</li>
+<li><strong>Perf</strong>：专注于底层硬件性能分析，主要输出 <strong>LLC Load Misses (%)</strong>，用以评估缓存效率。</li>
+</ul>
+</li>
+<li><strong>数据流路径</strong>：数据从测试床上的测量工具产生，经由 <strong>SSH</strong> 或 <strong>SCP</strong> 通道回传至协调机，最终汇聚到统一的数据表中，为后续的统计分析提供结构化输入。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>测量工具</th>
+<th>主要功能</th>
+<th>输出数据项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EnergiBridge</td>
+<td>能耗与内存监控</td>
+<td>Energy Usage CPU (J), Energy Usage DRAM (J), Energy Usage Package (J), Process Memory (KB)</td>
+</tr>
+<tr>
+<td>Perf</td>
+<td>缓存性能分析</td>
+<td>LLC Load Misses (%)</td>
+</tr>
+<tr>
+<td>time (Python module)</td>
+<td>执行时间记录</td>
+<td>Execution Time (min)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="table-2-descriptive-statistics-from-server-data-the-highlighted-number-shows-the-minimum-average-value">Table 2: Descriptive Statistics from Server data. The highlighted number shows the minimum average value.<a class="headerlink" href="#table-2-descriptive-statistics-from-server-data-the-highlighted-number-shows-the-minimum-average-value" title="Permanent link">&para;</a></h3>
+<p><img alt="555037709359a2af7afdc2e64329f6bc4c3a2c674d5dac761cd6b7f8fc1cb7d8.jpg" src="../images/555037709359a2af7afdc2e64329f6bc4c3a2c674d5dac761cd6b7f8fc1cb7d8.jpg" /></p>
+<ul>
+<li><strong>Table 2</strong> 汇总了在服务器上运行七个基准测试时，九种 Python 执行环境（包括 CPython 和八种编译器）的描述性统计结果，涵盖四个关键性能指标：能量消耗、执行时间、内存使用和 LLC 加载未命中率。</li>
+<li>数据以平均值（mean）、标准差（std）、最小值（min）、中位数（50%）和最大值（max）呈现，便于横向比较各编译器的稳定性与极端表现。</li>
+<li><strong>Codon</strong> 在 <strong>能量消耗</strong>（0.64 KJ）和 <strong>执行时间</strong>（1.04 分钟）两项指标上均取得<strong>最低平均值</strong>，表明其在能效和速度方面表现最优。</li>
+<li><strong>Nuitka</strong> 在 <strong>内存使用</strong>（1.75 MB）上取得<strong>最低平均值</strong>，显示其在内存优化方面具有显著优势。</li>
+<li><strong>PyPy</strong> 在 <strong>LLC Load Misses (%)</strong> 上取得<strong>最低平均值</strong>（13.25%），说明其缓存效率较高。</li>
+<li>以下为关键数据表格化整理：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Energy Consumption (KJ) mean</th>
+<th>Execution Time (min) mean</th>
+<th>Memory Usage (MB) mean</th>
+<th>LLC Load Misses (%) mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPython</td>
+<td>16.41</td>
+<td>24.98</td>
+<td>3.56</td>
+<td>21.73</td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>1.54</td>
+<td>2.36</td>
+<td>5.18</td>
+<td><strong>13.25</strong></td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>1.33</td>
+<td>2.15</td>
+<td>3.29</td>
+<td>18.22</td>
+</tr>
+<tr>
+<td>Pyston-lite</td>
+<td>16.87</td>
+<td>25.85</td>
+<td>2.78</td>
+<td>20.68</td>
+</tr>
+<tr>
+<td>Python 3.13 JIT</td>
+<td>12.57</td>
+<td>19.41</td>
+<td>3.88</td>
+<td>18.13</td>
+</tr>
+<tr>
+<td>Nuitka</td>
+<td>14.32</td>
+<td>21.88</td>
+<td><strong>1.75</strong></td>
+<td>58.73</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>14.93</td>
+<td>22.80</td>
+<td>2.84</td>
+<td>20.38</td>
+</tr>
+<tr>
+<td>Codon</td>
+<td><strong>0.64</strong></td>
+<td><strong>1.04</strong></td>
+<td>2.35</td>
+<td>20.89</td>
+</tr>
+<tr>
+<td>Mypyc</td>
+<td>15.09</td>
+<td>22.73</td>
+<td>3.15</td>
+<td>20.06</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>高变异度</strong>现象在多个指标中普遍存在，例如 CPython 的能量消耗标准差高达 12.97 KJ，表明不同基准测试间能耗差异巨大。</li>
+<li><strong>Numba</strong> 和 <strong>Codon</strong> 在能量与时间上表现突出，但 <strong>Nuitka</strong> 虽内存占用最低，却伴随极高的 LLC 未命中率（58.73%），暗示其可能牺牲缓存效率换取内存节省。</li>
+<li><strong>Pyston-lite</strong> 和 <strong>CPython</strong> 在能量与时间上表现接近，甚至略差，说明其作为轻量级 JIT 编译器在本实验设置下未体现明显优势。</li>
+<li><strong>Python 3.13 JIT</strong> 作为实验性编译器，在多项指标中表现中等，未达到 PyPy 或 Numba 的优化水平，但仍优于原始 CPython。</li>
+</ul>
+<h3 id="figure-2-average-energy-usage-execution-time-and-memory-usage-for-each-benchmark-by-compiler-the-dashed-red-line-represents-the-threshold-of-the-cpython-implementation-for-a-given-benchmark-legend-cpython-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc">Figure 2: Average energy usage, execution time, and memory usage for each benchmark by compiler. The dashed red line represents the threshold of the CPython implementation for a given benchmark. Legend: CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc<a class="headerlink" href="#figure-2-average-energy-usage-execution-time-and-memory-usage-for-each-benchmark-by-compiler-the-dashed-red-line-represents-the-threshold-of-the-cpython-implementation-for-a-given-benchmark-legend-cpython-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc" title="Permanent link">&para;</a></h3>
+<p><img alt="5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" src="../images/5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg" /></p>
+<ul>
+<li>
+<p>图片 5f6b38345651261940062f75000d782ea9de6bbbb22ffe3fd1704a13b3c1994d.jpg 是 Figure 2，展示七个基准测试（benchmark）在不同编译器下的平均能耗、执行时间和内存使用情况，对比对象为 CPython。</p>
+</li>
+<li>
+<p>图中包含三个子图：(a) 平均能耗（KJ），(b) 平均执行时间（分钟），(c) 内存使用（MB），每个子图按 benchmark 分列，共七组。</p>
+</li>
+<li>
+<p>所有柱状图均以 <strong>CPython 的结果作为红色虚线阈值</strong>，用于直观比较各编译器的优化效果。</p>
+</li>
+<li>
+<p>编译器图例包括：CPython, PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc。</p>
+</li>
+<li>
+<p>能耗柱状图采用<strong>三色渐变堆叠</strong>，从浅到深分别代表 DRAM → uncore components → core 的能耗贡献。</p>
+</li>
+<li>
+<p><strong>Codon、PyPy、Numba 在多数 benchmark 中显著低于 CPython 阈值</strong>，尤其在 n_body 和 k_nucleotide 上表现突出。</p>
+</li>
+<li>
+<p><strong>Nuitka、Cython、MyPyc 在 n_body 上能耗高于 CPython</strong>，呈现负优化。</p>
+</li>
+<li>
+<p>能耗主要由 uncore components（如 LLC、内存控制器）主导，其次是 core，DRAM 占比最小。</p>
+</li>
+<li>
+<p>柱状图采用<strong>双色调</strong>：浅色代表 NUC 平台，深色代表 Server 平台。</p>
+</li>
+<li>
+<p><strong>Codon、PyPy、Numba 在所有 benchmark 上均大幅缩短执行时间</strong>，尤其 Codon 在 n_body 上提速近 90 倍。</p>
+</li>
+<li>
+<p><strong>Python 3.13 JIT 在 fasta 和 k_nucleotide 上反而慢于 CPython</strong>，显示其优化不稳定。</p>
+</li>
+<li>
+<p>NUC 与 Server 平台趋势一致，但绝对时间值不同，反映硬件差异。</p>
+</li>
+<li>
+<p>使用箱线图展示内存使用（RSS，单位 MB），带误差条和离群点。</p>
+</li>
+<li>
+<p><strong>Nuitka 在几乎所有 benchmark 中内存使用最低</strong>，且波动小，稳定性高。</p>
+</li>
+<li>
+<p><strong>PyPy 在 fannkuch_redux 和 k_nucleotide 上内存占用显著高于 CPython</strong>，存在峰值达 11 MB。</p>
+</li>
+<li>
+<p>其他编译器内存表现与 CPython 相近，无明显优势或劣势。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>最佳能耗编译器</th>
+<th>最佳执行时间编译器</th>
+<th>最低内存编译器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mandelbrot</td>
+<td>Codon</td>
+<td>Codon</td>
+<td>Nuitka</td>
+</tr>
+<tr>
+<td>fannkuch_redux</td>
+<td>Codon</td>
+<td>Codon</td>
+<td>Nuitka</td>
+</tr>
+<tr>
+<td>binary_trees</td>
+<td>Codon</td>
+<td>Codon</td>
+<td>Nuitka</td>
+</tr>
+<tr>
+<td>n_body</td>
+<td>Codon</td>
+<td>Codon</td>
+<td>Nuitka</td>
+</tr>
+<tr>
+<td>spectralnorm</td>
+<td>PyPy</td>
+<td>PyPy</td>
+<td>Nuitka</td>
+</tr>
+<tr>
+<td>k_nucleotide</td>
+<td>Codon</td>
+<td>Codon</td>
+<td>Nuitka</td>
+</tr>
+<tr>
+<td>fasta</td>
+<td>Codon</td>
+<td>Codon</td>
+<td>Nuitka</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>总体趋势</strong>：Codon、PyPy、Numba 在性能和能耗上表现最优；Nuitka 在内存优化上最稳定；其他编译器效果有限或不稳定。</li>
+<li><strong>平台一致性</strong>：NUC 与 Server 在能耗和执行时间趋势高度一致，验证实验可重复性。</li>
+<li><strong>异常点</strong>：n_body 编译后部分 AOT 编译器（Nuitka/Cython/MyPyc）能耗反增，可能因 Python 列表操作与 C/C++ 类型转换开销所致。</li>
+</ul>
+<h3 id="figure-3-speedup-and-energy-improvement-on-the-server-across-benchmarks-compared-to-cpython-legend-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc">Figure 3: Speedup and Energy improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc<a class="headerlink" href="#figure-3-speedup-and-energy-improvement-on-the-server-across-benchmarks-compared-to-cpython-legend-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc" title="Permanent link">&para;</a></h3>
+<p><img alt="750c0034543fec6991a1d724b01db7a8aa3f63e208d8a28e2dcff778f21492fa.jpg" src="../images/750c0034543fec6991a1d724b01db7a8aa3f63e208d8a28e2dcff778f21492fa.jpg" /></p>
+<ul>
+<li>图片包含两个子图，分别展示在服务器上不同编译器相对于 CPython 的 <strong>Speedup</strong> 和 <strong>Energy Improvement (%)</strong>，横轴为七个基准测试（benchmarks），纵轴为性能提升百分比或倍数。</li>
+<li>子图 (a) Speedup 显示了各编译器在不同基准测试中的执行速度加速比。<strong>Codon</strong> 在多个基准中表现突出，尤其在 <code>n_body</code> 上达到约 89 倍加速，在 <code>spectralnorm</code> 上也接近 20 倍。<strong>PyPy</strong> 和 <strong>Numba</strong> 在多数基准上稳定提供 5–40 倍加速，其中 Numba 在 <code>n_body</code> 达到约 44 倍。</li>
+<li>子图 (b) Energy Improvement (%) 展示了能量效率提升百分比。<strong>Codon</strong> 在 <code>n_body</code> 上实现高达 <strong>99.06%</strong> 的节能，整体平均节能达 <strong>94.66%</strong>。<strong>PyPy</strong> 和 <strong>Numba</strong> 分别平均节能 <strong>86.89%</strong> 和 <strong>86.61%</strong>，表现稳定。</li>
+<li>部分编译器在特定基准上出现负优化，如 <strong>Nuitka、Cython、MyPyc</strong> 在 <code>n_body</code> 上能耗反而增加，分别达 -54.98%、-68.65%、-47.96%，表明其 AOT 编译机制对数学密集型列表操作适配不佳。</li>
+<li>下表总结关键编译器在代表性基准上的表现：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>编译器</th>
+<th>n_body (Speedup)</th>
+<th>n_body (Energy Improvement %)</th>
+<th>spectralnorm (Speedup)</th>
+<th>k_nucleotide (Energy Improvement %)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Codon</td>
+<td>~89x</td>
+<td><strong>99.06%</strong></td>
+<td>~20x</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>~20x</td>
+<td>~80%</td>
+<td>~23x</td>
+<td>~62%</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>~44x</td>
+<td>~85%</td>
+<td>~15x</td>
+<td>~70%</td>
+</tr>
+<tr>
+<td>Nuitka</td>
+<td>~1x</td>
+<td><strong>-54.98%</strong></td>
+<td>~1x</td>
+<td>~20%</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>~1x</td>
+<td><strong>-68.65%</strong></td>
+<td>~1x</td>
+<td>~30%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>整体趋势显示，<strong>Codon、PyPy、Numba</strong> 是最有效的性能与能效优化工具，而 <strong>Nuitka、Cython、MyPyc</strong> 在部分场景下可能引入额外开销，需谨慎选择适用场景。</li>
+<li>图例中颜色对应编译器：粉色=PyPy，橙色=Numba，紫色=Pyston-lite，浅蓝=Python 3.13 JIT，深绿=Nuitka，青色=Cython，棕色=Codon，黄色=MyPyc。</li>
+</ul>
+<h3 id="figure-4-memory-usage-improvement-on-the-server-across-benchmarks-compared-to-cpython-legend-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc">Figure 4: Memory usage improvement on the server across benchmarks compared to CPython. Legend: PyPy, Numba, Pyston-lite, Python 3.13 JIT, Nuitka, Cython, Codon, MyPyc<a class="headerlink" href="#figure-4-memory-usage-improvement-on-the-server-across-benchmarks-compared-to-cpython-legend-pypy-numba-pyston-lite-python-313-jit-nuitka-cython-codon-mypyc" title="Permanent link">&para;</a></h3>
+<p><img alt="d9fce18701234e5e668b72565404608bc6fee1e36af7e5f583ec7a0bfb3fc3ef.jpg" src="../images/d9fce18701234e5e668b72565404608bc6fee1e36af7e5f583ec7a0bfb3fc3ef.jpg" /></p>
+<ul>
+<li>图表标题为“Figure 4: Memory usage improvement on the server across benchmarks compared to CPython”，展示的是在服务器平台上，各编译器相对于 <strong>CPython</strong> 在内存使用上的改进百分比。</li>
+<li>横轴为七个基准测试（benchmarks）：<code>mandelbrot</code>, <code>fannkuch_redux</code>, <code>binary_trees</code>, <code>n_body</code>, <code>spectralnorm</code>, <code>k_nucleotide</code>, <code>fasta</code>。</li>
+<li>纵轴为内存使用改进百分比，正值表示内存使用减少（优化），负值表示内存使用增加（恶化）。</li>
+<li>图例包含八个编译器：<strong>PyPy</strong>, <strong>Numba</strong>, <strong>Pyston-lite</strong>, <strong>Python 3.13 JIT</strong>, <strong>Nuitka</strong>, <strong>Cython</strong>, <strong>Codon</strong>, <strong>MyPyc</strong>，每种编译器用不同颜色和标记点表示。</li>
+<li><strong>Nuitka</strong> 在多数基准测试中表现最佳，尤其在 <code>fannkuch_redux</code> 和 <code>binary_trees</code> 上达到约 -300% 至 -400% 的改进（即内存使用大幅下降），表明其在内存优化方面非常有效。</li>
+<li><strong>Codon</strong> 在多个测试中也表现出色，如 <code>n_body</code> 和 <code>spectralnorm</code>，改进幅度在 -50% 至 -100% 之间。</li>
+<li><strong>PyPy</strong> 在部分测试中（如 <code>fannkuch_redux</code>）出现显著负向改进（内存使用激增），但在其他测试中表现稳定。</li>
+<li><strong>Numba</strong> 和 <strong>Cython</strong> 表现较为波动，在某些测试中优化明显（如 <code>n_body</code>），在另一些测试中则导致内存使用上升。</li>
+<li><strong>Python 3.13 JIT</strong> 和 <strong>Pyston-lite</strong> 整体表现平庸，改进幅度较小或为负值。</li>
+<li><strong>MyPyc</strong> 在多数测试中表现不佳，甚至在 <code>fannkuch_redux</code> 中出现超过 -300% 的恶化。</li>
+<li>总体趋势显示，内存优化效果高度依赖于具体基准测试和编译器组合，无单一编译器在所有场景下均最优。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>编译器</th>
+<th>最佳表现基准</th>
+<th>改进幅度（%）</th>
+<th>最差表现基准</th>
+<th>恶化幅度（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nuitka</td>
+<td>fannkuch_redux</td>
+<td>~ -400</td>
+<td>fasta</td>
+<td>~ +50</td>
+</tr>
+<tr>
+<td>Codon</td>
+<td>n_body</td>
+<td>~ -100</td>
+<td>k_nucleotide</td>
+<td>~ +20</td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>binary_trees</td>
+<td>~ -50</td>
+<td>fannkuch_redux</td>
+<td>~ -300</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>n_body</td>
+<td>~ -80</td>
+<td>mandelbrot</td>
+<td>~ +20</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>spectralnorm</td>
+<td>~ -60</td>
+<td>fannkuch_redux</td>
+<td>~ -200</td>
+</tr>
+<tr>
+<td>Python 3.13 JIT</td>
+<td>binary_trees</td>
+<td>~ -30</td>
+<td>fasta</td>
+<td>~ +40</td>
+</tr>
+<tr>
+<td>Pyston-lite</td>
+<td>n_body</td>
+<td>~ -20</td>
+<td>fannkuch_redux</td>
+<td>~ -100</td>
+</tr>
+<tr>
+<td>MyPyc</td>
+<td>binary_trees</td>
+<td>~ -40</td>
+<td>fannkuch_redux</td>
+<td>~ -300</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>Nuitka</strong> 是内存优化最稳定的编译器，尤其适合内存敏感型应用；<strong>Codon</strong> 在计算密集型任务中表现优异；而 <strong>PyPy</strong> 和 <strong>MyPyc</strong> 在特定场景下可能导致内存使用激增，需谨慎选择。</li>
+</ul>
+<h3 id="64-considerations-on-lcc-miss-percentage-figure-5-correlation-between-execution-time-and-last-level-cache-misses-darker-areas-show-higher-frequency-with-the-red-dashed-line-indicating-a-strong-correlation">6.4 Considerations on LCC miss percentage Figure 5: Correlation between execution time and Last-Level Cache misses. Darker areas show higher frequency, with the red dashed line indicating a strong correlation.<a class="headerlink" href="#64-considerations-on-lcc-miss-percentage-figure-5-correlation-between-execution-time-and-last-level-cache-misses-darker-areas-show-higher-frequency-with-the-red-dashed-line-indicating-a-strong-correlation" title="Permanent link">&para;</a></h3>
+<p><img alt="8fac7d839736eba7a85e33736b6ce6cbc1eb1fdfe646a1ac44f9d94613c047e2.jpg" src="../images/8fac7d839736eba7a85e33736b6ce6cbc1eb1fdfe646a1ac44f9d94613c047e2.jpg" /></p>
+<ul>
+<li>图片 8fac7d839736eba7a85e33736b6ce6cbc1eb1fdfe646a1ac44f9d94613c047e2.jpg 展示的是 <strong>Figure 5</strong>，标题为“Correlation between execution time and Last-Level Cache misses”，用于分析执行时间与 <strong>LLC miss rate</strong> 之间的相关性。</li>
+<li>图中横轴列出七个基准测试（benchmarks）：<strong>mandelbrot</strong>, <strong>fannkuch_redux</strong>, <strong>binary_trees</strong>, <strong>n_body</strong>, <strong>spectralnorm</strong>, <strong>k_nucleotide</strong>, <strong>fasta</strong>。</li>
+<li>纵轴表示 <strong>Pearson’s correlation coefficient</strong> 值，范围从 -0.75 到 1.00，反映执行时间与 LLC miss rate 的线性相关强度和方向。</li>
+<li>图中使用颜色深浅表示数据点的频率分布，<strong>颜色越深代表该相关系数值出现的频率越高</strong>。</li>
+<li>图中包含两条水平虚线：一条红色虚线位于 y=0.75，标注为“strong correlation”；另一条黑色虚线位于 y=0.00，作为零相关参考线。</li>
+<li>从图中可见，大部分数据点集中在 <strong>正相关区域</strong>（y &gt; 0），表明在多数情况下，<strong>LLC miss rate 越高，执行时间也倾向于更长</strong>。</li>
+<li>在 <strong>k_nucleotide</strong> 和 <strong>n_body</strong> 基准上，相关系数普遍较高，部分接近或超过 0.75，显示强正相关。</li>
+<li>在 <strong>fasta</strong> 和 <strong>mandelbrot</strong> 上，相关系数分布较广，部分值低于 0，甚至接近 -0.5，说明存在负相关或弱相关情况。</li>
+<li>尽管整体趋势偏向正相关，但图中仍存在大量分散点，尤其在中低相关区间（如 0.25–0.5），表明相关性并不稳定。</li>
+<li>作者在正文 6.4 节指出，<strong>LLC miss rate 与执行时间之间存在正相关趋势，但相关性不强且不稳定</strong>，并强调“correlation does not mean causation”，建议未来深入研究其因果机制。</li>
+<li>此图支持了作者关于 <strong>uncore components（如 LLC）消耗大量能量并影响性能</strong> 的推断，但无法单独确认编译器对 LLC miss rate 的优化效果。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

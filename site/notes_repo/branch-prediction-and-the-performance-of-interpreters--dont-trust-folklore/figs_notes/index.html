@@ -1,0 +1,1892 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#branch-prediction-and-the-performance-of-interpreters-dont-trust-folklore" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-main-loop-of-naive-interpreter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1. Main loop of naive interpreter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-token-threading-using-a-gnu-extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. Token threading, using a GNU extension
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-speedups-in-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. Speedups in Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1. Benchmarks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-2-branch-predictor-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2. Branch predictor parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1fc5ddb3d1eee3e0070dccc37f05afc11c67082894b0273da92ada476f60b4b8jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1fc5ddb3d1eee3e0070dccc37f05afc11c67082894b0273da92ada476f60b4b8.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-python-mpki-for-all-predictors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. Python MPKI for all predictors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-javascript-mpki-for-all-predictors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. Javascript MPKI for all predictors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-cli-mpki-for-all-predictors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. CLI MPKI for all predictors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-correlation-between-mpki-and-lost-slots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. Correlation between MPKI and lost slots
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-dispatch-loop-of-the-cli-interpreter-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8. Dispatch loop of the CLI interpreter (+ADD)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-3-python-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3. Python characteristics and branch prediction for Nehalem (Neh.), Sandy Bridge (SB), Haswell (Has.) and TAGE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-4-javascript-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 4. Javascript characteristics and branch prediction for Nehalem (Neh.), Sandy Bridge (SB), Haswell (Has.) and TAGE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-5-cli-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 5. CLI characteristics and branch prediction for Nehalem (Neh.), Sandy Bridge (SB), Haswell (Has.) and TAGE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-6-ittage-misprediction-results-for-hard-to-predict-branch-tage-1-tage-2-and-tage-3-all-numbers-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 6. (IT)TAGE misprediction results for “hard to predict” branch, TAGE 1, TAGE 2 and TAGE 3 (all numbers in %)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="branch-prediction-and-the-performance-of-interpreters-dont-trust-folklore">Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore 图表详解<a class="headerlink" href="#branch-prediction-and-the-performance-of-interpreters-dont-trust-folklore" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-main-loop-of-naive-interpreter">Figure 1. Main loop of naive interpreter<a class="headerlink" href="#figure-1-main-loop-of-naive-interpreter" title="Permanent link">&para;</a></h3>
+<p><img alt="7313c63f2fd4694f4167936cd19dfd9afd723c4f2df88180ff84a11edc2dcaef.jpg" src="../images/7313c63f2fd4694f4167936cd19dfd9afd723c4f2df88180ff84a11edc2dcaef.jpg" /></p>
+<ul>
+<li>图片展示了“朴素解释器”的主循环，分为两部分：(a) C语言源代码和(b) x86汇编代码。</li>
+<li><strong>C源代码部分</strong>：<ul>
+<li>第1行：无限循环 <code>while (1)</code>，构成解释器核心。</li>
+<li>第2行：从虚拟程序计数器 <code>vpc</code> 指向的地址读取操作码 <code>opc</code>，并递增 <code>vpc</code>。</li>
+<li>第3–12行：使用 <code>switch(opc)</code> 实现指令分发，根据操作码跳转到对应处理逻辑。</li>
+<li>第5–7行：以 <code>ADD</code> 为例，从栈中弹出两个操作数 <code>x</code> 和 <code>y</code>，执行加法后将结果压回栈。</li>
+<li>第8行：<code>break</code> 用于跳出当前 <code>case</code>，避免穿透。</li>
+</ul>
+</li>
+<li><strong>x86汇编部分</strong>：<ul>
+<li>第1行：标签 <code>loop:</code> 标识循环起点。</li>
+<li>第2–4行：加载操作码（<code>add 0x2, %esi</code> 增加指针，<code>movzwl (%esi), %edi</code> 加载字），与有效范围比较（<code>cmp 0x299, %edi</code>），若超出则跳回循环开始（<code>ja &lt;loop&gt;</code>）。</li>
+<li>第5–6行：通过查表获取目标地址（<code>mov 0x...(%edi,4), %eax</code>），然后间接跳转（<code>jmp *%eax</code>），这是<strong>关键的间接分支指令</strong>。</li>
+<li>第7–12行：示例 <code>ADD</code> 的汇编实现，包括从栈中取值、计算、存回，并最终跳回主循环。</li>
+</ul>
+</li>
+<li>该图直观揭示了解释器性能瓶颈：<strong>间接跳转</strong>（<code>jmp *%eax</code>）因目标众多且模式复杂，传统上被认为难以预测，导致流水线停顿。</li>
+<li>下表总结了C代码与汇编代码的对应关系：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>C代码行号</th>
+<th>功能描述</th>
+<th>对应汇编行号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>主循环开始</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>获取操作码并递增vpc</td>
+<td>2–3</td>
+</tr>
+<tr>
+<td>3–4</td>
+<td>switch语句及范围检查</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5–7</td>
+<td>ADD操作：弹栈、计算、压栈</td>
+<td>7–11</td>
+</tr>
+<tr>
+<td>8</td>
+<td>break</td>
+<td>12</td>
+</tr>
+<tr>
+<td>无</td>
+<td>间接跳转至对应操作码处理逻辑</td>
+<td>5–6</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图是理解论文核心论点的基础：现代处理器（如Haswell）的分支预测器已能高效处理此类间接分支，使其不再成为性能主要瓶颈。</li>
+</ul>
+<h3 id="figure-2-token-threading-using-a-gnu-extension">Figure 2. Token threading, using a GNU extension<a class="headerlink" href="#figure-2-token-threading-using-a-gnu-extension" title="Permanent link">&para;</a></h3>
+<p><img alt="f37fa0abcff31d3e993f00ac0c1a6629a39efb99648c17845dba502394c3004b.jpg" src="../images/f37fa0abcff31d3e993f00ac0c1a6629a39efb99648c17845dba502394c3004b.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Token Threading</strong> 的实现方式，这是一种用于优化解释器性能的编译技术。</li>
+<li>该技术依赖于 <strong>GNU C</strong> 编译器的扩展功能 <strong>Labels as Values</strong>，允许将标签（label）作为指针存储和操作。</li>
+<li>核心数据结构是一个名为 <code>labels</code> 的指针数组，其中每个元素指向一个特定操作码（如 <code>ADD</code>, <code>SUB</code>）对应的代码标签地址。</li>
+<li>主要执行逻辑通过 <code>goto *labels[*vpc++];</code> 实现，它直接跳转到下一个字节码对应的操作标签，从而绕过传统的 <code>switch</code> 语句。</li>
+<li>在每个操作标签（如 <code>ADD:</code>）内部，执行完具体操作后，再次使用 <code>goto *labels[*vpc++];</code> 跳转到下一个字节码，形成“线程化”的执行流。</li>
+<li>这种方法避免了每次循环都进行间接跳转和查表，理论上能提高分支预测准确率和执行效率。</li>
+<li>但该技术牺牲了部分可移植性，因为并非所有编译器都支持 <strong>Labels as Values</strong> 扩展。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void* labels[]</code></td>
+<td>存储各操作码对应代码标签地址的指针数组</td>
+</tr>
+<tr>
+<td><code>goto *labels[*vpc++]</code></td>
+<td>核心跳转指令，根据虚拟程序计数器 <code>vpc</code> 获取下一条指令地址并跳转</td>
+</tr>
+<tr>
+<td><code>ADD:</code> / <code>SUB:</code></td>
+<td>操作码对应的代码标签，执行具体语义后继续跳转</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该图是论文中讨论 <strong>Jump Threading</strong> 优化策略的关键示例，旨在说明如何通过改变控制流结构来减少传统 <code>switch</code> 语句带来的性能开销。</li>
+</ul>
+<h3 id="figure-3-speedups-in-python">Figure 3. Speedups in Python<a class="headerlink" href="#figure-3-speedups-in-python" title="Permanent link">&para;</a></h3>
+<p><img alt="c33473af79f2628363612d9fe4db98aac0fca59cc4a70c57b403df0efcdc5d29.jpg" src="../images/c33473af79f2628363612d9fe4db98aac0fca59cc4a70c57b403df0efcdc5d29.jpg" /></p>
+<ul>
+<li>图片包含两个子图，分别展示 Python-3 和 Python-2 在不同微架构上因代码优化带来的性能提升。</li>
+<li>子图 (a) 标题为 “Speedup due to threaded code in Python-3”，比较了 <strong>Nehalem</strong>、<strong>Sandy Bridge</strong> 和 <strong>Haswell</strong> 三代处理器上启用跳转线程（jump threading）后的加速比。</li>
+<li>子图 (b) 标题为 “Speedup due to opcode prediction in Python-2”，展示了 Python-2 中针对高频操作码对进行的有限线程化优化在三款处理器上的加速效果。</li>
+<li>两图纵轴均为加速比（speedup），基准为未启用优化版本；横轴为不同基准测试程序（benchmarks）。</li>
+<li>所有柱状图按处理器代际分组：黑色代表 Nehalem，灰色代表 Sandy Bridge，白色代表 Haswell。</li>
+<li>数据趋势显示：<strong>加速比随处理器代际演进而下降</strong>。例如，在 Python-3 中，Nehalem 平均加速 10.1%，Sandy Bridge 降至 4.2%，Haswell 仅 2.8%。</li>
+<li>Python-2 的优化幅度更小，平均加速分别为 2.8%（Nehalem）、3.2%（Sandy Bridge）、1.8%（Haswell）。</li>
+<li>部分基准测试在 Nehalem 上出现显著加速（如超过 1.3 倍），但在 Haswell 上几乎无提升或仅略高于 1.0。</li>
+<li>这表明现代处理器（尤其是 Haswell）的分支预测能力已大幅增强，使得传统用于缓解间接跳转开销的“跳转线程”技术收益锐减。</li>
+<li>论文指出，这种加速不仅源于分支预测改善，也因线程化减少了部分指令执行（如 Python-3 平均减少 3.3% 指令数），但该因素贡献与性能增益量级相当。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>处理器代际</th>
+<th>Python-3 平均加速比</th>
+<th>Python-2 平均加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nehalem</td>
+<td><strong>10.1%</strong></td>
+<td><strong>2.8%</strong></td>
+</tr>
+<tr>
+<td>Sandy Bridge</td>
+<td><strong>4.2%</strong></td>
+<td><strong>3.2%</strong></td>
+</tr>
+<tr>
+<td>Haswell</td>
+<td><strong>2.8%</strong></td>
+<td><strong>1.8%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：<strong>跳转线程在现代处理器上的价值已显著降低</strong>，其历史性能优势主要源于早期分支预测器的不足，而非本质算法改进。</li>
+</ul>
+<h3 id="table-1-benchmarks">Table 1. Benchmarks<a class="headerlink" href="#table-1-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="95c1ce285ed9eb965b87915a5f5a8b31aa6dec6509220658748cdfdb9cb41f2b.jpg" src="../images/95c1ce285ed9eb965b87915a5f5a8b31aa6dec6509220658748cdfdb9cb41f2b.jpg" /></p>
+<ul>
+<li>该图片为论文中的 <strong>Table 1. Benchmarks</strong>，列出了用于实验的三类解释器（Python、Javascript、CLI）所使用的基准测试程序。</li>
+<li>表格按语言分类，清晰划分了各解释器对应的测试用例，便于横向比较不同语言在相同硬件或预测器下的表现。</li>
+<li>所有基准测试均运行至完成，部分测试耗时可达数百小时，确保数据具有统计意义和代表性。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>解释器类型</th>
+<th>基准测试名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python</strong></td>
+<td>call_method, call_method_slots, call_method_unknown, call_simple, chaos, django_v2, fannkuch, fastpickle, fastunpickle, float, formatted_logging, go, hexiom2, json_dump_v2, json_load, meteor_contest, nbody, nqueens, pathlib, pidigits, raytrace, regex_compile, regex_effbot, regex_v8, richards, silent_logging, simple_logging, telco, unpack_sequence</td>
+</tr>
+<tr>
+<td><strong>Javascript (kraken)</strong></td>
+<td>ai-astar, audio-beat-detection, audio-dft, audio-fft, audio-oscillator, imaging-darkroom, imaging-desaturate, imaging-gaussian-blur, json-parse-financial, json-stringify-tinderbox, crypto-aes, crypto-cm, crypto-pbkdf2, crypto-sha256-iterative</td>
+</tr>
+<tr>
+<td><strong>Javascript (octane)</strong></td>
+<td>box2d, code-load</td>
+</tr>
+<tr>
+<td><strong>CLI</strong></td>
+<td>164.gzip, 175.vpr, 177.mesa, 179.art, 181.mcf, 183.equake, 186.crafty, 188.ammp, 197.parser, 256.bzip2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Python</strong> 测试集包含大量真实应用场景，如 web 框架（django_v2）、正则表达式（regex_*）、序列化（fastpickle）、数学计算（nqueens）等，覆盖广泛。</li>
+<li><strong>Javascript</strong> 分为两个子集：<strong>Kraken</strong> 和 <strong>Octane</strong>，前者侧重多媒体与图像处理，后者包含更底层的性能测试如 <code>box2d</code>（物理引擎）和 <code>code-load</code>（代码加载开销）。</li>
+<li><strong>CLI</strong> 使用的是 <strong>SPEC 2000</strong> 的训练输入集，涵盖压缩（gzip, bzip2）、图形（mesa）、科学计算（ammp）、解析器（parser）等典型工作负载。</li>
+<li>部分基准测试被排除，如 Python 中的 <code>iterative_count</code>, <code>spectral_norm</code>, <code>threaded_count</code>，因测量设置不兼容；CLI 中缺失部分 SPEC 2000 测试项（如 gcc, perlbench），因编译器不支持某些 C 特性（如 setjmp, POSIX 系统调用）。</li>
+</ul>
+<h3 id="table-2-branch-predictor-parameters">Table 2. Branch predictor parameters<a class="headerlink" href="#table-2-branch-predictor-parameters" title="Permanent link">&para;</a></h3>
+<p><img alt="bb2bc6ce7bc772acd82002bd7af8cff61bfec2bc3cc409be03ecfc9a836bf6ff.jpg" src="../images/bb2bc6ce7bc772acd82002bd7af8cff61bfec2bc3cc409be03ecfc9a836bf6ff.jpg" /></p>
+<ul>
+<li><strong>Table 2</strong> 展示了三种分支预测器（TAGE、ITTAGE 2、ITTAGE 1）的关键参数配置，用于实验对比。</li>
+<li>参数包括最小历史长度、最大历史长度、表数量、各表项数及总存储空间，体现不同预测器的复杂度与资源占用。</li>
+<li><strong>TAGE</strong> 作为条件分支预测器基准，其最大历史长度为 75，共 5 张表，总存储为 <strong>8 KB</strong>。</li>
+<li><strong>ITTAGE 1</strong> 和 <strong>ITTAGE 2</strong> 是针对间接分支的 TAGE 变体，两者均使用 8 张表，最大历史长度为 80，但表项数和总存储不同：<ul>
+<li>ITTAGE 1：T₀ 表 512 项，T₁–Tₙ₋₁ 表每张 128 项，总存储 <strong>12.62 KB</strong>。</li>
+<li>ITTAGE 2：T₀ 表 256 项，T₁–Tₙ₋₁ 表每张 64 项，总存储 <strong>6.31 KB</strong>。</li>
+</ul>
+</li>
+<li>三者最小历史长度分别为 5（TAGE）、2（ITTAGE 2）、2（ITTAGE 1），表明 ITTAGE 更侧重短历史模式捕捉。</li>
+<li>存储规模差异直接影响预测精度，尤其在 CLI 解释器等高目标数场景中，<strong>更大的 ITTAGE（如 12.62 KB）能显著降低误预测率</strong>。</li>
+<li>实验设计通过对比不同大小的 ITTAGE，验证预测器“足迹”对解释器性能的影响，而非预测机制本身缺陷。</li>
+</ul>
+<h3 id="1fc5ddb3d1eee3e0070dccc37f05afc11c67082894b0273da92ada476f60b4b8jpg">1fc5ddb3d1eee3e0070dccc37f05afc11c67082894b0273da92ada476f60b4b8.jpg<a class="headerlink" href="#1fc5ddb3d1eee3e0070dccc37f05afc11c67082894b0273da92ada476f60b4b8jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="1fc5ddb3d1eee3e0070dccc37f05afc11c67082894b0273da92ada476f60b4b8.jpg" src="../images/1fc5ddb3d1eee3e0070dccc37f05afc11c67082894b0273da92ada476f60b4b8.jpg" /></p>
+<ul>
+<li>该图片展示了一个数学不等式，用于描述在性能测量中，<strong>retired indirect branches</strong>（已退休的间接分支）数量与<strong>bytecodes</strong>（字节码）数量之间的关系。</li>
+<li>不等式为：<strong>1 ≤ n_retired / n_bytecodes ≤ n_speculative / n_bytecodes</strong>。</li>
+<li><strong>n_retired</strong> 表示实际执行并完成的间接分支指令数量。</li>
+<li><strong>n_bytecodes</strong> 表示解释器执行的字节码总数。</li>
+<li><strong>n_speculative</strong> 表示处理器在推测执行路径中遇到的间接分支指令数量（包括最终被取消的路径）。</li>
+<li>该不等式表明，每个字节码至少对应一个已退休的间接分支（即 dispatch loop 中的跳转），但可能因推测执行而产生更多分支。</li>
+<li>在实验中，作者通过比较 <strong>n_speculative / n_bytecodes</strong> 的值来判断推测执行对测量结果的影响。若该比值接近 1，则说明非退休分支可忽略；否则需使用 Pin 工具进行精确计数。</li>
+<li>此公式是论文第 4.2.1 节“Existing Hardware – Performance Counters”中的关键推导，用于校准硬件性能计数器（PMU）的数据准确性。</li>
+</ul>
+<h3 id="figure-4-python-mpki-for-all-predictors">Figure 4. Python MPKI for all predictors<a class="headerlink" href="#figure-4-python-mpki-for-all-predictors" title="Permanent link">&para;</a></h3>
+<p><img alt="6938ddca3607b874b68eea2a7185d637042a438ad615d4c43da8f087b6956ac2.jpg" src="../images/6938ddca3607b874b68eea2a7185d637042a438ad615d4c43da8f087b6956ac2.jpg" /></p>
+<ul>
+<li>
+<p>图片为 <strong>Figure 4</strong>，标题为 “Python MPKI for all predictors”，展示的是 Python 解释器在不同处理器架构和预测器配置下的 <strong>MPKI（Mispredictions Per Kilo Instructions）</strong> 数据。</p>
+</li>
+<li>
+<p>横轴为 <strong>benchmarks</strong>，共约 26 个测试用例，编号从 0 到 25+，代表不同的 Python 基准程序。</p>
+</li>
+<li>
+<p>纵轴为 <strong>MPKI 值</strong>，范围从 0 到 20，表示每千条指令中分支预测错误的次数。</p>
+</li>
+<li>
+<p>图例包含四种预测器配置：</p>
+<ul>
+<li><strong>Nehalem</strong>：浅灰色柱状图</li>
+<li><strong>Sandy Bridge</strong>：中灰色柱状图</li>
+<li><strong>Haswell</strong>：深灰色柱状图</li>
+<li><strong>TAGE 1</strong>：黑色柱状图</li>
+</ul>
+</li>
+<li>
+<p>从整体趋势看，<strong>MPKI 随着处理器代际演进显著下降</strong>：</p>
+<ul>
+<li>Nehalem 上多数基准测试的 MPKI 在 <strong>12–18 范围内</strong>，部分甚至接近 20。</li>
+<li>Sandy Bridge 明显改善，MPKI 多数落在 <strong>4–10 区间</strong>。</li>
+<li>Haswell 进一步优化，MPKI 大幅压缩至 <strong>0.5–4</strong>，部分测试低于 1。</li>
+<li>TAGE 1（模拟的先进预测器）表现与 Haswell 接近，多数情况下 <strong>低于或持平于 Haswell</strong>。</li>
+</ul>
+</li>
+<li>
+<p>关键观察点：</p>
+<ul>
+<li><strong>Haswell 和 TAGE 1 的预测精度已非常接近</strong>，表明现代硬件预测器性能已逼近学术界最优方案。</li>
+<li>在多个基准测试中（如 benchmark 5, 10, 15），Nehalem 的 MPKI 是 Haswell 的 <strong>10 倍以上</strong>，体现分支预测技术的巨大进步。</li>
+<li>少数测试（如 benchmark 25）中 TAGE 1 表现优于 Haswell，说明在特定负载下，软件模拟的 ITTAGE 可能更优。</li>
+<li>所有预测器在部分测试（如 benchmark 0, 20）中均表现良好（MPKI &lt; 2），说明某些 Python 程序本身具有高度可预测性。</li>
+</ul>
+</li>
+<li>
+<p>数据对比表（典型值）：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Nehalem (MPKI)</th>
+<th>Sandy Bridge (MPKI)</th>
+<th>Haswell (MPKI)</th>
+<th>TAGE 1 (MPKI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>~5</td>
+<td>~2</td>
+<td>~1</td>
+<td>~0.5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>~18</td>
+<td>~6</td>
+<td>~3</td>
+<td>~2</td>
+</tr>
+<tr>
+<td>10</td>
+<td>~16</td>
+<td>~5</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>15</td>
+<td>~17</td>
+<td>~7</td>
+<td>~3</td>
+<td>~2</td>
+</tr>
+<tr>
+<td>20</td>
+<td>~4</td>
+<td>~1</td>
+<td>~0.5</td>
+<td>~0.3</td>
+</tr>
+<tr>
+<td>25</td>
+<td>~15</td>
+<td>~5</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>结论：该图直观验证了论文核心观点——<strong>现代处理器（如 Haswell）的分支预测能力已大幅提升，使得解释器中的间接跳转不再是性能瓶颈</strong>。TAGE 1 的模拟结果进一步佐证了这一点，表明当前硬件预测器已达到学术前沿水平。</li>
+</ul>
+<h3 id="figure-5-javascript-mpki-for-all-predictors">Figure 5. Javascript MPKI for all predictors<a class="headerlink" href="#figure-5-javascript-mpki-for-all-predictors" title="Permanent link">&para;</a></h3>
+<p><img alt="d17bf9fe709aa074e11a144b931ddfc3a15681bafed637ae6b05056b80c35e51.jpg" src="../images/d17bf9fe709aa074e11a144b931ddfc3a15681bafed637ae6b05056b80c35e51.jpg" /></p>
+<ul>
+<li>
+<p>图片为 <strong>Figure 5</strong>，标题为 “Javascript MPKI for all predictors”，展示的是在不同处理器架构和模拟预测器下，<strong>Javascript 解释器</strong>的分支预测错误率（MPKI）。</p>
+</li>
+<li>
+<p>横轴为 <strong>27 个不同的 Javascript 基准测试程序</strong>（benchmarks），编号从 0 到 26。</p>
+</li>
+<li>
+<p>纵轴为 <strong>MPKI（Mispredictions Per Kilo Instructions）</strong>，范围从 0 到 18，表示每千条指令中发生分支预测错误的次数。</p>
+</li>
+<li>
+<p>图例包含四种预测器配置：</p>
+<ul>
+<li><strong>Nehalem</strong>：白色柱状图</li>
+<li><strong>Sandy Bridge</strong>：浅灰色柱状图</li>
+<li><strong>Haswell</strong>：深灰色柱状图</li>
+<li><strong>TAGE 1</strong>：黑色柱状图</li>
+</ul>
+</li>
+<li>
+<p>数据趋势清晰显示，随着处理器代际演进，<strong>MPKI 显著下降</strong>：</p>
+<ul>
+<li><strong>Nehalem</strong> 的 MPKI 多数在 <strong>12–16</strong> 范围内，部分甚至接近 18。</li>
+<li><strong>Sandy Bridge</strong> 下降至 <strong>4–10</strong>，性能提升明显。</li>
+<li><strong>Haswell</strong> 和 <strong>TAGE 1</strong> 的 MPKI 大多落在 <strong>0.5–3</strong> 区间，表现极为优异。</li>
+</ul>
+</li>
+<li>
+<p>关键观察点：</p>
+<ul>
+<li>在绝大多数基准测试中，<strong>Haswell 与 TAGE 1 的预测精度几乎持平</strong>，说明现代硬件预测器已达到文献中最先进预测器（ITTAGE）的水平。</li>
+<li>少数异常值如 benchmark 15、25、26，Haswell 表现略优于 TAGE 1；而 benchmark 10、11、12 中 TAGE 1 更优。</li>
+<li>三个最差案例（benchmark 0, 1, 2）在 Nehalem 上高达 16–18 MPKI，而在 Haswell/TAGE 1 上均降至 2 以下，降幅超过 90%。</li>
+</ul>
+</li>
+<li>
+<p>总结性数据对比（典型值）：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预测器</th>
+<th>典型 MPKI 范围</th>
+<th>相对 Nehalem 改善幅度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nehalem</td>
+<td>12–16</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Sandy Bridge</td>
+<td>4–10</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td>Haswell</td>
+<td>0.5–3</td>
+<td>&gt;90%</td>
+</tr>
+<tr>
+<td>TAGE 1</td>
+<td>0.5–3</td>
+<td>&gt;90%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图有力支持论文核心论点：<strong>现代分支预测器（尤其是 Haswell）已使解释器中的间接跳转不再成为性能瓶颈</strong>，传统“不可预测”的说法已过时。</li>
+</ul>
+<h3 id="figure-6-cli-mpki-for-all-predictors">Figure 6. CLI MPKI for all predictors<a class="headerlink" href="#figure-6-cli-mpki-for-all-predictors" title="Permanent link">&para;</a></h3>
+<p><img alt="362e2e3d9b54feba7bff51cfac333157507f03db85089ae8da64b81060f68f65.jpg" src="../images/362e2e3d9b54feba7bff51cfac333157507f03db85089ae8da64b81060f68f65.jpg" /></p>
+<ul>
+<li>
+<p>图片为 <strong>Figure 6</strong>，标题为 “CLI MPKI for all predictors”，展示的是 <strong>Common Language Infrastructure (CLI)</strong> 解释器在不同处理器架构和预测器下的 <strong>分支误预测率（MPKI）</strong>。</p>
+</li>
+<li>
+<p>横轴列出多个 <strong>SPEC 2000</strong> 基准测试程序：gzip, vpr, mesa, art, mcf, equake, crafty, ammp, parser, bzip2。</p>
+</li>
+<li>
+<p>纵轴表示 <strong>MPKI（每千条指令的误预测次数）</strong>，范围从 0 到 25。</p>
+</li>
+<li>
+<p>图例包含四种预测器配置：</p>
+<ul>
+<li><strong>Nehalem</strong>（白色柱）</li>
+<li><strong>Sandy Bridge</strong>（浅灰色柱）</li>
+<li><strong>Haswell</strong>（深灰色柱）</li>
+<li><strong>TAGE1</strong>（黑色柱）</li>
+</ul>
+</li>
+<li>
+<p>数据趋势显示：</p>
+<ul>
+<li><strong>Nehalem</strong> 的 MPKI 最高，多数基准测试在 15–25 范围内，表明早期处理器预测能力较弱。</li>
+<li><strong>Sandy Bridge</strong> 明显优于 Nehalem，MPKI 大幅下降至 5–20 区间，体现第二代改进。</li>
+<li><strong>Haswell</strong> 进一步优化，MPKI 多数低于 5，部分如 crafty、ammp、parser 甚至接近 1–2，性能显著提升。</li>
+<li><strong>TAGE1</strong>（模拟的 ITTAGE 预测器）表现与 Haswell 接近，部分场景（如 crafty、vpr）略优或相当，验证了现代预测器的有效性。</li>
+</ul>
+</li>
+<li>
+<p>关键观察点：</p>
+<ul>
+<li><strong>crafty</strong> 和 <strong>vpr</strong> 在 Nehalem 和 Sandy Bridge 上 MPKI 较高（&gt;15），但在 Haswell 和 TAGE1 下大幅降低，说明这些程序对预测器敏感，但现代硬件已能较好处理。</li>
+<li><strong>art</strong> 和 <strong>bzip2</strong> 在所有架构下 MPKI 均较低（\&lt;5），表明其控制流较易预测。</li>
+<li><strong>TAGE1</strong> 在部分基准（如 crafty）中 MPKI 低于 Haswell，暗示模拟预测器在特定负载下可能更优。</li>
+</ul>
+</li>
+<li>
+<p>总结表格：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Nehalem MPKI</th>
+<th>Sandy Bridge MPKI</th>
+<th>Haswell MPKI</th>
+<th>TAGE1 MPKI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gzip</td>
+<td>~19</td>
+<td>~14</td>
+<td>~3</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>vpr</td>
+<td>~24</td>
+<td>~21</td>
+<td>~6</td>
+<td>~7</td>
+</tr>
+<tr>
+<td>mesa</td>
+<td>~14</td>
+<td>~11</td>
+<td>~3</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>art</td>
+<td>~8</td>
+<td>~10</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>mcf</td>
+<td>~18</td>
+<td>~15</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>equake</td>
+<td>~20</td>
+<td>~19</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>crafty</td>
+<td>~21</td>
+<td>~20</td>
+<td>~12</td>
+<td>~11</td>
+</tr>
+<tr>
+<td>ammp</td>
+<td>~20</td>
+<td>~19</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>parser</td>
+<td>~15</td>
+<td>~12</td>
+<td>~2</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>~20</td>
+<td>~14</td>
+<td>~3</td>
+<td>~2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>核心结论：<ul>
+<li><strong>CLI 解释器的间接分支预测在 Haswell 上已不再是性能瓶颈</strong>，MPKI 降至 0.5–2 范围。</li>
+<li><strong>ITTAGE 模拟结果与 Haswell 实际表现高度一致</strong>，证明现代预测器设计有效。</li>
+<li>尽管某些程序（如 crafty）仍存在较高误预测，但通过增大预测器容量（如 TAGE3 50KB）可进一步优化，非预测机制本身缺陷。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-7-correlation-between-mpki-and-lost-slots">Figure 7. Correlation between MPKI and lost slots<a class="headerlink" href="#figure-7-correlation-between-mpki-and-lost-slots" title="Permanent link">&para;</a></h3>
+<p><img alt="8c1b82375d550953f02680f4f8504df67ceb87f3574ce7092ef705dc3e01952b.jpg" src="../images/8c1b82375d550953f02680f4f8504df67ceb87f3574ce7092ef705dc3e01952b.jpg" /></p>
+<ul>
+<li>图表标题为 <strong>Figure 7. Correlation between MPKI and lost slots</strong>，展示的是 <strong>MPKI（Mispredictions Per Kilo Instructions）</strong> 与 <strong>wasted slots (%)</strong> 之间的相关性。</li>
+<li>横轴为 <strong>wasted slots (%)</strong>，范围从 0% 到 40%，表示处理器前端因分支错误预测、内存序冲突等导致的指令发射槽浪费比例。</li>
+<li>纵轴为 <strong>MPKI</strong>，范围从 0 到 25，代表每千条指令中发生的分支错误预测次数。</li>
+<li>数据点分为两类：<strong>Sandy Bridge</strong> 用“+”标记，<strong>Haswell</strong> 用“×”标记，清晰区分两代 Intel 微架构的表现。</li>
+<li>整体趋势显示：<strong>MPKI 越高，wasted slots 越高</strong>，二者呈正相关。这表明分支预测错误是造成前端资源浪费的主要原因。</li>
+<li><strong>Haswell 的数据点普遍集中在低 MPKI 和低 wasted slots 区域</strong>，例如多数在 MPKI &lt; 5 且 wasted slots &lt; 15%。</li>
+<li><strong>Sandy Bridge 的数据点分布更广，部分高达 MPKI &gt; 15 和 wasted slots &gt; 30%</strong>，说明其分支预测效率较低，前端浪费更严重。</li>
+<li>文中指出，在 Haswell 上，<strong>平均仅浪费 7.8% 的指令槽位</strong>，而 Sandy Bridge 为 <strong>14.5%</strong>，Haswell 减少了约 50% 的浪费。</li>
+<li>表明 <strong>Haswell 的分支预测器显著优于 Sandy Bridge</strong>，使得解释器程序的性能瓶颈不再主要来自分支预测错误。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>架构</th>
+<th>平均 wasted slots (%)</th>
+<th>MPKI 范围</th>
+<th>性能表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sandy Bridge</td>
+<td>14.5%</td>
+<td>0–25</td>
+<td>高浪费，预测准确率较低</td>
+</tr>
+<tr>
+<td>Haswell</td>
+<td>7.8%</td>
+<td>0–5 (多数)</td>
+<td>低浪费，预测准确率高</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图验证了论文核心观点：<strong>现代处理器（如 Haswell）的分支预测能力已大幅提升，使解释器中的间接跳转不再是性能瓶颈</strong>。</li>
+</ul>
+<h3 id="figure-8-dispatch-loop-of-the-cli-interpreter-add">Figure 8. Dispatch loop of the CLI interpreter (+ADD)<a class="headerlink" href="#figure-8-dispatch-loop-of-the-cli-interpreter-add" title="Permanent link">&para;</a></h3>
+<p><img alt="54f4cb404946263898ec387ea658c6983cbe2e6edf3b9f7b491ed3be97ac24b5.jpg" src="../images/54f4cb404946263898ec387ea658c6983cbe2e6edf3b9f7b491ed3be97ac24b5.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>CLI interpreter</strong> 的调度循环汇编代码，具体为处理 <strong>ADD</strong> 操作码的片段。</li>
+<li>该循环结构紧凑，仅由 <strong>7 条指令</strong> 构成，体现了低抽象层级解释器的高效性。</li>
+<li>第1行 <code>loop:</code> 标记了主循环的起始点，是解释器无限执行的核心。</li>
+<li>第2、3行 <code>cmp</code> 和 <code>ja</code> 实现了一个 <strong>无用的范围检查</strong>，这是编译器未能优化掉的冗余操作。</li>
+<li>第4行 <code>jmp *eax</code> 是关键的 <strong>间接跳转指令</strong>，它根据当前操作码（存储在 <code>eax</code>）跳转到对应的处理代码块。</li>
+<li>第5行省略号 <code>...</code> 表示此处插入的是对应操作码（如 ADD）的具体语义实现代码。</li>
+<li>第6至8行是 <strong>ADD 操作码的实现</strong>：从栈中加载两个操作数，执行加法，并将结果存回栈顶。</li>
+<li>第9行 <code>add 0x2, esi</code> 调整虚拟程序计数器（vpc），指向下一个字节码。</li>
+<li>第10行 <code>movzwl (esi), edi</code> 将下一个字节码的操作码加载到 <code>edi</code> 寄存器。</li>
+<li>第11行 <code>mov 0x... (edi,4), eax</code> 通过查表获取对应操作码的处理函数地址，存入 <code>eax</code>。</li>
+<li>第12行 <code>jmp &lt;loop&gt;</code> 无条件跳回循环起点，准备处理下一个字节码。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>行号</th>
+<th>指令</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>loop:</code></td>
+<td>循环标签</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>cmp 0x1de, edi</code></td>
+<td>检查操作码是否超出有效范围</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>ja &lt;loop&gt;</code></td>
+<td>若超出则跳过，继续下一轮</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>jmp *eax</code></td>
+<td><strong>间接跳转</strong>，执行当前字节码的语义</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>...</code></td>
+<td>字节码具体实现（如 ADD）</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>mov -0x10(ebx), eax</code></td>
+<td>从栈顶加载第一个操作数</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>add eax, -0x20(ebx)</code></td>
+<td>执行加法运算</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>add 0xfffffffff0, ebx</code></td>
+<td>将结果存回栈顶</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>add 0x2, esi</code></td>
+<td>更新虚拟程序计数器</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>movzwl (esi), edi</code></td>
+<td>加载下一个字节码的操作码</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>mov 0x... (edi,4), eax</code></td>
+<td>查表获取下一个字节码的处理函数地址</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>jmp &lt;loop&gt;</code></td>
+<td>跳回循环开始，处理下一个字节码</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该调度循环设计精简，但存在可优化空间，例如第2、3行的范围检查和第11行的查表操作。</li>
+<li>与 Python 或 Javascript 解释器相比，CLI 解释器的调度循环更短，因为其字节码更接近底层机器指令，无需处理动态类型等复杂特性。</li>
+</ul>
+<h3 id="table-3-python-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage">Table 3. Python characteristics and branch prediction for Nehalem (Neh.), Sandy Bridge (SB), Haswell (Has.) and TAGE<a class="headerlink" href="#table-3-python-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage" title="Permanent link">&para;</a></h3>
+<p><img alt="87002857a5a99350eb505693544537ff19860413d24115dcf57cd59cacd8f965.jpg" src="../images/87002857a5a99350eb505693544537ff19860413d24115dcf57cd59cacd8f965.jpg" /></p>
+<ul>
+<li>该表格（Table 3）记录了在不同处理器架构（Nehalem, Sandy Bridge, Haswell）及模拟预测器（TAGE1, TAGE2）下，<strong>Python 解释器</strong>执行各基准测试（benchmark）时的性能与分支预测数据。</li>
+<li>表格左侧列出了 <strong>30 个 Python 基准测试</strong>，如 <code>call_method</code>, <code>chaos</code>, <code>django_v2</code>, <code>go</code>, <code>json_load</code> 等，涵盖方法调用、正则表达式、日志处理、数值计算等多种场景。</li>
+<li>核心指标包括：<ul>
+<li><strong>Mbc</strong>: 执行的字节码数量（百万级）</li>
+<li><strong>Gins</strong>: 执行的原生指令数（十亿级）</li>
+<li><strong>IPC</strong>: 每周期指令数（Instructions Per Cycle），反映整体执行效率</li>
+<li><strong>ins/bc</strong>: 平均每条字节码对应的原生指令数</li>
+<li><strong>br</strong>: 分支指令占比</li>
+<li><strong>ind</strong>: 间接分支指令占比</li>
+<li><strong>ind/bc</strong>: 平均每条字节码触发的间接分支数</li>
+<li><strong>MPKI</strong>: 每千条指令的分支预测失误次数（Mispredictions Per Kilo Instructions），是衡量预测器效果的关键指标</li>
+</ul>
+</li>
+</ul>
+<p>以下是关键数据摘要：</p>
+<table>
+<thead>
+<tr>
+<th>benchmark</th>
+<th>Mbc</th>
+<th>Gins</th>
+<th>IPC (Has.)</th>
+<th>ins/bc</th>
+<th>ind/bc</th>
+<th>MPKI (Has.)</th>
+<th>MPKI (TAGE1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>call_method</td>
+<td>6137</td>
+<td>771</td>
+<td>2.93</td>
+<td>125.6</td>
+<td>1.01</td>
+<td>0.1</td>
+<td>0.067</td>
+</tr>
+<tr>
+<td>chaos</td>
+<td>1196</td>
+<td>162</td>
+<td>2.21</td>
+<td>135.4</td>
+<td>1.07</td>
+<td>1.8</td>
+<td>0.680</td>
+</tr>
+<tr>
+<td>django_v2</td>
+<td>1451</td>
+<td>332</td>
+<td>2.10</td>
+<td>228.7</td>
+<td>1.33</td>
+<td>1.5</td>
+<td>0.529</td>
+</tr>
+<tr>
+<td>fastpickle</td>
+<td>34</td>
+<td>351</td>
+<td>2.63</td>
+<td>10277</td>
+<td>54</td>
+<td>1.4</td>
+<td>2.258</td>
+</tr>
+<tr>
+<td>go</td>
+<td>2972</td>
+<td>344</td>
+<td>2.20</td>
+<td>115.7</td>
+<td>1.01</td>
+<td>2.4</td>
+<td>1.121</td>
+</tr>
+<tr>
+<td>json_load</td>
+<td>195</td>
+<td>271</td>
+<td>2.50</td>
+<td>1391</td>
+<td>6.76</td>
+<td>2.1</td>
+<td>3.074</td>
+</tr>
+<tr>
+<td>regex_effbot</td>
+<td>7</td>
+<td>52</td>
+<td>3.35</td>
+<td>6977</td>
+<td>146</td>
+<td>0.0</td>
+<td>0.026</td>
+</tr>
+<tr>
+<td>telco</td>
+<td>34</td>
+<td>38</td>
+<td>2.24</td>
+<td>174.6</td>
+<td>2.35</td>
+<td>1.5</td>
+<td>1.143</td>
+</tr>
+<tr>
+<td><strong>average</strong></td>
+<td>—</td>
+<td>—</td>
+<td><strong>2.86</strong></td>
+<td>—</td>
+<td>—</td>
+<td><strong>1.4</strong></td>
+<td><strong>0.8</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>性能趋势</strong>：从 Nehalem 到 Haswell，<strong>IPC 显著提升</strong>，平均值从 1.90 提升至 2.86，表明现代处理器架构对解释器执行更友好。</li>
+<li><strong>分支预测改进</strong>：<strong>MPKI 大幅下降</strong>，平均值从 Nehalem 的 12.8 降至 Haswell 的 1.4，说明现代分支预测器（如 Haswell 内置预测器或 ITTAGE）能有效捕捉解释器中的模式。</li>
+<li><strong>TAGE 预测器表现</strong>：TAGE1（12.62 KB）和 TAGE2（6.31 KB）的 MPKI 平均值分别为 0.8 和 1.3，<strong>接近甚至优于 Haswell 实际硬件表现</strong>，尤其在 <code>fastpickle</code>、<code>regex_effbot</code> 等复杂负载上表现稳定。</li>
+<li><strong>异常情况</strong>：<ul>
+<li><code>fastpickle</code> 和 <code>regex_effbot</code> 的 <code>ind/bc</code> 极高（54 和 146），表明其执行大量非主循环代码（如调用 C 库），导致间接分支激增。</li>
+<li><code>json_load</code> 的 <code>ind/bc</code> 达 6.76，MPKI 较高（2.1），但 TAGE1 仍能较好预测（3.074），说明预测器对复杂控制流仍有适应能力。</li>
+<li><code>go</code> 在 Haswell 上 MPKI 为 2.4，高于平均，但 TAGE1 仅 1.121，显示模拟预测器在特定负载上可能更优。</li>
+</ul>
+</li>
+<li><strong>结论</strong>：<strong>Python 解释器中的间接分支已不再“难以预测”</strong>。现代处理器和先进预测器（如 ITTAGE）能高效处理其模式，使分支预测不再是性能瓶颈。即使在 Haswell 上，预测失误率也已降至可忽略水平（平均 1.4 MPKI）。</li>
+</ul>
+<h3 id="table-4-javascript-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage">Table 4. Javascript characteristics and branch prediction for Nehalem (Neh.), Sandy Bridge (SB), Haswell (Has.) and TAGE<a class="headerlink" href="#table-4-javascript-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage" title="Permanent link">&para;</a></h3>
+<p><img alt="3bb5c726feb72a5c76eef6c2ca0135fefba8eb2b1860ddf505511ba977c2accb.jpg" src="../images/3bb5c726feb72a5c76eef6c2ca0135fefba8eb2b1860ddf505511ba977c2accb.jpg" /></p>
+<ul>
+<li>
+<p>该表格（Table 4）详细记录了 <strong>Javascript</strong> 解释器在不同微架构（Nehalem, Sandy Bridge, Haswell）及模拟预测器（TAGE1, TAGE2）下的性能与分支预测表现，基准测试分为 <strong>kraken</strong> 和 <strong>octane</strong> 两大套件。</p>
+</li>
+<li>
+<p>表格结构清晰，包含以下核心列：</p>
+<ul>
+<li><code>benchmark</code>：具体测试用例名称。</li>
+<li><code>Mbc</code>：执行的字节码数量（百万级）。</li>
+<li><code>Gins</code>：执行的原生指令数（十亿级）。</li>
+<li><code>IPC</code>：每周期指令数，分三列对应 Neh., SB, Has.。</li>
+<li><code>ins/bc</code>：平均每字节码对应的原生指令数。</li>
+<li><code>br</code>：分支指令占比。</li>
+<li><code>ind</code>：间接分支指令占比。</li>
+<li><code>ind/bc</code>：每字节码对应的间接分支数。</li>
+<li><code>MPKI</code>：千指令误预测数，分五列对应 Neh., SB, Has., T1, T2。</li>
+</ul>
+</li>
+<li>
+<p><strong>关键数据趋势</strong>：</p>
+<ul>
+<li><strong>IPC 提升显著</strong>：从 Nehalem 到 Haswell，平均 IPC 从 1.36 提升至 2.47，反映现代处理器流水线效率提升。</li>
+<li><strong>MPKI 持续下降</strong>：平均 MPKI 从 Nehalem 的 <strong>13.6</strong> 降至 Haswell 的 <strong>1.7</strong>，TAGE1 更低至 <strong>0.7</strong>，表明分支预测精度大幅提升。</li>
+<li><strong>TAGE 预测能力接近 Haswell</strong>：TAGE1（12.62KB ITTAGE）在多数测试中 MPKI 低于或接近 Haswell，验证其作为前沿预测器的有效性。</li>
+</ul>
+</li>
+<li>
+<p><strong>异常值分析</strong>：</p>
+<ul>
+<li><code>code-load</code> 在 octane 套件中表现特殊：<code>ins/bc</code> 高达 4286，<code>ind/bc</code> 达 14.3，说明其执行大量非解释器主循环代码，导致分支行为复杂。</li>
+<li><code>json-parse-financial</code> 和 <code>json-stringify-tinderbox</code> 在 kraken 中同样具有极高 <code>ins/bc</code> 和 <code>ind/bc</code>，暗示其调用大量本地库或复杂解析逻辑。</li>
+</ul>
+</li>
+<li>
+<p><strong>分支特性</strong>：</p>
+<ul>
+<li>间接分支占比（<code>ind</code>）普遍在 <strong>1%~3%</strong>，但 <code>code-load</code> 达到 <strong>0.3%</strong>，显示其分支行为更稀疏。</li>
+<li>多数测试中 <code>ind/bc</code> 接近 1.0，符合“每个字节码触发一次间接跳转”的预期；偏离值多与外部库调用相关。</li>
+</ul>
+</li>
+<li>
+<p><strong>预测器对比</strong>：</p>
+<ul>
+<li>TAGE1（大容量 ITTAGE）在绝大多数测试中优于 TAGE2（小容量），尤其在 <code>code-load</code>、<code>typescript</code> 等高复杂度测试中差距明显。</li>
+<li>Haswell 实际硬件预测器在部分测试（如 <code>splay</code>, <code>zlib</code>）中略优于 TAGE1，但在 <code>crypto-sha256-iterative</code> 等测试中被 TAGE1 超越，显示实际硬件可能采用更优策略或更大容量。</li>
+</ul>
+</li>
+<li>
+<p><strong>结论</strong>：</p>
+<ul>
+<li><strong>现代分支预测器已能高效处理 Javascript 解释器的间接跳转</strong>，MPKI 降至 1~2 范围，远低于早期文献所称的“难以预测”。</li>
+<li><strong>TAGE 模拟结果与 Haswell 实测高度一致</strong>，支持论文核心论点：间接分支不再是性能瓶颈。</li>
+<li><strong>少数高复杂度测试仍需更大预测器容量</strong>，如 <code>code-load</code>，提示未来优化方向可聚焦于预测器资源分配。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-5-cli-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage">Table 5. CLI characteristics and branch prediction for Nehalem (Neh.), Sandy Bridge (SB), Haswell (Has.) and TAGE<a class="headerlink" href="#table-5-cli-characteristics-and-branch-prediction-for-nehalem-neh-sandy-bridge-sb-haswell-has-and-tage" title="Permanent link">&para;</a></h3>
+<p><img alt="ebff19d6781f929f9f6c91e2e79aa788bdf0ebe70039ae8d1f60d9c3ab963353.jpg" src="../images/ebff19d6781f929f9f6c91e2e79aa788bdf0ebe70039ae8d1f60d9c3ab963353.jpg" /></p>
+<ul>
+<li>
+<p>该图片为论文中的 <strong>Table 5</strong>，标题为 “CLI characteristics and branch prediction for Nehalem (Neh.), Sandy Bridge (SB), Haswell (Has.) and TAGE”，展示的是 <strong>Common Language Infrastructure (CLI)</strong> 解释器在不同处理器架构和预测器下的性能与分支预测数据。</p>
+</li>
+<li>
+<p>表格结构分为三部分：</p>
+<ul>
+<li>左侧：基准测试（benchmark）及其基本执行特征。</li>
+<li>中间：指令级指标（IPC、每字节码指令数、分支比例等）。</li>
+<li>右侧：不同架构与预测器下的 <strong>MPKI（Mispredictions Per Kilo Instructions）</strong> 数据。</li>
+</ul>
+</li>
+<li>
+<p>基准测试列表包括：</p>
+<ul>
+<li>164.gzip</li>
+<li>175.vpr</li>
+<li>177.mesa</li>
+<li>179.art</li>
+<li>181.mcf</li>
+<li>183.equake</li>
+<li>186.crafty</li>
+<li>188.ammp</li>
+<li>197.parser</li>
+<li>256.bzip2</li>
+</ul>
+</li>
+<li>
+<p>关键指标说明：</p>
+<ul>
+<li><strong>Gbc</strong>: GC 次数（Garbage Collection count），反映内存管理开销。</li>
+<li><strong>Gins</strong>: GC 插入指令数（Garbage Insertion Instructions），衡量 GC 对执行流的干扰。</li>
+<li><strong>IPC</strong>: Instructions Per Cycle，衡量处理器效率。</li>
+<li><strong>ins/bc</strong>: 每个字节码执行的原生指令数。</li>
+<li><strong>br</strong>: 分支指令占比。</li>
+<li><strong>ind</strong>: 间接分支指令占比。</li>
+<li><strong>ind/bc</strong>: 每字节码对应的间接分支数。</li>
+<li><strong>MPKI</strong>: 分支误预测率，数值越低越好。</li>
+</ul>
+</li>
+<li>
+<p>数据概览：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>benchmark</th>
+<th>Gbc</th>
+<th>Gins</th>
+<th>IPC Neh.</th>
+<th>SB</th>
+<th>Has.</th>
+<th>ins/bc</th>
+<th>br</th>
+<th>ind</th>
+<th>ind/bc</th>
+<th>MPKI Neh.</th>
+<th>SB</th>
+<th>Has.</th>
+<th>T1</th>
+<th>T2</th>
+<th>T3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>164.gzip</td>
+<td>78.8</td>
+<td>1667.2</td>
+<td>1.20</td>
+<td>1.23</td>
+<td>2.55</td>
+<td>21.2</td>
+<td>23%</td>
+<td>4.8%</td>
+<td>1.02</td>
+<td>18.7</td>
+<td>14.5</td>
+<td>0.5</td>
+<td>0.64</td>
+<td>1.58</td>
+<td>0.62</td>
+</tr>
+<tr>
+<td>175.vpr</td>
+<td>18.4</td>
+<td>400.9</td>
+<td>0.97</td>
+<td>1.00</td>
+<td>1.80</td>
+<td>21.8</td>
+<td>23%</td>
+<td>4.7%</td>
+<td>1.03</td>
+<td>24.8</td>
+<td>21.9</td>
+<td>6.3</td>
+<td>6.49</td>
+<td>13.62</td>
+<td>1.08</td>
+</tr>
+<tr>
+<td>177.mesa</td>
+<td>118.6</td>
+<td>3177.1</td>
+<td>1.32</td>
+<td>1.30</td>
+<td>2.13</td>
+<td>26.8</td>
+<td>23%</td>
+<td>4.0%</td>
+<td>1.07</td>
+<td>13.8</td>
+<td>11.1</td>
+<td>2.6</td>
+<td>0.21</td>
+<td>0.59</td>
+<td>0.20</td>
+</tr>
+<tr>
+<td>179.art</td>
+<td>4.7</td>
+<td>58.5</td>
+<td>1.64</td>
+<td>1.49</td>
+<td>2.70</td>
+<td>12.5</td>
+<td>26%</td>
+<td>8.0%</td>
+<td>1.00</td>
+<td>7.3</td>
+<td>9.3</td>
+<td>0.2</td>
+<td>0.38</td>
+<td>0.38</td>
+<td>0.37</td>
+</tr>
+<tr>
+<td>181.mcf</td>
+<td>13.3</td>
+<td>181.2</td>
+<td>1.13</td>
+<td>1.19</td>
+<td>2.19</td>
+<td>13.7</td>
+<td>25%</td>
+<td>7.4%</td>
+<td>1.01</td>
+<td>17.5</td>
+<td>15.1</td>
+<td>1.1</td>
+<td>1.33</td>
+<td>2.09</td>
+<td>1.08</td>
+</tr>
+<tr>
+<td>183.equake</td>
+<td>40.5</td>
+<td>726.1</td>
+<td>1.09</td>
+<td>1.09</td>
+<td>2.34</td>
+<td>17.9</td>
+<td>24%</td>
+<td>5.7%</td>
+<td>1.02</td>
+<td>20.8</td>
+<td>19.0</td>
+<td>1.7</td>
+<td>0.47</td>
+<td>0.68</td>
+<td>0.43</td>
+</tr>
+<tr>
+<td>186.crafty</td>
+<td>35.8</td>
+<td>1047.3</td>
+<td>1.02</td>
+<td>1.03</td>
+<td>1.42</td>
+<td>29.2</td>
+<td>22%</td>
+<td>3.5%</td>
+<td>1.04</td>
+<td>21.1</td>
+<td>19.2</td>
+<td>11.6</td>
+<td>11.87</td>
+<td>16.31</td>
+<td>4.01</td>
+</tr>
+<tr>
+<td>188.ammp</td>
+<td>91.3</td>
+<td>1665.9</td>
+<td>1.15</td>
+<td>1.24</td>
+<td>2.18</td>
+<td>18.3</td>
+<td>24%</td>
+<td>5.7%</td>
+<td>1.04</td>
+<td>19.5</td>
+<td>14.4</td>
+<td>2.9</td>
+<td>0.39</td>
+<td>1.14</td>
+<td>0.30</td>
+</tr>
+<tr>
+<td>197.parser</td>
+<td>12.6</td>
+<td>447.5</td>
+<td>1.19</td>
+<td>1.24</td>
+<td>2.18</td>
+<td>35.4</td>
+<td>22%</td>
+<td>3.0%</td>
+<td>1.06</td>
+<td>14.4</td>
+<td>10.8</td>
+<td>1.4</td>
+<td>0.10</td>
+<td>2.75</td>
+<td>0.70</td>
+</tr>
+<tr>
+<td>256.bzip2</td>
+<td>28.3</td>
+<td>460.8</td>
+<td>1.16</td>
+<td>1.32</td>
+<td>2.29</td>
+<td>16.3</td>
+<td>24%</td>
+<td>6.2%</td>
+<td>1.02</td>
+<td>17.5</td>
+<td>12.7</td>
+<td>1.6</td>
+<td>1.55</td>
+<td>2.15</td>
+<td>0.44</td>
+</tr>
+<tr>
+<td>average</td>
+<td>—</td>
+<td>—</td>
+<td>1.16</td>
+<td>1.24</td>
+<td>2.20</td>
+<td>21.0</td>
+<td>23%</td>
+<td>5.2%</td>
+<td>1.03</td>
+<td>17.5</td>
+<td>14.8</td>
+<td>3.0</td>
+<td>2.4</td>
+<td>4.1</td>
+<td>0.9</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
+<li><strong>Haswell 架构表现最优</strong>：平均 MPKI 仅为 <strong>3.0</strong>，远低于 Nehalem 的 17.5 和 Sandy Bridge 的 14.8。</li>
+<li><strong>TAGE 预测器（T1/T2/T3）模拟结果与 Haswell 接近</strong>，尤其在 T3（50KB ITTAGE）配置下，MPKI 平均降至 <strong>0.9</strong>，表明现代预测器可有效处理 CLI 解释器的间接跳转。</li>
+<li><strong>crafty 和 vpr 是异常值</strong>：在 T1/T2 下 MPKI 显著偏高（如 crafty 达 11.87/16.31），但 T3 能大幅改善至 4.01，说明其对预测器容量敏感。</li>
+<li><strong>CLI 解释器的间接分支密度较高</strong>（ind/bc ≈ 1.03），但现代预测器仍能高效处理，证明“间接跳转不可预测”的旧观念已过时。</li>
+</ul>
+</li>
+<li>
+<p><strong>结论</strong>：</p>
+<ul>
+<li>在 CLI 解释器中，<strong>分支预测不再是性能瓶颈</strong>，尤其在 Haswell 或大容量 ITTAGE 预测器下。</li>
+<li>性能提升主要源于硬件预测器进化，而非解释器结构改变。</li>
+<li>对于复杂应用（如 crafty），需更大预测器容量以维持高准确率。</li>
+</ul>
+</li>
+</ul>
+<h3 id="table-6-ittage-misprediction-results-for-hard-to-predict-branch-tage-1-tage-2-and-tage-3-all-numbers-in">Table 6. (IT)TAGE misprediction results for “hard to predict” branch, TAGE 1, TAGE 2 and TAGE 3 (all numbers in %)<a class="headerlink" href="#table-6-ittage-misprediction-results-for-hard-to-predict-branch-tage-1-tage-2-and-tage-3-all-numbers-in" title="Permanent link">&para;</a></h3>
+<p><img alt="3f0ccf20363e5cbd44387d22e95a22512402e90b795ca7302758eb34796325fb.jpg" src="../images/3f0ccf20363e5cbd44387d22e95a22512402e90b795ca7302758eb34796325fb.jpg" /></p>
+<ul>
+<li>该表（Table 6）记录了三种不同大小的 ITTAGE 预测器（IT1: 6KB, IT2: 12KB, IT3: 50KB）在 Python、Javascript 和 CLI 解释器中对“难以预测”分支的误预测率（单位：百分比），并对比了 TAGE 对条件分支（如 Python 的 HAS_ARG）的预测表现。</li>
+<li><strong>Python 分支分析</strong>：<ul>
+<li><strong>间接跳转（indirect）</strong>：多数基准测试在 IT1（6KB）下误预测率低于 1%，但部分如 <code>chaos</code>, <code>django-v2</code>, <code>formatted-log</code>, <code>go</code> 表现较差。其中 <code>go</code> 在 IT1 下高达 4.407%，但在 IT3（50KB）下降至 1.728%，表明其需要更大预测器容量。</li>
+<li><strong>HAS_ARG 条件分支（TAGE）</strong>：绝大多数基准测试误预测率极低（&lt; 0.5%），仅少数如 <code>float</code>, <code>go</code>, <code>regex-compile</code> 略高，最高为 <code>regex-compile</code> 的 1.630%。</li>
+</ul>
+</li>
+<li><strong>Javascript 分支分析</strong>：<ul>
+<li><strong>间接跳转（indirect）</strong>：整体预测良好，多数低于 1%。但 <code>code-load</code> 异常严重，在 IT1 下达 31.662%，即使在 IT3 下仍为 24.257%，是唯一未被大容量预测器显著改善的案例。</li>
+<li>其他如 <code>j-s-tinderbox</code>, <code>c-sha256-it</code>, <code>box2d</code>, <code>raytrace</code>, <code>typescript</code> 等也存在较高误预测率，但均随预测器增大而显著下降。</li>
+</ul>
+</li>
+<li><strong>CLI 分支分析</strong>：<ul>
+<li><strong>间接跳转（indirect）</strong>：表现最差，尤其在 <code>vpr</code>, <code>crafty</code>, <code>bzip2</code> 上。例如 <code>vpr</code> 在 IT1 下为 12.527%，IT3 下降至 0.905%；<code>crafty</code> 在 IT1 下高达 32.405%，IT3 下仍为 9.688%，显示其对预测器容量需求极高。</li>
+<li>多数其他基准测试在 IT3 下可降至 1% 以下，如 <code>art</code>, <code>mcf</code>, <code>equake</code>, <code>ammp</code>, <code>parser</code>, <code>bzip2</code>。</li>
+</ul>
+</li>
+<li><strong>核心结论</strong>：<ul>
+<li>所谓“难以预测”的间接跳转分支，在现代预测器（尤其是足够大的 ITTAGE）下<strong>并非固有不可预测</strong>，其误预测主要源于<strong>预测器容量不足</strong>（footprint issue），而非分支本身特性。</li>
+<li><strong>TAGE 对条件分支（如 HAS_ARG）预测极为准确</strong>，误预测率普遍远低于 1%。</li>
+<li><strong>预测器容量（IT1/IT2/IT3）是影响性能的关键因素</strong>，从 6KB 到 50KB 的提升能显著降低误预测率，尤其对复杂或大型应用。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>解释器</th>
+<th>分支类型</th>
+<th>基准测试</th>
+<th>IT1 (6KB)</th>
+<th>IT2 (12KB)</th>
+<th>IT3 (50KB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>indirect</td>
+<td>go</td>
+<td>4.407</td>
+<td>13.521</td>
+<td>1.728</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>chaos</td>
+<td>0.165</td>
+<td>21.362</td>
+<td>0.163</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>formatted-log</td>
+<td>0.136</td>
+<td>48.212</td>
+<td>0.021</td>
+</tr>
+<tr>
+<td></td>
+<td>TAGE</td>
+<td>float</td>
+<td>-</td>
+<td>-</td>
+<td>0.821</td>
+</tr>
+<tr>
+<td>Javascript</td>
+<td>indirect</td>
+<td>code-load</td>
+<td>31.662</td>
+<td>36.134</td>
+<td>24.257</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>typescript</td>
+<td>18.291</td>
+<td>29.630</td>
+<td>4.100</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>box2d</td>
+<td>7.362</td>
+<td>12.618</td>
+<td>0.936</td>
+</tr>
+<tr>
+<td>CLI</td>
+<td>indirect</td>
+<td>vpr</td>
+<td>12.527</td>
+<td>27.812</td>
+<td>0.905</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>crafty</td>
+<td>32.405</td>
+<td>45.311</td>
+<td>9.688</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>bzip2</td>
+<td>2.190</td>
+<td>3.102</td>
+<td>0.470</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键洞察</strong>：<strong>“难以预测”的说法是过时的 folklore</strong>。现代高性能处理器（如 Haswell）和先进预测器（如 ITTAGE）已能有效处理解释器中的间接跳转，其性能瓶颈更多在于预测器容量而非预测算法本身。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

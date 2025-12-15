@@ -1,0 +1,1027 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/collections/dyn-lang-acc/">
+      
+      
+        <link rel="prev" href="../micro-2025/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Dynamic Language Acceleration - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dynamic Language Acceleration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        负载分析
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An Empirical Study on the Performance and Energy Usage of Compiled Python Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rethinking-java-performance-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rethinking Java Performance Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigating Managed Language Runtime Performance: Why JavaScript and Python are 8x and 29x slower than C++, yet Java and Go can be Faster?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#porting-a-jit-compiler-to-risc-v-challenges-and-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porting a JIT Compiler to RISC-V: Challenges and Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        动态类型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typed-architectures-architectural-support-for-lightweight-scripting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typed Architectures: Architectural Support for Lightweight Scripting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解释器开销
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branch-prediction-and-the-performance-of-interpreters-dont-trust-folklore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bungee Jumps: Accelerating Indirect Branches Through HW/SW Co-Design
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        垃圾回收开销
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrent-copying-garbage-collection-with-hardware-transactional-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrent Copying Garbage Collection with Hardware Transactional Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flexible-reference-counting-based-hardware-acceleration-for-garbage-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gray-in-young-a-generational-garbage-collection-for-processing-in-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        负载分析
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An Empirical Study on the Performance and Energy Usage of Compiled Python Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rethinking-java-performance-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rethinking Java Performance Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigating Managed Language Runtime Performance: Why JavaScript and Python are 8x and 29x slower than C++, yet Java and Go can be Faster?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#porting-a-jit-compiler-to-risc-v-challenges-and-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porting a JIT Compiler to RISC-V: Challenges and Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        动态类型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typed-architectures-architectural-support-for-lightweight-scripting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typed Architectures: Architectural Support for Lightweight Scripting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        解释器开销
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branch-prediction-and-the-performance-of-interpreters-dont-trust-folklore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bungee Jumps: Accelerating Indirect Branches Through HW/SW Co-Design
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        垃圾回收开销
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrent-copying-garbage-collection-with-hardware-transactional-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrent Copying Garbage Collection with Hardware Transactional Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flexible-reference-counting-based-hardware-acceleration-for-garbage-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gray-in-young-a-generational-garbage-collection-for-processing-in-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">动态语言加速<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>动态语言加速相关的论文笔记</p>
+<p>本页面共收录了 13 篇论文笔记，分为 4 个分类。</p>
+<h2 id="_2">负载分析<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><strong>负载特征化与性能差距归因</strong>：深入分析 Python、JavaScript、Java 等托管语言在真实应用场景下的运行时行为。重点考察其与静态编译语言（Native Code）在指令级并行度（ILP）、缓存局部性以及能效比上的量化差异，旨在揭示导致动态语言‘性能税’（Performance Tax）的关键瓶颈，为后续优化提供数据支撑。</p>
+<p><em>本分类包含 5 篇论文</em></p>
+<h2 id="an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code">An Empirical Study on the Performance and Energy Usage of Compiled Python Code<a class="headerlink" href="#an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Vincenzo Stoico, Andrei Calin Dragomir, Patricia Lago<br />
+<strong>Affiliations:</strong> Vrije Universiteit Amsterdam, The Netherlands<br />
+<strong>Venue:</strong> EASE 2025</p>
+</blockquote>
+<p>该研究实证评估了8种Python编译器（如Codon、PyPy、Numba）相比CPython在性能与能耗上的提升。在7个基准测试中，Codon、PyPy和Numba平均实现超90%的执行时间和能耗优化，Nuitka显著降低内存使用。实验在固定频率和单核条件下进行，控制了代码特征与平台变量。</p>
+<p><a href="../../notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/an-empirical-study-on-the-performance-and-energy-usage-of-compiled-python-code/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/10.1145/nnnnnnn.nnnnnnn" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+<h2 id="rethinking-java-performance-analysis">Rethinking Java Performance Analysis<a class="headerlink" href="#rethinking-java-performance-analysis" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Stephen M. Blackburn, Zixian Cai, Rui Chen, et al.<br />
+<strong>Affiliations:</strong> Google, Australian National University, ByteDance, IOP Systems, Canva, The University of Sydney<br />
+<strong>Venue:</strong> ASPLOS 2025</p>
+</blockquote>
+<p>论文提出DaCapo Chopin基准套件，包含22个新/更新的工作负载，并引入新方法论评估Java性能。通过主成分分析验证工作负载多样性，揭示现代生产级垃圾回收器即使在最优情况下仍消耗15% CPU周期，在小堆内存下开销高达17倍。论文强调需持续改进性能分析方法以避免研究方向偏差。</p>
+<p><a href="../../notes_repo/rethinking-java-performance-analysis/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/rethinking-java-performance-analysis/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/rethinking-java-performance-analysis/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/10.1145/3669940.3707217" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+<h2 id="investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster">Investigating Managed Language Runtime Performance: Why JavaScript and Python are 8x and 29x slower than C++, yet Java and Go can be Faster?<a class="headerlink" href="#investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> David Lion, Adrian Chiu, Michael Stumm, et al.<br />
+<strong>Affiliations:</strong> University of Toronto, YScope Inc.<br />
+<strong>Venue:</strong> USENIX ATC 2022</p>
+</blockquote>
+<p>该论文对Java、Go、JavaScript和Python的运行时性能进行了深入分析，以C++为基线。通过自研的LangBench基准测试套件和对OpenJDK、V8、CPython运行时的深度插桩，量化了各语言的开销来源。研究发现CPython和V8/Node.js分别比C++慢29.5倍和8倍且难以并行扩展，而OpenJDK和Go仅慢1.43倍和1.3倍，并在部分场景下因GC改善缓存局部性或优化I/O而超越C++。</p>
+<p><a href="../../notes_repo/investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/investigating-managed-language-runtime-performance-why-javascript-and-python-are-8x-and-29x-slower-than-c-yet-java-and-go-can-be-faster/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="porting-a-jit-compiler-to-risc-v-challenges-and-opportunities">Porting a JIT Compiler to RISC-V: Challenges and Opportunities<a class="headerlink" href="#porting-a-jit-compiler-to-risc-v-challenges-and-opportunities" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Quentin Ducasse, Guillermo Polito, Pablo Tesone, et al.<br />
+<strong>Affiliations:</strong> Laboratoire Lab-STICC - ENSTA Bretagne, France, CNRS, INRIA - Centrale Lille, UMR 9189 CRIStAL, France<br />
+<strong>Venue:</strong> MPLR 2022</p>
+</blockquote>
+<p>本文研究将Pharo的x86架构JIT编译器Cogit移植到RISC-V所面临的挑战与机遇。针对RISC-V缺乏条件码、立即数加载复杂等特性，提出了IR重构、使用离线字面量管理及开发仿真调试工具等解决方案。实现了开源的RISC-V后端，并构建了ISA无关的测试框架和自定义指令仿真机制，为在RISC-V上探索VM硬件加速（如GC、安全）奠定基础。</p>
+<p><a href="../../notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/porting-a-jit-compiler-to-risc-v-challenges-and-opportunities/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008">A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008<a class="headerlink" href="#a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Philipp Lengauer, Verena Bitto, Hanspeter Mössenböck, et al.<br />
+<strong>Affiliations:</strong> Institute for System Software, Johannes Kepler University Linz, Austria, Christian Doppler Laboratory MEVSS, Johannes Kepler University Linz, Austria<br />
+<strong>Venue:</strong> ICPE 2017</p>
+</blockquote>
+<p>本文对DaCapo、DaCapo Scala和SPECjvm2008三大Java基准套件进行了全面的内存与垃圾回收（GC）行为分析。利用低开销监控工具AntTracks，在现代JVM上量化了各基准的分配强度、GC频率、暂停时间等关键指标，并对比了ParallelOld GC与G1 GC的性能差异。研究揭示了如factorie和sunflow等基准高达137GB的内存分配，以及G1在多数场景下显著降低GC时间（如factorie从41%降至1.4%）和暂停时间的优势，为研究人员选择合适基准提供了实证指南。</p>
+<p><a href="../../notes_repo/a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/http://dx.doi.org/10.1145/3030207.3030211" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+<h2 id="_3">动态类型<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>动态类型检查与分派：由于变量类型在运行时可变，解释器或JIT编译器必须在每次操作前检查操作数的类型标签（Tag），并根据类型动态分派（Dispatch）到相应的处理函数。这一过程引入了大量的数据依赖性条件跳转和间接跳转指令。</p>
+<p><em>本分类包含 2 篇论文</em></p>
+<h2 id="checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors">Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors<a class="headerlink" href="#checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Owen Anderson, Emily Fortuna, Luis Ceze, et al.<br />
+<strong>Affiliations:</strong> Computer Science and Engineering, University of Washington<br />
+<strong>Venue:</strong> HPCA 2011</p>
+</blockquote>
+<p>提出Checked Load架构扩展，通过4条新ISA指令将动态类型检查从软件移至硬件，结合动态类型预测，在移动处理器上JavaScript基准测试平均加速11.2%，最高达44.6%。</p>
+<p><a href="../../notes_repo/checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="typed-architectures-architectural-support-for-lightweight-scripting">Typed Architectures: Architectural Support for Lightweight Scripting<a class="headerlink" href="#typed-architectures-architectural-support-for-lightweight-scripting" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Channoh Kim, Jaehyeok Kim, Sungmin Kim, et al.<br />
+<strong>Affiliations:</strong> Sungkyunkwan University, Suwon, Korea, Seoul National University, Seoul, Korea<br />
+<strong>Venue:</strong> ASPLOS 2017</p>
+</blockquote>
+<p>论文提出Typed Architectures，通过ISA级硬件支持动态类型检查，引入多态指令和灵活的类型标签提取/插入机制。在RISC-V上实现，对JavaScript和Lua解释器分别取得11.2%和9.9%的平均加速，EDP提升19.3%和16.5%，面积开销仅1.6%。</p>
+<p><a href="../../notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/typed-architectures-architectural-support-for-lightweight-scripting/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/http://dx.doi.org/10.1145/3037697.3037726" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+<h2 id="_4">解释器开销<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p><strong>解释器开销</strong>：在未被JIT编译之前，代码运行在解释器模式下，存在大量的解码-分派循环，导致极低的指令级并行度（ILP）。</p>
+<p><em>本分类包含 3 篇论文</em></p>
+<h2 id="branch-prediction-and-the-performance-of-interpreters-dont-trust-folklore">Branch Prediction and the Performance of Interpreters – Don’t Trust Folklore<a class="headerlink" href="#branch-prediction-and-the-performance-of-interpreters-dont-trust-folklore" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Erven Rohou, Bharath Narasimha Swamy, Andre Seznec<br />
+<strong>Affiliations:</strong> Inria, France<br />
+<strong>Venue:</strong> CGO 2015</p>
+</blockquote>
+<p>该论文挑战了“解释器中switch语句的间接跳转因高误预测率而严重损害性能”的传统观点。作者通过在Nehalem、Sandy Bridge和Haswell处理器上对Python、JavaScript和CLI解释器进行实验，发现分支预测准确率已大幅提升：全局分支误预测率（MPKI）从Nehalem上的12-20降至Haswell上的0.5-2。研究表明，在现代处理器上，间接跳转的预测开销已不再是性能瓶颈。</p>
+<p><a href="../../notes_repo/branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/branch-prediction-and-the-performance-of-interpreters--dont-trust-folklore/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/10.1109/CGO.2015.7054191" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+<h2 id="virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar">Virtual Program Counter (VPC) Prediction: Very Low Cost Indirect Branch Prediction Using Conditional Branch Prediction Hardwar<a class="headerlink" href="#virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardwar" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Hyesoon Kim, José A. Joao, Onur Mutlu, et al.<br />
+<strong>Affiliations:</strong> Georgia Institute of Technology, University of Texas at Austin, Carnegie Mellon University, Intel Corporation<br />
+<strong>Venue:</strong> IEEE Transactions on Computers 2009</p>
+</blockquote>
+<p>论文提出虚拟程序计数器（VPC）预测技术，利用现有条件分支预测硬件低成本地预测间接分支目标，避免了专用存储结构。该方法在C/C++和Java应用上分别平均提升性能26.7%和21.9%，并显著降低能耗，且可与任意条件分支预测器协同工作。</p>
+<p><a href="../../notes_repo/virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/virtual-program-counter-vpc-prediction-very-low-cost-indirect-branch-prediction-using-conditional-branch-prediction-hardware/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/10.1109/TC.2008.227" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+<h2 id="bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design">Bungee Jumps: Accelerating Indirect Branches Through HW/SW Co-Design<a class="headerlink" href="#bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Daniel S. McFarlin, Craig Zilles<br />
+<strong>Affiliations:</strong> Carnegie Mellon University, University of Illinois at Urbana-Champaign<br />
+<strong>Venue:</strong> MICRO 2015</p>
+</blockquote>
+<p>论文提出Bungee Jumps技术，通过HW/SW协同设计将间接分支的预测点与解析点分离，使顺序处理器能利用现代高准确率的间接分支预测器。该方法在SPEC、PHP和Python基准上分别实现了11%、23%和14%的平均加速，且代码体积仅增加1-3%。</p>
+<p><a href="../../notes_repo/bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/bungee-jumps-accelerating-indirect-branches-through-hwsw-co-design/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/http://dx.doi.org/10.1145/2830772.2830781" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+<h2 id="_5">垃圾回收开销<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p><strong>自动内存管理与硬件加速</strong>：垃圾回收（GC）产生的‘全停顿’（Stop-The-World）和高内存带宽占用是制约系统响应能力的主要因素，尤其在多核环境下，原子操作和锁竞争进一步加剧了开销。本部分探讨如何利用硬件事务内存（HTM）、近数据处理（PIM）或专用加速器来卸载对象扫描、引用计数更新等操作，以实现低延迟、高吞吐的并发垃圾回收。</p>
+<p><em>本分类包含 3 篇论文</em></p>
+<h2 id="concurrent-copying-garbage-collection-with-hardware-transactional-memory">Concurrent Copying Garbage Collection with Hardware Transactional Memory<a class="headerlink" href="#concurrent-copying-garbage-collection-with-hardware-transactional-memory" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Zixian Cai<br />
+<strong>Affiliations:</strong> The Australian National University<br />
+<strong>Venue:</strong> unknown 2020</p>
+</blockquote>
+<p>该论文提出了一种利用硬件事务内存（HTM）来降低并发复制垃圾回收（GC）中mutator开销的新算法。通过让mutator在事务中短暂执行，确保了堆视图的一致性，避免了传统读屏障或页保护的高开销。作者深入分析了Intel TSX的事务容量特性，并基于此设计了乐观复制和缓存预热等优化。实验结果表明，该HTM-based GC方案是可行的。</p>
+<p><a href="../../notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/concurrent-copying-garbage-collection-with-hardware-transactional-memory/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="flexible-reference-counting-based-hardware-acceleration-for-garbage-collection">Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection<a class="headerlink" href="#flexible-reference-counting-based-hardware-acceleration-for-garbage-collection" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> José A. Joao, Onur Mutlu, Yale N. Patt<br />
+<strong>Affiliations:</strong> ECE Department, The University of Texas at Austin, Computer Architecture Laboratory, Carnegie Mellon University<br />
+<strong>Venue:</strong> ISCA 2009</p>
+</blockquote>
+<p>提出HAMM，一种软硬件协同的垃圾回收加速机制。通过硬件实现的引用计数（带RCCB缓冲）高效检测死亡对象，并通过ABT快速重用内存块，从而减少软件GC频率。在DaCapo基准测试中，平均减少31%的GC时间，对应用性能（mutator）影响可忽略（仅0.38%开销）。</p>
+<p><a href="../../notes_repo/flexible-reference-counting-based-hardware-acceleration-for-garbage-collection/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/flexible-reference-counting-based-hardware-acceleration-for-garbage-collection/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/flexible-reference-counting-based-hardware-acceleration-for-garbage-collection/ELI5_notes/">👶 ELI5 解释</a></p>
+<hr />
+<h2 id="gray-in-young-a-generational-garbage-collection-for-processing-in-memory">Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory<a class="headerlink" href="#gray-in-young-a-generational-garbage-collection-for-processing-in-memory" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Authors:</strong> Ryu Morimoto, Kazuki Ichinose, Tomoharu Ugawa<br />
+<strong>Affiliations:</strong> The University of Tokyo<br />
+<strong>Venue:</strong> ISMM 2025</p>
+</blockquote>
+<p>针对UPMEM PIM架构的DPU设计了一种并行分代垃圾回收器（GC）。其创新点包括：将新生代置于快速SPM中，通过Gray-in-Young算法在对象晋升前于SPM内更新指针，并静态缓存对象布局信息。这些技术减少了85.9%的DRAM访问，性能提升46.2%，且GC代码仅占4.3KB，可扩展至11个线程。</p>
+<p><a href="../../notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/paper_notes/">📄 论文笔记</a> | <a href="../../notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/figs_notes/">📊 图表解析</a> | <a href="../../notes_repo/gray-in-young-a-generational-garbage-collection-for-processing-in-memory/ELI5_notes/">👶 ELI5 解释</a> | <a href="https://doi.org/10.1145/3735950.3735961" target="_blank" rel="noopener noreferrer">🔗 直达原文</a></p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../javascripts/switcher.js"></script>
+      
+        <script src="../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

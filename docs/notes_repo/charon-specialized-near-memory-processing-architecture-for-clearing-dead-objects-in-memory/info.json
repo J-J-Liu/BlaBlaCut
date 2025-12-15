@@ -1,0 +1,20 @@
+{
+  "index": "charon-specialized-near-memory-processing-architecture-for-clearing-dead-objects-in-memory",
+  "paper_title": "Charon: Specialized Near-Memory Processing Architecture for Clearing Dead Objects in Memory",
+  "metadata": {
+    "authors": [
+      "Jaeyoung Jang",
+      "Jun Heo",
+      "Yejin Lee",
+      "et al."
+    ],
+    "affiliations": [
+      "Sungkyunkwan University, Suwon, Korea",
+      "Seoul National University, Seoul, Korea"
+    ],
+    "venue": "MICRO",
+    "year": 2019,
+    "doi": "10.1145/3352460.3358297"
+  },
+  "description": "论文提出Charon，首个基于3D堆叠内存的垃圾回收（GC）加速器。通过分析HotSpot JVM，识别出Copy、Search、Scan&Push和Bitmap Count等关键GC原语，并在近内存逻辑层设计专用处理单元进行卸载。在Spark和GraphChi上的评估表明，相比8核乱序CPU基线，Charon实现了3.29倍的GC平均加速比和60.7%的能耗节省。"
+}

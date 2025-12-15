@@ -1,0 +1,19 @@
+{
+  "index": "flexible-reference-counting-based-hardware-acceleration-for-garbage-collection",
+  "paper_title": "Flexible Reference-Counting-Based Hardware Acceleration for Garbage Collection",
+  "metadata": {
+    "authors": [
+      "José A. Joao",
+      "Onur Mutlu",
+      "Yale N. Patt"
+    ],
+    "affiliations": [
+      "ECE Department, The University of Texas at Austin",
+      "Computer Architecture Laboratory, Carnegie Mellon University"
+    ],
+    "venue": "ISCA",
+    "year": 2009,
+    "doi": null
+  },
+  "description": "提出HAMM，一种软硬件协同的垃圾回收加速机制。通过硬件实现的引用计数（带RCCB缓冲）高效检测死亡对象，并通过ABT快速重用内存块，从而减少软件GC频率。在DaCapo基准测试中，平均减少31%的GC时间，对应用性能（mutator）影响可忽略（仅0.38%开销）。"
+}

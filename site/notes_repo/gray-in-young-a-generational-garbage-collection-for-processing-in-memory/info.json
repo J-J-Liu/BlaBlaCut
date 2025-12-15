@@ -1,0 +1,18 @@
+{
+  "index": "gray-in-young-a-generational-garbage-collection-for-processing-in-memory",
+  "paper_title": "Gray-in-Young: A Generational Garbage Collection for Processing-in-Memory",
+  "metadata": {
+    "authors": [
+      "Ryu Morimoto",
+      "Kazuki Ichinose",
+      "Tomoharu Ugawa"
+    ],
+    "affiliations": [
+      "The University of Tokyo"
+    ],
+    "venue": "ISMM",
+    "year": 2025,
+    "doi": "10.1145/3735950.3735961"
+  },
+  "description": "针对UPMEM PIM架构的DPU设计了一种并行分代垃圾回收器（GC）。其创新点包括：将新生代置于快速SPM中，通过Gray-in-Young算法在对象晋升前于SPM内更新指针，并静态缓存对象布局信息。这些技术减少了85.9%的DRAM访问，性能提升46.2%，且GC代码仅占4.3KB，可扩展至11个线程。"
+}

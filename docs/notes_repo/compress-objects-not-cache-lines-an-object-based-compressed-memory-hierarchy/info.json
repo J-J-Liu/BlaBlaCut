@@ -1,0 +1,17 @@
+{
+  "index": "compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy",
+  "paper_title": "Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy",
+  "metadata": {
+    "authors": [
+      "Po-An Tsai",
+      "Daniel Sanchez"
+    ],
+    "affiliations": [
+      "MIT CSAIL"
+    ],
+    "venue": "ASPLOS",
+    "year": 2019,
+    "doi": "10.1145/3297858.3304006"
+  },
+  "description": "针对传统缓存行压缩在面向对象程序中效果不佳的问题，提出Zippads——首个面向对象的压缩内存层次结构，以对象为压缩单元，并设计COCO跨对象压缩算法。在混合工作负载上，相比现有技术，平均压缩率提升1.63倍，内存流量减少56%，性能提升17%。"
+}

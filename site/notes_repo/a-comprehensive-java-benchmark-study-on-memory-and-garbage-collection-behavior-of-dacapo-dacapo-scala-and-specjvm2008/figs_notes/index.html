@@ -1,0 +1,2987 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#963a09d8d4ee7b97d1a6be63240d79dca9cb1a6c79ec017d08e8ad8c0a13c731jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        963a09d8d4ee7b97d1a6be63240d79dca9cb1a6c79ec017d08e8ad8c0a13c731.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-objects-allocated-by-vm-internal-code-interpreted-code-c1-compiled-code-or-by-c2-compiled-code-respectively-green-1st-top-allocator-yellow-2nd-top-allocator-red-3rd-top-allocator-as-well-as-the-time-spent-compiling-in-relation-to-the-overall-run-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3: Objects allocated by VM-internal code, interpreted code, C1 compiled code, or by C2 compiled code respectively (green: 1st top allocator, yellow: 2nd top allocator, red: 3rd top allocator), as well as the time spent compiling in relation to the overall run time
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afbjpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afb.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-8-object-pointers-per-gc-of-all-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 8: Object pointers per GC of all benchmarks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e5014de62636882c0e8e412fe1a7fe339bf08aa4bbd1587409471a5f0aac45dejpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        e5014de62636882c0e8e412fe1a7fe339bf08aa4bbd1587409471a5f0aac45de.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-10-gc-count-gc-time-relative-to-the-total-run-time-green-less-than-5-yellow-less-than-15-red-more-than-15-and-average-pause-time-for-minor-and-major-gcs-for-the-parallelold-gc-and-the-g1-gc-respectively-green-less-than-10ms-yellow-less-than-100ms-red-more-than-100ms-heap-unlimited" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 10: GC count, GC time relative to the total run time (green: less than 5%, yellow: less than 15%, red: more than 15%), and average pause time for minor (-) and major (+) GCs for the ParallelOld GC and the G1 GC respectively (green: less than 10ms, yellow: less than 100ms, red: more than 100ms) (heap unlimited)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008">A Comprehensive Java Benchmark Study on Memory and Garbage Collection Behavior of DaCapo, DaCapo Scala, and SPECjvm2008 图表详解<a class="headerlink" href="#a-comprehensive-java-benchmark-study-on-memory-and-garbage-collection-behavior-of-dacapo-dacapo-scala-and-specjvm2008" title="Permanent link">&para;</a></h1>
+<h3 id="963a09d8d4ee7b97d1a6be63240d79dca9cb1a6c79ec017d08e8ad8c0a13c731jpg">963a09d8d4ee7b97d1a6be63240d79dca9cb1a6c79ec017d08e8ad8c0a13c731.jpg<a class="headerlink" href="#963a09d8d4ee7b97d1a6be63240d79dca9cb1a6c79ec017d08e8ad8c0a13c731jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="963a09d8d4ee7b97d1a6be63240d79dca9cb1a6c79ec017d08e8ad8c0a13c731.jpg" src="../images/963a09d8d4ee7b97d1a6be63240d79dca9cb1a6c79ec017d08e8ad8c0a13c731.jpg" /></p>
+<ul>
+<li>图片内容为一张表格，详细列出了用于研究的三个 Java 基准测试套件（DaCapo、DaCapo Scala、SPECjvm2008）中各个基准测试的配置参数。</li>
+<li>表格包含四列：<strong>Benchmark</strong>（基准测试名称）、<strong>Warmups</strong>（预热次数）、<strong>Input</strong>（输入规模）、<strong>Live[MB]</strong>（存活内存大小，单位 MB）。</li>
+<li><strong>DaCapo</strong> 套件包含 14 个基准测试，如 <code>avrora</code>、<code>h2</code>、<code>lusearch</code> 等。其中 <code>h2</code> 的存活内存高达 <strong>1300.67 MB</strong>，是所有基准中最高的；而 <code>lusearch</code> 的存活内存仅为 <strong>2.64 MB</strong>，是 DaCapo 中最低的。</li>
+<li><strong>DaCapo Scala</strong> 套件包含 11 个基准测试，如 <code>actors</code>、<code>factorie</code>、<code>tmt</code> 等。<code>factorie</code> 的存活内存为 <strong>558.27 MB</strong>，是该套件中最高的；<code>kiama</code> 仅 <strong>6.45 MB</strong>，为最低。</li>
+<li><strong>SPECjvm2008</strong> 套件包含 21 个基准测试，如 <code>compiler.compiler</code>、<code>scimark.fft.large</code>、<code>serial</code> 等。<code>scimark.fft.large</code> 的存活内存为 <strong>612.17 MB</strong>，是该套件中最高的；<code>crypto.rsa</code> 仅 <strong>3.19 MB</strong>，为最低。</li>
+<li>输入规模（Input）在不同套件中表示方式不同：<ul>
+<li>DaCapo 和 DaCapo Scala 使用 <code>small</code>、<code>default</code>、<code>large</code>、<code>huge</code>、<code>gargantuan</code> 等描述性词汇。</li>
+<li>SPECjvm2008 使用操作数（如 <code>160ops</code>、<code>240ops</code>）来表示工作负载大小。</li>
+</ul>
+</li>
+<li>预热次数（Warmups）根据基准测试和输入规模进行了调整，范围从 <strong>5 次</strong>（如 DaCapo Scala 的 <code>actors</code>、<code>apparat</code>、<code>factorie</code>）到 <strong>80 次</strong>（如 DaCapo 的 <code>batik</code>、<code>eclipse</code>）。</li>
+<li>该表格是论文第 2 节“Methodology”中 Figure 1 的可视化呈现，用于说明实验设置，确保结果可复现。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Warmups</th>
+<th>Input</th>
+<th>Live[MB]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DaCapo</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>avrora</td>
+<td>20</td>
+<td>large</td>
+<td>7.49</td>
+</tr>
+<tr>
+<td>batik</td>
+<td>80</td>
+<td>small</td>
+<td>24.74</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>80</td>
+<td>small</td>
+<td>14.26</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>40</td>
+<td>default</td>
+<td>29.57</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>10</td>
+<td>huge</td>
+<td>1300.67</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>20</td>
+<td>large</td>
+<td>27.93</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>40</td>
+<td>default</td>
+<td>5.03</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>20</td>
+<td>large</td>
+<td>2.64</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>20</td>
+<td>large</td>
+<td>38.06</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>20</td>
+<td>large</td>
+<td>11.06</td>
+</tr>
+<tr>
+<td>tomcat</td>
+<td>10</td>
+<td>huge</td>
+<td>17.02</td>
+</tr>
+<tr>
+<td>tradebeans</td>
+<td>10</td>
+<td>huge</td>
+<td>278.42</td>
+</tr>
+<tr>
+<td>tradesoap</td>
+<td>10</td>
+<td>huge</td>
+<td>110.81</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>20</td>
+<td>large</td>
+<td>5.16</td>
+</tr>
+<tr>
+<td><strong>DaCapo Scala</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>actors</td>
+<td>5</td>
+<td>gargantuan</td>
+<td>17.02</td>
+</tr>
+<tr>
+<td>apparat</td>
+<td>5</td>
+<td>gargantuan</td>
+<td>66.68</td>
+</tr>
+<tr>
+<td>factorie</td>
+<td>5</td>
+<td>gargantuan</td>
+<td>558.27</td>
+</tr>
+<tr>
+<td>kiama</td>
+<td>40</td>
+<td>default</td>
+<td>6.45</td>
+</tr>
+<tr>
+<td>scalac</td>
+<td>20</td>
+<td>large</td>
+<td>71.86</td>
+</tr>
+<tr>
+<td>scaladoc</td>
+<td>20</td>
+<td>large</td>
+<td>68.44</td>
+</tr>
+<tr>
+<td>scalap</td>
+<td>20</td>
+<td>large</td>
+<td>5.76</td>
+</tr>
+<tr>
+<td>scalariform</td>
+<td>10</td>
+<td>huge</td>
+<td>19.15</td>
+</tr>
+<tr>
+<td>scalaxb</td>
+<td>10</td>
+<td>huge</td>
+<td>109.06</td>
+</tr>
+<tr>
+<td>tmt</td>
+<td>10</td>
+<td>huge</td>
+<td>39.22</td>
+</tr>
+<tr>
+<td><strong>SPECjvm2008</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>compiler.compiler</td>
+<td>20</td>
+<td>160ops</td>
+<td>229.10</td>
+</tr>
+<tr>
+<td>compiler.sunflow</td>
+<td>20</td>
+<td>160ops</td>
+<td>144.32</td>
+</tr>
+<tr>
+<td>compress</td>
+<td>20</td>
+<td>40ops</td>
+<td>85.20</td>
+</tr>
+<tr>
+<td>crypto.aes</td>
+<td>20</td>
+<td>16ops</td>
+<td>41.75</td>
+</tr>
+<tr>
+<td>crypto.rsa</td>
+<td>20</td>
+<td>120ops</td>
+<td>3.19</td>
+</tr>
+<tr>
+<td>crypto.signverify</td>
+<td>20</td>
+<td>96ops</td>
+<td>18.32</td>
+</tr>
+<tr>
+<td>derby</td>
+<td>20</td>
+<td>240ops</td>
+<td>435.10</td>
+</tr>
+<tr>
+<td>mpegaudio</td>
+<td>20</td>
+<td>40ops</td>
+<td>4.49</td>
+</tr>
+<tr>
+<td>scimark.fft.large</td>
+<td>20</td>
+<td>8ops</td>
+<td>612.17</td>
+</tr>
+<tr>
+<td>scimark.fft.small</td>
+<td>20</td>
+<td>80ops</td>
+<td>16.46</td>
+</tr>
+<tr>
+<td>scimark.lu.large</td>
+<td>20</td>
+<td>8ops</td>
+<td>583.21</td>
+</tr>
+<tr>
+<td>scimark.lu.small</td>
+<td>20</td>
+<td>96ops</td>
+<td>10.78</td>
+</tr>
+<tr>
+<td>scimark.monte_carlo</td>
+<td>20</td>
+<td>72ops</td>
+<td>2.93</td>
+</tr>
+<tr>
+<td>scimark.sor.large</td>
+<td>20</td>
+<td>8ops</td>
+<td>294.84</td>
+</tr>
+<tr>
+<td>scimark.sor.small</td>
+<td>20</td>
+<td>65ops</td>
+<td>6.70</td>
+</tr>
+<tr>
+<td>scimark.sparse.large</td>
+<td>20</td>
+<td>8ops</td>
+<td>446.93</td>
+</tr>
+<tr>
+<td>scimark.sparse.small</td>
+<td>20</td>
+<td>16ops</td>
+<td>11.45</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>20</td>
+<td>200ops</td>
+<td>367.17</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>20</td>
+<td>120ops</td>
+<td>19.26</td>
+</tr>
+<tr>
+<td>xml.transform</td>
+<td>20</td>
+<td>56ops</td>
+<td>35.12</td>
+</tr>
+<tr>
+<td>xml.validation</td>
+<td>20</td>
+<td>320ops</td>
+<td>92.79</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655jpg">3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg<a class="headerlink" href="#3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg" src="../images/3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg" /></p>
+<ul>
+<li>图片 3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg 展示了 DaCapo、DaCapo Scala 和 SPECjvm2008 三大 Java 基准测试套件中各基准程序的内存分配行为与对象布局特征，数据基于自适应堆大小（三倍于 live size）和 ParallelOld GC 配置。</li>
+<li><strong>总分配量</strong>：以对象数量和字节数衡量。<strong>factorie</strong>（DaCapo Scala）以 <strong>5,716,589.7 × 10³ 对象</strong> 和 <strong>137,521.8 MB</strong> 的分配量位居榜首，是所有基准中最“重”的内存消费者。紧随其后的是 <strong>derby</strong>（SPECjvm2008）和 <strong>sunflow</strong>（SPECjvm2008），它们在对象数和字节数上均位列前五。</li>
+<li><strong>分配速率</strong>：衡量每秒分配的对象数和字节数。<strong>tmt</strong>（DaCapo Scala）以 <strong>54,697.7 × 10³ 对象/秒</strong> 和 <strong>1,340.9 MB/秒</strong> 的速率成为最“快”的分配者。<strong>derby</strong> 和 <strong>serial</strong>（SPECjvm2008）也表现出极高的分配速率，对 GC 频率构成直接压力。</li>
+<li><strong>对象布局</strong>：揭示了对象的平均大小、数组对象占比及平均数组长度。<ul>
+<li><strong>最大对象</strong>：<strong>scimark.fft.large</strong>（SPECjvm2008）拥有最大的平均对象尺寸，高达 <strong>66,335.2 字节</strong>，但因其运行时间短、分配率低，实际内存压力较小。</li>
+<li><strong>最高数组比例</strong>：<strong>mpegaudio</strong>（SPECjvm2008）的数组对象占比高达 <strong>97.5%</strong>，而 <strong>sunflow</strong>（SPECjvm2008）则低至 <strong>3.4%</strong>，显示出显著的应用差异。</li>
+<li><strong>最长数组</strong>：<strong>scimark.fft.large</strong>（SPECjvm2008）的平均数组长度为 <strong>157,485.6</strong>，远超其他基准，这与其处理大型矩阵的特性相符。<strong>crypto.rsa</strong> 和 <strong>crypto.signverify</strong> 也因加密操作生成了长数组。</li>
+</ul>
+</li>
+</ul>
+<p>下表总结了关键指标的前三名：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">第一名</th>
+<th style="text-align: left;">数值</th>
+<th style="text-align: left;">第二名</th>
+<th style="text-align: left;">数值</th>
+<th style="text-align: left;">第三名</th>
+<th style="text-align: left;">数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>总对象数 (×10³)</strong></td>
+<td style="text-align: left;">factorie</td>
+<td style="text-align: left;">5,716,589.7</td>
+<td style="text-align: left;">tmt</td>
+<td style="text-align: left;">2,663,579.5</td>
+<td style="text-align: left;">derby</td>
+<td style="text-align: left;">2,001,219.7</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>总字节数 (MB)</strong></td>
+<td style="text-align: left;">factorie</td>
+<td style="text-align: left;">137,521.8</td>
+<td style="text-align: left;">sunflow</td>
+<td style="text-align: left;">93,002.4</td>
+<td style="text-align: left;">derby</td>
+<td style="text-align: left;">77,974.7</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>对象分配速率 (×10³/sec)</strong></td>
+<td style="text-align: left;">tmt</td>
+<td style="text-align: left;">54,697.7</td>
+<td style="text-align: left;">factorie</td>
+<td style="text-align: left;">37,494.4</td>
+<td style="text-align: left;">derby</td>
+<td style="text-align: left;">86,931.7</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>字节分配速率 (MB/sec)</strong></td>
+<td style="text-align: left;">tmt</td>
+<td style="text-align: left;">1,340.9</td>
+<td style="text-align: left;">factorie</td>
+<td style="text-align: left;">902.0</td>
+<td style="text-align: left;">derby</td>
+<td style="text-align: left;">3,387.2</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>平均对象大小 (字节)</strong></td>
+<td style="text-align: left;">scimark.fft.large</td>
+<td style="text-align: left;">66,335.2</td>
+<td style="text-align: left;">scimark.sor.large</td>
+<td style="text-align: left;">1,916.6</td>
+<td style="text-align: left;">scimark.lu.large</td>
+<td style="text-align: left;">1,985.1</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>数组对象比例 (%)</strong></td>
+<td style="text-align: left;">mpegaudio</td>
+<td style="text-align: left;">97.5</td>
+<td style="text-align: left;">scimark.lu.small</td>
+<td style="text-align: left;">99.1</td>
+<td style="text-align: left;">scimark.sor.small</td>
+<td style="text-align: left;">70.1</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>平均数组长度</strong></td>
+<td style="text-align: left;">scimark.fft.large</td>
+<td style="text-align: left;">157,485.6</td>
+<td style="text-align: left;">crypto.rsa</td>
+<td style="text-align: left;">61,137.9</td>
+<td style="text-align: left;">scimark.sparse.large</td>
+<td style="text-align: left;">141,717.1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>跨套件观察</strong>：SPECjvm2008 套件普遍展现出更高的平均数组长度，这源于其包含大量处理大输入数据或矩阵运算的基准（如 compress, crypto.<em>, scimark.</em>）。相比之下，DaCapo 和 DaCapo Scala 的对象布局更为多样。</li>
+<li><strong>特殊案例</strong>：<strong>lusearch</strong> 和 <strong>pmd</strong> 基准程序因滥用异常（Exception）作为控制流，导致大量 VM 内部对象被分配，这并非其核心业务逻辑所需，属于需要特别注意的“怪癖”。</li>
+</ul>
+<h3 id="figure-3-objects-allocated-by-vm-internal-code-interpreted-code-c1-compiled-code-or-by-c2-compiled-code-respectively-green-1st-top-allocator-yellow-2nd-top-allocator-red-3rd-top-allocator-as-well-as-the-time-spent-compiling-in-relation-to-the-overall-run-time">Figure 3: Objects allocated by VM-internal code, interpreted code, C1 compiled code, or by C2 compiled code respectively (green: 1st top allocator, yellow: 2nd top allocator, red: 3rd top allocator), as well as the time spent compiling in relation to the overall run time<a class="headerlink" href="#figure-3-objects-allocated-by-vm-internal-code-interpreted-code-c1-compiled-code-or-by-c2-compiled-code-respectively-green-1st-top-allocator-yellow-2nd-top-allocator-red-3rd-top-allocator-as-well-as-the-time-spent-compiling-in-relation-to-the-overall-run-time" title="Permanent link">&para;</a></h3>
+<p><img alt="04aef8cc3d18bbf1810729558772827aebd246a8ea33569bddd0fb2e839e0c04.jpg" src="../images/04aef8cc3d18bbf1810729558772827aebd246a8ea33569bddd0fb2e839e0c04.jpg" /></p>
+<ul>
+<li>图片 04aef8cc3d18bbf1810729558772827aebd246a8ea33569bddd0fb2e839e0c04.jpg 展示的是 Figure 3，其核心内容是各 Java 基准测试程序中对象分配的来源分布（VM 内部、解释执行、C1 编译、C2 编译）以及编译时间占总运行时间的比例。</li>
+<li>数据按基准套件分组：<strong>DaCapo</strong>、<strong>DaCapo Scala</strong> 和 <strong>SPECjvm2008</strong>。</li>
+<li>分配来源以百分比形式呈现，并用颜色编码表示主导程度：<strong>绿色</strong>代表第一大分配源，<strong>黄色</strong>为第二大，<strong>红色</strong>为第三大。</li>
+<li><strong>编译时间占比</strong>（Comp. [%]）列显示了 JIT 编译所消耗的时间比例。</li>
+</ul>
+<p>以下是数据表格化整理：</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Allocated by [%] VM Int.</th>
+<th>C1</th>
+<th>C2</th>
+<th>Comp. [%]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DaCapo</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>avrora</td>
+<td>1.1</td>
+<td>0.0</td>
+<td>98.3</td>
+<td>0.11</td>
+</tr>
+<tr>
+<td>batik</td>
+<td>0.6</td>
+<td>0.1</td>
+<td>97.5</td>
+<td>1.06</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>4.6</td>
+<td>0.0</td>
+<td>93.0</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>0.2</td>
+<td>0.1</td>
+<td>98.9</td>
+<td>24.48</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>99.0</td>
+<td>3.64</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>2.1</td>
+<td>0.0</td>
+<td>97.9</td>
+<td>0.85</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>1.6</td>
+<td>0.3</td>
+<td>97.3</td>
+<td>0.70</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td><strong>13.7</strong></td>
+<td>0.0</td>
+<td>86.2</td>
+<td>0.12</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td><strong>11.6</strong></td>
+<td>0.0</td>
+<td>88.3</td>
+<td>2.91</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>0.2</td>
+<td>0.0</td>
+<td>99.8</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>tomcat</td>
+<td>1.8</td>
+<td>0.0</td>
+<td>97.7</td>
+<td>6.80</td>
+</tr>
+<tr>
+<td>tradebeans</td>
+<td>0.5</td>
+<td>0.0</td>
+<td>99.5</td>
+<td>3.33</td>
+</tr>
+<tr>
+<td>tradesoap</td>
+<td>0.4</td>
+<td>0.0</td>
+<td>99.6</td>
+<td>0.25</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>1.8</td>
+<td>0.0</td>
+<td>98.2</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td><strong>DaCapo Scala</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>actors</td>
+<td>0.2</td>
+<td>0.0</td>
+<td>99.7</td>
+<td>0.39</td>
+</tr>
+<tr>
+<td>apparat</td>
+<td>0.1</td>
+<td>0.0</td>
+<td>99.8</td>
+<td>0.37</td>
+</tr>
+<tr>
+<td>factorie</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>100.0</td>
+<td>0.18</td>
+</tr>
+<tr>
+<td>kiama</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>99.7</td>
+<td>9.37</td>
+</tr>
+<tr>
+<td>scalac</td>
+<td>0.1</td>
+<td>0.3</td>
+<td>99.0</td>
+<td>23.59</td>
+</tr>
+<tr>
+<td>scaladoc</td>
+<td>0.2</td>
+<td>0.6</td>
+<td>99.1</td>
+<td>13.09</td>
+</tr>
+<tr>
+<td>scalap</td>
+<td>0.1</td>
+<td>0.0</td>
+<td>99.3</td>
+<td>10.14</td>
+</tr>
+<tr>
+<td>scalariform</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>99.5</td>
+<td>4.72</td>
+</tr>
+<tr>
+<td>scalaxb</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>99.9</td>
+<td>1.54</td>
+</tr>
+<tr>
+<td>tmt</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>100.0</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td><strong>SPECjvm2008</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>compiler.compiler</td>
+<td>0.1</td>
+<td>0.0</td>
+<td>99.9</td>
+<td>0.11</td>
+</tr>
+<tr>
+<td>compiler.sunflow</td>
+<td>0.2</td>
+<td>0.0</td>
+<td>99.8</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>compress</td>
+<td>1.4</td>
+<td>0.3</td>
+<td>68.9</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>crypto.aes</td>
+<td>4.3</td>
+<td>0.3</td>
+<td>86.5</td>
+<td>0.08</td>
+</tr>
+<tr>
+<td>crypto.rsa</td>
+<td>2.6</td>
+<td>0.0</td>
+<td>97.4</td>
+<td>0.07</td>
+</tr>
+<tr>
+<td>crypto.signverify</td>
+<td>1.9</td>
+<td>0.0</td>
+<td>98.0</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>derby</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>100.0</td>
+<td>0.06</td>
+</tr>
+<tr>
+<td>mpegaudio</td>
+<td>5.1</td>
+<td>0.0</td>
+<td>93.6</td>
+<td>0.12</td>
+</tr>
+<tr>
+<td>scimark.fft.large</td>
+<td>4.9</td>
+<td>39.1</td>
+<td>13.7</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>scimark.fft.small</td>
+<td>5.8</td>
+<td>0.2</td>
+<td>89.8</td>
+<td>0.11</td>
+</tr>
+<tr>
+<td>scimark.lu.large</td>
+<td>2.0</td>
+<td>48.7</td>
+<td>48.0</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>scimark.lu.small</td>
+<td>20.3</td>
+<td>0.0</td>
+<td>79.6</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>scimark.monte_carlo</td>
+<td>1.6</td>
+<td>1.0</td>
+<td>62.7</td>
+<td>0.09</td>
+</tr>
+<tr>
+<td>scimark.sor.large</td>
+<td>2.7</td>
+<td>94.3</td>
+<td>0.8</td>
+<td>0.42</td>
+</tr>
+<tr>
+<td>scimark.sor.small</td>
+<td>8.1</td>
+<td>18.9</td>
+<td>42.2</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>scimark.sparse.large</td>
+<td>9.0</td>
+<td>38.5</td>
+<td>21.2</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>scimark.sparse.small</td>
+<td>20.3</td>
+<td>5.2</td>
+<td>53.0</td>
+<td>7.23</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>100.0</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>0.2</td>
+<td>0.0</td>
+<td>99.8</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>xml.transform</td>
+<td>0.1</td>
+<td>0.0</td>
+<td>99.9</td>
+<td>0.36</td>
+</tr>
+<tr>
+<td>xml.validation</td>
+<td>0.6</td>
+<td>0.0</td>
+<td>99.4</td>
+<td>0.02</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>多数基准测试中，<strong>C2 编译代码</strong>是主要的对象分配来源，表明在稳定状态下，JIT 已充分优化并接管了大部分执行。</li>
+<li><strong>lusearch</strong> 和 <strong>pmd</strong> 是显著异常值，它们分别有 <strong>13.7%</strong> 和 <strong>11.6%</strong> 的对象由 <strong>VM 内部代码</strong>分配，这源于它们滥用 <code>Exception</code> 进行控制流，导致大量栈跟踪填充操作。</li>
+<li><strong>scimark</strong> 系列基准测试表现出特殊行为：例如 <strong>scimark.sor.large</strong> 中，<strong>C1 编译代码</strong>（94.3%）是主要分配源，而 <strong>C2 编译代码</strong>仅占 0.8%，说明其长循环方法未被充分优化或触发 C2 编译。</li>
+<li><strong>fop</strong>、<strong>scalac</strong>、<strong>scaladoc</strong> 和 <strong>scalap</strong> 的 <strong>编译时间占比</strong>非常高（&gt;10%），表明即使在测量阶段，这些基准仍处于编译活跃期，可能未完全预热。</li>
+<li><strong>factorie</strong>、<strong>tmt</strong>、<strong>serial</strong>、<strong>derby</strong> 等基准的编译时间占比极低（\&lt;0.2%），表明它们已达到稳定状态，适合用于性能评估。</li>
+</ul>
+<h3 id="5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afbjpg">5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afb.jpg<a class="headerlink" href="#5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afbjpg" title="Permanent link">&para;</a></h3>
+<p><img alt="5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afb.jpg" src="../images/5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afb.jpg" /></p>
+<ul>
+<li>该图像为一张详细的数据表格，展示了在 <strong>ParallelOld GC</strong> 和 <strong>G1 GC</strong> 两种垃圾回收器配置下，多个 Java 基准测试程序（Benchmark）的垃圾回收行为指标。</li>
+<li>表格按基准套件分为三组：<strong>DaCapo</strong>、<strong>DaCapo Scala</strong> 和 <strong>SPECjvm2008</strong>，每组内列出具体基准名称。</li>
+<li>每个基准的指标分为两大部分：<strong>ParallelOld GC</strong> 和 <strong>G1 GC</strong>，每部分包含四个子列：<ul>
+<li><strong>Count [#]</strong>：GC 次数，分 Minor (-) 和 Major (+)</li>
+<li><strong>Time [%]</strong>：GC 时间占总运行时间百分比，分 Minor (-) 和 Major (+)</li>
+<li><strong>Pause [ms]</strong>：平均暂停时间（毫秒），分 Minor (-) 和 Major (+)</li>
+<li><strong>YR [%]</strong>：Young Generation Ratio（年轻代占比），仅一个值</li>
+</ul>
+</li>
+</ul>
+<p>以下是关键数据摘要：</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>ParallelOld GC: Count (-/+)</th>
+<th>Time (% -/+)</th>
+<th>Pause (ms -/+)</th>
+<th>YR (%)</th>
+<th>G1 GC: Count (-/+)</th>
+<th>Time (% -/+)</th>
+<th>Pause (ms -/+)</th>
+<th>YR (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>avrora</strong></td>
+<td>68 / 0</td>
+<td>1.5 / -</td>
+<td>1 / -</td>
+<td>-</td>
+<td>50 / 0</td>
+<td>0.7 / -</td>
+<td>1 / -</td>
+<td>76</td>
+</tr>
+<tr>
+<td><strong>lusearch</strong></td>
+<td>6,979 / 62</td>
+<td>56.0 / 12.7</td>
+<td>0 / 9</td>
+<td>36</td>
+<td>4,748 / 1,431</td>
+<td>23.9 / 64.2</td>
+<td>0 / 7</td>
+<td>82</td>
+</tr>
+<tr>
+<td><strong>xalan</strong></td>
+<td>4,607 / 422</td>
+<td>45.8 / 30.5</td>
+<td>1 / 13</td>
+<td>31</td>
+<td>3,369 / 337</td>
+<td>32.7 / 29.8</td>
+<td>1 / 13</td>
+<td>50</td>
+</tr>
+<tr>
+<td><strong>factorie</strong></td>
+<td>272 / 0</td>
+<td>41.1 / -</td>
+<td>253 / -</td>
+<td>180</td>
+<td>171 / 0</td>
+<td>1.4 / -</td>
+<td>9 / -</td>
+<td>100</td>
+</tr>
+<tr>
+<td><strong>scalac</strong></td>
+<td>46 / 0</td>
+<td>25.2 / -</td>
+<td>16 / -</td>
+<td>112</td>
+<td>22 / 0</td>
+<td>7.4 / -</td>
+<td>9 / -</td>
+<td>146</td>
+</tr>
+<tr>
+<td><strong>tmt</strong></td>
+<td>2,326 / 0</td>
+<td>4.5 / -</td>
+<td>0 / -</td>
+<td>100</td>
+<td>1,597 / 0</td>
+<td>3.7 / -</td>
+<td>1 / -</td>
+<td>123</td>
+</tr>
+<tr>
+<td><strong>compiler.sunflow</strong></td>
+<td>612 / 54</td>
+<td>49.4 / 13.9</td>
+<td>55 / 175</td>
+<td>58</td>
+<td>638 / 0</td>
+<td>40.9 / -</td>
+<td>35 / -</td>
+<td>68</td>
+</tr>
+<tr>
+<td><strong>serial</strong></td>
+<td>384 / 0</td>
+<td>0.9 / -</td>
+<td>1 / -</td>
+<td>128</td>
+<td>1,156 / 0</td>
+<td>1.6 / -</td>
+<td>0 / -</td>
+<td>47</td>
+</tr>
+<tr>
+<td><strong>sunflow</strong></td>
+<td>5,500 / 40</td>
+<td>10.2 / 1.0</td>
+<td>1 / 18</td>
+<td>51</td>
+<td>3,929 / 0</td>
+<td>10.2 / -</td>
+<td>1 / -</td>
+<td>132</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>关键观察点</strong>：</p>
+<ul>
+<li><strong>lusearch</strong> 在 ParallelOld GC 下 GC 时间高达 <strong>56.0%</strong>，且发生 <strong>6,979 次 Minor GC</strong>，是所有基准中最“GC 密集”的。</li>
+<li><strong>factorie</strong> 在 G1 GC 下 GC 时间仅为 <strong>1.4%</strong>，远低于 ParallelOld GC 的 <strong>41.1%</strong>，显示 G1 对此基准优化显著。</li>
+<li><strong>xalan</strong> 在两种 GC 下均表现出高 GC 时间和高 Major GC 次数，说明其对象生命周期长，易触发 Full GC。</li>
+<li><strong>scimark.fft.large</strong> 在 ParallelOld GC 下无任何 GC 发生，表明其内存压力极小。</li>
+<li><strong>G1 GC</strong> 在多数情况下减少 GC 次数并缩短暂停时间，如 <strong>h2</strong> 的 Minor Pause 从 300ms 降至 81ms。</li>
+<li><strong>YR [%]</strong> 显示 G1 通常维持更高的年轻代比例，例如 <strong>factorie</strong> 为 100%，而 ParallelOld 为 180%，反映 G1 更倾向于保留对象在年轻代。</li>
+</ul>
+</li>
+<li>
+<p><strong>颜色编码含义</strong>（根据图注推断）：</p>
+<ul>
+<li><strong>绿色</strong>：低值（如 GC 时间 \&lt;5%，暂停 \&lt;10ms）</li>
+<li><strong>黄色</strong>：中等值（如 GC 时间 \&lt;15%，暂停 \&lt;100ms）</li>
+<li><strong>红色</strong>：高值（如 GC 时间 &gt;15%，暂停 &gt;100ms）</li>
+</ul>
+</li>
+<li>
+<p><strong>结论性要点</strong>：</p>
+<ul>
+<li><strong>G1 GC</strong> 在大多数基准上优于 <strong>ParallelOld GC</strong>，尤其在降低 GC 时间和暂停延迟方面。</li>
+<li>部分基准如 <strong>lusearch</strong> 和 <strong>xalan</strong> 对 GC 策略极为敏感，适合用于测试 GC 算法的极端场景。</li>
+<li><strong>scimark</strong> 系列基准因计算密集、分配少，不适合评估 GC 性能。</li>
+<li><strong>factorie</strong> 和 <strong>serial</strong> 是典型的“高分配率”基准，适合测试 GC 吞吐量与响应性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-8-object-pointers-per-gc-of-all-benchmarks">Figure 8: Object pointers per GC of all benchmarks<a class="headerlink" href="#figure-8-object-pointers-per-gc-of-all-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="c71bfe1e36cf9d6037022a4eeb6fd39a6139abb85fb3b9a0868f9f1097378240.jpg" src="../images/c71bfe1e36cf9d6037022a4eeb6fd39a6139abb85fb3b9a0868f9f1097378240.jpg" /></p>
+<ul>
+<li>该图（Figure 8）展示的是所有基准测试在垃圾回收（GC）期间记录的<strong>对象指针</strong>统计，数据基于 <strong>ParallelOld GC</strong> 收集。</li>
+<li>数据按基准套件分组：<strong>DaCapo</strong>、<strong>DaCapo Scala</strong> 和 <strong>SPECjvm2008</strong>，每行对应一个具体基准。</li>
+<li>核心指标包括：<ul>
+<li><strong>GCs [#]</strong>：该基准在整个运行中触发的 GC 次数。</li>
+<li><strong>Ptrs / GC [#]</strong>：每次 GC 平均处理的对象指针数量。</li>
+<li><strong>Avg ptrs / object [#]</strong>：每个对象平均持有的指针数量。</li>
+<li><strong>Null rate [%]</strong>：指针中为 null 的比例。</li>
+<li><strong>Old-to-young rate [%]</strong>：从老年代指向年轻代的指针占比。</li>
+</ul>
+</li>
+</ul>
+<p>以下是关键数据表格化呈现：</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>GCs [#]</th>
+<th>Ptrs / GC [#]</th>
+<th>Avg ptrs / object [#]</th>
+<th>Null rate [%]</th>
+<th>Old-to-young rate [%]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DaCapo</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>avrora</td>
+<td>68.4</td>
+<td>157,143.4</td>
+<td>5.1</td>
+<td>12.7</td>
+<td>6.4</td>
+</tr>
+<tr>
+<td>batik</td>
+<td>10.0</td>
+<td>161,875.6</td>
+<td>4.3</td>
+<td>43.1</td>
+<td>3.8</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>1.0</td>
+<td>77,906.3</td>
+<td>3.0</td>
+<td>40.5</td>
+<td>4.8</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>10.0</td>
+<td>351,025.9</td>
+<td>3.5</td>
+<td>45.4</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>27.6</td>
+<td>37,958,744.0</td>
+<td>5.8</td>
+<td>28.8</td>
+<td>8.9</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>468.4</td>
+<td>1,674.8</td>
+<td>3.8</td>
+<td>34.6</td>
+<td>15.9</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>11.0</td>
+<td>83,738.7</td>
+<td>14.8</td>
+<td>79.1</td>
+<td>5.4</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>7,041.0</td>
+<td>11,497.7</td>
+<td>9.0</td>
+<td>79.0</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>50.4</td>
+<td>443,487.8</td>
+<td>3.6</td>
+<td>44.9</td>
+<td>5.5</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>774.5</td>
+<td>80,871.7</td>
+<td>3.3</td>
+<td>45.0</td>
+<td>15.4</td>
+</tr>
+<tr>
+<td>tomcat</td>
+<td>1,234.3</td>
+<td>33,188.4</td>
+<td>4.9</td>
+<td>67.2</td>
+<td>15.0</td>
+</tr>
+<tr>
+<td>tradebeans</td>
+<td>179.2</td>
+<td>4,809,331.3</td>
+<td>6.9</td>
+<td>50.1</td>
+<td>6.7</td>
+</tr>
+<tr>
+<td>tradesoap</td>
+<td>973.2</td>
+<td>885,545.1</td>
+<td>8.3</td>
+<td>54.3</td>
+<td>6.9</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>5,028.0</td>
+<td>339,669.5</td>
+<td>26.3</td>
+<td>93.2</td>
+<td>4.3</td>
+</tr>
+<tr>
+<td>actors</td>
+<td>387.5</td>
+<td>9,185.8</td>
+<td>2.7</td>
+<td>25.9</td>
+<td>13.8</td>
+</tr>
+<tr>
+<td>apparat</td>
+<td>259.8</td>
+<td>324,520.0</td>
+<td>2.4</td>
+<td>23.5</td>
+<td>8.1</td>
+</tr>
+<tr>
+<td>factorie</td>
+<td>271.9</td>
+<td>10,287,986.8</td>
+<td>27.8</td>
+<td>59.0</td>
+<td>9.5</td>
+</tr>
+<tr>
+<td>kiama</td>
+<td>28.5</td>
+<td>822,980.2</td>
+<td>13.0</td>
+<td>49.5</td>
+<td>6.2</td>
+</tr>
+<tr>
+<td>scalac</td>
+<td>45.9</td>
+<td>1,623,276.1</td>
+<td>5.5</td>
+<td>31.3</td>
+<td>6.9</td>
+</tr>
+<tr>
+<td>scaladoc</td>
+<td>53.0</td>
+<td>1,133,381.0</td>
+<td>6.1</td>
+<td>40.7</td>
+<td>6.5</td>
+</tr>
+<tr>
+<td>scalap</td>
+<td>40.3</td>
+<td>87,220.5</td>
+<td>2.8</td>
+<td>33.9</td>
+<td>6.7</td>
+</tr>
+<tr>
+<td>scalariform</td>
+<td>127.8</td>
+<td>149,652.0</td>
+<td>2.3</td>
+<td>8.9</td>
+<td>13.3</td>
+</tr>
+<tr>
+<td>scalarxb</td>
+<td>48.5</td>
+<td>189,187.9</td>
+<td>1.5</td>
+<td>8.8</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>tmt</td>
+<td>2,325.5</td>
+<td>7,510.2</td>
+<td>3.7</td>
+<td>24.5</td>
+<td>9.8</td>
+</tr>
+<tr>
+<td><strong>SPECjvm2008</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>compiler.compiler</td>
+<td>165.6</td>
+<td>8,521,325.4</td>
+<td>3.4</td>
+<td>28.5</td>
+<td>12.2</td>
+</tr>
+<tr>
+<td>compiler.sunflow</td>
+<td>665.9</td>
+<td>5,843,973.8</td>
+<td>3.3</td>
+<td>27.7</td>
+<td>10.1</td>
+</tr>
+<tr>
+<td>compress</td>
+<td>14.1</td>
+<td>1,290.0</td>
+<td>3.2</td>
+<td>43.2</td>
+<td>4.3</td>
+</tr>
+<tr>
+<td>crypto.aes</td>
+<td>165.6</td>
+<td>2,083.5</td>
+<td>2.9</td>
+<td>45.3</td>
+<td>3.1</td>
+</tr>
+<tr>
+<td>crypto.rsa</td>
+<td>1,048.6</td>
+<td>1,069.7</td>
+<td>2.5</td>
+<td>40.2</td>
+<td>6.9</td>
+</tr>
+<tr>
+<td>crypto.signverify</td>
+<td>752.5</td>
+<td>5,589.5</td>
+<td>2.7</td>
+<td>44.1</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>derby</td>
+<td>181.0</td>
+<td>445,557.6</td>
+<td>8.2</td>
+<td>15.1</td>
+<td>13.6</td>
+</tr>
+<tr>
+<td>mpegaudio</td>
+<td>691.0</td>
+<td>1,776.3</td>
+<td>2.2</td>
+<td>38.1</td>
+<td>5.0</td>
+</tr>
+<tr>
+<td>scimark.fft.large</td>
+<td>0.0</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>scimark.fft.small</td>
+<td>322.6</td>
+<td>240.7</td>
+<td>2.1</td>
+<td>46.8</td>
+<td>19.8</td>
+</tr>
+<tr>
+<td>scimark.lu.large</td>
+<td>2.0</td>
+<td>24,170.5</td>
+<td>1.3</td>
+<td>24.5</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>scimark.lu.small</td>
+<td>2,116.4</td>
+<td>24,004.2</td>
+<td>2.4</td>
+<td>38.9</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>scimark.monte_carlo</td>
+<td>3.0</td>
+<td>1,293.0</td>
+<td>3.3</td>
+<td>46.2</td>
+<td>7.3</td>
+</tr>
+<tr>
+<td>scimark.sor.large</td>
+<td>2.0</td>
+<td>16,820.6</td>
+<td>1.8</td>
+<td>42.9</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>scimark.sor.small</td>
+<td>3.0</td>
+<td>3,231.7</td>
+<td>1.9</td>
+<td>25.6</td>
+<td>4.4</td>
+</tr>
+<tr>
+<td>scimark.sparse.large</td>
+<td>2.8</td>
+<td>906.1</td>
+<td>3.6</td>
+<td>51.0</td>
+<td>5.4</td>
+</tr>
+<tr>
+<td>scimark.sparse.small</td>
+<td>71.8</td>
+<td>3,257.0</td>
+<td>2.7</td>
+<td>45.7</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>384.4</td>
+<td>51,066.1</td>
+<td>10.6</td>
+<td>82.8</td>
+<td>6.3</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>5,540.5</td>
+<td>88,540.0</td>
+<td>4.2</td>
+<td>34.5</td>
+<td>15.6</td>
+</tr>
+<tr>
+<td>xml.transform</td>
+<td>571.3</td>
+<td>138,410.2</td>
+<td>4.2</td>
+<td>54.4</td>
+<td>4.4</td>
+</tr>
+<tr>
+<td>xml.validation</td>
+<td>638.4</td>
+<td>1,201,517.9</td>
+<td>3.8</td>
+<td>41.8</td>
+<td>0.9</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>高指针密度</strong>（Avg ptrs / object &gt; 10）的基准包括：<strong>luindex (14.8)</strong>、<strong>xalan (26.3)</strong>、<strong>factorie (27.8)</strong>、<strong>kiama (13.0)</strong>、<strong>serial (10.6)</strong>。这些基准适合用于测试指针密集型操作或内存分析工具。</li>
+<li><strong>xalan</strong> 和 <strong>factorie</strong> 在“Ptrs / GC”和“Avg ptrs / object”两项上表现突出，表明它们使用了少量但非常大的数组来存储对象，导致每个对象持有大量指针。</li>
+<li><strong>h2</strong> 基准在“Ptrs / GC”上数值极高（37,958,744.0），说明其单次 GC 处理的指针量巨大，是进行指针相关性能测试的理想选择。</li>
+<li><strong>scimark.fft.large</strong> 无 GC 发生，因此未记录指针数据，这与其低分配率和短运行时间一致。</li>
+<li><strong>Null rate</strong> 较高的基准如 <strong>xalan (93.2%)</strong>、<strong>luindex (79.1%)</strong>、<strong>lusearch (79.0%)</strong>，表明其对象结构中包含大量空指针，可能影响 GC 效率或内存布局优化。</li>
+<li><strong>Old-to-young rate</strong> 较高的基准如 <strong>jython (15.9%)</strong>、<strong>tomcat (15.0%)</strong>、<strong>sunflow (15.4%)</strong>，显示存在较多跨代引用，对分代 GC 算法构成挑战。</li>
+<li>总体而言，该图揭示了不同基准在对象引用模式上的显著差异，为选择特定内存行为的基准提供了量化依据。</li>
+</ul>
+<h3 id="e5014de62636882c0e8e412fe1a7fe339bf08aa4bbd1587409471a5f0aac45dejpg">e5014de62636882c0e8e412fe1a7fe339bf08aa4bbd1587409471a5f0aac45de.jpg<a class="headerlink" href="#e5014de62636882c0e8e412fe1a7fe339bf08aa4bbd1587409471a5f0aac45dejpg" title="Permanent link">&para;</a></h3>
+<p><img alt="e5014de62636882c0e8e412fe1a7fe339bf08aa4bbd1587409471a5f0aac45de.jpg" src="../images/e5014de62636882c0e8e412fe1a7fe339bf08aa4bbd1587409471a5f0aac45de.jpg" /></p>
+<ul>
+<li>该图像为附录中的 <strong>Figure 9</strong>，展示在 <strong>1GB 固定堆大小</strong> 条件下，各基准测试在 <strong>ParallelOld GC</strong> 与 <strong>G1 GC</strong> 下的垃圾回收行为对比。</li>
+<li>数据维度包括：GC 次数（Count）、GC 时间占比（Time [%]）、平均暂停时间（Pause [ms]）及年轻代比例（YR [%]），并区分 Minor (-) 与 Major (+) GC。</li>
+<li>所有数据按基准测试套件分组：<strong>DaCapo</strong>、<strong>DaCapo Scala</strong> 和 <strong>SPECjvm2008</strong>。</li>
+<li>多数单元格使用颜色编码表示数值等级：<ul>
+<li><strong>绿色</strong>：低值（如 GC 时间 \&lt;5%，暂停 \&lt;10ms）</li>
+<li><strong>黄色</strong>：中等值</li>
+<li><strong>红色</strong>：高值（如 GC 时间 &gt;15%，暂停 &gt;100ms）</li>
+</ul>
+</li>
+<li>部分基准测试因内存压力过大，在 ParallelOld GC 下出现 <strong>oom</strong>（Out of Memory），如 DaCapo 的 h2、luindex、pmd 等。</li>
+<li>在 G1 GC 下，部分基准测试仍发生 Major GC，但次数显著少于 ParallelOld GC，例如：<ul>
+<li><strong>tradebeans</strong>：ParallelOld GC 发生 138 次 Minor GC，G1 GC 仅 92 次。</li>
+<li><strong>xalan</strong>：ParallelOld GC 27 次 Minor GC，G1 GC 37 次，但 GC 时间从 3.0% 降至 2.3%。</li>
+</ul>
+</li>
+<li><strong>factorie</strong>（DaCapo Scala）表现极端：<ul>
+<li>ParallelOld GC：GC 时间高达 <strong>51.9%</strong>，暂停达 <strong>256ms</strong>。</li>
+<li>G1 GC：GC 时间降至 <strong>1.4%</strong>，暂停仅 <strong>6ms</strong>，显示 G1 在高分配压力下的显著优势。</li>
+</ul>
+</li>
+<li><strong>serial</strong>（SPECjvm2008）在 G1 GC 下发生 <strong>955 次 Minor GC</strong>，但无 Major GC，且 GC 时间仅 <strong>1.4%</strong>，暂停 <strong>0ms</strong>，体现其高效处理短生命周期对象的能力。</li>
+<li><strong>xml.validation</strong> 在 ParallelOld GC 下 GC 时间高达 <strong>22.4%</strong>，G1 GC 降至 <strong>10.6%</strong>，暂停从 34ms 降至 31ms，表明 G1 在复杂 XML 处理场景中更稳定。</li>
+<li>年轻代比例（YR [%]）反映 GC 对象分布策略：<ul>
+<li><strong>G1 GC</strong> 通常维持更高 YR 值，如 <strong>factorie</strong> 达 <strong>66%</strong>，说明其倾向于保留对象在年轻代。</li>
+<li><strong>ParallelOld GC</strong> 中 <strong>tradesoap</strong> YR 为 <strong>123%</strong>，表明年轻代曾短暂超过老年代，可能因堆空间紧张导致动态调整。</li>
+</ul>
+</li>
+<li>总体趋势：<strong>G1 GC 在固定小堆环境下表现优于 ParallelOld GC</strong>，尤其在减少 GC 时间和暂停方面，但在某些极端负载下仍可能发生 Major GC 或高暂停（如 <strong>compiler.sunflow</strong> 的 21,888ms 暂停）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>ParallelOld GC Count (-/+)</th>
+<th>Time [%] (-/+)</th>
+<th>Pause [ms] (-/+)</th>
+<th>YR [%]</th>
+<th>G1 GC Count (-/+)</th>
+<th>Time [%] (-/+)</th>
+<th>Pause [ms] (-/+)</th>
+<th>YR [%]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>avrora</td>
+<td>1 / 0</td>
+<td>0.0 / -</td>
+<td>6 / -</td>
+<td>9,597</td>
+<td>13 / 0</td>
+<td>0.4 / -</td>
+<td>2 / -</td>
+<td>223</td>
+</tr>
+<tr>
+<td>batik</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>147</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>131</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>771</td>
+<td>2 / 0</td>
+<td>3.4 / -</td>
+<td>2 / -</td>
+<td>398</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>2,891</td>
+<td>3 / 0</td>
+<td>6.8 / -</td>
+<td>3 / -</td>
+<td>545</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>oom / oom</td>
+<td>oom / oom</td>
+<td>oom / oom</td>
+<td>oom</td>
+<td>296 / 6</td>
+<td>6.7 / 6.8</td>
+<td>43 / 21,888</td>
+<td>16</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>35 / 0</td>
+<td>1.0 / -</td>
+<td>2 / -</td>
+<td>1,588</td>
+<td>38 / 0</td>
+<td>1.0 / -</td>
+<td>2 / -</td>
+<td>1,839</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>604</td>
+<td>1 / 0</td>
+<td>1.0 / -</td>
+<td>3 / -</td>
+<td>184</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>31 / 0</td>
+<td>3.6 / -</td>
+<td>1 / -</td>
+<td>16,592</td>
+<td>33 / 0</td>
+<td>4.1 / -</td>
+<td>1 / -</td>
+<td>20,528</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>3 / 0</td>
+<td>3.7 / -</td>
+<td>14 / -</td>
+<td>1,448</td>
+<td>7 / 0</td>
+<td>3.2 / -</td>
+<td>5 / -</td>
+<td>622</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>18 / 0</td>
+<td>1.1 / -</td>
+<td>2 / -</td>
+<td>6,593</td>
+<td>34 / 0</td>
+<td>1.8 / -</td>
+<td>2 / -</td>
+<td>2,458</td>
+</tr>
+<tr>
+<td>tomcat</td>
+<td>55 / 0</td>
+<td>0.4 / -</td>
+<td>2 / -</td>
+<td>2,045</td>
+<td>49 / 0</td>
+<td>0.4 / -</td>
+<td>2 / -</td>
+<td>3,821</td>
+</tr>
+<tr>
+<td>tradebeans</td>
+<td>138 / 0</td>
+<td>11.8 / -</td>
+<td>54 / -</td>
+<td>54</td>
+<td>92 / 0</td>
+<td>3.2 / -</td>
+<td>21 / -</td>
+<td>149</td>
+</tr>
+<tr>
+<td>tradesoap</td>
+<td>301 / 0</td>
+<td>45.0 / -</td>
+<td>82 / -</td>
+<td>123</td>
+<td>216 / 0</td>
+<td>25.1 / -</td>
+<td>53 / -</td>
+<td>125</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>27 / 0</td>
+<td>3.0 / -</td>
+<td>3 / -</td>
+<td>8,715</td>
+<td>37 / 0</td>
+<td>2.3 / -</td>
+<td>2 / -</td>
+<td>3,041</td>
+</tr>
+<tr>
+<td>actors</td>
+<td>35 / 0</td>
+<td>0.2 / -</td>
+<td>1 / -</td>
+<td>6,058</td>
+<td>72 / 0</td>
+<td>0.4 / -</td>
+<td>0 / -</td>
+<td>342</td>
+</tr>
+<tr>
+<td>apparat</td>
+<td>50 / 0</td>
+<td>1.1 / -</td>
+<td>19 / -</td>
+<td>519</td>
+<td>50 / 0</td>
+<td>0.5 / -</td>
+<td>8 / -</td>
+<td>396</td>
+</tr>
+<tr>
+<td>factorie</td>
+<td>421 / 0</td>
+<td>51.9 / -</td>
+<td>256 / -</td>
+<td>117</td>
+<td>267 / 1</td>
+<td>1.4 / 0.8</td>
+<td>6 / 978</td>
+<td>66</td>
+</tr>
+<tr>
+<td>kiama</td>
+<td>1 / 0</td>
+<td>3.9 / -</td>
+<td>9 / -</td>
+<td>581</td>
+<td>2 / 0</td>
+<td>2.4 / -</td>
+<td>3 / -</td>
+<td>504</td>
+</tr>
+<tr>
+<td>scalac</td>
+<td>6 / 0</td>
+<td>9.9 / -</td>
+<td>41 / -</td>
+<td>10,076</td>
+<td>10 / 0</td>
+<td>4.4 / -</td>
+<td>11 / -</td>
+<td>885</td>
+</tr>
+<tr>
+<td>scaladoc</td>
+<td>8 / 0</td>
+<td>13.9 / -</td>
+<td>3 / -</td>
+<td>10,891</td>
+<td>10 / 0</td>
+<td>5.1 / -</td>
+<td>10 / -</td>
+<td>986</td>
+</tr>
+<tr>
+<td>scalap</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>5,815</td>
+<td>4 / 0</td>
+<td>3.2 / -</td>
+<td>1 / -</td>
+<td>2,210</td>
+</tr>
+<tr>
+<td>scalariform</td>
+<td>6 / 0</td>
+<td>0.9 / -</td>
+<td>2 / -</td>
+<td>11,451</td>
+<td>16 / 0</td>
+<td>2.4 / -</td>
+<td>3 / -</td>
+<td>12,931</td>
+</tr>
+<tr>
+<td>scalaxb</td>
+<td>13 / 0</td>
+<td>1.1 / -</td>
+<td>10 / -</td>
+<td>14,787</td>
+<td>23 / 0</td>
+<td>0.9 / -</td>
+<td>4 / -</td>
+<td>219</td>
+</tr>
+<tr>
+<td>tmt</td>
+<td>312 / 0</td>
+<td>0.8 / -</td>
+<td>1 / -</td>
+<td>378</td>
+<td>495 / 0</td>
+<td>1.4 / -</td>
+<td>1 / -</td>
+<td>456</td>
+</tr>
+<tr>
+<td>compiler.compiler</td>
+<td>96 / 5</td>
+<td>51.2 / 6.5</td>
+<td>115 / 284</td>
+<td>41</td>
+<td>57 / 0</td>
+<td>27.0 / -</td>
+<td>77 / -</td>
+<td>126</td>
+</tr>
+<tr>
+<td>compiler.sunflow</td>
+<td>226 / 7</td>
+<td>41.3 / 3.0</td>
+<td>78 / 183</td>
+<td>45</td>
+<td>97 / 0</td>
+<td>10.5 / -</td>
+<td>31 / -</td>
+<td>152</td>
+</tr>
+<tr>
+<td>compress</td>
+<td>2 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>278</td>
+<td>4 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>177</td>
+</tr>
+<tr>
+<td>crypto.aes</td>
+<td>9 / 0</td>
+<td>0.2 / -</td>
+<td>2 / -</td>
+<td>1,587</td>
+<td>7 / 0</td>
+<td>1.4 / -</td>
+<td>16 / -</td>
+<td>1</td>
+</tr>
+<tr>
+<td>crypto.rsa</td>
+<td>22 / 0</td>
+<td>0.1 / -</td>
+<td>0 / -</td>
+<td>2,916</td>
+<td>718 / 0</td>
+<td>2.5 / -</td>
+<td>0 / -</td>
+<td>150</td>
+</tr>
+<tr>
+<td>crypto.signverify</td>
+<td>24 / 0</td>
+<td>0.4 / -</td>
+<td>1 / -</td>
+<td>2,886</td>
+<td>31 / 0</td>
+<td>3.1 / -</td>
+<td>8 / -</td>
+<td>11</td>
+</tr>
+<tr>
+<td>derby</td>
+<td>220 / 0</td>
+<td>3.8 / -</td>
+<td>5 / -</td>
+<td>78</td>
+<td>144 / 0</td>
+<td>1.6 / -</td>
+<td>2 / -</td>
+<td>133</td>
+</tr>
+<tr>
+<td>mpegaudio</td>
+<td>14 / 0</td>
+<td>0.1 / -</td>
+<td>0 / -</td>
+<td>3,911</td>
+<td>98 / 0</td>
+<td>0.8 / -</td>
+<td>0 / -</td>
+<td>479</td>
+</tr>
+<tr>
+<td>scimark.fft.large</td>
+<td>1 / 1</td>
+<td>0.5 / 0.2</td>
+<td>47 / 18</td>
+<td>71</td>
+<td>1 / 0</td>
+<td>0.0 / -</td>
+<td>0 / -</td>
+<td>1</td>
+</tr>
+<tr>
+<td>scimark.fft.small</td>
+<td>18 / 0</td>
+<td>0.2 / -</td>
+<td>1 / -</td>
+<td>2,373</td>
+<td>9 / 0</td>
+<td>2.0 / -</td>
+<td>15 / -</td>
+<td>1</td>
+</tr>
+<tr>
+<td>scimark.lu.large</td>
+<td>4 / 0</td>
+<td>0.2 / -</td>
+<td>24 / -</td>
+<td>65</td>
+<td>15 / 0</td>
+<td>0.3 / -</td>
+<td>7 / -</td>
+<td>24</td>
+</tr>
+<tr>
+<td>scimark.lu.small</td>
+<td>20 / 0</td>
+<td>0.6 / -</td>
+<td>1 / -</td>
+<td>2,529</td>
+<td>35 / 0</td>
+<td>1.1 / -</td>
+<td>1 / -</td>
+<td>1,226</td>
+</tr>
+<tr>
+<td>scimark.monte_carlo</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>1,337</td>
+<td>2 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>144</td>
+</tr>
+<tr>
+<td>scimark.sor.large</td>
+<td>2 / 0</td>
+<td>0.5 / -</td>
+<td>20 / -</td>
+<td>187</td>
+<td>12 / 0</td>
+<td>0.7 / -</td>
+<td>4 / -</td>
+<td>42</td>
+</tr>
+<tr>
+<td>scimark.sor.small</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>1,409</td>
+<td>5 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>82</td>
+</tr>
+<tr>
+<td>scimark.sparse.large</td>
+<td>4 / 0</td>
+<td>0.5 / -</td>
+<td>16 / -</td>
+<td>90</td>
+<td>1 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>1</td>
+</tr>
+<tr>
+<td>scimark.sparse.small</td>
+<td>1 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>7,780</td>
+<td>42 / 0</td>
+<td>1.6 / -</td>
+<td>1 / -</td>
+<td>80</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>387 / 0</td>
+<td>0.9 / -</td>
+<td>1 / -</td>
+<td>125</td>
+<td>955 / 0</td>
+<td>1.4 / -</td>
+<td>0 / -</td>
+<td>56</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>274 / 1</td>
+<td>5.1 / 0.0</td>
+<td>10 / 21</td>
+<td>49</td>
+<td>363 / 0</td>
+<td>2.0 / -</td>
+<td>3 / -</td>
+<td>2,776</td>
+</tr>
+<tr>
+<td>xml.transform</td>
+<td>42 / 0</td>
+<td>2.3 / -</td>
+<td>3 / -</td>
+<td>209</td>
+<td>49 / 0</td>
+<td>2.0 / -</td>
+<td>2 / -</td>
+<td>1,867</td>
+</tr>
+<tr>
+<td>xml.validation</td>
+<td>136 / 4</td>
+<td>22.4 / 2.6</td>
+<td>34 / 139</td>
+<td>48</td>
+<td>71 / 0</td>
+<td>10.6 / -</td>
+<td>31 / -</td>
+<td>138</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>关键发现</strong>：<ul>
+<li><strong>G1 GC 在 1GB 堆下整体表现更优</strong>，尤其在降低 GC 时间和暂停方面。</li>
+<li><strong>ParallelOld GC 易触发 OOM</strong>，尤其在内存密集型应用如 h2、luindex。</li>
+<li><strong>factorie 和 tradesoap 是极端案例</strong>，凸显不同 GC 策略对性能的巨大影响。</li>
+<li><strong>scimark 系列</strong>在两种 GC 下均表现稳定，GC 次数和时间极低，适合用于低干扰基准测试。</li>
+<li><strong>crypto.rsa</strong> 在 G1 GC 下发生大量 Minor GC（718 次），但无 Major GC，且 GC 时间仅 2.5%，显示其对大对象处理效率较高。</li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-10-gc-count-gc-time-relative-to-the-total-run-time-green-less-than-5-yellow-less-than-15-red-more-than-15-and-average-pause-time-for-minor-and-major-gcs-for-the-parallelold-gc-and-the-g1-gc-respectively-green-less-than-10ms-yellow-less-than-100ms-red-more-than-100ms-heap-unlimited">Figure 10: GC count, GC time relative to the total run time (green: less than 5%, yellow: less than 15%, red: more than 15%), and average pause time for minor (-) and major (+) GCs for the ParallelOld GC and the G1 GC respectively (green: less than 10ms, yellow: less than 100ms, red: more than 100ms) (heap unlimited)<a class="headerlink" href="#figure-10-gc-count-gc-time-relative-to-the-total-run-time-green-less-than-5-yellow-less-than-15-red-more-than-15-and-average-pause-time-for-minor-and-major-gcs-for-the-parallelold-gc-and-the-g1-gc-respectively-green-less-than-10ms-yellow-less-than-100ms-red-more-than-100ms-heap-unlimited" title="Permanent link">&para;</a></h3>
+<p><img alt="2efa14b8946ac10b6cc3891492b6f9dd7edaad65952ebd470d7d170f808b2c93.jpg" src="../images/2efa14b8946ac10b6cc3891492b6f9dd7edaad65952ebd470d7d170f808b2c93.jpg" /></p>
+<ul>
+<li>该图展示了在**无限堆（heap unlimited）**配置下，不同 Java 基准测试程序在 <strong>ParallelOld GC</strong> 和 <strong>G1 GC</strong> 下的垃圾回收行为对比，涵盖三项核心指标：GC 次数、GC 时间占比、平均暂停时间。</li>
+<li>图中使用颜色编码区分性能等级：<ul>
+<li><strong>GC 时间占比</strong>：绿色（\&lt;5%）、黄色（\&lt;15%）、红色（&gt;15%）</li>
+<li><strong>平均暂停时间</strong>：绿色（\&lt;10ms）、黄色（\&lt;100ms）、红色（&gt;100ms）</li>
+</ul>
+</li>
+</ul>
+<p>以下为关键数据摘要：</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>ParallelOld GC – Count (-/+)</th>
+<th>Time [%] (-/+)</th>
+<th>Pause [ms] (-/+)</th>
+<th>YR [%]</th>
+<th>G1 GC – Count (-/+)</th>
+<th>Time [%] (-/+)</th>
+<th>Pause [ms] (-/+)</th>
+<th>YR [%]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>avrora</td>
+<td>2 / 0</td>
+<td>0.1 / -</td>
+<td>6 / -</td>
+<td>7,251</td>
+<td>37 / 0</td>
+<td>0.7 / -</td>
+<td>1 / -</td>
+<td>179</td>
+</tr>
+<tr>
+<td>batik</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>120</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>113</td>
+</tr>
+<tr>
+<td>eclipse</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>719</td>
+<td>2 / 0</td>
+<td>4.0 / -</td>
+<td>2 / -</td>
+<td>406</td>
+</tr>
+<tr>
+<td>fop</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>2,828</td>
+<td>3 / 0</td>
+<td>6.7 / -</td>
+<td>3 / -</td>
+<td>772</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>8 / 0</td>
+<td>1.7 / -</td>
+<td>353 / -</td>
+<td>264</td>
+<td>16 / 0</td>
+<td>1.1 / -</td>
+<td>116 / -</td>
+<td>112</td>
+</tr>
+<tr>
+<td>jython</td>
+<td>20 / 0</td>
+<td>0.6 / -</td>
+<td>2 / -</td>
+<td>2,457</td>
+<td>31 / 0</td>
+<td>0.9 / -</td>
+<td>2 / -</td>
+<td>2,453</td>
+</tr>
+<tr>
+<td>luindex</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>539</td>
+<td>2 / 0</td>
+<td>2.1 / -</td>
+<td>3 / -</td>
+<td>245</td>
+</tr>
+<tr>
+<td>lusearch</td>
+<td>10 / 0</td>
+<td>2.7 / -</td>
+<td>2 / -</td>
+<td>38,857</td>
+<td>37 / 0</td>
+<td>3.4 / -</td>
+<td>1 / -</td>
+<td>15,363</td>
+</tr>
+<tr>
+<td>pmd</td>
+<td>3 / 0</td>
+<td>3.6 / -</td>
+<td>14 / -</td>
+<td>1,409</td>
+<td>5 / 0</td>
+<td>2.4 / -</td>
+<td>6 / -</td>
+<td>1,336</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>15 / 0</td>
+<td>1.0 / -</td>
+<td>2 / -</td>
+<td>8,567</td>
+<td>26 / 0</td>
+<td>1.4 / -</td>
+<td>2 / -</td>
+<td>4,697</td>
+</tr>
+<tr>
+<td>tomcat</td>
+<td>61 / 0</td>
+<td>0.5 / -</td>
+<td>2 / -</td>
+<td>1,721</td>
+<td>14 / 0</td>
+<td>0.2 / -</td>
+<td>5 / -</td>
+<td>29,220</td>
+</tr>
+<tr>
+<td>tradebeans</td>
+<td>10 / 0</td>
+<td>3.3 / -</td>
+<td>197 / -</td>
+<td>1,320</td>
+<td>90 / 0</td>
+<td>2.8 / -</td>
+<td>20 / -</td>
+<td>152</td>
+</tr>
+<tr>
+<td>tradesoap</td>
+<td>13 / 0</td>
+<td>41.8 / -</td>
+<td>1,680 / -</td>
+<td>754</td>
+<td>64 / 0</td>
+<td>14.6 / -</td>
+<td>193 / -</td>
+<td>61</td>
+</tr>
+<tr>
+<td>xalan</td>
+<td>11 / 0</td>
+<td>2.3 / -</td>
+<td>6 / -</td>
+<td>25,235</td>
+<td>21 / 0</td>
+<td>0.1 / -</td>
+<td>3 / -</td>
+<td>25,056</td>
+</tr>
+<tr>
+<td>actors</td>
+<td>44 / 0</td>
+<td>0.3 / -</td>
+<td>1 / -</td>
+<td>1,680</td>
+<td>68 / 0</td>
+<td>0.3 / -</td>
+<td>0 / -</td>
+<td>3,418</td>
+</tr>
+<tr>
+<td>apparat</td>
+<td>22 / 0</td>
+<td>0.5 / -</td>
+<td>21 / -</td>
+<td>9,099</td>
+<td>31 / 0</td>
+<td>0.3 / -</td>
+<td>11 / -</td>
+<td>7,080</td>
+</tr>
+<tr>
+<td>factorie</td>
+<td>17 / 0</td>
+<td>5.9 / -</td>
+<td>381 / -</td>
+<td>1,787</td>
+<td>44 / 0</td>
+<td>1.2 / -</td>
+<td>33 / -</td>
+<td>604</td>
+</tr>
+<tr>
+<td>kiama</td>
+<td>1 / 0</td>
+<td>3.5 / -</td>
+<td>9 / -</td>
+<td>518</td>
+<td>2 / 0</td>
+<td>1.8 / -</td>
+<td>2 / -</td>
+<td>496</td>
+</tr>
+<tr>
+<td>scalac</td>
+<td>3 / 0</td>
+<td>5.6 / -</td>
+<td>45 / -</td>
+<td>15,515</td>
+<td>10 / 0</td>
+<td>4.0 / -</td>
+<td>10 / -</td>
+<td>3,269</td>
+</tr>
+<tr>
+<td>scaladoc</td>
+<td>3 / 0</td>
+<td>6.3 / -</td>
+<td>41 / -</td>
+<td>21,921</td>
+<td>7 / 0</td>
+<td>4.0 / -</td>
+<td>12 / -</td>
+<td>2,699</td>
+</tr>
+<tr>
+<td>scalap</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>5,686</td>
+<td>3 / 0</td>
+<td>3.9 / -</td>
+<td>2 / -</td>
+<td>4,169</td>
+</tr>
+<tr>
+<td>scalariform</td>
+<td>8 / 0</td>
+<td>1.5 / -</td>
+<td>3 / -</td>
+<td>9,271</td>
+<td>14 / 0</td>
+<td>1.9 / -</td>
+<td>2 / -</td>
+<td>13,395</td>
+</tr>
+<tr>
+<td>scalaxb</td>
+<td>16 / 0</td>
+<td>1.3 / -</td>
+<td>10 / -</td>
+<td>2,034</td>
+<td>19 / 0</td>
+<td>0.7 / -</td>
+<td>4 / -</td>
+<td>462</td>
+</tr>
+<tr>
+<td>tmt</td>
+<td>271 / 0</td>
+<td>0.7 / -</td>
+<td>1 / -</td>
+<td>695</td>
+<td>220 / 0</td>
+<td>0.7 / -</td>
+<td>1 / -</td>
+<td>1,517</td>
+</tr>
+<tr>
+<td>compiler.compiler</td>
+<td>2 / 0</td>
+<td>1.9 / -</td>
+<td>93 / -</td>
+<td>9,525</td>
+<td>11 / 0</td>
+<td>6.6 / -</td>
+<td>69 / -</td>
+<td>967</td>
+</tr>
+<tr>
+<td>compiler.sunflow</td>
+<td>6 / 0</td>
+<td>1.2 / -</td>
+<td>51 / -</td>
+<td>14,019</td>
+<td>23 / 0</td>
+<td>2.3 / -</td>
+<td>28 / -</td>
+<td>3,877</td>
+</tr>
+<tr>
+<td>compress</td>
+<td>1 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>373</td>
+<td>4 / 0</td>
+<td>0.0 / -</td>
+<td>0 / -</td>
+<td>175</td>
+</tr>
+<tr>
+<td>crypto.aes</td>
+<td>3 / 0</td>
+<td>0.1 / -</td>
+<td>2 / -</td>
+<td>14,930</td>
+<td>17 / 0</td>
+<td>0.3 / -</td>
+<td>1 / -</td>
+<td>6,812</td>
+</tr>
+<tr>
+<td>crypto.rsa</td>
+<td>11 / 0</td>
+<td>0.0 / -</td>
+<td>0 / -</td>
+<td>4,906</td>
+<td>301 / 0</td>
+<td>1.4 / -</td>
+<td>0 / -</td>
+<td>381</td>
+</tr>
+<tr>
+<td>crypto.signverify</td>
+<td>10 / 0</td>
+<td>0.1 / -</td>
+<td>1 / -</td>
+<td>8,820</td>
+<td>34 / 0</td>
+<td>0.5 / -</td>
+<td>1 / -</td>
+<td>2,803</td>
+</tr>
+<tr>
+<td>derby</td>
+<td>8 / 0</td>
+<td>0.6 / -</td>
+<td>16 / -</td>
+<td>2,516</td>
+<td>33 / 0</td>
+<td>0.5 / -</td>
+<td>4 / -</td>
+<td>802</td>
+</tr>
+<tr>
+<td>mpegaudio</td>
+<td>7 / 0</td>
+<td>0.0 / -</td>
+<td>0 / -</td>
+<td>6,605</td>
+<td>249 / 0</td>
+<td>1.5 / -</td>
+<td>0 / -</td>
+<td>251</td>
+</tr>
+<tr>
+<td>scimark.fft.large</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>17,221</td>
+<td>1 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>3</td>
+</tr>
+<tr>
+<td>scimark.fft.small</td>
+<td>7 / 0</td>
+<td>0.1 / -</td>
+<td>1 / -</td>
+<td>9,910</td>
+<td>341 / 0</td>
+<td>2.8 / -</td>
+<td>0 / -</td>
+<td>302</td>
+</tr>
+<tr>
+<td>scimark.lu.large</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>25,817</td>
+<td>12 / 0</td>
+<td>0.3 / -</td>
+<td>11 / -</td>
+<td>70</td>
+</tr>
+<tr>
+<td>scimark.lu.small</td>
+<td>7 / 0</td>
+<td>0.2 / -</td>
+<td>1 / -</td>
+<td>21,669</td>
+<td>25 / 0</td>
+<td>0.8 / -</td>
+<td>2 / -</td>
+<td>3,125</td>
+</tr>
+<tr>
+<td>scimark.monte_carlo</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>1,163</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>0</td>
+</tr>
+<tr>
+<td>scimark.sor.large</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>11,629</td>
+<td>11 / 0</td>
+<td>1.4 / -</td>
+<td>9 / -</td>
+<td>22</td>
+</tr>
+<tr>
+<td>scimark.sor.small</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>1,214</td>
+<td>1 / 0</td>
+<td>0.0 / -</td>
+<td>3 / -</td>
+<td>438</td>
+</tr>
+<tr>
+<td>scimark.sparse.large</td>
+<td>0 / 0</td>
+<td>- / -</td>
+<td>- / -</td>
+<td>13,222</td>
+<td>3 / 0</td>
+<td>0.0 / -</td>
+<td>3 / -</td>
+<td>6</td>
+</tr>
+<tr>
+<td>scimark.sparse.small</td>
+<td>1 / 0</td>
+<td>0.0 / -</td>
+<td>1 / -</td>
+<td>6,805</td>
+<td>34 / 0</td>
+<td>1.1 / -</td>
+<td>0 / -</td>
+<td>448</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>263 / 0</td>
+<td>0.7 / -</td>
+<td>1 / -</td>
+<td>307</td>
+<td>804 / 0</td>
+<td>1.1 / -</td>
+<td>0 / -</td>
+<td>94</td>
+</tr>
+<tr>
+<td>sunflow</td>
+<td>81 / 0</td>
+<td>0.7 / -</td>
+<td>5 / -</td>
+<td>1,570</td>
+<td>265 / 0</td>
+<td>1.4 / -</td>
+<td>3 / -</td>
+<td>2,808</td>
+</tr>
+<tr>
+<td>xml.transform</td>
+<td>1 / 0</td>
+<td>0.1 / -</td>
+<td>5 / -</td>
+<td>43,979</td>
+<td>18 / 0</td>
+<td>0.7 / -</td>
+<td>2 / -</td>
+<td>6,853</td>
+</tr>
+<tr>
+<td>xml.validation</td>
+<td>4 / 0</td>
+<td>1.3 / -</td>
+<td>55 / -</td>
+<td>9,426</td>
+<td>22 / 0</td>
+<td>2.4 / -</td>
+<td>21 / -</td>
+<td>1,442</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>GC 次数</strong>：在无限堆条件下，大多数基准测试程序仅触发<strong>Minor GC</strong>，<strong>Major GC</strong>极少发生。例如，tradesoap 在 ParallelOld GC 下执行了 13 次 Minor GC，而 G1 GC 下为 64 次；serial 在 ParallelOld GC 下为 263 次，在 G1 GC 下高达 804 次。</li>
+<li><strong>GC 时间占比</strong>：部分程序如 <strong>tradesoap</strong>（ParallelOld GC: 41.8%，G1 GC: 14.6%）和 <strong>factorie</strong>（ParallelOld GC: 5.9%，G1 GC: 1.2%）表现出显著的 GC 开销，尤其在 ParallelOld GC 下更严重。G1 GC 在多数情况下能有效降低 GC 时间占比。</li>
+<li><strong>平均暂停时间</strong>：<strong>tradesoap</strong> 的 ParallelOld GC 平均暂停时间为 <strong>1,680 ms</strong>，属于极端高延迟案例；而 G1 GC 将其降至 <strong>193 ms</strong>。类似地，<strong>h2</strong> 的 ParallelOld GC 暂停时间为 353 ms，G1 GC 为 116 ms。</li>
+<li><strong>Young Generation Ratio (YR)</strong>：反映年轻代与老年代内存分配比例。例如，<strong>lusearch</strong> 的 YR 高达 38,857（ParallelOld GC），表明其对象生命周期极短，大量对象在年轻代即被回收；而 <strong>xalan</strong> 的 YR 为 25,235，说明其对象存活率较高。</li>
+<li><strong>G1 GC 优势明显</strong>：在无限堆配置下，G1 GC 通常比 ParallelOld GC 执行更多 Minor GC，但每次暂停时间更短，且整体 GC 时间占比更低。例如，<strong>tradebeans</strong> 的 ParallelOld GC 暂停时间为 197 ms，G1 GC 仅为 20 ms。</li>
+<li><strong>异常情况</strong>：<strong>scimark.monte_carlo</strong> 在两种 GC 下均无任何 GC 发生，因其计算密集型特性导致对象分配极少；<strong>crypto.rsa</strong> 在 ParallelOld GC 下无 Major GC，但在 G1 GC 下执行了 301 次 Minor GC，显示其对 GC 策略敏感。</li>
+</ul>
+<p>综上，该图清晰揭示了不同 GC 算法在无限堆环境下的行为差异，<strong>G1 GC 在控制暂停时间和降低 GC 开销方面表现更优</strong>，尤其适用于对响应时间敏感的应用场景。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

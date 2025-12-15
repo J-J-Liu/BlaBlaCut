@@ -163,7 +163,7 @@ def generate_collection_data():
             md_content.append("")
 
         # 生成论文条目的辅助函数
-        def generate_paper_entry(paper, md_content):
+        def generate_paper_entry(paper, md_content, heading_level=2):
             # 提取字段
             p_title = paper.get('paper_title', paper.get('title', 'Unknown Title'))
             desc = paper.get('description', '暂无描述')
@@ -206,8 +206,9 @@ def generate_collection_data():
             # 构建路径
             base_link = f"{relative_path_to_notes}/{source_folder}"
 
-            # 构建 Markdown 内容块
-            md_content.append(f"## {p_title}")
+            # 构建 Markdown 内容块（根据 heading_level 动态生成标题级别）
+            heading_prefix = "#" * heading_level
+            md_content.append(f"{heading_prefix} {p_title}")
             md_content.append(f"> **Authors:** {authors}  ")
             
             if affiliations:
@@ -254,7 +255,7 @@ def generate_collection_data():
                 md_content.append("")
                 
                 for paper in cat_papers:
-                    generate_paper_entry(paper, md_content)
+                    generate_paper_entry(paper, md_content, heading_level=3)
         else:
             # 单层结构显示（向后兼容）
             md_content.append(f"本页面共收录了 {len(aggregated_papers)} 篇论文笔记。")

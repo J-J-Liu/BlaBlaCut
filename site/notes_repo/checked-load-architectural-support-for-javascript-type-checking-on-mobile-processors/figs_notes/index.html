@@ -1,0 +1,1175 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors/figs_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors 图表详解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors 图表详解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#figure-1-code-generated-by-nitro-for-the-op-put-by-val-indexed-array-store-macrooperation-note-the-five-guards-that-it-performs-that-the-index-is-an-integer-that-the-array-is-non-primitive-that-the-array-is-an-array-that-the-array-length-is-not-zero-and-that-the-data-pointer-is-not-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 1. Code generated by Nitro for the op put by val (indexed array store) macrooperation. Note the five guards that it performs: that the index is an integer, that the array is non-primitive, that the array is an array, that the array length is not zero, and that the data pointer is not null.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-2-the-dynamic-instruction-count-cost-of-dynamic-type-checks-in-javascript-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 2. The dynamic instruction count cost of dynamic type checks in JavaScript benchmarks.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9e158821c24cecf7e7c8a61e01c41a755194ee2ac937ba4780681caa399ae050jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9e158821c24cecf7e7c8a61e01c41a755194ee2ac937ba4780681caa399ae050.jpg
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-3-the-cycle-cost-of-dynamic-type-checks-in-javascript-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 3. The cycle cost of dynamic type checks in JavaScript benchmarks.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-4-sample-generated-code-for-an-integer-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 4. Sample generated code for an integer guard.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-5-sample-generated-code-for-an-object-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 5. Sample generated code for an object guard.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-6-implementation-of-chklb-tag-checking-in-parallel-with-cache-tag-checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 6. Implementation of chklb tag checking in parallel with cache tag checking
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#figure-7-performance-impacts-of-checked-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Figure 7. Performance impacts of Checked Load
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-1-the-prediction-rates-for-checked-load-with-static-prediction-dynamic-prediction-with-a-separate-branch-history-table-and-dynamic-prediction-with-a-joined-branch-history-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1. The prediction rates for Checked Load with static prediction, dynamic prediction with a separate branch history table, and dynamic prediction with a joined branch history table.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors">Checked Load: Architectural Support for JavaScript Type-Checking on Mobile Processors 图表详解<a class="headerlink" href="#checked-load-architectural-support-for-javascript-type-checking-on-mobile-processors" title="Permanent link">&para;</a></h1>
+<h3 id="figure-1-code-generated-by-nitro-for-the-op-put-by-val-indexed-array-store-macrooperation-note-the-five-guards-that-it-performs-that-the-index-is-an-integer-that-the-array-is-non-primitive-that-the-array-is-an-array-that-the-array-length-is-not-zero-and-that-the-data-pointer-is-not-null">Figure 1. Code generated by Nitro for the op put by val (indexed array store) macrooperation. Note the five guards that it performs: that the index is an integer, that the array is non-primitive, that the array is an array, that the array length is not zero, and that the data pointer is not null.<a class="headerlink" href="#figure-1-code-generated-by-nitro-for-the-op-put-by-val-indexed-array-store-macrooperation-note-the-five-guards-that-it-performs-that-the-index-is-an-integer-that-the-array-is-non-primitive-that-the-array-is-an-array-that-the-array-length-is-not-zero-and-that-the-data-pointer-is-not-null" title="Permanent link">&para;</a></h3>
+<p><img alt="d1a369055607bcb4f1081a296a8cbf664fa3ef9f047791f4064d693fd4141c00.jpg" src="../images/d1a369055607bcb4f1081a296a8cbf664fa3ef9f047791f4064d693fd4141c00.jpg" /></p>
+<ul>
+<li>图片展示了 Nitro JavaScript VM 为 <code>put by val</code> 宏操作（即索引数组存储 <code>a[i] = c;</code>）生成的 x86 汇编代码，该代码位于 <strong>FastPath</strong> 分支。</li>
+<li>代码中包含 <strong>五个类型守卫（guards）</strong>，分别用于验证：<ul>
+<li>索引是否为整数</li>
+<li>数组是否为非原始类型（JSObject）</li>
+<li>对象是否为 JSArray 类型</li>
+<li>数组长度是否非零</li>
+<li>数据指针是否非空</li>
+</ul>
+</li>
+<li>每个守卫由比较指令（如 <code>cmp</code>, <code>test</code>）和条件跳转指令（如 <code>jb</code>, <code>jne</code>, <code>jae</code>, <code>je</code>）组成，若检查失败则跳转至 <strong>SlowCase</strong> 处理错误或转换逻辑。</li>
+<li>代码结构清晰，按顺序执行多个检查，每个检查后紧跟一个条件跳转，确保只有所有检查通过才进入最终的存储操作 <code>mov %rax → 0x18(%r13)</code>。</li>
+<li>从注释可见，这些检查涉及虚拟寄存器加载、对象类型校验、数组长度与指针有效性判断，体现了 JavaScript 动态类型系统在底层实现中的复杂性。</li>
+<li>该段代码共包含 <strong>5 个 guard 块</strong>，每个块平均约 2–3 条指令，总计超过 15 条指令，其中近半数用于类型检查，凸显了动态类型语言在性能上的开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Guard Type</th>
+<th>Instruction Sequence</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Integer Index</td>
+<td><code>cmp %r14, %rdx</code> → <code>jb SlowCase</code> → <code>mov %edx → %edx</code></td>
+<td>验证索引为整数</td>
+</tr>
+<tr>
+<td>Non-primitive JSObject</td>
+<td><code>test %rax, %r15</code> → <code>jne SlowCase</code> → <code>mov $0x797d10 → %r11</code></td>
+<td>验证对象非原始类型</td>
+</tr>
+<tr>
+<td>JSArray Type</td>
+<td><code>cmp %r11, (%rax)</code> → <code>jne SlowCase</code> → <code>mov 0x38(%rax) → %rcx</code></td>
+<td>验证对象为 JSArray 类型</td>
+</tr>
+<tr>
+<td>Array Length Non-zero</td>
+<td><code>cmp 0x30(%rax), %edx</code> → <code>jae SlowCase</code> → <code>mov 0x20(%rcx,%rdx,8) → %rax</code></td>
+<td>验证数组长度有效且索引不越界</td>
+</tr>
+<tr>
+<td>Null Pointer Check</td>
+<td><code>test %rax, %rax</code> → <code>je SlowCase</code></td>
+<td>验证数据指针非空</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>最终存储操作仅在所有守卫通过后执行，否则控制流转入 <strong>SlowCase</strong>，调用通用类型转换或错误处理例程。</li>
+<li>此代码片段是论文中论证“动态类型检查消耗大量指令”的核心例证，说明即使简单语句如 <code>a[i] = c;</code> 在 JavaScript 中也需多层运行时检查。</li>
+<li>论文后续提出的 <strong>Checked Load</strong> 指令旨在将此类多指令序列融合为单条指令，并在缓存层面并行完成标签检查，从而消除分支延迟与指令膨胀。</li>
+</ul>
+<h3 id="figure-2-the-dynamic-instruction-count-cost-of-dynamic-type-checks-in-javascript-benchmarks">Figure 2. The dynamic instruction count cost of dynamic type checks in JavaScript benchmarks.<a class="headerlink" href="#figure-2-the-dynamic-instruction-count-cost-of-dynamic-type-checks-in-javascript-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="c5503e4b59ff18b36c121c183e6568af6bbf3b0d02270933f4159a0bc2f6f17e.jpg" src="../images/c5503e4b59ff18b36c121c183e6568af6bbf3b0d02270933f4159a0bc2f6f17e.jpg" /></p>
+<ul>
+<li>图片展示了 Figure 2(a)，即“Region-of-interest (ROI) breakdown”，用于量化 JavaScript 基准测试中动态类型检查（type guards）在<strong>动态指令计数</strong>中的占比。</li>
+<li>数据基于对 Nitro JavaScript VM 的模拟执行，聚焦于<strong>动态生成代码区域</strong>，排除了编译器和解释器阶段的开销。</li>
+<li>图表采用堆叠条形图形式，每个基准测试对应一条横向条形，黑色部分代表 <strong>Guard 指令</strong>，灰色部分代表 <strong>Non-guard 指令</strong>。</li>
+<li>所有基准测试按名称垂直排列，底部包含 SunSpider 和 V8 套件的平均值（SUNSPIDER MEAN, V8 MEAN）。</li>
+<li><strong>SunSpider 套件</strong>（上半部分）中，多个基准测试的 Guard 指令占比超过 25%，最高达 <strong>46.8%</strong>（date-format-xparb），最低接近 0%（regexp-dna）。</li>
+<li><strong>V8 套件</strong>（下半部分）整体 Guard 占比更低，平均仅 <strong>4.1%</strong>，因该套件更依赖哈希表操作，类型检查成本被摊薄。</li>
+<li><strong>SunSpider 平均值</strong>为 <strong>10.9%</strong>，表明在典型客户端 JavaScript 应用中，类型检查是不可忽视的性能开销。</li>
+<li><strong>V8 平均值</strong>为 <strong>4.1%</strong>，反映其工作负载特性不同，但仍有部分测试如 crypto 显示较高类型检查比例。</li>
+<li>该图直观揭示了动态类型语言在移动处理器上的性能瓶颈：<strong>频繁的类型检查显著增加指令数量</strong>，尤其在数值密集型或简单对象访问场景下。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark Category</th>
+<th>Example Benchmarks</th>
+<th>Guard % Range</th>
+<th>Mean Guard %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SunSpider</td>
+<td>date-format-xparb, math-cordic</td>
+<td>0% – 46.8%</td>
+<td><strong>10.9%</strong></td>
+</tr>
+<tr>
+<td>V8</td>
+<td>crypto, raytrace</td>
+<td>Low to Moderate</td>
+<td><strong>4.1%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此数据支撑论文核心论点：<strong>类型检查是移动 JavaScript 性能的关键制约因素</strong>，值得通过架构级优化（如 Checked Load）解决。</li>
+</ul>
+<h3 id="9e158821c24cecf7e7c8a61e01c41a755194ee2ac937ba4780681caa399ae050jpg">9e158821c24cecf7e7c8a61e01c41a755194ee2ac937ba4780681caa399ae050.jpg<a class="headerlink" href="#9e158821c24cecf7e7c8a61e01c41a755194ee2ac937ba4780681caa399ae050jpg" title="Permanent link">&para;</a></h3>
+<p><img alt="9e158821c24cecf7e7c8a61e01c41a755194ee2ac937ba4780681caa399ae050.jpg" src="../images/9e158821c24cecf7e7c8a61e01c41a755194ee2ac937ba4780681caa399ae050.jpg" /></p>
+<ul>
+<li>图片为柱状图，标题为“Figure 2(b) Whole-program breakdown”，展示 JavaScript 基准测试中各类指令的动态执行占比。</li>
+<li>横轴表示百分比（0% 至 100%），纵轴列出多个 <strong>SunSpider</strong> 和 <strong>V8</strong> 基准测试名称，以及两个汇总项：<strong>SUNSPIDER MEAN</strong> 和 <strong>V8 MEAN</strong>。</li>
+<li>图例说明三类区域：<ul>
+<li><strong>Guard</strong>（黑色）：动态类型检查相关指令。</li>
+<li><strong>Non-guard</strong>（灰色）：非类型检查的生成代码指令。</li>
+<li><strong>Compiler and Interpreter</strong>（斜线填充）：编译器与解释器阶段消耗的指令。</li>
+</ul>
+</li>
+<li>数据显示，在多数基准测试中，<strong>Compiler and Interpreter</strong> 占比显著，尤其在 SunSpider 套件中，如 <code>date-format-xparb</code>、<code>string-unpack-code</code> 等，其占比接近或超过 50%。</li>
+<li><strong>Guard</strong> 指令占比在不同基准间差异大。例如：<ul>
+<li><code>date-format-xparb</code> 中 Guard 占比约 20%，而 <code>regexp-dna</code> 几乎为 0。</li>
+<li>V8 套件中，Guard 占比普遍较低，如 <code>crypto</code>、<code>deltablue</code> 等均低于 10%。</li>
+</ul>
+</li>
+<li>平均值方面：<ul>
+<li><strong>SUNSPIDER MEAN</strong>：Guard 约占 6.3%，Non-guard 约 47%，Compiler and Interpreter 约 46.7%。</li>
+<li><strong>V8 MEAN</strong>：Guard 约占 4.1%，Non-guard 约 58%，Compiler and Interpreter 约 37.9%。</li>
+</ul>
+</li>
+<li>该图强调：尽管 Guard 指令在生成代码中占比可观（见 Figure 2a），但在完整程序执行中，因编译/解释开销存在，其相对影响被稀释。</li>
+<li>作者在正文指出，随着 VM 优化进步，编译/解释开销将趋近于零，届时 Guard 的性能影响将更突出，凸显 <strong>Checked Load</strong> 架构扩展的价值。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark Category</th>
+<th>Guard (%)</th>
+<th>Non-guard (%)</th>
+<th>Compiler and Interpreter (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SUNSPIDER MEAN</td>
+<td>~6.3</td>
+<td>~47</td>
+<td>~46.7</td>
+</tr>
+<tr>
+<td>V8 MEAN</td>
+<td>~4.1</td>
+<td>~58</td>
+<td>~37.9</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键结论：<strong>Guard 成本在完整程序中被掩盖，但随 VM 演进将日益凸显，硬件加速（如 Checked Load）具有长期价值。</strong></li>
+</ul>
+<h3 id="figure-3-the-cycle-cost-of-dynamic-type-checks-in-javascript-benchmarks">Figure 3. The cycle cost of dynamic type checks in JavaScript benchmarks.<a class="headerlink" href="#figure-3-the-cycle-cost-of-dynamic-type-checks-in-javascript-benchmarks" title="Permanent link">&para;</a></h3>
+<p><img alt="e472d9348d4f362b4b3e6ee8591f747c0f4d093021eed00347c032156a2640c6.jpg" src="../images/e472d9348d4f362b4b3e6ee8591f747c0f4d093021eed00347c032156a2640c6.jpg" /></p>
+<ul>
+<li>图片 e472d9348d4f362b4b3e6ee8591f747c0f4d093021eed00347c032156a2640c6.jpg 为 Figure 3，展示 JavaScript 基准测试中动态类型检查的<strong>周期开销</strong>，分为两个子图：(a) 区域兴趣（ROI）分解与 (b) 全程序分解。</li>
+<li>子图 (a) “Region-of-interest (ROI) breakdown” 聚焦于<strong>动态生成代码执行阶段</strong>，排除编译器和解释器开销。横轴为百分比，纵轴列出 SunSpider 和 V8 基准测试名称。<ul>
+<li>黑色部分代表 <strong>Guard</strong> 指令消耗的周期。</li>
+<li>灰色部分代表 <strong>Non-guard</strong> 指令消耗的周期。</li>
+<li>数据显示，部分基准测试中 Guard 开销极高，例如 <strong>date-format-xparb</strong> 的 Guard 占比接近 <strong>60%</strong>，而 <strong>regexp-dna</strong> 几乎为 0%。</li>
+<li>SunSpider 套件平均 Guard 开销为 <strong>14.7%</strong>，V8 套件平均为 <strong>6.5%</strong>。</li>
+</ul>
+</li>
+<li>子图 (b) “Whole-program breakdown” 将分析范围扩展至整个程序执行，包括编译器和解释器阶段。<ul>
+<li>新增斜线填充区域代表 <strong>Compiler and Interpreter</strong> 阶段消耗的周期。</li>
+<li>在此视角下，Guard 开销被稀释，整体平均降至 <strong>8.5%</strong>。</li>
+<li>SunSpider 平均 <strong>8.8%</strong>，V8 平均 <strong>6.4%</strong>。</li>
+<li>例如，<strong>string-unpack-code</strong> 中大部分周期消耗在编译器阶段，Guard 开销极小。</li>
+</ul>
+</li>
+<li>关键观察：<ul>
+<li>动态类型检查的周期成本在不同基准测试间差异巨大，从接近 0% 到超过 60%。</li>
+<li><strong>SunSpider 基准测试</strong>普遍比 V8 套件更依赖类型检查，因其包含更多数值运算。</li>
+<li>当考虑全程序时，Guard 开销占比下降，但随着 VM 优化，编译/解释开销会减少，使 ROI 内的 Guard 成本成为主要瓶颈。</li>
+</ul>
+</li>
+<li>数据摘要表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>基准套件</th>
+<th>ROI 内 Guard 周期占比均值</th>
+<th>全程序内 Guard 周期占比均值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SunSpider</td>
+<td><strong>14.7%</strong></td>
+<td><strong>8.8%</strong></td>
+</tr>
+<tr>
+<td>V8</td>
+<td><strong>6.5%</strong></td>
+<td><strong>6.4%</strong></td>
+</tr>
+<tr>
+<td>总体</td>
+<td><strong>12.9%</strong></td>
+<td><strong>8.5%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>此图直观证明了动态类型检查是移动处理器上 JavaScript 执行的主要性能瓶颈，尤其在数值密集型应用中，其周期开销可高达总执行时间的六成以上。</li>
+</ul>
+<h3 id="figure-4-sample-generated-code-for-an-integer-guard">Figure 4. Sample generated code for an integer guard.<a class="headerlink" href="#figure-4-sample-generated-code-for-an-integer-guard" title="Permanent link">&para;</a></h3>
+<p><img alt="a9e6c2232f1b6f1495bd9d91ef7fa02d387b7456665d5a223a1e9a2f653d2a84.jpg" src="../images/a9e6c2232f1b6f1495bd9d91ef7fa02d387b7456665d5a223a1e9a2f653d2a84.jpg" /></p>
+<ul>
+<li>图片展示的是 <strong>Figure 4</strong>，即使用 <strong>Checked Load</strong> 指令生成的整数类型守卫（integer guard）代码示例。</li>
+<li>该代码片段由三部分组成：<strong>TypeGuard</strong> 标签、核心指令序列、以及 <strong>ErrorHandler</strong> 标签。</li>
+<li>第一行指令 <code>mov &amp;ErrorHandler → %ChklReg</code> 将错误处理函数的地址加载到专用寄存器 <strong>chklp</strong> 中，为后续的硬件异常转移做准备。</li>
+<li>第二行指令 <code>chklb 0(%MemLoc), 0xFF → %DestReg</code> 是核心的 <strong>Checked Load</strong> 指令：<ul>
+<li>它从内存地址 <code>%MemLoc</code> 加载一个字节值。</li>
+<li>同时在缓存访问阶段，自动将该值的最高字节与立即数 <code>0xFF</code> 进行比较。</li>
+<li>若比较失败（即类型不匹配），则硬件自动跳转至 <strong>chklp</strong> 寄存器指向的错误处理程序。</li>
+<li>若比较成功，则将加载的数据写入目标寄存器 <code>%DestReg</code>，并继续执行后续指令。</li>
+</ul>
+</li>
+<li>最后一行 <code>ErrorHandler:</code> 标记了错误处理程序的入口点，用于处理类型检查失败的情况。</li>
+<li>此代码结构体现了 <strong>乐观执行策略</strong>：假设类型检查通过，仅在失败时才触发硬件异常转移，从而避免了软件分支预测和冗余比较指令。</li>
+<li>与传统软件实现相比，该方案将原本需要多条指令（load + mask + compare + branch）完成的类型检查，压缩为一条 <strong>chklb</strong> 指令，显著减少指令数和潜在的分支预测开销。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>功能描述</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mov &amp;ErrorHandler → %ChklReg</code></td>
+<td>设置错误处理程序地址</td>
+<td>配置硬件异常转移目标</td>
+</tr>
+<tr>
+<td><code>chklb 0(%MemLoc), 0xFF → %DestReg</code></td>
+<td>带类型检查的加载指令</td>
+<td><strong>融合加载、比较、分支</strong>，实现高效类型守卫</td>
+</tr>
+<tr>
+<td><code>ErrorHandler:</code></td>
+<td>错误处理入口</td>
+<td>处理类型检查失败的恢复逻辑</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>该示例清晰展示了 <strong>Checked Load</strong> 如何在指令层面集成类型检查，利用硬件并行性消除软件开销，是论文中提出的架构扩展在实际代码生成中的具体体现。</li>
+</ul>
+<h3 id="figure-5-sample-generated-code-for-an-object-guard">Figure 5. Sample generated code for an object guard.<a class="headerlink" href="#figure-5-sample-generated-code-for-an-object-guard" title="Permanent link">&para;</a></h3>
+<p><img alt="90ae5df92e07141bdce5e037bfe46dbcf04322163301e1eea0f82780656ae634.jpg" src="../images/90ae5df92e07141bdce5e037bfe46dbcf04322163301e1eea0f82780656ae634.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>Figure 5</strong>，即使用 <strong>Checked Load</strong> 指令生成的 <strong>对象类型守卫（object guard）</strong> 示例代码。</li>
+<li>该代码分为三个逻辑块：<strong>IntGuard</strong>、<strong>TypeGuard</strong> 和 <strong>ErrorHandler</strong>，分别对应整数检查、对象类型检查和错误处理入口。</li>
+<li><strong>IntGuard</strong> 块：<ul>
+<li>首先将错误处理函数地址 <code>&amp;ErrorHandler</code> 加载到专用寄存器 <code>%ChklReg</code>，用于后续失败跳转。</li>
+<li>执行 <code>chklbn 0(%MemLoc), 0xFF → %DestReg</code>，该指令从内存位置 <code>%MemLoc</code> 加载值，并检查其标签是否 <strong>不等于</strong> <code>0xFF</code>（即非整数），若失败则跳转至 <code>%ChklReg</code> 指向的错误处理程序。</li>
+</ul>
+</li>
+<li><strong>TypeGuard</strong> 块：<ul>
+<li>将类型标签 <code>0xFF..FF</code>（全1）加载到通用寄存器 <code>%TagReg</code>。</li>
+<li>执行 <code>chklw 0(%DestReg), %TagReg → %DestReg2</code>，该指令从 <code>%DestReg</code> 指向的地址加载数据，并检查其缓存行首字是否与 <code>%TagReg</code> 匹配。匹配失败则跳转至错误处理程序。</li>
+</ul>
+</li>
+<li>此代码结构体现了 <strong>两层间接访问</strong> 的典型对象访问模式：第一层验证指针非整数，第二层验证对象类型。</li>
+<li>该实现利用了 <strong>chklbn</strong>（否定标签比较）和 <strong>chklw</strong>（寄存器标签比较）两条指令，有效替代了传统软件中多条指令构成的类型检查序列。</li>
+<li>错误处理部分以省略号 <code>...</code> 表示，实际由 VM 生成的通用错误恢复代码填充。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指令块</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IntGuard</td>
+<td>设置错误处理地址，并用 <code>chklbn</code> 检查加载值是否为非整数。</td>
+</tr>
+<tr>
+<td>TypeGuard</td>
+<td>加载对象类型标签，并用 <code>chklw</code> 检查对象头部标签是否匹配。</td>
+</tr>
+<tr>
+<td>ErrorHandler</td>
+<td>标记错误处理入口，实际执行由 VM 生成的恢复或转换逻辑。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>关键术语保留英文：<strong>Checked Load</strong>, <strong>chklbn</strong>, <strong>chklw</strong>, <strong>%ChklReg</strong>, <strong>%TagReg</strong>, <strong>ErrorHandler</strong>。</li>
+<li>整体代码简洁高效，通过硬件支持的指令融合，显著减少动态类型检查的指令开销和分支延迟。</li>
+</ul>
+<h3 id="figure-6-implementation-of-chklb-tag-checking-in-parallel-with-cache-tag-checking">Figure 6. Implementation of chklb tag checking in parallel with cache tag checking<a class="headerlink" href="#figure-6-implementation-of-chklb-tag-checking-in-parallel-with-cache-tag-checking" title="Permanent link">&para;</a></h3>
+<p><img alt="29a0d26748b58b6c49b6c62c31a17da6820ec7e5c30d7af533e8b265a74856c6.jpg" src="../images/29a0d26748b58b6c49b6c62c31a17da6820ec7e5c30d7af533e8b265a74856c6.jpg" /></p>
+<ul>
+<li>图片展示了 <strong>chklb</strong> 指令在缓存层级实现类型标签检查的硬件结构，其核心目标是<strong>与标准缓存命中检测并行执行</strong>，从而不延长关键路径。</li>
+<li>左侧为<strong>Standard Cache</strong>模块，负责传统地址匹配：输入 Target Address 被拆分为 Tag、Index、Shift；Index 用于选择缓存组（way），Tag 与各路缓存中的 Tag 进行比较，通过 MUX 选出匹配数据，并输出 Data Output 和 Cache Hit Flag。</li>
+<li>右侧为<strong>Checked Load Additions</strong>模块，新增逻辑用于类型检查：<ul>
+<li>输入包括 <strong>Encoded Instruction</strong> 中的 Type Tag（字节立即数）和 Negation Flag（是否取反）。</li>
+<li>对每个缓存路（way），将从该路读出的数据的<strong>最高字节</strong>与 Type Tag 进行比较。</li>
+<li>比较结果经由一个 MUX 选择，该 MUX 的选择信号来自左侧缓存 Tag 比较器的输出（即哪个 way 匹配）。</li>
+<li>最终比较结果与 Negation Flag 经 XOR 门处理，生成 <strong>CHKL Hit Flag</strong>。</li>
+</ul>
+</li>
+<li>关键设计点在于：<strong>类型标签比较与缓存 Tag 比较同时进行</strong>，且最终结果的选择依赖于已有的缓存命中判断逻辑，确保新增逻辑深度不超过原缓存路径。</li>
+<li>该结构支持 chklb 指令的语义：若加载地址对齐缓存行，且数据最高字节与指定 Type Tag（或其取反）匹配，则正常执行；否则触发异常，跳转至 chklp 寄存器指向的错误处理程序。</li>
+<li>硬件开销极小，仅需增加少量比较器、MUX 和 XOR 门，无需修改缓存阵列结构或增加额外流水级。</li>
+</ul>
+<h3 id="figure-7-performance-impacts-of-checked-load">Figure 7. Performance impacts of Checked Load<a class="headerlink" href="#figure-7-performance-impacts-of-checked-load" title="Permanent link">&para;</a></h3>
+<p><img alt="f21e640c76b08a5e3f1aab393f575981e150331204a2a260cf369de874486193.jpg" src="../images/f21e640c76b08a5e3f1aab393f575981e150331204a2a260cf369de874486193.jpg" /></p>
+<ul>
+<li>图片展示了 Figure 7，标题为“Performance impacts of Checked Load”，包含四个子图，分别评估了不同预测机制下 Checked Load 对 JavaScript 性能的影响。</li>
+<li>子图 (a) 展示了在**独立预测表（separate-table prediction）<strong>机制下，各基准测试在</strong>ROI（Region of Interest）**的性能提升情况。多数基准测试获得正向收益，其中 <strong>date-format-xparb</strong> 提升高达 <strong>60%+</strong>，而部分如 <strong>string-unpack-code</strong> 和 <strong>string-validate-input</strong> 提升较小或接近零。</li>
+<li>子图 (b) 展示了在**共享预测表（shared-table prediction）**机制下，ROI 的性能提升。整体趋势与 (a) 相似，但提升幅度略有下降，例如 <strong>date-format-xparb</strong> 约为 <strong>50%</strong>，<strong>crypto</strong> 约为 <strong>25%</strong>，表明共享硬件对性能影响有限。</li>
+<li>子图 (c) 展示了**静态预测（static prediction）**机制下的 ROI 性能变化。该策略假设类型检查很少失败，结果导致部分基准测试出现负向性能影响，如 <strong>access-nbody</strong> 下降约 <strong>25%</strong>，而 <strong>crypto</strong> 仍保持约 <strong>15%</strong> 的正向提升。</li>
+<li>子图 (d) 展示了在<strong>共享预测表</strong>机制下，**整个程序（whole-program）**的性能提升。由于包含了编译器和解释器开销，整体提升幅度低于 ROI，平均约为 <strong>7.8%</strong>，但仍显著优于静态预测。</li>
+<li>关键数据对比：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>预测机制</th>
+<th>ROI 平均提升</th>
+<th>Whole-program 平均提升</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Separate-table</td>
+<td><strong>11.9%</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Shared-table</td>
+<td><strong>11.2%</strong></td>
+<td><strong>7.8%</strong></td>
+</tr>
+<tr>
+<td>Static prediction</td>
+<td><strong>1.5%</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>从图表可见，<strong>动态预测机制（无论是独立还是共享表）</strong> 显著优于静态预测，尤其在数值密集型基准测试（如 crypto、math-cordic）中表现突出。</li>
+<li><strong>date-format-xparb</strong> 在所有配置下均表现出最高性能增益，说明其高度依赖频繁类型检查，是 Checked Load 最大受益者。</li>
+<li><strong>V8 MEAN</strong> 和 <strong>SUNSPIDER MEAN</strong> 均显示，SunSpider 套件比 V8 套件更受益于 Checked Load，这与文中所述 SunSpider 更多涉及原始类型检查一致。</li>
+<li>所有子图横轴均为“Performance Improvement”，单位为百分比，纵轴列出具体基准测试名称，便于横向比较不同预测策略对同一基准的影响。</li>
+<li>图表设计清晰，通过条形长度直观反映性能变化，黑色条形代表正向提升，灰色虚线标记零点，便于识别负向影响。</li>
+</ul>
+<h3 id="table-1-the-prediction-rates-for-checked-load-with-static-prediction-dynamic-prediction-with-a-separate-branch-history-table-and-dynamic-prediction-with-a-joined-branch-history-table">Table 1. The prediction rates for Checked Load with static prediction, dynamic prediction with a separate branch history table, and dynamic prediction with a joined branch history table.<a class="headerlink" href="#table-1-the-prediction-rates-for-checked-load-with-static-prediction-dynamic-prediction-with-a-separate-branch-history-table-and-dynamic-prediction-with-a-joined-branch-history-table" title="Permanent link">&para;</a></h3>
+<p><img alt="74b90b4ccdaef4cf5fb242a21df649348fab08949408f26529337fc36252cc1f.jpg" src="../images/74b90b4ccdaef4cf5fb242a21df649348fab08949408f26529337fc36252cc1f.jpg" /></p>
+<ul>
+<li>该表格（Table 1）记录了三种不同预测机制下 <strong>Checked Load</strong> 指令的预测准确率，用于评估其在 JavaScript 性能优化中的有效性。</li>
+<li>三种预测类型分别为：<ul>
+<li><strong>Static Prediction</strong>：静态预测，假设类型检查极少失败。</li>
+<li><strong>Dynamic Joined</strong>：动态预测，与通用分支预测共享同一 <strong>Branch History Table (BHT)</strong>。</li>
+<li><strong>Dynamic Separate</strong>：动态预测，使用独立的 BHT。</li>
+</ul>
+</li>
+</ul>
+<p>以下是各基准测试的预测准确率数据：</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Static</th>
+<th>Dynamic Joined</th>
+<th>Dynamic Separate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3d-cube</td>
+<td>76.5%</td>
+<td>97.7%</td>
+<td>98.4%</td>
+</tr>
+<tr>
+<td>3d-morph</td>
+<td>86.6%</td>
+<td>99.7%</td>
+<td>99.3%</td>
+</tr>
+<tr>
+<td>3d-raytrace</td>
+<td>68.3%</td>
+<td>96.9%</td>
+<td>99.1%</td>
+</tr>
+<tr>
+<td>access-binary-trees</td>
+<td>92.3%</td>
+<td>99.9%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>access-fannkuch</td>
+<td>100%</td>
+<td>99.7%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>access-nbody</td>
+<td>58.0%</td>
+<td>96.6%</td>
+<td>98.2%</td>
+</tr>
+<tr>
+<td>access-nsieve</td>
+<td>100%</td>
+<td>91.9%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>bitops-3bit-bits-in-byte</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>bitops-bits-in-byte</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>bitops-bitwise-and</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>bitops-nsieve-bits</td>
+<td>99.9%</td>
+<td>99.9%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>controlflow-recursive</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>crypto-md5</td>
+<td>100%</td>
+<td>99.6%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>crypto-sha1</td>
+<td>100%</td>
+<td>98.9%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>date-format-tofte</td>
+<td>99.8%</td>
+<td>99.4%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>date-format-xparb</td>
+<td>85.2%</td>
+<td>91.9%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>math-cordic</td>
+<td>83.0%</td>
+<td>99.3%</td>
+<td>99.3%</td>
+</tr>
+<tr>
+<td>math-partial-sums</td>
+<td>69.0%</td>
+<td>99.1%</td>
+<td>99.1%</td>
+</tr>
+<tr>
+<td>math-spectral-norm</td>
+<td>76.3%</td>
+<td>98.1%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>regexp-dna</td>
+<td>81.4%</td>
+<td>74.0%</td>
+<td>57.1%</td>
+</tr>
+<tr>
+<td>string-base64</td>
+<td>86.4%</td>
+<td>99.6%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>string-fasta</td>
+<td>93.5%</td>
+<td>99.7%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>string-tagcloud</td>
+<td>87.0%</td>
+<td>98.5%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>string-unpack-code</td>
+<td>55.9%</td>
+<td>97.8%</td>
+<td>99.8%</td>
+</tr>
+<tr>
+<td>string-validate-input</td>
+<td>76.7%</td>
+<td>97.9%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td><strong>SunSpider Mean</strong></td>
+<td><strong>87%</strong></td>
+<td><strong>97.4%</strong></td>
+<td><strong>98.0%</strong></td>
+</tr>
+<tr>
+<td>crypto</td>
+<td>100%</td>
+<td>99.8%</td>
+<td>99.9%</td>
+</tr>
+<tr>
+<td>deltablue</td>
+<td>99.6%</td>
+<td>96.1%</td>
+<td>99.6%</td>
+</tr>
+<tr>
+<td>earley-boyer</td>
+<td>94.2%</td>
+<td>95.6%</td>
+<td>99.4%</td>
+</tr>
+<tr>
+<td>raytrace</td>
+<td>76.6%</td>
+<td>88.2%</td>
+<td>97.3%</td>
+</tr>
+<tr>
+<td>regexp</td>
+<td>100%</td>
+<td>94.3%</td>
+<td>99.7%</td>
+</tr>
+<tr>
+<td>richards</td>
+<td>100%</td>
+<td>97.4%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>splay</td>
+<td>93.6%</td>
+<td>98.0%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td><strong>V8 Mean</strong></td>
+<td><strong>94.8%</strong></td>
+<td><strong>95.6%</strong></td>
+<td><strong>99.5%</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>关键观察</strong>：</p>
+<ul>
+<li><strong>Static Prediction</strong> 在多数测试中表现最差，尤其在 <code>access-nbody</code>、<code>math-partial-sums</code> 和 <code>regexp-dna</code> 等类型频繁变化的场景中，准确率显著低于动态预测。</li>
+<li><strong>Dynamic Separate</strong> 预测准确率最高，平均达到 <strong>98.0% (SunSpider)</strong> 和 <strong>99.5% (V8)</strong>，表明独立预测表可提供最优性能。</li>
+<li><strong>Dynamic Joined</strong> 虽然共享硬件资源，但准确率仍接近独立表，平均为 <strong>97.4% (SunSpider)</strong> 和 <strong>95.6% (V8)</strong>，说明<strong>硬件复用策略有效且成本低</strong>。</li>
+<li>特别值得注意的是 <code>regexp-dna</code>，其静态预测准确率高达 81.4%，但动态预测反而下降，可能因该测试中类型行为高度不可预测或存在特殊模式干扰预测器。</li>
+<li>多数位运算和字符串操作类测试（如 <code>bitops-*</code>, <code>string-*</code>）在所有预测方式下均接近 100%，表明这些操作类型稳定，易于预测。</li>
+</ul>
+</li>
+<li>
+<p><strong>结论</strong>：</p>
+<ul>
+<li>动态预测机制显著优于静态预测，是提升 <strong>Checked Load</strong> 效能的关键。</li>
+<li>共享预测硬件（Joined）在性能损失极小的前提下大幅节省芯片面积，适合资源受限的移动处理器。</li>
+<li>对于特定高变动性基准（如 <code>regexp-dna</code>），需进一步分析其行为以优化预测策略。</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

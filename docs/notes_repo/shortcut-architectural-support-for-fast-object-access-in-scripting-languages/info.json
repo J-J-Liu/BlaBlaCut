@@ -1,0 +1,19 @@
+{
+  "index": "shortcut-architectural-support-for-fast-object-access-in-scripting-languages",
+  "paper_title": "ShortCut: Architectural Support for Fast Object Access in Scripting Languages",
+  "metadata": {
+    "authors": [
+      "Jiho Choi",
+      "Thomas Shull",
+      "Maria J. Garzaran",
+      "et al."
+    ],
+    "affiliations": [
+      "University of Illinois at Urbana-Champaign"
+    ],
+    "venue": "ISCA",
+    "year": 2017,
+    "doi": "10.1145/3079856.3080237"
+  },
+  "description": "论文提出ShortCut架构，通过硬件支持加速动态脚本语言中的对象访问。其Plain设计绕过分发器直接调用处理器，Aggressive设计进一步将调用转化为简单load/store操作。在V8 JIT编译器和模拟器上评估，Plain ShortCut在基线编译器下平均减少30%执行时间，在最高优化级别下仍提升11%。"
+}
