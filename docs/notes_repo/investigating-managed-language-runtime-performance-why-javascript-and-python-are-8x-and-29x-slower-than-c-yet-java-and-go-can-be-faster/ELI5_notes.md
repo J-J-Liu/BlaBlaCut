@@ -32,7 +32,7 @@
     - **Java 和 Go 的性能完全可以与 C++ 竞争**：得益于成熟的 JIT（Java）和 AOT 编译（Go），它们平均只慢 **1.43x** 和 **1.30x**，并且能完美扩展到多核。
     - **最反直觉的发现**：Runtime 的抽象层**有时反而能带来性能优势**！例如，OpenJDK 的**移动式垃圾回收器（moving GC）** 通过重排内存对象，意外地**改善了缓存局部性**，在某些场景下甚至**超越了手动优化的 C++ 代码**。Go 的**goroutine 调度器**通过减少内核线程和上下文切换，也在高并发 I/O 场景下击败了 C++。
 
-### 1. Runtime Instrumentation for Bytecode and Type Checking (ELI5)
+### 1. Runtime Instrumentation for Bytecode and Type Checking
 
 **痛点直击**
 
@@ -57,7 +57,7 @@
     - 这样，开发者不仅能知道类型检查花了多少时间，甚至可以**选择性地关闭**某个已知是安全的函数的检查（比如一个只处理 `Int8Array` 的函数），从而直接验证“如果去掉这些安全网，性能能提升多少”。论文中就用这招，在排序 benchmark 里实现了 **8倍**的加速。
 - 这套方法的核心在于，它把原本不可观测的、运行时内部的“暗物质”开销，变成了可测量、可分析、甚至可干预的明确数据，为性能优化提供了坚实的科学依据，而不是玄学。
 
-### 2. LangBench Benchmark Suite (ELI5)
+### 2. LangBench Benchmark Suite
 
 **痛点直击**
 
@@ -84,7 +84,7 @@
 
 ![](images/fea8e74b1eb77bb72926ec06cbf6a306083d041e47616eebace92c6fc088944a.jpg) *Table 1: The applications and the component(s) they stress.*
 
-### 3. Analysis of Dynamic Type and Bounds Checking Overhead (ELI5)
+### 3. Analysis of Dynamic Type and Bounds Checking Overhead
 
 **痛点直击**
 
@@ -113,7 +113,7 @@
     - 在 Sudoku 基准测试中，仅此一项优化就带来了 **1.48倍** 的性能提升。
 - 这揭示了一个深刻的道理：在动态语言中，**数据的内存布局**（Memory Layout）对性能的影响远超我们的想象。了解运行时的内部工作机制，可以指导我们写出更高效的代码。
 
-### 4. Garbage Collection Write Barrier Cost (ELI5)
+### 4. Garbage Collection Write Barrier Cost
 
 **痛点直击 (The "Why")**
 
@@ -138,7 +138,7 @@
 
 这张表清晰地展示了不同 GC 策略下 Write Barrier 的巨大差异。它告诉我们，选择合适的 GC 算法，有时比优化业务代码更能立竿见影地提升性能，尤其是在处理**指针密集型**工作负载时。
 
-### 5. Scalability Limitations of GIL and Event-Loop Models (ELI5)
+### 5. Scalability Limitations of GIL and Event-Loop Models
 
 **痛点直击**
 
@@ -163,7 +163,7 @@
 
 ![](images/9450525787ccf28f146f9a3dfe07b1bb89bd5a87c4bae5316ca9bf395d715802.jpg) *Figure 2: Relative completion times for various language implementations normalized to optimized code under GCC. Note the logarithmic scale of the y axis. “LA” refers to the log analysis application. The numbers at the bottom shows the benchmark’s absolute execution time in the C++ implementation. For benchmarks with concurrency, the “Best” bars are annotated with the thread count that results in best completion time. For key-value store and file server it is the number of client threads, not the number of threads used server side. For GCC and OpenJDK, the server creates 1 (kernel) thread to handle each client thread, so the number of server-side threads is the same as the client. For both Node.js and CPython, their best completion time in key-value store is achieved when using a single server-side thread (due to their scalability characterstic described in §7). As for the file server benchmark, both Node.js and CPython’s best performance is achieved when using 64 server-side threads (§7). The number of server-side threads in Go is automatically determined by the runtime as described in §8.2. The number of threads for log analysis is the number of worker threads (as there is no client).*
 
-### 6. Performance Advantages from Runtime Abstractions (ELI5)
+### 6. Performance Advantages from Runtime Abstractions
 
 **痛点直击 (The "Why")**
 

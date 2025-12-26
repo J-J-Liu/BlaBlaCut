@@ -25,7 +25,7 @@
     - 这个过程利用了现有 BTB 和方向预测器的所有能力，而目标地址就自然地分散存储在 BTB 的不同（虚拟）位置里。
 - 这样一来，**间接分支预测的难题就被转化成了一个序列化的条件分支预测问题**，完美复用了芯片上已经存在的、高度优化的条件分支预测硬件，几乎 **零成本** 地获得了高性能。![](images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg) *Fig. 3. High-level conceptual overview of the VPC predictor.*
 
-### 1. Virtual Program Counter (VPC) Prediction (ELI5)
+### 1. Virtual Program Counter (VPC) Prediction
 
 **痛点直击**
 
@@ -55,7 +55,7 @@
 - ![](images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg) *Fig. 3. High-level conceptual overview of the VPC predictor.*
 - ![](images/cc59d1bb83ccc21cbefbc81dcc2b3a3cef100997897622419acc8f802c55ce2b.jpg) *Fig. 4. VPC prediction example: source, assembly, and the corresponding virtual branches.*
 
-### 2. Virtual Branch and Virtual PC (VPCA) (ELI5)
+### 2. Virtual Branch and Virtual PC (VPCA)
 
 **痛点直击**
 
@@ -80,7 +80,7 @@
     - 这个哈希操作保证了不同迭代（即不同的虚拟分支）会映射到预测结构（BTB和方向预测器）中**完全不同的位置**，从而可以存储和学习各自独立的目标地址和预测历史。
 - 这个过程就像在一条流水线上，对同一个模糊请求，快速生成并验证多个具体的候选答案，直到有一个被预测为“是”（taken），就采用它作为最终的跳转目标。整个过程**完全复用了现有硬件**，几乎没有增加额外的存储成本。![](images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg) *Fig. 3. High-level conceptual overview of the VPC predictor.*
 
-### 3. Iterative Prediction and Training Algorithms (ELI5)
+### 3. Iterative Prediction and Training Algorithms
 
 **痛点直击**
 
@@ -112,7 +112,7 @@
     - **如果预测错了**（No-target）：说明正确目标压根不在 BTB 里。这时，训练逻辑会选择一个“牺牲品”——通常是某个虚拟分支对应的 BTB 条目（比如 LFU 最低的），用正确的目标地址**替换**掉它，并把这个新条目对应的虚拟分支训练成 **taken**。
     - 这个训练过程保证了预测器能**动态适应**程序行为的变化，比如新出现了某个类的对象，也能很快学会预测。
 
-### 4. Dynamic Devirtualization without Compiler Support (ELI5)
+### 4. Dynamic Devirtualization without Compiler Support
 
 **痛点直击**
 
@@ -141,7 +141,7 @@
     - 第一个VPC就是原始PC。如果预测器对第一个VPC的预测结果是**not-taken**，就意味着“第一个猜测的目标不对”，于是硬件立即用一个**哈希函数**（`PC XOR HASHVAL[iter]`）生成第二个VPC，并再次查询预测器。这个过程迭代进行，直到某个VPC被预测为**taken**，此时与该VPC关联的**BTB**（Branch Target Buffer）中的目标地址就被当作最终预测结果。
 - 这个设计的绝妙之处在于，**目标地址的存储**（在BTB里）和**预测逻辑**（在条件分支预测器里）都被现有的硬件结构自然地承担了，几乎**没有增加额外的存储开销**，只是增加了一点点控制逻辑来管理VPC的迭代。这就实现了用极低的成本，获得了接近专用复杂预测器的性能。![](images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg) *Fig. 3. High-level conceptual overview of the VPC predictor.*
 
-### 5. Low-Cost Hardware Implementation (ELI5)
+### 5. Low-Cost Hardware Implementation
 
 **痛点直击**
 

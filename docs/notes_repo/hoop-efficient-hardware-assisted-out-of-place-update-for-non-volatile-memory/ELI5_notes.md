@@ -25,7 +25,7 @@
 
 最终，HOOP通过这套硬件辅助的“草稿区”模式，在几乎不增加关键路径负担的情况下，将写放大降到了接近理想水平（无持久化开销的系统），实现了**高性能**与**强一致性**的统一。
 
-### 1. Hardware-Assisted Out-of-Place (OOP) Update (ELI5)
+### 1. Hardware-Assisted Out-of-Place (OOP) Update
 
 **痛点直击 (The "Why")**
 - 传统的 **NVM**（非易失性内存）持久化方案，比如 **logging**（日志），为了保证崩溃一致性，必须先写一份日志再改数据。这导致了 **双倍写入**（write amplification），不仅拖慢了性能，还加速了 NVM 这种有写入寿命限制的硬件的老化。
@@ -45,7 +45,7 @@
 ![](images/6c5b235d6fb4853971c26e030dc24e02b9e11d457a5d1c1c668a04ed0b4d0933.jpg) *Fig. 1: Illustration of different crash-consistency techniques. (a) Logging technique requires that both logs and data must be persisted, which incurs double writes; (b) Shadow paging maintains two copies of data, it suffers from copy-on-write overhead; (c) Log-structured NVM alleviates the double writes, but it suffers from significant overhead of index lookup; (d) Our hardware-assisted out-of-place update reduces the write amplification significantly, while providing efficient data accesses.*
 ![](images/2462e7cd429df53d42e80a9b3289cc106eb25414496d10077e336f392cc9c839.jpg) *Fig. 2: Hardware-assisted out-of-place update with HOOP. HOOP performs out-of-place writes and reduces write traffic with data packing and coalescing. To reduce the storage overhead, HOOP adaptively migrates data in the out-of-place (OOP) region back to the home region with optimized GC.*
 
-### 2. Lightweight Indirection Layer in Memory Controller (ELI5)
+### 2. Lightweight Indirection Layer in Memory Controller
 
 **痛点直击 (The "Why")**
 - 传统的 **NVM**（非易失性内存）持久化方案，比如 **logging**（日志）或 **shadow paging**（影子分页），都有一个“顾头不顾尾”的毛病。
@@ -68,7 +68,7 @@
 - 这个设计的精妙之处在于，它**完全解耦了写操作的持久化顺序**。因为旧数据始终安全地待在“家”里，而新数据被原子地写入OOP区域，所以系统天然就是崩溃一致的，无需任何内存屏障。同时，这个映射表只跟踪那些**尚未被垃圾回收**（GC）的数据，因此它的规模可以保持得很小（论文中提到默认2MB），查询开销极低，从而实现了**透明且低开销**的地址翻译。
 ![](images/16a8d7e212c2aa5b6dda87381989bbb1dbc37c5b63a8d9168d064340e3512073.jpg) *Fig. 4: Transaction execution of different approaches. Both undo and redo logging deliver lengthy transaction execution times due to log writes. Shadow paging has to copy additional data before performing in-place updates. HOOP achieves fast transaction execution with out-of-place updates.*
 
-### 3. Data Packing and Memory Slice Organization (ELI5)
+### 3. Data Packing and Memory Slice Organization
 
 **痛点直击**
 - 传统的 NVM 持久化方案，比如 logging，有个很“难受”的地方：哪怕你只改了一个 **8-byte** 的整数，它也得把整个 **64-byte** 的 cache line 写一遍。这在写密集型应用里简直是灾难，不仅浪费宝贵的 **NVM 写带宽**，还加速了硬件老化。
@@ -88,7 +88,7 @@
 ![](images/c3438a9bbf9c81f1785f54228b2cf11eb233c85613a106863e9a578698d8dac6.jpg) *Fig. 3: Data packing in HOOP.*
 ![](images/7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg) *Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.*
 
-### 4. Adaptive Garbage Collection with Data Coalescing (ELI5)
+### 4. Adaptive Garbage Collection with Data Coalescing
 
 **痛点直击 (The "Why")**
 - 传统的 **Out-of-Place (OOP)** 更新（比如 log-structured 内存）虽然能保证原子性，但会带来一个致命问题：**写放大 (Write Amplification)**。
@@ -116,7 +116,7 @@
 - 这个 **Data Coalescing**（数据合并）的过程，通过一次性的反向扫描，就自动过滤掉了所有中间的、无效的更新，将多次写操作**合并**为一次最终写操作，从而将 **write amplification 降到了最低**。![](images/005c04de283a61409d0cf42bcf0a9fdda32c650975c500863ce072fdbc67c54e.jpg) *TABLE IV: Average data reduction in the GC of HOOP.*
 - 此外，这个 GC 是 **Adaptive**（自适应）的，它在后台周期性运行，不会阻塞应用的关键路径。只有当 OOP 区域快满或者 mapping table 快满时，才会更积极地触发，完美地平衡了性能和空间开销。
 
-### 5. Parallel Crash Recovery Mechanism (ELI5)
+### 5. Parallel Crash Recovery Mechanism
 
 **痛点直击 (The "Why")**
 - 传统的 NVM 崩溃恢复机制通常是 **单线程** 的。想象一下，系统崩溃后，整个世界都停了，只有一个“工人”在慢悠悠地翻看日志或 OOP 区域，试图把数据恢复到一致状态。

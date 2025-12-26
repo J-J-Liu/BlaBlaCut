@@ -39,7 +39,7 @@ SHADOW的核心思想就是：**别让他们互相等待或切换角色，让他
 
 *Figure 9: Impact of adding an InO Thread to an OoO system: An illustrative assembly example.*
 
-### 1. 异构线程并发执行 (Asymmetric Thread Co-execution) (ELI5)
+### 1. 异构线程并发执行 (Asymmetric Thread Co-execution)
 
 **痛点直击 (The "Why")**
 
@@ -78,7 +78,7 @@ SHADOW的核心思想就是：**别让他们互相等待或切换角色，让他
 
 这种设计的精妙在于，它用**极低的硬件开销**（仅**1%**的面积和功耗增加）就实现了ILP和TLP的**无缝融合**。OoO线程负责攻坚克难，InO线程负责人海战术，两者在同一个核心内各司其职，最大化了硬件资源的利用率。
 
-### 2. 动态工作窃取机制 (Dynamic Work Stealing Mechanism) (ELI5)
+### 2. 动态工作窃取机制 (Dynamic Work Stealing Mechanism)
 
 **痛点直击**
 
@@ -126,7 +126,7 @@ SHADOW的核心思想就是：**别让他们互相等待或切换角色，让他
 
 通过这一招，SHADOW 用最朴素的软件协同，解决了最棘手的硬件资源动态平衡问题，真正做到了 **“随 workload 而动”**。
 
-### 3. 轻量级顺序线程设计 (Lightweight In-Order Threads) (ELI5)
+### 3. 轻量级顺序线程设计 (Lightweight In-Order Threads)
 
 **痛点直击 (The "Why")**
 
@@ -173,7 +173,7 @@ ______________________________________________________________________
 
 *Table 4: Hardware overhead of SHADOW*
 
-### 4. 运行时可重构资源分区 (Runtime-Configurable Resource Partitioning) (ELI5)
+### 4. 运行时可重构资源分区 (Runtime-Configurable Resource Partitioning)
 
 **痛点直击**
 

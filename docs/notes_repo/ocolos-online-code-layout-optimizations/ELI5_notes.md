@@ -44,7 +44,7 @@ OCOLOS 的核心创新在于，它没有试图去“修改”正在运行的代�
 
 *Fig. 5: Performance of OCOLOS (light blue bars) compared to BOLT using an oracle profile of the input being run (dark blue bars), Clang PGO using the same oracle profile (purple bars) and BOLT using an average-case profiling input aggregated from all inputs (pink bars). All bars are normalized to original non-PGO binaries (white bars).*
 
-### 1. 在线代码布局优化 (Online Code Layout Optimization) (ELI5)
+### 1. 在线代码布局优化 (Online Code Layout Optimization)
 
 **痛点直击**
 
@@ -91,7 +91,7 @@ OCOLOS 的核心创新在于，它没有试图去“修改”正在运行的代�
 
 *Fig. 5: Performance of OCOLOS (light blue bars) compared to BOLT using an oracle profile of the input being run (dark blue bars), Clang PGO using the same oracle profile (purple bars) and BOLT using an average-case profiling input aggregated from all inputs (pink bars). All bars are normalized to original non-PGO binaries (white bars).*
 
-### 2. 安全的在线代码替换机制 (Safe Online Code Replacement) (ELI5)
+### 2. 安全的在线代码替换机制 (Safe Online Code Replacement)
 
 **痛点直击 (The "Why")**
 
@@ -123,7 +123,7 @@ OCOLOS 的核心创新在于，它没有试图去“修改”正在运行的代�
         - **C0 中的直接调用指令**：将这些调用的目标地址从 C0 的函数改为 C1 的对应函数。
 - 这个策略非常务实。它承认了在 unmanaged code 中完全掌控所有指针是不可能的，于是退而求其次，确保**common case**（通过虚表和直接调用的路径）能跑到高性能的 C1 上，而 **rare case**（通过其他方式调用的路径）则回退到功能正确但性能稍差的 C0 上，从而在**安全性和性能之间取得了完美的平衡**。
 
-### 3. 函数指针创建拦截 (Function Pointer Creation Interception) (ELI5)
+### 3. 函数指针创建拦截 (Function Pointer Creation Interception)
 
 **痛点直击 (The "Why")**
 
@@ -167,7 +167,7 @@ ______________________________________________________________________
 - **一劳永逸**：由于所有函数指针最终都指向不会被回收的 C0，因此后续无论进行多少次代码替换和垃圾回收，这些指针都始终有效。
 - **保持兼容性**：C0 中的函数虽然未被优化，但它只是一个“跳板”，内部会立刻跳转到当前最新的优化版本 Ci+1 去执行，保证了性能。
 
-### 4. 批处理加速模式 (Batch Accelerator Mode, BAM) (ELI5)
+### 4. 批处理加速模式 (Batch Accelerator Mode, BAM)
 
 **痛点直击**
 

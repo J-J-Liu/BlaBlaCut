@@ -27,7 +27,7 @@ Charon 的思路是：**别让工人来回跑了！直接在仓库的每个分�
 
 最终，这种“**识别热点原语 + 近内存专用硬件加速**”的组合拳，以极小的硬件代价（仅占 HMC 逻辑层 **0.49%** 的面积），换来了 **3.29倍的 GC 速度提升** 和 **60.7% 的能耗节省**，完美地解决了困扰 GC 数十年的带宽瓶颈问题。
 
-### 1. 关键GC原语识别 (ELI5)
+### 1. 关键GC原语识别
 
 **痛点直击**
 
@@ -52,7 +52,7 @@ Charon 的思路是：**别让工人来回跑了！直接在仓库的每个分�
     - 对于**Scan&Push**这种有间接访存依赖的操作，硬件单元会**预取所有待扫描的引用**，然后批量处理，避免了CPU因长延迟依赖而停顿。
 - 这种“**卸载关键原语而非整个GC**”的思路，使得Charon既能获得接近专用硬件的性能，又保持了对不同GC算法的**良好兼容性和低侵入性**（仅需修改JVM约37行代码）。
 
-### 2. 近内存专用处理单元 (ELI5)
+### 2. 近内存专用处理单元
 
 **痛点直击**
 
@@ -79,7 +79,7 @@ Charon 的思路是：**别让工人来回跑了！直接在仓库的每个分�
 
 ![](images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg) *Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit*
 
-### 3. 位图缓存（Bitmap Cache） (ELI5)
+### 3. 位图缓存（Bitmap Cache）
 
 **痛点直击 (The "Why")**
 
@@ -106,7 +106,7 @@ Charon 的思路是：**别让工人来回跑了！直接在仓库的每个分�
     - 当 **Scan&Push** 单元执行 `mark_obj` 时，它不再直接发起一个会导致 overfetching 的主存 RMW（Read-Modify-Write）请求，而是先将所需的数据块加载到这个缓存中，在缓存里完成修改，最后再以完整的 cache line 粒度写回。这**从根本上解决了 overfetching 问题**。
 - 为了保证与主机 CPU 的一致性，系统会在每个 GC 阶段（marking 或 compacting）结束后**主动 flush 这个缓存**，确保数据最终落盘。![](images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg) *Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit*
 
-### 4. 位图计数优化算法 (ELI5)
+### 4. 位图计数优化算法
 
 **痛点直击**
 
@@ -129,7 +129,7 @@ Charon 的思路是：**别让工人来回跑了！直接在仓库的每个分�
     - 但是，每个对象的起始位（`begMap` 中的 `1`）在这个减法中被“借位”消耗掉了，所以我们需要额外加上 `CountSetBits(begMap)` 来把它们补回来。
 - 通过这个转换，原本需要 O(n) 次迭代（n 是位图的比特数）的复杂操作，被简化成了**两次大规模并行的位计数操作（Population Count）和一次向量减法**。这些操作在专用硬件上可以被极度优化，从而实现了 **5.63倍** 的平均加速。
 
-### 5. 主机-Charon接口与系统集成 (ELI5)
+### 5. 主机-Charon接口与系统集成
 
 **痛点直击**
 

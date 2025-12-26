@@ -34,7 +34,7 @@
 
 *Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.*
 
-### 1. Profile-Guided Prefetch Distance Calculation (ELI5)
+### 1. Profile-Guided Prefetch Distance Calculation
 
 **痛点直击**
 
@@ -62,7 +62,7 @@
 - 通过这两个关键数据点，APT-GET就能算出需要隐藏的\*\*内存延迟 \*\*(MC_latency = 650 - 80 = 570 cycles)。再除以理想情况下每次迭代的时间 (IC_latency = 80 cycles)，就得到了最优的预取距离：**prefetch-distance ≈ MC_latency / IC_latency = 570 / 80 ≈ 7**。
 - 这个逻辑转换极其精妙：它绕开了无法预测的绝对执行时间，转而通过分析**执行时间的分布特征**，直接提取出了进行有效预取所必需的相对时间关系。
 
-### 2. Dynamic Prefetch Injection Site Selection (ELI5)
+### 2. Dynamic Prefetch Injection Site Selection
 
 **痛点直击 (The "Why")**
 
@@ -93,7 +93,7 @@
 
 *Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.*
 
-### 3. LLVM Compiler Pass for Profile-Guided Prefetching (ELI5)
+### 3. LLVM Compiler Pass for Profile-Guided Prefetching
 
 **痛点直击 (The "Why")**
 
@@ -138,7 +138,7 @@ ______________________________________________________________________
 
 *Figure 6. Execution time speedup provided by APT-GET over the non-prefetching baseline: APT-GET achieves 1.30× average speedup on average, compared to the 1.04× speedup provided by the state of the art (Ainsworth & Jones).*
 
-### 4. Automated Delinquent Load Profiling Methodology (ELI5)
+### 4. Automated Delinquent Load Profiling Methodology
 
 **痛点直击 (The "Why")**
 

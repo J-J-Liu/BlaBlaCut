@@ -35,7 +35,7 @@
 
 *Figure 13: Prophet learns counters from gcc’s inputs.*
 
-### 1. Profile-Guided Insertion Policy (ELI5)
+### 1. Profile-Guided Insertion Policy
 
 **痛点直击**
 
@@ -63,7 +63,7 @@
     - **硬件执行**：当程序运行时，硬件prefetcher在处理一个内存请求时，只需检查这个附带的1-bit hint。如果是“过滤”信号，就直接跳过，不去训练prefetcher也不插入metadata。
 - 这一招的精妙之处在于，它用一次性的、轻量级的**离线 profiling**（只用计数器，不用沉重的trace），换取了运行时对metadata table**极其精准的源头过滤**，从根本上解决了硬件因“目光短浅”而导致的误判问题。
 
-### 2. Profile-Guided Replacement Policy (ELI5)
+### 2. Profile-Guided Replacement Policy
 
 **痛点直击 (The "Why")**
 
@@ -91,7 +91,7 @@
 
 这个公式就是将准确率映射为优先级的核心逻辑。
 
-### 3. Multi-path Victim Buffer (ELI5)
+### 3. Multi-path Victim Buffer
 
 **痛点直击**
 
@@ -121,7 +121,7 @@
     - **协同预取**：在进行预取决策时，硬件会**同时查询主元数据表和这个 Victim Buffer**。如果在一个地址下找到多个有效目标，就可以**并发地预取它们**，从而覆盖复杂的多路径场景。
 - 这一招的核心逻辑转换在于：**将“单点预测”的压力，通过一个低成本、高选择性的辅助缓冲区，转化为了“多候选集”的灵活应对**，完美解决了单地址多目标的根本矛盾。
 
-### 4. Adaptive Learning across Inputs (ELI5)
+### 4. Adaptive Learning across Inputs
 
 **痛点直击 (The "Why")**
 
@@ -160,7 +160,7 @@
 
 这个流程的核心扭转在于：**将 PGO 从一个“一次性、静态”的过程，转变为一个“周期性、动态”的闭环系统**。它用极低的运行时开销，换取了模型对输入变化的强大适应能力，真正做到了“一个二进制，通吃所有输入”。
 
-### 5. Lightweight Counter-Based Profiling (ELI5)
+### 5. Lightweight Counter-Based Profiling
 
 **痛点直击 (The "Why")**
 

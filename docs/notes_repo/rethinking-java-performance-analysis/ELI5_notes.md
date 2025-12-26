@@ -38,7 +38,7 @@
 
 总而言之，这篇论文的巧妙之处在于，它没有去争论哪个垃圾回收器更好，而是先**质疑并重建了我们用来做判断的那把尺子**。它提供了一套完整的、现代化的、开源的“性能分析基础设施”，旨在将整个领域的经验主义研究拉回到一个更严谨、更贴近现实的轨道上来。
 
-### 1. DaCapo Chopin Benchmark Suite (ELI5)
+### 1. DaCapo Chopin Benchmark Suite
 
 **痛点直击**
 
@@ -71,7 +71,7 @@
 
 ![](images/34348e1e4e2f2e9e0ae0e6ba2905702f1ec9fb8dc14746272215b58fcaac00b2.jpg) *Figure 4. Principal components analysis of the 22 DaCapo workloads with respect to the 33 nominal statistics which had non-null results for all benchmarks.*
 
-### 2. Lower Bound Overhead (LBO) Methodology (ELI5)
+### 2. Lower Bound Overhead (LBO) Methodology
 
 **痛点直击 (The "Why")**
 
@@ -102,7 +102,7 @@ ______________________________________________________________________
 
 ![](images/fcac4d2752bcd5a947bf272dcf0b2f0110baff20bb3e822ed09c461fcea15e1f.jpg) *(b) Lower bound total CPU overheads (Linux TASK_CLOCK). Figure 1. Lower bounds on the overheads of five OpenJDK 21 production garbage collectors with their default settings, as a function of heap size, showing the geometric mean of overhead over all 22 DaCapo Chopin benchmarks. We only plot data points where the respective collector can run all 22 benchmarks to completion. In the best case, wall clock overheads are 9 % (G1 and Parallel) and total CPU overheads are 15 % (Serial). At smaller heaps, overheads exceed 2×.*
 
-### 3. User-Experienced Latency Metrics (ELI5)
+### 3. User-Experienced Latency Metrics
 
 **痛点直击**
 
@@ -131,7 +131,7 @@ ______________________________________________________________________
     - 一个事件的 **Metered Latency** 被定义为：`结束时间 - min(真实开始时间, 理想开始时间)`。
     - 这个 `min` 操作是精髓。它意味着，一旦系统因为GC等原因变慢，后续事件的真实开始时间就会晚于其理想开始时间。此时，延迟的计算就从“理想开始时间”算起，从而将前面事件的延迟“传导”给了后面的事件，模拟了真实队列中的级联效应。
 
-### 4. Nominal Statistics and Workload Characterization (ELI5)
+### 4. Nominal Statistics and Workload Characterization
 
 **痛点直击 (The "Why")**
 
@@ -159,7 +159,7 @@ ______________________________________________________________________
     - **从单一维度到多维画像**：通过 **47个维度**（如 **GTO** 内存周转率, **PCC** 编译器敏感性, **ULL** LLC失效率）的综合刻画，构建出每个 workload 独一无二的“指纹”。![](images/34348e1e4e2f2e9e0ae0e6ba2905702f1ec9fb8dc14746272215b58fcaac00b2.jpg) *Figure 4. Principal components analysis of the 22 DaCapo workloads with respect to the 33 nominal statistics which had non-null results for all benchmarks.* 这张PCA图就直观地证明了这些 workload 在多维空间里分布得很开，多样性极高。
     - **将方法论嵌入工具本身**：这些统计量不是论文附录里的死数据，而是直接集成在 DaCapo 套件里（通过 `-p` 参数即可查看）。这极大地降低了研究者进行科学、严谨实验的门槛，让他们能立刻根据 workload 的“性格”来设计合理的实验参数（比如根据 **GMD** 来设置堆大小倍数）。
 
-### 5. Principal Components Analysis (PCA) for Diversity Validation (ELI5)
+### 5. Principal Components Analysis (PCA) for Diversity Validation
 
 **痛点直击 (The "Why")**
 

@@ -24,7 +24,7 @@
 
 总而言之，这篇论文的核心贡献在于，它用一种**极简、低成本**的硬件扩展，将一个高频、高开销的软件瓶颈，转化为了一个与基础内存操作无缝融合的硬件原语，从而在不牺牲性能的前提下，显著提升了动态语言在资源受限的移动平台上的执行效率。
 
-### 1. Checked Load ISA Extension (ELI5)
+### 1. Checked Load ISA Extension
 
 **痛点直击**
 
@@ -60,7 +60,7 @@
 
 ![](images/74b90b4ccdaef4cf5fb242a21df649348fab08949408f26529337fc36252cc1f.jpg) *Table 1. The prediction rates for Checked Load with static prediction, dynamic prediction with a separate branch history table, and dynamic prediction with a joined branch history table.*
 
-### 2. Cache-Integrated Type Checking (ELI5)
+### 2. Cache-Integrated Type Checking
 
 **痛点直击**
 
@@ -87,7 +87,7 @@
     - 如上图所示，在 Cache 访问周期内，硬件可以同时完成“地址是否命中”和“类型是否正确”这两个判断。最终的指令成功与否，是这两个判断结果的组合。
 - 通过强制要求被检查的数据位于 **Cache Line 的起始位置**，硬件可以将比较器**硬连线**到固定的字节/字上，从而保证了新增逻辑的延迟**不会超过**原有的 Cache Tag 比较逻辑。这就确保了**处理器的关键路径长度完全没有增加**，既提升了性能，又没有牺牲时钟频率。
 
-### 3. Dynamic Type Prediction (ELI5)
+### 3. Dynamic Type Prediction
 
 **痛点直击**
 
@@ -120,7 +120,7 @@
 
 ![](images/74b90b4ccdaef4cf5fb242a21df649348fab08949408f26529337fc36252cc1f.jpg) *Table 1. The prediction rates for Checked Load with static prediction, dynamic prediction with a separate branch history table, and dynamic prediction with a joined branch history table.*
 
-### 4. Optimistic Code Generation for JIT (ELI5)
+### 4. Optimistic Code Generation for JIT
 
 **痛点直击**
 

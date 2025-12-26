@@ -2,6 +2,7 @@
     "title": "Recent Papers",
     "description": "最近收录的论文笔记，欢迎阅读~",
     "papers": [
+        "a-cpu-centric-perspective-on-agentic-ai",
         "apt-get-profile-guided-timely-software-prefetching",
         "atr-out-of-order-register-release-exploiting-atomic-regions",
         "berti-an-accurate-local-delta-data-prefetcher",

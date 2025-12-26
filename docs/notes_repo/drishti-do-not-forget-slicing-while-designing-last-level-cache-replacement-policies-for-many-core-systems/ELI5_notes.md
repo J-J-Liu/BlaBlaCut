@@ -38,7 +38,7 @@ Drishti并没有发明一种全新的替换算法，而是对现有顶级策略�
 
 最终效果非常显著：在32核系统上，Drishti将Mockingjay的性能提升从6.7%一举推高到**13.2%**，并且还节省了硬件存储开销。这证明了在设计缓存策略时，充分考虑底层硬件的物理布局（如切片）是多么重要。
 
-### 1. Per-Core Yet Global Reuse Predictor (ELI5)
+### 1. Per-Core Yet Global Reuse Predictor
 
 **痛点直击**
 
@@ -69,7 +69,7 @@ Drishti并没有发明一种全新的替换算法，而是对现有顶级策略�
 
 *Figure 9: Drishti's enhancement: Tracking reuse behavior and training the per-core and yet global reuse predictor with local (per-slice) sampled caches.*
 
-### 2. Local Per-Slice Sampled Cache (ELI5)
+### 2. Local Per-Slice Sampled Cache
 
 **痛点直击**
 
@@ -99,7 +99,7 @@ Drishti并没有发明一种全新的替换算法，而是对现有顶级策略�
 
 - 这种设计在 **性能** 和 **开销** 之间取得了精妙的平衡：既获得了全局预测的准确性，又避免了集中式方案的带宽瓶颈。论文数据显示，相比集中式预测器动辄 **65+ 次/kilo-instruction** 的访问，这种 per-core 全局预测器的平均访问量仅为 **2.46 次/kilo-instruction**，并且配合 NOCSTAR 互连将通信延迟从约20周期降至3周期，使得性能增益得以兑现。
 
-### 3. Dynamic Sampled Cache (ELI5)
+### 3. Dynamic Sampled Cache
 
 **痛点直击**
 
@@ -142,7 +142,7 @@ Drishti并没有发明一种全新的替换算法，而是对现有顶级策略�
 
 所示），还节省了存储空间。
 
-### 4. Dedicated Low-Latency Interconnect (NOCSTAR) (ELI5)
+### 4. Dedicated Low-Latency Interconnect (NOCSTAR)
 
 **痛点直击 (The "Why")**
 

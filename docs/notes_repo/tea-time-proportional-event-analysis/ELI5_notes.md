@@ -37,7 +37,7 @@
 
 正是这种高精度，让 TEA 能在 **lbm** 和 **nab** 这样的真实 benchmark 中发现传统工具无法定位的深层次性能问题，并指导开发者做出有效的优化，分别获得了 **1.28x** 和 **2.45x** 的显著加速。
 
-### 1. Time-Proportional Per-Instruction Cycle Stacks (PICS) (ELI5)
+### 1. Time-Proportional Per-Instruction Cycle Stacks (PICS)
 
 **痛点直击 (The "Why")**
 
@@ -64,7 +64,7 @@
 
 - 这个设计的精妙之处在于，它将“**时间归属**”和“**事件归因**”这两个问题，在 **commit 这个唯一能暴露真实延迟的时刻**，通过 **PSV** 这个载体**一次性、原子性地**解决了。这从根本上保证了分析结果的 **time-proportionality**。
 
-### 2. Performance Signature Vector (PSV) (ELI5)
+### 2. Performance Signature Vector (PSV)
 
 **痛点直击**
 
@@ -93,7 +93,7 @@
 | **Drained (DR)** | DR-L1, DR-TLB, DR-SQ       | ROB 为空，因前端取指或 Store Queue 满      |
 | **Flushed (FL)** | FL-MB, FL-EX, FL-MO        | 因分支误预测、异常或内存排序冲突导致 flush |
 
-### 3. Commit-State-Based Event Hierarchy (ELI5)
+### 3. Commit-State-Based Event Hierarchy
 
 **痛点直击**
 
@@ -127,7 +127,7 @@
 
 *Table 1: The performance events of TEA, IBS, SPE, and RIS.*
 
-### 4. Time-Proportional Sampling Logic (ELI5)
+### 4. Time-Proportional Sampling Logic
 
 **痛点直击 (The "Why")**
 

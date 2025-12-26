@@ -2,7 +2,18 @@
 
 最近收录的论文笔记，欢迎阅读~
 
-本页面共收录了 21 篇论文笔记。
+本页面共收录了 22 篇论文笔记。
+
+## A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI
+> **Authors:** Ritik Raj, Hong Wang, Tushar Krishna  
+> **Affiliations:** Georgia Institute of Technology, Atlanta, GA, USA, Intel, Santa Clara, CA, USA  
+> **Venue:** ArXiv 2025
+
+该论文从CPU中心视角分析Agentic AI系统瓶颈，首次系统性地揭示了工具处理可占总延迟高达90.6%，且CPU能耗在大批量时占比达44%。作者提出了CGAM和MAWS两种调度优化方案，在同构和异构工作负载上分别实现了最高2.1倍和1.41倍的P50延迟加速。
+
+[📄 论文笔记](../../notes_repo/a-cpu-centric-perspective-on-agentic-ai/paper_notes.md) | [📊 图表解析](../../notes_repo/a-cpu-centric-perspective-on-agentic-ai/figs_notes.md) | [👶 通俗解释](../../notes_repo/a-cpu-centric-perspective-on-agentic-ai/ELI5_notes.md)
+
+---
 
 ## APT-GET: Profile-Guided Timely Software Prefetching
 > **Authors:** Saba Jamilan, Tanvir Ahmed Khan, Grant Ayers, et al.  

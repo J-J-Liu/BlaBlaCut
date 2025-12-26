@@ -30,7 +30,7 @@
 
 这个精度的提升不是纸上谈兵。论文用 SPEC CPU2017 中的 **Imagick** 做案例研究：NCI 的报告让人摸不着头脑，而 TIP 则精准地指出了罪魁祸首是两条不必要的 **CSR (Control Status Register)** 操作指令，它们频繁触发 pipeline flush。开发者据此优化后，性能直接提升了 **1.93×**，充分证明了 TIP 在实战中的巨大价值。
 
-### 1. Oracle Profiler (ELI5)
+### 1. Oracle Profiler
 
 **痛点直击**
 
@@ -68,7 +68,7 @@
 
 *Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.*
 
-### 2. Time-Proportional Instruction Profiling (TIP) (ELI5)
+### 2. Time-Proportional Instruction Profiling (TIP)
 
 **痛点直击 (The "Why")**
 
@@ -121,7 +121,7 @@ ______________________________________________________________________
 | Dispatch (AMD IBS) |     53.1%      |    -     |         33.2x         |
 | Software           |     61.8%      |    -     |         38.6x         |
 
-### 3. Offending Instruction Register (OIR) (ELI5)
+### 3. Offending Instruction Register (OIR)
 
 **痛点直击**
 
@@ -155,7 +155,7 @@ ______________________________________________________________________
 
 *Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.*
 
-### 4. Instruction-Level Parallelism (ILP) Aware Attribution (ELI5)
+### 4. Instruction-Level Parallelism (ILP) Aware Attribution
 
 **痛点直击 (The "Why")**
 
@@ -184,7 +184,7 @@ ______________________________________________________________________
 
 这张图（Figure 4a）清晰地展示了这个关键区别。在 Cycle 1，两条指令 I1 和 I2 同时提交。Oracle（以及 TIP）会给每条指令记 **0.5 cycles**。而 NCI 和 LCI 只会把 **1 whole cycle** 归给其中一条，造成了明显的失真。正是这种对 **commit parallelism** 的精确处理，让 TIP 的指令级画像误差（**1.6%**）远低于 NCI（**9.3%**）。
 
-### 5. Four-State Commit Stage Model (ELI5)
+### 5. Four-State Commit Stage Model
 
 **痛点直击 (The "Why")**
 

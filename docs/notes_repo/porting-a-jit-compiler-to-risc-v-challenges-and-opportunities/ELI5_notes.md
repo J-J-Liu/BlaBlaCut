@@ -46,7 +46,7 @@ ______________________________________________________________________
 
 总而言之，这篇论文的精髓在于展示了一种**务实且高效的移植策略**：通过在编译器后端引入智能的指令融合、灵活的常量管理以及强大的仿真工具链，成功地将一个为复杂 ISA 设计的 JIT 编译器，“嫁接”到了一个设计哲学截然不同的精简 ISA 上，同时为未来的硬件/软件协同设计打开了大门。
 
-### 1. CogRTL IR to RISC-V Concretization with Conditional Code Handling (ELI5)
+### 1. CogRTL IR to RISC-V Concretization with Conditional Code Handling
 
 **痛点直击 (The "Why")**
 
@@ -72,7 +72,7 @@ ______________________________________________________________________
 
 ![](images/2ebc0cac7ecfd21c8d87ef4b86d873d71b66937dfdec5776e7fe04bbe97d43a6.jpg)
 
-### 2. Out-of-Line Literals Management (ELI5)
+### 2. Out-of-Line Literals Management
 
 **痛点直击 (The "Why")**
 
@@ -99,7 +99,7 @@ ______________________________________________________________________
         - 第二条是 `ld`（或 `lw`），从该基地址加上一个偏移量处 **加载** 出完整的字面量。
 - 这个设计将一个 **可变长度、逻辑复杂** 的问题，转换成了一个 **固定长度、逻辑简单** 的问题。无论是生成代码还是后续的 **code patching**，都变得极其可靠和高效。
 
-### 3. ISA-Agnostic Test Harness and VM Simulation Framework (ELI5)
+### 3. ISA-Agnostic Test Harness and VM Simulation Framework
 
 **痛点直击 (The "Why")**
 
@@ -125,7 +125,7 @@ ______________________________________________________________________
 
 - 这个框架的威力在于，它把对 **真实硬件** 的依赖，转化成了对 **模拟器正确性** 的依赖。而 Unicorn 作为一个成熟的、支持多架构的模拟器，其可靠性远高于自己从头搭建的硬件测试平台。这使得团队在没有 RISC-V 硬件的情况下，就完成了整个 JIT 后端的开发和验证，极大地加速了移植过程。
 
-### 4. Custom Instruction Prototyping via Simulator Hooks (ELI5)
+### 4. Custom Instruction Prototyping via Simulator Hooks
 
 **痛点直击 (The "Why")**
 

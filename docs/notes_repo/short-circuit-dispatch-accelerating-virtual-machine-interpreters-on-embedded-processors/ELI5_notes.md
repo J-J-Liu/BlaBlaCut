@@ -34,7 +34,7 @@
 
 ![](images/a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg) *Figure 5: Pipeline structure augmented with SCD*
 
-### 1. Short-Circuit Dispatch (SCD) 架构扩展 (ELI5)
+### 1. Short-Circuit Dispatch (SCD) 架构扩展
 
 **痛点直击 (The "Why")**
 
@@ -66,7 +66,7 @@
 
 - 这个设计的精妙之处在于 **极低的硬件开销**。它只是在现有 BTB 的 entry 里加了一个 **J/B̄ bit** 来区分存的是普通分支信息还是跳转表项（JTE），并增加了一些简单的控制逻辑。论文数据显示，芯片面积仅增加 **0.72%**，却能带来 **19.9%** 的平均性能提升和 **24.2%** 的 **EDP**（能耗延迟积）改善，性价比极高。
 
-### 2. 基于操作码的BTB查找机制 (ELI5)
+### 2. 基于操作码的BTB查找机制
 
 **痛点直击**
 
@@ -95,7 +95,7 @@
 
 ![](images/a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg) *Figure 5: Pipeline structure augmented with SCD*
 
-### 3. 新的ISA指令与寄存器 (ELI5)
+### 3. 新的ISA指令与寄存器
 
 **痛点直击**
 
@@ -126,7 +126,7 @@
 ![](images/0dee5f735f83da9327d3a84413cecf33bcd7ce7b27aa682d26e25f200b4e5048.jpg) *Figure 4: Transformed dispatch loop (original code taken from Figure 1(b))*
 这张图清晰地展示了改造前后的对比。灰色部分就是被SCD**短路**掉的冗余指令。通过`ldl.op`自动填充Rop，`bop`直接查表跳转，整个dispatch loop的开销被压缩到了极致。
 
-### 4. 跳转表条目（JTE）与BTB条目的共存管理 (ELI5)
+### 4. 跳转表条目（JTE）与BTB条目的共存管理
 
 **痛点直击 (The "Why")**
 
@@ -153,7 +153,7 @@
 - ![](images/a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg) *Figure 5: Pipeline structure augmented with SCD*
 - 这个设计的精妙之处在于，它用**极小的硬件改动**（一个标志位、一点控制逻辑），就将 BTB 从一个单纯的“分支预测器”变成了一个通用的“**小型硬件缓存**”，专门用来**短路**（short-circuit）掉解释器中最耗时的冗余计算路径。
 
-### 5. 流水线停顿逻辑 (ELI5)
+### 5. 流水线停顿逻辑
 
 **痛点直击 (The "Why")**
 

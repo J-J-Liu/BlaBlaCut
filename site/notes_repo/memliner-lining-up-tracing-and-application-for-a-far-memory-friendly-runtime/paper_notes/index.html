@@ -1,0 +1,1026 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-gc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 基于读写屏障的应用-GC协调机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-epoch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 基于Epoch的时间戳指针编码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 优先级驱动的混合追踪算法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-max_dl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 自适应延迟限制(MAX_DL)调优
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime">MemLiner: Lining up Tracing and Application for a Far-Memory-Friendly Runtime 论文解析<a class="headerlink" href="#memliner-lining-up-tracing-and-application-for-a-far-memory-friendly-runtime" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Chenxi Wang, Haoran Ma, Shi Liu, et al.</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: OSDI</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2022</p>
+<p><strong>研究机构 (Affiliations)</strong>: University of California, Los Angeles, University of Chicago</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决在 <strong>far-memory</strong>（远内存）系统中，<strong>垃圾回收</strong>（GC）线程与应用程序线程因<strong>内存访问模式不一致</strong>而导致的严重性能问题。</li>
+<li>具体问题包括：(1) 两者工作集分离，导致<strong>本地内存资源竞争</strong>和频繁的<strong>page fault</strong>；(2) 混合的随机访问模式使<strong>远程内存预取</strong>（prefetching）失效。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>MemLiner</strong>，一种运行时技术，其核心思想是 <strong>“working set alignment”</strong>（工作集对齐），即让 GC 线程的内存访问路径与应用程序线程对齐。</li>
+<li>实现了两大关键技术：<ul>
+<li><strong>应用与 GC 协调</strong>：利用 JVM 的 <strong>read/write barrier</strong>，让应用线程将其访问的对象指针推送到一个<strong>生产者-消费者队列</strong>（PQ）中，GC 线程优先处理这些对象，实现即时追踪。</li>
+<li><strong>基于优先级的追踪算法</strong>：当 PQ 为空时，GC 执行常规图遍历，但会根据对象的<strong>位置估计</strong>来决定是否延迟处理。<ul>
+<li><strong>对象位置估计</strong>：通过修改 64 位对象指针格式，预留 4 位作为 **timestamp **(ts)，记录该指针上次被解引用时的 <strong>epoch ID</strong>。通过比较 ts 与当前 epoch ID 来判断对象是否可能仍在本地内存中。</li>
+<li><strong>自适应延迟</strong>：引入 <strong>MAX_DL</strong> 参数，根据堆内存可用率（红/黄/绿区）动态调整对远程对象的追踪延迟，以平衡内存回收的紧迫性与性能干扰。
+    <img alt="" src="../images/4e4aed0788310a52867da893250402bec646cd5652c4cc83f043745200e66c93.jpg" /> <em>Figure 1: Our main idea: the working sets of GC threads, in blue, and application threads, in red, during a time window (a) without or (b) with the access alignment from MemLiner.</em>
+    <img alt="" src="../images/d2882792f33c8dfaa8acedefd832e654df60873e6853b12647417b91697b7598.jpg" /> <em>Figure 4: Classification of reachable objects in the heap: red objects are being accessed by the application and shaded objects are what MemLiner intends to trace.</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li>在 <strong>OpenJDK 12</strong> 的 <strong>G1</strong> 和 <strong>Shenandoah</strong> 两种 GC 上实现了 MemLiner，并使用 Spark、Cassandra、Neo4j 等云应用进行评估。</li>
+<li><strong>端到端性能提升</strong>：
+    | GC 类型        | 本地内存 25% | 本地内存 13% |
+    | :------------- | :----------: | :----------: |
+    | <strong>G1</strong>         |  <strong>1.48×</strong>   |  <strong>1.51×</strong>   |
+    | <strong>Shenandoah</strong> |  <strong>2.16×</strong>   |  <strong>1.80×</strong>   |</li>
+<li><strong>Swap 行为优化</strong>：平均减少了 <strong>81%</strong> 的按需 swap-in 和 <strong>56%</strong> 的总 swap-in。</li>
+<li><strong>预取效果提升</strong>：与 Leap 预取器结合使用时，预取<strong>覆盖率</strong>和<strong>准确率</strong>分别提升了 <strong>1.5×</strong> 和 <strong>1.7×</strong>。</li>
+<li><strong>对比现有方案</strong>：性能与将 GC 完全卸载到远程服务器的 <strong>Semeru</strong> 相当，但无需侵入式修改或额外的远程计算开销。
+    <img alt="" src="../images/55073cf894edb9bce9285b239bb38cddbbf6a84e8424ce301b2f2bd085adb569.jpg" /> <em>Figure 6: Performance comparisons between G1 GC (yellow bars) and MemLiner (green bars) under two local memory ratios: 25% and 13%; each bar is split into application (bottom with light colors) and GC (top with dark colors) time in seconds. The two dashed lines show application time and total time with unmodified JVM and 100% local memory (no swaps).</em>
+    <img alt="" src="../images/d0137e718e875c4a0ad853b181e1e372f4948cd23b35ee9f290f4cf5fd520a38.jpg" /> <em>Figure 8: Performance comparison with Shenandoah GC [25].</em>
+    <img alt="" src="../images/ba3ad26b004d3b6ca7c5501683c7eacc22f2173b1a3ad86f3046a3672c914616.jpg" /> <em>Figure 9: Performance comparisons with Leap and Semeru; Semeru crashed on NPR, NTR, and NDC (i.e., Neo4j applications).</em></li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li><strong>MemLiner</strong> 通过巧妙地对齐应用与 GC 的内存访问，有效缓解了 far-memory 系统中的线程级干扰问题。</li>
+<li>该方案是一种<strong>非侵入式</strong>、<strong>易于采用</strong>的通用技术，可与现有的 swap 优化（如 InfiniSwap）和预取器（如 Leap）无缝集成，为数据中心中广泛使用的托管语言应用提供了显著的性能提升。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li>现代数据中心面临严重的 <strong>内存约束</strong>，而 <strong>far-memory（远内存）</strong> 技术通过利用远程服务器的内存来扩展本地内存容量，成为一种极具吸引力的解决方案。</li>
+<li>主流的 far-memory 系统通常基于 <strong>cache-and-swap（缓存与交换）</strong> 机制，并严重依赖 <strong>良好的内存局部性</strong> 和 <strong>有效的远程内存预取</strong> 来维持性能。</li>
+<li>数据中心的主流工作负载大量使用 <strong>高阶语言（HLLs）</strong>（如 Java），其运行时依赖 <strong>垃圾回收（Garbage Collection, GC）</strong> 进行自动内存管理。现代 GC（如 G1、Shenandoah）普遍采用 <strong>并发追踪（concurrent tracing）</strong> 以减少停顿时间。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li><strong>GC 与应用程序的内存访问模式存在严重干扰</strong>：应用程序线程根据其执行逻辑访问对象，而 GC 线程则对堆进行图遍历以标记存活对象。这两种访问模式是 <strong>不协调且互不相关的</strong>，导致它们的 <strong>工作集（working set）</strong> 分离。</li>
+<li>这种分离引发了两大核心问题：<ul>
+<li><strong>资源竞争（Resource Competition）</strong>：应用程序和 GC 相互驱逐对方所需的内存页，导致 <strong>严重的本地内存缺失（local-memory misses）</strong>，并加剧了对 RDMA 带宽的竞争。</li>
+<li><strong>预取失效（Ineffective Prefetching）</strong>：从 OS 的角度看，混合了应用和 GC 访问的内存轨迹显得 <strong>高度随机</strong>，使得 OS 级别的预取器（如 Leap）无法识别清晰的访问模式，从而放弃或错误地进行预取。</li>
+</ul>
+</li>
+<li>简单地 <strong>禁用并发追踪</strong> 并非可行方案，因为这会显著增加 <strong>stop-the-world GC 暂停时间</strong>，反而恶化端到端性能（如图3所示）。
+    <img alt="" src="../images/a2d640b5828540a82920b345ba7d3d84eaf68ec94e857fe263d6dd5d266df4bc.jpg" /> <em>(a) End-to-end execution time. (b) GC pause time. Figure 3: Concurrent tracing improves overall performance. (Data is from 10 runs of each program; dots are outliers.)</em></li>
+<li>现有工作要么针对 <strong>原生语言（native languages）</strong>（如 AIFM），要么采用 <strong>侵入式架构</strong> 将 GC 完全卸载到远程服务器（如 Semeru），这些方案难以在现有数据中心中广泛部署。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出了 <strong>MemLiner</strong>，一种 <strong>非侵入式、易于采用</strong> 的运行时技术，旨在通过 <strong>“对齐”（lining up）</strong> 应用程序线程和 GC 线程的内存访问路径来解决上述问题。</li>
+<li><strong>核心思想是工作集对齐（working set alignment）</strong>：MemLiner 利用两个关键观察：<ul>
+<li>应用和 GC 访问的对象并非完全无关，只是 <strong>时间上未对齐</strong>。</li>
+<li>可以安全地 <strong>重排 GC 的对象追踪顺序</strong> 而不影响正确性。</li>
+</ul>
+</li>
+<li><strong>具体实现机制</strong>：<ul>
+<li><strong>应用与 GC 协调</strong>：通过 <strong>读写屏障（read/write barrier）</strong>，应用线程将其访问的对象指针发送给 GC，使 GC 能立即追踪这些对象。</li>
+<li><strong>智能追踪算法</strong>：MemLiner 将存活对象分为三类（本地内存中的、即将被使用的、暂不使用的），并设计了一套 <strong>基于优先级的追踪算法</strong>。该算法优先追踪前两类对象，并巧妙地 <strong>推迟</strong> 对第三类（很可能在远程）对象的追踪，以避免不必要的页面错误和交换。</li>
+<li><strong>自适应机制</strong>：引入 <strong>epoch-based 时间戳</strong> 来高效估计对象是否在本地内存中，并根据 <strong>堆内存可用率</strong> 动态调整追踪延迟策略，以平衡性能和 GC 进度。</li>
+</ul>
+</li>
+<li><strong>成果与影响</strong>：<ul>
+<li>在 OpenJDK 的 <strong>G1</strong> 和 <strong>Shenandoah</strong> GC 中实现了 MemLiner。</li>
+<li>在多种真实云应用（Spark, Cassandra, Neo4j 等）上的评估表明，MemLiner 能将 <strong>端到端性能最高提升 2.5×</strong>。</li>
+<li>显著提升了底层预取器（如 Leap）的 <strong>覆盖率（coverage）</strong> 和 <strong>准确率（accuracy）</strong>，分别提高了 <strong>1.5×</strong> 和 <strong>1.7×</strong>。</li>
+<li>与 Semeru 等方案相比，MemLiner <strong>无需修改应用、无需远程计算开销</strong>，即可获得可比的性能，具有极强的实用性和兼容性。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>MemLiner 的核心目标是解决在 <strong>far-memory</strong>（远内存）系统中，<strong>垃圾回收</strong>（GC）线程与<strong>应用</strong>（Application）线程因内存访问模式不一致而导致的性能问题。其架构设计是一种非侵入式的运行时技术，通过“对齐”两者的内存访问路径来优化性能。</p>
+<ul>
+<li><strong>设计哲学</strong>：MemLiner 采取了一种 <strong>easy-to-adopt, non-intrusive</strong> 的方法。它不重新设计操作系统、预取器或 GC 算法，也不将 GC 卸载到远程服务器，而是通过修改运行时（Runtime）内部的协调机制来实现优化。</li>
+<li><strong>核心洞察</strong>：<ul>
+<li>应用线程和 GC 线程访问的对象并非完全无关，只是在时间上未对齐。</li>
+<li>应用线程的访问顺序受程序语义约束，不可更改；但 GC 线程的遍历顺序（如标记对象的先后）可以调整，而不影响正确性。</li>
+</ul>
+</li>
+<li><strong>主要组件</strong>：<ul>
+<li><strong>应用-GC 协调机制</strong>：利用 JVM 已有的 <strong>read/write barrier</strong>（读写屏障），在应用线程每次访问堆对象时，将其访问的对象指针推送到一个<strong>线程本地的生产者-消费者队列</strong>（PQ）中。</li>
+<li><strong>优先级驱动的追踪算法</strong>：GC 线程会优先处理 PQ 中的对象（即应用刚访问过的对象），并向前探索少量引用（默认3跳），以覆盖应用即将访问的对象。</li>
+<li><strong>基于时代的对象位置估算</strong>：为避免昂贵的系统调用来查询对象是否在本地内存，MemLiner 在 <strong>64-bit 对象指针</strong>中预留了 <strong>4 bits</strong> 作为 <strong>timestamp</strong>（时代戳）。每当对象被访问或分配时，其指针的时代戳会被更新为当前时代ID。GC 通过比较指针时代戳与当前时代ID来估算对象是否仍在本地缓存中。</li>
+<li><strong>自适应延迟策略</strong>：对于估算为远程的对象，GC 不会立即追踪，而是将其推迟处理。推迟的最大次数 <strong>MAX_DL</strong> 会根据堆内存的可用率动态调整（<strong>red zone</strong> \&lt;15%: MAX_DL=0; <strong>yellow zone</strong> 15%-50%: MAX_DL=2; <strong>green zone</strong> &gt;50%: MAX_DL=4），以平衡内存回收的紧迫性和减少干扰。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/4e4aed0788310a52867da893250402bec646cd5652c4cc83f043745200e66c93.jpg" /> <em>Figure 1: Our main idea: the working sets of GC threads, in blue, and application threads, in red, during a time window (a) without or (b) with the access alignment from MemLiner.</em></p>
+<ul>
+<li><strong>集成与兼容性</strong>：<ul>
+<li>MemLiner 被集成到 <strong>OpenJDK 12</strong> 的两种主流 GC 中：<strong>G1</strong> 和 <strong>Shenandoah</strong>。</li>
+<li>它构建在标准的 OS <strong>paging/swap</strong> 机制之上，因此可以与现有的远内存交换优化（如 <strong>InfiniSwap</strong>, <strong>FastSwap</strong>）无缝协作。</li>
+<li>对应用完全透明，无需任何代码修改。</li>
+</ul>
+</li>
+</ul>
+<p><strong>关键技术流程</strong></p>
+<ul>
+<li><strong>应用线程执行</strong>：<ul>
+<li>在 read/write barrier 中，检查对象指针的时代戳。</li>
+<li>如果对象尚未被标记为存活，则将其指针（附带当前时代戳）推入线程本地的 PQ。</li>
+</ul>
+</li>
+<li><strong>GC 线程执行</strong>：<ul>
+<li><strong>模式一</strong>（高优先级） 当 PQ 非空时，从中取出对象，立即进行标记，并递归地向前探索最多 <strong>MAX_Depth</strong>（默认为3）层的引用进行标记。</li>
+<li><strong>模式二</strong>（常规遍历） 当 PQ 为空时，从常规的追踪队列 <strong>TQ</strong> 中取出对象。通过比较对象指针的时代戳与当前时代ID来判断其位置：<ul>
+<li>如果时代戳相近（<code>DIFF ≤ δ</code>），认为对象在本地，立即标记。</li>
+<li>否则，认为对象在远端，将其重新放回 TQ 并增加其延迟计数器 <code>dl</code>。</li>
+<li>如果 <code>dl</code> 达到 <strong>MAX_DL</strong>，则强制标记该对象，确保 GC 能够最终完成。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/d2882792f33c8dfaa8acedefd832e654df60873e6853b12647417b91697b7598.jpg" /> <em>Figure 4: Classification of reachable objects in the heap: red objects are being accessed by the application and shaded objects are what MemLiner intends to trace.</em>
+<img alt="" src="../images/883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg" />
+<img alt="" src="../images/6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6.jpg" /></p>
+<h3 id="1-gc">1. 基于读写屏障的应用-GC协调机制<a class="headerlink" href="#1-gc" title="Permanent link">&para;</a></h3>
+<p><strong>实现原理与核心机制</strong></p>
+<ul>
+<li>MemLiner 的协调机制完全建立在 JVM <strong>读写屏障 (read/write barrier)</strong> 之上，这是一种在每次堆内存读写操作时都会执行的运行时代码片段。</li>
+<li>其核心思想是将应用线程的<strong>实时访问行为</strong>作为信号，动态地引导 GC 线程的追踪路径，从而实现工作集对齐。</li>
+<li>具体流程为：当应用线程执行 <code>a = b.f</code> (读) 或 <code>b.f = a</code> (写) 时，屏障代码会捕获被解引用的对象 <code>b</code> 的指针，并将其推送到一个<strong>线程本地的生产者-消费者队列 (PQ)</strong> 中。</li>
+<li>这个 PQ 是一个<strong>无锁的环形缓冲区 (non-blocking ring buffer)</strong>，由应用线程（生产者）单向写入，无需任何同步开销。</li>
+<li>GC 的并发追踪线程（消费者）会持续轮询所有应用线程的 PQ。一旦发现非空，便立即从中取出对象指针进行追踪和标记。</li>
+</ul>
+<p><img alt="" src="../images/4e4aed0788310a52867da893250402bec646cd5652c4cc83f043745200e66c93.jpg" /> <em>Figure 1: Our main idea: the working sets of GC threads, in blue, and application threads, in red, during a time window (a) without or (b) with the access alignment from MemLiner.</em></p>
+<p><strong>算法流程与关键设计</strong></p>
+<ul>
+<li><strong>生产者端 (应用线程)</strong>:<ul>
+<li>在读写屏障中，首先检查目标对象在<strong>全局存活位图 (global live bitmap)</strong> 中是否已被标记为存活。</li>
+<li>如果未被标记，则将其指针推入线程本地的 PQ。</li>
+<li>由于 PQ 是固定大小的环形缓冲区，当队列满时，新条目会覆盖旧条目。这被视为一种可接受的优化，因为被覆盖的对象最终仍会在 GC 的常规图遍历中被处理，只是优先级降低。</li>
+</ul>
+</li>
+<li><strong>消费者端 (GC线程)</strong>:<ul>
+<li>GC 线程采用<strong>抢占式调度</strong>策略。在其主遍历循环（处理标准追踪队列 TQ）中，会不断检查 PQ 是否有新任务。</li>
+<li>一旦 PQ 非空，GC 线程会<strong>中断</strong>当前的常规遍历，转而处理 PQ 中的对象（即论文中的“红色对象”）。</li>
+<li>处理 PQ 对象时，不仅会标记该对象本身，还会通过一个名为 <code>EXPLORE</code> 的递归函数，向前追踪最多 <strong>MAX_Depth (默认值为3)</strong> 跳的引用，以覆盖应用即将访问的邻近对象（即论文中的“波浪线对象”），实现预取成本的“预支付”。</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与优化</strong></p>
+<ul>
+<li><strong>MAX_Depth</strong>: 设定为 <strong>3</strong>，这是一个经验值，足以覆盖同一逻辑数据结构内的大部分对象，同时避免因追踪过深而引入不必要的远程页面交换。</li>
+<li><strong>PQ 大小</strong>: 实验中设置为 <strong>1024</strong> 个条目。结合 G1 GC 推荐的并行 GC 线程数（核心数的 5/8）和并发追踪线程数（并行线程数的 1/4），此大小能有效避免在典型工作负载下发生频繁覆盖。</li>
+<li><strong>过滤优化 (针对G1 GC)</strong>: 为了最小化屏障开销，MemLiner 对 G1 GC 应用了三项关键优化：<ul>
+<li>仅在<strong>并发追踪阶段</strong>启用 PQ 入队操作。</li>
+<li>利用 G1 的<strong>分代特性</strong>，过滤掉所有<strong>年轻代 (young generation)</strong> 的对象引用，因为并发追踪只关注老年代。</li>
+<li>在更新指针时间戳前，先检查其时间戳是否已等于当前<strong>epoch ID</strong>，若是则跳过更新，减少冗余操作。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及整体作用</strong></p>
+<ul>
+<li><strong>输入</strong>: 应用线程在执行过程中对堆对象的<strong>实时读写操作</strong>。</li>
+<li><strong>输出</strong>: 一个动态的、高优先级的待追踪对象列表（通过 PQ 传递给 GC 线程）。</li>
+<li><strong>在整体中的作用</strong>:<ul>
+<li>这是 MemLiner <strong>工作集对齐 (working set alignment)</strong> 策略的第一步，也是最关键的一步。</li>
+<li>它直接解决了 <strong>Problem 1 (资源竞争)</strong> 和 <strong>Problem 2 (无效预取)</strong> 的根源。通过让 GC 紧随应用的访问足迹，两者的工作集高度重叠，极大减少了相互驱逐对方页面的情况。</li>
+<li>同时，它将原本由应用和 GC 产生的<strong>混合随机访问模式</strong>，简化为以应用访问模式为主导的<strong>更清晰、更具可预测性的模式</strong>，使得底层的 OS 预取器（如 Leap）能够有效工作。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-epoch">2. 基于Epoch的时间戳指针编码<a class="headerlink" href="#2-epoch" title="Permanent link">&para;</a></h3>
+<p><strong>核心机制：基于Epoch的时间戳指针编码</strong></p>
+<ul>
+<li><strong>设计目标</strong>：为了解决在远内存环境下，GC线程因盲目遍历堆图而频繁触发远程页面交换的问题，MemLiner需要一种<strong>轻量级、低开销</strong>的方法来<strong>估计一个对象是否很可能驻留在本地内存</strong>中。</li>
+<li><strong>核心洞察</strong>：一个对象如果最近被应用程序访问过，那么它极有可能还在本地内存缓存中。因此，记录对象的“最后访问时间”是关键。但传统的系统调用查询页表开销巨大，不可行。</li>
+<li><strong>创新方案</strong>：MemLiner将“最后访问时间”的概念与一个由内核维护的、反映本地缓存稳定性的逻辑时钟——<strong>Epoch</strong>——相结合，并将该信息直接<strong>编码到64位对象指针本身</strong>。</li>
+</ul>
+<p><strong>指针格式修改与Epoch定义</strong></p>
+<ul>
+<li>MemLiner利用了64位JVM指针中未被完全使用的地址空间。如图所示，它<strong>预留了高4位作为时间戳（ts）</strong>，用于存储Epoch ID。
+    <img alt="" src="../images/55073cf894edb9bce9285b239bb38cddbbf6a84e8424ce301b2f2bd085adb569.jpg" /> <em>Figure 6: Performance comparisons between G1 GC (yellow bars) and MemLiner (green bars) under two local memory ratios: 25% and 13%; each bar is split into application (bottom with light colors) and GC (top with dark colors) time in seconds. The two dashed lines show application time and total time with unmodified JVM and 100% local memory (no swaps).</em></li>
+<li><strong>Epoch的定义</strong>：一个Epoch代表一段执行周期，在此期间，属于JVM进程的本地内存页集合相对稳定（即换入/换出的页面数量变化小于一个阈值N%）。</li>
+<li><strong>Epoch的更新</strong>：内核的交换子系统负责监控JVM进程的页面缓存。当缓存中的页面集合发生显著变化时，内核会递增一个全局的<strong>Epoch计数器</strong>。这使得Epoch ID成为一个反映缓存“新鲜度”的动态指标。</li>
+</ul>
+<p><strong>算法流程与实现细节</strong></p>
+<ul>
+<li><strong>指针初始化</strong>：当通过<code>new</code>操作分配一个新对象时，其指针的ts字段会被立即设置为<strong>当前的Epoch ID</strong>。
+    <img alt="" src="../images/426696c61c1354691fc5163407e5b59b3176ad8cde2a388faf30e4df8f00c3b1.jpg" /></li>
+<li><strong>指针更新（关键步骤）</strong>：每当应用程序线程通过读/写屏障（read/write barrier）解引用一个对象指针（例如 <code>a = b.f</code>）时，MemLiner会执行以下操作：<ul>
+<li>将被解引用的对象<code>b</code>的指针ts字段<strong>更新为当前的Epoch ID</strong>。因为这次解引用操作保证了对象<code>b</code>此刻就在本地内存中。</li>
+<li>如果<code>b.f</code>本身也是一个对象引用，MemLiner还会将<code>a</code>的指针（带有最新的Epoch ID）写入<code>b.f</code>，这是一种<strong>前瞻性的预取提示</strong>，暗示<code>a</code>可能很快也会被访问。</li>
+</ul>
+</li>
+<li><strong>循环利用</strong>：由于ts字段只有4位，Epoch ID的范围是0-15。当计数器达到15后，下一次更新会回绕到0，形成一个循环。</li>
+</ul>
+<p><strong>在GC追踪算法中的应用</strong></p>
+<ul>
+<li>在MemLiner的主追踪逻辑（Algorithm 3）中，当GC线程从常规追踪队列（TQ）中取出一个待处理的对象<code>o</code>时，它会执行以下判断：<ul>
+<li>比较<code>o</code>的指针ts字段（<code>TS(o)</code>）与<strong>当前的全局Epoch ID</strong>。</li>
+<li>如果两者之差（<code>DIFF(TS(o), CURRENT_EPOCH())</code>）小于或等于一个预设的阈值<code>δ</code>（通常<code>δ</code>很小，例如1或2），则GC认为对象<code>o</code><strong>很可能仍在本地内存</strong>中，会立即对其进行标记和扫描。</li>
+<li>如果差值大于<code>δ</code>，则GC认为对象<code>o</code><strong>很可能已被换出到远端</strong>，此时会将该对象重新放回队列并增加其<strong>延迟计数（delay limit, dl）</strong>，推迟其处理，以避免触发昂贵的远程交换。</li>
+</ul>
+</li>
+<li><strong>自适应调整</strong>：为了防止因过度推迟而导致GC无法及时完成，MemLiner引入了<strong>MAX_DL</strong>参数。该参数根据堆内存的可用率<strong>动态调整</strong>：<ul>
+<li><strong>红色区域</strong>（\&lt;15%可用）：<code>MAX_DL = 0</code>，强制GC立即处理所有对象，优先保证内存回收。</li>
+<li><strong>黄色区域</strong>（15%-50%可用）：<code>MAX_DL = 2</code>。</li>
+<li><strong>绿色区域</strong>（&gt;50%可用）：<code>MAX_DL = 4</code>，允许更长的推迟时间以最小化干扰。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及整体作用</strong></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>应用程序的内存访问行为（通过读/写屏障触发）。</li>
+<li>内核维护的、反映本地缓存变化的全局Epoch计数器。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：<ul>
+<li>一个被修改的、携带了“最后访问Epoch”信息的64位对象指针。</li>
+<li>一个供GC决策使用的、关于对象本地性（locality）的概率性估计。</li>
+</ul>
+</li>
+<li><strong>在整体中的作用</strong>：<ul>
+<li><strong>降低开销</strong>：避免了为每个对象查询页表的系统调用，将元数据与指针本身绑定，访问成本几乎为零。</li>
+<li><strong>指导GC</strong>：为MemLiner的优先级追踪算法提供了关键依据，使其能够智能地<strong>优先处理本地对象</strong>（Category 1）和<strong>推迟处理远端对象</strong>（Category 3），从而<strong>大幅减少不必要的远程页面交换</strong>。</li>
+<li><strong>实现工作集对齐</strong>：通过让GC的访问模式向应用程序近期的访问模式倾斜，有效<strong>缩小了应用与GC的联合工作集</strong>，提升了缓存命中率和远内存预取效率。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3_1">3. 优先级驱动的混合追踪算法<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<p><strong>MemLiner优先级驱动的混合追踪算法实现原理</strong></p>
+<ul>
+<li>MemLiner的核心在于其GC线程采用了一种<strong>混合追踪模式</strong>，该模式动态地在<strong>高优先级应用对齐追踪</strong>和<strong>低干扰常规图遍历</strong>之间切换，以最小化与应用线程的资源竞争。</li>
+<li>该算法依赖两个关键数据结构：<ul>
+<li><strong>PQ (Producer-Consumer Queue)</strong>: 一个由应用线程填充、GC线程消费的<strong>无锁环形缓冲队列</strong>。应用线程通过<strong>read/write barrier</strong>将刚访问的对象指针推入其本地PQ。</li>
+<li><strong>TQ (Tracing Queue)</strong>: GC进行常规对象图遍历的标准工作队列，其中每个元素是一个二元组 <code>&lt;object_reference, delay_limit&gt;</code>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>算法流程与模式切换</strong></p>
+<ul>
+<li>GC线程的主循环（如Algorithm 3所示）持续监控PQ的状态，并据此在两种模式间切换：<ul>
+<li><strong>模式一：高优先级对齐追踪 (PQ非空时)</strong><ul>
+<li>当检测到PQ中有待处理对象时，GC线程立即中断TQ中的常规遍历。</li>
+<li>调用<code>EXPLORE</code>函数（如Algorithm 4所示）处理从PQ中取出的对象（即<strong>红色对象</strong>）。</li>
+<li><code>EXPLORE</code>函数不仅会立即标记该红色对象为存活，还会<strong>递归地向前探索最多MAX_Depth（默认为3）跳的引用</strong>，以追踪那些<strong>即将被应用访问的对象（波浪线对象）</strong>。</li>
+<li>这些前向探索的对象被标记后，可以<strong>预付费 (prepay)</strong> 远程内存的访问开销，从而避免应用线程后续触发昂贵的page fault。</li>
+<li>一旦PQ被清空或<code>EXPLORE</code>达到深度限制，GC线程便切回模式二。</li>
+</ul>
+</li>
+<li><strong>模式二：延迟式常规图遍历 (PQ为空时)</strong><ul>
+<li>GC线程从TQ中取出一个待处理对象<code>o</code>及其<code>delay_limit (dl)</code>。</li>
+<li>利用对象指针中的<strong>4位时间戳 (ts)</strong> 与当前<strong>全局epoch ID</strong>进行比较。</li>
+<li>如果<code>DIFF(TS(o), CURRENT_EPOCH()) ≤ δ</code>（δ为一个小常数），则认为对象<code>o</code><strong>极有可能仍在本地内存缓存中</strong>，于是立即对其进行标记并将其子引用加入TQ。</li>
+<li>否则，认为对象<code>o</code><strong>位于远程内存且近期不会被应用访问（清晰圆圈对象）</strong>，为避免不必要的page fault和带宽竞争，MemLiner选择将其<strong>推迟处理</strong>：将<code>&lt;o, dl+1&gt;</code>重新放回TQ尾部。</li>
+<li>为防止无限期推迟导致GC无法完成，引入了<strong>最大延迟次数MAX_DL</strong>。当<code>dl</code>达到<code>MAX_DL</code>时，无论对象是否在本地，都强制进行标记。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg" />
+<img alt="" src="../images/6c416f1831aefe21ec273b581a3d21fa538f812f21655f0ec0315898d7c712d6.jpg" /></p>
+<p><strong>关键参数设置与自适应机制</strong></p>
+<ul>
+<li><strong>MAX_Depth</strong>: 控制前向探索的深度，默认值为<strong>3</strong>。此值基于经验设定，足以覆盖同一逻辑数据结构内的对象，同时避免因探索过深而引入不相关的远程对象。</li>
+<li><strong>MAX_DL</strong>: 控制对象被推迟处理的最大次数，其值并非固定，而是根据<strong>堆内存的可用率</strong>进行<strong>动态自适应调整</strong>：<ul>
+<li><strong>红区 (Red Zone)</strong>: 可用内存 &lt; 15%，<code>MAX_DL = 0</code>。此时GC必须尽快完成以避免Full GC，因此不进行任何推迟。</li>
+<li><strong>黄区 (Yellow Zone)</strong>: 15% ≤ 可用内存 &lt; 50%，<code>MAX_DL = 2</code>。允许适度推迟以平衡性能和GC进度。</li>
+<li><strong>绿区 (Green Zone)</strong>: 可用内存 ≥ 50%，<code>MAX_DL = 4</code>。资源充裕，可以更激进地推迟远程对象的追踪以最大化本地缓存效率。</li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及整体作用</strong></p>
+<ul>
+<li><strong>输入</strong>:<ul>
+<li>来自应用线程的实时对象访问流（通过PQ传递）。</li>
+<li>堆内存的全局状态（通过TQ初始化的根对象集和实时的堆可用率）。</li>
+<li>对象指针内嵌的<strong>时间戳</strong>，作为对象局部性的廉价代理指标。</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>一个<strong>精确的存活对象集合</strong>（通过全局live bitmap表示），确保垃圾回收的正确性。</li>
+<li>一个<strong>高度对齐的内存访问模式</strong>，使得应用和GC的工作集重叠度最大化。</li>
+</ul>
+</li>
+<li><strong>在整体系统中的作用</strong>:<ul>
+<li><strong>减少本地内存工作集</strong>: 通过优先追踪本地对象和推迟远程对象，显著降低了GC引起的本地cache污染。</li>
+<li><strong>提升远程内存预取效率</strong>: 将原本随机的GC访问模式“拉直”，使其与应用的访问模式对齐，从而使OS-level预取器（如Leap）能够有效识别并预取数据流。</li>
+<li><strong>维持GC吞吐量</strong>: 自适应的<code>MAX_DL</code>机制确保了在内存压力下GC仍能及时完成，避免了灾难性的Full GC暂停。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-max_dl">4. 自适应延迟限制(MAX_DL)调优<a class="headerlink" href="#4-max_dl" title="Permanent link">&para;</a></h3>
+<p><strong>自适应延迟限制(MAX_DL)调优机制</strong></p>
+<p>MemLiner通过动态调整<strong>MAX_DL</strong>（Maximum Delay Limit）参数，巧妙地在<strong>减少GC-应用干扰</strong>与<strong>确保及时完成垃圾回收</strong>这两个目标之间取得平衡。该机制是其核心自适应能力的体现。</p>
+<ul>
+<li>
+<p><strong>设计动机</strong>：</p>
+<ul>
+<li>在远内存场景下，盲目追踪所有对象（尤其是远端对象）会因频繁的page fault和swap操作，严重干扰应用线程并浪费RDMA带宽。</li>
+<li>MemLiner的策略是推迟追踪那些被估计为位于<strong>远端内存</strong>且<strong>近期不会被应用访问</strong>的对象（即论文中的Category (3)对象）。</li>
+<li>然而，过度推迟会导致<strong>GC无法及时完成</strong>，进而触发代价高昂的<strong>Full GC</strong>（Stop-The-World），这比干扰本身对性能的损害更大。</li>
+<li>因此，需要一个<strong>自适应的上限</strong>来控制推迟次数，这个上限就是<strong>MAX_DL</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>核心输入：堆内存可用率</strong></p>
+<ul>
+<li>MemLiner持续监控JVM堆的可用内存百分比，并将其划分为三个区域：<ul>
+<li><strong>红区 (Red Zone)</strong>: 可用内存 &lt; <strong>15%</strong>。系统处于内存危机状态，必须立即完成GC以避免Full GC。</li>
+<li><strong>黄区 (Yellow Zone)</strong>: <strong>15%</strong> ≤ 可用内存 ≤ <strong>50%</strong>。系统内存压力中等。</li>
+<li><strong>绿区 (Green Zone)</strong>: 可用内存 &gt; <strong>50%</strong>。系统内存充裕，可以容忍一定程度的GC推迟以最大化减少干扰。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>算法流程与参数设置</strong></p>
+<ul>
+<li>每当GC线程从标准追踪队列<strong>TQ</strong>中取出一个待处理对象<code>o</code>时，会检查其关联的<strong>延迟计数器 <code>dl</code></strong>。</li>
+<li>如果对象<code>o</code>被判断为远端（通过<strong>epoch timestamp</strong>机制），算法会尝试将其重新放回<strong>TQ</strong>队列尾部，并将<code>dl</code>加1。</li>
+<li><strong>关键决策点</strong>：在重新入队前，算法会检查<code>dl</code>是否已经达到当前的<strong>MAX_DL</strong>阈值。<ul>
+<li>如果 <code>dl &lt; MAX_DL</code>，则允许推迟，对象被放回队列。</li>
+<li>如果 <code>dl &gt;= MAX_DL</code>，则<strong>强制</strong>处理该对象，无论其是否在远端内存，以确保追踪进度。</li>
+</ul>
+</li>
+<li><strong>MAX_DL的动态取值</strong>由堆内存可用率决定：
+    | 内存区域 | 可用内存百分比 | <strong>MAX_DL</strong> 值 |
+    | :------- | :------------- | :------------ |
+    | <strong>红区</strong> | &lt; 15%          | <strong>0</strong>         |
+    | <strong>黄区</strong> | 15% - 50%      | <strong>2</strong>         |
+    | <strong>绿区</strong> | &gt; 50%          | <strong>4</strong>         |</li>
+</ul>
+</li>
+<li>
+<p><strong>在整体系统中的作用</strong></p>
+<ul>
+<li><strong>紧急情况下的熔断机制</strong>：当堆内存进入<strong>红区</strong>时，<strong>MAX_DL=0</strong>意味着<strong>完全禁用推迟策略</strong>。此时，GC的行为退化为接近传统GC，优先保证快速完成回收，防止灾难性的Full GC。这体现了“<strong>在紧急情况下，完成比完美更重要</strong>”的设计哲学。</li>
+<li><strong>常态下的干扰抑制</strong>：在<strong>绿区</strong>和<strong>黄区</strong>，非零的<strong>MAX_DL</strong>值允许GC“<strong>礼让</strong>”应用线程，优先处理本地内存中的对象或应用即将访问的对象（通过PQ队列），从而显著<strong>减少不必要的远内存访问</strong>，提升<strong>prefetching</strong>效率和整体吞吐量。</li>
+<li><strong>与Epoch机制的协同</strong>：<strong>MAX_DL</strong>机制与基于<strong>epoch timestamp</strong>的对象位置估计算法紧密配合。Epoch机制负责<strong>识别</strong>哪些对象可以被安全推迟，而<strong>MAX_DL</strong>机制则负责<strong>控制</strong>推迟的<strong>程度</strong>，二者共同构成了MemLiner智能、自适应的追踪调度器。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg" /></p>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>硬件环境</strong>：使用两台服务器，每台配备 2 颗 Intel Xeon E5-2640 v3 CPU、128GB 内存、1TB SSD，并通过 40Gbps InfiniBand 网络连接。一台作为 <strong>host server</strong> 运行应用，另一台作为 <strong>remote server</strong> 提供远端内存。</li>
+<li><strong>软件栈</strong>：基于 <strong>OpenJDK 12.0.2</strong> 和 <strong>Linux 5.4.0</strong> 内核。远端内存交换系统基于 <strong>FastSwap</strong> 的重新实现。</li>
+<li><strong>应用与工作负载</strong>：评估了多种云原生应用，包括 <strong>Apache Spark</strong> (LR, KMeans, TeraSort)、<strong>Cassandra</strong>、<strong>Neo4j</strong>、<strong>QuickCached</strong> 和 <strong>DayTrader</strong>，覆盖了顺序、随机和混合等多种内存访问模式。</li>
+<li><strong>内存配置</strong>：主要在 <strong>25%</strong> 和 <strong>13%</strong> 两种本地内存比例下进行测试（即本地内存分别为应用堆大小的 1/4 和 1/8），以模拟资源受限的远内存场景。通过 <strong>cgroup</strong> 强制限制本地内存用量。</li>
+<li><strong>对比基线</strong>：与未修改的 <strong>G1 GC</strong> 和 <strong>Shenandoah GC</strong> 进行对比，并与 <strong>Leap</strong> (OS级预取器) 和 <strong>Semeru</strong> (内存分离式运行时) 等系统进行了比较。</li>
+</ul>
+<p><strong>结果数据</strong></p>
+<ul>
+<li>
+<p><strong>整体性能提升</strong>：</p>
+<ul>
+<li>在 <strong>G1 GC</strong> 上，MemLiner 在 25% 和 13% 内存配置下，平均端到端性能分别提升 <strong>1.48×</strong> 和 <strong>1.51×</strong>。</li>
+<li>在 <strong>Shenandoah GC</strong> 上，性能提升更为显著，分别达到 <strong>2.16×</strong> 和 <strong>1.80×</strong>。这主要是因为 Shenandoah 的并发GC线程更多，与应用的干扰更严重。</li>
+<li>MemLiner 能将未修改 JVM 在 25%/13% 配置下的 <strong>2.17×/3.73×</strong> 减速，降低至 <strong>1.47×/2.48×</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>对交换和预取的影响</strong>：</p>
+<ul>
+<li>MemLiner 平均减少了 <strong>81%</strong> 的按需交换（on-demand swap-ins）和 <strong>56%</strong> 的总交换量。</li>
+<li>与 <strong>Leap</strong> 预取器结合使用时，MemLiner 将 Leap 的 <strong>prefetching coverage</strong>（覆盖率）和 <strong>accuracy</strong>（准确率）分别提升了 <strong>1.5×</strong> 和 <strong>1.7×</strong>。
+    <img alt="" src="../images/ba3ad26b004d3b6ca7c5501683c7eacc22f2173b1a3ad86f3046a3672c914616.jpg" /> <em>Figure 9: Performance comparisons with Leap and Semeru; Semeru crashed on NPR, NTR, and NDC (i.e., Neo4j applications).</em></li>
+</ul>
+</li>
+<li>
+<p><strong>与 Semeru 的对比</strong>：</p>
+<ul>
+<li>MemLiner 在性能上与 <strong>Semeru</strong> 相当甚至更优，但无需将 GC 卸载到远程服务器，也无需对 JVM 进行侵入式改造。</li>
+<li>Semeru 在部分 Neo4j 工作负载（NPR, NTR, NDC）上甚至崩溃，而 MemLiner 则稳定运行。
+    <img alt="" src="../images/ba3ad26b004d3b6ca7c5501683c7eacc22f2173b1a3ad86f3046a3672c914616.jpg" /> <em>Figure 9: Performance comparisons with Leap and Semeru; Semeru crashed on NPR, NTR, and NDC (i.e., Neo4j applications).</em></li>
+</ul>
+</li>
+<li>
+<p><strong>不同内存配置下的表现</strong>：</p>
+<ul>
+<li>MemLiner 的收益随本地内存比例的降低而增加。当本地内存比例超过 <strong>50%</strong> 时，其性能与基线基本持平，因为此时干扰问题不显著。
+    <img alt="" src="../images/0be4836eee6796ebf973ad82e1be98b6c12810b27cce42d63d8fa3fc231514c7.jpg" /> <em>Figure 7: Performance comparisons for SKM and STC between the unmodified JVM and MemLiner under different local memory configurations.</em></li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验</strong></p>
+<ul>
+<li>
+<p><strong>Epoch 估计机制的有效性</strong>：</p>
+<ul>
+<li>通过禁用 <strong>epoch-based object location estimation</strong> 机制来进行消融实验。</li>
+<li>在 25% 内存配置下，对于 SLR、SKM 和 STC 三个 Spark 应用，性能分别下降了 <strong>8.6%</strong>、<strong>8.8%</strong> 和 <strong>11.3%</strong>。这证明了该机制在区分本地/远端对象、指导 GC 延迟策略方面的有效性。</li>
+</ul>
+</li>
+<li>
+<p><strong>PQ (Producer-Consumer Queue) 的利用率</strong>：</p>
+<ul>
+<li>在并发追踪阶段，从 PQ 中扫描的对象占总扫描对象的比例，在 SLR、SKM 和 STC 上分别为 <strong>45%</strong>、<strong>42%</strong> 和 <strong>11%</strong>。这表明 MemLiner 成功地将相当一部分 GC 工作与应用的访问路径对齐。</li>
+</ul>
+</li>
+<li>
+<p><strong>对内存回收的影响</strong>：</p>
+<ul>
+<li>由于 MemLiner 会延迟追踪远端对象，理论上可能延迟内存回收。但实验数据显示，这种延迟是可控的。</li>
+<li>通过测量 STC、SKM 和 SLR 的 <strong>post-GC memory footprint</strong>（GC后内存占用），发现 MemLiner 仅带来微不足道的峰值内存消耗增加，证明其 <strong>MAX_DL</strong> 自适应调优机制能有效平衡干扰减少与内存回收效率。
+    <img alt="" src="../images/b45c4d04ac2ee4ab47cfed00aa8b2c40152e34f4dceb5c0ccc37775b6ea5e774.jpg" /> <em>Figure 10: Memory footprints for SKM, STC, and SLR, between unmodified JVM and MemLiner under 25% rate.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>运行时开销</strong>：</p>
+<ul>
+<li>当应用完全运行在本地内存（无交换）时，MemLiner 对 <strong>Shenandoah</strong> 和 <strong>G1</strong> 的平均运行时开销仅为 <strong>5%</strong> 和 <strong>2%</strong>。</li>
+<li>针对 G1 的三项优化（仅在并发追踪时启用屏障、过滤年轻代对象、避免重复更新时间戳）是实现低开销的关键。</li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

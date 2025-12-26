@@ -32,7 +32,7 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 
 最终，Berti 用仅 **2.55 KB** 的极小硬件开销，实现了性能和能效的显著提升，证明了在 L1D 层面，精细化、上下文感知的预取策略远比粗放的全局策略更为有效。
 
-### 1. Local-Delta Learning (ELI5)
+### 1. Local-Delta Learning
 
 **痛点直击 (The "Why")**
 
@@ -69,7 +69,7 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 | IPCP       |          50.6%           |           +5.0%           |
 | **Berti**  |        **87.2%**         |         **+8.5%**         |
 
-### 2. Timely Delta Detection (ELI5)
+### 2. Timely Delta Detection
 
 **痛点直击**
 
@@ -94,7 +94,7 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 
 这张图完美诠释了这个过程。当访问地址 12 时，系统测得其 fetch latency 为 5 个周期。那么，一个 timely 的预取请求必须在时间点 `T(12) - 5` 之前发出。回溯历史，只有地址 2 的访问时间满足这个条件，因此 delta `+10` (12-2) 被标记为 **timely delta**。而地址 7 和 10 的访问都太晚了，它们产生的 delta (`+5`, `+2`) 即使被用来预取，也会迟到，所以被直接忽略。这就是 Berti 实现 **近 90% 准确率** 的核心秘密。
 
-### 3. Coverage-Based Prefetch Filtering (ELI5)
+### 3. Coverage-Based Prefetch Filtering
 
 **痛点直击 (The "Why")**
 
@@ -123,7 +123,7 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 | MLOP       |          62.4%           | Best global delta, less filtering  |
 | IPCP       |          50.6%           | Composite, but GS class adds noise |
 
-### 4. Multi-Level Prefetch Orchestration (ELI5)
+### 4. Multi-Level Prefetch Orchestration
 
 **痛点直击**
 
@@ -158,7 +158,7 @@ Berti 的核心创新在于将 **delta 的定义、学习和应用** 全面 **lo
 - **极高的准确率**：通过高水位线过滤，只有最有把握的请求才能进入 L1D，避免了污染。如 Figure 10 所示，Berti 的准确率高达 **87.2%**，远超 IPCP (50.6%) 和 MLOP (62.4%)。
 - **显著的节能效果**：减少了无谓的数据搬运，使得内存层次结构的动态能耗大幅降低。如 Figure 15 所示，相比 IPCP，Berti 在 SPEC CPU2017 和 GAP 上分别节省了 **21.1%** 和 **72.6%** 的动态能耗。
 
-### 5. Efficient Hardware Implementation (ELI5)
+### 5. Efficient Hardware Implementation
 
 **痛点直击 (The "Why")**
 

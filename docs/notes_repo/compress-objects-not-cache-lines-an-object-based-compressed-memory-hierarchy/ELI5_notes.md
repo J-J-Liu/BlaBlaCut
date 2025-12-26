@@ -39,7 +39,7 @@
 
 最终，这套组合拳使得系统在混合负载下，相比最先进的传统压缩方案，实现了**1.63倍**的平均压缩率提升，**56%** 的内存流量降低，并带来了**17%** 的性能提升。
 
-### 1. Zippads (ELI5)
+### 1. Zippads
 
 **痛点直击 (The "Why")**
 
@@ -64,7 +64,7 @@
     - **指针即元数据**：Zippads 把压缩所需的元信息（比如压缩后的大小、使用的算法类型）**直接编码在指针本身**里（见图 ![](images/4fe784bb23414488022335e306dd60fbf8d8658bf4467c9516532f4d4c391320.jpg) *Figure 11. Zippads pointer format. Compression information is encoded in the pointer.*）。因为所有内存访问都始于一个指针，所以硬件在访问时立刻就能知道如何解压，无需额外查询。
 - 这个设计使得 Zippads 能够实现**零内部碎片**的紧凑存储（见图 ![](images/e728c1717ce55fe59ef92c8f9221b98257136721f2d7d2dc5103612d97b29a60.jpg) *Figure 3. Different compression techniques applied to BTree.* 中的 c 部分），从而在对象密集型应用上获得了远超传统方案的压缩比（平均 **1.63倍**）。
 
-### 2. COCO (Cross-Object COmpression) (ELI5)
+### 2. COCO (Cross-Object COmpression)
 
 **痛点直击 (The "Why")**
 
@@ -88,7 +88,7 @@
     - **存储差异**：最终，压缩后的对象只包含三部分：**base object id**、**diff bitmap** 和 **byte diffs**。
 - 为了高效实现，COCO 还设计了一个小型的 **base object cache**（8KB），用来缓存最常用的基准对象，避免每次压缩/解压都要去主存读取基准，从而保证了低延迟。![](images/7199ca0abce3881253e530119b292aa1db859ae978561cd45146200105760527.jpg) *Figure 13. Example COCO-compressed object.* 展示了这个压缩格式的直观例子。
 
-### 3. Hotpads 集成 (ELI5)
+### 3. Hotpads 集成
 
 **痛点直击 (The "Why")**
 
@@ -127,7 +127,7 @@
 
 - 上图清晰地展示了 Hotpads 的工作流程。Zippads 的压缩逻辑就嵌入在这个流程中：在步骤 `4` 的 CE 过程中，当对象 A 和 D 被决定要驱逐到 L2 时，Zippads 会对它们进行压缩，并在步骤 `5` 中将指针直接重写为指向 L2 中的 **压缩版本**。整个过程对软件完全透明，且没有额外的地址翻译开销。
 
-### 4. 指针内嵌压缩元数据 (ELI5)
+### 4. 指针内嵌压缩元数据
 
 **痛点直击 (The "Why")**
 
@@ -148,7 +148,7 @@
     - 新增了几个 **algorithm-specific bits** 来标识使用了哪种压缩算法（比如是 BDI+FPC 还是 COCO）。
 - 这个改动看似微小，却完成了关键的逻辑转换：**将“先查元数据再取数据”的串行操作，变成了“取指针即得元数据”的一步到位操作**。因为所有内存访问都始于一个指针，所以硬件在解引用指针的瞬间，就已经拥有了执行解压所需的全部上下文信息，彻底绕开了传统方案的性能瓶颈。
 
-### 5. 大对象分块处理 (ELI5)
+### 5. 大对象分块处理
 
 **痛点直击 (The "Why")**
 

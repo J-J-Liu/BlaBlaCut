@@ -1,0 +1,731 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-zippads-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Zippads (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-coco-cross-object-compression-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. COCO (Cross-Object COmpression) (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hotpads-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hotpads 集成 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 指针内嵌压缩元数据 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-eli5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 大对象分块处理 (ELI5)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy">Compress Objects, Not Cache Lines: An Object-Based Compressed Memory Hierarchy 通俗讲解<a class="headerlink" href="#compress-objects-not-cache-lines-an-object-based-compressed-memory-hierarchy" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的内存压缩技术（比如 <strong>BDI</strong>, <strong>LCP</strong>）都是以 <strong>cache line</strong>（缓存行，通常是64B或128B的固定块）为单位进行压缩。</li>
+<li>这套方法在处理<strong>科学计算</strong>这类以<strong>数组</strong>为主、数据布局规整的程序时效果很好，因为一个缓存行里的数据往往很相似，内部冗余度高。</li>
+<li>但在处理<strong>面向对象</strong>（object-based）的现代应用（如数据库、图计算、Java应用）时就“很难受”了：<ul>
+<li><strong>布局不规整</strong>：一个对象内部包含不同类型、不同大小的字段，一个缓存行里可能混杂着好几个不同对象的碎片，导致<strong>行内冗余度极低</strong>，传统算法压不动。</li>
+<li><strong>对齐浪费</strong>：对象大小是任意的，但压缩系统却强迫它们塞进固定大小的缓存行里，造成大量<strong>内部碎片</strong>（internal fragmentation）。</li>
+<li><strong>地址翻译开销</strong>：为了找到压缩后的数据在哪，系统需要额外的元数据（metadata）来做地址翻译，这本身又占空间、耗时间。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<p>想象你要打包搬家。</p>
+<ul>
+<li><strong>传统方法</strong>就像规定所有东西都必须塞进<strong>标准尺寸的纸箱</strong>（cache line）里。你有一堆形状各异的物品（objects），比如一个花瓶、几本书、一个台灯。为了塞进箱子，你不得不在花瓶周围塞满泡沫（padding），结果箱子没装满但已经封箱了，非常浪费空间。而且，为了找到你的花瓶，你还得翻查一份厚厚的“物品-箱子”对照表（address translation）。</li>
+<li><strong>这篇论文的思路</strong>是：<strong>别管纸箱了，直接按物品本身来打包</strong>！花瓶用气泡膜裹好，书用绳子捆起来。每个物品（object）自己就是一个独立的压缩单元。更重要的是，既然你家有很多一模一样的马克杯（同类型的objects），那就只带一个完整的杯子，其他杯子只带和第一个不一样的部分（比如杯柄上的划痕）。这就是<strong>跨对象压缩</strong>（cross-object compression）的核心思想。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<p>作者并没有在传统的缓存/内存架构上打补丁，而是做了一个根本性的<strong>范式转换</strong>：从 <strong>“压缩缓存行”</strong> 转向 <strong>“压缩对象”</strong>。这个转换依赖于两个关键支撑：</p>
+<ul>
+<li>
+<p><strong>第一，构建一个面向对象的内存层次结构</strong>（Zippads）。</p>
+<ul>
+<li>它基于一个叫 <strong>Hotpads</strong> 的前期工作，该工作将内存视为一系列管理<strong>可变大小对象</strong>的“垫子”（pads），而不是传统的扁平地址空间。</li>
+<li>在这个体系里，<strong>指针</strong>（pointer）是硬件可以直接操控的一等公民。当一个对象被移动或压缩时，硬件能自动更新所有指向它的指针，让它们<strong>直接指向压缩后的对象</strong>。这就彻底<strong>绕开了传统压缩方案中复杂的地址翻译问题</strong>，消除了元数据开销和间接访问延迟。</li>
+</ul>
+</li>
+<li>
+<p><strong>第二，设计一个专门为对象定制的压缩算法</strong>（COCO）。</p>
+<ul>
+<li>COCO洞察到：<strong>同一个类</strong>（type）。因此，它采用<strong>差分编码</strong>（differential encoding）策略。</li>
+<li>对于某一类型的对象，系统会选一个作为<strong>基对象</strong>（base object）。后续的同类对象，只需要存储一个<strong>位图</strong>（diff bitmap）和<strong>差异字节</strong>（byte diffs），指明自己和基对象哪里不一样。</li>
+<li>为了高效实现，COCO还引入了一个很小的<strong>基对象缓存</strong>（base object cache），确保解压时能快速拿到基对象，避免频繁访问主存。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/e728c1717ce55fe59ef92c8f9221b98257136721f2d7d2dc5103612d97b29a60.jpg" /> <em>Figure 3. Different compression techniques applied to BTree.</em></p>
+<p>上图清晰地展示了这种思路的威力。传统LCP方案（b）因为对齐和固定块限制，压缩后仍有大量空白。而Zippads（c）将对象紧凑排列，并直接通过指针访问。COCO（d）更进一步，通过共享基对象，将内存占用压得更低。</p>
+<p>最终，这套组合拳使得系统在混合负载下，相比最先进的传统压缩方案，实现了<strong>1.63倍</strong>的平均压缩率提升，<strong>56%</strong> 的内存流量降低，并带来了<strong>17%</strong> 的性能提升。</p>
+<h3 id="1-zippads-eli5">1. Zippads (ELI5)<a class="headerlink" href="#1-zippads-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的内存压缩（比如 <strong>LCP</strong> 或 <strong>BDI</strong>）都是以 <strong>cache line</strong>（通常是64B）为单位进行的。这在处理科学计算这类<strong>数组密集型</strong>（array-dominated）程序时效果很好，因为数组元素类型相同、数值相近，一个 cache line 内部冗余度高。</li>
+<li>但在<strong>面向对象</strong>（object-based）的程序（如 Java 应用、数据库、图计算）中，情况就完全不同了：<ul>
+<li>对象是<strong>可变大小</strong>的，很少能完美对齐到 cache line 边界。</li>
+<li>一个 cache line 里可能混杂着不同对象的字段，这些字段<strong>类型各异、数值毫无关联</strong>，导致基于 cache line 的压缩算法几乎找不到任何冗余，压缩比极低（论文里提到只有 <strong>10%</strong> 左右）。</li>
+<li>更糟的是，为了支持随机访问，传统方案必须维护一个从“逻辑地址”到“压缩后物理地址”的映射表（类似 TLB），这带来了<strong>额外的元数据开销</strong>和<strong>内部碎片</strong>（internal fragmentation），进一步侵蚀了本就不高的压缩收益。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要搬家。传统方法就像是把所有东西都塞进一个个<strong>标准尺寸的纸箱</strong>（cache line）里，然后压缩每个箱子。但你的家是个杂物间：一个箱子里可能有书、锅、玩具和衣服，这些东西没法互相压缩，所以箱子还是鼓鼓囊囊的。而且你还得记下“原来放在客厅第3块地板下的东西，现在在第7号压缩箱的第2层”，这个清单本身就很占地方。</li>
+<li><strong>Zippads</strong> 的做法完全不同。它说：“别管纸箱了，我们直接按‘物品’来打包”。你的书、锅、玩具各自就是一个<strong>独立的对象</strong>。我们给每件物品单独抽真空压缩，然后把它们<strong>紧密地堆在一起</strong>，不留空隙。最关键的是，所有指向这件物品的“便签条”（指针），我们直接<strong>重写</strong>成新位置的地址。这样，你就再也不需要那个又大又麻烦的“纸箱-物品”对照清单了。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li><strong>Zippads 并没有发明一种新的压缩算法，而是彻底改变了压缩的“粒度”和“寻址方式”</strong>。</li>
+<li>它构建在一个叫 <strong>Hotpads</strong> 的<strong>基于对象的内存层次结构</strong>之上。Hotpads 的核心思想是，硬件直接管理<strong>可变大小的对象</strong>，而不是固定大小的 cache line，并且在对象移动时（比如被垃圾回收或换出到下一级缓存），会<strong>自动重写所有指向它的指针</strong>。</li>
+<li><strong>Zippads 巧妙地利用了 Hotpads 的这个特性</strong>：<ul>
+<li><strong>压缩粒度</strong>：当一个对象变得“冷”（不常被访问）并被逐出到下一级（比如 LLC 或主存）时，Zippads 就在这个时机<strong>压缩整个对象</strong>，而不是等它被填满一个 cache line。</li>
+<li><strong>消除地址转换</strong>：由于 Hotpads 本来就要重写指针，Zippads 就让指针<strong>直接指向压缩后的对象</strong>。这就完全绕开了传统压缩内存中那个笨重的地址翻译层。</li>
+<li><strong>指针即元数据</strong>：Zippads 把压缩所需的元信息（比如压缩后的大小、使用的算法类型）<strong>直接编码在指针本身</strong>里（见图 <img alt="" src="../images/4fe784bb23414488022335e306dd60fbf8d8658bf4467c9516532f4d4c391320.jpg" /> <em>Figure 11. Zippads pointer format. Compression information is encoded in the pointer.</em>）。因为所有内存访问都始于一个指针，所以硬件在访问时立刻就能知道如何解压，无需额外查询。</li>
+</ul>
+</li>
+<li>这个设计使得 Zippads 能够实现<strong>零内部碎片</strong>的紧凑存储（见图 <img alt="" src="../images/e728c1717ce55fe59ef92c8f9221b98257136721f2d7d2dc5103612d97b29a60.jpg" /> <em>Figure 3. Different compression techniques applied to BTree.</em> 中的 c 部分），从而在对象密集型应用上获得了远超传统方案的压缩比（平均 <strong>1.63倍</strong>）。</li>
+</ul>
+<h3 id="2-coco-cross-object-compression-eli5">2. COCO (Cross-Object COmpression) (ELI5)<a class="headerlink" href="#2-coco-cross-object-compression-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的内存压缩（如 <strong>BDI</strong>, <strong>FPC</strong>）都是以 <strong>cache line</strong> 为单位进行的。这在处理规整的数组（Array）时效果很好，因为一个 cache line 里的数据往往类型相同、数值相近。</li>
+<li>但在 <strong>object-based</strong> 的程序（比如 Java 应用）里，情况就完全不同了。一个对象内部的字段五花八门（int, pointer, string...），彼此之间毫无相似性，导致在一个 cache line 内部几乎找不到可以压缩的冗余。</li>
+<li>更要命的是，对象在内存中的布局是不规则的，经常被 cache line 边界切开。这不仅让压缩算法“巧妇难为无米之炊”，还引入了额外的地址翻译开销和内部碎片，进一步降低了压缩效率。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你有一大堆同款但不同配置的手机。传统压缩方法就像是把每个手机都拆成一堆零件（螺丝、屏幕、电池...），然后试图在这一堆杂乱的零件里找相同的螺丝来压缩。结果发现，每个手机的零件都混在一起，很难找到规律。</li>
+<li><strong>COCO</strong> 的思路则完全不同：它先把所有手机按型号分类。对于每一类（比如 iPhone 15），它选出一台作为“<strong>base object</strong>”（基准机）。然后，对于同一型号的其他手机，它只记录它们和这台基准机的<strong>差异</strong>。比如，“你的手机比基准机多了个蓝色保护壳”、“他的手机少了根充电线”。这样一来，描述每台新手机所需的信息量就大大减少了。</li>
+<li>这本质上是一种 <strong>“差分编码” (Differential Encoding)</strong> 的思想，就像 Git 版本控制系统只存储文件的 diff 而不是完整副本一样。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有去优化如何压缩单个对象内部的数据，而是巧妙地<strong>将压缩的粒度从“对象内部”转移到了“对象之间”</strong>。</li>
+<li>具体来说，COCO 在压缩一个对象时，会执行以下几步：<ul>
+<li><strong>识别类型</strong>：通过对象头（通常是第一个 word）获取其 <strong>type id</strong>。</li>
+<li><strong>查找基准</strong>：根据 type id 找到该类型对应的 <strong>base object</strong>。论文中采用了一个非常简单有效的策略：<strong>第一个被压缩的该类型对象就作为基准</strong>。</li>
+<li><strong>计算差异</strong>：逐字节比较当前对象和 base object，生成一个 <strong>diff bitmap</strong>（一个 bit 代表一个 byte 是否不同）和一个 <strong>byte diffs</strong>（所有不同的字节值组成的序列）。</li>
+<li><strong>存储差异</strong>：最终，压缩后的对象只包含三部分：<strong>base object id</strong>、<strong>diff bitmap</strong> 和 <strong>byte diffs</strong>。</li>
+</ul>
+</li>
+<li>为了高效实现，COCO 还设计了一个小型的 <strong>base object cache</strong>（8KB），用来缓存最常用的基准对象，避免每次压缩/解压都要去主存读取基准，从而保证了低延迟。<img alt="" src="../images/7199ca0abce3881253e530119b292aa1db859ae978561cd45146200105760527.jpg" /> <em>Figure 13. Example COCO-compressed object.</em> 展示了这个压缩格式的直观例子。</li>
+</ul>
+<h3 id="3-hotpads-eli5">3. Hotpads 集成 (ELI5)<a class="headerlink" href="#3-hotpads-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的内存压缩（比如 LCP、BDI）都是以 <strong>cache line</strong> 为单位进行的。这在处理科学计算这类 <strong>array-dominated</strong> 的程序时效果很好，因为数据是规整、同质的。</li>
+<li>但在 <strong>object-based</strong> 程序（如 Java 应用）里，这种做法就“很难受”了：<ul>
+<li><strong>布局错位</strong>：一个对象可能横跨多个 cache line，而一个 cache line 里又塞满了不同对象的字段。压缩算法只能看到“碎片”，看不到完整的对象，自然找不到规律。</li>
+<li><strong>地址翻译开销</strong>：压缩后数据大小不一，必须维护一张额外的映射表（类似 TLB），把逻辑地址翻译成物理的压缩块地址。这要么增加延迟，要么浪费空间（内部碎片）。</li>
+<li><strong>冗余利用不足</strong>：同一个类的多个对象，内容高度相似（比如数据库里的很多 Entry 对象），但传统算法只在单个 cache line 内找冗余，完全错过了这个“金矿”。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要整理一个杂乱的仓库。传统方法是把仓库切成一个个固定大小的格子（cache line），然后对每个格子单独打包压缩。结果就是，一个完整的工具箱被切开放在了三个格子里，每个格子还混着其他杂物，根本没法有效压缩。</li>
+<li><strong>Hotpads</strong> 的思路完全不同：它要求仓库管理员（硬件）知道每一件物品（object）的边界和类型。管理员直接按“物品”来管理，把整个工具箱当作一个整体搬来搬去。</li>
+<li><strong>Zippads</strong> 就是在这个新式仓库里工作的压缩专家。他不仅按“物品”打包，还会发现：“嘿，仓库里有100个几乎一样的锤子！我只需要存一把‘标准锤’，其他99把只记录跟标准锤不一样的地方就行了。” 这就是 <strong>COCO</strong> 算法的精髓。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>
+<p>作者并没有从零开始设计一套全新的压缩硬件，而是巧妙地将压缩功能 <strong>嫁接</strong> 到了 <strong>Hotpads</strong> 这个已有的、革命性的内存层次结构上。具体来说，他们利用了 Hotpads 的三个核心机制：</p>
+</li>
+<li>
+<p><strong>指针重写 (Pointer Rewriting)</strong>:</p>
+<ul>
+<li>在 Hotpads 中，当一个对象从 L1 pad 被移动到 L2 pad 时，所有指向它的指针都会被硬件自动更新，直接指向它在 L2 的新地址。</li>
+<li>Zippads <strong>直接利用了这一点</strong>。当一个对象被压缩并存入主存时，它的“新地址”就是压缩后的地址。通过指针重写，所有访问都直接指向压缩数据，<strong>彻底绕开了传统压缩方案中那个麻烦的“地址翻译层”</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>集合-驱逐 (Collection-Eviction, CE) 过程</strong>:</p>
+<ul>
+<li>Hotpads 的 CE 过程就像一个高效的垃圾回收器，它会遍历整个 pad，找出活对象、死对象，并将活对象紧凑地挪到一起。</li>
+<li>Zippads <strong>将压缩操作融入了 CE 流程</strong>。当一个对象在 CE 过程中被决定要驱逐到下一级（比如主存）时，Zippads 就在此刻对其进行压缩。这使得压缩成为一个“批处理”操作，开销被完美分摊。</li>
+</ul>
+</li>
+<li>
+<p><strong>对象流 (Object Flow)</strong>:</p>
+<ul>
+<li>Hotpads 的对象有一个“canonical level”（规范层级）的概念，即对象当前所在的最底层存储位置。</li>
+<li>Zippads <strong>规定只有到达特定层级（如最后一级 pad 或主存）的对象才会被压缩</strong>。对象在生命周期早期（在 L1/L2）是未压缩的，保证了快速访问；只有当它们变“冷”并下沉时，才被压缩以节省空间。这种 <strong>“冷热分离”</strong> 的策略非常优雅。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/38a37e2d7f1c4de83780e94df44f3db956893cfa0366b407c1db7dbf647c2429.jpg" /> <em>Figure 4. Example showing Hotpads’s main features.</em></p>
+<ul>
+<li>上图清晰地展示了 Hotpads 的工作流程。Zippads 的压缩逻辑就嵌入在这个流程中：在步骤 <code>4</code> 的 CE 过程中，当对象 A 和 D 被决定要驱逐到 L2 时，Zippads 会对它们进行压缩，并在步骤 <code>5</code> 中将指针直接重写为指向 L2 中的 <strong>压缩版本</strong>。整个过程对软件完全透明，且没有额外的地址翻译开销。</li>
+</ul>
+<h3 id="4-eli5">4. 指针内嵌压缩元数据 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的压缩内存系统（比如 LCP、VSC）面临一个根本性的两难困境：硬件需要知道<strong>压缩数据的大小</strong>和<strong>用的什么算法</strong>才能正确解压，但这些元数据放哪里？</li>
+<li>如果把这些信息放在<strong>独立的元数据表或缓存标签里</strong>，就会引入额外的访问开销。每次读取压缩数据前，都得先查一次元数据表，这在延迟敏感的路径上是致命的。</li>
+<li>更糟糕的是，在<strong>主内存</strong>这种没有缓存标签（Tag）的地方，这个问题无解。你无法像在 Cache 里那样把元数据塞进 Tag，只能用更笨重的方案，比如为每个压缩块维护一个庞大的地址翻译表，这又带来了<strong>巨大的存储开销</strong>和<strong>内部碎片</strong>。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要寄一个包裹。传统做法是，你把包裹（压缩数据）和一张单独的说明单（元数据）交给邮局。邮局必须先找到并读取这张说明单，才知道这个包裹有多重、该怎么拆封。如果说明单丢了或者找起来很麻烦，整个流程就卡住了。</li>
+<li>Zippads 的做法是，直接把所有关键信息——重量、尺寸、拆封方式——<strong>印在包裹的快递单上</strong>（也就是指针本身）。快递员（硬件）拿到快递单的一瞬间，就知道一切所需信息，可以立刻高效地处理包裹，完全不需要再去翻找另一张纸。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者敏锐地抓住了 <strong>Hotpads 架构的一个核心特性：指针对软件是不透明的（opaque）</strong>。这意味着硬件可以完全控制指针的内部格式，而不用担心破坏用户程序。</li>
+<li>利用这个自由度，他们没有去设计复杂的外部元数据结构，而是<strong>直接改造了指针的二进制布局</strong>。如图 <img alt="" src="../images/4fe784bb23414488022335e306dd60fbf8d8658bf4467c9516532f4d4c391320.jpg" /> <em>Figure 11. Zippads pointer format. Compression information is encoded in the pointer.</em> 所示，他们在原有的指针中“偷”出几个比特位：<ul>
+<li>原本的 <strong>size</strong> 字段现在存储的是<strong>压缩后的对象大小</strong>。</li>
+<li>新增了几个 <strong>algorithm-specific bits</strong> 来标识使用了哪种压缩算法（比如是 BDI+FPC 还是 COCO）。</li>
+</ul>
+</li>
+<li>这个改动看似微小，却完成了关键的逻辑转换：<strong>将“先查元数据再取数据”的串行操作，变成了“取指针即得元数据”的一步到位操作</strong>。因为所有内存访问都始于一个指针，所以硬件在解引用指针的瞬间，就已经拥有了执行解压所需的全部上下文信息，彻底绕开了传统方案的性能瓶颈。</li>
+</ul>
+<h3 id="5-eli5">5. 大对象分块处理 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的压缩内存系统以 <strong>cache line</strong>（通常是64B）为单位进行压缩。这在处理小对象时问题不大，但当程序分配一个<strong>大对象</strong>（比如1KB的数组或复杂结构体）时，这套机制就“很难受”了。</li>
+<li>最核心的痛点是：<strong>访问局部性与解压开销的矛盾</strong>。程序很可能只需要读写这个大对象里的某一个字段或元素，但为了拿到这8个字节，系统却不得不把整个1KB的对象从主存中取出、解压，再丢进缓存。这个<strong>高延迟</strong>和<strong>带宽浪费</strong>在性能敏感的场景下是不可接受的。</li>
+<li>此外，如果大对象被频繁修改，每次写回都可能因为压缩后大小变化而触发昂贵的<strong>重定位</strong>（relocation）和<strong>指针更新</strong>操作，进一步拖慢系统。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你要从一个巨大的、被真空压缩袋封起来的羽绒被里拿一个<strong>小枕头</strong>。传统做法是，你必须把整个压缩袋拆开，让整床被子恢复原状，然后才能找到并拿出那个小枕头。这显然效率极低。</li>
+<li>Zippads的做法更像是，一开始就<strong>没把整床被子塞进一个袋子</strong>，而是把它拆成了几个独立的小被子（子对象），每个都用自己独立的压缩袋装好，并且有一个<strong>目录索引</strong>（index array）告诉你哪个小被子在哪个袋子里。现在，你只需要根据目录找到对应的小袋子，拆开它，就能立刻拿到你的小枕头，完全不用管其他部分。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有沿用“整个对象一体压缩”的思路，而是巧妙地在对象分配和访问的流程中，插入了一个<strong>分块抽象层</strong>。</li>
+<li>具体来说，当分配一个超过阈值（128B）的大对象时：<ul>
+<li>系统不会立即为其分配完整的物理空间，而是先创建一个轻量级的 <strong>index array</strong>（索引数组）。</li>
+<li>这个索引数组的每个条目都是一个<strong>指针</strong>，初始状态为 <strong>null</strong>。</li>
+<li>只有当程序<strong>首次访问</strong>该大对象的某个特定区域（比如偏移72字节处）时，系统才会：<ul>
+<li>动态分配一个标准大小（64B）的 <strong>subobject</strong>（子对象）。</li>
+<li>将该子对象的地址填入索引数组对应的槽位。</li>
+<li>后续对该区域的所有访问，都会通过索引数组间接路由到这个独立的子对象上。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>这样一来，<strong>压缩、解压、移动</strong>的操作粒度就从“整个大对象”降级到了“64B的子对象”。访问局部性得到了完美保留，避免了为访问少量数据而付出全局解压的高昂代价。同时，由于子对象是独立管理的，单个子对象的溢出（overflow）也不会影响整个大对象的稳定性。</li>
+</ul>
+<p><img alt="" src="../images/746182b37942c3612c6be6964b2fee50109c568eff8169a9e37a87520c5d7614.jpg" /> <em>Figure 12. Zippads breaks large objects into subobjects.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

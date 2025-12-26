@@ -39,7 +39,7 @@ Alecto 的核心创新在于，它把 **预取器选择** 这个动作，从传�
 
 通过这一招，Alecto 同时解决了两大痛点：既保证了每个预取器能得到最干净、最相关的训练数据，又大幅减少了因无效预取导致的硬件资源冲突。最终实现了 **更高性能**（IPC提升）、**更低能耗**（减少48%的table访问）和 **极小的存储开销**（\<1KB）。
 
-### 1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA) (ELI5)
+### 1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA)
 
 **痛点直击 (The "Why")**
 
@@ -98,7 +98,7 @@ Alecto 的核心创新在于，它把 **预取器选择** 这个动作，从传�
 - **Identified and Blocked (IB)**: 这个预取器被证明不行，直接切断它的数据源，让它“冷静”一段时间。
 - 通过 **Sample Table** 和 **Sandbox Table** 在运行时不断收集每个预取器在每个 PC 上的**准确率**反馈，这个 Allocation Table 能够动态地更新状态，从而实现对每个需求请求的**精准路由**。这从根本上解决了训练污染和资源冲突的问题。
 
-### 2. 细粒度预取器识别 (Fine-grained Prefetcher Identification) (ELI5)
+### 2. 细粒度预取器识别 (Fine-grained Prefetcher Identification)
 
 **痛点直击 (The "Why")**
 
@@ -139,7 +139,7 @@ Alecto 的核心创新在于，它把 **预取器选择** 这个动作，从传�
 
 *Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.*
 
-### 3. 三态状态机与自适应 aggressiveness (ELI5)
+### 3. 三态状态机与自适应 aggressiveness
 
 **痛点直击**
 
@@ -173,7 +173,7 @@ Alecto 的核心创新在于，它把 **预取器选择** 这个动作，从传�
     - 对于处于 **UI** 状态的预取器，则给予一个保守的、最低限度的训练机会，用于探索其潜力。
 - 这个设计的精妙之处在于，它用极其简单的状态机逻辑（只有三种状态和几个阈值），就实现了对每个 PC-预取器对的精细化、动态化管理，从根本上解决了资源冲突和训练污染的问题。
 
-### 4. 运行时指标收集机制 (Sample Table & Sandbox Table) (ELI5)
+### 4. 运行时指标收集机制 (Sample Table & Sandbox Table)
 
 **痛点直击**
 
@@ -210,7 +210,7 @@ Alecto 的核心创新在于，它把 **预取器选择** 这个动作，从传�
 - 通过这两个计数器，系统可以随时计算出针对**每一个 PC**，**每一个 prefetcher** 的 **准确率 (Accuracy = Confirmed / Issued)**。
 - 正是这个 **per-PC, per-prefetcher 的准确率**，成为了驱动 Allocation Table 状态机（UI/IA/IB）进行精细决策的唯一依据，从而实现了动态且精准的 demand request allocation。
 
-### 5. 集成式预取请求过滤 (Integrated Prefetch Filtering) (ELI5)
+### 5. 集成式预取请求过滤 (Integrated Prefetch Filtering)
 
 **痛点直击 (The "Why")**
 

@@ -28,7 +28,7 @@
 
 最终效果非常显著：在 V8 基线编译器下，**Plain ShortCut 就能将平均执行时间减少 30%**，即使在高度优化的模式下，也能带来 **11%** 的提升。这证明了通过软硬件协同设计来解决动态语言的核心瓶颈，是一条极具价值的路径。
 
-### 1. Inline Cache Table (ICTable) (ELI5)
+### 1. Inline Cache Table (ICTable)
 
 **痛点直击 (The "Why")**
 
@@ -73,7 +73,7 @@ ______________________________________________________________________
     - 软件上需要对 JIT 编译器做少量修改，以插入新的 ISA 指令。
     - 需要在 **GC (Garbage Collection)** 或 **Context Switch** 时刷新 ICTable，以防使用过期的指针，但这些操作本身就很稀疏，影响微乎其微。
 
-### 2. Plain ShortCut Design (ELI5)
+### 2. Plain ShortCut Design
 
 **痛点直击 (The "Why")**
 
@@ -104,7 +104,7 @@ ______________________________________________________________________
 ![](images/6436a3a332849c71cb68c1085c91e251b6d0423ec11779f9ad2c41d45457d9af.jpg) *Figure 2: Operations of a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).*
 ![](images/17a0ec9d9714e372b3a227f63b3c94cf0a256493abec54dd6ef62a4fb4e85eca.jpg) *Figure 3: Structures used in a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).*
 
-### 3. Aggressive ShortCut Design (ELI5)
+### 3. Aggressive ShortCut Design
 
 **痛点直击**
 
@@ -135,7 +135,7 @@ ______________________________________________________________________
 ![](images/6436a3a332849c71cb68c1085c91e251b6d0423ec11779f9ad2c41d45457d9af.jpg) *Figure 2: Operations of a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).*
 ![](images/17a0ec9d9714e372b3a227f63b3c94cf0a256493abec54dd6ef62a4fb4e85eca.jpg) *Figure 3: Structures used in a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).*
 
-### 4. ISA Extensions for ShortCut (ELI5)
+### 4. ISA Extensions for ShortCut
 
 **痛点直击**
 
@@ -173,7 +173,7 @@ ______________________________________________________________________
 
 ![](images/fc5e336a6fc832570fa1a6e003cf29adb17663518ee4396bd36f9f1855fa59b3.jpg) *Table 2: Instructions added by ShortCut.*
 
-### 5. Integration with Shared Dispatcher (ELI5)
+### 5. Integration with Shared Dispatcher
 
 **痛点直击**
 

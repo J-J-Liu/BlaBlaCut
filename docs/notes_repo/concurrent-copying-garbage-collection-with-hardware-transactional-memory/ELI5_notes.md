@@ -26,7 +26,7 @@
     - 这个中止操作保证了：任何在 collector 完成复制之后、mutator 更新其栈上引用之前的“间隙期”（problematic gap）内发生的 mutator 执行都会被回滚。随后，mutator 会在下一个 yieldpoint 处安全地更新其栈上的陈旧引用。
 - 因此，作者巧妙地将原本需要在**每一次读操作**上都付出的高昂成本，转化成了只在**GC活跃期间**、并且只在**极少数发生冲突的代码路径**上才需要付出的、一次性的事务启动和可能的重试成本。![](images/8b375db05156e9ea8aed0dff8505f95304e194664632086d16ecd5828f5cebc3.jpg) *Table 4.1: Machines used in the evaluation.*
 
-### 1. 基于HTM的并发复制垃圾回收算法 (ELI5)
+### 1. 基于HTM的并发复制垃圾回收算法
 
 **痛点直击**
 
@@ -54,7 +54,7 @@
 
 ![](images/fca77d7a9e12d5dad7efe61d5344235db8aeb939383bcc018089466fd3496ab0.jpg) *Figure 5.1: Success rate curves on Haswell.*
 
-### 2. Collector-Mutator协调协议 (ELI5)
+### 2. Collector-Mutator协调协议
 
 **痛点直击 (The "Why")**
 
@@ -78,7 +78,7 @@
 
 ![](images/8b375db05156e9ea8aed0dff8505f95304e194664632086d16ecd5828f5cebc3.jpg) *Table 4.1: Machines used in the evaluation.*
 
-### 3. 乐观复制优化 (Optimistic Copying) (ELI5)
+### 3. 乐观复制优化 (Optimistic Copying)
 
 **痛点直击 (The "Why")**
 
@@ -105,7 +105,7 @@
         - 如果 **O != Os**，证明有并发写入导致数据不一致，事务主动 **abort**，丢弃 **O'**，下次重试。
 - 这一招的精髓在于，它把事务内的 **大量写操作**（复制 O 到 O'）成功转换成了 **大量读操作**（比较 O 和 Os）。由于 HTM 的 **读容量远大于写容量**（论文显示读容量可达数 MB），这极大地提高了事务的成功率，使整个并发 GC 方案变得可行。
 
-### 4. 缓存预热优化 (Cache Warmup) (ELI5)
+### 4. 缓存预热优化 (Cache Warmup)
 
 **痛点直击**
 
@@ -129,7 +129,7 @@
 
 ![](images/3205642b8258cabc26576371092cc40f6fe045f106fec3d6a9e56798a14eb2d6.jpg) *Figure 5.10: Success rate curves on Coffee Lake when warming up caches.*
 
-### 5. HTM容量特性分析 (ELI5)
+### 5. HTM容量特性分析
 
 **痛点直击**
 

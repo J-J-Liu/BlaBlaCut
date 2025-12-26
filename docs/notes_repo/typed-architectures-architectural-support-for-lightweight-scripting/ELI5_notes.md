@@ -56,7 +56,7 @@ ______________________________________________________________________
 
 通过这三招，作者成功地将原本由软件显式执行的、繁重的动态类型管理任务，**隐式地卸载到了硬件流水线中**，以仅 **1.6%** 的面积开销，换来了接近 **10%-11%** 的平均性能提升和显著的能效改善。![](images/faf222a9648408ba3885a02642ca484bc0761821514f047c02630bdb87747b54.jpg) *Figure 5: Overall speedups for Lua and JavaScript interpreters (the higher, the better)*
 
-### 1. 统一寄存器文件 (Unified Register File) (ELI5)
+### 1. 统一寄存器文件 (Unified Register File)
 
 **痛点直击 (The "Why")**
 
@@ -79,7 +79,7 @@ ______________________________________________________________________
     - **R.f**: 一个**1-bit的F/Ī标志**，用来快速区分这个值是**Floating-point**（浮点）还是**Integer**（整数）子类型，这对后续选择正确的ALU至关重要。
 - 这个改动看似简单，但它把**类型信息从内存空间提升到了寄存器状态**。从此以后，任何需要类型信息的操作（比如 `xadd` 指令）都可以直接从寄存器里读取 `R.t` 和 `R.f`，在**硬件流水线内部并行完成**类型检查和数值计算，彻底绕开了软件层面那些冗长的类型守卫代码。![](images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg) *Figure 4: Pipeline structure augmented with Typed Architecture*
 
-### 2. 多态指令 (Polymorphic Instructions) (ELI5)
+### 2. 多态指令 (Polymorphic Instructions)
 
 **痛点直击 (The "Why")**
 
@@ -107,7 +107,7 @@ ______________________________________________________________________
 
 ![](images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg) *Figure 4: Pipeline structure augmented with Typed Architecture*
 
-### 3. 带标签的内存指令 (Tagged Memory Instructions) (ELI5)
+### 3. 带标签的内存指令 (Tagged Memory Instructions)
 
 **痛点直击 (The "Why")**
 
@@ -134,7 +134,7 @@ ______________________________________________________________________
 ![](images/27a67567f10ec8b1aa421b7a37983fc0d469362eb83c9646dd972f94ee1bc42f.jpg) *Table 4: Special-purpose register settings*
 ![](images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg) *Figure 4: Pipeline structure augmented with Typed Architecture*
 
-### 4. 类型规则表 (Type Rule Table) (ELI5)
+### 4. 类型规则表 (Type Rule Table)
 
 **痛点直击 (The "Why")**
 
@@ -162,7 +162,7 @@ ______________________________________________________________________
 ![](images/7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg) *Table 5: Type Rule Table settings for Lua and SpiderMonkey*
 这张图展示了为 **Lua** 和 **SpiderMonkey** 配置的 Type Rule Table 内容。可以看到，它清晰地定义了哪些输入类型组合（Input Type A/B）在特定操作（Op）下是合法的，并直接映射到输出类型（Output Type）。这就是那个“智能预检系统”的核心数据库。
 
-### 5. 类型检查与慢速路径处理 (ELI5)
+### 5. 类型检查与慢速路径处理
 
 **痛点直击 (The "Why")**
 

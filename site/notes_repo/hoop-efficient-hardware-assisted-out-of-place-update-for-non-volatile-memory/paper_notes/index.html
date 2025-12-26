@@ -1,0 +1,1282 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-hardware-assisted-out-of-place-oop-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Hardware-Assisted Out-of-Place (OOP) Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-lightweight-indirection-layer-in-memory-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Lightweight Indirection Layer in Memory Controller
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-data-packing-and-memory-slice-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Data Packing and Memory Slice Organization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-adaptive-garbage-collection-with-data-coalescing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Adaptive Garbage Collection with Data Coalescing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-parallel-crash-recovery-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Parallel Crash Recovery Mechanism
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory">HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory 论文解析<a class="headerlink" href="#hoop-efficient-hardware-assisted-out-of-place-update-for-non-volatile-memory" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Miao Cai, Chance C. Coats, Jian Huang</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: unknown</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2020</p>
+<p><strong>研究机构 (Affiliations)</strong>: Nanjing University, University of Illinois at Urbana-Champaign</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>解决现有非易失性内存（NVM）崩溃一致性技术（如日志、影子分页）存在的<strong>高写放大</strong>和<strong>关键路径性能开销大</strong>的核心问题。</li>
+<li>提出一种透明、高效的硬件辅助方案，在保证<strong>原子持久性</strong>的同时，显著降低写流量和执行延迟。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li>提出 <strong>HOOP (Hardware-Assisted Out-of-Place Update)</strong> 机制，其核心思想是将更新数据写入NVM中的新位置（OOP区域），同时保留旧数据，直到新数据持久化。</li>
+<li>在内存控制器中设计了一个轻量级的间接层，包含以下关键组件：<ul>
+<li><strong>OOP数据缓冲区</strong>：在事务执行期间缓冲更新，并应用<strong>数据打包（data packing）</strong> 技术，将多个细粒度更新压缩到单个缓存行中，减少写流量。</li>
+<li><strong>物理到物理地址映射表</strong>：一个小型哈希表，用于将数据的“家地址”（home address）映射到其在OOP区域中的最新位置，确保加载操作能读取到最新数据。</li>
+<li><strong>自适应垃圾回收（GC）</strong>：后台运行的GC算法，周期性地将OOP区域中的最新数据迁移回其原始“家地址”。该过程采用<strong>数据合并（data coalescing）</strong> 策略，对同一缓存行的多次更新只写回一次，进一步减少写放大。</li>
+<li><strong>快速并行恢复</strong>：系统崩溃后，利用多核线程并行扫描OOP区域，根据提交的事务日志快速恢复到一致状态。</li>
+</ul>
+</li>
+<li>整个方案对上层软件透明，无需修改TLB或使用非易失性缓存。</li>
+</ul>
+<p><img alt="" src="../images/2462e7cd429df53d42e80a9b3289cc106eb25414496d10077e336f392cc9c839.jpg" /> <em>Fig. 2: Hardware-assisted out-of-place update with HOOP. HOOP performs out-of-place writes and reduces write traffic with data packing and coalescing. To reduce the storage overhead, HOOP adaptively migrates data in the out-of-place (OOP) region back to the home region with optimized GC.</em></p>
+<p><strong>结果</strong></p>
+<ul>
+<li><strong>性能提升</strong>：与包括Opt-Redo、Opt-Undo、OSP、LSM和LAD在内的最先进崩溃一致性技术相比，HOOP将应用性能最高提升了 <strong>1.7倍</strong>。</li>
+<li><strong>写放大降低</strong>：通过数据打包和合并，HOOP将写放大最高降低了 <strong>2.1倍</strong>，显著优于基线方法。</li>
+<li><strong>低关键路径延迟</strong>：HOOP的关键路径延迟非常接近无持久性保证的原生系统，平均仅高出 <strong>24.1%</strong>。</li>
+<li><strong>高效恢复</strong>：数据恢复能力随核心数扩展，在高带宽下（&gt;25 GB/s）可在 <strong>47毫秒</strong> 内恢复1GB的OOP区域数据。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">对比指标</th>
+<th style="text-align: center;">HOOP vs. Opt-Redo</th>
+<th style="text-align: center;">HOOP vs. Opt-Undo</th>
+<th style="text-align: center;">HOOP vs. OSP</th>
+<th style="text-align: center;">HOOP vs. LSM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>吞吐量提升</strong></td>
+<td style="text-align: center;"><strong>74.3%</strong></td>
+<td style="text-align: center;"><strong>45.1%</strong></td>
+<td style="text-align: center;"><strong>33.8%</strong></td>
+<td style="text-align: center;"><strong>27.9%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>关键路径延迟降低</strong></td>
+<td style="text-align: center;"><strong>45.1%</strong></td>
+<td style="text-align: center;"><strong>52.8%</strong></td>
+<td style="text-align: center;"><strong>44.3%</strong></td>
+<td style="text-align: center;"><strong>60.5%</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>写流量降低</strong></td>
+<td style="text-align: center;"><strong>2.1×</strong></td>
+<td style="text-align: center;"><strong>1.9×</strong></td>
+<td style="text-align: center;"><strong>21.2%</strong></td>
+<td style="text-align: center;"><strong>12.5%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/c68196e643257977f61c9cf4821354c4ac4c8425755d7aa3e8a6d72b7b1e5f78.jpg" /> <em>Fig. 8: Write traffic produced by different approaches.</em></p>
+<p><strong>结论</strong></p>
+<ul>
+<li><strong>HOOP</strong> 通过硬件辅助的<strong>异地更新（Out-of-Place Update）</strong> 范式，成功解耦了数据持久化与程序执行的关键路径。</li>
+<li>其结合<strong>数据打包</strong>、<strong>数据合并</strong>和<strong>自适应垃圾回收</strong>的轻量级设计，在提供强<strong>原子持久性</strong>保证的同时，实现了<strong>低写放大</strong>和<strong>高吞吐量</strong>。</li>
+<li>该方案仅需对内存控制器进行<strong>最小化硬件修改</strong>（约4.25%面积开销），具有很高的实用性和可部署性，为NVM系统的高效持久化提供了新的有效途径。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景与动机</strong></p>
+<ul>
+<li><strong>Byte-addressable Non-Volatile Memory (NVM)</strong> 技术（如 3D XPoint）结合了近似 DRAM 的性能和可扩展的大容量，但其应用必须解决 <strong>memory persistency</strong> 问题，以确保系统崩溃时的数据 <strong>crash consistency</strong>。</li>
+<li>现有的主流 <strong>crash-consistency</strong> 技术存在显著缺陷：<ul>
+<li><strong>Logging (日志)</strong>：无论是 undo 还是 redo 日志，都需要为每次更新写入额外的日志数据，导致 <strong>write amplification</strong> 高达 2 倍，不仅降低性能，还损害 NVM 寿命。此外，强制 <strong>persistence ordering</strong> 需要频繁的 cache flush 和 memory fence 指令，引入严重的 <strong>critical-path latency</strong>。</li>
+<li><strong>Shadow Paging (影子分页)</strong>：采用 <strong>copy-on-write (CoW)</strong> 机制，即使只修改少量数据也要复制整个页面，同样造成高 <strong>write amplification</strong>。细粒度优化方案（如 cache-line 级别）则需要复杂的 <strong>TLB modifications</strong>，带来新的性能开销。</li>
+<li><strong>Log-structured NVM</strong>：虽然减少了双写问题，但每次读取都需要通过软件索引树（如 skip list）查找最新数据位置，导致 <strong>O(log N)</strong> 的内存访问次数，显著增加 <strong>read latency</strong>。</li>
+</ul>
+</li>
+<li>这些方案要么在 <strong>critical path</strong> 上引入巨大开销，要么产生过多的 <strong>NVM write traffic</strong>，或者两者兼有，难以兼顾高性能与低开销。</li>
+</ul>
+<p><img alt="" src="../images/6c5b235d6fb4853971c26e030dc24e02b9e11d457a5d1c1c668a04ed0b4d0933.jpg" /> <em>Fig. 1: Illustration of different crash-consistency techniques. (a) Logging technique requires that both logs and data must be persisted, which incurs double writes; (b) Shadow paging maintains two copies of data, it suffers from copy-on-write overhead; (c) Log-structured NVM alleviates the double writes, but it suffers from significant overhead of index lookup; (d) Our hardware-assisted out-of-place update reduces the write amplification significantly, while providing efficient data accesses.</em></p>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li>提出 <strong>HOOP (Hardware-Assisted Out-of-Place Update)</strong>，一种透明、高效的硬件辅助 <strong>out-of-place update</strong> 机制，旨在同时实现 <strong>low critical-path latency</strong> 和 <strong>small write amplification</strong>。</li>
+<li>在 <strong>memory controller</strong> 中设计了一个轻量级的 <strong>indirection layer</strong>，包含以下关键组件：<ul>
+<li><strong>OOP Data Buffer</strong>：在控制器中为每个核心设置缓冲区，对事务中的更新进行 <strong>data packing</strong>，将多个 word 级别的更新及其元数据打包成一个 <strong>memory slice</strong> 再写入 NVM，有效利用带宽并减少写流量。</li>
+<li><strong>Hash-based Address-Mapping Table</strong>：维护一个物理到物理的地址映射表，使 Load 操作能透明地读取最新数据，且该表大小可控，因为条目会在 <strong>Garbage Collection (GC)</strong> 后被清理。</li>
+<li><strong>Adaptive Garbage Collection with Data Coalescing</strong>：后台 GC 进程周期性地将 OOP 区域中的最新数据迁移回其原始 <strong>home region</strong>。通过 <strong>data coalescing</strong> 机制，将对同一缓存行的多次更新合并为一次写回，极大减少了 GC 过程中的额外写流量。</li>
+<li><strong>Fast Multi-core Data Recovery</strong>：系统崩溃后，利用多核并行扫描 OOP 区域，快速恢复到一致状态，展现出良好的可扩展性。</li>
+</ul>
+</li>
+<li>HOOP 的方案完全在硬件层面实现，对上层软件透明，无需修改 CPU 缓存、TLB 或要求程序员插入持久化指令。</li>
+<li>实验评估表明，与最先进的技术相比，HOOP <strong>improves application performance by up to 1.7×</strong>，同时 <strong>reduces the write amplification by up to 2.1×</strong>，其关键路径延迟非常接近无持久化保证的原生系统。</li>
+</ul>
+<p><img alt="" src="../images/2462e7cd429df53d42e80a9b3289cc106eb25414496d10077e336f392cc9c839.jpg" /> <em>Fig. 2: Hardware-assisted out-of-place update with HOOP. HOOP performs out-of-place writes and reduces write traffic with data packing and coalescing. To reduce the storage overhead, HOOP adaptively migrates data in the out-of-place (OOP) region back to the home region with optimized GC.</em></p>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>HOOP (Hardware-Assisted Out-of-Place Update) 的核心架构是在<strong>内存控制器</strong>中实现一个轻量级的、透明的间接层，以支持高效的<strong>out-of-place (OOP) 更新</strong>，从而保证 NVM 的<strong>原子持久性 (atomic durability)</strong>，同时最小化写放大和关键路径延迟。</p>
+<ul>
+<li><strong>基本工作流</strong>:<ul>
+<li>应用程序通过 <code>Tx_begin</code> 和 <code>Tx_end</code> 指令界定需要原子持久性的事务区域。</li>
+<li>在事务执行期间，所有被修改的数据（store 操作）不会直接写回其原始位置（称为 <strong>home region</strong>），而是被暂存并最终持久化到 NVM 中一个专用的、日志结构化的区域（称为 <strong>OOP region</strong>）。</li>
+<li>读取操作（load 操作）会通过内存控制器中的地址映射表，透明地定位到最新的数据版本（可能在 OOP region 或 home region）。</li>
+<li>系统通过后台的<strong>垃圾回收 (Garbage Collection, GC)</strong> 机制，周期性地将 OOP region 中的最新数据迁移回其 home region，并清理旧版本，以回收空间并减少长期写放大。</li>
+<li>发生系统崩溃后，利用 OOP region 中保存的已提交事务数据，通过<strong>多线程并行</strong>的方式快速恢复系统到一致状态。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/2462e7cd429df53d42e80a9b3289cc106eb25414496d10077e336f392cc9c839.jpg" /> <em>Fig. 2: Hardware-assisted out-of-place update with HOOP. HOOP performs out-of-place writes and reduces write traffic with data packing and coalescing. To reduce the storage overhead, HOOP adaptively migrates data in the out-of-place (OOP) region back to the home region with optimized GC.</em></p>
+<p><strong>核心组件</strong></p>
+<ul>
+<li>
+<p><strong>OOP 数据缓冲区 (OOP Data Buffer)</strong>:</p>
+<ul>
+<li>位于内存控制器中，每个核心拥有一个专用的 1KB 缓冲区。</li>
+<li>用于暂存事务中修改的缓存行及其元数据（home region 地址）。</li>
+<li>支持<strong>数据打包 (data packing)</strong>：将多个独立缓存行中的细粒度（word-level）更新压缩到一个 <strong>memory slice</strong>（128字节）中，显著减少写流量。</li>
+</ul>
+</li>
+<li>
+<p><strong>地址映射表 (Address Mapping Table)</strong>:</p>
+<ul>
+<li>一个位于内存控制器中的<strong>哈希表</strong>，用于维护从 home region 物理地址到 OOP region 物理地址的映射。</li>
+<li>该表是<strong>物理到物理 (physical-to-physical)</strong> 的映射，对上层软件完全透明，避免了 TLB 修改和 shootdown 开销。</li>
+<li>表项在 GC 将数据迁回 home region 后会被移除，因此其大小可控（默认 2MB）。</li>
+</ul>
+</li>
+<li>
+<p><strong>OOP 区域组织 (OOP Region Organization)</strong>:</p>
+<ul>
+<li>OOP region 被组织成<strong>日志结构 (log-structured)</strong>，由多个固定大小（2MB）的 <strong>OOP blocks</strong> 组成。</li>
+<li>每个 OOP block 由固定大小（128字节）的 <strong>memory slices</strong> 填充。</li>
+<li>Memory slices 分为两类：<strong>data memory slice</strong>（存放实际数据和元数据）和 <strong>address memory slice</strong>（存放大型事务的起始地址，便于 GC 和恢复）。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg" /> <em>Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.</em></p>
+<ul>
+<li>
+<p><strong>垃圾回收与数据合并 (Garbage Collection and Data Coalescing)</strong>:</p>
+<ul>
+<li>GC 在后台周期性运行（默认每 10ms）。</li>
+<li>GC 扫描 OOP blocks 中已提交的事务，并采用<strong>逆时间顺序 (reverse time order)</strong> 处理。</li>
+<li>通过<strong>数据合并 (data coalescing)</strong> 技术，将对同一 home 地址的多次更新合并为一次写入，极大减少了迁回 home region 时的写流量。</li>
+<li>GC 过程本身也是崩溃安全的。</li>
+</ul>
+</li>
+<li>
+<p><strong>驱逐缓冲区 (Eviction Buffer)</strong>:</p>
+<ul>
+<li>一个小型缓冲区（默认 128KB），用于在 GC 迁移数据期间暂存被驱逐的缓存行。</li>
+<li>确保在地址映射表项被移除后，LLC miss 仍能读取到最新数据，防止读取陈旧数据。</li>
+</ul>
+</li>
+</ul>
+<p><strong>数据访问流程</strong></p>
+<ul>
+<li>
+<p><strong>Store 操作</strong>:</p>
+<ul>
+<li>修改后的数据被标记并发送到内存控制器。</li>
+<li>HOOP 将其存入对应核心的 OOP 数据缓冲区。</li>
+<li>当缓冲区满或遇到 <code>Tx_end</code> 时，数据被打包成 memory slice 并持久化到 OOP region。</li>
+</ul>
+</li>
+<li>
+<p><strong>Load 操作</strong>:</p>
+<ul>
+<li>LLC miss 时，请求被发送到内存控制器。</li>
+<li>控制器首先查询<strong>地址映射表</strong>。<ul>
+<li>若命中，则从 OOP region 读取数据，并与 home region 的原始数据（并行读取）合并以重构最新缓存行。</li>
+<li>若未命中，则检查<strong>驱逐缓冲区</strong>，最后才从 home region 读取。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/8071590215bf4899da92162ed14a0fe1d34dffbcc5676b3d247b31cfc4e98a0d.jpg" /> <em>Fig. 6: The load and store procedure in HOOP.</em></p>
+<h3 id="1-hardware-assisted-out-of-place-oop-update">1. Hardware-Assisted Out-of-Place (OOP) Update<a class="headerlink" href="#1-hardware-assisted-out-of-place-oop-update" title="Permanent link">&para;</a></h3>
+<p><strong>核心机制与实现原理</strong></p>
+<ul>
+<li>HOOP 的核心思想是 <strong>Hardware-Assisted Out-of-Place (OOP) Update</strong>，即在 NVM 中为更新的数据分配一个<strong>新位置</strong>进行写入，同时保留原始位置（称为 <strong>home region</strong>）的旧数据，直到新数据被持久化。这种机制天然地保证了<strong>原子性</strong>：系统崩溃时，要么读取到完整的旧数据，要么读取到完整的、已提交的新数据。</li>
+<li>为了支持 OOP 更新，HOOP 在<strong>内存控制器</strong>中引入了一个轻量级的<strong>间接层 (indirection layer)</strong>，负责将逻辑上的 home region 地址映射到物理上可能位于 OOP 区域的新地址。</li>
+<li>整个方案对上层软件<strong>完全透明</strong>，应用程序只需使用简单的 <code>Tx_begin</code> 和 <code>Tx_end</code> 指令来界定需要原子持久化的事务区域，无需手动插入缓存刷新 (<code>clwb</code>) 或内存屏障 (<code>mfence</code>) 指令。</li>
+</ul>
+<p><strong>关键组件与算法流程</strong></p>
+<ul>
+<li>
+<p><strong>OOP 数据缓冲区 (OOP Data Buffer)</strong>:</p>
+<ul>
+<li>位于内存控制器中，每个核心拥有一个专用的 <strong>1KB</strong> 缓冲区条目，用于暂存事务中修改的数据。</li>
+<li>采用<strong>字粒度 (word granularity)</strong> 跟踪更新，而非传统的缓存行粒度，以适应细粒度写入的应用场景。</li>
+<li>应用<strong>数据打包 (data packing)</strong> 技术：将最多 <strong>8</strong> 个独立的 8 字节数据更新及其元数据压缩到一个 <strong>128 字节</strong>的单元中，称为 <strong>memory slice</strong>。这显著减少了写入 NVM 的流量。</li>
+<li><img alt="" src="../images/c3438a9bbf9c81f1785f54228b2cf11eb233c85613a106863e9a578698d8dac6.jpg" /> <em>Fig. 3: Data packing in HOOP.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>OOP 区域组织 (OOP Region Organization)</strong>:</p>
+<ul>
+<li>OOP 区域在 NVM 中以<strong>日志结构 (log-structured)</strong> 方式组织，由多个 <strong>2MB</strong> 的 <strong>OOP block</strong> 组成。</li>
+<li>每个 OOP block 由固定大小的 <strong>memory slice</strong> 填充。Memory slice 分为两类：<ul>
+<li><strong>Data memory slice</strong>: 存储实际的更新数据和元数据（包括 home 地址、事务 ID、下一个 slice 的偏移等）。</li>
+<li><strong>Address memory slice</strong>: 存储一个事务中所有 data memory slice 的起始地址，便于垃圾回收 (GC) 和恢复时快速定位。</li>
+</ul>
+</li>
+<li><img alt="" src="../images/7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg" /> <em>Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>地址映射表 (Address Mapping Table)</strong>:</p>
+<ul>
+<li>一个位于内存控制器中的<strong>哈希表</strong>，用于维护从 <strong>home region 物理地址</strong> 到 <strong>OOP region 物理地址</strong> 的映射。</li>
+<li>默认大小为 <strong>2MB</strong>（256KB/核），用于跟踪所有尚未被 GC 回 home region 的 OOP 数据。</li>
+<li>在 LLC (Last-Level Cache) 未命中时，硬件会自动查询此表以确定是从 home region 还是 OOP region 读取最新数据。</li>
+<li>当 GC 将数据迁回 home region 后，对应的映射表项会被移除，从而控制表的大小。</li>
+</ul>
+</li>
+<li>
+<p><strong>垃圾回收 (Garbage Collection, GC)</strong>:</p>
+<ul>
+<li><strong>目标</strong>: 将 OOP 区域中的最新数据版本迁移回其 home region，以释放 OOP 空间并减少长期存储开销。</li>
+<li><strong>流程</strong>:<ul>
+<li>周期性触发（默认每 <strong>10 毫秒</strong>）。</li>
+<li>扫描 OOP block 中的 <strong>committed transactions</strong>，并按<strong>时间逆序</strong>处理。</li>
+<li>使用一个临时哈希表 <strong>H</strong> 进行<strong>数据合并 (data coalescing)</strong>：对于同一 home 地址的多次更新，只保留最新的那个。这极大地减少了写回 home region 的流量。</li>
+<li>将哈希表 H 中的数据批量写回 home region，并从地址映射表中移除相应条目。</li>
+<li>标记已清空的 OOP block 为 <code>BLK_UNUSED</code>。</li>
+</ul>
+</li>
+<li><strong>优势</strong>: 通过数据合并，HOOP 能显著降低 GC 引入的额外写入。实验表明，当事务数超过 10^4 时，写回 home region 的数据量可减少 <strong>85%</strong> 以上。</li>
+<li><img alt="" src="../images/005c04de283a61409d0cf42bcf0a9fdda32c650975c500863ce072fdbc67c54e.jpg" /> <em>TABLE IV: Average data reduction in the GC of HOOP.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>数据恢复 (Data Recovery)</strong>:</p>
+<ul>
+<li>系统崩溃后，利用 OOP 区域中保存的已提交事务数据进行恢复。</li>
+<li><strong>利用多核并行</strong>: 操作系统创建多个恢复线程。</li>
+<li><strong>流程</strong>:<ul>
+<li>主线程收集所有 committed transaction 的地址，并按提交顺序排序。</li>
+<li>将这些地址以轮询方式分发给各个恢复线程。</li>
+<li>每个线程独立扫描分配给它的事务，构建本地哈希表，仅保留每个地址的最新值。</li>
+<li>主线程聚合所有本地哈希表，形成全局最新状态。</li>
+<li>多个线程并行地将全局状态写回 home region。</li>
+</ul>
+</li>
+<li><strong>可扩展性</strong>: 恢复速度随线程数和内存带宽线性增长。</li>
+<li><img alt="" src="../images/fb6ee0cebe93c8d3416d4e74476e0a3afe6ee85a757239288c73246219b0a32e.jpg" /> <em>Fig. 11: Recovery performance of 1GB OOP region with various number of recovery threads and memory bandwidth.</em></li>
+</ul>
+</li>
+</ul>
+<p><strong>输入输出关系及整体作用</strong></p>
+<ul>
+<li><strong>输入</strong>: 来自 CPU 核心的普通 Load/Store 指令，以及界定事务边界的 <code>Tx_begin</code>/<code>Tx_end</code> 指令。</li>
+<li><strong>输出</strong>: 对应用程序而言，是符合<strong>原子持久性 (atomic durability)</strong> 语义的内存操作；对 NVM 而言，是经过优化的、低写放大倍数的数据流。</li>
+<li><strong>在整体系统中的作用</strong>:<ul>
+<li><strong>解耦持久性与性能</strong>: 通过 OOP 写入，消除了传统日志方法中强制的持久化顺序 (<code>persist ordering</code>)，允许 Store 指令在关键路径上以常规的乱序方式执行，从而<strong>大幅降低关键路径延迟</strong>。</li>
+<li><strong>消除日志开销</strong>: 旧数据本身就是“日志”，因此无需额外的日志写入，<strong>显著降低了写放大 (write amplification)</strong>。</li>
+<li><strong>提供透明性</strong>: 所有复杂性被封装在内存控制器的硬件中，对操作系统和应用程序完全透明，简化了 NVM 编程模型。</li>
+<li><strong>保障高效恢复</strong>: 利用 OOP 区域的日志结构和多核并行，实现了<strong>快速且可扩展</strong>的崩溃恢复能力。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>性能指标与参数设置摘要</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件/参数</th>
+<th style="text-align: left;">默认值/规格</th>
+<th style="text-align: left;">作用/影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>OOP Region Size</strong></td>
+<td style="text-align: left;">NVM 总容量的 <strong>10%</strong></td>
+<td style="text-align: left;">存储 OOP 更新的专用空间</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>OOP Data Buffer</strong></td>
+<td style="text-align: left;"><strong>1KB</strong> / core</td>
+<td style="text-align: left;">暂存事务更新，支持数据打包</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Address Mapping Table</strong></td>
+<td style="text-align: left;"><strong>2MB</strong> (256KB/core)</td>
+<td style="text-align: left;">跟踪 OOP 数据位置，控制其大小是 GC 触发条件之一</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Eviction Buffer</strong></td>
+<td style="text-align: left;"><strong>128KB</strong></td>
+<td style="text-align: left;">在 GC 期间暂存被驱逐的缓存行，防止读取陈旧数据</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GC Trigger Period</strong></td>
+<td style="text-align: left;"><strong>10 毫秒</strong></td>
+<td style="text-align: left;">平衡数据合并效率与 OOP 空间压力</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Memory Slice Size</strong></td>
+<td style="text-align: left;"><strong>128 bytes</strong></td>
+<td style="text-align: left;">包含最多 8 个 8-byte 数据 + 64-byte 元数据</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>OOP Block Size</strong></td>
+<td style="text-align: left;"><strong>2MB</strong></td>
+<td style="text-align: left;">GC 和空间管理的基本单位</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Area Overhead</strong></td>
+<td style="text-align: left;"><strong>4.25%</strong></td>
+<td style="text-align: left;">相对于 Sandy Bridge 处理器的面积开销</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-lightweight-indirection-layer-in-memory-controller">2. Lightweight Indirection Layer in Memory Controller<a class="headerlink" href="#2-lightweight-indirection-layer-in-memory-controller" title="Permanent link">&para;</a></h3>
+<p><strong>核心组件与实现原理</strong></p>
+<ul>
+<li>HOOP 的 <strong>Lightweight Indirection Layer</strong> 是其实现透明、高效 <strong>Out-of-Place (OOP) Update</strong> 的关键，它被完全集成在 <strong>memory controller</strong> 中，对上层软件完全透明。</li>
+<li>该层的核心是一个 <strong>hash-based physical-to-physical address mapping table</strong>（物理到物理地址映射表），用于追踪那些已被更新但尚未通过 <strong>Garbage Collection (GC)</strong> 迁移回其 <strong>home region</strong> 的缓存行（cache line）在 <strong>OOP region</strong> 中的新位置。</li>
+<li><strong>输入</strong>: 来自 LLC (Last-Level Cache) 的内存访问请求，包含目标数据的 <strong>home-region physical address</strong>。</li>
+<li><strong>输出</strong>:<ul>
+<li>对于 <strong>load 操作</strong>：返回数据的实际物理地址（可能在 <strong>home region</strong> 或 <strong>OOP region</strong>），并最终将正确的数据返回给处理器。</li>
+<li>对于 <strong>store 操作</strong>：将更新后的数据及其 <strong>home-region address</strong> 写入 <strong>OOP data buffer</strong>，并在必要时触发到 <strong>OOP region</strong> 的写入，并在映射表中创建新条目。</li>
+</ul>
+</li>
+</ul>
+<p><strong>地址映射表 (Mapping Table) 详解</strong></p>
+<ul>
+<li><strong>功能</strong>: 维护一个从 <strong>home-region address</strong> 到 <strong>OOP-region address</strong> 的映射关系。</li>
+<li><strong>结构</strong>: 一个共享的哈希表，由所有核心共用。</li>
+<li><strong>条目内容</strong>: 每个条目包含 <strong>home-region address</strong> 和对应的 <strong>OOP-region address</strong>。</li>
+<li><strong>大小与管理</strong>:<ul>
+<li>默认配置为 <strong>2MB</strong>（每个核心 256KB）。</li>
+<li>表的大小直接关联于两次 <strong>GC</strong> 操作之间可能产生的 OOP 更新数量。合理的大小可以避免频繁 GC。</li>
+<li>条目会在两种情况下被移除：<ul>
+<li><strong>GC 完成后</strong>: 当 OOP region 中的最新数据被成功迁移回 home region 后，对应的映射条目会被清除。</li>
+<li><strong>Cache Hit in LLC</strong>: 当一个 LLC miss 触发了对映射表的查询并命中后，数据被加载到缓存层次结构中。此时，由于缓存一致性协议能保证后续访问的正确性，该映射条目会被移除，因为最新的数据已在缓存中。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>优势</strong>: 相比于软件方案（如 LSNVMM）或需要修改 TLB 的方案（如 OSP），硬件实现的地址翻译避免了昂贵的 <strong>TLB shootdown</strong> 和软件开销，实现了 <strong>trivial address translation overhead</strong>。</li>
+</ul>
+<p><strong>辅助缓冲区: Eviction Buffer</strong></p>
+<ul>
+<li><strong>功能</strong>: 在 <strong>GC</strong> 过程中，当数据从 OOP region 被写回到 home region 时，这些被写回的缓存行会暂时存放在 <strong>eviction buffer</strong> 中。</li>
+<li><strong>目的</strong>: 确保在映射表条目被移除后、数据最终落盘前，如果发生 LLC miss，系统仍能读取到最新的数据版本，而不是 home region 中可能已过时的旧数据。</li>
+<li><strong>工作流程</strong>:<ul>
+<li>LLC miss 时，首先查询 <strong>mapping table</strong>。</li>
+<li>若未命中，则查询 <strong>eviction buffer</strong>。</li>
+<li>若仍未命中，才从 <strong>home region</strong> 读取。</li>
+</ul>
+</li>
+<li><strong>大小</strong>: 默认为 <strong>128KB</strong>，因其仅需缓存 GC 过程中的小粒度数据，故容量需求很小。</li>
+</ul>
+<p><strong>整体工作流程 (以 Load/Store 为例)</strong></p>
+<p><img alt="" src="../images/8071590215bf4899da92162ed14a0fe1d34dffbcc5676b3d247b31cfc4e98a0d.jpg" /> <em>Fig. 6: The load and store procedure in HOOP.</em></p>
+<ul>
+<li><strong>Load 操作流程</strong>:<ul>
+<li>处理器发出 load 请求，经缓存层次到达 LLC。</li>
+<li>若 LLC miss，请求连同 <strong>home-region address</strong> 被发送至 memory controller。</li>
+<li>Memory controller 查询 <strong>mapping table</strong>。<ul>
+<li><strong>Hit</strong>: 并行地从 <strong>OOP region</strong> 和 <strong>home region</strong> 读取数据（因为 OOP region 中只存储了更新的部分字）。利用 <strong>metadata</strong> 信息将 OOP 中的新数据与 home region 中的旧数据 <strong>reconstruct</strong> 成完整的最新缓存行。</li>
+<li><strong>Miss</strong>: 检查 <strong>eviction buffer</strong>，若命中则返回数据；否则直接从 <strong>home region</strong> 读取。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Store 操作流程</strong>:<ul>
+<li>在事务中被修改的缓存行，在被驱逐出缓存或事务结束时，其数据和 <strong>home-region address</strong> 会被发送到 memory controller。</li>
+<li>Memory controller 将其暂存于 per-core 的 <strong>OOP data buffer</strong> 中，并进行 <strong>data packing</strong>。</li>
+<li>当 buffer 满或遇到 <strong>Tx end</strong> 指令时，打包后的 <strong>memory slice</strong> 被写入 <strong>OOP region</strong>。</li>
+<li>同时，在 <strong>mapping table</strong> 中创建一个新的映射条目，记录该 home address 现在指向 OOP region 中的新位置。</li>
+</ul>
+</li>
+</ul>
+<p><strong>在 HOOP 整体架构中的作用</strong></p>
+<ul>
+<li><strong>实现原子持久性</strong>: 通过确保更新总是先安全地写入 OOP region，再异步迁移，天然保证了 <strong>atomic durability</strong>。系统崩溃后，只需重放 OOP region 中的 committed transaction 即可恢复。</li>
+<li><strong>消除持久化排序开销</strong>: 由于更新是 out-of-place 的，store 操作无需任何 <strong>persistence ordering</strong>（如 clflush, mfence），可以像在普通 DRAM 上一样乱序执行，极大降低了 <strong>critical-path latency</strong>。</li>
+<li><strong>支撑高效 GC 与 Recovery</strong>: 映射表为 <strong>Garbage Collection</strong> 提供了精确的数据位置信息，使其能高效地将最新数据迁回 home region。同样，在 <strong>Data Recovery</strong> 阶段，系统通过扫描 OOP region 并结合映射逻辑来重建一致状态。</li>
+<li><strong>维持透明性</strong>: 整个机制对应用程序和操作系统完全透明，无需修改现有软件栈或编程模型。</li>
+</ul>
+<h3 id="3-data-packing-and-memory-slice-organization">3. Data Packing and Memory Slice Organization<a class="headerlink" href="#3-data-packing-and-memory-slice-organization" title="Permanent link">&para;</a></h3>
+<p><strong>数据打包与内存切片组织原理</strong></p>
+<ul>
+<li>HOOP 的核心创新之一在于其 <strong>数据打包 (Data Packing)</strong> 机制，该机制旨在将细粒度的更新高效地写入 NVM，从而显著降低 <strong>写放大 (Write Amplification)</strong>。</li>
+<li>传统方案（如 logging）通常以 <strong>缓存行 (Cache Line)</strong> 为单位进行持久化，即使只修改了其中几个字节，也会导致整个 64 字节的缓存行被写入，造成带宽和 NVM 寿命的浪费。</li>
+<li>HOOP 反其道而行之，它在 <strong>内存控制器</strong> 中追踪 <strong>字 (Word)</strong> 粒度（8 字节）的数据更新，并将多个独立的字更新 <strong>打包 (Pack)</strong> 到一个更大的、固定大小的单元中，即 <strong>内存切片 (Memory Slice)</strong>。</li>
+</ul>
+<p><strong>内存切片 (Memory Slice) 的内部结构</strong></p>
+<ul>
+<li>每个 <strong>内存切片</strong> 的固定大小为 <strong>128 字节</strong>。这个尺寸经过精心设计，可以利用两个连续的内存突发 (memory bursts) 高效地完成写入。</li>
+<li>一个内存切片被划分为 <strong>数据区</strong> 和 <strong>元数据区</strong> 两部分：<ul>
+<li><strong>数据区</strong>: 最多可容纳 <strong>8 个</strong> 8 字节的 <strong>数据 (Data)</strong> 更新。</li>
+<li><strong>元数据区</strong>: 固定为 <strong>64 字节</strong>，用于存储与这 8 个数据更新相关的关键信息。</li>
+</ul>
+</li>
+<li>元数据区包含以下关键字段：<ul>
+<li><strong>Home Addresses</strong>: 每个数据字在其 <strong>Home Region</strong> 中的原始地址（反向映射），用于后续的垃圾回收 (GC) 和恢复。</li>
+<li><strong>Next Slice Offset</strong>: 一个 <strong>24-bit</strong> 的偏移量，用于链接属于同一个大事务的多个内存切片，形成一个链表。</li>
+<li><strong>Transaction ID (TxID)</strong>: 一个 <strong>32-bit</strong> 的事务标识符，由内存控制器在事务开始时分配，用于在恢复时确定更新的顺序。</li>
+<li><strong>First Slice Flag</strong>: 一个比特位，用于标记此切片是否为该事务的第一个切片。</li>
+<li><strong>Word Count</strong>: 一个 <strong>3-bit</strong> 的计数器，记录此切片中实际包含的有效数据字数量（0-8）。</li>
+<li><strong>Slice State Flag</strong>: 一个 <strong>4-bit</strong> 的标志，用于 GC 和恢复过程中的状态管理。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/c3438a9bbf9c81f1785f54228b2cf11eb233c85613a106863e9a578698d8dac6.jpg" /> <em>Fig. 3: Data packing in HOOP.</em></p>
+<p><strong>OOP 区域的组织与写入流程</strong></p>
+<ul>
+<li>所有打包好的内存切片都被追加写入到一个专用的 <strong>OOP Region (Out-of-Place Region)</strong> 中。</li>
+<li>OOP Region 采用 <strong>日志结构 (Log-Structured)</strong> 组织方式，这意味着写入操作是 <strong>顺序的 (Sequential)</strong>，能最大化利用 NVM 的写入带宽并减少碎片。</li>
+<li>OOP Region 被进一步划分为多个 <strong>OOP Block</strong>（默认每个 2MB）。每个 Block 的头部包含索引号、指向下一个 Block 的指针以及状态标志（如 BLK_FULL, BLK_GC）。</li>
+<li>内存控制器维护一个 <strong>OOP Data Buffer</strong>（每个核心 1KB）来暂存正在打包的数据和元数据。</li>
+<li>数据从 OOP Data Buffer 刷新到 OOP Region 的触发条件有两个：<ol>
+<li><strong>缓冲区满</strong>: 当一个事务的更新填满了缓冲区（即凑够 8 个字），会立即打包成一个内存切片并写入。</li>
+<li><strong>事务提交</strong>: 当处理器执行 <strong>Tx end</strong> 指令时，无论缓冲区是否满，都会将剩余数据打包并强制刷新到 OOP Region，以确保事务的 <strong>原子持久性 (Atomic Durability)</strong>。</li>
+</ol>
+</li>
+</ul>
+<p><img alt="" src="../images/7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg" /> <em>Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.</em></p>
+<p><strong>在整体架构中的作用与优势</strong></p>
+<ul>
+<li><strong>输入</strong>: 来自 CPU 核心的、在事务中发生的 <strong>字粒度 Store 操作</strong>。</li>
+<li><strong>处理</strong>: 在内存控制器中进行 <strong>追踪、缓冲、打包</strong>，生成包含数据和完整元数据的 <strong>128-byte Memory Slice</strong>。</li>
+<li><strong>输出</strong>: 将内存切片 <strong>顺序写入</strong> OOP Region，并在 <strong>地址映射表 (Address Mapping Table)</strong> 中建立从 Home 地址到 OOP 地址的映射。</li>
+<li>这一机制在整体 HOOP 架构中扮演了承上启下的关键角色：<ul>
+<li><strong>对上 (CPU)</strong>: 它消除了软件层对 <strong>clwb</strong> 和 <strong>mfence</strong> 指令的依赖，因为持久化顺序由硬件在 OOP 区域内隐式保证，从而极大缩短了 <strong>关键路径延迟 (Critical-Path Latency)</strong>。</li>
+<li><strong>对下 (NVM)</strong>: 它通过字粒度打包，将原本可能需要多次缓存行写入的操作，压缩到更少的 128-byte 写入中，直接降低了 <strong>写流量 (Write Traffic)</strong>。</li>
+<li><strong>对 GC</strong>: 它为后续的 <strong>垃圾回收 (Garbage Collection)</strong> 提供了结构化的数据单元。GC 算法可以高效地扫描这些内存切片，利用其中的元数据（特别是 Home Addresses 和 TxID）进行 <strong>数据合并 (Data Coalescing)</strong>，最终将最新数据批量写回 Home Region，进一步减少写放大。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-adaptive-garbage-collection-with-data-coalescing">4. Adaptive Garbage Collection with Data Coalescing<a class="headerlink" href="#4-adaptive-garbage-collection-with-data-coalescing" title="Permanent link">&para;</a></h3>
+<p><strong>核心机制与设计目标</strong></p>
+<p>HOOP 的 <strong>Adaptive Garbage Collection (GC)</strong> 机制是其降低 <strong>write amplification</strong> 和节省 <strong>NVM</strong> 空间开销的核心。其根本目标是在后台将 <strong>Out-of-Place (OOP) region</strong> 中的最新数据版本迁移回 <strong>home region</strong>，同时通过 <strong>Data Coalescing</strong> 技术将对同一地址的多次更新合并为一次写入，从而最小化写流量。</p>
+<ul>
+<li><strong>触发方式</strong>: GC 作为一个 <strong>background</strong> 进程周期性执行，默认周期为 <strong>10 毫秒</strong>。</li>
+<li><strong>作用域</strong>: GC 以 <strong>OOP block</strong> 为单位进行操作，每个 OOP block 大小为 <strong>2MB</strong>。</li>
+<li><strong>关键挑战</strong>:<ul>
+<li>避免因频繁迁移旧数据版本而产生大量不必要的写操作。</li>
+<li>确保 GC 过程本身是 <strong>crash-safe</strong> 的，即系统在 GC 执行中崩溃后仍能恢复到一致状态。</li>
+</ul>
+</li>
+</ul>
+<p><strong>算法流程详解</strong></p>
+<p>GC 的具体工作流程由 <strong>Algorithm 1</strong> 描述，其核心在于 <strong>reverse-time-order scanning</strong> 和 <strong>hash-map-based coalescing</strong>。</p>
+<ul>
+<li><strong>输入</strong>: 一个或多个状态为 <strong>BLK_FULL</strong> 的 <strong>OOP block</strong>。</li>
+<li><strong>输出</strong>: 数据被写回 <strong>home region</strong>，对应的 <strong>OOP block</strong> 状态被重置为 <strong>BLK_UNUSED</strong>，相关的 <strong>mapping table</strong> 条目被清理。</li>
+<li><strong>详细步骤</strong>:<ul>
+<li><strong>定位事务</strong>: 首先，GC 读取 <strong>OOP block</strong> 中的 <strong>address memory slice</strong>，以获取所有已提交 (<strong>committed</strong>) 事务的起始地址。</li>
+<li><strong>逆序扫描</strong>: 从最新的事务开始，<strong>反向遍历</strong> OOP block 中的所有已提交事务。这种逆序策略是实现高效 <strong>coalescing</strong> 的关键。</li>
+<li><strong>数据合并 (Coalescing)</strong>:<ul>
+<li>为本次 GC 操作创建一个临时的 <strong>hash map H</strong>。</li>
+<li>对于扫描到的每一个数据更新（包含 <strong>home-region address</strong>, <strong>TxID</strong>, 和 <strong>Data</strong>），检查其 <strong>home-region address</strong> 是否已在 <strong>H</strong> 中。</li>
+<li>如果 <strong>H</strong> 中已存在该地址的条目，则<strong>跳过</strong>当前更新（因为逆序扫描保证了 <strong>H</strong> 中的数据版本更新）。</li>
+<li>如果 <strong>H</strong> 中不存在该地址，则将 <code>&lt;home-region address, Data, TxID&gt;</code> 作为新条目加入 <strong>H</strong>。</li>
+<li>通过此过程，<strong>H</strong> 最终只保留每个 <strong>home-region address</strong> 的<strong>最新</strong>数据版本。</li>
+</ul>
+</li>
+<li><strong>批量写回</strong>: 遍历完成后，将 <strong>hash map H</strong> 中的所有数据<strong>批量写回</strong>到它们各自的 <strong>home region</strong> 地址。</li>
+<li><strong>元数据清理</strong>:<ul>
+<li>在写回过程中，对于每个写回的地址，检查 <strong>mapping table (MT)</strong>。</li>
+<li>如果该地址存在于 <strong>MT</strong> 中，则将其条目<strong>移除</strong>，因为最新数据现在已位于 <strong>home region</strong>。</li>
+</ul>
+</li>
+<li><strong>块回收</strong>: 更新 <strong>OOP block</strong> 的头部，将其状态设为 <strong>BLK_UNUSED</strong>，并清除其在 <strong>block index table</strong> 中的记录，使其可供后续的 OOP 写入重用。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg" /> <em>Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.</em></p>
+<p><strong>在整体架构中的作用与优势</strong></p>
+<p>该 GC 机制是 HOOP 实现高性能和低写放大的关键一环，它与 OOP 写入、地址映射等组件紧密协同。</p>
+<ul>
+<li><strong>降低写放大</strong>: <strong>Data Coalescing</strong> 是核心优势。如 <strong>Table IV</strong> 所示，随着事务数量的增加，<strong>data reduction ratio</strong> 显著提升。当事务数超过 <strong>10^4</strong> 时，得益于数据局部性，需要写回 <strong>home region</strong> 的数据量可降至原始更新量的 <strong>15%</strong> 以下。</li>
+<li><strong>维持低映射表开销</strong>: 通过定期将数据迁回 <strong>home region</strong> 并清理 <strong>mapping table</strong>，确保了该硬件表的大小可以保持在一个较小且固定的水平（默认 <strong>2MB</strong>），避免了其成为性能瓶颈。</li>
+<li><strong>保障 Crash-Safety</strong>: GC 过程本身不破坏数据一致性。即使在 GC 执行中发生崩溃，系统也可以通过标准的 <strong>data recovery</strong> 流程（同样基于 OOP region 中的完整事务日志）来恢复，因为 OOP region 始终保存着完整的、可重放的更新历史。</li>
+<li><strong>性能权衡</strong>: GC 的触发频率是一个关键参数。如 <strong>Figure 10</strong> 所示，过于频繁的 GC（如 2ms）会减少 <strong>coalescing</strong> 的机会，增加写流量；而过于稀疏的 GC（如 &gt;11ms）则可能导致 OOP region 空间耗尽，迫使 GC 在关键路径上执行。<strong>10ms</strong> 的默认设置是在实验中找到的性能平衡点。</li>
+</ul>
+<h3 id="5-parallel-crash-recovery-mechanism">5. Parallel Crash Recovery Mechanism<a class="headerlink" href="#5-parallel-crash-recovery-mechanism" title="Permanent link">&para;</a></h3>
+<p><strong>并行崩溃恢复机制的核心原理</strong></p>
+<ul>
+<li>HOOP 的崩溃恢复机制完全依赖于其 <strong>Out-of-Place (OOP) 更新</strong>的设计哲学。所有已提交事务（committed transactions）的更新数据都持久化在专用的 <strong>OOP region</strong> 中，而原始数据（home region）保持不变，这为系统提供了一个天然的、一致的恢复起点。</li>
+<li>恢复过程的核心目标是：从 OOP region 中扫描出所有 <strong>committed transactions</strong>，根据其提交顺序（通过 <strong>TxID</strong> 体现）重建每个内存地址的<strong>最新有效版本</strong>，并将这些最新数据写回其 <strong>home region</strong>，从而将整个 NVM 系统恢复到崩溃前最后一个一致的状态。</li>
+<li>该机制的关键创新在于利用现代多核处理器的 <strong>thread parallelism</strong> 来加速这一扫描和恢复过程，使其能够<strong>即时（instantly）</strong> 完成，而非成为系统重启的瓶颈。</li>
+</ul>
+<p><strong>并行恢复的详细算法流程</strong></p>
+<ul>
+<li>
+<p><strong>阶段一：初始化与任务分发</strong></p>
+<ul>
+<li>系统崩溃后重启，操作系统负责创建多个 <strong>recovery threads</strong>。</li>
+<li>主线程（master thread）首先读取 <strong>block index table</strong>，定位所有有效的 OOP blocks。</li>
+<li>主线程接着扫描 OOP region，读取所有的 <strong>address memory slices</strong>，以获取每个已提交事务的起始地址（start address）。</li>
+<li>这些事务地址被收集后，按<strong>提交顺序排序</strong>，然后以<strong>轮询（round-robin）</strong> 的方式分发给各个 recovery threads，确保负载均衡。</li>
+</ul>
+</li>
+<li>
+<p><strong>阶段二：并行扫描与本地状态构建</strong></p>
+<ul>
+<li>每个 recovery thread 独立处理分配给它的事务列表。</li>
+<li>thread 会<strong>逆序（in reverse order）</strong> 扫描其负责的事务（从最新的开始）。这种逆序处理是实现数据<strong>合并（coalescing）</strong> 的关键。</li>
+<li>对于扫描到的每个 <strong>data memory slice</strong>，thread 会解析出其中包含的 <code>&lt;home-region address, TxID, Data&gt;</code> 三元组。</li>
+<li>thread 将这些三元组存入一个<strong>本地哈希映射（local hash-map set）</strong>。由于是逆序处理，当遇到同一个 home-region address 的多次更新时，它只会保留 <strong>TxID 最大（即最新）</strong> 的那个数据版本。</li>
+</ul>
+</li>
+<li>
+<p><strong>阶段三：全局聚合与并行写回</strong></p>
+<ul>
+<li>当所有 recovery threads 完成本地扫描后，主线程会<strong>聚合（aggregate）</strong> 所有的本地哈希映射，形成一个<strong>全局哈希映射（global hash map）</strong>。在此过程中，再次检查并确保每个 home-region address 都对应其最新的数据版本。</li>
+<li>主线程将全局哈希映射分割成多个子集，并再次利用 recovery threads <strong>并行地</strong>将数据写回到各自的 <strong>home region</strong>。</li>
+<li>在写回过程中，会执行必要的 <strong>cache flush instructions</strong> 以确保数据的<strong>持久性（durability）</strong>。</li>
+<li>最后，所有 recovery threads 清理其映射的内存空间（<code>kunmap</code>），同时系统会清空 <strong>mapping table</strong>, <strong>eviction buffer</strong>, 和 <strong>OOP region</strong>，标志着恢复完成。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/fb6ee0cebe93c8d3416d4e74476e0a3afe6ee85a757239288c73246219b0a32e.jpg" /> <em>Fig. 11: Recovery performance of 1GB OOP region with various number of recovery threads and memory bandwidth.</em></p>
+<p><strong>关键参数与配置</strong></p>
+<ul>
+<li><strong>Recovery Threads 数量</strong>: 该数量直接决定了恢复的并行度。如上图所示，随着线程数增加，恢复时间显著缩短，尤其是在高内存带宽环境下。</li>
+<li><strong>Memory Bandwidth</strong>: 恢复性能与 NVM 带宽呈强正相关。例如，在 25 GB/s 带宽下，恢复 1GB OOP 数据仅需 <strong>47 毫秒</strong>，速度是 10 GB/s 带宽下的 <strong>2.3 倍</strong>。</li>
+<li><strong>OOP Region Size</strong>: 默认配置为 NVM 总容量的 <strong>10%</strong>。恢复时间与 OOP region 的大小直接相关。</li>
+<li><strong>Data Memory Slice 结构</strong>: 每个 slice 包含 <strong>32-bit TxID</strong>，这是实现事务排序和最新版本识别的关键元数据。</li>
+</ul>
+<p><strong>输入输出关系及在整体架构中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>:<ul>
+<li>崩溃时 NVM 的物理状态，特别是 <strong>OOP region</strong> 中存储的所有 <strong>committed transactions</strong>。</li>
+<li><strong>Block index table</strong> 和 <strong>address memory slices</strong>，用于快速定位和索引有效事务。</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>一个完全恢复到最近一致状态的 <strong>home region</strong>。</li>
+<li>一个被清空并重置的 <strong>OOP region</strong>，准备接收新的更新。</li>
+</ul>
+</li>
+<li><strong>在整体架构中的作用</strong>:<ul>
+<li><strong>保障 Crash Consistency</strong>: 这是 HOOP 实现 <strong>atomic durability</strong> 的最后一环。即使在 GC 或写入过程中发生崩溃，OOP region 中完整的事务日志也能保证数据不丢失、不损坏。</li>
+<li><strong>提升系统可用性</strong>: 通过高效的并行恢复，将系统从崩溃中恢复的时间降至最低，避免了长时间的停机，这对于高可用性服务至关重要。</li>
+<li><strong>与 GC 机制协同</strong>: 恢复算法（Algorithm 1 in §III-F）与 <strong>Garbage Collection (GC)</strong> 算法（Algorithm 1 in §III-E）高度相似，都采用了逆序扫描和数据合并的策略。这种设计复用不仅简化了系统，也保证了两者行为的一致性。GC 在后台维护系统效率，而 Recovery 在前台保障系统安全。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>仿真平台</strong>: 在基于 <strong>Pin</strong> 的多核模拟器 <strong>McSimA+</strong> 上实现，并集成了一个 <strong>NVM 模拟器</strong>。</li>
+<li><strong>硬件配置</strong>: 模拟一个 <strong>16 核</strong> 的乱序处理器系统，详细配置见下表。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">组件</th>
+<th style="text-align: left;">配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cores</td>
+<td style="text-align: left;">16</td>
+</tr>
+<tr>
+<td style="text-align: left;">L1 Cache</td>
+<td style="text-align: left;">64 KB/core (VIPT)</td>
+</tr>
+<tr>
+<td style="text-align: left;">L2 Cache</td>
+<td style="text-align: left;">256 KB/core</td>
+</tr>
+<tr>
+<td style="text-align: left;">LLC</td>
+<td style="text-align: left;">20 MB</td>
+</tr>
+<tr>
+<td style="text-align: left;">NVM Capacity</td>
+<td style="text-align: left;">512 GB</td>
+</tr>
+<tr>
+<td style="text-align: left;">OOP Region Size</td>
+<td style="text-align: left;">NVM 容量的 10% (51.2 GB)</td>
+</tr>
+<tr>
+<td style="text-align: left;">NVM Latency (Read/Write)</td>
+<td style="text-align: left;">50 ns / 150 ns</td>
+</tr>
+<tr>
+<td style="text-align: left;">GC Period</td>
+<td style="text-align: left;">默认每 10 毫秒</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>对比基线</strong>: 与五种最先进的崩溃一致性技术进行比较：<ul>
+<li><strong>Opt-Redo</strong>: 基于硬件的 redo logging，支持异步数据检查点和日志截断。</li>
+<li><strong>Opt-Undo</strong>: 基于硬件的 undo logging (ATOM)，在内存控制器中强制执行日志和数据的持久化顺序。</li>
+<li><strong>OSP</strong>: 优化的影子分页 (SSP)，在缓存行粒度进行复制。</li>
+<li><strong>LSM</strong>: 基于软件的日志结构化 NVM (LSNVMM)，使用跳表作为地址映射索引。</li>
+<li><strong>LAD</strong>: 无日志原子持久性方案，在内存控制器中缓存事务更新。</li>
+</ul>
+</li>
+<li><strong>基准测试</strong>:<ul>
+<li><strong>合成工作负载</strong>: 对 <strong>vector, hashmap, queue, RB-tree, B-tree</strong> 等五种流行数据结构执行随机插入和更新操作。</li>
+<li><strong>真实应用</strong>: 使用 <strong>WHISPER</strong> 套件中的 <strong>YCSB</strong> (80% 更新) 和 <strong>TPC-C</strong> (New Order 事务) 工作负载，后端为 <strong>N-store</strong> 数据库。</li>
+</ul>
+</li>
+<li><strong>评估指标</strong>: <strong>事务吞吐量</strong>、<strong>关键路径延迟</strong>、<strong>写入流量</strong>、<strong>GC 开销</strong>、<strong>数据恢复速度</strong> 和 <strong>能效</strong>。</li>
+</ul>
+<p><strong>结果数据分析</strong></p>
+<ul>
+<li>
+<p><strong>性能提升</strong>:</p>
+<ul>
+<li><strong>事务吞吐量</strong>: HOOP 相比 <strong>Opt-Redo, Opt-Undo, OSP, LSM, LAD</strong> 分别提升了 <strong>74.3%, 45.1%, 33.8%, 27.9%, 24.3%</strong>。其吞吐量仅比无持久性保证的原生系统低 <strong>20.6%</strong>。</li>
+<li><strong>关键路径延迟</strong>: HOOP 的关键路径延迟平均比上述五种基线分别降低了 <strong>45.1%, 52.8%, 44.3%, 60.5%, 21.6%</strong>，非常接近原生系统的延迟（仅长 <strong>24.1%</strong>）。
+    <img alt="" src="../images/4344f1b7a35052af885912f28409af07835db05d0aa2992e404db764b1460617.jpg" /> <em>(b) Critical path latency (lower is better) Fig. 7: Transaction throughput and critical path latency for system benchmarks. HOOP improves transaction throughput by 74.3%, 45.1%, 33.8%, 27.9%, and 24.3% compared with Opt-Redo, Opt-Undo, OSP, LSM, and LAD, respectively. For critical path latency, HOOP also achieves a critical path latency close to a native system without any persistence guarantee.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>写入放大与能效</strong>:</p>
+<ul>
+<li><strong>写入流量</strong>: HOOP 产生的 NVM 写入流量最低。相比 <strong>Opt-Redo</strong> 和 <strong>Opt-Undo</strong>，写入量分别减少了 <strong>2.1×</strong> 和 <strong>1.9×</strong>。相比 <strong>OSP, LSM, LAD</strong> 也分别减少了 <strong>21.2%, 12.5%, 11.6%</strong>。</li>
+<li><strong>能效</strong>: 得益于极低的写入流量，HOOP 的能效最高，相比 <strong>OSP, LSM, LAD</strong> 平均能耗分别降低了 <strong>37.6%, 29.6%, 10.8%</strong>。
+    <img alt="" src="../images/c68196e643257977f61c9cf4821354c4ac4c8425755d7aa3e8a6d72b7b1e5f78.jpg" /> <em>Fig. 8: Write traffic produced by different approaches.</em>
+    <img alt="" src="../images/2a730c01a05539a4141b87ffba9435432ad9d866848d0a8481f0cdf1d87d35e7.jpg" /> <em>Fig. 9: Energy consumption of different approaches.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>数据压缩效果</strong>:</p>
+<ul>
+<li><strong>GC 数据缩减</strong>: 通过 <strong>data coalescing</strong>（数据合并），HOOP 在 GC 过程中显著减少了需要写回主区域的数据量。当事务数量超过 <strong>10^4</strong> 时，得益于数据局部性，需要写回的数据比例低于 <strong>15%</strong>。
+    <img alt="" src="../images/005c04de283a61409d0cf42bcf0a9fdda32c650975c500863ce072fdbc67c54e.jpg" /> <em>TABLE IV: Average data reduction in the GC of HOOP.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>可扩展性与恢复能力</strong>:</p>
+<ul>
+<li><strong>数据恢复</strong>: HOOP 的数据恢复速度具有良好的多线程可扩展性。在 <strong>25 GB/s</strong> 的内存带宽下，恢复 <strong>1GB</strong> 的 OOP 区域仅需 <strong>47 毫秒</strong>，是 <strong>10 GB/s</strong> 带宽下的 <strong>2.3 倍</strong>。
+    <img alt="" src="../images/fb6ee0cebe93c8d3416d4e74476e0a3afe6ee85a757239288c73246219b0a32e.jpg" /> <em>Fig. 11: Recovery performance of 1GB OOP region with various number of recovery threads and memory bandwidth.</em></li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验与敏感性分析</strong></p>
+<ul>
+<li>
+<p><strong>GC 触发频率的影响</strong>:</p>
+<ul>
+<li><strong>过短周期</strong> (如 2ms): GC 频繁触发，但 <strong>data coalescing</strong> 效果差，导致更多无效写入，事务吞吐量下降 <strong>6.8%-17.8%</strong>。</li>
+<li><strong>过长周期</strong> (如 &gt;11ms): OOP 区域空间耗尽，迫使 GC 在关键路径上执行，成为性能瓶颈。</li>
+<li><strong>最优周期</strong>: 实验表明 <strong>8-10 毫秒</strong> 是最佳平衡点，此时吞吐量达到峰值。
+    <img alt="" src="../images/dae2b5da4f756ef6c75022c6f4abf27ce063504fff78130106e76147ee59bdc5.jpg" /> <em>Fig. 10: GC efficiency with different timing thresholds.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>映射表大小的影响</strong>:</p>
+<ul>
+<li><strong>小映射表</strong>: 空间不足会迫使 GC 更频繁地运行，影响性能。</li>
+<li><strong>大映射表</strong>: 性能提升趋于平缓。实验选用 <strong>2MB</strong> 的映射表，在默认 <strong>10ms</strong> GC 周期下提供了合理的性能保障。进一步增大映射表带来的收益有限。
+    <img alt="" src="../images/943eb9da7dc85205867100b3c43959f4baa82babbff562e9d351becbdd40157d.jpg" /> <em>Fig. 13: YCSB throughput with various mapping table size.</em></li>
+</ul>
+</li>
+<li>
+<p><strong>NVM 延迟的敏感性</strong>:</p>
+<ul>
+<li>HOOP 的性能与 NVM 的读/写延迟呈正相关。降低延迟能直接提升 <strong>YCSB</strong> 吞吐量，这符合预期，因为加载/存储操作和 GC 操作的性能都依赖于底层 NVM 的速度。
+    <img alt="" src="../images/2393dd634bc37aa91883e3aa5d78b8260772337cf43296815230683f25eb1160.jpg" /> <em>Fig. 12: YCSB throughput with various NVM latency.</em></li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

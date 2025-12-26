@@ -23,7 +23,7 @@
 - 通过这个拆分，编译器（code generator）就可以大胆地将原本阻塞在跳转指令之后的、计算跳转地址的那部分代码（the indirect branch computation chain），**co-mingle**（混合调度）到各个预测的目标代码块中去执行（如 Figure 3(b) 和 Figure 7 所示）。
 - 这样一来，IO 处理器就能模仿 OOO 的行为：在等待最终地址确认的同时，已经开始执行预测路径上的有用工作，从而**完全隐藏了间接跳转的计算延迟**。为了保证这种推测执行的安全性，论文还配套使用了 **fault-suppressed instructions**（抑制异常的指令）和 **temporary registers**（临时寄存器）来处理可能的异常和状态回滚。整个方案的硬件开销也很小，主要增加了一个叫 **Decomposed Branch Buffer (DBB)** 的小结构来关联 `predict` 和 `resolve` 指令。
 
-### 1. Bungee Jump Transformation (ELI5)
+### 1. Bungee Jump Transformation
 
 **痛点直击 (The "Why")**
 
@@ -54,7 +54,7 @@
 ![](images/cf3a20d7ef553f2a29fd121ebf2fb530f18e3210fa2848f338faeb325888eee8.jpg)
 ![](images/91baa461e56916cdb3800d4a55ebb30bd80a7caf68bfe8bff56604fdeadb6d3b.jpg) *Figure 7: Transformation*
 
-### 2. Decomposed Branch Buffer (DBB) (ELI5)
+### 2. Decomposed Branch Buffer (DBB)
 
 **痛点直击 (The "Why")**
 
@@ -88,7 +88,7 @@
             ![](images/22088a1874d703377a20a1910cb4de03af04c04cdc8001b474bf5ad6ab8b217c.jpg) *(b) Insert tail pointer index into corresponding resolution instruction.*
             ![](images/4f4a4d3c1e22a0fb82b039524c9c73ccd6bb50f992dc39893b4a4c9839052a65.jpg) *Figure 8: The Decomposed Branch Buffer and its operations.The area shaded in grey denotes existing HW structures and data/control paths.*
 
-### 3. Landing Pad with Marker Instructions (ELI5)
+### 3. Landing Pad with Marker Instructions
 
 **痛点直击**
 
@@ -116,7 +116,7 @@
 - 如果检查失败（ID不匹配或不是marker指令），硬件就会忽略这次预测，转而从 **predict** 指令的下一条顺序地址开始取指。这个顺序地址处，保留了完整的、未经优化的间接分支计算代码（`ld r9; jmp r9`），它能保证最终一定能找到并跳转到正确的路径。
 - 这一招的核心在于，它用极小的硬件开销（一个8位比较器）和微小的代码膨胀（每个目标块加一条指令），就完美地解决了因预测目标无效而导致的系统可靠性问题，为整个“预测-解析分离”的大胆构想提供了坚实的安全网。
 
-### 4. Speculative Execution with Fault Suppression (ELI5)
+### 4. Speculative Execution with Fault Suppression
 
 **痛点直击 (The "Why")**
 
@@ -145,7 +145,7 @@
 
 这种设计的核心在于，它用一种非常经济的方式（只需要硬件支持 non-faulting 指令和一个 fault 标志位）就解决了推测执行中最棘手的异常处理问题，使得 in-order 处理器也能安全、高效地执行大块的推测代码，从而逼近 out-of-order 处理器的调度效果。
 
-### 5. Profile-Guided Transformation Selection (ELI5)
+### 5. Profile-Guided Transformation Selection
 
 **痛点直击**
 

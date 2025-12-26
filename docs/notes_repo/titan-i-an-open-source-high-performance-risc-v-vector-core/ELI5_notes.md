@@ -32,7 +32,7 @@
 ![](images/e0edef77ab135adf1a07c43ae47e780f55d14329f28e2519f51da2534d510bbe.jpg) *Figure 8: Cryptographic Benchmarks of T1 (DLEN1K, VLEN16K,emulated with DDR4-3200) with GA102 (NVIDIA GTX 3090) and NVIDIA GB202 (GTX 5090)*
 ![](images/0ab617733a0cdcfbf8508585892beb15df59655a0571329ed684bc50fb3f8df4.jpg) *Figure 9: HPCbenchmark results: Figure 9a: PerformanceofT1(at2.45GHz) with local memoryand DDR4-3200,normalized to KP920; Figure 9b: Performancecomparison ilustrating T1's tolerance to memorylatency,showing results with DRAMand local SRAM,normalized to KP920,Ituses stripmining bydynamicallyset VLforcontinues DRAMaccessinSGEM workload.; Figure 9c: Performance of T1(at 1.6 GHz) using DDR4-3200, normalized to K1, where higher is better.*
 
-### 1. Coarse-Grained Floor-Planning Solver (ELI5)
+### 1. Coarse-Grained Floor-Planning Solver
 
 **痛点直击**
 
@@ -60,7 +60,7 @@
 - 这个看似简单的策略，却能非常有效地将\*\*最坏情况下的跨 \*\*(worst-case routing distance) 从 7 个单位降低到 4 个单位（如图所示）。
 - 通过控制这个关键瓶颈，整个 **Permutation Unit** 的延迟得以降低，从而让增大 **DLEN** 带来的性能收益能够真正兑现，实现了接近**线性的可扩展性**。
 
-### 2. Datapath-Wide Permutation Unit with Shadow Mask Cache (ELI5)
+### 2. Datapath-Wide Permutation Unit with Shadow Mask Cache
 
 **痛点直击**
 
@@ -86,7 +86,7 @@
 ![](images/4a80decfd712ba09ca9992395240de5dca8c381b5e5f2dbac5cacb0b0591ec39.jpg) *Titan-l:An Open-Source, High Performance RISC-V Vector Core*
 ![](images/059cc18a0fd5fdea64b90f6c0ee6a78e62366895f9e4603e38815ac5dd4bb8b7.jpg)
 
-### 3. Fine-Grained Chaining Microarchitecture (ELI5)
+### 3. Fine-Grained Chaining Microarchitecture
 
 **痛点直击**
 
@@ -112,7 +112,7 @@
 
 如上图所示，通过调整 **ChainingSize**（即 ScaleFactor），可以在 **Lane 面积开销** 和 **ILP 挖掘能力** 之间做权衡。对于 HPC 这类计算密集、依赖复杂的场景，增大 ChainingSize 能带来显著的性能提升（如 Table 1 所示，PACK 测试中 fine-grained chaining 带来了 **61%** 的性能提升）。
 
-### 4. Issue-as-Commit for Scalar-Vector OoO Execution (ELI5)
+### 4. Issue-as-Commit for Scalar-Vector OoO Execution
 
 之前的设计里，**Scalar（标量）** 和 **Vector（向量）** 两条流水线虽然物理上是分开的，但逻辑上却像被一根绳子拴着。只要向量单元开始干活，标量单元就得在旁边干等着，哪怕它们俩处理的数据八竿子打不着。这种“**虚假依赖**”导致了巨大的性能浪费——向量单元可能正吭哧吭哧处理一个超长的数组，而标量单元明明可以去干别的活，却被硬生生地卡住了。
 
@@ -132,7 +132,7 @@ ______________________________________________________________________
 
 通过这个简单的逻辑转换，系统在保证正确性的前提下，极大地释放了标量单元的生产力，让两条流水线真正实现了**并发执行**，从而显著提升了整体吞吐量。
 
-### 5. Dual LSU with Memory Interleaving and Delay Slots (ELI5)
+### 5. Dual LSU with Memory Interleaving and Delay Slots
 
 **痛点直击**
 

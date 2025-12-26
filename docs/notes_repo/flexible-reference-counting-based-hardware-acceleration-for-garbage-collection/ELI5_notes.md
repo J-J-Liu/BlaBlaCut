@@ -41,7 +41,7 @@ ______________________________________________________________________
 
 最终，这套机制与现有的 **Generational GC** 完美协同。它大幅减少了新生代（nursery）的 Minor GC 次数（平均 **-52%**），也显著降低了老年代（mature space）的存活对象数量，从而减少了 Major GC 的频率（平均 **-50%**）和每次 GC 的工作量（存活空间 **-49%**）。结果就是，在几乎不影响应用程序本身性能（mutator slowdown only **0.38%**）的前提下，将总的 GC 时间开销平均降低了 **31%**。
 
-### 1. Reference Count Coalescing Buffers (RCCBs) (ELI5)
+### 1. Reference Count Coalescing Buffers (RCCBs)
 
 **痛点直击 (The "Why")**
 
@@ -69,7 +69,7 @@ ______________________________________________________________________
         - L2 RCCB 会做同样的合并操作。最终，只有从 L2 RCCB 被换出的净增量，才会真正去更新主存中对象头里的引用计数。
 - 这个设计的精妙之处在于，它利用了程序的 **locality**（局部性）：短时间内对同一对象的引用操作往往会相互抵消。通过两级缓冲进行 **filtering**（过滤），论文数据显示能**过滤掉 96.3% 的冗余更新**，从根本上解决了传统引用计数的性能瓶颈。![](images/3f4a974812579eaa2440b2b0a09e5fdd3a6cb19fad436d17d4dcbcec8b9a5a91.jpg) *Figure 2: Overview of the major hardware structures provided by HAMM (components are not to scale)*
 
-### 2. Available Block Tables (ABTs) (ELI5)
+### 2. Available Block Tables (ABTs)
 
 **痛点直击**
 
@@ -94,7 +94,7 @@ ______________________________________________________________________
     - **Memory ABT**（主存中）：这是最终的、按**size class**（大小类别）组织的全局空闲块链表。L2 ABT从这里补充自己。
 - 这个设计巧妙地将硬件发现死对象的“生产”行为和软件分配器的“消费”行为**解耦**。生产者（RCCB）可以慢慢把死块归还到Memory ABT，而消费者（Allocator）总能从本地L1 ABT拿到“现货”，两者互不阻塞，从而实现了**无缝、高速的内存块复用**。
 
-### 3. Hardware-Software Cooperative ISA Extensions (ELI5)
+### 3. Hardware-Software Cooperative ISA Extensions
 
 **痛点直击**
 
@@ -126,7 +126,7 @@ ______________________________________________________________________
         - ![](images/136e77f278e1281a53743e7754ef7d40982fa9f1da7e8d3d9860ec33f6aa9977.jpg) *Table 3: HAMM ISA instruction for garbage collection*
 - 通过这套指令集，硬件承担了最繁重、最底层的引用计数跟踪和死块快速供给工作，而软件 GC 依然保留了高层次的控制权（比如决定何时进行 full GC、如何布局内存等），实现了 **性能** 与 **灵活性** 的完美平衡。
 
-### 4. Object Reference Map (ORM) for Dead Object Scanning (ELI5)
+### 4. Object Reference Map (ORM) for Dead Object Scanning
 
 **痛点直击 (The "Why")**
 

@@ -32,7 +32,7 @@ RPG2 的核心创新在于构建了一个**纯软件的、在线的、可回滚�
 
 - 这套机制的核心保障是 \*\*BOLT Address Translation Table \*\*(BATT)，它像一张精确的地图，让系统能在新旧两个函数版本的任意指令间进行安全转换，从而实现了“**大胆尝试，不行就撤**”的鲁棒性。这正是 RPG2 名字中 “**Robust**” 的真正含义。
 
-### 1. 基于BOLT的二进制代码分析与生成 (ELI5)
+### 1. 基于BOLT的二进制代码分析与生成
 
 **痛点直击 (The "Why")**
 
@@ -64,7 +64,7 @@ RPG2 的核心创新在于构建了一个**纯软件的、在线的、可回滚�
 
 *Figure 5. Annotated example of RPG2 code transformations.*
 
-### 2. 运行时代码注入与在线栈替换（OSR） (ELI5)
+### 2. 运行时代码注入与在线栈替换（OSR）
 
 **痛点直击 (The "Why")**
 
@@ -93,7 +93,7 @@ RPG2解决这个难题的核心，在于它没有试图去“修改”原始函�
 
 *Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.*
 
-### 3. 基于性能反馈的动态预取距离调优 (ELI5)
+### 3. 基于性能反馈的动态预取距离调优
 
 **痛点直击**
 
@@ -138,7 +138,7 @@ RPG2解决这个难题的核心，在于它没有试图去“修改”原始函�
 
 *Figure 10. RPG2’s impact on IPC over time.*
 
-### 4. 安全回滚机制 (ELI5)
+### 4. 安全回滚机制
 
 **痛点直击 (The "Why")**
 

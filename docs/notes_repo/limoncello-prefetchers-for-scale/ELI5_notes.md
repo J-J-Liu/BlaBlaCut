@@ -49,7 +49,7 @@ Limoncello 的思路是：高峰期干脆让这些“热心过头”的调度员
 
 *Figure 17. Limoncello memory latency reduction. Memory latency reduces by 13% in the median and 10% in the P99.*
 
-### 1. Hard Limoncello (ELI5)
+### 1. Hard Limoncello
 
 **痛点直击 (The "Why")**
 
@@ -89,7 +89,7 @@ Limoncello 的思路是：高峰期干脆让这些“热心过头”的调度员
 
 *Figure 18. Limoncello socket bandwidth usage reduction. Average socket bandwidth reduces by 15%.*
 
-### 2. Soft Limoncello (ELI5)
+### 2. Soft Limoncello
 
 **痛点直击 (The "Why")**
 
@@ -146,7 +146,7 @@ Limoncello 的思路是：高峰期干脆让这些“热心过头”的调度员
 
 *Figure 20. Software prefetcher impact in Limoncello. The y-axis shows the portion of fleetwide cycles spent in the respective function categories. The center bar (green) shows Hard Limoncello deployed without any software prefetchers. Adding software prefetchers into Limoncello lowered CPU cycles spent in targeted functions by 2% (yellow).*
 
-### 3. 基于大规模硬件消融研究的目标识别方法 (ELI5)
+### 3. 基于大规模硬件消融研究的目标识别方法
 
 **痛点直击 (The "Why")**
 
@@ -180,7 +180,7 @@ Limoncello 的思路是：高峰期干脆让这些“热心过头”的调度员
 
 *Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.*
 
-### 4. 软件预取参数调优（地址、距离、度） (ELI5)
+### 4. 软件预取参数调优（地址、距离、度）
 
 **痛点直击**
 

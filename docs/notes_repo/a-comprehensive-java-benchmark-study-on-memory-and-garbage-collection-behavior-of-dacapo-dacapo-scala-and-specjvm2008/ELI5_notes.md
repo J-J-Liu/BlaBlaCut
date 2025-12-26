@@ -30,7 +30,7 @@
 
 总而言之，这篇论文的价值在于提供了一份**权威、可靠、细致入微的“基准使用指南”**。它告诉研究社区：当你下次想证明你的新GC算法有多快时，请先看看这张地图，选对真正能考验你算法的“赛道”，而不是随便找个平坦的停车场就宣布自己赢了。
 
-### 1. AntTracks Memory Monitoring Tool (ELI5)
+### 1. AntTracks Memory Monitoring Tool
 
 **痛点直击**
 
@@ -54,7 +54,7 @@
 - 最后，一个**离线的后处理工具 (Offline Post-processor)** 会读取这个紧凑的日志流，并利用 VM 的内部知识（比如类元数据）将日志“解压”和“重建”成完整的、可供分析的对象生命周期轨迹。
 - 正是这种 **“VM 内部集成 + 高效日志 + 离线重建”** 的三段式设计，让它避开了所有传统工具的性能陷阱，实现了 **~4%** 的超低开销，同时保证了**100% 的追踪完整性**。
 
-### 2. Benchmark Categorization by Memory/GC Behavior (ELI5)
+### 2. Benchmark Categorization by Memory/GC Behavior
 
 **痛点直击**
 
@@ -87,7 +87,7 @@
 ![](images/3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg)
 ![](images/5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afb.jpg)
 
-### 3. VM-Internal Allocation Analysis (ELI5)
+### 3. VM-Internal Allocation Analysis
 
 **痛点直击 (The "Why")**
 
@@ -122,7 +122,7 @@
 
 这种分析方式把“黑盒 JVM”变成了“透明鱼缸”，让研究者能精准定位性能异常的真正源头，而不是在应用层瞎猜。
 
-### 4. Garbage Collection Behavior Comparison (ELI5)
+### 4. Garbage Collection Behavior Comparison
 
 **痛点直击 (The "Why")**
 
@@ -162,7 +162,7 @@ ______________________________________________________________________
 
 这个对比清晰地揭示了：**G1 的设计哲学是“用空间换时间确定性”**——它牺牲一点吞吐量（因并发开销），换取极低且可预测的停顿，而这正是现代 Java 应用最需要的。
 
-### 5. Object Reference and Pointer Density Measurement (ELI5)
+### 5. Object Reference and Pointer Density Measurement
 
 **痛点直击**
 
