@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-short-circuit-dispatch-scd-eli5" class="md-nav__link">
+  <a href="#1-short-circuit-dispatch-scd" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Short-Circuit Dispatch (SCD) 架构扩展 (ELI5)
+        1. Short-Circuit Dispatch (SCD) 架构扩展
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-btb-eli5" class="md-nav__link">
+  <a href="#2-btb" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 基于操作码的BTB查找机制 (ELI5)
+        2. 基于操作码的BTB查找机制
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-isa-eli5" class="md-nav__link">
+  <a href="#3-isa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 新的ISA指令与寄存器 (ELI5)
+        3. 新的ISA指令与寄存器
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-jtebtb-eli5" class="md-nav__link">
+  <a href="#4-jtebtb" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 跳转表条目（JTE）与BTB条目的共存管理 (ELI5)
+        4. 跳转表条目（JTE）与BTB条目的共存管理
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-eli5" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 流水线停顿逻辑 (ELI5)
+        5. 流水线停顿逻辑
       
     </span>
   </a>
@@ -503,7 +503,7 @@
 <li><strong>精妙之处</strong>： BTB 的每个条目增加了一个 <strong>J/B̅ 标志位</strong>，用来区分这个条目是存储普通的分支预测信息（B），还是存储字节码的跳转表项（J）。这样，SCD 就能在几乎不增加硬件成本（论文称面积仅增加 <strong>0.72%</strong>）的前提下，将 BTB 一物两用，高效地缓存了软件跳转表中最常用的部分，从而大幅减少了冗余指令的执行。</li>
 </ul>
 <p><img alt="" src="../images/a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg" /> <em>Figure 5: Pipeline structure augmented with SCD</em></p>
-<h3 id="1-short-circuit-dispatch-scd-eli5">1. Short-Circuit Dispatch (SCD) 架构扩展 (ELI5)<a class="headerlink" href="#1-short-circuit-dispatch-scd-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-short-circuit-dispatch-scd">1. Short-Circuit Dispatch (SCD) 架构扩展<a class="headerlink" href="#1-short-circuit-dispatch-scd" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的虚拟机（VM）解释器，比如 Lua 或 JavaScript 的，其核心是一个“取指-解码-执行”的无限循环。这个循环里最耗时的部分叫 <strong>dispatch loop</strong>（分发循环）。</li>
@@ -540,7 +540,7 @@
 <ul>
 <li>这个设计的精妙之处在于 <strong>极低的硬件开销</strong>。它只是在现有 BTB 的 entry 里加了一个 <strong>J/B̄ bit</strong> 来区分存的是普通分支信息还是跳转表项（JTE），并增加了一些简单的控制逻辑。论文数据显示，芯片面积仅增加 <strong>0.72%</strong>，却能带来 <strong>19.9%</strong> 的平均性能提升和 <strong>24.2%</strong> 的 <strong>EDP</strong>（能耗延迟积）改善，性价比极高。</li>
 </ul>
-<h3 id="2-btb-eli5">2. 基于操作码的BTB查找机制 (ELI5)<a class="headerlink" href="#2-btb-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-btb">2. 基于操作码的BTB查找机制<a class="headerlink" href="#2-btb" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的虚拟机解释器（VM Interpreter）在执行字节码时，有一个经典的“分发循环”（dispatch loop）：取指令、解码、查跳转表、间接跳转。这个循环里的<strong>间接跳转</strong>是性能瓶颈。</li>
@@ -568,7 +568,7 @@
 <li>如果BTB里有这条“操作码-&gt;地址”的记录（JTE, Jump Table Entry），就直接跳过去，<strong>完全绕过了后续所有冗余的解码和查表指令</strong>；如果没有，就走原来的慢路径，并在最后用<code>jru</code>指令把这次查到的新映射关系存入BTB，供下次使用。</li>
 </ul>
 <p><img alt="" src="../images/a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg" /> <em>Figure 5: Pipeline structure augmented with SCD</em></p>
-<h3 id="3-isa-eli5">3. 新的ISA指令与寄存器 (ELI5)<a class="headerlink" href="#3-isa-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-isa">3. 新的ISA指令与寄存器<a class="headerlink" href="#3-isa" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的字节码解释器在每次执行指令时，都要走一遍完整的 <strong>dispatch loop</strong>：取指令、解码、查跳转表、间接跳转。这个过程会产生大量<strong>冗余计算</strong>，尤其是在嵌入式处理器上。</li>
@@ -603,7 +603,7 @@
 </ul>
 <p><img alt="" src="../images/0dee5f735f83da9327d3a84413cecf33bcd7ce7b27aa682d26e25f200b4e5048.jpg" /> <em>Figure 4: Transformed dispatch loop (original code taken from Figure 1(b))</em>
 这张图清晰地展示了改造前后的对比。灰色部分就是被SCD<strong>短路</strong>掉的冗余指令。通过<code>ldl.op</code>自动填充Rop，<code>bop</code>直接查表跳转，整个dispatch loop的开销被压缩到了极致。</p>
-<h3 id="4-jtebtb-eli5">4. 跳转表条目（JTE）与BTB条目的共存管理 (ELI5)<a class="headerlink" href="#4-jtebtb-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-jtebtb">4. 跳转表条目（JTE）与BTB条目的共存管理<a class="headerlink" href="#4-jtebtb" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>BTB </strong>(Branch Target Buffer) 只干一件事：记住“在某个 PC 地址，上次跳去了哪里”，用来预测<strong>直接跳转</strong>。但解释器的分发循环里，那个关键的间接跳转（<code>jmp *table[opcode]</code>）有成百上千个可能的目标，传统 BTB 对它基本无效。</li>
@@ -633,7 +633,7 @@
 <li><img alt="" src="../images/a882f7a086f6afea88dcc6d387cb4eeb25ba473f16ca250feb10d6c89452d122.jpg" /> <em>Figure 5: Pipeline structure augmented with SCD</em></li>
 <li>这个设计的精妙之处在于，它用<strong>极小的硬件改动</strong>（一个标志位、一点控制逻辑），就将 BTB 从一个单纯的“分支预测器”变成了一个通用的“<strong>小型硬件缓存</strong>”，专门用来<strong>短路</strong>（short-circuit）掉解释器中最耗时的冗余计算路径。</li>
 </ul>
-<h3 id="5-eli5">5. 流水线停顿逻辑 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5">5. 流水线停顿逻辑<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>在嵌入式处理器上，解释器的分发循环（dispatch loop）是性能瓶颈。传统做法是每次都要走一遍完整的“取指令 -&gt; 解码 -&gt; 查跳转表 -&gt; 间接跳转”流程。</li>

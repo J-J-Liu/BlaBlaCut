@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-hard-limoncello-eli5" class="md-nav__link">
+  <a href="#1-hard-limoncello" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Hard Limoncello (ELI5)
+        1. Hard Limoncello
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-soft-limoncello-eli5" class="md-nav__link">
+  <a href="#2-soft-limoncello" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Soft Limoncello (ELI5)
+        2. Soft Limoncello
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 基于大规模硬件消融研究的目标识别方法 (ELI5)
+        3. 基于大规模硬件消融研究的目标识别方法
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 软件预取参数调优（地址、距离、度） (ELI5)
+        4. 软件预取参数调优（地址、距离、度）
       
     </span>
   </a>
@@ -493,7 +493,7 @@
 <p><em>Figure 16. Limoncello application throughput gain. Application throughput increases by 6-13% increase, dependent on the CPU utilization level of the machines.</em></p>
 <p><img alt="" src="../images/3c91155487617f08edd483be7d4f2988b11f9779218c551261842d1d7a821be7.jpg" /></p>
 <p><em>Figure 17. Limoncello memory latency reduction. Memory latency reduces by 13% in the median and 10% in the P99.</em></p>
-<h3 id="1-hard-limoncello-eli5">1. Hard Limoncello (ELI5)<a class="headerlink" href="#1-hard-limoncello-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-hard-limoncello">1. Hard Limoncello<a class="headerlink" href="#1-hard-limoncello" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统硬件预取器（Hardware Prefetcher）的设计哲学是“不惜一切代价减少 Cache Miss”，这在内存带宽充裕的实验室环境（如跑 SPEC benchmark）下很有效。</li>
@@ -537,7 +537,7 @@
 </ul>
 <p><img alt="" src="../images/a317eaaeb97264073e48804709ed99eb80087ec36a131cbb7bd8b5b529c9c4e6.jpg" /></p>
 <p><em>Figure 18. Limoncello socket bandwidth usage reduction. Average socket bandwidth reduces by 15%.</em></p>
-<h3 id="2-soft-limoncello-eli5">2. Soft Limoncello (ELI5)<a class="headerlink" href="#2-soft-limoncello-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-soft-limoncello">2. Soft Limoncello<a class="headerlink" href="#2-soft-limoncello" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统硬件 Prefetcher 在 <strong>高内存带宽利用率</strong> 的数据中心场景下，会“好心办坏事”。</li>
@@ -590,7 +590,7 @@
 </ul>
 <p><img alt="" src="../images/93b80913f8f63d8313aeba2dc8b2dfa091b72d5bb5d45ec96124af897098514a.jpg" /></p>
 <p><em>Figure 20. Software prefetcher impact in Limoncello. The y-axis shows the portion of fleetwide cycles spent in the respective function categories. The center bar (green) shows Hard Limoncello deployed without any software prefetchers. Adding software prefetchers into Limoncello lowered CPU cycles spent in targeted functions by 2% (yellow).</em></p>
-<h3 id="3-eli5">3. 基于大规模硬件消融研究的目标识别方法 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 基于大规模硬件消融研究的目标识别方法<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>profile-guided software prefetching</strong> 方法在超大规模数据中心里根本玩不转。为什么？因为它依赖于“有代表性的 benchmark 和输入数据”来生成性能画像。</li>
@@ -621,7 +621,7 @@
 <p><em>Figure 10. Application throughput based on different Hard Limoncello configurations. ?? /?? indicates the lower (?? %) and upper (?? %) memory bandwidth thresholds in the configuration. Thresholds are expressed as a percentage of memory bandwidth saturation.</em></p>
 <p><img alt="" src="../images/3ff57cc91d398f594588787611299c7461c6903e1cfdf675f118c02e669909bc.jpg" /></p>
 <p><em>Figure 11. Change in CPU cycles (%) from Hard Limoncello. Functions that regress in performance when hardware prefetchers are disabled show an increase in CPU cycles (green) and an increase in LLC MPKI (blue). Data center tax functions in particular show performance regressions from disabling hardware prefetchers while other functions tend to improve in performance and decrease in cycles and MPKI.</em></p>
-<h3 id="4-eli5">4. 软件预取参数调优（地址、距离、度） (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 软件预取参数调优（地址、距离、度）<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>软件预取（Software Prefetching）</strong> 调优是个“盲人摸象”的过程。你不知道该在代码哪一行插 prefetch 指令，该提前多远（<strong>prefetch distance</strong>），又该一次拉多少数据（<strong>prefetch degree</strong>）。</li>

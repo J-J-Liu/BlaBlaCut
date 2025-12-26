@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-eli5" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 基于强化学习的预取框架 (ELI5)
+        1. 基于强化学习的预取框架
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-q-qvstore-eli5" class="md-nav__link">
+  <a href="#2-q-qvstore" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 分层Q值存储结构 (QVStore) (ELI5)
+        2. 分层Q值存储结构 (QVStore)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 可配置的多特征状态空间与奖励机制 (ELI5)
+        3. 可配置的多特征状态空间与奖励机制
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-evaluation-queue-eq-eli5" class="md-nav__link">
+  <a href="#4-evaluation-queue-eq" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 评估队列 (Evaluation Queue, EQ) (ELI5)
+        4. 评估队列 (Evaluation Queue, EQ)
       
     </span>
   </a>
@@ -484,7 +484,7 @@
 <p><img alt="" src="../images/83740f38c45361837c159177240b3dcdcfd417f74be36d813c28a2e5afc9c928.jpg" /> <em>Figure 1: Comparison of (a) coverage, overprediction, and (b) performance of two recently-proposed prefetchers, SPP [78] and Bingo [27], and our new proposal, Pythia.</em>
 这张图完美地诠释了痛点：<strong>Bingo</strong> 在 PARSEC-Canneal 上表现优异，但在内存带宽需求更高的 Ligra-CC 上，同样的预取行为反而导致了性能下降。而 <strong>Pythia</strong> 凭借其系统感知能力，在两个场景下都保持了正向收益。</p>
 <p>总而言之，Pythia 的核心贡献不是发明了一个新的预取算法，而是提供了一个<strong>通用的、可学习的、系统感知的硬件预取框架</strong>。它用强化学习的“大脑”取代了传统预取器僵化的“肌肉记忆”，从而实现了前所未有的<strong>适应性</strong>和<strong>鲁棒性</strong>。</p>
-<h3 id="1-eli5">1. 基于强化学习的预取框架 (ELI5)<a class="headerlink" href="#1-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1">1. 基于强化学习的预取框架<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的硬件预取器（Prefetcher）设计思路非常“死板”。它们通常只盯着<strong>一种程序特征</strong>（比如PC地址或者访问步长），然后硬编码一套固定的规则去预测未来访问。这就像一个只会用锤子的工匠，看什么都像钉子。</li>
@@ -513,7 +513,7 @@
 <li>为了在硬件上高效实现这个RL智能体，作者设计了<strong>QVStore</strong>（Q值存储）这一核心数据结构。它采用<strong>分层的Vault-Plane架构</strong>，利用<strong>Tile Coding</strong>思想，既能高效处理高维状态，又能保证查询延迟足够低，满足硬件流水线的要求。</li>
 <li><img alt="" src="../images/f23e99871edd02cc547df7251fb2b18641ae3cbdfdb2c7a37c40b5f972debf6a.jpg" /></li>
 </ul>
-<h3 id="2-q-qvstore-eli5">2. 分层Q值存储结构 (QVStore) (ELI5)<a class="headerlink" href="#2-q-qvstore-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-q-qvstore">2. 分层Q值存储结构 (QVStore)<a class="headerlink" href="#2-q-qvstore" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的强化学习（RL）在硬件中实现时，最大的“难受”点在于 <strong>Q值表的规模爆炸</strong>。状态（state）是由多个程序特征（如PC、地址、Delta等）组成的高维向量，每个维度稍有变化，整个状态空间就呈指数级增长。</li>
@@ -538,7 +538,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="3-eli5">3. 可配置的多特征状态空间与奖励机制 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 可配置的多特征状态空间与奖励机制<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的硬件预取器（如SPP、Bingo）就像一个只会用一种工具的工匠。SPP擅长识别地址序列中的“步长”模式，Bingo则精于利用首次访问来预测整个内存区域的足迹。问题在于，现实世界的程序千奇百怪，有的场景下SPP效果拔群，换到另一个场景可能Bingo更优，甚至两者都失效。</li>
@@ -566,7 +566,7 @@
 <li>其<strong>奖励机制（Reward Scheme）</strong> 被精心设计为<strong>五个离散级别</strong>，并显式地将<strong>内存带宽使用情况</strong>作为上下文信息融入其中。具体来说，对于“不准确”的预取和“不预取”的决策，都分别定义了在<strong>高带宽</strong>和<strong>低带宽</strong>两种场景下的不同奖励值（如R_inacc_low_bw vs R_inacc_high_bw）。</li>
 <li>这一招的巧妙之处在于，RL Agent在与环境（处理器+内存子系统）交互的过程中，会自动学习到：在带宽紧张时，应该<strong>主动降低预取的激进度</strong>，牺牲一部分覆盖率来换取更高的准确性，从而避免对系统造成负面影响。这种自适应的权衡能力，是任何静态、单一特征的预取器都无法做到的。<img alt="" src="../images/49b320026f484de8c0a6145c55852f0ac0727d79500999230fe2a90fb2c4724c.jpg" /> <em>Figure 3: Formulating the prefetcher as an RL-agent.</em></li>
 </ul>
-<h3 id="4-evaluation-queue-eq-eli5">4. 评估队列 (Evaluation Queue, EQ) (ELI5)<a class="headerlink" href="#4-evaluation-queue-eq-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-evaluation-queue-eq">4. 评估队列 (Evaluation Queue, EQ)<a class="headerlink" href="#4-evaluation-queue-eq" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统硬件预取器（Prefetcher）最大的问题在于“开环”：它发出一个预取请求后，就撒手不管了。它不知道这个请求后来是命中了（有用）、还是污染了缓存（有害），更不知道在当前<strong>内存带宽</strong>紧张的情况下，一次错误的预取代价有多高。</li>

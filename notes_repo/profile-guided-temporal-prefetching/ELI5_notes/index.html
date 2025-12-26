@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-profile-guided-insertion-policy-eli5" class="md-nav__link">
+  <a href="#1-profile-guided-insertion-policy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Profile-Guided Insertion Policy (ELI5)
+        1. Profile-Guided Insertion Policy
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-profile-guided-replacement-policy-eli5" class="md-nav__link">
+  <a href="#2-profile-guided-replacement-policy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Profile-Guided Replacement Policy (ELI5)
+        2. Profile-Guided Replacement Policy
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-multi-path-victim-buffer-eli5" class="md-nav__link">
+  <a href="#3-multi-path-victim-buffer" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Multi-path Victim Buffer (ELI5)
+        3. Multi-path Victim Buffer
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-adaptive-learning-across-inputs-eli5" class="md-nav__link">
+  <a href="#4-adaptive-learning-across-inputs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Adaptive Learning across Inputs (ELI5)
+        4. Adaptive Learning across Inputs
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-lightweight-counter-based-profiling-eli5" class="md-nav__link">
+  <a href="#5-lightweight-counter-based-profiling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Lightweight Counter-Based Profiling (ELI5)
+        5. Lightweight Counter-Based Profiling
       
     </span>
   </a>
@@ -500,7 +500,7 @@
 <p><em>Figure 5: Prophet process overview. Step1: Prophet leverages the PMU to gather counters related to the temporal prefetcher’s performance. Step2: Prophet analyzes the collected counters to generate hints and then injects hints into the original binaries. Step 3: Prophet samples and learns counters across different program inputs.</em></p>
 <p><img alt="" src="../images/43948fc9cbd2b8790f6e3b4be9949e5ea3476184e05ad873a7b24d42dea75539.jpg" /></p>
 <p><em>Figure 13: Prophet learns counters from gcc’s inputs.</em></p>
-<h3 id="1-profile-guided-insertion-policy-eli5">1. Profile-Guided Insertion Policy (ELI5)<a class="headerlink" href="#1-profile-guided-insertion-policy-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-profile-guided-insertion-policy">1. Profile-Guided Insertion Policy<a class="headerlink" href="#1-profile-guided-insertion-policy" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>现有的硬件 <strong>temporal prefetcher</strong>（如 Triangel）在管理宝贵的 <strong>on-chip metadata table</strong> 时，面临着一个两难困境：要么“来者不拒”，把大量无效的地址关联信息塞进表里，迅速占满空间并挤掉有用的信息；要么“过度谨慎”，用一些基于短期历史的启发式规则（比如论文里的 <strong>PatternConf</strong>）错误地过滤掉那些其实能产生有用预取的请求。</li>
@@ -526,7 +526,7 @@
 </li>
 <li>这一招的精妙之处在于，它用一次性的、轻量级的<strong>离线 profiling</strong>（只用计数器，不用沉重的trace），换取了运行时对metadata table<strong>极其精准的源头过滤</strong>，从根本上解决了硬件因“目光短浅”而导致的误判问题。</li>
 </ul>
-<h3 id="2-profile-guided-replacement-policy-eli5">2. Profile-Guided Replacement Policy (ELI5)<a class="headerlink" href="#2-profile-guided-replacement-policy-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-profile-guided-replacement-policy">2. Profile-Guided Replacement Policy<a class="headerlink" href="#2-profile-guided-replacement-policy" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件 <strong>temporal prefetcher</strong>（如 Triangel）在管理 <strong>metadata table</strong>（元数据表）时，其 <strong>replacement policy</strong>（替换策略）只关心一个事：这个元数据条目未来还会不会被用到？它用 <strong>reuse distance</strong>（重用距离）之类的指标来预测。</li>
@@ -551,7 +551,7 @@
 </ul>
 <p><img alt="" src="../images/37bc72061a8ee86cc1388e266f82418a26bef80f9a35efb33771fc0ce33ae8e8.jpg" /></p>
 <p>这个公式就是将准确率映射为优先级的核心逻辑。</p>
-<h3 id="3-multi-path-victim-buffer-eli5">3. Multi-path Victim Buffer (ELI5)<a class="headerlink" href="#3-multi-path-victim-buffer-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-multi-path-victim-buffer">3. Multi-path Victim Buffer<a class="headerlink" href="#3-multi-path-victim-buffer" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的硬件时序预取器（如 Triangel）在处理 <strong>Markov 链</strong> 时，其元数据表（metadata table）里每个内存地址只存一个“下一个最可能访问的目标地址”。</li>
@@ -579,7 +579,7 @@
 </li>
 <li>这一招的核心逻辑转换在于：<strong>将“单点预测”的压力，通过一个低成本、高选择性的辅助缓冲区，转化为了“多候选集”的灵活应对</strong>，完美解决了单地址多目标的根本矛盾。</li>
 </ul>
-<h3 id="4-adaptive-learning-across-inputs-eli5">4. Adaptive Learning across Inputs (ELI5)<a class="headerlink" href="#4-adaptive-learning-across-inputs-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-adaptive-learning-across-inputs">4. Adaptive Learning across Inputs<a class="headerlink" href="#4-adaptive-learning-across-inputs" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>Profile-Guided Optimization (PGO)</strong> 有个致命伤：它在<strong>特定输入</strong>（比如 <code>input_A</code>）上跑一遍，收集数据，然后把优化“固化”到二进制文件里。</li>
@@ -617,7 +617,7 @@
 </li>
 </ul>
 <p>这个流程的核心扭转在于：<strong>将 PGO 从一个“一次性、静态”的过程，转变为一个“周期性、动态”的闭环系统</strong>。它用极低的运行时开销，换取了模型对输入变化的强大适应能力，真正做到了“一个二进制，通吃所有输入”。</p>
-<h3 id="5-lightweight-counter-based-profiling-eli5">5. Lightweight Counter-Based Profiling (ELI5)<a class="headerlink" href="#5-lightweight-counter-based-profiling-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-lightweight-counter-based-profiling">5. Lightweight Counter-Based Profiling<a class="headerlink" href="#5-lightweight-counter-based-profiling" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 Profile-Guided Optimization (PGO) 为了指导优化，往往需要收集完整的 <strong>execution trace</strong>（执行轨迹）。这在预取场景下尤其痛苦：<ul>

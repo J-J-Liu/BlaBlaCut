@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-eli5" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 多尺度空间预取与多偏移触发机制 (ELI5)
+        1. 多尺度空间预取与多偏移触发机制
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-eli5" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 基于优先级的区域仲裁策略 (ELI5)
+        2. 基于优先级的区域仲裁策略
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 分层元数据存储架构 (ELI5)
+        3. 分层元数据存储架构
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 片外元数据访问过滤机制 (ELI5)
+        4. 片外元数据访问过滤机制
       
     </span>
   </a>
@@ -502,7 +502,7 @@
 <p><em>Figure 4: Achieving high accuracy in large spatial regions and high coverage in small spatial regions by using different numbers of trigger offsets Figure 5: Placing 16 KB PHT off-chip keeps most prefetch opportunities, even with additional memory access latency</em></p>
 <p>这张图清晰地表明，即使加上50ns的额外延迟，将16KB PHT放在片外也只会损失不到15%的预取机会，证明了该设计的可行性。</p>
 <p>最终，RICH 通过这种“<strong>小区域广撒网，大区域精耕细作，并用分层存储降低成本</strong>”的策略，在几乎不增加片上面积（on-chip area）的前提下，显著提升了 <strong>coverage</strong> 和 <strong>timeliness</strong>，从而在高延迟内存系统中获得了远超现有技术的性能优势。</p>
-<h3 id="1-eli5">1. 多尺度空间预取与多偏移触发机制 (ELI5)<a class="headerlink" href="#1-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1">1. 多尺度空间预取与多偏移触发机制<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的空间预取器（比如 Bingo、SMS）通常只盯着 <strong>4KB</strong> 这一个固定区域大小干活，这在现实中非常“难受”。</li>
@@ -538,7 +538,7 @@
 <p><img alt="" src="../images/1f10b5e59c03da97147d1e6f49132168e55c6d8bffc6ba398eef1107e5abb7ce.jpg" /></p>
 <p><em>Figure 3: By using more access offsets in a trigger, we can trade off between the accuracy and coverage of prefetching. Specifically, a), b),and c) correspond to 16 KB-region, 4 KBregion, and 2 KB-region.</em></p>
 <p>这种设计的核心在于，它不再试图用一个僵化的模型去拟合所有程序，而是通过 <strong>多尺度感知</strong> 和 <strong>自适应触发</strong>，让预取器能像一个经验丰富的专家一样，在 <strong>覆盖率</strong> 和 <strong>准确性</strong> 这对天然矛盾的目标之间，根据不同场景动态地找到最佳平衡点。最终结果就是，在常规系统中性能提升 <strong>3.4%</strong>，而在高延迟内存系统中，优势更是扩大到 <strong>8.3%</strong>。</p>
-<h3 id="2-eli5">2. 基于优先级的区域仲裁策略 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2">2. 基于优先级的区域仲裁策略<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的空间预取器（如 Bingo）通常只在一个固定的 <strong>4KB</strong> 区域内工作。这就像你只能用一种尺寸的渔网捕鱼——遇到小鱼群浪费网眼，遇到大鱼群又捕不全。</li>
@@ -577,7 +577,7 @@
 <li><strong>第二层：动态覆盖检查 (overlap check)</strong>。即使一个低优先级的请求先到，如果此时一个高优先级的请求覆盖了同一片区域，低优先级的请求也会被 <strong>block</strong> 掉。反之，如果一个 16KB 请求已经发出，那么在其完成前，该区域内的所有 4KB 和 2KB 请求都会被禁止。</li>
 <li><strong>作者最关键的扭转在于</strong>：将“选择哪个区域预取”这个问题，从一个复杂的在线优化问题，简化为一个基于离线分析得出的、高效且可预测的 <strong>静态优先级决策</strong>，并辅以简单的硬件表（<strong>Inflight Prefetch Table</strong>）来执行去重。这既保证了性能，又控制了硬件开销。</li>
 </ul>
-<h3 id="3-eli5">3. 分层元数据存储架构 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 分层元数据存储架构<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <p>传统硬件预取器（如 Bingo、SMS）为了控制 <strong>on-chip area overhead</strong>，把所有元数据都塞在片上，这导致了一个根本性的矛盾：它们只能处理 <strong>4KB 以内的小区域空间局部性</strong>。但现实 workload 中，很多程序（比如科学计算、图处理）的访问模式跨越多个页面，呈现出 <strong>16KB 甚至更大的空间局部性</strong>。如果强行用小区域去覆盖，就会出现“只见树木，不见森林”的问题——<strong>coverage</strong>（覆盖率）极低。可如果直接把大区域的元数据（比如 16KB 的 bit-vector pattern）全放片上，那动辄上百 KB 的存储开销是处理器设计无法承受的奢侈。更麻烦的是，如果简单地把所有元数据都扔到 off-chip memory，每次预测都要去主存读一次，那 <strong>metadata access latency</strong> 本身就可能吃掉预取带来的所有收益，得不偿失。</p>
 <hr />
@@ -616,7 +616,7 @@
 <p>这种设计的核心逻辑转换在于：<strong>将“存储位置”的决策从“能不能放得下”转变为“值不值得为它付出延迟代价”</strong>。通过承认并利用不同类型元数据的内在属性差异，RICH 用极小的片上代价（仅增加一个小型缓存和 Valid Map），就撬动了 off-chip 内存的巨大容量，从而支持了性能更强的大区域预取，完美解决了传统方案的两难困境。</p>
 <p><img alt="" src="../images/caca357af3f3213087919d97821353c5fd143706cce1834eabdabd91fa574906.jpg" /></p>
 <p><em>Table 2: Categorization of RICH's metadata</em></p>
-<h3 id="4-eli5">4. 片外元数据访问过滤机制 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 片外元数据访问过滤机制<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统做法里，只要有个新的 <strong>16KB-region pattern</strong>（一个256-bit的位向量），就一股脑地往<strong>片外主存</strong>里读或写。这在直觉上很“完整”，但实际运行起来非常难受。</li>

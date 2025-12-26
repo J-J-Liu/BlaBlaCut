@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-coarse-grained-floor-planning-solver-eli5" class="md-nav__link">
+  <a href="#1-coarse-grained-floor-planning-solver" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Coarse-Grained Floor-Planning Solver (ELI5)
+        1. Coarse-Grained Floor-Planning Solver
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-datapath-wide-permutation-unit-with-shadow-mask-cache-eli5" class="md-nav__link">
+  <a href="#2-datapath-wide-permutation-unit-with-shadow-mask-cache" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Datapath-Wide Permutation Unit with Shadow Mask Cache (ELI5)
+        2. Datapath-Wide Permutation Unit with Shadow Mask Cache
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-fine-grained-chaining-microarchitecture-eli5" class="md-nav__link">
+  <a href="#3-fine-grained-chaining-microarchitecture" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Fine-Grained Chaining Microarchitecture (ELI5)
+        3. Fine-Grained Chaining Microarchitecture
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-issue-as-commit-for-scalar-vector-ooo-execution-eli5" class="md-nav__link">
+  <a href="#4-issue-as-commit-for-scalar-vector-ooo-execution" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Issue-as-Commit for Scalar-Vector OoO Execution (ELI5)
+        4. Issue-as-Commit for Scalar-Vector OoO Execution
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-dual-lsu-with-memory-interleaving-and-delay-slots-eli5" class="md-nav__link">
+  <a href="#5-dual-lsu-with-memory-interleaving-and-delay-slots" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Dual LSU with Memory Interleaving and Delay Slots (ELI5)
+        5. Dual LSU with Memory Interleaving and Delay Slots
       
     </span>
   </a>
@@ -509,7 +509,7 @@
 <p>这些创新共同作用，使得 T1 能够在扩大 DLEN 和 VLEN 的同时，依然保持高性能和高能效，从而在 <strong>cryptography</strong> 和 <strong>HPC</strong> 等关键 workload 上实现了对 GP-GPU 和其他 vector core 的显著超越。其性能优势在论文的多个图表中得到了验证，例如在纯 DDR 模式下，T1 相比 SpacemiT X60 (K1) 实现了高达 <strong>8.05×</strong> 的性能提升。</p>
 <p><img alt="" src="../images/e0edef77ab135adf1a07c43ae47e780f55d14329f28e2519f51da2534d510bbe.jpg" /> <em>Figure 8: Cryptographic Benchmarks of T1 (DLEN1K, VLEN16K,emulated with DDR4-3200) with GA102 (NVIDIA GTX 3090) and NVIDIA GB202 (GTX 5090)</em>
 <img alt="" src="../images/0ab617733a0cdcfbf8508585892beb15df59655a0571329ed684bc50fb3f8df4.jpg" /> <em>Figure 9: HPCbenchmark results: Figure 9a: PerformanceofT1(at2.45GHz) with local memoryand DDR4-3200,normalized to KP920; Figure 9b: Performancecomparison ilustrating T1's tolerance to memorylatency,showing results with DRAMand local SRAM,normalized to KP920,Ituses stripmining bydynamicallyset VLforcontinues DRAMaccessinSGEM workload.; Figure 9c: Performance of T1(at 1.6 GHz) using DDR4-3200, normalized to K1, where higher is better.</em></p>
-<h3 id="1-coarse-grained-floor-planning-solver-eli5">1. Coarse-Grained Floor-Planning Solver (ELI5)<a class="headerlink" href="#1-coarse-grained-floor-planning-solver-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-coarse-grained-floor-planning-solver">1. Coarse-Grained Floor-Planning Solver<a class="headerlink" href="#1-coarse-grained-floor-planning-solver" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在传统的 <strong>lane-based</strong> 向量处理器里，当你把 <strong>DLEN</strong>（数据通路宽度）做得很大时，比如从 256-bit 扩到 1024-bit，意味着你有更多个 <strong>Lane</strong> 并行工作。</li>
@@ -537,7 +537,7 @@
 <li>这个看似简单的策略，却能非常有效地将**最坏情况下的跨 **(worst-case routing distance) 从 7 个单位降低到 4 个单位（如图所示）。</li>
 <li>通过控制这个关键瓶颈，整个 <strong>Permutation Unit</strong> 的延迟得以降低，从而让增大 <strong>DLEN</strong> 带来的性能收益能够真正兑现，实现了接近<strong>线性的可扩展性</strong>。</li>
 </ul>
-<h3 id="2-datapath-wide-permutation-unit-with-shadow-mask-cache-eli5">2. Datapath-Wide Permutation Unit with Shadow Mask Cache (ELI5)<a class="headerlink" href="#2-datapath-wide-permutation-unit-with-shadow-mask-cache-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-datapath-wide-permutation-unit-with-shadow-mask-cache">2. Datapath-Wide Permutation Unit with Shadow Mask Cache<a class="headerlink" href="#2-datapath-wide-permutation-unit-with-shadow-mask-cache" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在传统的 <strong>Lane-based</strong> 向量处理器里，当执行带 <strong>mask</strong> 的指令（比如 <code>vadd.vv v1, v2, v3, v0.t</code>）时，每个 <strong>Lane</strong> 都需要知道 <strong>v0</strong> 这个 <strong>mask register</strong> 里对应自己那部分的比特位是 0 还是 1。</li>
@@ -563,7 +563,7 @@
 </ul>
 <p><img alt="" src="../images/4a80decfd712ba09ca9992395240de5dca8c381b5e5f2dbac5cacb0b0591ec39.jpg" /> <em>Titan-l:An Open-Source, High Performance RISC-V Vector Core</em>
 <img alt="" src="../images/059cc18a0fd5fdea64b90f6c0ee6a78e62366895f9e4603e38815ac5dd4bb8b7.jpg" /></p>
-<h3 id="3-fine-grained-chaining-microarchitecture-eli5">3. Fine-Grained Chaining Microarchitecture (ELI5)<a class="headerlink" href="#3-fine-grained-chaining-microarchitecture-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-fine-grained-chaining-microarchitecture">3. Fine-Grained Chaining Microarchitecture<a class="headerlink" href="#3-fine-grained-chaining-microarchitecture" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 vector core 在处理超宽 datapath（比如 DLEN=1024）时，会遇到一个“大块头”的问题：一条 vector 指令动辄要处理成百上千个数据元素，如果必须等这条指令的所有元素都算完、写回寄存器文件（VRF）后，下一条依赖它的指令才能开始，那整个流水线就会被卡住，造成巨大的 <strong>硬件资源浪费</strong> 和 <strong>性能瓶颈</strong>。</li>
@@ -588,7 +588,7 @@
 </ul>
 <p><img alt="" src="../images/da8de2a4cc9b2a56078e4eaae0c865bc0e4479e50aebabdef2d42775bd764e4d.jpg" /> <em>Figure 4: Linearly Area Scaling of T1 design parameters,evaluated at TSMC N28 SVT technology at 65% utilization.Four cases are examined:(1)when varying VLEN,DLEN is held at 128,y-asix on the left-hand represents the total area of T1,whereas the right-hand y-axis isolates the area of Lane and Permutation;(2)when varying DLEN,the ratio VLEN/DLEN remains 1; (3)when examining LaneScale,both VLEN and DLE are set to 1024,y-asix on the left-hand represents the total area of T1,whereas the right-hand y-axis isolates the area of Lane;and(4)when asesing ChainingSize,VLEN and DLEN are maintained at 1024.</em></p>
 <p>如上图所示，通过调整 <strong>ChainingSize</strong>（即 ScaleFactor），可以在 <strong>Lane 面积开销</strong> 和 <strong>ILP 挖掘能力</strong> 之间做权衡。对于 HPC 这类计算密集、依赖复杂的场景，增大 ChainingSize 能带来显著的性能提升（如 Table 1 所示，PACK 测试中 fine-grained chaining 带来了 <strong>61%</strong> 的性能提升）。</p>
-<h3 id="4-issue-as-commit-for-scalar-vector-ooo-execution-eli5">4. Issue-as-Commit for Scalar-Vector OoO Execution (ELI5)<a class="headerlink" href="#4-issue-as-commit-for-scalar-vector-ooo-execution-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-issue-as-commit-for-scalar-vector-ooo-execution">4. Issue-as-Commit for Scalar-Vector OoO Execution<a class="headerlink" href="#4-issue-as-commit-for-scalar-vector-ooo-execution" title="Permanent link">&para;</a></h3>
 <p>之前的设计里，<strong>Scalar（标量）</strong> 和 <strong>Vector（向量）</strong> 两条流水线虽然物理上是分开的，但逻辑上却像被一根绳子拴着。只要向量单元开始干活，标量单元就得在旁边干等着，哪怕它们俩处理的数据八竿子打不着。这种“<strong>虚假依赖</strong>”导致了巨大的性能浪费——向量单元可能正吭哧吭哧处理一个超长的数组，而标量单元明明可以去干别的活，却被硬生生地卡住了。</p>
 <hr />
 <p>想象一下厨房里有两个厨师：一个负责切菜（<strong>Scalar</strong>），一个负责炖一锅需要两小时的大骨汤（<strong>Vector</strong>）。在旧规矩下，只要炖汤师傅点火开始炖，切菜师傅就必须放下手里的活，站在旁边盯着汤锅，直到汤炖好才能继续切菜。这显然很蠢！他们完全可以各干各的，互不干扰。<strong>Issue-as-Commit</strong> 的核心思想就是废除这条愚蠢的规矩。</p>
@@ -601,7 +601,7 @@
 <li>只有当向量指令真的会影响标量世界时（比如写一个标量寄存器，或者可能抛出异常），协调员才会拉住标量单元，让它等一等。</li>
 </ul>
 <p>通过这个简单的逻辑转换，系统在保证正确性的前提下，极大地释放了标量单元的生产力，让两条流水线真正实现了<strong>并发执行</strong>，从而显著提升了整体吞吐量。</p>
-<h3 id="5-dual-lsu-with-memory-interleaving-and-delay-slots-eli5">5. Dual LSU with Memory Interleaving and Delay Slots (ELI5)<a class="headerlink" href="#5-dual-lsu-with-memory-interleaving-and-delay-slots-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-dual-lsu-with-memory-interleaving-and-delay-slots">5. Dual LSU with Memory Interleaving and Delay Slots<a class="headerlink" href="#5-dual-lsu-with-memory-interleaving-and-delay-slots" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的向量处理器，哪怕是支持 OoO 的，其 <strong>LSU (Load-Store Unit)</strong> 往往是“单通道”的。这意味着 <strong>load 和 store 操作必须串行化</strong>，即使它们访问的是内存中完全不相干的区域。这直接浪费了一半的理论内存带宽。</li>

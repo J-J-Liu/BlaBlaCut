@@ -1,0 +1,722 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/a-cpu-centric-perspective-on-agentic-ai/ELI5_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI 通俗讲解 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a-cpu-centric-perspective-on-agentic-ai" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI 通俗讲解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 整体创新点通俗解读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-cpu-and-gpu-aware-micro-batching-cgam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CPU and GPU-Aware Micro-batching (CGAM)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-mixed-agentic-workload-scheduling-maws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Mixed Agentic Workload Scheduling (MAWS)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-agentic-ai-system-characterization-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Agentic AI System Characterization Framework
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-batching-cap-selection-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Batching Cap Selection Strategy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cgamoverlap-execution-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. CGAMoverlap Execution Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="a-cpu-centric-perspective-on-agentic-ai">A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI 通俗讲解<a class="headerlink" href="#a-cpu-centric-perspective-on-agentic-ai" title="Permanent link">&para;</a></h1>
+<h3 id="0">0. 整体创新点通俗解读<a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>过去大家优化 LLM 时，眼睛都死死盯着 <strong>GPU</strong>，疯狂压榨它的计算和显存带宽。这在纯推理场景下没问题。</li>
+<li>但 <strong>Agentic AI</strong> 完全变了：它不再是“输入-输出”的简单流程，而是一个 <strong>LLM + 外部工具</strong> 的混合体。这些工具（比如 Python 执行、Web 搜索、向量检索）<strong>根本跑在 CPU 上</strong>。</li>
+<li>结果就是，当你把 GPU 优化到飞起时，发现 <strong>90% 的时间</strong> 都卡在 CPU 工具调用上（见 Figure 2），GPU 只能干等着。整个系统变成了一个 <strong>CPU 瓶颈</strong> 的“瘸腿”系统，之前的 GPU 优化努力大打折扣。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你有一条顶级的 <strong>F1 赛车生产线（GPU）</strong>，每分钟能造出一辆车。但你的 <strong>零件仓库（CPU 工具）</strong> 在城郊，每次取关键零件都要花 10 分钟开车过去。</li>
+<li>无论你的生产线多快，<strong>整条线的产出速度</strong> 完全被这个 <strong>10 分钟的取件时间</strong> 给锁死了。论文要解决的，就是如何优化这个“取件”环节，或者干脆重新设计物流，让生产线和仓库能高效协同。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>这篇论文的核心贡献不是提出一个新模型，而是 <strong>首次系统性地揭示并量化了 Agentic AI 中的 CPU 瓶颈</strong>，并基于此提出了两个调度层面的优化策略。</li>
+<li><strong>核心洞察</strong>：Agentic AI 的性能瓶颈已经从 <strong>纯 GPU-bound</strong> 转移到了 <strong>CPU/GPU 协同-bound</strong>。因此，优化必须是 <strong>CPU-Centric</strong> 的。</li>
+<li><strong>具体做法</strong>：<ul>
+<li><strong>第一步：精准画像</strong>。作者没有泛泛而谈，而是提出了三个维度（Orchestrator, Path, Repetitiveness）来对 Agentic Workload 进行分类（见 Figure 1），并选了 5 个典型 workload 进行深度剖析。</li>
+<li><strong>第二步：量化瓶颈</strong>。通过 profiling，他们用数据说话：<strong>Tool processing latency</strong> 占比高达 <strong>90.6%</strong>；<strong>CPU dynamic energy</strong> 在大 batch 下占总能耗的 <strong>44%</strong>（见 Figure 5）。这彻底颠覆了“GPU 是唯一瓶颈”的认知。</li>
+<li><strong>第三步：对症下药</strong>。基于上述发现，他们设计了两种调度器：<ul>
+<li><strong>CGAM (CPU and GPU-Aware Micro-batching)</strong>：针对 <strong>同构 workload</strong>（比如全是 LangChain 请求）。它发现盲目增大 batch size 会导致 CPU 过载（core over-subscription）和 GPU 显存压力，反而拖慢 P50 延迟。于是，它聪明地设置了一个 <strong>batching cap</strong>，将大 batch 拆成 micro-batch 顺序处理。这样既能利用并行性，又避免了资源争抢，实现了 <strong>2.1x 的 P50 延迟加速</strong>（见 Figure 7）。</li>
+<li><strong>MAWS (Mixed Agentic Workload Scheduling)</strong>：针对 <strong>异构 workload</strong>（比如同时有 CPU-heavy 和 LLM-heavy 的请求）。它意识到，如果对所有请求都用 multi-processing，会让 LLM-heavy 的轻量请求白白占用大量 CPU 核心，挤占了真正需要 CPU 资源的 heavy 请求。所以，它 <strong>自适应地为不同请求选择并行策略</strong>：CPU-heavy 用 multi-processing，LLM-heavy 用更轻量的 multi-threading。这释放了宝贵的 CPU 资源，让混合负载下的整体性能更均衡（见 Figure 8）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/c568650775b5d377253e5df9d267269103a2e3df26d2fe110a2406804dde2ed4.jpg" /> <em>Figure 1. Characterization of agentic AI workloads on the basis of (a) Orchestrator (LLM and Host) (b) Agentic Path (Static and Dynamic) and (c) Repetitiveness (Single-step and Multi-step)</em>
+<img alt="" src="../images/66e2038a359c663d017153de1608985be33a834503ddf5f87eaaa65f9978eb7e.jpg" /> <em>Figure 2. (a) Haystack with ENNS retrieval on QA benchmarks (b) Toolformer with WolframAlpha API on Math benchmarks (c) Chemcrow with literature (Arxiv/Pubmed) search tool on Chemistry benchmarks (d) Langchain with web search and LexRank summarization tools on QA benchmarks (e) Mini-SWE-Agent with bash/Python execution tools on coding benchmarks</em>
+<img alt="" src="../images/373ee23985283730c802d9101fad6c425eb49df85d3c02245ba720ffdab29b33.jpg" /> <em>Figure 5. CPU (AMD Threadripper) and GPU (Nvidia B200) dynamic energy consumption for Langchain workload</em>
+<img alt="" src="../images/07e7bbdae99c50386308344797acf2b4a7ececfa16ddaae6860b42ff8664adea.jpg" /> <em>Figure 7. Comparison of CGAM and CGAMoverlap using Bcap = 64 against baseline (multi-processing or multi-threading) on (a) Langchain workload on FreshQA benchmark, (b) Haystack workload on NQ benchmark and (c) SWE-Agent on APPS benchmark</em></p>
+<h3 id="1-cpu-and-gpu-aware-micro-batching-cgam">1. CPU and GPU-Aware Micro-batching (CGAM)<a class="headerlink" href="#1-cpu-and-gpu-aware-micro-batching-cgam" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击</strong></p>
+<ul>
+<li>以前跑 Agentic AI，大家习惯性地把所有请求一股脑塞给系统做 <strong>batching</strong>，心想“越多越划算”。但这篇论文发现，在 Agentic 场景下，这招会“搬石头砸自己的脚”。</li>
+<li>具体来说，当 <strong>batch size</strong> 大到一定程度（比如128），系统就“吃撑了”：<ul>
+<li><strong>CPU 端</strong>：工具执行（如 Python、Web Search）需要大量并行进程，导致 <strong>core over-subscription</strong>，线程间争抢资源、频繁 <strong>context switching</strong>，让本该快的 CPU 工具反而变慢，<strong>P50 latency</strong> 直接翻倍。</li>
+<li><strong>GPU 端</strong>：巨大的 <strong>KV cache</strong> 会耗尽显存带宽甚至容量，让 LLM 推理也变慢。</li>
+<li><strong>能耗端</strong>：CPU 的动态能耗占比飙升至 <strong>44%</strong>，效率极低。</li>
+</ul>
+</li>
+<li>所以，问题的核心不是“能不能 batch”，而是“batch 到多大才刚刚好”，再大就纯属浪费甚至有害。</li>
+</ul>
+<p><strong>通俗比方</strong></p>
+<ul>
+<li>这就像你去一家网红餐厅吃饭。餐厅有 <strong>两个窗口</strong>：一个负责 <strong>点菜/上菜 (CPU)</strong>，另一个是 <strong>后厨炒菜 (GPU)</strong>。</li>
+<li>如果你一次性叫了 <strong>128 个人</strong>一起点餐，会发生什么？<ul>
+<li><strong>点菜窗口</strong>会挤爆，服务员手忙脚乱，记错单、上错菜，前面的人等得不耐烦（<strong>高 P50 latency</strong>）。</li>
+<li><strong>后厨</strong>也堆满了订单，锅碗瓢盆全占满，厨师互相挡路，出菜速度反而变慢。</li>
+</ul>
+</li>
+<li><strong>CGAM 的做法</strong>是：不让128人一窝蜂涌上去，而是分成两批 <strong>micro-batch</strong>，每批64人。<ul>
+<li>第一批64人先去点菜、后厨开始炒。</li>
+<li>等第一批的菜快上齐时，第二批64人才开始点菜。</li>
+</ul>
+</li>
+<li>这样，两个窗口都保持在 <strong>高效、不拥堵</strong> 的状态，第一批客人能更快吃到饭（<strong>降低 P50 latency</strong>），整个餐厅的翻台率和能耗也更优。</li>
+</ul>
+<p><strong>关键一招</strong></p>
+<ul>
+<li>作者没有去魔改 LLM 或工具本身，而是在调度层面做了一个非常聪明的 <strong>流量整形 (Traffic Shaping)</strong>。</li>
+<li>核心逻辑转换在于：<strong>用 throughput gain ratio 来动态设定一个 batching cap (Bcap)</strong>。<ul>
+<li>他们定义了一个指标 <code>r(B) = T(B) / T(B/2)</code>，即 batch size 翻倍后，吞吐量能提升多少。</li>
+<li>一旦 <code>r(B)</code> 低于一个阈值（比如1.1，意味着只提升了10%），就说明再增大 batch size 得不偿失，此时的 B 就是 <strong>Bcap</strong>。</li>
+</ul>
+</li>
+<li>在实际执行时：<ul>
+<li>面对一个大 batch（如128），系统不再一次性处理，而是将其拆成多个 <strong>micro-batch</strong>（如两个64）。</li>
+<li>这些 micro-batch <strong>顺序执行</strong>，确保任何时候系统的负载都不会超过 Bcap，从而完美避开 CPU/GPU 的饱和区。</li>
+</ul>
+</li>
+<li>这一招直接带来了三大好处：<ul>
+<li><strong>~2x P50 latency speedup</strong>：第一批请求能更快完成。</li>
+<li><strong>~0.5x KV cache usage</strong>：GPU 显存压力减半。</li>
+<li><strong>~2x CPU energy reduction</strong>：避免了无谓的 core over-subscription。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/b6ee5be93f561d2e4556f73a8f70b776c11eddcce4add766cde63e07855d84a0.jpg" /> <em>Figure 6. Timeline of batched agentic AI inference for (a) Multiprocessing, (b) CGAM, and (c) CGAMoverlap</em></p>
+<p>上图清晰地展示了 CGAM 的威力。Baseline（Multiprocessing）下，所有128个请求同时启动，导致 CPU 和 GPU 都长时间处于高负载拥堵状态。而 CGAM 将其拆成两个64的 micro-batch 顺序执行，不仅让第一批请求（前64个）的完成时间大幅提前，还让整个系统的资源曲线变得平滑高效。</p>
+<h3 id="2-mixed-agentic-workload-scheduling-maws">2. Mixed Agentic Workload Scheduling (MAWS)<a class="headerlink" href="#2-mixed-agentic-workload-scheduling-maws" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前的调度器，比如简单的 <strong>multi-processing</strong>，把所有任务都一视同仁地扔给独立进程处理。这在面对<strong>异构工作负载</strong>（heterogeneous workloads）时就“很难受”了。</li>
+<li>具体来说，系统里同时跑着两种活：一种是 <strong>CPU-heavy</strong> 的（比如 LangChain 里要爬网页、做摘要），另一种是 <strong>LLM-heavy</strong> 的（比如一个纯文本生成请求，工具调用很少）。LLM-heavy 的任务虽然主要算力在 GPU，但它启动时依然会占用一个完整的 CPU 进程。</li>
+<li>当大量 LLM-heavy 任务涌入时，它们会<strong>无谓地抢占宝贵的 CPU 核心</strong>，导致真正需要 CPU 算力的 CPU-heavy 任务反而“饿死”或者被严重拖慢。这就叫 <strong>CPU 资源过载 (over-subscription)</strong>，顾头（GPU）不顾尾（CPU），整体效率大打折扣。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象一个餐厅厨房（你的服务器），里面有两种厨师：<ul>
+<li><strong>主厨 (CPU-heavy tasks)</strong>：他们需要大量的案板、刀具和炉灶（CPU 核心），做一道复杂的菜（比如 Haystack 的 ENNS 检索）。</li>
+<li><strong>配菜员 (LLM-heavy tasks)</strong>：他们的主要工作是把食材交给烤箱（GPU），自己只需要很小的操作台（一点点 CPU 资源）来准备食材。</li>
+</ul>
+</li>
+<li>如果你给每个配菜员都分配一个独立的、完整的操作间（multi-processing），那么很快厨房里就挤满了只占着茅坑不拉屎的配菜员，主厨们连站的地方都没有了，整个出餐速度就慢了下来。</li>
+<li><strong>MAWS 的思路就是</strong>：给主厨们每人一个独立的操作间（<strong>multi-processing</strong>），但让配菜员们共享一个大的中央备餐区（<strong>multi-threading</strong>）。这样既保证了主厨有充足的空间干活，又避免了备餐区的资源浪费。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有发明新的调度算法，而是巧妙地在任务分发前，先对任务进行<strong>类型感知 (type-aware)</strong> 的分类。</li>
+<li><strong>具体扭转点在于</strong>：将原来“一刀切”的 <strong>multi-processing</strong> 策略，替换为一个<strong>自适应的混合策略</strong>。<ul>
+<li>对于被识别为 <strong>CPU-heavy</strong> 的任务（如包含复杂工具调用的 LangChain pipeline），继续使用 <strong>multi-processing</strong>。这能绕过 Python 的 <strong>GIL</strong> 限制，让它们能真正并行地榨干多核 CPU 的性能。</li>
+<li>对于被识别为 <strong>LLM-heavy</strong> 的任务（如简单的 guardrail + LLM inference），则改用 <strong>multi-threading</strong>。因为这类任务的 CPU 部分很轻，主要是 I/O 操作（比如调用 vLLM API），用线程池处理开销更小，不会过度消耗 CPU 核心。</li>
+</ul>
+</li>
+<li>这个简单的“分流”操作，释放了被 LLM-heavy 任务无谓占用的 CPU 资源，让 CPU-heavy 任务能跑得更快，从而提升了整个混合工作负载的 <strong>P99 延迟</strong> 和吞吐效率。</li>
+</ul>
+<p><img alt="" src="../images/2ce33be19b396d7fca80f5b1f5379cd89c4061711ea42c08582430787618f641.jpg" /> <em>Figure 8. Comparison of MAWS against multiprocessing baseline on 128 mixed Langchain tasks (half LLM heavy, half CPU heavy)</em></p>
+<h3 id="3-agentic-ai-system-characterization-framework">3. Agentic AI System Characterization Framework<a class="headerlink" href="#3-agentic-ai-system-characterization-framework" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<p>以前大家研究 Agentic AI，基本是从算法或应用层面看问题，比如“这个 Agent 能不能解化学题”或者“那个框架的 ReAct 逻辑好不好”。但这种视角有个致命盲区：它完全忽略了 <strong>系统层面的异构性</strong>。当你把一个 Agent 部署到真实服务器上跑起来，你会发现：</p>
+<ul>
+<li>有些 Agent 的瓶颈在 <strong>GPU 上的 LLM 推理</strong>，而另一些的瓶颈却在 <strong>CPU 上的工具调用</strong>（比如检索、执行 Python 脚本）。</li>
+<li>有些 Agent 的执行路径是固定的（比如先检索再生成），而另一些则像下棋一样，每一步都动态决定下一步做什么。</li>
+<li>有些任务一锤子买卖（单步），有些则要反复试错、迭代十几次（多步）。</li>
+</ul>
+<p>如果不对这些工作负载进行<strong>系统级的分类</strong>，你根本没法做有效的优化。你可能会花大力气去优化 GPU 推理，结果发现整个 pipeline 90% 的时间都卡在 CPU 上的 ENNS 检索——这就是典型的“顾头不顾尾”。所以，作者提出这个框架，就是为了<strong>把混沌的 Agentic AI 世界，用几条清晰的坐标轴划分清楚</strong>，让系统研究者能对症下药。</p>
+<hr />
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<p>你可以把这个分类框架想象成给所有 Agentic AI 工作负载建立一个 <strong>“三维坐标系”</strong>，就像给动物分类用“脊椎/无脊椎”、“恒温/变温”、“胎生/卵生”一样。</p>
+<ul>
+<li><strong>X 轴（Orchestrator）</strong>：谁是“大脑”？是 <strong>LLM 自己</strong>在思考下一步该干嘛（比如 AutoGPT），还是由 <strong>Host（Python 代码）</strong> 在背后指挥 LLM 当一个听话的“打工人”（比如 LangChain）？</li>
+<li><strong>Y 轴（Path）</strong>：行动路线是 <strong>静态</strong>的（像工厂流水线，步骤固定），还是 <strong>动态</strong>的（像探险家，走到哪算哪，根据环境实时决策）？</li>
+<li><strong>Z 轴（Repetitiveness）</strong>：任务是一次性完成的 <strong>单步</strong>操作，还是需要多次“感知-规划-行动”循环的 <strong>多步</strong>过程？</li>
+</ul>
+<p>通过这三个正交维度，任何一个复杂的 Agentic AI 系统都能被精准定位到这个立方体的某个角落，从而立刻暴露出它的<strong>计算特性</strong>和<strong>潜在瓶颈</strong>。</p>
+<p><img alt="" src="../images/c568650775b5d377253e5df9d267269103a2e3df26d2fe110a2406804dde2ed4.jpg" /> <em>Figure 1. Characterization of agentic AI workloads on the basis of (a) Orchestrator (LLM and Host) (b) Agentic Path (Static and Dynamic) and (c) Repetitiveness (Single-step and Multi-step)</em></p>
+<hr />
+<p><strong>关键一招 (The "How")</strong></p>
+<p>作者并没有发明新的 Agent，而是巧妙地<strong>定义了三个正交的系统级属性</strong>，并用它们来解构现有的 Agentic AI 框架。具体来说：</p>
+<ul>
+<li><strong>替换</strong>了传统的、以“功能”或“领域”为中心的分类方式（比如“这是个 Web Agent”，“那是个多智能体系统”）。</li>
+<li><strong>扭转</strong>了分析视角，从“Agent 能做什么”转向了“Agent 是怎么做的”，聚焦于其<strong>底层的执行模式</strong>。</li>
+</ul>
+<p>这三招组合起来，威力巨大：</p>
+<ul>
+<li><strong>基于编排器（Orchestrator）</strong>：直接决定了 <strong>控制流</strong>是在 CPU 还是 GPU 上。LLM-orchestrated 的系统，LLM 本身要承担决策开销；而 Host-orchestrated 的系统，则把决策逻辑放在了 CPU 上，LLM 只负责纯推理。</li>
+<li><strong>基于路径（Path）</strong>：静态路径的系统更容易做 <strong>Pipeline 并行</strong>和 <strong>Prefetching</strong>；而动态路径的系统则充满了 <strong>数据依赖</strong>和 <strong>分支不确定性</strong>，对调度器是巨大挑战。</li>
+<li><strong>基于重复性（Repetitiveness）</strong>：单步系统可以简单批处理；而多步系统则会产生 <strong>长尾延迟</strong>和 <strong>状态管理</strong>开销，因为每个请求的迭代次数可能天差地别。</li>
+</ul>
+<p>通过这个框架，作者就能有理有据地选出 <strong>Haystack, Toolformer, ChemCrow, LangChain, SWE-Agent</strong> 这五个极具代表性的 workload 进行剖析，因为它们恰好覆盖了这个三维空间的不同区域，从而保证了后续 profiling 结论的普适性和说服力。</p>
+<h3 id="4-batching-cap-selection-strategy">4. Batching Cap Selection Strategy<a class="headerlink" href="#4-batching-cap-selection-strategy" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>以前搞 <strong>Agentic AI</strong> 推理，大家习惯性地把所有请求一股脑塞进一个超大 <strong>batch</strong>（比如128），以为这样能最大化 <strong>GPU</strong> 利用率。</li>
+<li>但现实很骨感：当 <strong>batch size</strong> 超过某个临界点后，<strong>吞吐量</strong> 的增长就变得极其缓慢，甚至停滞。与此同时，<strong>P50/P99 延迟</strong> 却会因为 <strong>CPU 过载</strong>（核心过订阅、上下文切换开销剧增）和 <strong>GPU 内存压力</strong>（KV Cache 膨胀导致带宽饱和或PCIe交换）而急剧恶化。</li>
+<li>这种“顾此失彼”的做法，不仅浪费了宝贵的 <strong>CPU 资源</strong> 和 <strong>电力</strong>，还让一半用户的体验（P50）变得非常差。本质上，这是一种在 <strong>收益递减区</strong> 盲目堆砌资源的低效行为。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象你在管理一个快递分拣中心。<strong>GPU</strong> 是高速分拣机，<strong>CPU</strong> 是负责把包裹从卡车上卸下来并放到传送带上的工人。</li>
+<li>以前的做法是，不管工人有多少，一次性叫来128辆卡车同时卸货。结果呢？工人们挤作一团，互相挡路（<strong>CPU coherence/synchronization overhead</strong>），频繁地放下这个包裹去接那个（<strong>context switching</strong>），效率反而大打折扣。虽然分拣机一直在转，但前面的传送带却时断时续。</li>
+<li><strong>Batching Cap Selection</strong> 的思路是：先做个小实验，看看每次增加一倍的卡车数量，整体处理速度能提升多少。一旦发现增加卡车带来的速度提升微乎其微（比如不到10%），就立刻停止增加。这个临界点就是 <strong>Bcap</strong>。这样，你就能用最精干的人手（<strong>CPU cores</strong>），让分拣机（<strong>GPU</strong>）保持在一个高效、稳定的节奏上工作。</li>
+</ul>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者没有沿用“越大越好”的惯性思维，而是引入了一个<strong>量化指标</strong>——<strong>吞吐量增益比率 r(B)</strong>。</li>
+<li>具体来说，他们通过实验测量不同 <strong>batch size</strong> 下的吞吐量 <strong>T(B)</strong>，然后计算 <strong>r(B) = T(B) / T(B/2)</strong>。这个比率直接告诉你，把批处理大小翻倍，到底能换来多少实际的性能提升。</li>
+<li>最巧妙的一步是，他们设定了一个<strong>效率阈值 λ</strong>（例如1.1）。一旦 <strong>r(B) &lt; λ</strong>，就意味着继续增大 <strong>batch size</strong> 已经得不偿失，此时的 <strong>B</strong> 就被定为最优的 <strong>Bcap</strong>。</li>
+<li>这个 <strong>Bcap</strong> 成为了后续 <strong>CGAM (CPU and GPU-Aware Micro-batching)</strong> 优化策略的基石。系统不再处理一个巨大的 <strong>batch</strong>，而是将其拆分成多个大小不超过 <strong>Bcap</strong> 的 <strong>micro-batch</strong> 来顺序或重叠处理，从而在保证高吞吐的同时，显著改善延迟和能效。</li>
+</ul>
+<p><img alt="" src="../images/74f461bc56f169f39e5cd580fbe77acbfd6e1db2a9ab1035b1da70d985cc6394.jpg" /> <em>. Table 2. Throughput gain ratios r and selected Bcap values</em></p>
+<p>上表清晰地展示了这一策略的应用：对于 <strong>LangChain</strong>、<strong>Haystack</strong> 和 <strong>SWE-Agent</strong> 这三个 workload，当 <strong>batch size</strong> 从32增加到64时，<strong>r(B)</strong> 分别为1.83、1.91和1.85，收益尚可；但当从64增加到128时，<strong>r(B)</strong> 骤降至1.08、1.05和1.09，远低于阈值1.1。因此，<strong>Bcap = 64</strong> 被选为最优值，完美避开了收益递减区。</p>
+<h3 id="5-cgamoverlap-execution-model">5. CGAMoverlap Execution Model<a class="headerlink" href="#5-cgamoverlap-execution-model" title="Permanent link">&para;</a></h3>
+<p><strong>痛点直击 (The "Why")</strong></p>
+<ul>
+<li>传统的 <strong>CGAM (CPU and GPU-Aware Micro-batching)</strong> 虽然通过限制微批次大小（<code>Bcap</code>）有效控制了 <strong>P50延迟</strong> 和资源消耗，但它采用的是严格的串行执行模式：必须等第一个微批次完全跑完（CPU + GPU），才开始第二个。</li>
+<li>这种“等全完事再开工”的模式，在面对<strong>长尾请求</strong>时非常难受。对于第二个微批次里的请求，它们的等待时间被白白拉长了，导致 <strong>P90/P99延迟</strong> 居高不下，用户体验不均衡。</li>
+</ul>
+<p><strong>通俗比方 (The Analogy)</strong></p>
+<ul>
+<li>想象一个汽车装配线，有两个工位：<strong>工位A（CPU）</strong> 负责安装发动机，<strong>工位B（GPU）</strong> 负责喷漆。</li>
+<li><strong>标准CGAM</strong> 的做法是：第一辆车必须在A和B都做完，第二辆车才能进A工位。结果就是，第二辆车在A工位门口干等第一辆车喷完漆。</li>
+<li><strong>CGAMoverlap</strong> 则聪明得多：只要第一辆车装完发动机（离开A工位），第二辆车立刻就能进去装自己的发动机。此时，第一辆车正在B工位喷漆，第二辆车在A工位装发动机，两个工位<strong>并行工作</strong>。虽然第二辆车最终出厂（完成全部流程）的时间可能只快了一点点（对P50影响不大），但它<strong>不用再干等</strong>，所以它的总等待时间大大缩短了，这对最慢的那几辆车（P90）是巨大的福音。</li>
+</ul>
+<p><img alt="" src="../images/b6ee5be93f561d2e4556f73a8f70b776c11eddcce4add766cde63e07855d84a0.jpg" /> <em>Figure 6. Timeline of batched agentic AI inference for (a) Multiprocessing, (b) CGAM, and (c) CGAMoverlap</em></p>
+<p><strong>关键一招 (The "How")</strong></p>
+<ul>
+<li>作者并没有改变微批次的基本结构，而是巧妙地<strong>扭转了微批次之间的调度逻辑</strong>。</li>
+<li>具体来说，调度器不再等待一个微批次的 <strong>end-to-end latency</strong> 完成，而是在监控到该微批次的 <strong>CPU-bound stage</strong> 结束后，就立即触发下一个微批次的 <strong>CPU-bound stage</strong>。</li>
+<li>这个操作的核心在于利用了 <strong>CPU和GPU的异构性</strong>：当GPU正忙于处理第一个微批次的推理时，CPU其实已经空闲出来，可以立刻为下一个微批次服务。通过这种<strong>流水线式的重叠</strong>，系统整体的吞吐效率和尾部延迟得到了优化。</li>
+<li>当然，天下没有免费的午餐。这种重叠会带来轻微的 <strong>CPU contention</strong>（因为两个微批次的CPU阶段可能会有短暂交叠），所以 <strong>P50延迟</strong> 会比标准CGAM略差一点，但换来的是显著的 <strong>P90延迟</strong> 改善，这是一个非常务实的权衡。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

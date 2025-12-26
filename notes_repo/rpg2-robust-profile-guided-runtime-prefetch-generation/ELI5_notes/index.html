@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-bolt-eli5" class="md-nav__link">
+  <a href="#1-bolt" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 基于BOLT的二进制代码分析与生成 (ELI5)
+        1. 基于BOLT的二进制代码分析与生成
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-osr-eli5" class="md-nav__link">
+  <a href="#2-osr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 运行时代码注入与在线栈替换（OSR） (ELI5)
+        2. 运行时代码注入与在线栈替换（OSR）
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 基于性能反馈的动态预取距离调优 (ELI5)
+        3. 基于性能反馈的动态预取距离调优
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 安全回滚机制 (ELI5)
+        4. 安全回滚机制
       
     </span>
   </a>
@@ -497,7 +497,7 @@
 <p>这套机制的核心保障是 **BOLT Address Translation Table **(BATT)，它像一张精确的地图，让系统能在新旧两个函数版本的任意指令间进行安全转换，从而实现了“<strong>大胆尝试，不行就撤</strong>”的鲁棒性。这正是 RPG2 名字中 “<strong>Robust</strong>” 的真正含义。</p>
 </li>
 </ul>
-<h3 id="1-bolt-eli5">1. 基于BOLT的二进制代码分析与生成 (ELI5)<a class="headerlink" href="#1-bolt-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-bolt">1. 基于BOLT的二进制代码分析与生成<a class="headerlink" href="#1-bolt" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>profile-guided prefetching</strong>（如 APT-GET）都是在编译期静态完成的。这意味着你必须为每个程序、每种输入、甚至每种 CPU 微架构，都预先跑一遍 profiling，然后生成一个专用的二进制文件。</li>
@@ -526,7 +526,7 @@
 <p><em>Table 1. Memory access categories that RPG2 supports</em></p>
 <p><img alt="" src="../images/c0fcf70d8c6a8270d3d6404732e5a3b4b481a21341d1e8fa08a86695d77bc9e9.jpg" /></p>
 <p><em>Figure 5. Annotated example of RPG2 code transformations.</em></p>
-<h3 id="2-osr-eli5">2. 运行时代码注入与在线栈替换（OSR） (ELI5)<a class="headerlink" href="#2-osr-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-osr">2. 运行时代码注入与在线栈替换（OSR）<a class="headerlink" href="#2-osr" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>Profile-Guided Optimization (PGO)</strong> 或静态编译器（如 APT-GET）在程序运行前就“拍板”了预取策略。这在面对<strong>多变的输入数据</strong>或<strong>不同的 CPU 微架构</strong>时非常难受。</li>
@@ -553,7 +553,7 @@
 </ul>
 <p><img alt="" src="../images/d88cb72abce29cf4c425fa5030479bfa639d9aea032c05bbfce2d22130e7369b.jpg" /></p>
 <p><em>Figure 6. The PC register and code memory of the target process before and after, RPG2’s code replacement.</em></p>
-<h3 id="3-eli5">3. 基于性能反馈的动态预取距离调优 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 基于性能反馈的动态预取距离调优<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的软件预取，无论是手动还是编译器自动插入，都面临一个致命问题：<strong>预取距离</strong>（prefetch distance）是“写死”的。这个距离一旦确定，就无法适应程序运行时的真实情况。</li>
@@ -597,7 +597,7 @@
 </ul>
 <p><img alt="" src="../images/bf9367c258960cd85482ea244dcca3e62c08a2ec04410b21469f291c936d59e6.jpg" /></p>
 <p><em>Figure 10. RPG2’s impact on IPC over time.</em></p>
-<h3 id="4-eli5">4. 安全回滚机制 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 安全回滚机制<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>profile-guided prefetching</strong>（如 APT-GET）是“一锤子买卖”：编译时根据某个输入或硬件环境，把预取指令和距离<strong>硬编码</strong>进二进制文件。</li>

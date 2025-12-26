@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-oracle-profiler-eli5" class="md-nav__link">
+  <a href="#1-oracle-profiler" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Oracle Profiler (ELI5)
+        1. Oracle Profiler
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-time-proportional-instruction-profiling-tip-eli5" class="md-nav__link">
+  <a href="#2-time-proportional-instruction-profiling-tip" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Time-Proportional Instruction Profiling (TIP) (ELI5)
+        2. Time-Proportional Instruction Profiling (TIP)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-offending-instruction-register-oir-eli5" class="md-nav__link">
+  <a href="#3-offending-instruction-register-oir" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Offending Instruction Register (OIR) (ELI5)
+        3. Offending Instruction Register (OIR)
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-instruction-level-parallelism-ilp-aware-attribution-eli5" class="md-nav__link">
+  <a href="#4-instruction-level-parallelism-ilp-aware-attribution" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Instruction-Level Parallelism (ILP) Aware Attribution (ELI5)
+        4. Instruction-Level Parallelism (ILP) Aware Attribution
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-four-state-commit-stage-model-eli5" class="md-nav__link">
+  <a href="#5-four-state-commit-stage-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Four-State Commit Stage Model (ELI5)
+        5. Four-State Commit Stage Model
       
     </span>
   </a>
@@ -498,7 +498,7 @@
 <p><img alt="" src="../images/501ae01efccae38527f4120367e437c0b10d9dacd28beb8f2b04c02048c0f44a.jpg" /></p>
 <p><em>Figure 1: Instruction-level profle error of state-of-the-art profilers compared to our Time-Proportional Instruction Profiler(TIP).Existing profilers are inaccurate due to lack of ILP support and systematic latency misattribution.</em></p>
 <p>这个精度的提升不是纸上谈兵。论文用 SPEC CPU2017 中的 <strong>Imagick</strong> 做案例研究：NCI 的报告让人摸不着头脑，而 TIP 则精准地指出了罪魁祸首是两条不必要的 <strong>CSR (Control Status Register)</strong> 操作指令，它们频繁触发 pipeline flush。开发者据此优化后，性能直接提升了 <strong>1.93×</strong>，充分证明了 TIP 在实战中的巨大价值。</p>
-<h3 id="1-oracle-profiler-eli5">1. Oracle Profiler (ELI5)<a class="headerlink" href="#1-oracle-profiler-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-oracle-profiler">1. Oracle Profiler<a class="headerlink" href="#1-oracle-profiler" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前的性能分析器（比如 Intel PEBS 的 <strong>NCI</strong>、外部调试器的 <strong>LCI</strong>，或者软件中断采样）在给指令“算账”时，逻辑是混乱的。它们不是在真正决定程序慢下来的那个时刻去记录，而是在一个方便但不准确的点（比如刚提交完或即将提交时）随便抓一个指令来背锅。</li>
@@ -539,7 +539,7 @@
 <p><em>Figure 3: Oracle profiler clock cycle attribution overview.</em></p>
 <p><img alt="" src="../images/fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" /></p>
 <p><em>Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.</em></p>
-<h3 id="2-time-proportional-instruction-profiling-tip-eli5">2. Time-Proportional Instruction Profiling (TIP) (ELI5)<a class="headerlink" href="#2-time-proportional-instruction-profiling-tip-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-time-proportional-instruction-profiling-tip">2. Time-Proportional Instruction Profiling (TIP)<a class="headerlink" href="#2-time-proportional-instruction-profiling-tip" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的性能分析器（Profiler）在现代乱序执行（Out-of-Order）处理器上“指鹿为马”。它们采样的指令，往往不是真正导致性能瓶颈的“元凶”。</li>
@@ -629,7 +629,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="3-offending-instruction-register-oir-eli5">3. Offending Instruction Register (OIR) (ELI5)<a class="headerlink" href="#3-offending-instruction-register-oir-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-offending-instruction-register-oir">3. Offending Instruction Register (OIR)<a class="headerlink" href="#3-offending-instruction-register-oir" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的硬件性能分析器（如 Intel PEBS 的 NCI）在处理器流水线 <strong>flush</strong>（冲刷）或 <strong>drain</strong>（排空）后，ROB（Reorder Buffer）会暂时变空。此时，分析器面临一个棘手问题：这些“空转”的时钟周期到底该算在谁头上？</li>
@@ -664,7 +664,7 @@
 <p><em>Figure 5: Structural overview of our Time-Proportional Instruction Profiler (TIP). TIP is triggered by the PMU,collects a sample,and finally exposes the sample to software.</em></p>
 <p><img alt="" src="../images/1818e2fbd0725ae6c00abe00cdccb4fbba5a8ffb82996af7ae71f49ac170da6a.jpg" /></p>
 <p><em>Figure 6: TIP sample selection logic.TIP classifies samples based on the the core state, ROB-flags,and OIR-flags.</em></p>
-<h3 id="4-instruction-level-parallelism-ilp-aware-attribution-eli5">4. Instruction-Level Parallelism (ILP) Aware Attribution (ELI5)<a class="headerlink" href="#4-instruction-level-parallelism-ilp-aware-attribution-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-instruction-level-parallelism-ilp-aware-attribution">4. Instruction-Level Parallelism (ILP) Aware Attribution<a class="headerlink" href="#4-instruction-level-parallelism-ilp-aware-attribution" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件性能分析器（如 Intel PEBS 的 NCI）在处理器每个周期提交多条指令时，只会把整个周期的“功劳”或“罪责”归于其中一条指令（比如下一条要提交的指令）。</li>
@@ -691,7 +691,7 @@
 <p><img alt="" src="../images/fba8a9662d00e763839fb2246d90215b3b0f2682edc7105ddf9d9e6aebad714f.jpg" /></p>
 <p><em>Figure4:Exampleillustrating theOracle,NC1,andLCIprofilersona2-wideout-of-orderprocessor.NCIandLCIfallhortbeuse they do not account for ILPat the commit stage and misattribute pipeline stall,flush and/ordrain latencies.</em></p>
 <p>这张图（Figure 4a）清晰地展示了这个关键区别。在 Cycle 1，两条指令 I1 和 I2 同时提交。Oracle（以及 TIP）会给每条指令记 <strong>0.5 cycles</strong>。而 NCI 和 LCI 只会把 <strong>1 whole cycle</strong> 归给其中一条，造成了明显的失真。正是这种对 <strong>commit parallelism</strong> 的精确处理，让 TIP 的指令级画像误差（<strong>1.6%</strong>）远低于 NCI（<strong>9.3%</strong>）。</p>
-<h3 id="5-four-state-commit-stage-model-eli5">5. Four-State Commit Stage Model (ELI5)<a class="headerlink" href="#5-four-state-commit-stage-model-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-four-state-commit-stage-model">5. Four-State Commit Stage Model<a class="headerlink" href="#5-four-state-commit-stage-model" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件性能分析器（如 Intel PEBS 的 NCI 或外部调试器的 LCI）在归因执行时间时，逻辑非常“粗糙”。它们只看一个点：要么是“下一个要提交的指令”，要么是“上一个刚提交的指令”。</li>

@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-htm-eli5" class="md-nav__link">
+  <a href="#1-htm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 基于HTM的并发复制垃圾回收算法 (ELI5)
+        1. 基于HTM的并发复制垃圾回收算法
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-collector-mutator-eli5" class="md-nav__link">
+  <a href="#2-collector-mutator" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Collector-Mutator协调协议 (ELI5)
+        2. Collector-Mutator协调协议
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-optimistic-copying-eli5" class="md-nav__link">
+  <a href="#3-optimistic-copying" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 乐观复制优化 (Optimistic Copying) (ELI5)
+        3. 乐观复制优化 (Optimistic Copying)
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-cache-warmup-eli5" class="md-nav__link">
+  <a href="#4-cache-warmup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 缓存预热优化 (Cache Warmup) (ELI5)
+        4. 缓存预热优化 (Cache Warmup)
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-htm-eli5" class="md-nav__link">
+  <a href="#5-htm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. HTM容量特性分析 (ELI5)
+        5. HTM容量特性分析
       
     </span>
   </a>
@@ -499,7 +499,7 @@
 </li>
 <li>因此，作者巧妙地将原本需要在<strong>每一次读操作</strong>上都付出的高昂成本，转化成了只在<strong>GC活跃期间</strong>、并且只在<strong>极少数发生冲突的代码路径</strong>上才需要付出的、一次性的事务启动和可能的重试成本。<img alt="" src="../images/8b375db05156e9ea8aed0dff8505f95304e194664632086d16ecd5828f5cebc3.jpg" /> <em>Table 4.1: Machines used in the evaluation.</em></li>
 </ul>
-<h3 id="1-htm-eli5">1. 基于HTM的并发复制垃圾回收算法 (ELI5)<a class="headerlink" href="#1-htm-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-htm">1. 基于HTM的并发复制垃圾回收算法<a class="headerlink" href="#1-htm" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>并发复制垃圾回收 (Concurrent Copying GC)</strong> 面临一个两难困境：既要让应用程序（<strong>mutator</strong>）和垃圾回收器（<strong>collector</strong>）同时运行以减少停顿，又要保证 <strong>mutator</strong> 在任何时候看到的堆内存都是<strong>一致且正确</strong>的。</li>
@@ -529,7 +529,7 @@
 <li>这样，通过让 <strong>mutator</strong> 在潜在的危险窗口期<strong>短暂地、批量地</strong>在事务中执行，巧妙地利用了 <strong>HTM</strong> 的<strong>原子性</strong>和<strong>回滚能力</strong>，替代了细粒度、持续性的<strong>读屏障</strong>。开销从“<strong>每次读都付费</strong>”变成了“<strong>每次执行片段开始时尝试开启事务，并在必要时回滚</strong>”，在大多数情况下能显著降低平均开销。</li>
 </ul>
 <p><img alt="" src="../images/fca77d7a9e12d5dad7efe61d5344235db8aeb939383bcc018089466fd3496ab0.jpg" /> <em>Figure 5.1: Success rate curves on Haswell.</em></p>
-<h3 id="2-collector-mutator-eli5">2. Collector-Mutator协调协议 (ELI5)<a class="headerlink" href="#2-collector-mutator-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-collector-mutator">2. Collector-Mutator协调协议<a class="headerlink" href="#2-collector-mutator" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>concurrent copying GC</strong> 面临一个两难困境：要么用昂贵的 <strong>read barrier</strong>（每次读对象都要检查），要么用复杂的 <strong>page protection</strong>（触发页错误来修复指针）。这两种方法都会给 <strong>mutator</strong>（应用程序）带来持续且显著的性能开销。</li>
@@ -553,7 +553,7 @@
 </li>
 </ul>
 <p><img alt="" src="../images/8b375db05156e9ea8aed0dff8505f95304e194664632086d16ecd5828f5cebc3.jpg" /> <em>Table 4.1: Machines used in the evaluation.</em></p>
-<h3 id="3-optimistic-copying-eli5">3. 乐观复制优化 (Optimistic Copying) (ELI5)<a class="headerlink" href="#3-optimistic-copying-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-optimistic-copying">3. 乐观复制优化 (Optimistic Copying)<a class="headerlink" href="#3-optimistic-copying" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>作者想用 <strong>HTM (Hardware Transactional Memory)</strong> 来做并发垃圾回收，核心想法是在一个事务里完成对象复制和所有指针更新，保证原子性。</li>
@@ -585,7 +585,7 @@
 </li>
 <li>这一招的精髓在于，它把事务内的 <strong>大量写操作</strong>（复制 O 到 O'）成功转换成了 <strong>大量读操作</strong>（比较 O 和 Os）。由于 HTM 的 <strong>读容量远大于写容量</strong>（论文显示读容量可达数 MB），这极大地提高了事务的成功率，使整个并发 GC 方案变得可行。</li>
 </ul>
-<h3 id="4-cache-warmup-eli5">4. 缓存预热优化 (Cache Warmup) (ELI5)<a class="headerlink" href="#4-cache-warmup-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-cache-warmup">4. 缓存预热优化 (Cache Warmup)<a class="headerlink" href="#4-cache-warmup" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>HTM (Hardware Transactional Memory)</strong> 事务在执行时，其成功与否严重依赖于底层 <strong>CPU缓存</strong>的状态。</li>
@@ -607,7 +607,7 @@
 <li>通过这个简单的“<strong>预演</strong>”操作，当真正的事务开始时，它所依赖的数据已经“热”在缓存里了，从而极大地降低了因缓存抖动而导致的非必要中止，有效<strong>放大了HTM的实际可用读取容量</strong>。</li>
 </ul>
 <p><img alt="" src="../images/3205642b8258cabc26576371092cc40f6fe045f106fec3d6a9e56798a14eb2d6.jpg" /> <em>Figure 5.10: Success rate curves on Coffee Lake when warming up caches.</em></p>
-<h3 id="5-htm-eli5">5. HTM容量特性分析 (ELI5)<a class="headerlink" href="#5-htm-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-htm">5. HTM容量特性分析<a class="headerlink" href="#5-htm" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>之前研究HTM（Hardware Transactional Memory）容量时，大家报告的数字五花八门，甚至互相矛盾。有的说读事务能到7.5MB，有的却说连L1缓存大小都撑不住。这让想用HTM做系统设计的人非常难受：我到底能指望它处理多大的原子操作？这种不确定性直接阻碍了HTM在像垃圾回收这类对事务大小有要求的场景中的应用。</li>

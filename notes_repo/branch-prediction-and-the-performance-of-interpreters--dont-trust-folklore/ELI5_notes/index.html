@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-indirect-branch-prediction-with-ittage-eli5" class="md-nav__link">
+  <a href="#1-indirect-branch-prediction-with-ittage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Indirect Branch Prediction with ITTAGE (ELI5)
+        1. Indirect Branch Prediction with ITTAGE
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-switch-based-interpreter-dispatch-loop-eli5" class="md-nav__link">
+  <a href="#2-switch-based-interpreter-dispatch-loop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Switch-Based Interpreter Dispatch Loop (ELI5)
+        2. Switch-Based Interpreter Dispatch Loop
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-jump-threading-token-threading-eli5" class="md-nav__link">
+  <a href="#3-jump-threading-token-threading" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Jump Threading (Token Threading) (ELI5)
+        3. Jump Threading (Token Threading)
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-hardware-performance-counter-analysis-eli5" class="md-nav__link">
+  <a href="#4-hardware-performance-counter-analysis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Hardware Performance Counter Analysis (ELI5)
+        4. Hardware Performance Counter Analysis
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-pin-based-trace-simulation-eli5" class="md-nav__link">
+  <a href="#5-pin-based-trace-simulation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Pin-based Trace Simulation (ELI5)
+        5. Pin-based Trace Simulation
       
     </span>
   </a>
@@ -498,7 +498,7 @@
 <img alt="" src="../images/362e2e3d9b54feba7bff51cfac333157507f03db85089ae8da64b81060f68f65.jpg" /> <em>Figure 6. CLI MPKI for all predictors</em></p>
 <hr />
 <p><strong>总结一句话</strong>：这篇论文像一位冷静的侦探，用最新的证据（Haswell数据和ITTAGE模拟）推翻了一个流传已久的“冤案”（间接跳转是主要瓶颈），从而为解释器的未来优化指明了更正确的方向——别再在已经解决的问题上内耗了。</p>
-<h3 id="1-indirect-branch-prediction-with-ittage-eli5">1. Indirect Branch Prediction with ITTAGE (ELI5)<a class="headerlink" href="#1-indirect-branch-prediction-with-ittage-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-indirect-branch-prediction-with-ittage">1. Indirect Branch Prediction with ITTAGE<a class="headerlink" href="#1-indirect-branch-prediction-with-ittage" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>以前大家普遍认为，解释器（Interpreter）里那个负责 <strong>dispatch loop</strong> 的 <strong>indirect branch</strong>（间接跳转）是性能杀手。为什么？因为它就像一个有上百个出口的旋转门，传统分支预测器（比如只记住上次去了哪）根本猜不准下一次会去哪个出口。</li>
@@ -554,7 +554,7 @@
 <ul>
 <li>因此，这篇论文颠覆了长期以来的 <strong>folklore</strong>（经验之谈），告诉我们：在设计现代解释器时，不必再过分担忧那个经典的 indirect jump，可以把精力投入到其他更有价值的优化上。</li>
 </ul>
-<h3 id="2-switch-based-interpreter-dispatch-loop-eli5">2. Switch-Based Interpreter Dispatch Loop (ELI5)<a class="headerlink" href="#2-switch-based-interpreter-dispatch-loop-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-switch-based-interpreter-dispatch-loop">2. Switch-Based Interpreter Dispatch Loop<a class="headerlink" href="#2-switch-based-interpreter-dispatch-loop" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统 <strong>Switch-Based Interpreter</strong> 的核心是一个巨大的 C 语言 <code>switch</code> 语句，它会被编译器翻译成一个 <strong>jump table（跳转表）</strong> 加上一条 <strong>indirect jump（间接跳转）</strong> 指令。</li>
@@ -580,7 +580,7 @@
 <li>因此，作者的关键论证逻辑是：<strong>不要再去盲目优化 dispatch loop（比如用 jump threading）来绕过间接跳转了，因为现代硬件已经把它处理得很好了</strong>。之前大家觉得“很难受”，是因为用的是老掉牙的预测器；现在换了新装备，这个问题自然就烟消云散了。</li>
 <li>论文还指出，像 <strong>Python</strong> 和 <strong>Javascript</strong> 这样的现代解释器，其性能提升中，<strong>jump threading 带来的收益已经从过去的 ~20% 锐减到 Haswell 上的 ~2.8%</strong>，并且这部分收益更多来自于<strong>减少了指令数量</strong>，而非改善了分支预测。</li>
 </ul>
-<h3 id="3-jump-threading-token-threading-eli5">3. Jump Threading (Token Threading) (ELI5)<a class="headerlink" href="#3-jump-threading-token-threading-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-jump-threading-token-threading">3. Jump Threading (Token Threading)<a class="headerlink" href="#3-jump-threading-token-threading" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的解释器核心是一个巨大的 <strong>switch-case</strong> 循环。每次执行一个字节码（opcode）后，程序都必须无条件地跳回循环顶部。</li>
@@ -609,7 +609,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="4-hardware-performance-counter-analysis-eli5">4. Hardware Performance Counter Analysis (ELI5)<a class="headerlink" href="#4-hardware-performance-counter-analysis-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-hardware-performance-counter-analysis">4. Hardware Performance Counter Analysis<a class="headerlink" href="#4-hardware-performance-counter-analysis" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前研究解释器（Interpreter）性能时，大家普遍相信一个“民间传说”（folklore）：那个负责分发字节码的 <strong>间接跳转</strong>（indirect jump）指令因为目标太多、太随机，所以 <strong>分支预测器</strong>（Branch Predictor）根本猜不准，导致巨大的性能惩罚（比如20个周期的流水线冲刷）。这个观点成了很多优化工作的出发点。</li>
@@ -643,7 +643,7 @@
 <hr />
 <p><strong>最终结论</strong>
 这项工作最精妙之处在于，它用<strong>最硬核的硬件证据</strong>（Hardware Performance Counter Analysis）戳破了一个流传已久的性能“神话”。它告诉我们，在评估系统性能时，必须与时俱进，用<strong>真实、量化</strong>的数据去检验那些“大家都这么说”的假设，而不是盲目地遵循<strong>Folklore</strong>。</p>
-<h3 id="5-pin-based-trace-simulation-eli5">5. Pin-based Trace Simulation (ELI5)<a class="headerlink" href="#5-pin-based-trace-simulation-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-pin-based-trace-simulation">5. Pin-based Trace Simulation<a class="headerlink" href="#5-pin-based-trace-simulation" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>评估一个新型 <strong>branch predictor</strong>（比如论文里的 <strong>ITTAGE</strong>）的性能，最理想的方式是在真实的 CPU 硬件上跑。但现实是，CPU 的内部预测器结构是黑盒，你无法随意修改它的参数（比如增大历史表大小）来测试“如果预测器更大一点会怎样”。</li>

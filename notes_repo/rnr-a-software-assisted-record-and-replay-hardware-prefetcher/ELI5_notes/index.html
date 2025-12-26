@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-record-and-replay-eli5" class="md-nav__link">
+  <a href="#1-record-and-replay" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 软件辅助的记录与回放（Record-and-Replay）机制 (ELI5)
+        1. 软件辅助的记录与回放（Record-and-Replay）机制
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-eli5" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 基于窗口的回放时序控制 (ELI5)
+        2. 基于窗口的回放时序控制
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 软硬件协同的轻量级编程接口 (ELI5)
+        3. 软硬件协同的轻量级编程接口
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-l2-eli5" class="md-nav__link">
+  <a href="#4-l2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 私有L2缓存未命中序列记录 (ELI5)
+        4. 私有L2缓存未命中序列记录
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-eli5" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 与现有预取器的集成设计 (ELI5)
+        5. 与现有预取器的集成设计
       
     </span>
   </a>
@@ -499,7 +499,7 @@
 <p><em>Fig. 6. Speedup over no prefetcher baseline.</em></p>
 <p><img alt="" src="../images/ac3cd850a0f384e47fb22f6e4ae4c9a2dfb5869c0e1b885d19ff8f0a5c4ec8f6.jpg" /></p>
 <p><em>Fig. 9. Prefetcher accuracy.</em></p>
-<h3 id="1-record-and-replay-eli5">1. 软件辅助的记录与回放（Record-and-Replay）机制 (ELI5)<a class="headerlink" href="#1-record-and-replay-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-record-and-replay">1. 软件辅助的记录与回放（Record-and-Replay）机制<a class="headerlink" href="#1-record-and-replay" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>硬件预取器 (hardware prefetcher)</strong> 面对 <strong>不规则内存访问 (irregular memory access)</strong> 时非常“难受”。它们要么依赖简单的空间/步长模式（对不规则数据无效），要么需要复杂的表结构来记录历史访问，但这些表容量有限，无法区分在不同程序阶段发生的、看似相似的长序列。</li>
@@ -542,7 +542,7 @@
 <p><img alt="" src="../images/306e0cce2fbf83e249036af0d08066d768556de8201dfe528d2f51eba9b85833.jpg" /></p>
 <p><em>Fig. 6. Speedup over no prefetcher baseline.</em></p>
 <p>）。</p>
-<h3 id="2-eli5">2. 基于窗口的回放时序控制 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2">2. 基于窗口的回放时序控制<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件预取器（如 Next-line, Bingo）在处理 <strong>irregular memory access</strong> 时，最大的问题不是“猜不准”，而是“送得不是时候”。</li>
@@ -579,7 +579,7 @@
 <p><img alt="" src="../images/6dceb3629c0b54f1b7d5ce5b5e11a8ab3691bb715929b3e98101afd5919eed38.jpg" /></p>
 <p><em>Fig. 10. Effectiveness of replay timing control.</em></p>
 <p>数据显示，加入窗口控制后，性能提升从几乎为零一跃至 <strong>2.31x</strong>，这正是解决了“<strong>timeliness</strong>”这一核心痛点所带来的巨大收益。</p>
-<h3 id="3-eli5">3. 软硬件协同的轻量级编程接口 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 软硬件协同的轻量级编程接口<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>硬件预取器 (hardware prefetcher)</strong> 是个“黑盒”，它只能靠自己观察过去的访存模式来猜未来。对于 <strong>PageRank</strong> 或 <strong>SpMV</strong> 这类应用，其访存模式是 <strong>长且不规则 (long and irregular)</strong> 的，但偏偏在每次迭代中又 <strong>完美重复</strong>。硬件预取器面对这种“一次性长序列”根本记不住，或者会和其他相似模式混淆，导致 <strong>准确率 (accuracy)</strong> 和 <strong>覆盖率 (coverage)</strong> 双低。</li>
@@ -605,7 +605,7 @@
 </ul>
 <p><img alt="" src="../images/a411c9bb16467f008f25fdaefd04d87326c1286fa05a084065b20d3d18802c22.jpg" /></p>
 <p><em>Fig. 3. State transition diagram of the RnR prefetch state.</em></p>
-<h3 id="4-l2-eli5">4. 私有L2缓存未命中序列记录 (ELI5)<a class="headerlink" href="#4-l2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-l2">4. 私有L2缓存未命中序列记录<a class="headerlink" href="#4-l2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件预取器（如基于GHB的时序预取器）试图从<strong>所有</strong>内存访问中学习模式，但这在处理像图计算或稀疏矩阵乘法这类应用时会“很难受”。</li>
@@ -634,7 +634,7 @@
 <p><img alt="" src="../images/72cd74b9fec8e7dcbf8e0ded18a4a0e9c5362b626311e750d16d3e2b2cf62eb0.jpg" /></p>
 <p><em>Fig. 7. L2 MPKI.</em></p>
 <p>这张图清晰地展示了RnR如何大幅降低L2的MPKI（每千条指令缺失数），其效果远超其他预取器。</p>
-<h3 id="5-eli5">5. 与现有预取器的集成设计 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5">5. 与现有预取器的集成设计<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件预取器（如流式、步长预取器）在处理<strong>规则内存访问</strong>时非常高效，但面对<strong>不规则、重复的访问模式</strong>（如图计算、稀疏矩阵运算）时，要么完全失效，要么准确率极低。</li>

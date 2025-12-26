@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-data-indirection-graph-dig-eli5" class="md-nav__link">
+  <a href="#1-data-indirection-graph-dig" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Data Indirection Graph (DIG) (ELI5)
+        1. Data Indirection Graph (DIG)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-eli5" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 编译器自动分析与代码生成 (ELI5)
+        2. 编译器自动分析与代码生成
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-dig-eli5" class="md-nav__link">
+  <a href="#3-dig" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 基于DIG的低开销硬件预取器 (ELI5)
+        3. 基于DIG的低开销硬件预取器
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-pfhr-eli5" class="md-nav__link">
+  <a href="#4-pfhr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 预取状态处理寄存器文件 (PFHR) (ELI5)
+        4. 预取状态处理寄存器文件 (PFHR)
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-eli5" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 自适应预取算法 (ELI5)
+        5. 自适应预取算法
       
     </span>
   </a>
@@ -522,7 +522,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="1-data-indirection-graph-dig-eli5">1. Data Indirection Graph (DIG) (ELI5)<a class="headerlink" href="#1-data-indirection-graph-dig-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-data-indirection-graph-dig">1. Data Indirection Graph (DIG)<a class="headerlink" href="#1-data-indirection-graph-dig" title="Permanent link">&para;</a></h3>
 <p>之前那些通用的硬件预取器（比如 GHB-based prefetcher）在处理图计算、稀疏矩阵这类<strong>不规则工作负载</strong>时，简直是在“盲人摸象”。</p>
 <ul>
 <li>它们依赖空间局部性或简单的地址相关性，但像 CSR 格式的图，其访问模式是 <strong>data-dependent</strong> 的：你得先读 <code>offset[i]</code> 和 <code>offset[i+1]</code> 这两个值，才能知道接下来要一口气读 <code>edge[offset[i]]</code> 到 <code>edge[offset[i+1]-1]</code> 这一整段数据。</li>
@@ -560,7 +560,7 @@
 </li>
 </ul>
 <p>这一招的核心扭转在于：<strong>把“理解语义”的重担交给了离源码最近、最懂逻辑的编译器，而把“高效执行”的任务留给了硬件</strong>。两者通过 DIG 这个精巧的“契约”进行沟通，实现了“1+1远大于2”的效果。</p>
-<h3 id="2-eli5">2. 编译器自动分析与代码生成 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2">2. 编译器自动分析与代码生成<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前处理像图计算、稀疏矩阵这类 <strong>irregular workloads</strong> 时，硬件 prefetcher 几乎是瞎子。因为它们的内存访问模式不是简单的步长或流式，而是由数据内容决定的（data-dependent），比如 <code>A[B[i]]</code> 这种间接寻址。</li>
@@ -599,7 +599,7 @@
 <p><img alt="" src="../images/84ac0f00303e1b122651346855f2ff8c90c9a97b1a4bb52014a11a08d23d8c78.jpg" /></p>
 <p><em>Figure 12. Design space exploration on the PFHR file size. Performance of each configuration is normalized to 4 entries.</em></p>
 <p>这个设计的精妙之处在于，它把一个<strong>高度依赖领域知识的、易错的手动过程</strong>，转化成了一个<strong>通用的、自动化的编译期分析任务</strong>。这极大地降低了使用门槛，让 Prodigy 的强大能力可以被广泛应用，而不仅仅局限于少数专家优化的场景。</p>
-<h3 id="3-dig-eli5">3. 基于DIG的低开销硬件预取器 (ELI5)<a class="headerlink" href="#3-dig-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-dig">3. 基于DIG的低开销硬件预取器<a class="headerlink" href="#3-dig" title="Permanent link">&para;</a></h3>
 <p>之前那些通用的硬件预取器（比如 GHB-based prefetcher）在处理图计算、稀疏矩阵这类<strong>不规则工作负载</strong>时，简直是在“盲人摸象”。它们依赖地址间的空间或时间局部性来预测下一个要访问的地址，但像 CSR 格式的图遍历，其内存访问模式是由数据内容动态决定的——今天访问哪个邻居，完全取决于当前顶点在 <code>offset</code> 数组里的值。这种<strong>数据依赖的间接寻址</strong>（data-dependent indirection）让传统预取器彻底失效，导致 CPU 被 <strong>DRAM stalls</strong> 拖垮，性能瓶颈极其严重。</p>
 <hr />
 <p>想象一下，你要在一个巨大的、没有目录的图书馆里找书。传统预取器就像一个只会按书架顺序一本本拿书的助手，效率极低。而 Prodigy 的做法是：在你开始找书前，先给你一张<strong>藏宝图</strong>（DIG）。这张图不是告诉你具体哪本书在哪，而是清晰地标出了“<strong>区域A的卡片能指引你去区域B的一段书架，而区域B每本书的附录又能带你去区域C的某本书</strong>”这样的逻辑关系。硬件预取器拿到这张图后，就变成了一个<strong>聪明的向导</strong>：它看到你拿到了区域A的一张卡片（demand access），立刻就能根据藏宝图，提前把区域B对应书架上的一整排书（ranged indirection）都搬到你的桌边；等你翻到其中一本书的附录时，它又已经把区域C那本指定的书（single-valued indirection）准备好了。整个过程流畅且精准，因为它知道的是“<strong>规则</strong>”，而不是死记硬背“<strong>地址</strong>”。</p>
@@ -620,7 +620,7 @@
 <p><img alt="" src="../images/b584e65333005c041677a7ea1d1f340d97907a8f4aec29130cda0f2f843e6f8c.jpg" /></p>
 <p><em>Figure 9. Memory structures used in Prodigy—(a) node table, (b) edge index table, and (c) edge table for storing the DIG representation, (d) prefetch status handling register (PFHR) file tracking progress for live prefetch sequences and issuing non-blocking prefetches. Figure 10. Prefetching algorithm initiates prefetch sequences between prefetch bounds j and k and advances a prefetch sequence using software-defined indirection types. The superscripts denote a demand (D) or a prefetch (P) access.</em></p>
 <p>最终效果就是，这个基于 DIG 的预取器，以几乎可以忽略的硬件开销（<strong>0.8KB</strong>），实现了对复杂不规则内存访问模式的精准预判，从而将平均性能提升了 <strong>2.6倍</strong>，并节省了 <strong>1.6倍</strong> 的能耗。</p>
-<h3 id="4-pfhr-eli5">4. 预取状态处理寄存器文件 (PFHR) (ELI5)<a class="headerlink" href="#4-pfhr-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-pfhr">4. 预取状态处理寄存器文件 (PFHR)<a class="headerlink" href="#4-pfhr" title="Permanent link">&para;</a></h3>
 <p>之前做<strong>硬件预取</strong>（Hardware Prefetching）处理像图计算这种不规则负载时，有个特别难受的地方：预取器一旦启动一个复杂的、跨多个数据结构的预取链（比如从 work queue -&gt; offset list -&gt; edge list -&gt; visited list），就必须傻乎乎地等这条链上所有请求都完成才能干下一件事。这就像你派了一个快递员去帮你买咖啡，但他必须先去超市买咖啡豆，再去磨坊磨粉，最后才去咖啡机冲泡——在这整个漫长的过程中，他被“阻塞”了，没法接新活。更要命的是，如果你自己走路比他骑车还快，等他把咖啡送到时，你早就喝完水走人了，这杯咖啡就成了<strong>过时的垃圾</strong>，白白占着你的背包（Cache），这就是所谓的<strong>预取时效性</strong>（Prefetch Timeliness）问题。</p>
 <p><strong>通俗比方</strong>
 你可以把 <strong>PFHR</strong>（PreFetch status Handling Register）文件想象成一个<strong>智能外卖调度中心的看板</strong>。以前的预取器只有一个脑子，记不住多件事。现在，这个调度中心有了一块大看板（PFHR file），上面有很多小卡片（PFHR entries）。每当你（CPU核心）点了一份“复杂套餐”（触发一个预取序列），调度中心就立刻在看板上挂一张新卡片，上面写着：</p>
@@ -653,7 +653,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="5-eli5">5. 自适应预取算法 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5">5. 自适应预取算法<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <p>传统硬件预取器在处理图计算这类不规则负载时，常常陷入两难境地：</p>
 <ul>

@@ -1,0 +1,1119 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/notes_repo/a-cpu-centric-perspective-on-agentic-ai/paper_notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI 论文解析 - BlaBlaCut</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a-cpu-centric-perspective-on-agentic-ai" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BlaBlaCut" class="md-header__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BlaBlaCut
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI 论文解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BlaBlaCut" class="md-nav__button md-logo" aria-label="BlaBlaCut" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    BlaBlaCut
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/Recent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/awesome-data-prefetchers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Awesome Data Prefetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/micro-2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MICRO 2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../collections/dyn-lang-acc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Language Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 论文基本信息
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 摘要
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 背景知识与核心贡献
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心技术和实现细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心技术和实现细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 技术架构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-cpu-and-gpu-aware-micro-batching-cgam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CPU and GPU-Aware Micro-batching (CGAM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-mixed-agentic-workload-scheduling-maws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Mixed Agentic Workload Scheduling (MAWS)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-agentic-ai-system-characterization-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Agentic AI System Characterization Framework
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-batching-cap-selection-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Batching Cap Selection Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-cgamoverlap-execution-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. CGAMoverlap Execution Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 实验方法与实验结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="a-cpu-centric-perspective-on-agentic-ai">A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI 论文解析<a class="headerlink" href="#a-cpu-centric-perspective-on-agentic-ai" title="Permanent link">&para;</a></h1>
+<h2 id="0">0. 论文基本信息<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<p><strong>作者 (Authors)</strong>: Ritik Raj, Hong Wang, Tushar Krishna</p>
+<p><strong>发表期刊/会议 (Journal/Conference)</strong>: ArXiv</p>
+<p><strong>发表年份 (Publication Year)</strong>: 2025</p>
+<p><strong>研究机构 (Affiliations)</strong>: Georgia Institute of Technology, Atlanta, GA, USA, Intel, Santa Clara, CA, USA</p>
+<hr />
+<h2 id="1">1. 摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><strong>目的</strong></p>
+<ul>
+<li>从一个被长期忽视的 <strong>CPU-centric perspective</strong> 出发，系统性地表征和理解 <strong>Agentic AI</strong> 工作负载引入的系统瓶颈。</li>
+<li>挑战传统AI优化中过度关注GPU的范式，揭示 <strong>CPU在工具处理、吞吐量和能耗方面</strong> 的关键影响，并提出针对性的优化方案。</li>
+</ul>
+<p><strong>方法</strong></p>
+<ul>
+<li><strong>系统级表征</strong>：提出了三个正交的分类维度来刻画Agentic AI系统的多样性：<ul>
+<li><strong>Orchestrator-based</strong> (LLM-orchestrated vs. Host-orchestrated)</li>
+<li><strong>Agentic Path</strong> (Static vs. Dynamic)</li>
+<li><strong>Repetitiveness</strong> (Single-step vs. Multi-step)
+    <img alt="" src="../images/c568650775b5d377253e5df9d267269103a2e3df26d2fe110a2406804dde2ed4.jpg" /> <em>Figure 1. Characterization of agentic AI workloads on the basis of (a) Orchestrator (LLM and Host) (b) Agentic Path (Static and Dynamic) and (c) Repetitiveness (Single-step and Multi-step)</em></li>
+</ul>
+</li>
+<li><strong>全栈剖析</strong>：基于上述表征，选取了五个具有代表性的Agentic AI工作负载（Haystack RAG, Toolformer, ChemCrow, Langchain, SWE-Agent），在配备 <strong>Intel Emerald Rapids CPU</strong> 和 <strong>NVIDIA B200 GPU</strong> 的先进系统上，对 <strong>latency</strong>, <strong>throughput</strong>, 和 <strong>energy</strong> 进行了全面剖析。</li>
+<li><strong>优化设计</strong>：根据剖析洞察，设计了两种调度优化策略：<ul>
+<li>**CGAM **(CPU and GPU-Aware Micro-batching)：用于同质化工作负载。</li>
+<li>**MAWS **(Mixed Agentic Workload Scheduling)：用于异质化工作负载。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结果</strong></p>
+<ul>
+<li><strong>延迟剖析</strong>：<strong>工具处理</strong>（在CPU上执行）是主要瓶颈，其延迟占比最高可达 <strong>90.6%</strong>。
+    <img alt="" src="../images/66e2038a359c663d017153de1608985be33a834503ddf5f87eaaa65f9978eb7e.jpg" /> <em>Figure 2. (a) Haystack with ENNS retrieval on QA benchmarks (b) Toolformer with WolframAlpha API on Math benchmarks (c) Chemcrow with literature (Arxiv/Pubmed) search tool on Chemistry benchmarks (d) Langchain with web search and LexRank summarization tools on QA benchmarks (e) Mini-SWE-Agent with bash/Python execution tools on coding benchmarks</em></li>
+<li><strong>吞吐量瓶颈</strong>：Agentic AI的吞吐量受限于两类因素：<ul>
+<li><strong>CPU因素</strong>：核心过载（over-subscription）、缓存一致性（coherence）和同步开销。</li>
+<li><strong>GPU因素</strong>：设备内存容量和带宽限制。
+    <img alt="" src="../images/7958225a80c4749b585decaf96807e0ea47935e1f7925028cbfe96492d01a179.jpg" /> <em>Figure 4. (a) vLLM throughput saturation for GPT-OSS-20B model (b) Throughput saturation for various agentic workloads (c) Average time taken by different components in Langchain benchmark showing a critical CPU context switching bottleneck at batch size 128</em></li>
+</ul>
+</li>
+<li><strong>能耗剖析</strong>：在大批次（batch size 128）场景下，<strong>CPU动态能耗</strong>占总动态能耗的比例高达 <strong>44%</strong>。
+    <img alt="" src="../images/373ee23985283730c802d9101fad6c425eb49df85d3c02245ba720ffdab29b33.jpg" /> <em>Figure 5. CPU (AMD Threadripper) and GPU (Nvidia B200) dynamic energy consumption for Langchain workload</em></li>
+<li><strong>优化效果</strong>：所提出的优化方案显著提升了性能：<ul>
+<li><strong>CGAM</strong> 在同质化工作负载上实现了最高 <strong>2.1×</strong> 的 P50 延迟加速。</li>
+<li><strong>MAWS</strong> 在异质化工作负载上实现了 <strong>1.41×</strong> 的 P50 延迟加速。
+    <img alt="" src="../images/07e7bbdae99c50386308344797acf2b4a7ececfa16ddaae6860b42ff8664adea.jpg" /> <em>Figure 7. Comparison of CGAM and CGAMoverlap using Bcap = 64 against baseline (multi-processing or multi-threading) on (a) Langchain workload on FreshQA benchmark, (b) Haystack workload on NQ benchmark and (c) SWE-Agent on APPS benchmark</em></li>
+</ul>
+</li>
+</ul>
+<p><strong>结论</strong></p>
+<ul>
+<li>Agentic AI的性能、效率和可扩展性受到 <strong>CPU-centric bottlenecks</strong> 的深刻影响，这些瓶颈源于其独特的工具调用和决策循环架构。</li>
+<li>仅关注GPU优化的策略对于Agentic AI是不充分的。必须采用 <strong>CPU-GPU协同优化</strong> 的新范式。</li>
+<li>通过系统性的表征、剖析和针对性的调度优化（如CGAM和MAWS），可以有效缓解CPU瓶颈，显著提升Agentic AI系统的整体效能。</li>
+</ul>
+<hr />
+<h2 id="2">2. 背景知识与核心贡献<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p><strong>研究背景</strong></p>
+<ul>
+<li><strong>Agentic AI</strong> 框架通过在大型语言模型（LLM）之上引入一个决策协调器（orchestrator），并集成外部工具（如网络搜索、Python解释器、数据库等），将被动的文本生成模型转变为能够自主规划、调用工具、记忆历史并动态调整的智能体。</li>
+<li>尽管AI模型推理主要在GPU上执行，但Agentic AI工作流中的<strong>工具处理</strong>（tool processing）环节（如执行代码、检索、网页抓取、摘要等）严重依赖<strong>CPU</strong>。</li>
+<li>现有研究和优化工作主要聚焦于<strong>GPU-centric</strong>视角，对CPU在Agentic AI中扮演的关键角色及其带来的系统瓶颈缺乏系统性的理解和分析。</li>
+</ul>
+<p><strong>研究动机</strong></p>
+<ul>
+<li>工具处理已成为Agentic AI端到端延迟的主要来源，其性能直接影响整体效率。</li>
+<li>CPU与GPU之间的资源分配、同步和调度问题，在批量处理Agentic请求时会引发新的<strong>系统级瓶颈</strong>。</li>
+<li>为了高效、可扩展地部署Agentic AI系统，亟需一个<strong>CPU-centric</strong>的视角来全面剖析其性能特征，并据此设计针对性的优化策略。</li>
+</ul>
+<p><strong>核心贡献</strong></p>
+<ul>
+<li><strong>系统级表征方法</strong>：提出了三个正交的分类维度来刻画Agentic AI系统的多样性，这些维度直接影响系统性能：<ul>
+<li><strong>Orchestrator</strong>（协调器）: LLM-orchestrated vs. Host-orchestrated。</li>
+<li><strong>Agentic Path</strong>（智能体路径）: Static vs. Dynamic。</li>
+<li><strong>Repetitiveness/Flow</strong>（重复性/流程）: Single-step vs. Multi-step。
+    <img alt="" src="../images/c568650775b5d377253e5df9d267269103a2e3df26d2fe110a2406804dde2ed4.jpg" /> <em>Figure 1. Characterization of agentic AI workloads on the basis of (a) Orchestrator (LLM and Host) (b) Agentic Path (Static and Dynamic) and (c) Repetitiveness (Single-step and Multi-step)</em></li>
+</ul>
+</li>
+<li><strong>CPU瓶颈的实证揭示</strong>：通过对五个代表性工作负载（Haystack RAG, Toolformer, ChemCrow, Langchain, SWE-Agent）的全面剖析，首次系统性地揭示了CPU在Agentic AI中的关键瓶颈：<ul>
+<li><strong>工具处理</strong>在CPU上可占据高达 <strong>90.6%</strong> 的总延迟。</li>
+<li>Agentic吞吐量受限于<strong>CPU因素</strong>（核心过载、缓存一致性、同步开销）或<strong>GPU因素</strong>（显存容量与带宽）。</li>
+<li>在大批量场景下，<strong>CPU动态能耗</strong>可占系统总动态能耗的 <strong>44%</strong>。</li>
+</ul>
+</li>
+<li><strong>针对性调度优化</strong>：基于上述洞察，提出了两种调度优化方案：<ul>
+<li>**CGAM **(CPU and GPU-Aware Micro-batching)：针对同构工作负载，通过设置批处理上限（Bcap）进行微批处理，有效降低P50延迟、KV Cache占用和CPU能耗。在同构工作负载上实现了最高 <strong>2.1×</strong> 的P50延迟加速。</li>
+<li>**MAWS **(Mixed Agentic Workload Scheduling)：针对异构工作负载（CPU-heavy与LLM-heavy混合），采用自适应的并行策略（对CPU-heavy任务使用多进程，对LLM-heavy任务使用多线程），避免资源争抢。在异构工作负载上实现了最高 <strong>1.41×</strong> 的P50延迟加速。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="3">3. 核心技术和实现细节<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="0_1">0. 技术架构概览<a class="headerlink" href="#0_1" title="Permanent link">&para;</a></h3>
+<p><strong>整体技术架构</strong></p>
+<p>本文提出了一种以 <strong>CPU-centric</strong> 为核心的 Agentic AI 系统分析与优化框架。其整体架构并非一个单一的模型或系统，而是一个包含 <strong>工作负载表征 (Characterization)</strong>、<strong>全栈性能剖析 (Profiling)</strong> 和 <strong>调度优化 (Optimizations)</strong> 的三层研究范式。</p>
+<ul>
+<li>
+<p><strong>第一层：工作负载表征</strong></p>
+<ul>
+<li>提出了三个正交的分类维度来系统化地描述 Agentic AI 工作负载的多样性：<ul>
+<li><strong>Orchestrator-Based (基于协调器)</strong>: 区分 <strong>LLM-orchestrated</strong> (如 ReAct, AutoGPT) 和 <strong>Host-orchestrated</strong> (如 LangChain, Haystack)。</li>
+<li><strong>Path-based (基于路径)</strong>: 区分 <strong>Static Path</strong> (预定义工作流) 和 <strong>Dynamic Path</strong> (运行时自适应构建执行图)。</li>
+<li><strong>Flow/Repetitiveness-based (基于流程/重复性)</strong>: 区分 <strong>Single-step</strong> (单次推理) 和 <strong>Multi-step</strong> (多轮迭代)。</li>
+</ul>
+</li>
+<li>基于上述表征，精心挑选了五个具有代表性的 Agentic AI 工作负载进行深入研究：<strong>Haystack RAG</strong>, <strong>Toolformer</strong>, <strong>ChemCrow</strong>, <strong>LangChain</strong>, 和 <strong>SWE-Agent</strong>。
+    <img alt="" src="../images/c568650775b5d377253e5df9d267269103a2e3df26d2fe110a2406804dde2ed4.jpg" /> <em>Figure 1. Characterization of agentic AI workloads on the basis of (a) Orchestrator (LLM and Host) (b) Agentic Path (Static and Dynamic) and (c) Repetitiveness (Single-step and Multi-step)</em></li>
+</ul>
+</li>
+<li>
+<p><strong>第二层：全栈性能剖析</strong></p>
+<ul>
+<li>在配备 <strong>Intel Emerald Rapids CPU</strong> 和 <strong>NVIDIA B200 GPU</strong> 的先进硬件平台上，对选定的工作负载进行全面的性能剖析。</li>
+<li>剖析聚焦于三个核心指标，并揭示了关键的 <strong>CPU 瓶颈</strong>：<ul>
+<li><strong>Latency (延迟)</strong>: <strong>工具处理 (Tool processing)</strong> 在 CPU 上的耗时可占总延迟的 <strong>90.6%</strong>。</li>
+<li><strong>Throughput (吞吐量)</strong>: 吞吐量饱和点由 <strong>CPU 因素</strong> (核心过载、缓存一致性、同步开销) 或 <strong>GPU 因素</strong> (设备内存容量和带宽) 决定。</li>
+<li><strong>Energy (能耗)</strong>: 在大批量场景下，<strong>CPU 动态能耗</strong> 可占系统总动态能耗的 <strong>44%</strong>。
+    <img alt="" src="../images/66e2038a359c663d017153de1608985be33a834503ddf5f87eaaa65f9978eb7e.jpg" /> <em>Figure 2. (a) Haystack with ENNS retrieval on QA benchmarks (b) Toolformer with WolframAlpha API on Math benchmarks (c) Chemcrow with literature (Arxiv/Pubmed) search tool on Chemistry benchmarks (d) Langchain with web search and LexRank summarization tools on QA benchmarks (e) Mini-SWE-Agent with bash/Python execution tools on coding benchmarks</em>
+    <img alt="" src="../images/7958225a80c4749b585decaf96807e0ea47935e1f7925028cbfe96492d01a179.jpg" /> <em>Figure 4. (a) vLLM throughput saturation for GPT-OSS-20B model (b) Throughput saturation for various agentic workloads (c) Average time taken by different components in Langchain benchmark showing a critical CPU context switching bottleneck at batch size 128</em>
+    <img alt="" src="../images/373ee23985283730c802d9101fad6c425eb49df85d3c02245ba720ffdab29b33.jpg" /> <em>Figure 5. CPU (AMD Threadripper) and GPU (Nvidia B200) dynamic energy consumption for Langchain workload</em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>第三层：调度优化</strong></p>
+<ul>
+<li>基于剖析洞察，设计了两种针对不同场景的调度优化策略：<ul>
+<li><strong>CPU and GPU-Aware Micro-batching (CGAM)</strong>: 针对 <strong>同构 (homogeneous)</strong> 工作负载。通过引入 <strong>批处理上限 (Batching Cap)</strong> 来避免因过度并行化导致的 CPU/GPU 资源饱和，从而降低 P50 延迟、减少 KV Cache 占用和 CPU 能耗。
+    <img alt="" src="../images/b6ee5be93f561d2e4556f73a8f70b776c11eddcce4add766cde63e07855d84a0.jpg" /> <em>Figure 6. Timeline of batched agentic AI inference for (a) Multiprocessing, (b) CGAM, and (c) CGAMoverlap</em></li>
+<li><strong>Mixed Agentic Workload Scheduling (MAWS)</strong>: 针对 <strong>异构 (heterogeneous)</strong> 工作负载（混合了 CPU-heavy 和 LLM-heavy 请求）。通过为不同类型的任务采用不同的并行策略（CPU-heavy 用 <strong>multi-processing</strong>，LLM-heavy 用 <strong>multi-threading</strong>），避免资源争抢，提升整体效率。
+    <img alt="" src="../images/2ce33be19b396d7fca80f5b1f5379cd89c4061711ea42c08582430787618f641.jpg" /> <em>Figure 8. Comparison of MAWS against multiprocessing baseline on 128 mixed Langchain tasks (half LLM heavy, half CPU heavy)</em></li>
+</ul>
+</li>
+<li>实验评估表明，这些优化能分别在同构和异构工作负载上实现最高 <strong>2.1×</strong> 和 <strong>1.41×</strong> 的 P50 延迟加速。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-cpu-and-gpu-aware-micro-batching-cgam">1. CPU and GPU-Aware Micro-batching (CGAM)<a class="headerlink" href="#1-cpu-and-gpu-aware-micro-batching-cgam" title="Permanent link">&para;</a></h3>
+<p><strong>核心动机与问题定义</strong></p>
+<ul>
+<li>传统的大批量（large-batch）处理在智能体AI工作负载中会导致<strong>性能饱和</strong>，即继续增大batch size带来的吞吐量增益微乎其微。</li>
+<li>这种饱和源于两大瓶颈：<strong>CPU瓶颈</strong>（如核心过载、上下文切换开销剧增）和<strong>GPU瓶颈</strong>（如KV缓存占用过高，超出HBM容量或带宽）。</li>
+<li>大批量处理还会导致<strong>P50延迟</strong>和<strong>尾部延迟</strong>显著增加，并带来不成比例的<strong>CPU动态能耗</strong>增长。</li>
+</ul>
+<p><strong>CGAM的核心思想</strong></p>
+<ul>
+<li><strong>放弃单一的大批量处理</strong>，转而采用<strong>微批处理</strong>（Micro-batching）策略。</li>
+<li>引入一个关键参数——<strong>批处理上限</strong>（<strong>Bcap</strong>），它代表了能获得最佳资源效率的最大有效批大小。</li>
+<li>将一个大的请求批次（例如 B=128）拆分成多个大小为 <strong>Bcap</strong> 的微批次（例如 2个 Bcap=64 的微批次），并按序或重叠方式处理这些微批次。</li>
+</ul>
+<p><strong>批处理上限（Bcap）的选择算法</strong></p>
+<ul>
+<li>定义<strong>吞吐量增益比</strong>（<strong>throughput gain ratio</strong>）为 <code>r(B) = T(B) / T(B/2)</code>，其中 <code>T(B)</code> 是批大小为B时的吞吐量（requests/s）。</li>
+<li>设定一个<strong>效率阈值</strong>（<strong>λ</strong>），论文中经验值为 <strong>λ = 1.1</strong>，意味着当批大小翻倍带来的吞吐量提升小于10%时，即进入饱和区。</li>
+<li><strong>Bcap</strong> 被选为满足 <code>r(B) &lt; λ</code> 的最小批大小。根据表2的实证数据，对于多数工作负载，<strong>Bcap = 64</strong> 是一个合适的值。</li>
+</ul>
+<p><img alt="" src="../images/74f461bc56f169f39e5cd580fbe77acbfd6e1db2a9ab1035b1da70d985cc6394.jpg" /> <em>. Table 2. Throughput gain ratios r and selected Bcap values</em></p>
+<p><strong>基础CGAM的执行流程</strong></p>
+<ul>
+<li>对于一个总大小为B的请求批次，将其分割为 <code>ceil(B / Bcap)</code> 个微批次。</li>
+<li><strong>顺序执行</strong>每个微批次：先完成该微批次中所有请求的<strong>CPU工具处理</strong>（Tools），再将结果送入GPU进行<strong>LLM推理</strong>（Inference）。</li>
+<li>在任意时刻，系统中活跃的请求数量不超过 <strong>Bcap</strong>。</li>
+</ul>
+<p><img alt="" src="../images/b6ee5be93f561d2e4556f73a8f70b776c11eddcce4add766cde63e07855d84a0.jpg" /> <em>Figure 6. Timeline of batched agentic AI inference for (a) Multiprocessing, (b) CGAM, and (c) CGAMoverlap</em></p>
+<p><strong>CGAMoverlap的进阶执行流程</strong></p>
+<ul>
+<li>为了进一步优化<strong>P90延迟</strong>，在基础CGAM上引入<strong>流水线重叠</strong>。</li>
+<li>当第一个微批次完成<strong>CPU工具处理</strong>后，立即启动第二个微批次的<strong>CPU工具处理</strong>，同时GPU开始处理第一个微批次的<strong>LLM推理</strong>。</li>
+<li>这样，CPU和GPU可以<strong>并发工作</strong>，减少了整体的空闲等待时间，但会因更高的CPU竞争而略微增加P50延迟。</li>
+</ul>
+<p><strong>CGAM带来的三大优势</strong></p>
+<ul>
+<li><strong>降低P50延迟</strong>：由于第一个微批次能在总延迟的一半左右完成，使得前50%的用户请求能获得近<strong>2倍</strong>的加速。在评估中，对LangChain、Haystack和SWE-Agent分别实现了<strong>2.11×</strong>, <strong>1.94×</strong>, 和 <strong>1.72×</strong> 的P50延迟加速。</li>
+<li><strong>减少KV缓存使用</strong>：活跃批大小被限制在Bcap，使得峰值<strong>KV缓存</strong>占用几乎减半，缓解了GPU内存压力，避免了因缓存溢出到主机内存而产生的PCIe瓶颈。</li>
+<li><strong>节约CPU能耗</strong>：通过限制并发核心数，显著降低了CPU的动态能耗。论文指出，在大批次下，此优化可带来约<strong>2倍</strong>的CPU能耗节省，这对于总能耗中CPU占比高达**44%**的场景至关重要。</li>
+</ul>
+<p><strong>输入输出关系与系统作用</strong></p>
+<ul>
+<li><strong>输入</strong>：一个大的、同质化的智能体AI请求批次（Batch Size B）。</li>
+<li><strong>输出</strong>：经过优化调度后，按微批次顺序（或重叠）完成的所有请求响应，其<strong>P50/P90延迟</strong>、<strong>GPU内存占用</strong>和<strong>CPU能耗</strong>均得到显著改善。</li>
+<li><strong>在系统中的作用</strong>：CGAM作为一个<strong>调度层</strong>，位于请求分发器和底层执行引擎（vLLM, 工具API等）之间。它不改变模型或工具本身，而是通过智能地管理请求的并发模式，来规避硬件瓶颈，从而在不牺牲吞吐量的前提下，大幅提升服务质量和能效。</li>
+</ul>
+<h3 id="2-mixed-agentic-workload-scheduling-maws">2. Mixed Agentic Workload Scheduling (MAWS)<a class="headerlink" href="#2-mixed-agentic-workload-scheduling-maws" title="Permanent link">&para;</a></h3>
+<p><strong>核心动机与问题定义</strong></p>
+<ul>
+<li><strong>MAWS (Mixed Agentic Workload Scheduling)</strong> 的设计初衷是解决<strong>异构智能体工作负载</strong>（heterogeneous agentic workloads）在并行执行时的资源争用问题。</li>
+<li>在真实场景中，请求队列可能同时包含两类任务：<ul>
+<li><strong>CPU-heavy 任务</strong>：其延迟主要由<strong>工具执行</strong>（如 Web 搜索、Python/Bash 执行、ENNS 检索）主导，这些操作严重依赖 CPU 资源。</li>
+<li><strong>LLM-heavy 任务</strong>：其延迟主要由<strong>GPU 上的大模型推理</strong>主导，CPU 仅承担轻量级的协调或 I/O 工作。</li>
+</ul>
+</li>
+<li>若对所有任务统一采用<strong>多进程</strong>（multi-processing）策略来并行化，LLM-heavy 任务会因创建大量独立进程而造成<strong>CPU 核心过载</strong>（core over-subscription），进而拖慢对 CPU 资源敏感的 CPU-heavy 任务，导致整体性能下降。</li>
+</ul>
+<p><strong>实现原理与调度策略</strong></p>
+<ul>
+<li>MAWS 的核心思想是<strong>自适应地为不同类型的任务选择最优的 CPU 并行化原语</strong>。</li>
+<li>其具体策略如下：<ul>
+<li>对于被识别为 <strong>CPU-heavy</strong> 的任务，采用 <strong>multi-processing</strong>。这能有效绕过 Python 的 **GIL **(Global Interpreter Lock)，让每个任务独占一个 CPU 核心，最大化 CPU-bound 工具的执行效率。</li>
+<li>对于被识别为 <strong>LLM-heavy</strong> 的任务，采用 <strong>multi-threading</strong>。由于这类任务的 CPU 工作负载很轻（主要是调用 vLLM API 的 I/O 操作），使用线程池可以避免进程创建和上下文切换的巨大开销，同时释放出宝贵的 CPU 核心给 CPU-heavy 任务使用。</li>
+</ul>
+</li>
+<li>这种混合调度策略通过<strong>精细化的资源隔离</strong>，确保了 CPU 资源被高效地分配给最需要它的任务类型。</li>
+</ul>
+<p><strong>算法流程与输入输出</strong></p>
+<ul>
+<li><strong>输入</strong>：一个包含 N 个异构智能体请求的批次，其中每个请求都带有类型标签（CPU-heavy 或 LLM-heavy）。</li>
+<li><strong>处理流程</strong>：<ol>
+<li><strong>任务分类</strong>：调度器首先将输入批次中的请求分为两个子集：<code>CPU_heavy_tasks</code> 和 <code>LLM_heavy_tasks</code>。</li>
+<li><strong>差异化调度</strong>：<ul>
+<li>将 <code>CPU_heavy_tasks</code> 子集提交给一个多进程执行器。</li>
+<li>将 <code>LLM_heavy_tasks</code> 子集提交给一个多线程执行器（例如，利用 LangChain 的 <code>Runnable.batch</code> 内置的线程池）。</li>
+</ul>
+</li>
+<li><strong>结果聚合</strong>：等待两个执行器完成各自的任务，并按原始请求顺序聚合结果。</li>
+</ol>
+</li>
+<li><strong>输出</strong>：与输入批次一一对应的完整响应列表。</li>
+<li><strong>在整体系统中的作用</strong>：MAWS 作为一个<strong>高层调度器</strong>，位于请求分发层，它不改变单个智能体的内部逻辑，而是优化了多个异构智能体在共享 CPU/GPU 资源池上的并发执行方式，从而提升了系统的<strong>整体吞吐量</strong>和<strong>尾部延迟</strong>（P99 latency）。</li>
+</ul>
+<p><strong>性能评估与关键指标</strong></p>
+<ul>
+<li>论文通过实验验证了 MAWS 的有效性。图8展示了在一个包含 <strong>128 个混合 LangChain 任务</strong>（一半 CPU-heavy，一半 LLM-heavy）的场景下，MAWS 相比统一使用多进程的基线方法的性能提升。
+    <img alt="" src="images/2ce33be19b396d7fca80f5b1f5379cd89c4061611ea42c08582430787618f641.jpg" /></li>
+<li>关键性能指标如下：<ul>
+<li><strong>P99 延迟</strong>：MAWS 实现了 <strong>1.17×</strong> 的加速比，显著改善了最慢请求的响应时间。</li>
+<li><strong>P50 延迟</strong>：基本与基线持平，说明该策略在优化尾部延迟的同时，没有损害中位用户的体验。</li>
+</ul>
+</li>
+<li>当与 <strong>CGAM</strong> 优化结合使用时（如图9所示），在 <strong>256 个混合任务</strong>的更大规模负载下，MAWS+CGAM 对 CPU-heavy 任务的 <strong>P50 延迟</strong>实现了高达 <strong>2.1×</strong> 的加速。
+    <img alt="" src="../images/480d42e0fd66e0dab5ad90b7c0fe0b1c3971addcfd5809304a9c240a05d39ead.jpg" /> <em>Figure 9. Comparison of MAWS+CGAM against multiprocessing baseline on 256 mixed Langchain tasks</em></li>
+</ul>
+<h3 id="3-agentic-ai-system-characterization-framework">3. Agentic AI System Characterization Framework<a class="headerlink" href="#3-agentic-ai-system-characterization-framework" title="Permanent link">&para;</a></h3>
+<p><strong>Agentic AI系统表征框架的核心维度</strong></p>
+<p>该框架通过三个正交的分类维度，从系统架构层面解构了Agentic AI工作负载的多样性，为后续的性能剖析和优化提供了理论基础。</p>
+<ul>
+<li>
+<p><strong>基于编排器 (Orchestrator-Based)</strong></p>
+<ul>
+<li><strong>核心区分</strong>：决策逻辑的控制权归属。</li>
+<li><strong>LLM-orchestrated</strong>：<strong>LLM</strong> 本身作为中央控制器，负责决定任务分解、工具调用时机及最终输出。其推理能力直接驱动整个执行流程。<ul>
+<li><em>代表系统</em>：ReAct, AutoGPT, BabyAGI。</li>
+</ul>
+</li>
+<li><strong>Host-orchestrated</strong>：由<strong>Host</strong>（通常是Python代码）管理控制流，将LLM视为一个无状态的推理服务。Host代码负责调度工具、聚合结果并决定下一步操作。<ul>
+<li><em>代表系统</em>：LangChain, Haystack, Semantic Kernel。</li>
+</ul>
+</li>
+<li><strong>系统影响</strong>：此维度直接影响CPU与GPU的职责划分。LLM-orchestrated系统通常有更复杂的LLM推理路径，而Host-orchestrated系统则将更多逻辑卸载到CPU上执行。</li>
+</ul>
+</li>
+<li>
+<p><strong>基于智能体路径 (Path-based)</strong></p>
+<ul>
+<li><strong>核心区分</strong>：执行流程的确定性。</li>
+<li><strong>Static Path</strong>：遵循预定义的、<strong>确定性的</strong>工作流。工具调用的顺序和类型在运行前已固定。<ul>
+<li><em>代表系统</em>：大多数RAG（Retrieval Augmented Generation）管道，如Haystack。</li>
+</ul>
+</li>
+<li><strong>Dynamic Path</strong>：执行图在<strong>运行时动态构建</strong>，路径选择取决于中间结果、环境反馈或LLM的实时决策。<ul>
+<li><em>代表系统</em>：Tree-of-Thoughts, Reflexion, LATS。</li>
+</ul>
+</li>
+<li><strong>系统影响</strong>：动态路径引入了不可预测的分支和循环，使得静态优化（如预分配资源）变得困难，并可能增加同步和上下文切换的开销。</li>
+</ul>
+</li>
+<li>
+<p><strong>基于流程重复性 (Flow/Repetitiveness-based)</strong></p>
+<ul>
+<li><strong>核心区分</strong>：与环境交互的迭代次数。</li>
+<li><strong>Single-step</strong>：任务在一个推理周期内完成，<strong>无环境反馈循环</strong>。典型的如单次问答或简单的工具调用。<ul>
+<li><em>代表系统</em>：标准CoT（Chain-of-Thought）提示、单轮RAG。</li>
+</ul>
+</li>
+<li><strong>Multi-step</strong>：涉及<strong>多次迭代</strong>的“感知-规划-行动”循环，以解决复杂任务。每一步都可能依赖前一步的结果。<ul>
+<li><em>代表系统</em>：WebArena, SWE-Agent, AgentBench。</li>
+</ul>
+</li>
+<li><strong>系统影响</strong>：多步流程显著放大了工具处理（CPU-bound）部分的累积延迟，并对系统的状态管理和内存占用提出了更高要求。</li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="../images/c568650775b5d377253e5df9d267269103a2e3df26d2fe110a2406804dde2ed4.jpg" /> <em>Figure 1. Characterization of agentic AI workloads on the basis of (a) Orchestrator (LLM and Host) (b) Agentic Path (Static and Dynamic) and (c) Repetitiveness (Single-step and Multi-step)</em></p>
+<hr />
+<p><strong>代表性工作负载在框架中的映射</strong></p>
+<p>研究选取了五个具有代表性的Agentic AI工作负载，它们在上述三个维度上覆盖了广泛的组合，从而能够全面揭示系统瓶颈。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Workload</th>
+<th style="text-align: left;">Orchestrator</th>
+<th style="text-align: left;">Path</th>
+<th style="text-align: left;">Flow</th>
+<th style="text-align: left;">Primary Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Haystack RAG</strong></td>
+<td style="text-align: left;">Host</td>
+<td style="text-align: left;">Static</td>
+<td style="text-align: left;">Single-step</td>
+<td style="text-align: left;"><strong>ENNS</strong> (Exact Nearest Neighbor Search)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Toolformer</strong></td>
+<td style="text-align: left;">LLM</td>
+<td style="text-align: left;">Static</td>
+<td style="text-align: left;">Single-step</td>
+<td style="text-align: left;"><strong>WolframAlpha API</strong>, QA APIs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ChemCrow</strong></td>
+<td style="text-align: left;">LLM</td>
+<td style="text-align: left;">Dynamic</td>
+<td style="text-align: left;">Multi-step</td>
+<td style="text-align: left;"><strong>Arxiv/Pubmed</strong> literature search</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LangChain</strong></td>
+<td style="text-align: left;">Host</td>
+<td style="text-align: left;">Dynamic</td>
+<td style="text-align: left;">Multi-step</td>
+<td style="text-align: left;"><strong>Web Search</strong>, <strong>LexRank</strong> summarization</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SWE-Agent</strong></td>
+<td style="text-align: left;">LLM</td>
+<td style="text-align: left;">Dynamic</td>
+<td style="text-align: left;">Multi-step</td>
+<td style="text-align: left;"><strong>Bash/Python</strong> execution</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../images/578c72b4c295b60f4997ba3deaf14cbe33517f05b5f79b14e690d1f1348e114d.jpg" /> <em>Table 1. Representative Agentic AI systems (Tools/Application selected for profiling are underlined)</em></p>
+<hr />
+<p><strong>框架在系统剖析中的作用与输入输出关系</strong></p>
+<p>该表征框架是连接高层应用逻辑与底层系统性能的桥梁。</p>
+<ul>
+<li><strong>输入</strong>：一个具体的Agentic AI应用或工作负载。</li>
+<li><strong>处理</strong>：通过分析其架构，将其归类到三个维度的特定象限中。</li>
+<li><strong>输出</strong>：<ul>
+<li><strong>性能预测</strong>：例如，一个<strong>Host-orchestrated</strong>, <strong>Static Path</strong>, <strong>Single-step</strong>的工作负载（如Haystack RAG）很可能会被<strong>CPU-bound</strong>的检索操作所主导。</li>
+<li><strong>瓶颈定位</strong>：一个多步、动态路径的LLM-orchestrated系统（如SWE-Agent）可能会同时面临<strong>CPU</strong>（工具执行）和<strong>GPU</strong>（长序列、多轮推理的KV Cache压力）的瓶颈。</li>
+<li><strong>优化指导</strong>：框架的分类结果直接启发了后续的优化策略。例如，针对<strong>Multi-step</strong>工作负载，需要考虑状态管理的开销；针对<strong>Host-orchestrated</strong>系统，则需重点优化CPU上的并行调度。</li>
+</ul>
+</li>
+<li><strong>整体作用</strong>：该框架为理解Agentic AI的“黑盒”行为提供了一个结构化的透镜，使得研究者能够超越单纯的模型层面，从<strong>系统级</strong>（System-level）视角去分析、预测和优化其性能、吞吐量和能效。</li>
+</ul>
+<h3 id="4-batching-cap-selection-strategy">4. Batching Cap Selection Strategy<a class="headerlink" href="#4-batching-cap-selection-strategy" title="Permanent link">&para;</a></h3>
+<p><strong>核心原理与算法流程</strong></p>
+<ul>
+<li><strong>批处理上限 (Batching Cap) 选择策略</strong>的核心目标是，在避免系统进入<strong>吞吐量饱和区</strong>的前提下，最大化资源利用效率。该策略通过量化批处理规模扩大带来的边际效益来实现。</li>
+<li>其具体算法流程如下：<ul>
+<li>定义 <strong>吞吐量增益比率 r(B)</strong> 为 <code>r(B) = T(B) / T(B/2)</code>，其中 <code>T(B)</code> 表示在批处理大小为 <code>B</code> 时的系统吞吐量（单位：requests/second）。</li>
+<li>引入一个<strong>效率阈值 λ</strong>（论文中设定为 <strong>1.1</strong>），该阈值代表可接受的最低效率增益（即10%的提升）。</li>
+<li>系统性地增加批处理大小 <code>B</code>，并计算对应的 <code>r(B)</code>。</li>
+<li>当首次出现 <code>r(B) &lt; λ</code> 的情况时，将前一个批处理大小 <code>B/2</code> 确定为最优的<strong>批处理上限 Bcap</strong>。这意味着，继续将批处理大小从 <code>B/2</code> 增加到 <code>B</code> 所带来的吞吐量提升已低于10%，得不偿失。</li>
+</ul>
+</li>
+</ul>
+<p><strong>参数设置与决策依据</strong></p>
+<ul>
+<li><strong>效率阈值 λ</strong> 的设定是此策略的关键超参数。论文选择 <strong>λ = 1.1</strong> 是基于实验分析得出的<strong>实用平衡点</strong>，它在追求高吞吐量和避免因过度并行化导致的延迟激增（如CPU过载、GPU内存带宽瓶颈）之间取得了良好折衷。</li>
+<li>该策略的决策完全依赖于对系统<strong>吞吐量 T(B) 随批处理大小 B 变化</strong>的实证测量，而非理论模型，因此具有很强的<strong>硬件和工作负载适应性</strong>。</li>
+</ul>
+<p><img alt="" src="../images/74f461bc56f169f39e5cd580fbe77acbfd6e1db2a9ab1035b1da70d985cc6394.jpg" /> <em>. Table 2. Throughput gain ratios r and selected Bcap values</em></p>
+<p><strong>输入输出关系及在整体优化中的作用</strong></p>
+<ul>
+<li><strong>输入</strong>：一系列不同批处理大小 <code>B</code> 下测得的系统吞吐量 <code>T(B)</code> 数据。</li>
+<li><strong>输出</strong>：一个具体的数值 <strong>Bcap</strong>，即推荐使用的最大微批处理（micro-batch）大小。</li>
+<li><strong>在整体优化框架中的作用</strong>：<ul>
+<li><strong>作为 CPU and GPU-Aware Micro-batching (CGAM) 优化的基础</strong>：<code>Bcap</code> 直接决定了微批处理的粒度。对于一个大的请求批次（例如 B=128），CGAM 会将其拆分为多个大小不超过 <code>Bcap</code>（例如 Bcap=64）的微批次进行顺序或重叠处理。</li>
+<li><strong>解决吞吐量饱和问题</strong>：通过限制单次并行处理的请求数量，有效规避了因<strong>CPU核心过载 (core over-subscription)</strong>、<strong>缓存一致性开销 (coherence traffic)</strong> 或 <strong>GPU设备内存容量/带宽瓶颈</strong> 导致的性能下降。</li>
+<li><strong>带来多重收益</strong>：<ul>
+<li><strong>降低 P50 延迟</strong>：第一批微批次的请求可以更快完成，显著改善中位数响应时间。</li>
+<li><strong>减少 KV Cache 内存占用</strong>：并发处理的请求数减半，使得 GPU 上的 <strong>KV Cache</strong> 使用量也近似减半，缓解了内存压力。</li>
+<li><strong>提升能效</strong>：通过限制CPU核心的并发使用数量，大幅降低了<strong>CPU动态能耗</strong>，这对于大批次场景下（CPU能耗可占总动态能耗的44%）尤为重要。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-cgamoverlap-execution-model">5. CGAMoverlap Execution Model<a class="headerlink" href="#5-cgamoverlap-execution-model" title="Permanent link">&para;</a></h3>
+<p><strong>核心执行原理与流程</strong></p>
+<ul>
+<li><strong>CGAMoverlap</strong> 是 <strong>CPU and GPU-Aware Micro-batching (CGAM)</strong> 的一种优化变体，其核心思想是通过<strong>计算重叠 (computation overlap)</strong> 来改善尾部延迟。</li>
+<li>该模型将一个大批次（例如 B=128）分割为两个或多个微批次（micro-batch），每个微批次的大小不超过预设的<strong>批处理上限 (batching cap, Bcap)</strong>，文中实验设定为 <strong>Bcap = 64</strong>。</li>
+<li>其执行流程的关键在于打破微批次间的严格串行依赖：<ul>
+<li>当第一个微批次完成其 <strong>CPU-bound 工具处理阶段</strong> 后，系统<strong>不会等待</strong>其后续的 <strong>GPU LLM 推理阶段</strong> 完成。</li>
+<li>而是<strong>立即启动</strong>第二个微批次的 <strong>CPU-bound 工具处理阶段</strong>。</li>
+<li>此时，系统进入一个<strong>重叠执行窗口</strong>：<strong>第一个微批次的 GPU 阶段</strong> 与 <strong>第二个微批次的 CPU 阶段</strong> <strong>并发执行</strong>。</li>
+</ul>
+</li>
+<li>这种设计充分利用了 CPU 和 GPU 作为独立计算单元的特性，实现了异构资源的并行利用。</li>
+</ul>
+<p><img alt="" src="../images/b6ee5be93f561d2e4556f73a8f70b776c11eddcce4add766cde63e07855d84a0.jpg" /> <em>Figure 6. Timeline of batched agentic AI inference for (a) Multiprocessing, (b) CGAM, and (c) CGAMoverlap</em></p>
+<p><strong>性能权衡与适用场景</strong></p>
+<ul>
+<li><strong>P50 延迟 (中位数延迟)</strong>: 由于在重叠窗口期间，CPU 资源需要同时服务于两个微批次（尽管是不同阶段），这会引入额外的 <strong>CPU 争用 (CPU contention)</strong>。这种争用可能导致第一个微批次的 CPU 阶段收尾工作或第二个微批次的 CPU 阶段启动变慢，从而<strong>轻微增加 P50 延迟</strong>。实验数据显示，CGAMoverlap 的 P50 速度提升（1.37x - 1.82x）略低于标准 CGAM（1.72x - 2.11x）。</li>
+<li><strong>P90/P99 延迟 (尾部延迟)</strong>: 这是 CGAMoverlap 的主要优化目标。通过提前启动第二个微批次的处理，显著减少了其在队列中的等待时间。因此，<strong>P90 延迟得到明显改善</strong>。实验数据显示，对于 LangChain、Haystack 和 SWE-Agent，P90 延迟分别降低了 1.33x、1.15x 和 1.16x。</li>
+<li><strong>最佳适用场景</strong>: 该模型在 <strong>CPU 阶段和 GPU 阶段耗时相对均衡</strong> 的工作负载上效果最佳。例如，在 <strong>LangChain</strong> 工作负载中，由于 Web 搜索/摘要（CPU）和 LLM 推理（GPU）耗时接近，重叠带来的收益最大，P90 改善最显著。而在 CPU 或 GPU 单方面极度占优的工作负载中，重叠窗口的效益会减弱。</li>
+</ul>
+<p><strong>输入输出关系及系统作用</strong></p>
+<ul>
+<li><strong>输入</strong>: 一个大的、同时到达的请求批次（例如 B=128）。</li>
+<li><strong>内部处理</strong>:<ul>
+<li>将大批次分割为 N 个微批次（N = B / Bcap）。</li>
+<li>按照重叠调度策略依次启动各微批次的 CPU 阶段。</li>
+<li>在 CPU 阶段完成后，将数据传递给 GPU 进行 LLM 推理。</li>
+</ul>
+</li>
+<li><strong>输出</strong>: 所有请求的最终响应，但其完成时间分布被重塑，<strong>尾部请求的完成时间被大幅提前</strong>。</li>
+<li><strong>在整体系统中的作用</strong>: CGAMoverlap 是一种<strong>延迟分布整形 (latency distribution shaping)</strong> 策略。它不追求绝对的吞吐量最大化或平均延迟最小化，而是<strong>主动牺牲少量的中位数性能，以换取对用户体验至关重要的尾部延迟的显著优化</strong>。这对于需要提供稳定服务质量（SLO）的在线服务系统具有重要价值。</li>
+</ul>
+<hr />
+<h2 id="4">4. 实验方法与实验结果<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>实验设置</strong></p>
+<ul>
+<li><strong>硬件平台</strong>：<ul>
+<li><strong>Latency/Throughput Profiling</strong>: 使用 <strong>48-core Intel Emerald Rapids CPU</strong> (配备 DDR5 DRAM) 和 <strong>NVIDIA B200 GPU</strong> (配备 HBM3e)。</li>
+<li><strong>Energy Profiling</strong>: 由于设施限制，在另一台主机上进行，配备 <strong>64-core AMD Ryzen Threadripper PRO 7985WX CPU</strong> 和 <strong>NVIDIA H200 GPU</strong>。</li>
+</ul>
+</li>
+<li><strong>软件环境</strong>：<ul>
+<li>使用 <strong>PyTorch 2.8.0</strong> 和 <strong>vLLM 0.11.0</strong> 作为本地 LLM 推理服务器。</li>
+<li><strong>ChemCrow</strong> 工作负载因使用 GPT-4-0613 模型，通过 <strong>OpenAI API</strong> 调用，而非本地 vLLM。</li>
+<li>其他依赖库版本：langchain 0.3.27, haystack-ai 2.18.1, chemcrow 0.3.24, mini-swe-agent 1.9.1。</li>
+</ul>
+</li>
+<li><strong>工作负载选择</strong>：基于第 3 节的系统级表征，选择了五个具有代表性的 Agentic AI 工作负载，覆盖了不同的 Orchestrator、Agentic Path 和 Repetitiveness 特性。<ul>
+<li><strong>Haystack RAG</strong>: 使用 <strong>ENNS (Exact Nearest Neighbor Search)</strong> 在 <strong>305GB C4</strong> 语料库上进行检索。</li>
+<li><strong>Toolformer</strong>: 基于 <strong>GPT-J 6B</strong> 模型，调用 <strong>WolframAlpha API</strong> 解决数学问题。</li>
+<li><strong>ChemCrow</strong>: 使用 <strong>GPT-4-0613</strong> 模型，通过 <strong>Arxiv/Pubmed</strong> 进行文献搜索。</li>
+<li><strong>LangChain</strong>: 构建了自定义管道（Web Search -&gt; <strong>LexRank Summarization</strong> -&gt; LLM Inference），使用 <strong>GPT-OSS-20B</strong> 模型。</li>
+<li><strong>SWE-Agent</strong>: 使用 <strong>mini-SWE-Agent</strong>，通过 <strong>Bash/Python Execution</strong> 工具解决编码问题。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结果数据分析</strong></p>
+<ul>
+<li>
+<p><strong>延迟 (Latency) 分析</strong>：</p>
+<ul>
+<li><strong>CPU 工具处理是主要瓶颈</strong>。在所有工作负载中，工具处理阶段占据了绝大部分端到端延迟。<ul>
+<li><strong>Haystack RAG</strong>: 检索阶段耗时 <strong>6.0-8.0s</strong>，占总延迟的 <strong>84.5%-90.6%</strong>。</li>
+<li><strong>SWE-Agent</strong>: Bash/Python 执行占总延迟的 <strong>43.8%-78.7%</strong>。</li>
+<li><strong>LangChain</strong>: Web 搜索或摘要工具可驱动超过 <strong>50%</strong> 的端到端延迟。</li>
+</ul>
+</li>
+<li><strong>关键结论</strong>: <strong>Tool processing on CPUs can take up to 90.6% of the total latency</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>吞吐量 (Throughput) 分析</strong>：</p>
+<ul>
+<li>吞吐量饱和由 <strong>CPU 或 GPU 瓶颈</strong> 导致。<ul>
+<li><strong>GPU 瓶颈</strong>: 主要由 <strong>KV Cache</strong> 占用过多 <strong>GPU High-Bandwidth Memory (HBM)</strong> 引起，导致内存带宽饱和。如 Figure 4a 所示，vLLM 吞吐量在 batch size 达到 64 后增长显著放缓。</li>
+<li><strong>CPU 瓶颈</strong>: 包括 <strong>Core Over-subscription</strong>（核心过度订阅）、<strong>Cache Coherence</strong>（缓存一致性）开销和 <strong>Synchronization</strong>（同步）开销。<ul>
+<li><strong>Haystack RAG</strong>: 在 batch size &gt; 32 时，因 <strong>LLC (Last-Level Cache) 压力</strong> 和 <strong>Disk I/O 争用</strong> 而饱和。</li>
+<li><strong>LangChain/SWE-Agent</strong>: 在 batch size = 128 时，因 <strong>Core Over-subscription</strong> 导致吞吐量饱和，摘要任务的平均延迟从 2.9s (bs=64) 增至 6.3s (bs=128)。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>关键结论</strong>: <strong>Agentic throughput gets bottlenecked either by CPU factors or GPU factors</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>能耗 (Energy) 分析</strong>：</p>
+<ul>
+<li><strong>CPU 动态能耗占比随批大小显著增加</strong>。<ul>
+<li>在 <strong>LangChain</strong> 工作负载上，当批大小从 1 增加到 128 时：<ul>
+<li>总动态能耗增加了 <strong>38.1</strong> 倍。</li>
+<li><strong>GPU</strong> 动态能耗增加了 <strong>26.8</strong> 倍。</li>
+<li><strong>CPU</strong> 动态能耗增加了 <strong>86.7</strong> 倍。</li>
+</ul>
+</li>
+<li>CPU 动态能耗占总动态能耗的比例从 <strong>小批大小时的 20%</strong> 上升到 <strong>批大小 128 时的 44%</strong>。</li>
+</ul>
+</li>
+<li><strong>关键结论</strong>: <strong>CPU dynamic energy consumes up to 44% of the total dynamic energy at large batch sizes</strong>，表明 CPU 并行化在能效上远低于 GPU。</li>
+</ul>
+</li>
+</ul>
+<p><strong>消融实验与优化评估</strong></p>
+<ul>
+<li>
+<p><strong>优化方案一: CPU and GPU-Aware Micro-batching (CGAM)</strong></p>
+<ul>
+<li><strong>核心思想</strong>: 通过分析吞吐量增益比 <code>r(B) = T(B)/T(B/2)</code> 来确定最优批处理上限 <code>Bcap</code>。当 <code>r(B) &lt; λ</code> (λ=1.1) 时，停止增大批大小，以避免进入饱和区。</li>
+<li><strong>评估结果 (vs Multi-processing baseline, B=128)</strong>:
+    | Workload  | Metric          | Speedup   |
+    | :-------- | :-------------- | :-------- |
+    | LangChain | <strong>P50 Latency</strong> | <strong>2.11×</strong> |
+    | Haystack  | <strong>P50 Latency</strong> | <strong>1.94×</strong> |
+    | SWE-Agent | <strong>P50 Latency</strong> | <strong>1.72×</strong> |</li>
+<li><strong>CGAMoverlap 变体</strong>: 通过重叠两个微批次的 CPU 和 GPU 执行阶段，在略微牺牲 P50 延迟的情况下，显著改善了 P90 延迟（例如 LangChain 上 P90 延迟降低 <strong>1.33×</strong>）。</li>
+<li><img alt="" src="../images/07e7bbdae99c50386308344797acf2b4a7ececfa16ddaae6860b42ff8664adea.jpg" /> <em>Figure 7. Comparison of CGAM and CGAMoverlap using Bcap = 64 against baseline (multi-processing or multi-threading) on (a) Langchain workload on FreshQA benchmark, (b) Haystack workload on NQ benchmark and (c) SWE-Agent on APPS benchmark</em></li>
+</ul>
+</li>
+<li>
+<p><strong>优化方案二: Mixed Agentic Workload Scheduling (MAWS)</strong></p>
+<ul>
+<li><strong>核心思想</strong>: 针对混合工作负载（同时包含 <strong>CPU-heavy</strong> 和 <strong>LLM-heavy</strong> 请求），采用自适应并行策略。对 <strong>CPU-heavy</strong> 任务使用 <strong>Multi-processing</strong>，对 <strong>LLM-heavy</strong> 任务使用开销更轻的 <strong>Multi-threading</strong>，以避免 CPU 资源过度订阅。</li>
+<li><strong>评估结果</strong>:<ul>
+<li><strong>MAWS (B=128)</strong>: 在混合 LangChain 任务上，相比多进程基线，<strong>P99 延迟提升 1.17×</strong>，同时保持 P50 延迟不变。</li>
+<li><strong>MAWS+CGAM (B=256)</strong>: 结合两种优化，在混合工作负载上实现了全面的性能提升。<ul>
+<li><strong>CPU-heavy 任务 P50 延迟</strong>: <strong>2.1×</strong> 提升。</li>
+<li><strong>所有任务 P50 延迟</strong>: <strong>1.4×</strong> 提升。</li>
+<li><strong>整体 P99 延迟</strong>: <strong>1.15×</strong> 提升。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><img alt="" src="../images/2ce33be19b396d7fca80f5b1f5379cd89c4061711ea42c08582430787618f641.jpg" /> <em>Figure 8. Comparison of MAWS against multiprocessing baseline on 128 mixed Langchain tasks (half LLM heavy, half CPU heavy)</em></li>
+<li><img alt="" src="../images/480d42e0fd66e0dab5ad90b7c0fe0b1c3971addcfd5809304a9c240a05d39ead.jpg" /> <em>Figure 9. Comparison of MAWS+CGAM against multiprocessing baseline on 256 mixed Langchain tasks</em></li>
+</ul>
+</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../javascripts/switcher.js"></script>
+      
+        <script src="../../../javascripts/smart_back.js"></script>
+      
+    
+  </body>
+</html>

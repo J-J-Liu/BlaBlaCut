@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-reference-count-coalescing-buffers-rccbs-eli5" class="md-nav__link">
+  <a href="#1-reference-count-coalescing-buffers-rccbs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Reference Count Coalescing Buffers (RCCBs) (ELI5)
+        1. Reference Count Coalescing Buffers (RCCBs)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-available-block-tables-abts-eli5" class="md-nav__link">
+  <a href="#2-available-block-tables-abts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Available Block Tables (ABTs) (ELI5)
+        2. Available Block Tables (ABTs)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-hardware-software-cooperative-isa-extensions-eli5" class="md-nav__link">
+  <a href="#3-hardware-software-cooperative-isa-extensions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Hardware-Software Cooperative ISA Extensions (ELI5)
+        3. Hardware-Software Cooperative ISA Extensions
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-object-reference-map-orm-for-dead-object-scanning-eli5" class="md-nav__link">
+  <a href="#4-object-reference-map-orm-for-dead-object-scanning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Object Reference Map (ORM) for Dead Object Scanning (ELI5)
+        4. Object Reference Map (ORM) for Dead Object Scanning
       
     </span>
   </a>
@@ -495,7 +495,7 @@
 </li>
 </ul>
 <p>最终，这套机制与现有的 <strong>Generational GC</strong> 完美协同。它大幅减少了新生代（nursery）的 Minor GC 次数（平均 <strong>-52%</strong>），也显著降低了老年代（mature space）的存活对象数量，从而减少了 Major GC 的频率（平均 <strong>-50%</strong>）和每次 GC 的工作量（存活空间 <strong>-49%</strong>）。结果就是，在几乎不影响应用程序本身性能（mutator slowdown only <strong>0.38%</strong>）的前提下，将总的 GC 时间开销平均降低了 <strong>31%</strong>。</p>
-<h3 id="1-reference-count-coalescing-buffers-rccbs-eli5">1. Reference Count Coalescing Buffers (RCCBs) (ELI5)<a class="headerlink" href="#1-reference-count-coalescing-buffers-rccbs-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-reference-count-coalescing-buffers-rccbs">1. Reference Count Coalescing Buffers (RCCBs)<a class="headerlink" href="#1-reference-count-coalescing-buffers-rccbs" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>reference counting</strong>（引用计数）在软件里实现时，最大的问题就是“<strong>太碎、太勤、太吵</strong>”。</li>
@@ -526,7 +526,7 @@
 </li>
 <li>这个设计的精妙之处在于，它利用了程序的 <strong>locality</strong>（局部性）：短时间内对同一对象的引用操作往往会相互抵消。通过两级缓冲进行 <strong>filtering</strong>（过滤），论文数据显示能<strong>过滤掉 96.3% 的冗余更新</strong>，从根本上解决了传统引用计数的性能瓶颈。<img alt="" src="../images/3f4a974812579eaa2440b2b0a09e5fdd3a6cb19fad436d17d4dcbcec8b9a5a91.jpg" /> <em>Figure 2: Overview of the major hardware structures provided by HAMM (components are not to scale)</em></li>
 </ul>
-<h3 id="2-available-block-tables-abts-eli5">2. Available Block Tables (ABTs) (ELI5)<a class="headerlink" href="#2-available-block-tables-abts-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-available-block-tables-abts">2. Available Block Tables (ABTs)<a class="headerlink" href="#2-available-block-tables-abts" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的垃圾回收（GC）在找到死对象后，需要软件分配器（allocator）去管理空闲内存块。这个过程通常涉及复杂的<strong>free-list</strong>遍历或同步操作，对于追求极致速度的<strong>bump-pointer allocator</strong>来说，这会引入不可接受的延迟和开销。</li>
@@ -551,7 +551,7 @@
 </li>
 <li>这个设计巧妙地将硬件发现死对象的“生产”行为和软件分配器的“消费”行为<strong>解耦</strong>。生产者（RCCB）可以慢慢把死块归还到Memory ABT，而消费者（Allocator）总能从本地L1 ABT拿到“现货”，两者互不阻塞，从而实现了<strong>无缝、高速的内存块复用</strong>。</li>
 </ul>
-<h3 id="3-hardware-software-cooperative-isa-extensions-eli5">3. Hardware-Software Cooperative ISA Extensions (ELI5)<a class="headerlink" href="#3-hardware-software-cooperative-isa-extensions-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-hardware-software-cooperative-isa-extensions">3. Hardware-Software Cooperative ISA Extensions<a class="headerlink" href="#3-hardware-software-cooperative-isa-extensions" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Garbage Collection (GC)</strong> 是个“事后诸葛亮”。它得等内存快用光了，才停下来（或边运行边）扫描整个堆，找出哪些对象没人用了。这个过程非常 <strong>昂贵</strong>：不仅消耗大量 CPU 周期，还会污染缓存，甚至导致应用暂停。</li>
@@ -592,7 +592,7 @@
 </li>
 <li>通过这套指令集，硬件承担了最繁重、最底层的引用计数跟踪和死块快速供给工作，而软件 GC 依然保留了高层次的控制权（比如决定何时进行 full GC、如何布局内存等），实现了 <strong>性能</strong> 与 <strong>灵活性</strong> 的完美平衡。</li>
 </ul>
-<h3 id="4-object-reference-map-orm-for-dead-object-scanning-eli5">4. Object Reference Map (ORM) for Dead Object Scanning (ELI5)<a class="headerlink" href="#4-object-reference-map-orm-for-dead-object-scanning-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-object-reference-map-orm-for-dead-object-scanning">4. Object Reference Map (ORM) for Dead Object Scanning<a class="headerlink" href="#4-object-reference-map-orm-for-dead-object-scanning" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件辅助引用计数（Reference Counting）有个致命盲点：它只能追踪对象<strong>外部</strong>的指针变化。一旦一个对象被判定为“死亡”（引用计数为零），它的内存块就可以被回收。但这个死亡对象内部可能还包含指向其他对象的指针！如果这些内部指针不被处理，那些被指向的对象的引用计数就永远不会减少，导致它们永远无法被回收，形成<strong>内存泄漏</strong>。</li>

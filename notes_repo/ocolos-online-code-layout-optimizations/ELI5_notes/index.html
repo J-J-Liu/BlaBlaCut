@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-online-code-layout-optimization-eli5" class="md-nav__link">
+  <a href="#1-online-code-layout-optimization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 在线代码布局优化 (Online Code Layout Optimization) (ELI5)
+        1. 在线代码布局优化 (Online Code Layout Optimization)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-safe-online-code-replacement-eli5" class="md-nav__link">
+  <a href="#2-safe-online-code-replacement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 安全的在线代码替换机制 (Safe Online Code Replacement) (ELI5)
+        2. 安全的在线代码替换机制 (Safe Online Code Replacement)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-function-pointer-creation-interception-eli5" class="md-nav__link">
+  <a href="#3-function-pointer-creation-interception" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 函数指针创建拦截 (Function Pointer Creation Interception) (ELI5)
+        3. 函数指针创建拦截 (Function Pointer Creation Interception)
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-batch-accelerator-mode-bam-eli5" class="md-nav__link">
+  <a href="#4-batch-accelerator-mode-bam" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 批处理加速模式 (Batch Accelerator Mode, BAM) (ELI5)
+        4. 批处理加速模式 (Batch Accelerator Mode, BAM)
       
     </span>
   </a>
@@ -494,7 +494,7 @@
 <p>最终效果非常显著，论文展示了对 MySQL 最高 <strong>1.41×</strong>、对 Verilator 高达 <strong>2.20×</strong> 的加速比，而且这一切都不需要改动一行应用代码。</p>
 <p><img alt="" src="../images/733557cfd45975ce35d8ed22bfc93c255ed09d1706d6d1f19fa5423766bca9c4.jpg" /></p>
 <p><em>Fig. 5: Performance of OCOLOS (light blue bars) compared to BOLT using an oracle profile of the input being run (dark blue bars), Clang PGO using the same oracle profile (purple bars) and BOLT using an average-case profiling input aggregated from all inputs (pink bars). All bars are normalized to original non-PGO binaries (white bars).</em></p>
-<h3 id="1-online-code-layout-optimization-eli5">1. 在线代码布局优化 (Online Code Layout Optimization) (ELI5)<a class="headerlink" href="#1-online-code-layout-optimization-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-online-code-layout-optimization">1. 在线代码布局优化 (Online Code Layout Optimization)<a class="headerlink" href="#1-online-code-layout-optimization" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Profile-Guided Optimization (PGO)</strong> 是个“马后炮”。它需要先跑一遍程序收集 <strong>profile</strong>（剖析数据），然后用这些数据去重新编译或重写二进制文件，最后再用这个新二进制文件去跑真正的任务。</li>
@@ -561,7 +561,7 @@
 </table>
 <p><img alt="" src="../images/733557cfd45975ce35d8ed22bfc93c255ed09d1706d6d1f19fa5423766bca9c4.jpg" /></p>
 <p><em>Fig. 5: Performance of OCOLOS (light blue bars) compared to BOLT using an oracle profile of the input being run (dark blue bars), Clang PGO using the same oracle profile (purple bars) and BOLT using an average-case profiling input aggregated from all inputs (pink bars). All bars are normalized to original non-PGO binaries (white bars).</em></p>
-<h3 id="2-safe-online-code-replacement-eli5">2. 安全的在线代码替换机制 (Safe Online Code Replacement) (ELI5)<a class="headerlink" href="#2-safe-online-code-replacement-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-safe-online-code-replacement">2. 安全的在线代码替换机制 (Safe Online Code Replacement)<a class="headerlink" href="#2-safe-online-code-replacement" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>Profile-Guided Optimization (PGO)</strong> 是个“事后诸葛亮”。它需要先跑一遍程序收集 profile，再用这个 profile 去重新编译或重写二进制文件。问题来了：<ul>
@@ -596,7 +596,7 @@
 </li>
 <li>这个策略非常务实。它承认了在 unmanaged code 中完全掌控所有指针是不可能的，于是退而求其次，确保<strong>common case</strong>（通过虚表和直接调用的路径）能跑到高性能的 C1 上，而 <strong>rare case</strong>（通过其他方式调用的路径）则回退到功能正确但性能稍差的 C0 上，从而在<strong>安全性和性能之间取得了完美的平衡</strong>。</li>
 </ul>
-<h3 id="3-function-pointer-creation-interception-eli5">3. 函数指针创建拦截 (Function Pointer Creation Interception) (ELI5)<a class="headerlink" href="#3-function-pointer-creation-interception-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-function-pointer-creation-interception">3. 函数指针创建拦截 (Function Pointer Creation Interception)<a class="headerlink" href="#3-function-pointer-creation-interception" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <p>在 OCOLOS 这类支持 <strong>连续优化 (Continuous Optimization)</strong> 的系统里，代码会经历 C0 → C1 → C2 ... 的多次在线替换。旧版本的代码（比如 C1）在新版本（C2）上线后会被当作“垃圾”回收掉以节省内存。但这里有个致命问题：如果程序在 C1 时代创建了一个指向 C1 中某个函数的 <strong>函数指针 (Function Pointer)</strong>，并把它存到了堆、栈甚至寄存器里，那么当 C1 被回收后，这个指针就变成了一个 <strong>悬空指针 (Dangling Pointer)</strong>。一旦程序后续通过这个指针调用函数，就会直接崩溃。</p>
 <ul>
@@ -630,7 +630,7 @@
 <li><strong>一劳永逸</strong>：由于所有函数指针最终都指向不会被回收的 C0，因此后续无论进行多少次代码替换和垃圾回收，这些指针都始终有效。</li>
 <li><strong>保持兼容性</strong>：C0 中的函数虽然未被优化，但它只是一个“跳板”，内部会立刻跳转到当前最新的优化版本 Ci+1 去执行，保证了性能。</li>
 </ul>
-<h3 id="4-batch-accelerator-mode-bam-eli5">4. 批处理加速模式 (Batch Accelerator Mode, BAM) (ELI5)<a class="headerlink" href="#4-batch-accelerator-mode-bam-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-batch-accelerator-mode-bam">4. 批处理加速模式 (Batch Accelerator Mode, BAM)<a class="headerlink" href="#4-batch-accelerator-mode-bam" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Profile-Guided Optimization (PGO)</strong> 工具（如 BOLT）是 <strong>离线 (offline)</strong> 的。它们需要先完整地跑一遍程序来收集 profile，然后用这个 profile 去优化二进制文件，最后再用这个优化后的二进制文件去运行真正的任务。</li>

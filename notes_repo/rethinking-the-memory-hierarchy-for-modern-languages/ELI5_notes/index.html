@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-eli5" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 隐式、基于对象的数据移动 (ELI5)
+        1. 隐式、基于对象的数据移动
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-eli5" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 指针重写以避免关联查找 (ELI5)
+        2. 指针重写以避免关联查找
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-collection-eviction-ce-eli5" class="md-nav__link">
+  <a href="#3-collection-eviction-ce" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 层次化垃圾回收与驱逐统一（Collection-Eviction, CE） (ELI5)
+        3. 层次化垃圾回收与驱逐统一（Collection-Eviction, CE）
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 层级内对象分配 (ELI5)
+        4. 层级内对象分配
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-eli5" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 规范层级与不变式 (ELI5)
+        5. 规范层级与不变式
       
     </span>
   </a>
@@ -506,7 +506,7 @@ Hotpads的核心思想是<strong>将内存安全语言的“抽象指针”特�
 </ul>
 <p><img alt="" src="../images/8abad735fb6373cc3647d17c2368a2d8ed6447c44fe1b6220320f46194507192.jpg" /> <em>Fig. 4: Example showing Hotpads’s key features.</em></p>
 <p>最终，Hotpads通过这种软硬件协同的设计，构建了一个与现代内存安全语言语义完美契合的内存层次结构，在评估中实现了<strong>34%</strong> 的性能提升和<strong>2.6倍</strong>的能效改善。</p>
-<h3 id="1-eli5">1. 隐式、基于对象的数据移动 (ELI5)<a class="headerlink" href="#1-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1">1. 隐式、基于对象的数据移动<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>cache hierarchy</strong> 是为 C 这类语言设计的，它把内存看作一个巨大的、由固定大小 <strong>cache line</strong>（比如 64 字节）组成的线性数组。这个模型和现代 <strong>memory-safe languages</strong>（如 Java, Go）的编程模型存在根本性的错配。</li>
@@ -533,7 +533,7 @@ Hotpads的核心思想是<strong>将内存安全语言的“抽象指针”特�
 </li>
 <li>这个设计的核心在于，通过 <strong>隐式、基于对象的数据移动</strong> 和 <strong>指针重写</strong> 的组合拳，将数据放置的粒度与程序的语义（对象）完美对齐，从而一举解决了传统缓存因粒度不匹配而导致的空间和带宽浪费问题。<img alt="" src="../images/8abad735fb6373cc3647d17c2368a2d8ed6447c44fe1b6220320f46194507192.jpg" /> <em>Fig. 4: Example showing Hotpads’s key features.</em></li>
 </ul>
-<h3 id="2-eli5">2. 指针重写以避免关联查找 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2">2. 指针重写以避免关联查找<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>cache</strong> 之所以慢且耗电，核心在于 <strong>associative lookup（关联查找）</strong>。每次 CPU 访问内存，硬件都得在 cache 的 tag array 里进行一次“大海捞针”式的搜索，看这个地址的数据是不是在 cache 里。这个过程需要并行比较多个 cache line 的 tag，非常 <strong>昂贵</strong>。</li>
@@ -555,7 +555,7 @@ Hotpads的核心思想是<strong>将内存安全语言的“抽象指针”特�
 </li>
 <li>这个 <strong>pointer rewriting（指针重写）</strong> 操作，本质上是一次 <strong>一次性投资</strong>。它把后续无数次的、昂贵的 associative lookup，转换成了最廉价的 <strong>direct access（直接寻址）</strong>。论文数据显示，这一招让 <strong>80% 的 L1 访问</strong> 变成了直接访问，从而使得 L1 pad 的能效比 L1 cache 高出 <strong>2.3倍</strong>。</li>
 </ul>
-<h3 id="3-collection-eviction-ce-eli5">3. 层次化垃圾回收与驱逐统一（Collection-Eviction, CE） (ELI5)<a class="headerlink" href="#3-collection-eviction-ce-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-collection-eviction-ce">3. 层次化垃圾回收与驱逐统一（Collection-Eviction, CE）<a class="headerlink" href="#3-collection-eviction-ce" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>cache hierarchy</strong> 和 <strong>garbage collection (GC)</strong> 是两套完全割裂的系统，各自为政，造成了巨大的效率浪费。</li>
@@ -597,7 +597,7 @@ Hotpads的核心思想是<strong>将内存安全语言的“抽象指针”特�
 <li>通过这种方式，<strong>dead objects 被就地回收，不会产生任何向下的写流量；只有真正有价值的、但暂时不热的 live objects 才会被驱逐</strong>。这极大地减少了内存带宽消耗和能量开销。论文数据显示，CE 过程将 <strong>GC 开销平均降低了 8 倍</strong>，并且使 <strong>主存动态能耗降低了 4.1 倍</strong>。</li>
 </ul>
 <p><img alt="" src="../images/654379b33f525bc74eb9e3062b449f664941630600a3a07bc9cd11fbb5710336.jpg" /> <em>Fig. 17: Allocated, evicted, and collected bytes per pad level.</em></p>
-<h3 id="4-eli5">4. 层级内对象分配 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 层级内对象分配<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的内存系统，无论你用的是 C 还是 Java，都建立在一个 <strong>flat address space（扁平地址空间）</strong> 的抽象之上。这个抽象对程序员友好，但对硬件很不友好。</li>
@@ -624,7 +624,7 @@ Hotpads的核心思想是<strong>将内存安全语言的“抽象指针”特�
 <li>这一招的精妙之处在于，它将 <strong>allocation</strong> 和 <strong>promotion</strong> 解耦了。分配是即时的、廉价的；而是否需要持久化（分配主存地址）则推迟到 CE 时根据对象的“存活价值”来决定。这完美契合了 <strong>generational hypothesis（分代假说）</strong> ——大多数对象死得很快，根本不值得为它们付出主存访问的代价。</li>
 </ul>
 <p><img alt="" src="../images/8abad735fb6373cc3647d17c2368a2d8ed6447c44fe1b6220320f46194507192.jpg" /> <em>Fig. 4: Example showing Hotpads’s key features.</em></p>
-<h3 id="5-eli5">5. 规范层级与不变式 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5">5. 规范层级与不变式<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的缓存层次结构（Cache Hierarchy）和垃圾回收（GC）是两套完全独立的系统，它们各自为政，导致了巨大的效率浪费。</li>

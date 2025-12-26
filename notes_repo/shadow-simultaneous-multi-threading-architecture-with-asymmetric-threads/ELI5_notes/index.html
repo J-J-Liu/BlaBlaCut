@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-asymmetric-thread-co-execution-eli5" class="md-nav__link">
+  <a href="#1-asymmetric-thread-co-execution" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 异构线程并发执行 (Asymmetric Thread Co-execution) (ELI5)
+        1. 异构线程并发执行 (Asymmetric Thread Co-execution)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-dynamic-work-stealing-mechanism-eli5" class="md-nav__link">
+  <a href="#2-dynamic-work-stealing-mechanism" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 动态工作窃取机制 (Dynamic Work Stealing Mechanism) (ELI5)
+        2. 动态工作窃取机制 (Dynamic Work Stealing Mechanism)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-lightweight-in-order-threads-eli5" class="md-nav__link">
+  <a href="#3-lightweight-in-order-threads" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 轻量级顺序线程设计 (Lightweight In-Order Threads) (ELI5)
+        3. 轻量级顺序线程设计 (Lightweight In-Order Threads)
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-runtime-configurable-resource-partitioning-eli5" class="md-nav__link">
+  <a href="#4-runtime-configurable-resource-partitioning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 运行时可重构资源分区 (Runtime-Configurable Resource Partitioning) (ELI5)
+        4. 运行时可重构资源分区 (Runtime-Configurable Resource Partitioning)
       
     </span>
   </a>
@@ -490,7 +490,7 @@
 <p>这个设计的绝妙之处在于，它用<strong>极低的硬件开销（仅1%面积/功耗）</strong>，在一个核心内同时具备了深度ILP挖掘能力和宽裕的TLP扩展能力，并且能<strong>无缝、动态地</strong>在两者之间取得最佳平衡，完美适应了现代应用中普遍存在的、不断变化的并行性需求。最终在评测中实现了最高<strong>3.16倍</strong>的加速比，平均提升<strong>1.33倍</strong>。</p>
 <p><img alt="" src="../images/71829aec55b1fa03a28462b26db7f62b428c5f97fbc3eba5a5af98543dd377f3.jpg" /></p>
 <p><em>Figure 9: Impact of adding an InO Thread to an OoO system: An illustrative assembly example.</em></p>
-<h3 id="1-asymmetric-thread-co-execution-eli5">1. 异构线程并发执行 (Asymmetric Thread Co-execution) (ELI5)<a class="headerlink" href="#1-asymmetric-thread-co-execution-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-asymmetric-thread-co-execution">1. 异构线程并发执行 (Asymmetric Thread Co-execution)<a class="headerlink" href="#1-asymmetric-thread-co-execution" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统CPU设计陷入了“非此即彼”的困境。<strong>Out-of-Order </strong>(OoO) 核心擅长挖掘<strong>ILP </strong>(Instruction-Level Parallelism)，但一旦遇到<strong>内存密集型</strong>（memory-bound）任务，比如处理稀疏矩阵（SpMM），就会因为大量的缓存未命中而卡住。它的**Reorder Buffer **(ROB) 和 **Reservation Station **(RS) 会被那些等待内存数据的指令占满，导致整个流水线几乎停滞。</li>
@@ -525,7 +525,7 @@
 <p><img alt="" src="../images/71829aec55b1fa03a28462b26db7f62b428c5f97fbc3eba5a5af98543dd377f3.jpg" /></p>
 <p><em>Figure 9: Impact of adding an InO Thread to an OoO system: An illustrative assembly example.</em></p>
 <p>这种设计的精妙在于，它用<strong>极低的硬件开销</strong>（仅<strong>1%</strong>的面积和功耗增加）就实现了ILP和TLP的<strong>无缝融合</strong>。OoO线程负责攻坚克难，InO线程负责人海战术，两者在同一个核心内各司其职，最大化了硬件资源的利用率。</p>
-<h3 id="2-dynamic-work-stealing-mechanism-eli5">2. 动态工作窃取机制 (Dynamic Work Stealing Mechanism) (ELI5)<a class="headerlink" href="#2-dynamic-work-stealing-mechanism-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-dynamic-work-stealing-mechanism">2. 动态工作窃取机制 (Dynamic Work Stealing Mechanism)<a class="headerlink" href="#2-dynamic-work-stealing-mechanism" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <p>传统 SMT（Simultaneous Multi-Threading）架构在处理 <strong>内存密集型且稀疏性高</strong> 的工作负载时，会陷入一个两难困境：</p>
 <ul>
@@ -563,7 +563,7 @@
 <li><strong>涌现的平衡</strong>：整个系统的最优负载分配不是被“计算”出来的，而是作为所有线程独立、贪婪行为的 <strong>涌现结果 (emergent property)</strong> 自然形成的。</li>
 </ul>
 <p>通过这一招，SHADOW 用最朴素的软件协同，解决了最棘手的硬件资源动态平衡问题，真正做到了 <strong>“随 workload 而动”</strong>。</p>
-<h3 id="3-lightweight-in-order-threads-eli5">3. 轻量级顺序线程设计 (Lightweight In-Order Threads) (ELI5)<a class="headerlink" href="#3-lightweight-in-order-threads-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-lightweight-in-order-threads">3. 轻量级顺序线程设计 (Lightweight In-Order Threads)<a class="headerlink" href="#3-lightweight-in-order-threads" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <p>传统CPU设计陷入了“鱼与熊掌不可兼得”的困境：</p>
 <ul>
@@ -602,7 +602,7 @@
 <p><em>Figure 9: Impact of adding an InO Thread to an OoO system: An illustrative assembly example.</em></p>
 <p><img alt="" src="../images/efec98a9627c2c1ce68ca0956e70191f88ea96a8e568aa5c20a8c3cedac80c1d.jpg" /></p>
 <p><em>Table 4: Hardware overhead of SHADOW</em></p>
-<h3 id="4-runtime-configurable-resource-partitioning-eli5">4. 运行时可重构资源分区 (Runtime-Configurable Resource Partitioning) (ELI5)<a class="headerlink" href="#4-runtime-configurable-resource-partitioning-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-runtime-configurable-resource-partitioning">4. 运行时可重构资源分区 (Runtime-Configurable Resource Partitioning)<a class="headerlink" href="#4-runtime-configurable-resource-partitioning" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统CPU的SMT（Simultaneous Multi-Threading）设计是“静态对称”的，所有硬件线程共享一套固定的资源池（比如ROB、RS、PRF），并且执行模式完全一样（要么全是OoO，要么全是InO）。</li>

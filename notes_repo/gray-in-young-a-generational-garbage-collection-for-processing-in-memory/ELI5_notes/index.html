@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-gray-in-young-giy-eli5" class="md-nav__link">
+  <a href="#1-gray-in-young-giy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Gray-in-Young (GiY) 算法 (ELI5)
+        1. Gray-in-Young (GiY) 算法
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-spmoli-eli5" class="md-nav__link">
+  <a href="#2-spmoli" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. SPM中的对象布局信息（OLI）静态缓存 (ELI5)
+        2. SPM中的对象布局信息（OLI）静态缓存
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 分代式堆内存布局 (ELI5)
+        3. 分代式堆内存布局
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-major-gc-eli5" class="md-nav__link">
+  <a href="#4-major-gc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 分离式Major GC二进制 (ELI5)
+        4. 分离式Major GC二进制
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-minor-gcgc-eli5" class="md-nav__link">
+  <a href="#5-minor-gcgc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 并行Minor GC与混合GC栈 (ELI5)
+        5. 并行Minor GC与混合GC栈
       
     </span>
   </a>
@@ -528,7 +528,7 @@
 </li>
 </ul>
 <p>最终，这套组合拳打下来，成功地将 DRAM 访问减少了 <strong>85.9%</strong>，性能提升了 <strong>46.2%</strong>，并且代码占用仅 <strong>4.3 KB</strong>，完美适配了 DPU 的严苛环境。</p>
-<h3 id="1-gray-in-young-giy-eli5">1. Gray-in-Young (GiY) 算法 (ELI5)<a class="headerlink" href="#1-gray-in-young-giy-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-gray-in-young-giy">1. Gray-in-Young (GiY) 算法<a class="headerlink" href="#1-gray-in-young-giy" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Cheney's copying</strong> 这类垃圾回收算法，在将年轻代（Young Space）对象复制到老年代（Old Space）时，会先把对象拷贝到 DRAM，然后再去扫描这个新拷贝来更新它内部的指针。这在 UPMEM DPU 上是个灾难。</li>
@@ -553,7 +553,7 @@
 </ul>
 <p><img alt="" src="../images/c25e9a01d208db5ce7269fadc7aea15c8a848947ac08ae8e8fc21f41314519a4.jpg" /> <em>Figure 5.Copy with GiY algorithm; white objects in old space are empty shells.</em></p>
 <p><img alt="" src="../images/602b2ea8d0832c9aa93e71dacd776c0cb8b297bb2fbaea83a1e921687ab744e5.jpg" /> <em>Figure 7. GC stack</em></p>
-<h3 id="2-spmoli-eli5">2. SPM中的对象布局信息（OLI）静态缓存 (ELI5)<a class="headerlink" href="#2-spmoli-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-spmoli">2. SPM中的对象布局信息（OLI）静态缓存<a class="headerlink" href="#2-spmoli" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>在 UPMEM DPU 上做 GC 时，一个隐藏的性能杀手是 <strong>对象扫描（object scanning）</strong>。当 GC 遍历一个对象以找出其中的指针时，它必须知道这个对象的“布局”——哪些字段是指针，哪些不是。</li>
@@ -579,7 +579,7 @@
 <ul>
 <li>这个设计还有一个精妙的细节：当对象从 SPM <strong>晋升（promote）</strong> 到 DRAM 的老年代时，GC 会将其头部的 <strong>本地类索引替换回全局类索引</strong>。这保证了老年代对象的通用性，使其能被任何后续的内核或 Major GC 正确处理，完美地兼顾了性能与通用性。</li>
 </ul>
-<h3 id="3-eli5">3. 分代式堆内存布局 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 分代式堆内存布局<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的垃圾回收（GC）设计假设内存是统一的，但在 <strong>UPMEM PIM</strong> 这类新型硬件上，这个假设完全崩塌了。DPU 拥有两块截然不同的内存：<strong>64KB 的 SPM</strong>（单周期访问）和 <strong>64MB 的 DRAM</strong>（通过 <strong>DMA</strong> 访问，延迟高达 <strong>70+ 周期</strong>）。</li>
@@ -608,7 +608,7 @@
 </ul>
 <p><img alt="" src="../images/062f75c491cfdf611fad3a35c71acec74b556bdb356b1a86622024e80f4605f3.jpg" /> <em>Figure 3. Overview</em></p>
 <p>这个设计的最终效果是惊人的：通过将热点数据和计算密集型操作限制在 SPM 内，<strong>DRAM 访问次数最高减少了 85.9%</strong>，从而带来了 <strong>46.2%</strong> 的性能提升。这完美地诠释了“<strong>让计算靠近数据</strong>”这一 PIM 核心理念在内存管理层面的具体实践。</p>
-<h3 id="4-major-gc-eli5">4. 分离式Major GC二进制 (ELI5)<a class="headerlink" href="#4-major-gc-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-major-gc">4. 分离式Major GC二进制<a class="headerlink" href="#4-major-gc" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>UPMEM DPU 的 <strong>指令内存只有 24KB</strong>，这是一个极其严苛的硬性限制。</li>
@@ -646,7 +646,7 @@
 <li>这一招的精妙之处在于，它利用了 <strong>Host CPU 作为协调者</strong> 的角色，将 DPU 有限的本地资源压力转移了出去。论文中的评估也证明了这一点：加载 Major GC 二进制的开销（<strong>11毫秒</strong>）仅占其总执行时间的 <strong>1.4%</strong>，代价极小，收益巨大。最终，为 Kernel 本身和 Minor GC 留下了宝贵的 <strong>4.3KB</strong> 空间，这在 24KB 的总预算下是决定性的。</li>
 </ul>
 <p><img alt="" src="../images/c7c5f9cad3b323e82942af66d3a9570e758df35a5c03cf7ab6280644c45e869b.jpg" /> <em>Figure 15. Binary size.</em></p>
-<h3 id="5-minor-gcgc-eli5">5. 并行Minor GC与混合GC栈 (ELI5)<a class="headerlink" href="#5-minor-gcgc-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-minor-gcgc">5. 并行Minor GC与混合GC栈<a class="headerlink" href="#5-minor-gcgc" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在DPU上做Minor GC，最大的难受点在于<strong>硬件特性与传统GC模型的错配</strong>。DPU有<strong>11个硬件线程</strong>，但它的Pipeline要求必须有这么多活跃线程才能吃饱。如果GC是单线程的，那Mutator（用户程序）在GC期间就只能干瞪眼，浪费了巨大的并行潜力。</li>

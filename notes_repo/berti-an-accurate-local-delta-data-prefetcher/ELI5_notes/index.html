@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-local-delta-learning-eli5" class="md-nav__link">
+  <a href="#1-local-delta-learning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Local-Delta Learning (ELI5)
+        1. Local-Delta Learning
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-timely-delta-detection-eli5" class="md-nav__link">
+  <a href="#2-timely-delta-detection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Timely Delta Detection (ELI5)
+        2. Timely Delta Detection
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-coverage-based-prefetch-filtering-eli5" class="md-nav__link">
+  <a href="#3-coverage-based-prefetch-filtering" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Coverage-Based Prefetch Filtering (ELI5)
+        3. Coverage-Based Prefetch Filtering
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-multi-level-prefetch-orchestration-eli5" class="md-nav__link">
+  <a href="#4-multi-level-prefetch-orchestration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Multi-Level Prefetch Orchestration (ELI5)
+        4. Multi-Level Prefetch Orchestration
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-efficient-hardware-implementation-eli5" class="md-nav__link">
+  <a href="#5-efficient-hardware-implementation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Efficient Hardware Implementation (ELI5)
+        5. Efficient Hardware Implementation
       
     </span>
   </a>
@@ -499,7 +499,7 @@
 </li>
 </ul>
 <p>最终，Berti 用仅 <strong>2.55 KB</strong> 的极小硬件开销，实现了性能和能效的显著提升，证明了在 L1D 层面，精细化、上下文感知的预取策略远比粗放的全局策略更为有效。</p>
-<h3 id="1-local-delta-learning-eli5">1. Local-Delta Learning (ELI5)<a class="headerlink" href="#1-local-delta-learning-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-local-delta-learning">1. Local-Delta Learning<a class="headerlink" href="#1-local-delta-learning" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>global-delta prefetcher</strong>（如 BOP、MLOP）把所有内存访问混在一起找规律，这在现实程序里非常“难受”。因为一个程序里成千上万个指令（IP）各自有自己独立的访问模式，强行用一个“全局最优”的 delta 去预测所有访问，结果就是<strong>顾此失彼</strong>。</li>
@@ -560,7 +560,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="2-timely-delta-detection-eli5">2. Timely Delta Detection (ELI5)<a class="headerlink" href="#2-timely-delta-detection-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-timely-delta-detection">2. Timely Delta Detection<a class="headerlink" href="#2-timely-delta-detection" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>delta prefetcher</strong>（比如 BOP、MLOP）最大的问题在于，它们只关心“<strong>有没有用</strong>”，而不关心“<strong>来不来得及</strong>”。</li>
@@ -584,7 +584,7 @@
 </ul>
 <p><img alt="" src="../images/e999d4b8aa7915ab79661a02414e3960278f8ae39e8dbb35a6bae02a84971b93.jpg" /> <em>Figure 4. Learning timely deltas.</em></p>
 <p>这张图完美诠释了这个过程。当访问地址 12 时，系统测得其 fetch latency 为 5 个周期。那么，一个 timely 的预取请求必须在时间点 <code>T(12) - 5</code> 之前发出。回溯历史，只有地址 2 的访问时间满足这个条件，因此 delta <code>+10</code> (12-2) 被标记为 <strong>timely delta</strong>。而地址 7 和 10 的访问都太晚了，它们产生的 delta (<code>+5</code>, <code>+2</code>) 即使被用来预取，也会迟到，所以被直接忽略。这就是 Berti 实现 <strong>近 90% 准确率</strong> 的核心秘密。</p>
-<h3 id="3-coverage-based-prefetch-filtering-eli5">3. Coverage-Based Prefetch Filtering (ELI5)<a class="headerlink" href="#3-coverage-based-prefetch-filtering-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-coverage-based-prefetch-filtering">3. Coverage-Based Prefetch Filtering<a class="headerlink" href="#3-coverage-based-prefetch-filtering" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 delta prefetcher（比如 <strong>BOP</strong> 和 <strong>MLOP</strong>）最大的问题在于“<strong>盲目自信</strong>”。它们找到一个全局最优的 offset 或 delta，就不管三七二十一地到处用。这在访问模式简单、统一的程序里还好，但在现实世界中，尤其是像 <strong>GAP</strong> 这类图计算负载里，不同指令（IP）的访问模式千差万别。</li>
@@ -633,7 +633,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="4-multi-level-prefetch-orchestration-eli5">4. Multi-Level Prefetch Orchestration (ELI5)<a class="headerlink" href="#4-multi-level-prefetch-orchestration-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-multi-level-prefetch-orchestration">4. Multi-Level Prefetch Orchestration<a class="headerlink" href="#4-multi-level-prefetch-orchestration" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的硬件预取器（prefetcher）往往是个“愣头青”：一旦它觉得某个模式靠谱，就会一股脑地把数据往最顶层的 <strong>L1D cache</strong> 里塞。这在理想情况下很好，但在现实世界中会引发两个严重问题：<ul>
@@ -675,7 +675,7 @@
 <li><strong>极高的准确率</strong>：通过高水位线过滤，只有最有把握的请求才能进入 L1D，避免了污染。如 Figure 10 所示，Berti 的准确率高达 <strong>87.2%</strong>，远超 IPCP (50.6%) 和 MLOP (62.4%)。</li>
 <li><strong>显著的节能效果</strong>：减少了无谓的数据搬运，使得内存层次结构的动态能耗大幅降低。如 Figure 15 所示，相比 IPCP，Berti 在 SPEC CPU2017 和 GAP 上分别节省了 <strong>21.1%</strong> 和 <strong>72.6%</strong> 的动态能耗。</li>
 </ul>
-<h3 id="5-efficient-hardware-implementation-eli5">5. Efficient Hardware Implementation (ELI5)<a class="headerlink" href="#5-efficient-hardware-implementation-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-efficient-hardware-implementation">5. Efficient Hardware Implementation<a class="headerlink" href="#5-efficient-hardware-implementation" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>L1D prefetcher</strong> 设计面临一个经典困境：<strong>存储开销</strong>（storage overhead）和<strong>性能收益</strong>之间难以平衡。L1D 空间极其宝贵，任何硬件结构都必须非常精简。</li>

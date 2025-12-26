@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-zippads-eli5" class="md-nav__link">
+  <a href="#1-zippads" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Zippads (ELI5)
+        1. Zippads
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-coco-cross-object-compression-eli5" class="md-nav__link">
+  <a href="#2-coco-cross-object-compression" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. COCO (Cross-Object COmpression) (ELI5)
+        2. COCO (Cross-Object COmpression)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-hotpads-eli5" class="md-nav__link">
+  <a href="#3-hotpads" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Hotpads 集成 (ELI5)
+        3. Hotpads 集成
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 指针内嵌压缩元数据 (ELI5)
+        4. 指针内嵌压缩元数据
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-eli5" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 大对象分块处理 (ELI5)
+        5. 大对象分块处理
       
     </span>
   </a>
@@ -510,7 +510,7 @@
 <p><img alt="" src="../images/e728c1717ce55fe59ef92c8f9221b98257136721f2d7d2dc5103612d97b29a60.jpg" /> <em>Figure 3. Different compression techniques applied to BTree.</em></p>
 <p>上图清晰地展示了这种思路的威力。传统LCP方案（b）因为对齐和固定块限制，压缩后仍有大量空白。而Zippads（c）将对象紧凑排列，并直接通过指针访问。COCO（d）更进一步，通过共享基对象，将内存占用压得更低。</p>
 <p>最终，这套组合拳使得系统在混合负载下，相比最先进的传统压缩方案，实现了<strong>1.63倍</strong>的平均压缩率提升，<strong>56%</strong> 的内存流量降低，并带来了<strong>17%</strong> 的性能提升。</p>
-<h3 id="1-zippads-eli5">1. Zippads (ELI5)<a class="headerlink" href="#1-zippads-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-zippads">1. Zippads<a class="headerlink" href="#1-zippads" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的内存压缩（比如 <strong>LCP</strong> 或 <strong>BDI</strong>）都是以 <strong>cache line</strong>（通常是64B）为单位进行的。这在处理科学计算这类<strong>数组密集型</strong>（array-dominated）程序时效果很好，因为数组元素类型相同、数值相近，一个 cache line 内部冗余度高。</li>
@@ -538,7 +538,7 @@
 </li>
 <li>这个设计使得 Zippads 能够实现<strong>零内部碎片</strong>的紧凑存储（见图 <img alt="" src="../images/e728c1717ce55fe59ef92c8f9221b98257136721f2d7d2dc5103612d97b29a60.jpg" /> <em>Figure 3. Different compression techniques applied to BTree.</em> 中的 c 部分），从而在对象密集型应用上获得了远超传统方案的压缩比（平均 <strong>1.63倍</strong>）。</li>
 </ul>
-<h3 id="2-coco-cross-object-compression-eli5">2. COCO (Cross-Object COmpression) (ELI5)<a class="headerlink" href="#2-coco-cross-object-compression-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-coco-cross-object-compression">2. COCO (Cross-Object COmpression)<a class="headerlink" href="#2-coco-cross-object-compression" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的内存压缩（如 <strong>BDI</strong>, <strong>FPC</strong>）都是以 <strong>cache line</strong> 为单位进行的。这在处理规整的数组（Array）时效果很好，因为一个 cache line 里的数据往往类型相同、数值相近。</li>
@@ -563,7 +563,7 @@
 </li>
 <li>为了高效实现，COCO 还设计了一个小型的 <strong>base object cache</strong>（8KB），用来缓存最常用的基准对象，避免每次压缩/解压都要去主存读取基准，从而保证了低延迟。<img alt="" src="../images/7199ca0abce3881253e530119b292aa1db859ae978561cd45146200105760527.jpg" /> <em>Figure 13. Example COCO-compressed object.</em> 展示了这个压缩格式的直观例子。</li>
 </ul>
-<h3 id="3-hotpads-eli5">3. Hotpads 集成 (ELI5)<a class="headerlink" href="#3-hotpads-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-hotpads">3. Hotpads 集成<a class="headerlink" href="#3-hotpads" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的内存压缩（比如 LCP、BDI）都是以 <strong>cache line</strong> 为单位进行的。这在处理科学计算这类 <strong>array-dominated</strong> 的程序时效果很好，因为数据是规整、同质的。</li>
@@ -611,7 +611,7 @@
 <ul>
 <li>上图清晰地展示了 Hotpads 的工作流程。Zippads 的压缩逻辑就嵌入在这个流程中：在步骤 <code>4</code> 的 CE 过程中，当对象 A 和 D 被决定要驱逐到 L2 时，Zippads 会对它们进行压缩，并在步骤 <code>5</code> 中将指针直接重写为指向 L2 中的 <strong>压缩版本</strong>。整个过程对软件完全透明，且没有额外的地址翻译开销。</li>
 </ul>
-<h3 id="4-eli5">4. 指针内嵌压缩元数据 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 指针内嵌压缩元数据<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的压缩内存系统（比如 LCP、VSC）面临一个根本性的两难困境：硬件需要知道<strong>压缩数据的大小</strong>和<strong>用的什么算法</strong>才能正确解压，但这些元数据放哪里？</li>
@@ -633,7 +633,7 @@
 </li>
 <li>这个改动看似微小，却完成了关键的逻辑转换：<strong>将“先查元数据再取数据”的串行操作，变成了“取指针即得元数据”的一步到位操作</strong>。因为所有内存访问都始于一个指针，所以硬件在解引用指针的瞬间，就已经拥有了执行解压所需的全部上下文信息，彻底绕开了传统方案的性能瓶颈。</li>
 </ul>
-<h3 id="5-eli5">5. 大对象分块处理 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5">5. 大对象分块处理<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的压缩内存系统以 <strong>cache line</strong>（通常是64B）为单位进行压缩。这在处理小对象时问题不大，但当程序分配一个<strong>大对象</strong>（比如1KB的数组或复杂结构体）时，这套机制就“很难受”了。</li>

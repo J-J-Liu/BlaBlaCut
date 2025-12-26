@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-profile-guided-prefetch-distance-calculation-eli5" class="md-nav__link">
+  <a href="#1-profile-guided-prefetch-distance-calculation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Profile-Guided Prefetch Distance Calculation (ELI5)
+        1. Profile-Guided Prefetch Distance Calculation
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-dynamic-prefetch-injection-site-selection-eli5" class="md-nav__link">
+  <a href="#2-dynamic-prefetch-injection-site-selection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Dynamic Prefetch Injection Site Selection (ELI5)
+        2. Dynamic Prefetch Injection Site Selection
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-llvm-compiler-pass-for-profile-guided-prefetching-eli5" class="md-nav__link">
+  <a href="#3-llvm-compiler-pass-for-profile-guided-prefetching" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. LLVM Compiler Pass for Profile-Guided Prefetching (ELI5)
+        3. LLVM Compiler Pass for Profile-Guided Prefetching
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-automated-delinquent-load-profiling-methodology-eli5" class="md-nav__link">
+  <a href="#4-automated-delinquent-load-profiling-methodology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Automated Delinquent Load Profiling Methodology (ELI5)
+        4. Automated Delinquent Load Profiling Methodology
       
     </span>
   </a>
@@ -488,7 +488,7 @@
 <p><em>Figure 6. Execution time speedup provided by APT-GET over the non-prefetching baseline: APT-GET achieves 1.30× average speedup on average, compared to the 1.04× speedup provided by the state of the art (Ainsworth &amp; Jones).</em></p>
 <p><img alt="" src="../images/95616f7d281dd9c3f57d85acc5a821fc05dc64b0d6d12103f821a3cb567394c0.jpg" /></p>
 <p><em>Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.</em></p>
-<h3 id="1-profile-guided-prefetch-distance-calculation-eli5">1. Profile-Guided Prefetch Distance Calculation (ELI5)<a class="headerlink" href="#1-profile-guided-prefetch-distance-calculation-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-profile-guided-prefetch-distance-calculation">1. Profile-Guided Prefetch Distance Calculation<a class="headerlink" href="#1-profile-guided-prefetch-distance-calculation" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的软件预取（Software Prefetching）最大的问题在于“静态”。它通常由编译器在编译时，基于代码结构和一些启发式规则，硬编码一个固定的 <strong>prefetch-distance</strong>（预取距离）。</li>
@@ -517,7 +517,7 @@
 <li>通过这两个关键数据点，APT-GET就能算出需要隐藏的**内存延迟 **(MC_latency = 650 - 80 = 570 cycles)。再除以理想情况下每次迭代的时间 (IC_latency = 80 cycles)，就得到了最优的预取距离：<strong>prefetch-distance ≈ MC_latency / IC_latency = 570 / 80 ≈ 7</strong>。</li>
 <li>这个逻辑转换极其精妙：它绕开了无法预测的绝对执行时间，转而通过分析<strong>执行时间的分布特征</strong>，直接提取出了进行有效预取所必需的相对时间关系。</li>
 </ul>
-<h3 id="2-dynamic-prefetch-injection-site-selection-eli5">2. Dynamic Prefetch Injection Site Selection (ELI5)<a class="headerlink" href="#2-dynamic-prefetch-injection-site-selection-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-dynamic-prefetch-injection-site-selection">2. Dynamic Prefetch Injection Site Selection<a class="headerlink" href="#2-dynamic-prefetch-injection-site-selection" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的软件预取（如 Ainsworth &amp; Jones 的工作）有个“死脑筋”：它总是把 prefetch 指令塞到最内层循环里。这在内层循环跑很多次（high trip count）时没问题，因为预取有足够的时间生效。</li>
@@ -545,7 +545,7 @@
 <p><em>Figure 2. Performance impact of prefetch-distance for indirect memory access kernel with low work function complexity and varying inner loop trip count</em></p>
 <p><img alt="" src="../images/95616f7d281dd9c3f57d85acc5a821fc05dc64b0d6d12103f821a3cb567394c0.jpg" /></p>
 <p><em>Figure 10. Speedup of injecting prefetches inside the outer or inner loops over non-prefetching baseline: For most of the applications, injecting prefeches inside the outer loop achieves 1.20× overall speedup in average, while injecting prefetches inside the inner loop improves speedup for DFS up to 1.11× over non-prefethcing baseline.</em></p>
-<h3 id="3-llvm-compiler-pass-for-profile-guided-prefetching-eli5">3. LLVM Compiler Pass for Profile-Guided Prefetching (ELI5)<a class="headerlink" href="#3-llvm-compiler-pass-for-profile-guided-prefetching-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-llvm-compiler-pass-for-profile-guided-prefetching">3. LLVM Compiler Pass for Profile-Guided Prefetching<a class="headerlink" href="#3-llvm-compiler-pass-for-profile-guided-prefetching" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>compiler-based software prefetching</strong>（比如 Ainsworth &amp; Jones 的工作）是纯静态的。它在编译时分析代码，决定在哪里插 <code>prefetch</code> 指令以及预取多远（<strong>prefetch-distance</strong>）。</li>
@@ -584,7 +584,7 @@
 <p>这种设计的精妙之处在于，它将<strong>动态 profiling 的高精度</strong>与<strong>静态编译的低开销</strong>完美结合。Profiling 只需运行一次，开销极小（\&lt;20秒），而生成的优化代码在后续所有运行中都能持续受益，最终在真实应用上取得了 <strong>1.30x</strong> 的平均加速比，显著优于静态方法的 <strong>1.04x</strong>。</p>
 <p><img alt="" src="../images/0844beaacc88f3137e7802c9c98e5d10be26a0c31589645da5b8ff459909628f.jpg" /></p>
 <p><em>Figure 6. Execution time speedup provided by APT-GET over the non-prefetching baseline: APT-GET achieves 1.30× average speedup on average, compared to the 1.04× speedup provided by the state of the art (Ainsworth &amp; Jones).</em></p>
-<h3 id="4-automated-delinquent-load-profiling-methodology-eli5">4. Automated Delinquent Load Profiling Methodology (ELI5)<a class="headerlink" href="#4-automated-delinquent-load-profiling-methodology-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-automated-delinquent-load-profiling-methodology">4. Automated Delinquent Load Profiling Methodology<a class="headerlink" href="#4-automated-delinquent-load-profiling-methodology" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的软件预取（Software Prefetching）最大的问题不是“不知道要预取什么”，而是“不知道什么时候预取”。编译器在静态分析时，面对一个循环里的间接内存访问（如 <code>T[BO[e]+BI[i]]</code>），它能准确地算出未来要访问的地址（即生成正确的 <strong>prefetch-slice</strong>），但它完全不知道这个循环跑一圈到底需要多长时间。</li>

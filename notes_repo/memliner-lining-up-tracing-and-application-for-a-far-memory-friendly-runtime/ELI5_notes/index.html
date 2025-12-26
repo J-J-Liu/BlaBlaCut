@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-gc-eli5" class="md-nav__link">
+  <a href="#1-gc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 基于读写屏障的应用-GC协调机制 (ELI5)
+        1. 基于读写屏障的应用-GC协调机制
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-epoch-eli5" class="md-nav__link">
+  <a href="#2-epoch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 基于Epoch的时间戳指针编码 (ELI5)
+        2. 基于Epoch的时间戳指针编码
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 优先级驱动的混合追踪算法 (ELI5)
+        3. 优先级驱动的混合追踪算法
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-max_dl-eli5" class="md-nav__link">
+  <a href="#4-max_dl" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 自适应延迟限制(MAX_DL)调优 (ELI5)
+        4. 自适应延迟限制(MAX_DL)调优
       
     </span>
   </a>
@@ -489,7 +489,7 @@
 <li><strong>第三步：智能处理冷数据</strong>。对于那些不在 PQ 里的、应用很久没碰过的“冷”对象，MemLiner 不会让 GC 盲目地去访问它们（因为这会触发不必要的远程交换）。它通过一个精巧的 <strong>epoch-based timestamp</strong> 机制（把时间戳编码在对象指针的空闲位里）来估算一个对象是否还在本地内存。如果估计不在，就暂时跳过，等以后再说。并且，这个“推迟”的次数是 <strong>adaptive</strong>（自适应）的：当堆内存快耗尽时，就不再推迟，确保 GC 能及时完成。</li>
 </ul>
 <p>通过这三步，MemLiner 成功地将 GC 的内存访问路径“掰弯”，使其与应用程序的路径 <strong>lining up</strong>（对齐）。这样一来，两者的 <strong>working set</strong>（工作集）高度重叠，极大地减少了互相驱逐页面的情况，同时也向底层的预取器暴露出了清晰、可预测的访问模式，从而一举解决了 far-memory 系统在托管语言环境下的两大痛点。</p>
-<h3 id="1-gc-eli5">1. 基于读写屏障的应用-GC协调机制 (ELI5)<a class="headerlink" href="#1-gc-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-gc">1. 基于读写屏障的应用-GC协调机制<a class="headerlink" href="#1-gc" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>在远内存（Far-Memory）系统中，应用线程和GC线程的内存访问模式是<strong>完全脱节</strong>的。应用线程按业务逻辑顺序访问对象，而GC线程则从根对象开始做图遍历。</li>
@@ -516,7 +516,7 @@
 </li>
 <li>这个设计的精妙之处在于，它利用了<strong>应用线程自身的行为作为GC工作的最高优先级信号</strong>，将原本割裂的两个工作流无缝地编织在一起，从根本上解决了访问模式冲突的问题。<img alt="" src="../images/4e4aed0788310a52867da893250402bec646cd5652c4cc83f043745200e66c93.jpg" /> <em>Figure 1: Our main idea: the working sets of GC threads, in blue, and application threads, in red, during a time window (a) without or (b) with the access alignment from MemLiner.</em></li>
 </ul>
-<h3 id="2-epoch-eli5">2. 基于Epoch的时间戳指针编码 (ELI5)<a class="headerlink" href="#2-epoch-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-epoch">2. 基于Epoch的时间戳指针编码<a class="headerlink" href="#2-epoch" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在远内存（Far-Memory）系统中，应用线程和GC线程的内存访问模式是“两张皮”。应用可能在顺序读数据，而GC却在随机遍历对象图。这导致OS的<strong>prefetcher</strong>（如Leap）完全失效，因为它看到的是一个混乱的、毫无规律的访问流。</li>
@@ -549,7 +549,7 @@
 </li>
 <li>这一招的精妙之处在于，它用<strong>极低的开销</strong>（只需在barrier里加几条指令更新指针，以及内核里维护一个简单的计数器）就为GC提供了一个<strong>关于对象物理位置的、足够好的概率性估计</strong>，从而让GC能够智能地“趋利避害”，极大地减少了不必要的page fault和swap操作。</li>
 </ul>
-<h3 id="3-eli5">3. 优先级驱动的混合追踪算法 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 优先级驱动的混合追踪算法<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在远内存（Far-Memory）系统中，应用线程和GC线程的内存访问模式是<strong>完全脱节</strong>的。应用可能在顺序读一个大数组，而GC却在随机地遍历整个堆的对象图。</li>
@@ -594,7 +594,7 @@
 <li><img alt="" src="../images/d2882792f33c8dfaa8acedefd832e654df60873e6853b12647417b91697b7598.jpg" /> <em>Figure 4: Classification of reachable objects in the heap: red objects are being accessed by the application and shaded objects are what MemLiner intends to trace.</em></li>
 <li><img alt="" src="../images/883619a118620e67392334bcd7ce676e06a896e981ccd874574024456a4ed609.jpg" /></li>
 </ul>
-<h3 id="4-max_dl-eli5">4. 自适应延迟限制(MAX_DL)调优 (ELI5)<a class="headerlink" href="#4-max_dl-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-max_dl">4. 自适应延迟限制(MAX_DL)调优<a class="headerlink" href="#4-max_dl" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的垃圾回收（GC）在远内存（far-memory）环境下会陷入一个两难困境：如果严格按照应用的访问路径来追踪对象，虽然能减少本地缓存干扰、提升预取效率，但可能会<strong>无限期推迟</strong>对某些冷数据的扫描。一旦堆内存耗尽而GC还没完成标记，就只能触发代价高昂的 <strong>Full GC</strong>（Stop-The-World），导致应用长时间停顿。</li>

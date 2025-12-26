@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-hardware-assisted-out-of-place-oop-update-eli5" class="md-nav__link">
+  <a href="#1-hardware-assisted-out-of-place-oop-update" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Hardware-Assisted Out-of-Place (OOP) Update (ELI5)
+        1. Hardware-Assisted Out-of-Place (OOP) Update
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-lightweight-indirection-layer-in-memory-controller-eli5" class="md-nav__link">
+  <a href="#2-lightweight-indirection-layer-in-memory-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Lightweight Indirection Layer in Memory Controller (ELI5)
+        2. Lightweight Indirection Layer in Memory Controller
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-data-packing-and-memory-slice-organization-eli5" class="md-nav__link">
+  <a href="#3-data-packing-and-memory-slice-organization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Data Packing and Memory Slice Organization (ELI5)
+        3. Data Packing and Memory Slice Organization
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-adaptive-garbage-collection-with-data-coalescing-eli5" class="md-nav__link">
+  <a href="#4-adaptive-garbage-collection-with-data-coalescing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Adaptive Garbage Collection with Data Coalescing (ELI5)
+        4. Adaptive Garbage Collection with Data Coalescing
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-parallel-crash-recovery-mechanism-eli5" class="md-nav__link">
+  <a href="#5-parallel-crash-recovery-mechanism" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Parallel Crash Recovery Mechanism (ELI5)
+        5. Parallel Crash Recovery Mechanism
       
     </span>
   </a>
@@ -489,7 +489,7 @@
 - <strong>消除了持久化排序</strong>：因为更新是“异地”的，新老数据互不影响，所以CPU可以像操作普通内存一样乱序执行store指令，完全不需要软件插入fence和flush来保证顺序，极大地降低了关键路径延迟。</p>
 <p><img alt="" src="../images/6c5b235d6fb4853971c26e030dc24e02b9e11d457a5d1c1c668a04ed0b4d0933.jpg" /> <em>Fig. 1: Illustration of different crash-consistency techniques. (a) Logging technique requires that both logs and data must be persisted, which incurs double writes; (b) Shadow paging maintains two copies of data, it suffers from copy-on-write overhead; (c) Log-structured NVM alleviates the double writes, but it suffers from significant overhead of index lookup; (d) Our hardware-assisted out-of-place update reduces the write amplification significantly, while providing efficient data accesses.</em></p>
 <p>最终，HOOP通过这套硬件辅助的“草稿区”模式，在几乎不增加关键路径负担的情况下，将写放大降到了接近理想水平（无持久化开销的系统），实现了<strong>高性能</strong>与<strong>强一致性</strong>的统一。</p>
-<h3 id="1-hardware-assisted-out-of-place-oop-update-eli5">1. Hardware-Assisted Out-of-Place (OOP) Update (ELI5)<a class="headerlink" href="#1-hardware-assisted-out-of-place-oop-update-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-hardware-assisted-out-of-place-oop-update">1. Hardware-Assisted Out-of-Place (OOP) Update<a class="headerlink" href="#1-hardware-assisted-out-of-place-oop-update" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong>
 - 传统的 <strong>NVM</strong>（非易失性内存）持久化方案，比如 <strong>logging</strong>（日志），为了保证崩溃一致性，必须先写一份日志再改数据。这导致了 <strong>双倍写入</strong>（write amplification），不仅拖慢了性能，还加速了 NVM 这种有写入寿命限制的硬件的老化。
 - 另一种方案 <strong>shadow paging</strong>（影子分页）虽然避免了日志，但它采用 <strong>copy-on-write</strong>（写时复制）机制。哪怕你只改了一个字节，它也可能要复制一整页（或缓存行），同样造成了巨大的、不必要的写入开销。
@@ -505,7 +505,7 @@
   - <strong>垃圾回收</strong>（GC）：为了避免 OOP region 被占满，HOOP 在后台运行一个智能的 <strong>垃圾回收</strong>（garbage collection）进程。它会周期性地扫描 OOP region，利用 <strong>data coalescing</strong>（数据合并）技术，把多次更新到同一个地址的数据合并成一次写操作，再将其“搬”回原地址（home region），从而释放 OOP 空间并进一步减少写入放大。
 <img alt="" src="../images/6c5b235d6fb4853971c26e030dc24e02b9e11d457a5d1c1c668a04ed0b4d0933.jpg" /> <em>Fig. 1: Illustration of different crash-consistency techniques. (a) Logging technique requires that both logs and data must be persisted, which incurs double writes; (b) Shadow paging maintains two copies of data, it suffers from copy-on-write overhead; (c) Log-structured NVM alleviates the double writes, but it suffers from significant overhead of index lookup; (d) Our hardware-assisted out-of-place update reduces the write amplification significantly, while providing efficient data accesses.</em>
 <img alt="" src="../images/2462e7cd429df53d42e80a9b3289cc106eb25414496d10077e336f392cc9c839.jpg" /> <em>Fig. 2: Hardware-assisted out-of-place update with HOOP. HOOP performs out-of-place writes and reduces write traffic with data packing and coalescing. To reduce the storage overhead, HOOP adaptively migrates data in the out-of-place (OOP) region back to the home region with optimized GC.</em></p>
-<h3 id="2-lightweight-indirection-layer-in-memory-controller-eli5">2. Lightweight Indirection Layer in Memory Controller (ELI5)<a class="headerlink" href="#2-lightweight-indirection-layer-in-memory-controller-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-lightweight-indirection-layer-in-memory-controller">2. Lightweight Indirection Layer in Memory Controller<a class="headerlink" href="#2-lightweight-indirection-layer-in-memory-controller" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong>
 - 传统的 <strong>NVM</strong>（非易失性内存）持久化方案，比如 <strong>logging</strong>（日志）或 <strong>shadow paging</strong>（影子分页），都有一个“顾头不顾尾”的毛病。
 - <strong>Logging</strong> 需要为每次写操作额外写一份日志，这直接导致 <strong>2倍甚至更高的写放大 </strong>(write amplification)，不仅拖慢了速度，还严重损耗 NVM 的寿命。
@@ -524,7 +524,7 @@
     - <strong>对于 Load </strong>(读)：当发生缓存未命中时，Memory Controller 会先用“家地址”去查询这个映射表。如果命中，就从 OOP region 读取最新数据；如果没命中，就直接从“家地址”读取。
 - 这个设计的精妙之处在于，它<strong>完全解耦了写操作的持久化顺序</strong>。因为旧数据始终安全地待在“家”里，而新数据被原子地写入OOP区域，所以系统天然就是崩溃一致的，无需任何内存屏障。同时，这个映射表只跟踪那些<strong>尚未被垃圾回收</strong>（GC）的数据，因此它的规模可以保持得很小（论文中提到默认2MB），查询开销极低，从而实现了<strong>透明且低开销</strong>的地址翻译。
 <img alt="" src="../images/16a8d7e212c2aa5b6dda87381989bbb1dbc37c5b63a8d9168d064340e3512073.jpg" /> <em>Fig. 4: Transaction execution of different approaches. Both undo and redo logging deliver lengthy transaction execution times due to log writes. Shadow paging has to copy additional data before performing in-place updates. HOOP achieves fast transaction execution with out-of-place updates.</em></p>
-<h3 id="3-data-packing-and-memory-slice-organization-eli5">3. Data Packing and Memory Slice Organization (ELI5)<a class="headerlink" href="#3-data-packing-and-memory-slice-organization-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-data-packing-and-memory-slice-organization">3. Data Packing and Memory Slice Organization<a class="headerlink" href="#3-data-packing-and-memory-slice-organization" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong>
 - 传统的 NVM 持久化方案，比如 logging，有个很“难受”的地方：哪怕你只改了一个 <strong>8-byte</strong> 的整数，它也得把整个 <strong>64-byte</strong> 的 cache line 写一遍。这在写密集型应用里简直是灾难，不仅浪费宝贵的 <strong>NVM 写带宽</strong>，还加速了硬件老化。
 - 更糟糕的是，这些零散的小写操作是 <strong>随机的</strong>，无法充分利用 NVM 顺序写快的优势。结果就是，持久化成了性能瓶颈，系统大部分时间都在等数据落盘。</p>
@@ -539,7 +539,7 @@
 - 这一招的核心扭转在于，它把 <strong>细粒度、随机的写请求</strong>，通过硬件缓冲和智能打包，转化成了 <strong>粗粒度、顺序的写操作</strong>。这从根本上解决了传统方案中 <strong>写放大</strong> 和 <strong>带宽浪费</strong> 的痛点。</p>
 <p><img alt="" src="../images/c3438a9bbf9c81f1785f54228b2cf11eb233c85613a106863e9a578698d8dac6.jpg" /> <em>Fig. 3: Data packing in HOOP.</em>
 <img alt="" src="../images/7a7de45551dbcf6c157314ae9ea4c874a53cec7b38e1a44241a763a6fc0f3109.jpg" /> <em>Fig. 5: Layout of the OOP region. HOOP organizes the OOP region in a log-structured manner. Each OOP block consists of memory slices with a fixed size. There are two types of memory slices: data memory slice and address memory slice.</em></p>
-<h3 id="4-adaptive-garbage-collection-with-data-coalescing-eli5">4. Adaptive Garbage Collection with Data Coalescing (ELI5)<a class="headerlink" href="#4-adaptive-garbage-collection-with-data-coalescing-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-adaptive-garbage-collection-with-data-coalescing">4. Adaptive Garbage Collection with Data Coalescing<a class="headerlink" href="#4-adaptive-garbage-collection-with-data-coalescing" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong>
 - 传统的 <strong>Out-of-Place (OOP)</strong> 更新（比如 log-structured 内存）虽然能保证原子性，但会带来一个致命问题：<strong>写放大 (Write Amplification)</strong>。
 - 想象一下，你对同一个数据项 <code>X</code> 进行了三次更新：<code>X=1</code>, <code>X=2</code>, <code>X=3</code>。在 OOP 方案里，这三个版本都会被依次写入日志区域。但最终，只有 <code>X=3</code> 是有效的，前两个写操作完全是<strong>浪费</strong>。
@@ -563,7 +563,7 @@
     - <strong>第四步</strong>：遍历完所有相关日志后，hash map 里剩下的就是每个地址的<strong>最新、有效</strong>的值。此时，GC 只需要将这些值<strong>一次性写回</strong>它们在 Home Region 的原始位置即可。
 - 这个 <strong>Data Coalescing</strong>（数据合并）的过程，通过一次性的反向扫描，就自动过滤掉了所有中间的、无效的更新，将多次写操作<strong>合并</strong>为一次最终写操作，从而将 <strong>write amplification 降到了最低</strong>。<img alt="" src="../images/005c04de283a61409d0cf42bcf0a9fdda32c650975c500863ce072fdbc67c54e.jpg" /> <em>TABLE IV: Average data reduction in the GC of HOOP.</em>
 - 此外，这个 GC 是 <strong>Adaptive</strong>（自适应）的，它在后台周期性运行，不会阻塞应用的关键路径。只有当 OOP 区域快满或者 mapping table 快满时，才会更积极地触发，完美地平衡了性能和空间开销。</p>
-<h3 id="5-parallel-crash-recovery-mechanism-eli5">5. Parallel Crash Recovery Mechanism (ELI5)<a class="headerlink" href="#5-parallel-crash-recovery-mechanism-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-parallel-crash-recovery-mechanism">5. Parallel Crash Recovery Mechanism<a class="headerlink" href="#5-parallel-crash-recovery-mechanism" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong>
 - 传统的 NVM 崩溃恢复机制通常是 <strong>单线程</strong> 的。想象一下，系统崩溃后，整个世界都停了，只有一个“工人”在慢悠悠地翻看日志或 OOP 区域，试图把数据恢复到一致状态。
 - 这个过程会随着数据量的增加而<strong>线性甚至超线性地变慢</strong>，导致系统 <strong>Recovery Time Objective (RTO)</strong> 极长。在一个多核时代，让其他所有核心干等着一个核心干活，是巨大的资源浪费。

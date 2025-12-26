@@ -1,0 +1,19 @@
+{
+  "index": "a-cpu-centric-perspective-on-agentic-ai",
+  "paper_title": "A CPU-CENTRIC PERSPECTIVE ON AGENTIC AI",
+  "metadata": {
+    "authors": [
+      "Ritik Raj",
+      "Hong Wang",
+      "Tushar Krishna"
+    ],
+    "affiliations": [
+      "Georgia Institute of Technology, Atlanta, GA, USA",
+      "Intel, Santa Clara, CA, USA"
+    ],
+    "venue": "ArXiv",
+    "year": 2025,
+    "doi": null
+  },
+  "description": "该论文从CPU中心视角分析Agentic AI系统瓶颈，首次系统性地揭示了工具处理可占总延迟高达90.6%，且CPU能耗在大批量时占比达44%。作者提出了CGAM和MAWS两种调度优化方案，在同构和异构工作负载上分别实现了最高2.1倍和1.41倍的P50延迟加速。"
+}

@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-time-proportional-per-instruction-cycle-stacks-pics-eli5" class="md-nav__link">
+  <a href="#1-time-proportional-per-instruction-cycle-stacks-pics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Time-Proportional Per-Instruction Cycle Stacks (PICS) (ELI5)
+        1. Time-Proportional Per-Instruction Cycle Stacks (PICS)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-performance-signature-vector-psv-eli5" class="md-nav__link">
+  <a href="#2-performance-signature-vector-psv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Performance Signature Vector (PSV) (ELI5)
+        2. Performance Signature Vector (PSV)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-commit-state-based-event-hierarchy-eli5" class="md-nav__link">
+  <a href="#3-commit-state-based-event-hierarchy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Commit-State-Based Event Hierarchy (ELI5)
+        3. Commit-State-Based Event Hierarchy
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-time-proportional-sampling-logic-eli5" class="md-nav__link">
+  <a href="#4-time-proportional-sampling-logic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Time-Proportional Sampling Logic (ELI5)
+        4. Time-Proportional Sampling Logic
       
     </span>
   </a>
@@ -526,7 +526,7 @@
 </tbody>
 </table>
 <p>正是这种高精度，让 TEA 能在 <strong>lbm</strong> 和 <strong>nab</strong> 这样的真实 benchmark 中发现传统工具无法定位的深层次性能问题，并指导开发者做出有效的优化，分别获得了 <strong>1.28x</strong> 和 <strong>2.45x</strong> 的显著加速。</p>
-<h3 id="1-time-proportional-per-instruction-cycle-stacks-pics-eli5">1. Time-Proportional Per-Instruction Cycle Stacks (PICS) (ELI5)<a class="headerlink" href="#1-time-proportional-per-instruction-cycle-stacks-pics-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-time-proportional-per-instruction-cycle-stacks-pics">1. Time-Proportional Per-Instruction Cycle Stacks (PICS)<a class="headerlink" href="#1-time-proportional-per-instruction-cycle-stacks-pics" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>以前的性能分析工具，无论是 <strong>instruction-driven</strong>（如 AMD IBS, Arm SPE）还是 <strong>event-driven</strong>（如 PMC 计数），都有一个根本性的“错位”问题。</li>
@@ -552,7 +552,7 @@
 <ul>
 <li>这个设计的精妙之处在于，它将“<strong>时间归属</strong>”和“<strong>事件归因</strong>”这两个问题，在 <strong>commit 这个唯一能暴露真实延迟的时刻</strong>，通过 <strong>PSV</strong> 这个载体<strong>一次性、原子性地</strong>解决了。这从根本上保证了分析结果的 <strong>time-proportionality</strong>。</li>
 </ul>
-<h3 id="2-performance-signature-vector-psv-eli5">2. Performance Signature Vector (PSV) (ELI5)<a class="headerlink" href="#2-performance-signature-vector-psv-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-performance-signature-vector-psv">2. Performance Signature Vector (PSV)<a class="headerlink" href="#2-performance-signature-vector-psv" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的性能分析工具，比如 <strong>AMD IBS</strong>、<strong>Arm SPE</strong>，它们的问题在于“抓错了人”。它们在指令刚进入流水线（fetch/dispatch阶段）就给它贴上一个标签，然后记录这个指令后续遇到了什么事件（比如 cache miss）。但问题是，一个指令可能在前端等了很久，但它真正卡住整个程序的地方是在后端（commit阶段）。这种“前端采样”的方式，会把大量时间花在那些其实对整体性能影响不大的指令上，导致分析结果严重失真。论文里提到，这些方法的平均误差高达 <strong>55%+</strong>，几乎没法用。</li>
@@ -598,7 +598,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="3-commit-state-based-event-hierarchy-eli5">3. Commit-State-Based Event Hierarchy (ELI5)<a class="headerlink" href="#3-commit-state-based-event-hierarchy-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-commit-state-based-event-hierarchy">3. Commit-State-Based Event Hierarchy<a class="headerlink" href="#3-commit-state-based-event-hierarchy" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的性能分析工具，比如 AMD IBS、Arm SPE，它们的问题在于“抓错了人”。它们在指令刚进入流水线（fetch/dispatch阶段）就给指令打上标签，然后记录它后面遇到的所有事件。</li>
@@ -631,7 +631,7 @@
 <p><em>Figure 3: Performance event hierarchy for the Stalled (ST) commit state.</em></p>
 <p><img alt="" src="../images/eb6db800b0743fd8564fb4a8f11a2c335ff65e65a3eaf511e8e7806f0bc37165.jpg" /></p>
 <p><em>Table 1: The performance events of TEA, IBS, SPE, and RIS.</em></p>
-<h3 id="4-time-proportional-sampling-logic-eli5">4. Time-Proportional Sampling Logic (ELI5)<a class="headerlink" href="#4-time-proportional-sampling-logic-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-time-proportional-sampling-logic">4. Time-Proportional Sampling Logic<a class="headerlink" href="#4-time-proportional-sampling-logic" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的性能分析工具，比如 <strong>AMD IBS</strong>、<strong>Arm SPE</strong>，它们的采样逻辑是“<strong>在哪里打标签，就在哪里采样</strong>”，通常在 <strong>fetch</strong> 或 <strong>dispatch</strong> 阶段给指令打上标记。</li>

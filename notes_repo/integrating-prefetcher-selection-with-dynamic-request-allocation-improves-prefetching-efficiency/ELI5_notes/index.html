@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-dynamic-demand-request-allocation-ddra-eli5" class="md-nav__link">
+  <a href="#1-dynamic-demand-request-allocation-ddra" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA) (ELI5)
+        1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-fine-grained-prefetcher-identification-eli5" class="md-nav__link">
+  <a href="#2-fine-grained-prefetcher-identification" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 细粒度预取器识别 (Fine-grained Prefetcher Identification) (ELI5)
+        2. 细粒度预取器识别 (Fine-grained Prefetcher Identification)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-aggressiveness-eli5" class="md-nav__link">
+  <a href="#3-aggressiveness" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 三态状态机与自适应 aggressiveness (ELI5)
+        3. 三态状态机与自适应 aggressiveness
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-sample-table-sandbox-table-eli5" class="md-nav__link">
+  <a href="#4-sample-table-sandbox-table" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 运行时指标收集机制 (Sample Table &amp; Sandbox Table) (ELI5)
+        4. 运行时指标收集机制 (Sample Table &amp; Sandbox Table)
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-integrated-prefetch-filtering-eli5" class="md-nav__link">
+  <a href="#5-integrated-prefetch-filtering" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 集成式预取请求过滤 (Integrated Prefetch Filtering) (ELI5)
+        5. 集成式预取请求过滤 (Integrated Prefetch Filtering)
       
     </span>
   </a>
@@ -502,7 +502,7 @@
 <li>这个状态机的转换依据，来自于一个精巧的反馈回路：通过 <strong>Sandbox Table</strong> 和 <strong>Sample Table</strong> 收集每个预取器针对每个PC的 <strong>实际命中率（accuracy）</strong>，并以此作为奖惩信号，不断优化分配策略。</li>
 </ul>
 <p>通过这一招，Alecto 同时解决了两大痛点：既保证了每个预取器能得到最干净、最相关的训练数据，又大幅减少了因无效预取导致的硬件资源冲突。最终实现了 <strong>更高性能</strong>（IPC提升）、<strong>更低能耗</strong>（减少48%的table访问）和 <strong>极小的存储开销</strong>（\&lt;1KB）。</p>
-<h3 id="1-dynamic-demand-request-allocation-ddra-eli5">1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA) (ELI5)<a class="headerlink" href="#1-dynamic-demand-request-allocation-ddra-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-dynamic-demand-request-allocation-ddra">1. 动态需求请求分配 (Dynamic Demand Request Allocation, DDRA)<a class="headerlink" href="#1-dynamic-demand-request-allocation-ddra" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>以前的硬件预取系统就像一个大杂烩，所有类型的 <strong>Prefetcher</strong>（比如 Stream、Stride、Spatial）都盯着同一锅“需求请求”（Demand Requests）来学习。</li>
@@ -550,7 +550,7 @@
 <li><strong>Identified and Blocked (IB)</strong>: 这个预取器被证明不行，直接切断它的数据源，让它“冷静”一段时间。</li>
 <li>通过 <strong>Sample Table</strong> 和 <strong>Sandbox Table</strong> 在运行时不断收集每个预取器在每个 PC 上的<strong>准确率</strong>反馈，这个 Allocation Table 能够动态地更新状态，从而实现对每个需求请求的<strong>精准路由</strong>。这从根本上解决了训练污染和资源冲突的问题。</li>
 </ul>
-<h3 id="2-fine-grained-prefetcher-identification-eli5">2. 细粒度预取器识别 (Fine-grained Prefetcher Identification) (ELI5)<a class="headerlink" href="#2-fine-grained-prefetcher-identification-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-fine-grained-prefetcher-identification">2. 细粒度预取器识别 (Fine-grained Prefetcher Identification)<a class="headerlink" href="#2-fine-grained-prefetcher-identification" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的预取器选择策略（如 DOL, IPCP, Bandit）都是“一刀切”的。它们要么给所有内存访问指令（PC）用同一个静态优先级，要么只在全局层面动态调整预取器的开关或激进度。</li>
@@ -590,7 +590,7 @@
 <p><em>Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.</em></p>
 <p><img alt="" src="../images/88a9443b674d9939923ca0cc16a6bc2295bf79b71b7653872f507a9b42af3865.jpg" /></p>
 <p><em>Fig. 5. The state machine of Allocation Table. For every memory access instruction, each prefetcher has three states: Un-Identified (UI) indicates the suitability of this prefetcher is unidentified; Identified and Aggressive (IA) means the prefetcher is efficient and its prefetching degree should be promoted; Identified and Blocked (IB) applies when a prefetcher is deemed unsuitable for processing the memory access instructions.</em></p>
-<h3 id="3-aggressiveness-eli5">3. 三态状态机与自适应 aggressiveness (ELI5)<a class="headerlink" href="#3-aggressiveness-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-aggressiveness">3. 三态状态机与自适应 aggressiveness<a class="headerlink" href="#3-aggressiveness" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的预取器协同方案（比如 Bandit、IPCP）就像一个“一刀切”的经理。它要么给所有预取器开绿灯，让它们都去处理同一个内存访问请求（PC），要么用一个全局的开关来控制整体激进程度。</li>
@@ -627,7 +627,7 @@
 </li>
 <li>这个设计的精妙之处在于，它用极其简单的状态机逻辑（只有三种状态和几个阈值），就实现了对每个 PC-预取器对的精细化、动态化管理，从根本上解决了资源冲突和训练污染的问题。</li>
 </ul>
-<h3 id="4-sample-table-sandbox-table-eli5">4. 运行时指标收集机制 (Sample Table &amp; Sandbox Table) (ELI5)<a class="headerlink" href="#4-sample-table-sandbox-table-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-sample-table-sandbox-table">4. 运行时指标收集机制 (Sample Table &amp; Sandbox Table)<a class="headerlink" href="#4-sample-table-sandbox-table" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>prefetcher selection</strong> 机制（比如 Bandit）最大的问题在于，它们是“黑盒式”决策。它们能看到最终结果（比如 IPC 奖励），但看不到每个 prefetcher 在处理<strong>每一个具体的内存访问指令 (PC)</strong> 时，到底表现如何。</li>
@@ -664,7 +664,7 @@
 <li>通过这两个计数器，系统可以随时计算出针对<strong>每一个 PC</strong>，<strong>每一个 prefetcher</strong> 的 <strong>准确率 (Accuracy = Confirmed / Issued)</strong>。</li>
 <li>正是这个 <strong>per-PC, per-prefetcher 的准确率</strong>，成为了驱动 Allocation Table 状态机（UI/IA/IB）进行精细决策的唯一依据，从而实现了动态且精准的 demand request allocation。</li>
 </ul>
-<h3 id="5-integrated-prefetch-filtering-eli5">5. 集成式预取请求过滤 (Integrated Prefetch Filtering) (ELI5)<a class="headerlink" href="#5-integrated-prefetch-filtering-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-integrated-prefetch-filtering">5. 集成式预取请求过滤 (Integrated Prefetch Filtering)<a class="headerlink" href="#5-integrated-prefetch-filtering" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的复合预取器（hybrid prefetcher）架构里，多个预取器（比如 stream、stride、spatial）会并行工作。这看似能覆盖更多内存访问模式，但带来一个“甜蜜的烦恼”：<strong>同一个数据块，可能被好几个预取器同时预测到，并发出重复的预取请求</strong>。</li>

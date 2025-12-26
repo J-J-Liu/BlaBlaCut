@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-inline-cache-table-ictable-eli5" class="md-nav__link">
+  <a href="#1-inline-cache-table-ictable" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Inline Cache Table (ICTable) (ELI5)
+        1. Inline Cache Table (ICTable)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-plain-shortcut-design-eli5" class="md-nav__link">
+  <a href="#2-plain-shortcut-design" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Plain ShortCut Design (ELI5)
+        2. Plain ShortCut Design
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-aggressive-shortcut-design-eli5" class="md-nav__link">
+  <a href="#3-aggressive-shortcut-design" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Aggressive ShortCut Design (ELI5)
+        3. Aggressive ShortCut Design
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-isa-extensions-for-shortcut-eli5" class="md-nav__link">
+  <a href="#4-isa-extensions-for-shortcut" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. ISA Extensions for ShortCut (ELI5)
+        4. ISA Extensions for ShortCut
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-integration-with-shared-dispatcher-eli5" class="md-nav__link">
+  <a href="#5-integration-with-shared-dispatcher" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Integration with Shared Dispatcher (ELI5)
+        5. Integration with Shared Dispatcher
       
     </span>
   </a>
@@ -499,7 +499,7 @@
 </ul>
 <p><img alt="" src="../images/6436a3a332849c71cb68c1085c91e251b6d0423ec11779f9ad2c41d45457d9af.jpg" /> <em>Figure 2: Operations of a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).</em></p>
 <p>最终效果非常显著：在 V8 基线编译器下，<strong>Plain ShortCut 就能将平均执行时间减少 30%</strong>，即使在高度优化的模式下，也能带来 <strong>11%</strong> 的提升。这证明了通过软硬件协同设计来解决动态语言的核心瓶颈，是一条极具价值的路径。</p>
-<h3 id="1-inline-cache-table-ictable-eli5">1. Inline Cache Table (ICTable) (ELI5)<a class="headerlink" href="#1-inline-cache-table-ictable-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-inline-cache-table-ictable">1. Inline Cache Table (ICTable)<a class="headerlink" href="#1-inline-cache-table-ictable" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>在 JavaScript 这类动态语言里，一个简单的 <code>obj.x</code> 访问，在运行时可能面对成百上千种不同结构的对象（即 <strong>Object Type</strong>）。</li>
@@ -551,7 +551,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="2-plain-shortcut-design-eli5">2. Plain ShortCut Design (ELI5)<a class="headerlink" href="#2-plain-shortcut-design-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-plain-shortcut-design">2. Plain ShortCut Design<a class="headerlink" href="#2-plain-shortcut-design" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>在 JavaScript 这类动态语言里，一个简单的 <code>obj.x</code> 访问，在底层可能要经历一个叫 <strong>Inline Cache (IC)</strong> 的“调度中心”。这个调度中心（dispatcher）会拿着 <code>obj</code> 的类型，挨个去比对它见过的类型列表，找到匹配的就跳转到对应的处理函数（handler）。</li>
@@ -584,7 +584,7 @@
 </ul>
 <p><img alt="" src="../images/6436a3a332849c71cb68c1085c91e251b6d0423ec11779f9ad2c41d45457d9af.jpg" /> <em>Figure 2: Operations of a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).</em>
 <img alt="" src="../images/17a0ec9d9714e372b3a227f63b3c94cf0a256493abec54dd6ef62a4fb4e85eca.jpg" /> <em>Figure 3: Structures used in a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).</em></p>
-<h3 id="3-aggressive-shortcut-design-eli5">3. Aggressive ShortCut Design (ELI5)<a class="headerlink" href="#3-aggressive-shortcut-design-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-aggressive-shortcut-design">3. Aggressive ShortCut Design<a class="headerlink" href="#3-aggressive-shortcut-design" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Inline Caching (IC)</strong> 机制，即使是优化过的 <strong>Shared Dispatcher</strong> 设计，也存在显著的“仪式感”开销。每次访问对象属性，都必须：<ul>
@@ -619,7 +619,7 @@
 </ul>
 <p><img alt="" src="../images/6436a3a332849c71cb68c1085c91e251b6d0423ec11779f9ad2c41d45457d9af.jpg" /> <em>Figure 2: Operations of a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).</em>
 <img alt="" src="../images/17a0ec9d9714e372b3a227f63b3c94cf0a256493abec54dd6ef62a4fb4e85eca.jpg" /> <em>Figure 3: Structures used in a conventional IC (a), Plain ShortCut (b), and Aggressive ShortCut (c).</em></p>
-<h3 id="4-isa-extensions-for-shortcut-eli5">4. ISA Extensions for ShortCut (ELI5)<a class="headerlink" href="#4-isa-extensions-for-shortcut-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-isa-extensions-for-shortcut">4. ISA Extensions for ShortCut<a class="headerlink" href="#4-isa-extensions-for-shortcut" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统动态语言（如 JavaScript）的 <strong>Inline Caching (IC)</strong> 机制，为了处理对象类型的不确定性，在每次属性访问时都要执行一个 <strong>Dispatcher</strong>。这个 Dispatcher 本质上是一串 if-else 比较和跳转。</li>
@@ -667,7 +667,7 @@
 </li>
 </ul>
 <p><img alt="" src="../images/fc5e336a6fc832570fa1a6e003cf29adb17663518ee4396bd36f9f1855fa59b3.jpg" /> <em>Table 2: Instructions added by ShortCut.</em></p>
-<h3 id="5-integration-with-shared-dispatcher-eli5">5. Integration with Shared Dispatcher (ELI5)<a class="headerlink" href="#5-integration-with-shared-dispatcher-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-integration-with-shared-dispatcher">5. Integration with Shared Dispatcher<a class="headerlink" href="#5-integration-with-shared-dispatcher" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Shared Dispatcher</strong> 设计虽然避免了频繁的代码重编译，但它引入了一个新的性能瓶颈：每次对象访问（比如 <code>obj.x</code>）都要先调用一个<strong>共享的分发函数</strong>。</li>

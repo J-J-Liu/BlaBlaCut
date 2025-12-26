@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-eli5" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 动态反馈驱动的预取器激进度调整 (ELI5)
+        1. 动态反馈驱动的预取器激进度调整
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-eli5" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 基于布隆过滤器的预取缓存污染估算 (ELI5)
+        2. 基于布隆过滤器的预取缓存污染估算
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 基于污染感知的动态缓存插入策略 (ELI5)
+        3. 基于污染感知的动态缓存插入策略
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 基于采样的运行时反馈收集机制 (ELI5)
+        4. 基于采样的运行时反馈收集机制
       
     </span>
   </a>
@@ -499,7 +499,7 @@
 </ul>
 <p><img alt="" src="../images/f1ace0e99fd907a732738620ca676335d85d31db685f8c1d9a1daff3165347ee.jpg" /></p>
 <p><em>Table 5. Average IPC and BPKI for FDP vs conventional prefetchers</em></p>
-<h3 id="1-eli5">1. 动态反馈驱动的预取器激进度调整 (ELI5)<a class="headerlink" href="#1-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1">1. 动态反馈驱动的预取器激进度调整<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件预取器（如 stream prefetcher）的激进度（由 <strong>Prefetch Distance</strong> 和 <strong>Prefetch Degree</strong> 决定）是<strong>静态</strong>的，在芯片设计时就固定死了。</li>
@@ -572,7 +572,7 @@
 </table>
 <p><img alt="" src="../images/f1ace0e99fd907a732738620ca676335d85d31db685f8c1d9a1daff3165347ee.jpg" /></p>
 <p><em>Table 5. Average IPC and BPKI for FDP vs conventional prefetchers</em></p>
-<h3 id="2-eli5">2. 基于布隆过滤器的预取缓存污染估算 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2">2. 基于布隆过滤器的预取缓存污染估算<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <p>传统硬件预取器（Prefetcher）是个典型的“好心办坏事”的角色。它为了加速程序，会提前把数据拉进缓存。但如果预测错了，或者拉得太早，这些没用的预取数据就会把真正需要的<strong>需求块</strong>（demand block）给挤出去，这就是<strong>预取器造成的缓存污染</strong>（Prefetcher-Generated Cache Pollution）。要解决这个问题，最直接的想法是：精确追踪每一个被预取块挤出去的需求块，并在后续发生缺失时，判断这个缺失是不是预取器的锅。</p>
 <ul>
@@ -603,7 +603,7 @@
 </li>
 </ul>
 <p>这套机制的核心智慧在于，它接受了一定程度的<strong>假阳性</strong>（False Positive，即一个缺失被错误地归咎于预取器），但完全避免了<strong>假阴性</strong>（False Negative），并且以极低的硬件成本（仅4KB）为反馈系统提供了至关重要的<strong>污染度量</strong>（pollution metric），使得动态调整预取策略成为可能。</p>
-<h3 id="3-eli5">3. 基于污染感知的动态缓存插入策略 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 基于污染感知的动态缓存插入策略<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的硬件预取器（prefetcher）有个“死脑筋”：它总是把预取到的数据块一股脑地塞进缓存的 <strong>MRU (Most-Recently-Used)</strong> 位置。这么做的初衷很好——让预取的数据在缓存里活得久一点，等程序真正用到时还在。</li>
@@ -635,7 +635,7 @@
 <p><img alt="" src="../images/70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg" /></p>
 <p><em>Figure 8. Distribution of the insertion position of prefetched blocks</em></p>
 <p>上图（<code>70f8d913f7463350949980738a8c1304c6e031abbb64d9302047e97800c10cb0.jpg</code>）清晰地展示了这个策略的效果。对于 <code>applu</code> 和 <code>ammp</code> 这类高污染基准，动态策略（Dynamic Insertion）大部分时间都选择了最保守的 <strong>LRU</strong> 插入，从而避免了性能崩溃，同时在其他基准上又能灵活选择更优的位置以获取性能增益。</p>
-<h3 id="4-eli5">4. 基于采样的运行时反馈收集机制 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 基于采样的运行时反馈收集机制<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的硬件预取器（如 Stream Prefetcher）的 <strong>Prefetch Distance</strong> 和 <strong>Prefetch Degree</strong> 是在芯片设计时就<strong>静态固化</strong>的。这就像给所有病人开同一张药方，完全无视病情变化。</li>

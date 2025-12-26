@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-virtual-program-counter-vpc-prediction-eli5" class="md-nav__link">
+  <a href="#1-virtual-program-counter-vpc-prediction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Virtual Program Counter (VPC) Prediction (ELI5)
+        1. Virtual Program Counter (VPC) Prediction
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-virtual-branch-and-virtual-pc-vpca-eli5" class="md-nav__link">
+  <a href="#2-virtual-branch-and-virtual-pc-vpca" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Virtual Branch and Virtual PC (VPCA) (ELI5)
+        2. Virtual Branch and Virtual PC (VPCA)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-iterative-prediction-and-training-algorithms-eli5" class="md-nav__link">
+  <a href="#3-iterative-prediction-and-training-algorithms" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Iterative Prediction and Training Algorithms (ELI5)
+        3. Iterative Prediction and Training Algorithms
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-dynamic-devirtualization-without-compiler-support-eli5" class="md-nav__link">
+  <a href="#4-dynamic-devirtualization-without-compiler-support" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Dynamic Devirtualization without Compiler Support (ELI5)
+        4. Dynamic Devirtualization without Compiler Support
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-low-cost-hardware-implementation-eli5" class="md-nav__link">
+  <a href="#5-low-cost-hardware-implementation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Low-Cost Hardware Implementation (ELI5)
+        5. Low-Cost Hardware Implementation
       
     </span>
   </a>
@@ -496,7 +496,7 @@
 </li>
 <li>这样一来，<strong>间接分支预测的难题就被转化成了一个序列化的条件分支预测问题</strong>，完美复用了芯片上已经存在的、高度优化的条件分支预测硬件，几乎 <strong>零成本</strong> 地获得了高性能。<img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></li>
 </ul>
-<h3 id="1-virtual-program-counter-vpc-prediction-eli5">1. Virtual Program Counter (VPC) Prediction (ELI5)<a class="headerlink" href="#1-virtual-program-counter-vpc-prediction-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-virtual-program-counter-vpc-prediction">1. Virtual Program Counter (VPC) Prediction<a class="headerlink" href="#1-virtual-program-counter-vpc-prediction" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统处理器处理<strong>间接分支</strong>（indirect branch）非常难受。它不像条件分支只有“跳”或“不跳”两种选择，而是要从<strong>N个可能的目标地址</strong>里猜一个，这本质上是个高难度的多分类问题。</li>
@@ -529,7 +529,7 @@
 <li><img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></li>
 <li><img alt="" src="../images/cc59d1bb83ccc21cbefbc81dcc2b3a3cef100997897622419acc8f802c55ce2b.jpg" /> <em>Fig. 4. VPC prediction example: source, assembly, and the corresponding virtual branches.</em></li>
 </ul>
-<h3 id="2-virtual-branch-and-virtual-pc-vpca-eli5">2. Virtual Branch and Virtual PC (VPCA) (ELI5)<a class="headerlink" href="#2-virtual-branch-and-virtual-pc-vpca-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-virtual-branch-and-virtual-pc-vpca">2. Virtual Branch and Virtual PC (VPCA)<a class="headerlink" href="#2-virtual-branch-and-virtual-pc-vpca" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统处理器处理 <strong>indirect branch</strong>（间接跳转）非常头疼。它不像条件分支只需猜“跳 or 不跳”，而是要猜“跳到哪”，这是一个多选题。</li>
@@ -555,7 +555,7 @@
 </li>
 <li>这个过程就像在一条流水线上，对同一个模糊请求，快速生成并验证多个具体的候选答案，直到有一个被预测为“是”（taken），就采用它作为最终的跳转目标。整个过程<strong>完全复用了现有硬件</strong>，几乎没有增加额外的存储成本。<img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></li>
 </ul>
-<h3 id="3-iterative-prediction-and-training-algorithms-eli5">3. Iterative Prediction and Training Algorithms (ELI5)<a class="headerlink" href="#3-iterative-prediction-and-training-algorithms-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-iterative-prediction-and-training-algorithms">3. Iterative Prediction and Training Algorithms<a class="headerlink" href="#3-iterative-prediction-and-training-algorithms" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的间接分支预测器（如 BTB）假设一个间接跳转总是去同一个地方，这在现代 <strong>object-oriented</strong> 程序里完全行不通。想想一个 <code>Shape</code> 对象的 <code>draw()</code> 方法，它可能是 <code>Circle::draw</code>、<code>Rectangle::draw</code> 或 <code>Triangle::draw</code>，具体调哪个取决于运行时对象的实际类型。</li>
@@ -590,7 +590,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="4-dynamic-devirtualization-without-compiler-support-eli5">4. Dynamic Devirtualization without Compiler Support (ELI5)<a class="headerlink" href="#4-dynamic-devirtualization-without-compiler-support-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-dynamic-devirtualization-without-compiler-support">4. Dynamic Devirtualization without Compiler Support<a class="headerlink" href="#4-dynamic-devirtualization-without-compiler-support" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>devirtualization</strong>（去虚拟化）是编译器干的活，它需要在编译时就“猜”出一个虚函数调用最可能指向哪几个具体的实现。这要求要么做复杂的<strong>whole-program analysis</strong>（全程序分析），要么依赖<strong>profiling</strong>（剖析）数据。</li>
@@ -626,7 +626,7 @@
 </li>
 <li>这个设计的绝妙之处在于，<strong>目标地址的存储</strong>（在BTB里）和<strong>预测逻辑</strong>（在条件分支预测器里）都被现有的硬件结构自然地承担了，几乎<strong>没有增加额外的存储开销</strong>，只是增加了一点点控制逻辑来管理VPC的迭代。这就实现了用极低的成本，获得了接近专用复杂预测器的性能。<img alt="" src="../images/283fea9a3dbb8605fa7b42a34727e9519292bc2364f35c22347b8409c814ac9b.jpg" /> <em>Fig. 3. High-level conceptual overview of the VPC predictor.</em></li>
 </ul>
-<h3 id="5-low-cost-hardware-implementation-eli5">5. Low-Cost Hardware Implementation (ELI5)<a class="headerlink" href="#5-low-cost-hardware-implementation-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-low-cost-hardware-implementation">5. Low-Cost Hardware Implementation<a class="headerlink" href="#5-low-cost-hardware-implementation" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的间接分支预测器（如 Tagged Target Cache, Cascaded Predictor）为了记住一个间接跳转可能去的多个目标地址，必须配备<strong>专用的、庞大的存储结构</strong>。这在硬件上是笔巨大的开销。</li>

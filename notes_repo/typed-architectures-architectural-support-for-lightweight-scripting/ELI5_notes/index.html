@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-unified-register-file-eli5" class="md-nav__link">
+  <a href="#1-unified-register-file" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 统一寄存器文件 (Unified Register File) (ELI5)
+        1. 统一寄存器文件 (Unified Register File)
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-polymorphic-instructions-eli5" class="md-nav__link">
+  <a href="#2-polymorphic-instructions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 多态指令 (Polymorphic Instructions) (ELI5)
+        2. 多态指令 (Polymorphic Instructions)
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-tagged-memory-instructions-eli5" class="md-nav__link">
+  <a href="#3-tagged-memory-instructions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 带标签的内存指令 (Tagged Memory Instructions) (ELI5)
+        3. 带标签的内存指令 (Tagged Memory Instructions)
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-type-rule-table-eli5" class="md-nav__link">
+  <a href="#4-type-rule-table" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 类型规则表 (Type Rule Table) (ELI5)
+        4. 类型规则表 (Type Rule Table)
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-eli5" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 类型检查与慢速路径处理 (ELI5)
+        5. 类型检查与慢速路径处理
       
     </span>
   </a>
@@ -526,7 +526,7 @@
 </li>
 </ul>
 <p>通过这三招，作者成功地将原本由软件显式执行的、繁重的动态类型管理任务，<strong>隐式地卸载到了硬件流水线中</strong>，以仅 <strong>1.6%</strong> 的面积开销，换来了接近 <strong>10%-11%</strong> 的平均性能提升和显著的能效改善。<img alt="" src="../images/faf222a9648408ba3885a02642ca484bc0761821514f047c02630bdb87747b54.jpg" /> <em>Figure 5: Overall speedups for Lua and JavaScript interpreters (the higher, the better)</em></p>
-<h3 id="1-unified-register-file-eli5">1. 统一寄存器文件 (Unified Register File) (ELI5)<a class="headerlink" href="#1-unified-register-file-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-unified-register-file">1. 统一寄存器文件 (Unified Register File)<a class="headerlink" href="#1-unified-register-file" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的处理器寄存器只存<strong>原始数据值</strong>（比如一个64位的整数或浮点数）。在运行像 <strong>JavaScript</strong> 或 <strong>Lua</strong> 这样的动态脚本语言时，每个变量都必须附带一个<strong>类型标签</strong>（type tag），用来说明这个值到底是整数、字符串还是对象。</li>
@@ -550,7 +550,7 @@
 </li>
 <li>这个改动看似简单，但它把<strong>类型信息从内存空间提升到了寄存器状态</strong>。从此以后，任何需要类型信息的操作（比如 <code>xadd</code> 指令）都可以直接从寄存器里读取 <code>R.t</code> 和 <code>R.f</code>，在<strong>硬件流水线内部并行完成</strong>类型检查和数值计算，彻底绕开了软件层面那些冗长的类型守卫代码。<img alt="" src="../images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" /> <em>Figure 4: Pipeline structure augmented with Typed Architecture</em></li>
 </ul>
-<h3 id="2-polymorphic-instructions-eli5">2. 多态指令 (Polymorphic Instructions) (ELI5)<a class="headerlink" href="#2-polymorphic-instructions-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-polymorphic-instructions">2. 多态指令 (Polymorphic Instructions)<a class="headerlink" href="#2-polymorphic-instructions" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的动态脚本语言（如 JavaScript、Lua）解释器在执行像 <code>+</code> 这样的操作符时，必须先检查操作数的类型。因为 <code>+</code> 可以是整数加法、浮点加法，甚至是字符串拼接。</li>
@@ -580,7 +580,7 @@
 <li>这个设计的核心扭转在于：<strong>将原本在软件中串行、显式的“检查-分发”逻辑，转变为在硬件中并行、隐式的“感知-执行”逻辑</strong>。对于最常见的同类型操作，几乎消除了所有类型检查的开销。</li>
 </ul>
 <p><img alt="" src="../images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" /> <em>Figure 4: Pipeline structure augmented with Typed Architecture</em></p>
-<h3 id="3-tagged-memory-instructions-eli5">3. 带标签的内存指令 (Tagged Memory Instructions) (ELI5)<a class="headerlink" href="#3-tagged-memory-instructions-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-tagged-memory-instructions">3. 带标签的内存指令 (Tagged Memory Instructions)<a class="headerlink" href="#3-tagged-memory-instructions" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的动态脚本语言（如 Lua, JavaScript）在内存中存储一个变量时，不仅要存它的值（value），还要存它的类型标签（tag）。这个 <strong>tag-value pair</strong> 的布局在不同引擎里千奇百怪。</li>
@@ -607,7 +607,7 @@
 </ul>
 <p><img alt="" src="../images/27a67567f10ec8b1aa421b7a37983fc0d469362eb83c9646dd972f94ee1bc42f.jpg" /> <em>Table 4: Special-purpose register settings</em>
 <img alt="" src="../images/cb9c8a5c10ab5fbdee11b5c8465d38f9ca62502b35a468d98a834c2a99e58627.jpg" /> <em>Figure 4: Pipeline structure augmented with Typed Architecture</em></p>
-<h3 id="4-type-rule-table-eli5">4. 类型规则表 (Type Rule Table) (ELI5)<a class="headerlink" href="#4-type-rule-table-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-type-rule-table">4. 类型规则表 (Type Rule Table)<a class="headerlink" href="#4-type-rule-table" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的动态脚本语言（如 JavaScript, Lua）在执行像 <code>+</code> 这样的<strong>多态操作符</strong>时，必须在软件层面做大量工作：先从内存里把两个操作数的<strong>类型标签 (type tag)</strong> 挖出来，然后用一堆 <code>if-else</code> 或 <code>switch-case</code> 来判断组合（比如 int+int, int+float, string+string），最后才能决定调用哪个具体的加法函数。这个过程会产生大量的<strong>动态指令</strong>，对性能、功耗和内存都是巨大负担。</li>
@@ -637,7 +637,7 @@
 </ul>
 <p><img alt="" src="../images/7ab5bf9d29dc6a843428b7e5ea02ab409d6542ad3d7f14146b6f18ae2dfd1535.jpg" /> <em>Table 5: Type Rule Table settings for Lua and SpiderMonkey</em>
 这张图展示了为 <strong>Lua</strong> 和 <strong>SpiderMonkey</strong> 配置的 Type Rule Table 内容。可以看到，它清晰地定义了哪些输入类型组合（Input Type A/B）在特定操作（Op）下是合法的，并直接映射到输出类型（Output Type）。这就是那个“智能预检系统”的核心数据库。</p>
-<h3 id="5-eli5">5. 类型检查与慢速路径处理 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5">5. 类型检查与慢速路径处理<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>在动态脚本语言（如 <strong>JavaScript</strong>、<strong>Lua</strong>）的解释器中，一个简单的 <code>+</code> 操作背后可能隐藏着巨大的开销。因为 <code>+</code> 是<strong>多态</strong>的：它既可以加两个整数，也可以拼接两个字符串，甚至可以处理浮点数。</li>

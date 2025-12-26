@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-llvm-eli5" class="md-nav__link">
+  <a href="#1-llvm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 基于LLVM的二进制重写架构 (ELI5)
+        1. 基于LLVM的二进制重写架构
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-eli5" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 精确的样本分析驱动代码布局 (ELI5)
+        2. 精确的样本分析驱动代码布局
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-eli5" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 混合函数发现与控制流图重建 (ELI5)
+        3. 混合函数发现与控制流图重建
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 多阶段优化流水线 (ELI5)
+        4. 多阶段优化流水线
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-eli5" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 重定位模式下的全程序重排 (ELI5)
+        5. 重定位模式下的全程序重排
       
     </span>
   </a>
@@ -505,7 +505,7 @@
 <p>最终效果非常显著：对于像 Clang 和 GCC 这样的大型编译器，在已经应用了 LTO 和 FDO 的基础上，BOLT 依然能带来高达 <strong>15.0%</strong> 和 <strong>20.4%</strong> 的性能提升。</p>
 <p><img alt="" src="../images/a055dec4443f7187bed1f717138705be1771800432877ebbc5dff1c3a05c4653.jpg" /></p>
 <p><em>Fig. 5: Performance improvements from BOLT for our set of Facebook data-center workloads.</em></p>
-<h3 id="1-llvm-eli5">1. 基于LLVM的二进制重写架构 (ELI5)<a class="headerlink" href="#1-llvm-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-llvm">1. 基于LLVM的二进制重写架构<a class="headerlink" href="#1-llvm" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的二进制优化器（比如老旧的Spike、FDPR）通常是为特定架构（如Alpha、Itanium）从零开始打造的“一次性”工具。这导致两个巨大痛点：<ul>
@@ -548,7 +548,7 @@
 <p><img alt="" src="../images/501d90e771f25402387f061f13d24afb9daffd62e1bd198c5ef9dcf9247e0c01.jpg" /></p>
 <p><em>Fig. 3: Diagram showing BOLT’s binary rewriting pipeline.</em></p>
 <p>这个架构图清晰地展示了BOLT如何将LLVM作为其“引擎”。它把复杂的、容易出错的底层细节（Disassembly/Assembly, Relocations）外包给了经过工业级验证的LLVM，而自己则专注于实现高层次的、与架构无关的优化逻辑（如基于Profile的代码布局）。这是一种典型的“站在巨人肩膀上”的工程智慧。</p>
-<h3 id="2-eli5">2. 精确的样本分析驱动代码布局 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2">2. 精确的样本分析驱动代码布局<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 **Feedback-Driven Optimization **(FDO) 需要将运行时收集的性能剖析数据（profile）<strong>映射回编译器的中间表示</strong>（IR）。这个过程非常“难受”，因为：<ul>
@@ -607,7 +607,7 @@
 </tbody>
 </table>
 <p>这组数据清晰地证明了，在二进制层面利用精确剖析数据进行代码布局，能够挖掘出传统编译期优化无法触及的巨大性能潜力。</p>
-<h3 id="3-eli5">3. 混合函数发现与控制流图重建 (ELI5)<a class="headerlink" href="#3-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3">3. 混合函数发现与控制流图重建<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>静态二进制分析</strong> 面临一个根本性难题：<strong>精确地找到函数边界并重建控制流图（CFG）几乎是不可能的</strong>。因为编译器和链接器在生成最终二进制时，会进行大量优化（如内联、尾调用优化、代码布局重排），导致原始的函数结构信息严重丢失。</li>
@@ -644,7 +644,7 @@
 </ul>
 <p><img alt="" src="../images/589fdcad7be5dd03055853b805001b2026035c0bb367cd0ba63a6622982d632d.jpg" /></p>
 <p><em>Fig. 4: Partial CFG dump for a function with C++ exceptions.</em></p>
-<h3 id="4-eli5">4. 多阶段优化流水线 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 多阶段优化流水线<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的编译器优化（如 <strong>FDO/PGO</strong> 和 <strong>LTO</strong>）虽然强大，但它们工作在 <strong>源码或中间表示（IR）层面</strong>。当程序最终被链接成一个巨大的二进制文件后，编译器就“撒手不管”了。</li>
@@ -678,7 +678,7 @@
 <p><img alt="" src="../images/659a9874a6ae5ca6c6fcb92eeff4657c776c35d78cb09c58bb08ff960c5aec08.jpg" /></p>
 <p><em>Fig. 9: Breakdown of improvements on different metrics for Clang (higher is better). ICF refers to identical code folding. Optimizations are always added on top of the previous bar, i.e., +ICF includes BB reordering and ICF both turned on.</em></p>
 <p>这两张图的性能分解更是直观地证明了，<strong>基本块重排</strong>（BB reordering）和<strong>函数重排</strong>（Function reordering）是BOLT性能收益的绝对大头，完美印证了其设计哲学：在二进制层面做最精准的代码布局，是解决大型应用前端瓶颈的终极利器。</p>
-<h3 id="5-eli5">5. 重定位模式下的全程序重排 (ELI5)<a class="headerlink" href="#5-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5">5. 重定位模式下的全程序重排<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>post-link optimizer</strong>（如早期的 BOLT 初始设计）只能在现有函数边界内做文章，比如调整函数内部的基本块顺序。这就像你只能在每个房间里重新摆放家具，但无法改变房间在整个大楼里的位置。</li>

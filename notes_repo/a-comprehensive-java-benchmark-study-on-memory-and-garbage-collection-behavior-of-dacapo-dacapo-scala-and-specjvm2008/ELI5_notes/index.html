@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-anttracks-memory-monitoring-tool-eli5" class="md-nav__link">
+  <a href="#1-anttracks-memory-monitoring-tool" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. AntTracks Memory Monitoring Tool (ELI5)
+        1. AntTracks Memory Monitoring Tool
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-benchmark-categorization-by-memorygc-behavior-eli5" class="md-nav__link">
+  <a href="#2-benchmark-categorization-by-memorygc-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Benchmark Categorization by Memory/GC Behavior (ELI5)
+        2. Benchmark Categorization by Memory/GC Behavior
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-vm-internal-allocation-analysis-eli5" class="md-nav__link">
+  <a href="#3-vm-internal-allocation-analysis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. VM-Internal Allocation Analysis (ELI5)
+        3. VM-Internal Allocation Analysis
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-garbage-collection-behavior-comparison-eli5" class="md-nav__link">
+  <a href="#4-garbage-collection-behavior-comparison" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Garbage Collection Behavior Comparison (ELI5)
+        4. Garbage Collection Behavior Comparison
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-object-reference-and-pointer-density-measurement-eli5" class="md-nav__link">
+  <a href="#5-object-reference-and-pointer-density-measurement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Object Reference and Pointer Density Measurement (ELI5)
+        5. Object Reference and Pointer Density Measurement
       
     </span>
   </a>
@@ -499,7 +499,7 @@
 <p><img alt="" src="../images/3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg" />
 <img alt="" src="../images/5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afb.jpg" /></p>
 <p>总而言之，这篇论文的价值在于提供了一份<strong>权威、可靠、细致入微的“基准使用指南”</strong>。它告诉研究社区：当你下次想证明你的新GC算法有多快时，请先看看这张地图，选对真正能考验你算法的“赛道”，而不是随便找个平坦的停车场就宣布自己赢了。</p>
-<h3 id="1-anttracks-memory-monitoring-tool-eli5">1. AntTracks Memory Monitoring Tool (ELI5)<a class="headerlink" href="#1-anttracks-memory-monitoring-tool-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-anttracks-memory-monitoring-tool">1. AntTracks Memory Monitoring Tool<a class="headerlink" href="#1-anttracks-memory-monitoring-tool" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 Java 内存监控工具（比如基于 <strong>JVMTI</strong> 或 <strong>Java Agent</strong> 的）通常通过 <strong>字节码插桩 (Bytecode Instrumentation)</strong> 来追踪对象分配。这招在原理上很直接，但副作用巨大：<ul>
@@ -526,7 +526,7 @@
 <li>最后，一个<strong>离线的后处理工具 (Offline Post-processor)</strong> 会读取这个紧凑的日志流，并利用 VM 的内部知识（比如类元数据）将日志“解压”和“重建”成完整的、可供分析的对象生命周期轨迹。</li>
 <li>正是这种 <strong>“VM 内部集成 + 高效日志 + 离线重建”</strong> 的三段式设计，让它避开了所有传统工具的性能陷阱，实现了 <strong>~4%</strong> 的超低开销，同时保证了<strong>100% 的追踪完整性</strong>。</li>
 </ul>
-<h3 id="2-benchmark-categorization-by-memorygc-behavior-eli5">2. Benchmark Categorization by Memory/GC Behavior (ELI5)<a class="headerlink" href="#2-benchmark-categorization-by-memorygc-behavior-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-benchmark-categorization-by-memorygc-behavior">2. Benchmark Categorization by Memory/GC Behavior<a class="headerlink" href="#2-benchmark-categorization-by-memorygc-behavior" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前的研究者选 Java <strong>Benchmark</strong> 就像闭着眼睛抓阄。大家只知道 DaCapo、SPECjvm2008 这些名字，但对它们内部的 <strong>内存行为</strong> 和 <strong>GC 行为</strong> 几乎一无所知。</li>
@@ -565,7 +565,7 @@
 </ul>
 <p><img alt="" src="../images/3e3f97b8269e961ed27a2e581ab9c22f654959e2495c52dbe5ac9e229bcb2655.jpg" />
 <img alt="" src="../images/5df0bd19ee84ec27f7524c6626e763489d179f2645e3e0c899ab0268ccc69afb.jpg" /></p>
-<h3 id="3-vm-internal-allocation-analysis-eli5">3. VM-Internal Allocation Analysis (ELI5)<a class="headerlink" href="#3-vm-internal-allocation-analysis-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-vm-internal-allocation-analysis">3. VM-Internal Allocation Analysis<a class="headerlink" href="#3-vm-internal-allocation-analysis" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>以前做 Java 性能分析时，大家通常只关心“应用代码”自己 new 了多少对象。但现代 JVM 是个黑盒，它内部也会偷偷分配大量内存（比如填栈跟踪、类加载、GC 填充等），这些 <strong>VM-Internal Allocation</strong> 往往被忽略。</li>
@@ -607,7 +607,7 @@
 </li>
 </ul>
 <p>这种分析方式把“黑盒 JVM”变成了“透明鱼缸”，让研究者能精准定位性能异常的真正源头，而不是在应用层瞎猜。</p>
-<h3 id="4-garbage-collection-behavior-comparison-eli5">4. Garbage Collection Behavior Comparison (ELI5)<a class="headerlink" href="#4-garbage-collection-behavior-comparison-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-garbage-collection-behavior-comparison">4. Garbage Collection Behavior Comparison<a class="headerlink" href="#4-garbage-collection-behavior-comparison" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>以前的 <strong>ParallelOld GC</strong>（Java 8 默认）在处理大堆内存时很“难受”：它采用“Stop-the-World”方式做 <strong>major collection</strong>，一旦老年代满了，整个应用就得停下来，<strong>GC pause 时间可能长达几百毫秒甚至秒级</strong>，这对延迟敏感的服务（如 Web 后端、实时系统）是灾难性的。</li>
@@ -691,7 +691,7 @@
 </tbody>
 </table>
 <p>这个对比清晰地揭示了：<strong>G1 的设计哲学是“用空间换时间确定性”</strong>——它牺牲一点吞吐量（因并发开销），换取极低且可预测的停顿，而这正是现代 Java 应用最需要的。</p>
-<h3 id="5-object-reference-and-pointer-density-measurement-eli5">5. Object Reference and Pointer Density Measurement (ELI5)<a class="headerlink" href="#5-object-reference-and-pointer-density-measurement-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-object-reference-and-pointer-density-measurement">5. Object Reference and Pointer Density Measurement<a class="headerlink" href="#5-object-reference-and-pointer-density-measurement" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 GC 行为分析往往只关注 <strong>分配速率</strong>、<strong>存活对象大小</strong> 或 <strong>GC 暂停时间</strong>，但忽略了对象之间<strong>引用关系的拓扑结构</strong>。这会导致一个盲区：两个 benchmark 可能有相似的内存占用和 GC 频率，但如果一个内部充满了巨型对象数组（每个元素都是指针），而另一个是大量小对象组成的稀疏图，那么它们对 GC 的压力是天壤之别的。</li>

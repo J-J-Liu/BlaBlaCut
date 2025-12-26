@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-prefetchable-regions-eli5" class="md-nav__link">
+  <a href="#1-prefetchable-regions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Prefetchable Regions (ELI5)
+        1. Prefetchable Regions
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-linden-compiler-eli5" class="md-nav__link">
+  <a href="#2-linden-compiler" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Linden Compiler (ELI5)
+        2. Linden Compiler
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-linden-runtime-eli5" class="md-nav__link">
+  <a href="#3-linden-runtime" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Linden Runtime (ELI5)
+        3. Linden Runtime
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-tier-aware-prefetch-distance-adaptation-eli5" class="md-nav__link">
+  <a href="#4-tier-aware-prefetch-distance-adaptation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Tier-Aware Prefetch Distance Adaptation (ELI5)
+        4. Tier-Aware Prefetch Distance Adaptation
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-selective-hardware-prefetcher-control-eli5" class="md-nav__link">
+  <a href="#5-selective-hardware-prefetcher-control" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Selective Hardware Prefetcher Control (ELI5)
+        5. Selective Hardware Prefetcher Control
       
     </span>
   </a>
@@ -508,7 +508,7 @@
 <p><img alt="" src="../images/3809248474e6c7ccbbedb62aa62164adcbf81725375e6f86f4075678f2e15501.jpg" /></p>
 <p><em>Figure 5: Linden consists of a compiler and runtime. Compiler takes a program and finds the prefetchable regions in the program. Runtime is responsible for detecting hotness, hardware monitoring, and compiler hints to enforce different policies. Runtime able to migrate pages between the tiers, enable/disable hardware prefetchers and change the software behavior in terms prefetchability.</em></p>
 <p>总而言之，Linden 的核心创新在于将 <strong>latency reduction</strong>（通过迁移）和 <strong>latency tolerance</strong>（通过智能预取）<strong>统一到一个协同的框架下</strong>，让系统能根据数据的特性和硬件的实时状态，动态选择最优的延迟应对策略，而不是只会“搬家”这一种笨办法。</p>
-<h3 id="1-prefetchable-regions-eli5">1. Prefetchable Regions (ELI5)<a class="headerlink" href="#1-prefetchable-regions-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-prefetchable-regions">1. Prefetchable Regions<a class="headerlink" href="#1-prefetchable-regions" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的内存分层系统（tiered memory）只想着“<strong>减少延迟</strong>”——把热数据挪到快的 DRAM，冷数据扔到慢的 CXL。这招在带宽充足时挺好用。</li>
@@ -557,7 +557,7 @@
 <p><img alt="" src="../images/3809248474e6c7ccbbedb62aa62164adcbf81725375e6f86f4075678f2e15501.jpg" /></p>
 <p><em>Figure 5: Linden consists of a compiler and runtime. Compiler takes a program and finds the prefetchable regions in the program. Runtime is responsible for detecting hotness, hardware monitoring, and compiler hints to enforce different policies. Runtime able to migrate pages between the tiers, enable/disable hardware prefetchers and change the software behavior in terms prefetchability.</em></p>
 <p>本质上，Linden 把“<strong>是否迁移</strong>”这个问题，从单一的“hot/cold”判断，升级成了一个 <strong>多目标优化问题</strong>：在“减少延迟”（迁移）和“容忍延迟”（预取）之间做智能权衡。而 <strong>prefetchable regions 就是实现这种权衡的最小决策单元</strong>。</p>
-<h3 id="2-linden-compiler-eli5">2. Linden Compiler (ELI5)<a class="headerlink" href="#2-linden-compiler-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-linden-compiler">2. Linden Compiler<a class="headerlink" href="#2-linden-compiler" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>tiered memory</strong> 系统（比如 DRAM + CXL）只想着“<strong>把热数据搬快点</strong>”，也就是通过 page migration 来 <strong>reduce latency</strong>。这在数据访问模式简单、局部性好的时候很有效。</li>
@@ -599,7 +599,7 @@
 <ul>
 <li>换句话说，作者并没有让 compiler 直接生成 prefetch 指令，而是巧妙地 <strong>把“能不能 prefetch”这个语义信息，从 compile-time 传递到 runtime</strong>，让 runtime 能结合 <strong>实时的 hotness 和 hardware contention</strong> 做出最合适的 <strong>reduce or tolerate</strong> 决策。</li>
 </ul>
-<h3 id="3-linden-runtime-eli5">3. Linden Runtime (ELI5)<a class="headerlink" href="#3-linden-runtime-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-linden-runtime">3. Linden Runtime<a class="headerlink" href="#3-linden-runtime" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>tiered memory</strong> 系统（比如 DRAM + CXL）只做一件事：把热数据迁移到快层，冷数据扔到慢层。这叫 <strong>latency reduction</strong>（延迟削减）。</li>
@@ -671,7 +671,7 @@
 <p><em>Table 1: An example of a prefetchability table.</em></p>
 <p><img alt="" src="../images/4950cea33d775343cb93b18962b015f4b21456804391e0fe6b9d3468dafd7f78.jpg" /></p>
 <p><em>Listing 1: Algorithm for policy enforcement in the Linden runtime.</em></p>
-<h3 id="4-tier-aware-prefetch-distance-adaptation-eli5">4. Tier-Aware Prefetch Distance Adaptation (ELI5)<a class="headerlink" href="#4-tier-aware-prefetch-distance-adaptation-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-tier-aware-prefetch-distance-adaptation">4. Tier-Aware Prefetch Distance Adaptation<a class="headerlink" href="#4-tier-aware-prefetch-distance-adaptation" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的 <strong>软件预取（Software Prefetching）</strong> 在设计时，通常假设内存是<strong>同构的（homogeneous）</strong>，即所有数据访问延迟都差不多。因此，它会用一个固定的 <strong>prefetch distance</strong>（比如提前4个元素）来发出预取指令。</li>
@@ -707,7 +707,7 @@
 <p><img alt="" src="../images/ae1bb199e2a6c62bf74c0e61f6f7a3b45062625cd7e1f5a9eb6485944eef2587.jpg" /></p>
 <p><em>Figure 4: DRAM and CXL have different optimal prefetch distances. For example, in the scan microbenchmark, DRAM performs best with a prefetch distance of 4, while CXL requires a longer distance of 7 due to its higher latency.</em></p>
 <p>上图清晰地展示了这个核心思想：<strong>DRAM 和 CXL 有着截然不同的最优 prefetch distance</strong>。Linden 的价值就在于，它能确保系统始终运行在这个“最优值”上，而不是在一个对任何 tier 都不合适的固定值上将就。</p>
-<h3 id="5-selective-hardware-prefetcher-control-eli5">5. Selective Hardware Prefetcher Control (ELI5)<a class="headerlink" href="#5-selective-hardware-prefetcher-control-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-selective-hardware-prefetcher-control">5. Selective Hardware Prefetcher Control<a class="headerlink" href="#5-selective-hardware-prefetcher-control" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的内存分层系统（如 DRAM + CXL）在处理 <strong>硬件预取器（Hardware Prefetcher）</strong> 时，采用的是“一刀切”策略：要么全开，要么全关。</li>

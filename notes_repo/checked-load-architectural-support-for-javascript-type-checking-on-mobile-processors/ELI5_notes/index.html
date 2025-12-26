@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-checked-load-isa-extension-eli5" class="md-nav__link">
+  <a href="#1-checked-load-isa-extension" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Checked Load ISA Extension (ELI5)
+        1. Checked Load ISA Extension
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-cache-integrated-type-checking-eli5" class="md-nav__link">
+  <a href="#2-cache-integrated-type-checking" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Cache-Integrated Type Checking (ELI5)
+        2. Cache-Integrated Type Checking
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-dynamic-type-prediction-eli5" class="md-nav__link">
+  <a href="#3-dynamic-type-prediction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Dynamic Type Prediction (ELI5)
+        3. Dynamic Type Prediction
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-optimistic-code-generation-for-jit-eli5" class="md-nav__link">
+  <a href="#4-optimistic-code-generation-for-jit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Optimistic Code Generation for JIT (ELI5)
+        4. Optimistic Code Generation for JIT
       
     </span>
   </a>
@@ -481,7 +481,7 @@
 <li>为了进一步优化失败的情况，他们还复用了现有的<strong>分支预测器</strong>来做<strong>动态类型预测</strong>。预测器会学习某个 Checked Load 指令是否大概率会失败，如果预测会失败，就直接走慢路径，避免了错误的快路径执行和随后的昂贵回滚。评估显示，这种共享预测器的方案效果几乎和专用预测器一样好（见表 <img alt="" src="../images/74b90b4ccdaef4cf5fb242a21df649348fab08949408f26529337fc36252cc1f.jpg" /> <em>Table 1. The prediction rates for Checked Load with static prediction, dynamic prediction with a separate branch history table, and dynamic prediction with a joined branch history table.</em>），极大地节省了硬件成本。</li>
 </ul>
 <p>总而言之，这篇论文的核心贡献在于，它用一种<strong>极简、低成本</strong>的硬件扩展，将一个高频、高开销的软件瓶颈，转化为了一个与基础内存操作无缝融合的硬件原语，从而在不牺牲性能的前提下，显著提升了动态语言在资源受限的移动平台上的执行效率。</p>
-<h3 id="1-checked-load-isa-extension-eli5">1. Checked Load ISA Extension (ELI5)<a class="headerlink" href="#1-checked-load-isa-extension-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-checked-load-isa-extension">1. Checked Load ISA Extension<a class="headerlink" href="#1-checked-load-isa-extension" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在像 <strong>JavaScript</strong> 这样的动态类型语言里，每次对一个变量做操作前，都得先检查它的类型（比如，这个值到底是个整数还是个对象？）。这叫 <strong>type guard</strong>。</li>
@@ -535,7 +535,7 @@
 </tbody>
 </table>
 <p><img alt="" src="../images/74b90b4ccdaef4cf5fb242a21df649348fab08949408f26529337fc36252cc1f.jpg" /> <em>Table 1. The prediction rates for Checked Load with static prediction, dynamic prediction with a separate branch history table, and dynamic prediction with a joined branch history table.</em></p>
-<h3 id="2-cache-integrated-type-checking-eli5">2. Cache-Integrated Type Checking (ELI5)<a class="headerlink" href="#2-cache-integrated-type-checking-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-cache-integrated-type-checking">2. Cache-Integrated Type Checking<a class="headerlink" href="#2-cache-integrated-type-checking" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在像 <strong>JavaScript</strong> 这样的动态类型语言里，程序运行时得不停地检查变量的类型（比如这个数是不是整数？那个东西是不是数组？）。在传统的移动处理器上，这些检查是用<strong>软件指令序列</strong>实现的：先从内存加载数据，再用几条指令提取并比较类型标签（tag），最后根据结果决定是走快速路径还是慢速回滚路径。</li>
@@ -567,7 +567,7 @@
 </li>
 <li>通过强制要求被检查的数据位于 <strong>Cache Line 的起始位置</strong>，硬件可以将比较器<strong>硬连线</strong>到固定的字节/字上，从而保证了新增逻辑的延迟<strong>不会超过</strong>原有的 Cache Tag 比较逻辑。这就确保了<strong>处理器的关键路径长度完全没有增加</strong>，既提升了性能，又没有牺牲时钟频率。</li>
 </ul>
-<h3 id="3-dynamic-type-prediction-eli5">3. Dynamic Type Prediction (ELI5)<a class="headerlink" href="#3-dynamic-type-prediction-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-dynamic-type-prediction">3. Dynamic Type Prediction<a class="headerlink" href="#3-dynamic-type-prediction" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>在 JavaScript 这类动态类型语言中，每次操作前都要做 <strong>type guard（类型检查）</strong>，以防拿到的值不是预期类型。</li>
@@ -601,7 +601,7 @@
 </ul>
 <p><img alt="" src="../images/f21e640c76b08a5e3f1aab393f575981e150331204a2a260cf369de874486193.jpg" /> <em>Figure 7. Performance impacts of Checked Load</em></p>
 <p><img alt="" src="../images/74b90b4ccdaef4cf5fb242a21df649348fab08949408f26529337fc36252cc1f.jpg" /> <em>Table 1. The prediction rates for Checked Load with static prediction, dynamic prediction with a separate branch history table, and dynamic prediction with a joined branch history table.</em></p>
-<h3 id="4-optimistic-code-generation-for-jit-eli5">4. Optimistic Code Generation for JIT (ELI5)<a class="headerlink" href="#4-optimistic-code-generation-for-jit-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-optimistic-code-generation-for-jit">4. Optimistic Code Generation for JIT<a class="headerlink" href="#4-optimistic-code-generation-for-jit" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 JIT 编译器（比如 Nitro）在生成 JavaScript 代码时，为了安全，必须在每次使用变量前插入一连串的 <strong>软件类型检查</strong>（type guards）。这些检查通常由多条指令组成：加载值、提取 tag、比较、条件跳转。</li>

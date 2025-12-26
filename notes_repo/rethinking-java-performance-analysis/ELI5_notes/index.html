@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-dacapo-chopin-benchmark-suite-eli5" class="md-nav__link">
+  <a href="#1-dacapo-chopin-benchmark-suite" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. DaCapo Chopin Benchmark Suite (ELI5)
+        1. DaCapo Chopin Benchmark Suite
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-lower-bound-overhead-lbo-methodology-eli5" class="md-nav__link">
+  <a href="#2-lower-bound-overhead-lbo-methodology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Lower Bound Overhead (LBO) Methodology (ELI5)
+        2. Lower Bound Overhead (LBO) Methodology
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-user-experienced-latency-metrics-eli5" class="md-nav__link">
+  <a href="#3-user-experienced-latency-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. User-Experienced Latency Metrics (ELI5)
+        3. User-Experienced Latency Metrics
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-nominal-statistics-and-workload-characterization-eli5" class="md-nav__link">
+  <a href="#4-nominal-statistics-and-workload-characterization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Nominal Statistics and Workload Characterization (ELI5)
+        4. Nominal Statistics and Workload Characterization
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-principal-components-analysis-pca-for-diversity-validation-eli5" class="md-nav__link">
+  <a href="#5-principal-components-analysis-pca-for-diversity-validation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Principal Components Analysis (PCA) for Diversity Validation (ELI5)
+        5. Principal Components Analysis (PCA) for Diversity Validation
       
     </span>
   </a>
@@ -507,7 +507,7 @@
 <img alt="" src="../images/160e4d777abbd273dffa3d84dd5a63c80039934effad11d5c9a567a40887952c.jpg" /> <em>Figure 3. DaCapo Chopin records the time for each event for its latency-sensitive workloads, avoiding the need for users to resort to using misleading proxies such as GC pause times. These figures plot the distribution of request latencies for cassandra for each of OpenJDK 21’s five production collectors, with the 95th percentile indicated by the shaded area. Even at the generous 6.0× heap, the newer collectors do not deliver better latency than G1 on this workload.</em>
 <img alt="" src="../images/34348e1e4e2f2e9e0ae0e6ba2905702f1ec9fb8dc14746272215b58fcaac00b2.jpg" /> <em>Figure 4. Principal components analysis of the 22 DaCapo workloads with respect to the 33 nominal statistics which had non-null results for all benchmarks.</em></p>
 <p>总而言之，这篇论文的巧妙之处在于，它没有去争论哪个垃圾回收器更好，而是先<strong>质疑并重建了我们用来做判断的那把尺子</strong>。它提供了一套完整的、现代化的、开源的“性能分析基础设施”，旨在将整个领域的经验主义研究拉回到一个更严谨、更贴近现实的轨道上来。</p>
-<h3 id="1-dacapo-chopin-benchmark-suite-eli5">1. DaCapo Chopin Benchmark Suite (ELI5)<a class="headerlink" href="#1-dacapo-chopin-benchmark-suite-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-dacapo-chopin-benchmark-suite">1. DaCapo Chopin Benchmark Suite<a class="headerlink" href="#1-dacapo-chopin-benchmark-suite" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前的Java性能分析方法论已经严重“掉队”了。具体来说，有四大“很难受”的地方：<ul>
@@ -550,7 +550,7 @@
 </li>
 </ul>
 <p><img alt="" src="../images/34348e1e4e2f2e9e0ae0e6ba2905702f1ec9fb8dc14746272215b58fcaac00b2.jpg" /> <em>Figure 4. Principal components analysis of the 22 DaCapo workloads with respect to the 33 nominal statistics which had non-null results for all benchmarks.</em></p>
-<h3 id="2-lower-bound-overhead-lbo-methodology-eli5">2. Lower Bound Overhead (LBO) Methodology (ELI5)<a class="headerlink" href="#2-lower-bound-overhead-lbo-methodology-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2-lower-bound-overhead-lbo-methodology">2. Lower Bound Overhead (LBO) Methodology<a class="headerlink" href="#2-lower-bound-overhead-lbo-methodology" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>评估 <strong>Garbage Collection (GC)</strong> 的真实开销是个老大难问题。传统方法要么只看 <strong>GC pause time</strong>（停顿时间），要么只看总的 <strong>wall-clock time</strong>（挂钟时间）。但这两种方法都严重失真。</li>
@@ -579,7 +579,7 @@
 <li>这个方法的精妙之处在于，它用一种<strong>透明、可复现</strong>的方式，把那些最难测量的、细粒度的、并发的GC开销，也一并纳入了考量范围，从而揭示了GC真实的<strong>总计算成本</strong>，正如论文图1(b)所示。</li>
 </ul>
 <p><img alt="" src="../images/fcac4d2752bcd5a947bf272dcf0b2f0110baff20bb3e822ed09c461fcea15e1f.jpg" /> <em>(b) Lower bound total CPU overheads (Linux TASK_CLOCK). Figure 1. Lower bounds on the overheads of five OpenJDK 21 production garbage collectors with their default settings, as a function of heap size, showing the geometric mean of overhead over all 22 DaCapo Chopin benchmarks. We only plot data points where the respective collector can run all 22 benchmarks to completion. In the best case, wall clock overheads are 9 % (G1 and Parallel) and total CPU overheads are 15 % (Serial). At smaller heaps, overheads exceed 2×.</em></p>
-<h3 id="3-user-experienced-latency-metrics-eli5">3. User-Experienced Latency Metrics (ELI5)<a class="headerlink" href="#3-user-experienced-latency-metrics-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-user-experienced-latency-metrics">3. User-Experienced Latency Metrics<a class="headerlink" href="#3-user-experienced-latency-metrics" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前评估Java垃圾回收器（GC）的延迟时，大家普遍用一个偷懒的办法：直接看 <strong>GC暂停时间（GC pause time）</strong>。这在今天看来是个巨大的误区。</li>
@@ -610,7 +610,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="4-nominal-statistics-and-workload-characterization-eli5">4. Nominal Statistics and Workload Characterization (ELI5)<a class="headerlink" href="#4-nominal-statistics-and-workload-characterization-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4-nominal-statistics-and-workload-characterization">4. Nominal Statistics and Workload Characterization<a class="headerlink" href="#4-nominal-statistics-and-workload-characterization" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>以前搞性能分析，就像蒙着眼睛打架。大家手里的基准测试（benchmarks）就是个黑盒子：你只知道它跑得快或慢，但完全不知道它“脾气”如何。</li>
@@ -643,7 +643,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="5-principal-components-analysis-pca-for-diversity-validation-eli5">5. Principal Components Analysis (PCA) for Diversity Validation (ELI5)<a class="headerlink" href="#5-principal-components-analysis-pca-for-diversity-validation-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-principal-components-analysis-pca-for-diversity-validation">5. Principal Components Analysis (PCA) for Diversity Validation<a class="headerlink" href="#5-principal-components-analysis-pca-for-diversity-validation" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>在系统性能研究领域，一个基准测试套件（benchmark suite）的价值完全取决于其内部工作负载（workloads）的<strong>多样性</strong>。如果套件里的程序都大同小异，那你的实验结论就可能只是在某个狭窄场景下的“自嗨”，无法推广。</li>

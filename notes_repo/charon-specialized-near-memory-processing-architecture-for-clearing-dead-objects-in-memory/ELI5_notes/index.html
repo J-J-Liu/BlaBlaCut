@@ -398,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-gc-eli5" class="md-nav__link">
+  <a href="#1-gc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 关键GC原语识别 (ELI5)
+        1. 关键GC原语识别
       
     </span>
   </a>
@@ -409,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-eli5" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 近内存专用处理单元 (ELI5)
+        2. 近内存专用处理单元
       
     </span>
   </a>
@@ -420,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-bitmap-cache-eli5" class="md-nav__link">
+  <a href="#3-bitmap-cache" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 位图缓存（Bitmap Cache） (ELI5)
+        3. 位图缓存（Bitmap Cache）
       
     </span>
   </a>
@@ -431,10 +431,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-eli5" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 位图计数优化算法 (ELI5)
+        4. 位图计数优化算法
       
     </span>
   </a>
@@ -442,10 +442,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-charon-eli5" class="md-nav__link">
+  <a href="#5-charon" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 主机-Charon接口与系统集成 (ELI5)
+        5. 主机-Charon接口与系统集成
       
     </span>
   </a>
@@ -490,7 +490,7 @@
 </ul>
 <p><img alt="" src="../images/579c96fb48fc3f7e6147b6ef7cdbf1d23293ea402691c33012ed49aa536de0d6.jpg" /> <em>Figure 4: Runtime breakdown of GC</em></p>
 <p>最终，这种“<strong>识别热点原语 + 近内存专用硬件加速</strong>”的组合拳，以极小的硬件代价（仅占 HMC 逻辑层 <strong>0.49%</strong> 的面积），换来了 <strong>3.29倍的 GC 速度提升</strong> 和 <strong>60.7% 的能耗节省</strong>，完美地解决了困扰 GC 数十年的带宽瓶颈问题。</p>
-<h3 id="1-gc-eli5">1. 关键GC原语识别 (ELI5)<a class="headerlink" href="#1-gc-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="1-gc">1. 关键GC原语识别<a class="headerlink" href="#1-gc" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前的硬件GC加速器总想“一口吃成胖子”，要么为特定语言（如Lisp）定制，要么试图把整个GC流程都搬到硬件上。这导致它们<strong>灵活性极差</strong>，面对像HotSpot JVM里复杂多变的<strong>Generational GC</strong>（分代垃圾回收）就束手无策。</li>
@@ -516,7 +516,7 @@
 </li>
 <li>这种“<strong>卸载关键原语而非整个GC</strong>”的思路，使得Charon既能获得接近专用硬件的性能，又保持了对不同GC算法的<strong>良好兼容性和低侵入性</strong>（仅需修改JVM约37行代码）。</li>
 </ul>
-<h3 id="2-eli5">2. 近内存专用处理单元 (ELI5)<a class="headerlink" href="#2-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="2">2. 近内存专用处理单元<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的垃圾回收（GC）跑在通用CPU上，效率极低。根本原因在于GC的核心操作（比如拷贝大对象、扫描引用链）是<strong>极度内存密集型</strong>的，但通用CPU的设计哲学是“计算密集”，它有两大短板：<ul>
@@ -547,7 +547,7 @@
 <li>这套组合拳的核心思想就是：<strong>在哪里产生数据，就在哪里处理数据</strong>。通过将计算单元下沉到数据所在的3D堆叠内存内部，彻底绕开了传统冯·诺依曼架构的“内存墙”问题。最终，这套方案仅用<strong>1.95mm²</strong>的微小面积开销，就换来了<strong>3.29倍</strong>的GC速度提升和**60.7%**的能耗节省。</li>
 </ul>
 <p><img alt="" src="../images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" /> <em>Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit</em></p>
-<h3 id="3-bitmap-cache-eli5">3. 位图缓存（Bitmap Cache） (ELI5)<a class="headerlink" href="#3-bitmap-cache-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="3-bitmap-cache">3. 位图缓存（Bitmap Cache）<a class="headerlink" href="#3-bitmap-cache" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击 (The "Why")</strong></p>
 <ul>
 <li>传统的垃圾回收（GC）在处理 <strong>Bitmap Count</strong> 和 <strong>mark_obj</strong> 操作时，会频繁地从主存中读取位图（bitmap）数据。</li>
@@ -579,7 +579,7 @@
 </li>
 <li>为了保证与主机 CPU 的一致性，系统会在每个 GC 阶段（marking 或 compacting）结束后<strong>主动 flush 这个缓存</strong>，确保数据最终落盘。<img alt="" src="../images/7f64beff0b5ee507bac1486c263da5ede7f7cebb6b28029d89b968f0ded757ae.jpg" /> <em>Figure 5: Charon overview Figure 6: Hardware block diagram of each processing unit</em></li>
 </ul>
-<h3 id="4-eli5">4. 位图计数优化算法 (ELI5)<a class="headerlink" href="#4-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="4">4. 位图计数优化算法<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>传统的 <strong>Bitmap Count</strong> 原语在软件里干的是个“苦力活”：它需要从头到尾，一个比特一个比特地扫描两个巨大的位图（<code>begMap</code> 和 <code>endMap</code>），来计算某个内存范围内所有存活对象的总大小。</li>
@@ -605,7 +605,7 @@
 </li>
 <li>通过这个转换，原本需要 O(n) 次迭代（n 是位图的比特数）的复杂操作，被简化成了<strong>两次大规模并行的位计数操作（Population Count）和一次向量减法</strong>。这些操作在专用硬件上可以被极度优化，从而实现了 <strong>5.63倍</strong> 的平均加速。</li>
 </ul>
-<h3 id="5-charon-eli5">5. 主机-Charon接口与系统集成 (ELI5)<a class="headerlink" href="#5-charon-eli5" title="Permanent link">&para;</a></h3>
+<h3 id="5-charon">5. 主机-Charon接口与系统集成<a class="headerlink" href="#5-charon" title="Permanent link">&para;</a></h3>
 <p><strong>痛点直击</strong></p>
 <ul>
 <li>以前的硬件GC加速器之所以没普及，核心问题在于“<strong>侵入性太强</strong>”。它们要么要求CPU架构大改（比如加专用指令），要么要求JVM重写一大块逻辑。这在工业级软件（如HotSpot JVM）里是不可接受的，因为验证和维护成本太高。</li>
